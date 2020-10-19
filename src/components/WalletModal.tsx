@@ -5,15 +5,13 @@ import Metamask from '../assets/metamask.svg'
 import WalletConnect from '../assets/walletconnect.svg'
 import Coinbase from '../assets/coinbase.svg'
 import Fortmatic from '../assets/fortmatic.svg'
-import Portis from '../assets/portis.svg'
+// import Portis from '../assets/portis.svg'
 
 import Modal from './Modal'
 
 import * as wallets from 'eth-wallets'
 
 export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
-  const modalRef = useRef()
-
   async function onWalletClicked(wallet) {
     wallets.setOption(
       wallets.WALLETS.WALLETCONNECT,
@@ -48,10 +46,10 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
 
   function makeWalletButton(svg: JSX.Element, name: string, wallet: number) {
     return (
-      <div className="mt-4 pl-4 pr-4 flex">
+      <div className="flex pl-4 pr-4 mt-4">
         <button
           onClick={() => onWalletClicked(wallet)}
-          className="flex-grow p-2 text-lg border-2 border-brand-gray-1 text-black rounded-lg font-sf-compact-medium hover:border-transparent hover:bg-brand-blue hover:text-white"
+          className="flex-grow p-2 text-lg text-black border-2 rounded-lg border-brand-gray-1 font-sf-compact-medium hover:border-transparent hover:bg-brand-blue hover:text-white"
         >
           <div className="flex flex-row items-center">
             <div className="flex-none">{svg}</div>
@@ -63,10 +61,10 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
   }
 
   return (
-    <Modal modalRef={modalRef} isOpen={isOpen} setIsOpen={(b) => (isOpen = b)}>
-      <div style={{ minWidth: 400 }}>
-        <div className="bg-gradient-to-b from-very-dark-blue to-brand-blue p-4">
-          <p className="text-3xl text-center font-gilroy-bold text-gray-200">
+    <Modal isOpen={isOpen} setIsOpen={(b) => (isOpen = b)}>
+      <div className="min-w-100">
+        <div className="p-4 bg-gradient-to-b from-very-dark-blue to-brand-blue">
+          <p className="text-3xl text-center text-gray-200 font-gilroy-bold">
             {' '}
             Connect your Wallet
           </p>

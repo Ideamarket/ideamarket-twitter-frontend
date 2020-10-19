@@ -7,7 +7,7 @@ import Patreon from '../assets/patreon.svg'
 import More from '../assets/more.svg'
 import Star from '../assets/star.svg'
 
-import WalletStatus from '../components/WalletStatus'
+import { WalletStatus } from '../components'
 
 import { useState } from 'react'
 

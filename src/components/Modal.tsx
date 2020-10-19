@@ -2,7 +2,6 @@ import { Transition } from '@headlessui/react'
 import { ReactNode } from 'react'
 
 export default function Modal({
-  modalRef,
   className = '',
   children,
   isOpen,
@@ -12,7 +11,6 @@ export default function Modal({
   children?: ReactNode
   isOpen: boolean
   setIsOpen: (val: boolean) => void
-  modalRef: any
 }) {
   if (!isOpen) {
     return <></>
@@ -48,7 +46,7 @@ export default function Modal({
             aria-modal="true"
             aria-labelledby="modal-headline"
           >
-            <div ref={modalRef}>{children}</div>
+            <div>{children}</div>
           </Transition>
         </div>
       </div>

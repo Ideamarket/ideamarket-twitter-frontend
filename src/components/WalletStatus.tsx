@@ -17,20 +17,19 @@ export default function WalletStatus() {
 
   return (
     <div
-      style={{ borderWidth: '1px', cursor: 'pointer' }}
-      className="flex flex-row items-center px-2 border-brand-gray-2 rounded"
+      className="flex flex-row items-center px-2 border rounded cursor-pointer border-brand-gray-2"
       onClick={toggleWalletModal}
     >
       <NoSSRWalletModal isOpen={isModalOpen} />
 
       {web3 === undefined && <DotRed className="w-3 h-3" />}
       {web3 === undefined && (
-        <div className="ml-3 align-middle text-gray-400">No wallet</div>
+        <div className="ml-3 text-gray-400 align-middle">No wallet</div>
       )}
 
       {web3 !== undefined && <DotGreen className="w-3 h-3" />}
       {web3 !== undefined && (
-        <div className="ml-3 align-middle text-gray-400">
+        <div className="ml-3 text-gray-400 align-middle">
           {address.slice(0, 6)}...{address.slice(-4)}
         </div>
       )}
