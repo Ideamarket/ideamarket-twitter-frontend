@@ -4875,9 +4875,9 @@ eth-tx-summary@^3.1.2:
     through2 "^2.0.3"
 
 eth-wallets@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/eth-wallets/-/eth-wallets-1.0.5.tgz#bfe933755a8f316a68406ccc10320ba48b7420e3"
-  integrity sha512-+smQ5ffMwCQ8Jea33bQM5AO2RevLzNxZ68oeQJUomXkZ+k3keOamL+g0+ApFvAI1y4AceDgq58lfw9/gr/oVSA==
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/eth-wallets/-/eth-wallets-1.0.6.tgz#bdb26cc0b2043d2b82f2ec95ac236a16b102b51c"
+  integrity sha512-JlCW+E8xuDkEiTxJxbLoWsN8cPZHrsnO9Xk7Cwl8dWQXyVrvobk7UeLNllUxaEzmrWniqiL9yOPBBSr8Dra7Tw==
   dependencies:
     "@portis/web3" "^2.0.0-beta.59"
     "@walletconnect/web3-provider" "^1.3.1"
@@ -10198,15 +10198,10 @@ tsconfig-paths@^3.9.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tslib@^1.8.1:
+tslib@^1.8.1, tslib@^1.9.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
-
-tslib@^1.9.0:
-  version "1.13.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
-  integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
 
 tsutils@^3.17.1:
   version "3.17.1"
