@@ -7,8 +7,9 @@ import Patreon from '../assets/patreon.svg'
 import More from '../assets/more.svg'
 import Star from '../assets/star.svg'
 
+import WalletStatus from '../components/WalletStatus'
+
 import { useState } from 'react'
-import dynamic from 'next/dynamic'
 
 export default function Home() {
   const tabs = [
@@ -27,18 +28,13 @@ export default function Home() {
   ]
   const [selectedTabId, setSelectedTabId] = useState(1)
 
-  const NoSSRWalletModal = dynamic(
-    () => import('../components/WalletSelectionModal'),
-    { ssr: false }
-  )
-
   return (
     <div className="bg-brand-gray max-h-home">
-      <NoSSRWalletModal isOpen={true} />
       <div className="w-screen p-5 text-center text-white bg-top-mobile h-158">
         <div className="flex items-center">
           <img className="w-8" src="/logo.png" alt="Logo" />
           <h2 className="text-xl leading-none font-gilroy-bold">IdeaMarkets</h2>
+          <WalletStatus />
           <svg
             className="w-6 h-6 ml-auto"
             xmlns="http://www.w3.org/2000/svg"
