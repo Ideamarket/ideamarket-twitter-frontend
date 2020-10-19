@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import useWalletStore from '../store/walletStore'
 
 import Metamask from '../assets/metamask.svg'
 import WalletConnect from '../assets/walletconnect.svg'
@@ -14,8 +15,6 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
   const modalRef = useRef()
 
   async function onWalletClicked(wallet) {
-    // TODO: Move this to the global store and set when the app boots
-
     wallets.setOption(
       wallets.WALLETS.WALLETCONNECT,
       wallets.OPTIONS.INFURA_KEY,
@@ -37,7 +36,14 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
       web3 = await wallets.connect(wallet)
     } catch (ex) {
       console.log(ex)
+      return
     }
+
+    console.log(web3.eth)
+    useWalletStore.setState({
+      web3: web3,
+      address: (await web3.eth.getAccounts())[0],
+    })
   }
 
   function makeWalletButton(svg: JSX.Element, name: string, wallet: number) {
