@@ -16,7 +16,7 @@
   "dependencies": {
     "@headlessui/react": "^0.2.0",
     "classnames": "^2.2.6",
-    "eth-wallets": "^1.0.5",
+    "eth-wallets": "1.0.7",
     "next": "9.5.5",
     "react": "16.14.0",
     "react-dom": "16.14.0",
