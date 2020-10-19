@@ -22,6 +22,8 @@ module.exports = {
         'very-dark-blue': 'hsl(235, 42%, 17%)',
         'very-dark-blue-2': 'hsl(235, 42%, 10%)',
         'very-dark-blue-3': 'hsl(235, 42%, 5%)',
+        'brand-green': '#329300',
+        'brand-red': '#8f0033',
       },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
@@ -34,6 +36,7 @@ module.exports = {
       },
       spacing: {
         7.5: '1.875rem',
+        30: '7.5rem',
         158: '39.5rem',
       },
       letterSpacing: {
@@ -54,6 +57,10 @@ module.exports = {
       },
       minWidth: {
         100: '25rem',
+      },
+      maxWidth: {
+        88: '22rem',
+        304: '76rem',
       },
     },
   },
