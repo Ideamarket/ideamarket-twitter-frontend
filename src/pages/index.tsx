@@ -5,6 +5,8 @@ import Medium from '../assets/medium.svg'
 import Twitter from '../assets/twitter.svg'
 import Patreon from '../assets/patreon.svg'
 import More from '../assets/more.svg'
+import Star from '../assets/star.svg'
+
 import { useState } from 'react'
 
 export default function Home() {
@@ -24,9 +26,10 @@ export default function Home() {
   ]
   const [selectedTabId, setSelectedTabId] = useState(1)
   return (
-    <div className="bg-brand-gray">
+    <div className="bg-brand-gray max-h-home">
       <div className="w-screen p-5 text-center text-white bg-top-mobile h-158">
-        <div className="flex">
+        <div className="flex items-center">
+          <img className="w-8" src="/logo.png" alt="Logo" />
           <h2 className="text-xl leading-none font-gilroy-bold">IdeaMarkets</h2>
           <svg
             className="w-6 h-6 ml-auto"
@@ -101,7 +104,7 @@ export default function Home() {
           </div>
           <div className="border border-b-2 border-l-0 border-r-2"></div>
         </div>
-        <div className="h-screen bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">
+        <div className="bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">
           <div className="px-5 border-b border-brand-gray-3">
             <div>
               <div className="font-sf-pro-text">
@@ -125,28 +128,180 @@ export default function Home() {
             </div>
           </div>
           <div>
-            <div className="flex p-5 border">
-              <div>
-                <h2>Harvest Finance</h2>
-                <p>FARM</p>
+            <div className="p-5">
+              <div className="flex">
+                <div className="flex items-center">
+                  <div className="w-7.5 h-7.5 rounded-full border"></div>
+                  <div className="ml-2.5">
+                    <h2 className="text-base font-medium leading-none tracking-tightest-2 text-very-dark-blue font-sf-pro-text">
+                      Harvest Finance
+                    </h2>
+                    <p className="text-sm font-medium tracking-tighter font-sf-pro-text text-brand-gray-2">
+                      FARM
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center ml-auto">
+                  <svg
+                    className="w-7.5 text-brand-blue"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
               </div>
-              <div className="flex items-center justify-center ml-auto">
-                <svg
-                  className="w-7.5 text-brand-blue"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+              <div className="grid grid-cols-3 gap-5 mt-5 font-sf-pro-text">
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    Price
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    $150.25
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    Deposits
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    $506
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    24H Change
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    +35%
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    24H Volume
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    $15,543,667
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    1YR Income
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    $478.55
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    Watch
+                  </p>
+                  <Star className="w-5" />
+                </div>
               </div>
             </div>
-            <div className="border"></div>
+
+            <div className="p-5 border-t">
+              <div className="flex">
+                <div className="flex items-center">
+                  <div className="w-7.5 h-7.5 rounded-full border"></div>
+                  <div className="ml-2.5">
+                    <h2 className="text-base font-medium leading-none tracking-tightest-2 text-very-dark-blue font-sf-pro-text">
+                      Chainlink
+                    </h2>
+                    <p className="text-sm font-medium tracking-tighter font-sf-pro-text text-brand-gray-2">
+                      LINK
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-center ml-auto">
+                  <svg
+                    className="w-7.5 text-brand-blue"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-5 mt-5 font-sf-pro-text">
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    Price
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    $150.25
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    Deposits
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    $506
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    24H Change
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    +35%
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    24H Volume
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    $15,543,667
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    1YR Income
+                  </p>
+                  <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+                    $478.55
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium tracking-tightest text-brand-gray-4">
+                    Watch
+                  </p>
+                  <Star className="w-5 fill-current text-brand-gray-4" />
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <div>
+          <div className="flex justify-center mt-10 space-x-5 font-sf-pro-text">
+            <p className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
+              Need Help?
+            </p>
+            <p className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
+              Contact
+            </p>
+            <p className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
+              Legal &amp; Privacy
+            </p>
+          </div>
+          <p className="mt-5 text-sm leading-none text-center tracking-tightest-2 text-brand-gray-2">
+            &copy;2020 IdeaMarkets
+          </p>
         </div>
       </div>
     </div>

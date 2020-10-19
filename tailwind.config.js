@@ -17,6 +17,7 @@ module.exports = {
         'brand-gray': '#f6f6f6',
         'brand-gray-2': '#708090',
         'brand-gray-3': '#dc2e9',
+        'brand-gray-4': '#435366',
         // #1a1d3f
         'very-dark-blue': 'hsl(235, 42%, 17%)',
         'very-dark-blue-2': 'hsl(235, 42%, 10%)',
@@ -36,7 +37,8 @@ module.exports = {
         158: '39.5rem',
       },
       letterSpacing: {
-        tightest: '-0.015625rem',
+        tightest: '-0.015625rem', // -0.25px
+        'tightest-2': '-0.018125rem', // -0.29px;
       },
       backgroundImage: (theme) => ({
         'top-mobile': "url('/topbg-mobile.svg')",
@@ -46,6 +48,9 @@ module.exports = {
       },
       boxShadow: {
         home: '0 1px 5px 0 rgba(0, 0, 0, 0.05)',
+      },
+      maxHeight: {
+        home: '77rem',
       },
     },
   },
