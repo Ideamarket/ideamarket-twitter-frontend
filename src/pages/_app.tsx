@@ -2,18 +2,19 @@ import '../styles/fonts/gilroy/style.css'
 import '../styles/fonts/sf-compact-display/style.css'
 import '../styles/globals.css'
 
-import dynamic from 'next/dynamic'
-
+import { useEffect } from 'react'
 import type { AppProps } from 'next/app'
+import { initWalletStore } from '../store/walletStore'
+import { initIdeaMarketsStore } from '../store/ideaMarketsStore'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const NoSSRInit = dynamic(() => import('../components/Init'), {
-    ssr: false,
-  })
+  useEffect(() => {
+    initWalletStore()
+    initIdeaMarketsStore()
+  }, [])
 
   return (
     <div>
-      <NoSSRInit />
       <Component {...pageProps} />
     </div>
   )

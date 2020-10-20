@@ -12,6 +12,7 @@ import DotGreen from '../assets/dotgreen.svg'
 import Modal from './Modal'
 
 import * as wallets from 'eth-wallets'
+import classNames from 'classnames'
 
 export default function WalletSelectionModal({
   isOpen,
@@ -58,23 +59,23 @@ export default function WalletSelectionModal({
         <button
           disabled={connectingWallet !== 0}
           onClick={() => onWalletClicked(wallet)}
-          className={`${
+          className={classNames(
             connectingWallet === 0
               ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'
-              : 'cursor-not-allowed'
-          } ${
-            connectingWallet === wallet
-              ? 'border-transparent bg-brand-blue text-brand-gray'
-              : ''
-          } flex-grow p-2 text-lg text-black border-2 rounded-lg border-brand-gray-1 font-sf-compact-medium`}
+              : 'cursor-not-allowed',
+            connectingWallet === wallet &&
+              'border-transparent bg-brand-blue text-brand-gray',
+            'flex-grow p-2 text-lg text-black border-2 rounded-lg border-brand-gray-1 font-sf-compact-medium'
+          )}
         >
           <div className="flex flex-row items-center">
             <div className="flex-none">{svg}</div>
             <div className="flex-none ml-2">{name}</div>
             <div
-              className={`${
-                connectingWallet !== wallet ? 'display: hidden' : ''
-              } flex flex-row justify-end flex-grow`}
+              className={classNames(
+                connectingWallet !== wallet && 'display: hidden',
+                'flex flex-row justify-end flex-grow'
+              )}
             >
               <svg
                 viewBox="0 0 100 100"
@@ -141,6 +142,11 @@ export default function WalletSelectionModal({
           'Fortmatic',
           wallets.WALLETS.FORTMATIC
         )}
+        {/* {makeWalletButton(
+          <Portis className="w-7 h-7" />,
+          'Portis',
+          wallets.WALLETS.PORTIS
+        )} */}
 
         <hr className="m-4" />
         <div className="flex flex-row items-center mx-4 mb-4 ">
@@ -153,6 +159,7 @@ export default function WalletSelectionModal({
                 className="underline"
                 href={`https://etherscan.io/address/${address}`}
                 target="_blank"
+                rel="noreferrer"
               >
                 {address.slice(0, 6)}...{address.slice(-4)}
               </a>
@@ -162,11 +169,12 @@ export default function WalletSelectionModal({
             <button
               disabled={web3 === undefined}
               onClick={onDisconnectClicked}
-              className={`${
+              className={classNames(
                 web3 !== undefined
                   ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'
-                  : 'cursor-not-allowed'
-              } p-2 text-xs text-center border-2 rounded-lg text-brand-gray-2 border-brand-gray-1 font-sf-compact-medium`}
+                  : 'cursor-not-allowed',
+                'p-2 text-xs text-center border-2 rounded-lg text-brand-gray-2 border-brand-gray-1 font-sf-compact-medium'
+              )}
             >
               Disconnect
             </button>
@@ -176,6 +184,3 @@ export default function WalletSelectionModal({
     </Modal>
   )
 }
-
-// { makeWalletButton(<Portis className="w-7 h-7"/>, 'Fortmatic', wallets.WALLETS.PORTIS) }
-//
