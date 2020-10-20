@@ -357,6 +357,35 @@ export default function Home() {
             </div>
           </div>
           <div>
+            <div className="hidden md:flex md:px-10 md:py-5 md:border-b md:space-x-10">
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-43">
+                Name
+              </div>
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
+                Price
+              </div>
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
+                Deposits
+              </div>
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
+                24H Change
+              </div>
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
+                24H Volume
+              </div>
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
+                1YR Income
+              </div>
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
+                Price Chart
+              </div>
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-36">
+                Trade
+              </div>
+              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
+                Watch
+              </div>
+            </div>
             {tokenRows.map((token: Token, index: number) => (
               <TokenRow
                 key={token.symbol}
