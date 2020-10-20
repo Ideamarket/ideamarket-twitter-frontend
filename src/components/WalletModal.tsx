@@ -6,6 +6,8 @@ import WalletConnect from '../assets/walletconnect.svg'
 import Coinbase from '../assets/coinbase.svg'
 import Fortmatic from '../assets/fortmatic.svg'
 // import Portis from '../assets/portis.svg'
+import DotRed from '../assets/dotred.svg'
+import DotGreen from '../assets/dotgreen.svg'
 
 import Modal from './Modal'
 
@@ -13,6 +15,8 @@ import * as wallets from 'eth-wallets'
 
 export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
   const [connectingWallet, setConnectingWallet] = useState(0)
+  const web3 = useWalletStore((state) => state.web3)
+  const address = useWalletStore((state) => state.address)
 
   async function onWalletClicked(wallet) {
     setConnectingWallet(wallet)
@@ -43,10 +47,25 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
       setConnectingWallet(0)
     }
 
-    console.log(web3.eth)
+    localStorage.setItem('WALLET_TYPE', wallet.toString())
     useWalletStore.setState({
       web3: web3,
       address: (await web3.eth.getAccounts())[0],
+    })
+  }
+
+  async function onDisconnectClicked() {
+    try {
+      const wallet = parseInt(localStorage.getItem('WALLET_TYPE'))
+      await wallets.disconnect(wallet)
+    } catch (ex) {
+      console.log(ex)
+    }
+
+    localStorage.removeItem('WALLET_TYPE')
+    useWalletStore.setState({
+      web3: undefined,
+      address: '',
     })
   }
 
@@ -140,10 +159,40 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
           wallets.WALLETS.FORTMATIC
         )}
 
-        <hr className="mt-4" />
+        <hr className="m-4" />
+        <div className="flex flex-row items-center mx-4 mb-4 ">
+          {web3 === undefined && <DotRed className="w-3 h-3" />}
+          {web3 !== undefined && <DotGreen className="w-3 h-3" />}
+          <p className="ml-2 text-brand-gray-2">
+            {address !== '' ? 'Connected with: ' : 'Not connected'}
+            {address !== '' && (
+              <a
+                className="underline"
+                href={`https://etherscan.io/address/${address}`}
+                target="_blank"
+              >
+                {address.slice(0, 6)}...{address.slice(-4)}
+              </a>
+            )}
+          </p>
+          <div className="flex justify-end flex-grow">
+            <button
+              disabled={web3 === undefined}
+              onClick={onDisconnectClicked}
+              className={`${
+                web3 !== undefined
+                  ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'
+                  : 'cursor-not-allowed'
+              } p-2 text-xs text-center border-2 rounded-lg text-brand-gray-2 border-brand-gray-1 font-sf-compact-medium`}
+            >
+              Disconnect
+            </button>
+          </div>
+        </div>
       </div>
     </Modal>
   )
 }
 
 // { makeWalletButton(<Portis className="w-7 h-7"/>, 'Fortmatic', wallets.WALLETS.PORTIS) }
+//
