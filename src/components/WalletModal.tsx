@@ -12,10 +12,10 @@ import Modal from './Modal'
 import * as wallets from 'eth-wallets'
 
 export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
-  const [walletButtonsDisabled, setWalletButtonsDisabled] = useState(false)
+  const [connectingWallet, setConnectingWallet] = useState(0)
 
   async function onWalletClicked(wallet) {
-    setWalletButtonsDisabled(true)
+    setConnectingWallet(wallet)
 
     wallets.setOption(
       wallets.WALLETS.WALLETCONNECT,
@@ -40,7 +40,7 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
       console.log(ex)
       return
     } finally {
-      setWalletButtonsDisabled(false)
+      setConnectingWallet(0)
     }
 
     console.log(web3.eth)
@@ -54,13 +54,55 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
     return (
       <div className="flex pl-4 pr-4 mt-4">
         <button
-          disabled={walletButtonsDisabled}
+          disabled={connectingWallet !== 0}
           onClick={() => onWalletClicked(wallet)}
-          className="flex-grow p-2 text-lg text-black border-2 rounded-lg border-brand-gray-1 font-sf-compact-medium hover:border-transparent hover:bg-brand-blue hover:text-white"
+          className={`${
+            connectingWallet === 0
+              ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'
+              : 'cursor-not-allowed'
+          } ${
+            connectingWallet === wallet
+              ? 'border-transparent bg-brand-blue text-brand-gray'
+              : ''
+          } flex-grow p-2 text-lg text-black border-2 rounded-lg border-brand-gray-1 font-sf-compact-medium`}
         >
           <div className="flex flex-row items-center">
             <div className="flex-none">{svg}</div>
             <div className="flex-none ml-2">{name}</div>
+            <div
+              className={`${
+                connectingWallet !== wallet ? 'display: hidden' : ''
+              } flex flex-row justify-end flex-grow`}
+            >
+              <svg
+                viewBox="0 0 100 100"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 animate-spin"
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="45"
+                  style={{
+                    fill: 'transparent',
+                    stroke: 'hsl(235, 42%, 17%)',
+                    strokeWidth: '10',
+                  }}
+                />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="45"
+                  style={{
+                    fill: 'transparent',
+                    stroke: 'white',
+                    strokeWidth: '10',
+                    strokeDasharray: '283',
+                    strokeDashoffset: '75',
+                  }}
+                />
+              </svg>
+            </div>
           </div>
         </button>
       </div>
@@ -70,7 +112,7 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
   return (
     <Modal isOpen={isOpen} setIsOpen={(b) => (isOpen = b)}>
       <div className="lg:min-w-100">
-        <div className="p-4 bg-gradient-to-b from-very-dark-blue to-brand-blue">
+        <div className="p-4 bg-gradient-to-b from-very-dark-blue-3 to-brand-blue">
           <p className="text-2xl text-center text-gray-200 md:text-3xl font-gilroy-bold">
             {' '}
             Connect your Wallet
