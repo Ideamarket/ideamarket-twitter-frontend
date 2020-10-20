@@ -1,4 +1,8 @@
 import classNames from 'classnames'
+import { useState } from 'react'
+// import Particles from 'react-particles-js'
+
+import { WalletStatus } from '../components'
 
 import YouTube from '../assets/youtube.svg'
 import Medium from '../assets/medium.svg'
@@ -8,12 +12,7 @@ import More from '../assets/more.svg'
 import Star from '../assets/star.svg'
 import StarOn from '../assets/star-on.svg'
 
-import ParticlesConfig from '../assets/particlesjs-config.json'
-import Particles from 'react-particles-js'
-
-import { WalletStatus } from '../components'
-
-import { useState } from 'react'
+// import ParticlesConfig from '../assets/particlesjs-config.json'
 
 type Token = {
   company: string
@@ -46,7 +45,7 @@ export function TokenRow({
   return (
     <div
       className={classNames(
-        'flex flex-col p-5 space-x-2 md:flex-row md:items-center border-b',
+        'flex flex-col p-5 space-x-2 md:flex-row md:items-center border-b overflow-x-scroll md:h-18 md:overflow-y-hidden',
         hideInMobile && 'hidden md:flex'
       )}
     >
@@ -77,30 +76,30 @@ export function TokenRow({
           </svg>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-5 mt-5 md:mt-0 md:grid-cols-8 font-sf-pro-text">
-        <div className="md:w-24">
+      <div className="grid grid-cols-3 gap-5 mt-5 md:mt-0 md:grid-cols-8 md:place-items-center font-sf-pro-text">
+        <div className="md:w-20">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Price
           </p>
-          <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+          <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
             {price ? price : <>&mdash;</>}
           </p>
         </div>
-        <div className="md:w-24">
+        <div className="md:w-20">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Deposits
           </p>
-          <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+          <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
             {deposits ? deposits : <>&mdash;</>}
           </p>
         </div>
-        <div className="md:w-24">
+        <div className="md:w-20">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             24H Change
           </p>
           <p
             className={classNames(
-              'text-base font-medium tracking-tightest-2 text-very-dark-blue',
+              'text-base leading-4  font-medium tracking-tightest-2 text-very-dark-blue',
               dayChange &&
                 (dayChange[0] === '+' ? 'text-brand-green' : 'text-brand-red')
             )}
@@ -108,23 +107,23 @@ export function TokenRow({
             {dayChange ? dayChange : <>&mdash;</>}
           </p>
         </div>
-        <div className="md:w-24">
+        <div className="md:w-20">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             24H Volume
           </p>
-          <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+          <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
             {dayVolume ? dayVolume : <>&mdash;</>}
           </p>
         </div>
-        <div className="md:w-24">
+        <div className="md:w-20">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             1YR Income
           </p>
-          <p className="text-base font-medium tracking-tightest-2 text-very-dark-blue">
+          <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
             {yearIncome ? yearIncome : <>&mdash;</>}
           </p>
         </div>
-        <div className="md:w-24">
+        <div className="md:w-20">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Watch
           </p>
@@ -134,17 +133,17 @@ export function TokenRow({
             <Star className="w-5 fill-current text-brand-gray-4" />
           )}
         </div>
-        <div>
+        <div className="md:w-20">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Price Chart
           </p>
           <p>Chart</p>
         </div>
-        <div className="hidden md:block">
+        <div className="hidden md:block md:w-24">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Trade
           </p>
-          <button className="px-4 py-1 text-base font-medium text-white rounded-lg tracking-tightest-2 font-sf-compact-medium bg-brand-blue hover:bg-blue-800">
+          <button className="w-32 h-10 text-base font-medium text-white rounded-lg tracking-tightest-2 font-sf-compact-medium bg-brand-blue hover:bg-blue-800">
             Trade
           </button>
         </div>
@@ -155,7 +154,8 @@ export function TokenRow({
 
 export default function Home() {
   const [selectedTabId, setSelectedTabId] = useState(1)
-  const mobileTabs = [
+
+  const tabs = [
     {
       id: 1,
       value: 'Top Tokens',
@@ -168,10 +168,6 @@ export default function Home() {
       id: 3,
       value: 'New Listings',
     },
-  ]
-
-  const desktopTabs = [
-    ...mobileTabs,
     {
       id: 4,
       value: 'Watch List',
@@ -252,8 +248,8 @@ export default function Home() {
   ]
 
   return (
-    <div className="bg-brand-gray max-h-home">
-      <div className="w-screen p-5 text-center text-white bg-top-mobile h-158">
+    <div className="bg-brand-gray max-h-home md:max-h-desktop-home">
+      <div className="w-screen p-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
         <div className="flex items-center">
           <img className="w-8" src="/logo.png" alt="Logo" />
           <h2 className="text-xl leading-none font-gilroy-bold">IdeaMarkets</h2>
@@ -275,60 +271,60 @@ export default function Home() {
         </div>
         <div className="mt-8">
           <div className="flex items-center justify-center space-x-5">
-            <div className="w-20">
+            <div className="w-20 md:w-36">
               <p className="text-xs text-gray-600">as seen in</p>
               <img src="/coindesk.png" alt="" />
             </div>
-            <div className="w-20">
+            <div className="w-20 md:w-36">
               <img src="/ethereum.png" alt="" />
             </div>
           </div>
-          <h2 className="mt-8 text-3xl font-gilroy-bold">
+          <h2 className="mt-8 md:mt-18 text-3xl md:text-6+xl font-gilroy-bold">
             Cash in on your <span className="text-brand-blue">clout.</span>
           </h2>
-          <p className="mt-8 text-lg font-sf-compact-medium">
+          <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
             Earn passive income from your community's confidence in you.
           </p>
         </div>
         <div className="inline-flex flex-col space-y-3 md:flex-row md:space-x-10 md:space-y-0 md:items-center mt-7">
-          <button className="px-4 py-1 text-lg font-bold text-white rounded-lg font-sf-compact-medium bg-brand-blue hover:bg-blue-800">
+          <button className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-3 md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800">
             Launch Your Token
           </button>
           <p className="text-lg font-sf-compact-medium">How it Works</p>
         </div>
-        <Particles
+        {/* <Particles
           params={ParticlesConfig as any}
           className="absolute top-0 bottom-0 left-0 right-0 pointer-events-none"
-        ></Particles>
+        ></Particles> */}
       </div>
 
-      <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 font-sf-compact-medium">
+      <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 md:-translate-y-28 font-sf-compact-medium">
         <div className="grid grid-cols-2 md:grid-cols-5">
-          <div className="flex items-center p-5 space-x-2.5 text-white rounded-tl-xlg border-2 md:border-b-0">
+          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tl-xlg border-2 md:border-b-0">
             <div>
               <YouTube className="h-5" />
             </div>
             <p className="text-lg leading-none">YouTube</p>
           </div>
-          <div className="flex items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0">
+          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0">
             <div>
               <Medium className="h-5" />
             </div>
             <p className="text-lg leading-none">Medium</p>
           </div>
-          <div className="flex items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0">
+          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0">
             <div>
               <Twitter className="h-5" />
             </div>
             <p className="text-lg leading-none">Twitter</p>
           </div>
-          <div className="flex items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0">
+          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0">
             <div>
               <Patreon className="h-5" />
             </div>
             <p className="text-lg leading-none">Patreon</p>
           </div>
-          <div className="flex items-center p-5 space-x-2.5 text-white border-l-2 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 md:rounded-tr-xlg">
+          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white border-l-2 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 md:rounded-tr-xlg">
             <div>
               <More className="h-5" />
             </div>
@@ -341,7 +337,7 @@ export default function Home() {
             <div>
               <div className="font-sf-pro-text">
                 <nav className="flex -mb-px space-x-5">
-                  {desktopTabs.map((tab) => (
+                  {tabs.map((tab) => (
                     <a
                       onClick={() => setSelectedTabId(tab.id)}
                       key={tab.id}
@@ -371,7 +367,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div>
+        <div className="md:flex">
           <div className="flex justify-center mt-10 space-x-5 font-sf-pro-text">
             <p className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
               Need Help?
@@ -383,7 +379,7 @@ export default function Home() {
               Legal &amp; Privacy
             </p>
           </div>
-          <p className="mt-5 text-sm leading-none text-center tracking-tightest-2 text-brand-gray-2">
+          <p className="mt-5 text-sm leading-none text-center md:ml-auto md:mt-10 tracking-tightest-2 text-brand-gray-2">
             &copy;2020 IdeaMarkets
           </p>
         </div>

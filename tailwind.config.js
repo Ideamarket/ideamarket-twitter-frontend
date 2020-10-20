@@ -36,8 +36,9 @@ module.exports = {
       },
       spacing: {
         7.5: '1.875rem',
+        18: '4.5rem',
         30: '7.5rem',
-        158: '39.5rem',
+        156.5: '39.125rem',
       },
       letterSpacing: {
         tightest: '-0.015625rem', // -0.25px
@@ -45,6 +46,7 @@ module.exports = {
       },
       backgroundImage: (theme) => ({
         'top-mobile': "url('/topbg-mobile.svg')",
+        'top-desktop': "url('/topbg.svg')",
       }),
       borderRadius: {
         xlg: '0.625rem',
@@ -53,7 +55,8 @@ module.exports = {
         home: '0 1px 5px 0 rgba(0, 0, 0, 0.05)',
       },
       maxHeight: {
-        home: '77rem',
+        home: '82rem',
+        'desktop-home': '76rem',
       },
       minWidth: {
         100: '25rem',
@@ -61,6 +64,9 @@ module.exports = {
       maxWidth: {
         88: '22rem',
         304: '76rem',
+      },
+      fontSize: {
+        '6+xl': '4.2rem',
       },
     },
   },
