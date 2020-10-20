@@ -8,6 +8,9 @@ import More from '../assets/more.svg'
 import Star from '../assets/star.svg'
 import StarOn from '../assets/star-on.svg'
 
+import ParticlesConfig from '../assets/particlesjs-config.json'
+import Particles from 'react-particles-js'
+
 import { WalletStatus } from '../components'
 
 import { useState } from 'react'
@@ -293,7 +296,12 @@ export default function Home() {
           </button>
           <p className="text-lg font-sf-compact-medium">How it Works</p>
         </div>
+        <Particles
+          params={ParticlesConfig as any}
+          className="absolute top-0 bottom-0 left-0 right-0"
+        ></Particles>
       </div>
+
       <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 font-sf-compact-medium">
         <div className="grid grid-cols-2 md:grid-cols-5">
           <div className="flex items-center p-5 space-x-2.5 text-white rounded-tl-xlg border-2 md:border-b-0">
