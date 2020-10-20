@@ -16,7 +16,7 @@ export const useContractStore = create<State>((set) => ({
   currencyConverterContract: undefined,
 }))
 
-export const clearContracts = () => {
+export async function clearContracts() {
   useContractStore.setState({
     factoryContract: undefined,
     exchangeContract: undefined,
@@ -24,7 +24,7 @@ export const clearContracts = () => {
   })
 }
 
-export const initContractsFromWeb3 = (web3: Web3) => {
+export async function initContractsFromWeb3(web3: Web3) {
   const factoryContract = new web3.eth.Contract(
     DeployedABIsKovan.ideaTokenFactory as any,
     DeployedAddressesKovan.ideaTokenFactory,
