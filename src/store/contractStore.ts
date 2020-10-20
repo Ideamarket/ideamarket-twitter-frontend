@@ -27,15 +27,18 @@ export const clearContracts = () => {
 export const initContractsFromWeb3 = (web3: Web3) => {
   const factoryContract = new web3.eth.Contract(
     DeployedABIsKovan.ideaTokenFactory as any,
-    DeployedAddressesKovan.ideaTokenFactory
+    DeployedAddressesKovan.ideaTokenFactory,
+    { from: web3.eth.defaultAccount }
   )
   const exchangeContract = new web3.eth.Contract(
     DeployedABIsKovan.ideaTokenExchange as any,
-    DeployedAddressesKovan.ideaTokenExchange
+    DeployedAddressesKovan.ideaTokenExchange,
+    { from: web3.eth.defaultAccount }
   )
   const currencyConverterContract = new web3.eth.Contract(
     DeployedABIsKovan.currencyConverter as any,
-    DeployedAddressesKovan.currencyConverter
+    DeployedAddressesKovan.currencyConverter,
+    { from: web3.eth.defaultAccount }
   )
   useContractStore.setState({
     factoryContract: factoryContract,
