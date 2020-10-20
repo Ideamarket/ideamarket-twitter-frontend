@@ -13,7 +13,13 @@ import Modal from './Modal'
 
 import * as wallets from 'eth-wallets'
 
-export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
+export default function WalletSelectionModal({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean
+  setIsOpen: (b: boolean) => void
+}) {
   const [connectingWallet, setConnectingWallet] = useState(0)
   const web3 = useWalletStore((state) => state.web3)
   const address = useWalletStore((state) => state.address)
@@ -52,6 +58,8 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
       web3: web3,
       address: (await web3.eth.getAccounts())[0],
     })
+
+    setIsOpen(false)
   }
 
   async function onDisconnectClicked() {

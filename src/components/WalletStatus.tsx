@@ -16,9 +16,13 @@ export default function WalletStatus() {
   const isModalOpen = useWalletStore((state) => state.showWalletModal)
   const toggleWalletModal = useWalletStore((state) => state.toggleWalletModal)
 
+  const setIsWalletModalOpen = function (b: boolean) {
+    useWalletStore.setState({ showWalletModal: b })
+  }
+
   return (
     <React.Fragment>
-      <NoSSRWalletModal isOpen={isModalOpen} />
+      <NoSSRWalletModal isOpen={isModalOpen} setIsOpen={setIsWalletModalOpen} />
       <div
         className="flex flex-row items-center px-2 border rounded cursor-pointer border-brand-gray-2"
         onClick={toggleWalletModal}
