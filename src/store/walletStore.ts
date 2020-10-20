@@ -1,7 +1,8 @@
 import create from 'zustand'
+import Web3 from 'web3'
 
 type State = {
-  web3: boolean
+  web3: Web3
   showWalletModal: boolean
   address: string
   toggleWalletModal: () => void

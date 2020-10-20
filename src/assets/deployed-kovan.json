@@ -1,0 +1,19 @@
+{
+  "migrations": "0x259Ba5C8B1fCa1992f14e53614b729442473aE69",
+  "dsPause": "0xF53f1814dF57Eae82501d60B636907aD2E3a520b",
+  "dsPauseProxy": "0x1ef7138b12636b32e903daC4A3681af7df689F24",
+  "proxyAdmin": "0x5c0bc36D68925Aeb4620BE6d479133ed53247F64",
+  "interestManager": "0xaA187389d83B0bB1bc827Fc6B95865b1F133D0BE",
+  "interestManagerLogic": "0x4452E7e88D45dA40c67d10B53B83ee58C76884e9",
+  "ideaTokenExchange": "0x9758F9970c40FA1CC72BE614a4c9910a5d11a39c",
+  "ideaTokenExchangeLogic": "0xB7804b181318BFA5BceC01146eE343B74e9950De",
+  "ideaTokenFactory": "0x1454f9Fc82059ABc768D581bB414B1e9b6B512F8",
+  "ideaTokenFactoryLogic": "0xD0d06b5cdC65950Eb224EeEa000497e72D6d6227",
+  "currencyConverter": "0xb93274dd6Ed7e7c9818F3bF53A4cA1A4655a08B4",
+  "addMarketSpell": "0x6E19a04294e8Cba218EfD89f449323553303ee89",
+  "domainNoSubdomainNameVerifier": "0x281207eAb6b7Dc5eDD995f67A09E88Ada7a042dA",
+  "authorizeInterestWithdrawerSpell": "0x32C493da7f5B9E3FCe566394730f9A9b1D8EC30f",
+  "authorizePlatformFeeWithdrawerSpell": "0x531D59bC7B6cFEe0409d0818185fe0d938F1160b",
+  "setTradingFeeSpell": "0x684Ef91bcF0a80a7c8Bee806AF9b5f1a965DD630",
+  "setPlatformFeeSpell": "0xb6F2C5F716fCe44bF428974c3b6D296842c5a724"
+}
