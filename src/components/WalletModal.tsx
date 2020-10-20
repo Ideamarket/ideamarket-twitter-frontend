@@ -62,9 +62,9 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
 
   return (
     <Modal isOpen={isOpen} setIsOpen={(b) => (isOpen = b)}>
-      <div className="min-w-100">
+      <div className="lg:min-w-100">
         <div className="p-4 bg-gradient-to-b from-very-dark-blue to-brand-blue">
-          <p className="text-3xl text-center text-gray-200 font-gilroy-bold">
+          <p className="text-2xl text-center text-gray-200 md:text-3xl font-gilroy-bold">
             {' '}
             Connect your Wallet
           </p>
