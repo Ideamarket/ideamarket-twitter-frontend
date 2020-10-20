@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useWalletStore from '../store/walletStore'
+import { useWalletStore, setWeb3, unsetWeb3 } from '../store/walletStore'
 
 import Metamask from '../assets/metamask.svg'
 import WalletConnect from '../assets/walletconnect.svg'
@@ -27,22 +27,6 @@ export default function WalletSelectionModal({
   async function onWalletClicked(wallet) {
     setConnectingWallet(wallet)
 
-    wallets.setOption(
-      wallets.WALLETS.WALLETCONNECT,
-      wallets.OPTIONS.INFURA_KEY,
-      '3399077c10a24059be2a6c5b4fa77c03'
-    )
-    wallets.setOption(
-      wallets.WALLETS.COINBASE,
-      wallets.OPTIONS.JSON_RPC_URL,
-      'https://mainnet.infura.io/v3/3399077c10a24059be2a6c5b4fa77c03'
-    )
-    wallets.setOption(
-      wallets.WALLETS.FORTMATIC,
-      wallets.OPTIONS.API_KEY,
-      'pk_live_B3A1A25FBF96DCB5'
-    )
-
     let web3
     try {
       web3 = await wallets.connect(wallet)
@@ -53,12 +37,7 @@ export default function WalletSelectionModal({
       setConnectingWallet(0)
     }
 
-    localStorage.setItem('WALLET_TYPE', wallet.toString())
-    useWalletStore.setState({
-      web3: web3,
-      address: (await web3.eth.getAccounts())[0],
-    })
-
+    await setWeb3(web3, wallet)
     setIsOpen(false)
   }
 
@@ -70,11 +49,7 @@ export default function WalletSelectionModal({
       console.log(ex)
     }
 
-    localStorage.removeItem('WALLET_TYPE')
-    useWalletStore.setState({
-      web3: undefined,
-      address: '',
-    })
+    unsetWeb3()
   }
 
   function makeWalletButton(svg: JSX.Element, name: string, wallet: number) {

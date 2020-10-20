@@ -1,5 +1,5 @@
 import React from 'react'
-import useWalletStore from '../store/walletStore'
+import { useWalletStore } from '../store/walletStore'
 
 import DotRed from '../assets/dotred.svg'
 import DotGreen from '../assets/dotgreen.svg'
