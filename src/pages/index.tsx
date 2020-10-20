@@ -248,7 +248,7 @@ export default function Home() {
   ]
 
   return (
-    <div className="bg-brand-gray max-h-home md:max-h-desktop-home">
+    <div className="bg-brand-gray max-h-home">
       <div className="w-screen p-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
         <div className="flex items-center">
           <img className="w-8" src="/logo.png" alt="Logo" />

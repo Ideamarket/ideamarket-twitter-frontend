@@ -57,7 +57,6 @@ module.exports = {
       },
       maxHeight: {
         home: '82rem',
-        'desktop-home': '76rem',
       },
       minWidth: {
         100: '25rem',
