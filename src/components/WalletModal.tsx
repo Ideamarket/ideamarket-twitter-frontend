@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useState } from 'react'
 import useWalletStore from '../store/walletStore'
 
 import Metamask from '../assets/metamask.svg'
@@ -12,7 +12,11 @@ import Modal from './Modal'
 import * as wallets from 'eth-wallets'
 
 export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
+  const [walletButtonsDisabled, setWalletButtonsDisabled] = useState(false)
+
   async function onWalletClicked(wallet) {
+    setWalletButtonsDisabled(true)
+
     wallets.setOption(
       wallets.WALLETS.WALLETCONNECT,
       wallets.OPTIONS.INFURA_KEY,
@@ -35,6 +39,8 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
     } catch (ex) {
       console.log(ex)
       return
+    } finally {
+      setWalletButtonsDisabled(false)
     }
 
     console.log(web3.eth)
@@ -48,6 +54,7 @@ export default function WalletSelectionModal({ isOpen }: { isOpen: boolean }) {
     return (
       <div className="flex pl-4 pr-4 mt-4">
         <button
+          disabled={walletButtonsDisabled}
           onClick={() => onWalletClicked(wallet)}
           className="flex-grow p-2 text-lg text-black border-2 rounded-lg border-brand-gray-1 font-sf-compact-medium hover:border-transparent hover:bg-brand-blue hover:text-white"
         >
