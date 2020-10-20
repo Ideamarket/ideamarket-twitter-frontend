@@ -123,7 +123,7 @@ export function TokenRow({
             {yearIncome ? yearIncome : <>&mdash;</>}
           </p>
         </div>
-        <div className="md:w-20">
+        <div className="md:w-20 md:col-start-8 md:col-span-1 md:row-start-1 md:row-span-1 md:ml-10">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Watch
           </p>
@@ -139,7 +139,7 @@ export function TokenRow({
           </p>
           <p>Chart</p>
         </div>
-        <div className="hidden md:block md:w-24">
+        <div className="hidden md:block">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Trade
           </p>
