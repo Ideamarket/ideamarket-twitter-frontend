@@ -16,6 +16,7 @@
   "dependencies": {
     "@apollo/client": "3.2.5",
     "@headlessui/react": "0.2.0",
+    "bignumber.js": "^9.0.1",
     "classnames": "2.2.6",
     "eth-wallets": "1.0.7",
     "graphql": "15.3.0",
