@@ -642,6 +642,7 @@
     {
       "inputs": [
         { "internalType": "address", "name": "owner", "type": "address" },
+        { "internalType": "address", "name": "authorizer", "type": "address" },
         {
           "internalType": "address",
           "name": "tradingFeeRecipient",
@@ -658,7 +659,7 @@
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function",
-      "signature": "0xf8c8765e"
+      "signature": "0x1459457a"
     },
     {
       "inputs": [
@@ -795,6 +796,16 @@
       "type": "function",
       "constant": true,
       "signature": "0x818b9756"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "authorizer", "type": "address" }
+      ],
+      "name": "setAuthorizer",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function",
+      "signature": "0x058a628f"
     },
     {
       "inputs": [
