@@ -12,7 +12,6 @@ import {
 } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { WebSocketLink } from '@apollo/client/link/ws'
-import { useContractStore } from './contractStore'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -36,14 +35,33 @@ type IdeaMarket = {
   platformFeeWithdrawer: string
 }
 
+type IdeaToken = {
+  address: string
+  marketID: number
+  tokenID: number
+  name: string
+  supply: string
+  rawSupply: BN
+  holders: number
+  marketCap: string
+  rawMarketCap: BN
+  interestWithdrawer: string
+  daiInToken: string
+  rawDaiInToken: BN
+  invested: string
+  rawInvested: BN
+}
+
 type State = {
   client: ApolloClient<NormalizedCacheObject>
   markets: { [id: number]: IdeaMarket }
+  tokens: { [marketID: number]: { [tokenID: number]: IdeaToken } }
 }
 
 export const useIdeaMarketsStore = create<State>((set) => ({
   client: undefined,
   markets: {},
+  tokens: {},
 }))
 
 export async function initIdeaMarketsStore() {
@@ -77,17 +95,16 @@ export async function initIdeaMarketsStore() {
 
   useIdeaMarketsStore.setState({ client: client })
 
-  const result = await client.query({ query: queryGetAllMarkets() })
-  const promises = []
+  const result = await client.query({
+    query: queryGetAllMarketsWithNumTokens(20),
+  })
   for (let i = 0; i < result.data.ideaMarkets.length; i++) {
     const market = result.data.ideaMarkets[i]
-    promises.push(handleNewMarket(market))
+    handleNewMarket(market)
   }
-
-  await Promise.all(promises)
 }
 
-async function handleNewMarket(market): Promise<void> {
+function handleNewMarket(market): void {
   const newMarket = <IdeaMarket>{
     name: market.name,
     marketID: market.marketID,
@@ -117,6 +134,39 @@ async function handleNewMarket(market): Promise<void> {
   const marketsState = useIdeaMarketsStore.getState().markets
   marketsState[market.marketID] = newMarket
   useIdeaMarketsStore.setState({ markets: marketsState })
+
+  for (let i = 0; i < market.tokens.length; i++) {
+    const token = market.tokens[i]
+    handleNewToken(token, market.marketID)
+  }
+}
+
+function handleNewToken(token, marketID: number): void {
+  const newToken = <IdeaToken>{
+    address: token.id,
+    marketID: marketID,
+    tokenID: token.tokenID,
+    name: token.name,
+    supply: web3BNToFloatString(new BN(token.supply), tenPow18, 2),
+    rawSupply: new BN(token.supply),
+    holders: token.holders,
+    marketCap: web3BNToFloatString(new BN(token.marketCap), tenPow18, 2),
+    rawMarketCap: new BN(token.marketCap),
+    interestWithdrawer: token.interestWithdrawer,
+    daiInToken: web3BNToFloatString(new BN(token.daiInToken), tenPow18, 2),
+    rawDaiInToken: new BN(token.daiInToken),
+    invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
+    rawInvested: new BN(token.invested),
+  }
+
+  let tokensState = useIdeaMarketsStore.getState().tokens[marketID]
+  if (tokensState === undefined) {
+    tokensState = {}
+    useIdeaMarketsStore.setState({ tokens: tokensState })
+  }
+
+  tokensState[token.tokenID] = newToken
+  useIdeaMarketsStore.setState({ tokens: { [marketID]: tokensState } })
 }
 
 function web3BNToFloatString(
@@ -129,7 +179,7 @@ function web3BNToFloatString(
   return divided.toFixed(decimals)
 }
 
-const queryGetAllMarkets = () => gql`
+const queryGetAllMarketsWithNumTokens = (numTokens: number) => gql`
   {
     ideaMarkets {
       marketID
@@ -140,6 +190,17 @@ const queryGetAllMarkets = () => gql`
       platformFeeRate
       platformFeeWithdrawer
       platformFeeInvested
+      tokens(orderBy: marketCap, orderDirections: desc, first: ${numTokens}) {
+        id
+        tokenID
+        name
+        supply
+        holders
+        marketCap
+        interestWithdrawer
+        daiInToken
+        invested
+      }
     }
   }
 `
