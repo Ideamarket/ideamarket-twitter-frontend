@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { listToken } from '../actions/listToken'
+import BigNumber from 'bignumber.js'
 
 import { WalletStatus } from '../components'
 
@@ -12,17 +13,25 @@ import More from '../assets/more.svg'
 import Star from '../assets/star.svg'
 import StarOn from '../assets/star-on.svg'
 
-import { useIdeaMarketsStore, IdeaToken } from '../store/ideaMarketsStore'
+import { web3BNToFloatString, calculateCurrentPriceBN } from '../util'
+import {
+  useIdeaMarketsStore,
+  setIsWatching,
+  IdeaToken,
+  IdeaMarket,
+} from '../store/ideaMarketsStore'
+
+const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export function TokenRow({
   token,
+  market,
   hideInMobile = false,
 }: {
   token: IdeaToken
+  market: IdeaMarket
   hideInMobile?: boolean
 }) {
-  const { name, daiInToken } = token
-
   return (
     <div
       className={classNames(
@@ -35,7 +44,7 @@ export function TokenRow({
           <div className="w-7.5 h-7.5 rounded-full border"></div>
           <div className="ml-2.5">
             <h2 className="text-base font-medium leading-none tracking-tightest-2 text-very-dark-blue font-sf-pro-text">
-              {name}
+              {token.name}
             </h2>
           </div>
         </div>
@@ -60,7 +69,18 @@ export function TokenRow({
             Price
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
-            {'TODO' /*price ? price : <>&mdash;</> */}
+            $
+            {
+              web3BNToFloatString(
+                calculateCurrentPriceBN(
+                  token.rawSupply,
+                  market.rawBaseCost,
+                  market.rawPriceRise
+                ),
+                tenPow18,
+                2
+              ) /*price ? price : <>&mdash;</> */
+            }
           </p>
         </div>
         <div className="md:w-20">
@@ -68,7 +88,11 @@ export function TokenRow({
             Deposits
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
-            {parseFloat(daiInToken) > 0.0 ? daiInToken : <>&mdash;</>}
+            {parseFloat(token.daiInToken) > 0.0 ? (
+              token.daiInToken
+            ) : (
+              <>&mdash;</>
+            )}
           </p>
         </div>
         <div className="md:w-20">
@@ -105,10 +129,20 @@ export function TokenRow({
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Watch
           </p>
-          {false /*isWatching*/ ? (
-            <StarOn className="w-5 fill-current text-brand-gray-4" />
+          {token.isWatching ? (
+            <StarOn
+              className="w-5 cursor-pointer fill-current text-brand-gray-4"
+              onClick={() => {
+                setIsWatching(market.marketID, token.tokenID, false)
+              }}
+            />
           ) : (
-            <Star className="w-5 fill-current text-brand-gray-4" />
+            <Star
+              className="w-5 cursor-pointer fill-current text-brand-gray-4"
+              onClick={() => {
+                setIsWatching(market.marketID, token.tokenID, true)
+              }}
+            />
           )}
         </div>
         <div className="md:w-20">
@@ -312,6 +346,7 @@ export default function Home() {
                 key={token.tokenID}
                 hideInMobile={index > 1}
                 token={token}
+                market={selectedMarket}
               />
             ))}
           </div>

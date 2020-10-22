@@ -2,6 +2,8 @@ import create from 'zustand'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 
+import { web3BNToFloatString } from '../util'
+
 import {
   gql,
   split,
@@ -21,9 +23,11 @@ const HTTP_GRAPHQL_ENDPOINT =
 const WS_GRAPHQL_ENDPOINT =
   'wss://api.thegraph.com/subgraphs/name/ideamarket/ideamarket'
 
-type IdeaMarket = {
+export type IdeaMarket = {
   name: string
   marketID: number
+  baseCost: string
+  rawBaseCost: BN
   priceRise: string
   rawPriceRise: BN
   tradingFeeRate: string
@@ -50,6 +54,7 @@ export type IdeaToken = {
   rawDaiInToken: BN
   invested: string
   rawInvested: BN
+  isWatching: boolean
 }
 
 type State = {
@@ -104,10 +109,30 @@ export async function initIdeaMarketsStore() {
   }
 }
 
+export function setIsWatching(
+  marketID: number,
+  tokenID: number,
+  watching: boolean
+): void {
+  const token = useIdeaMarketsStore.getState().tokens[marketID][tokenID]
+  const address = token.address
+
+  if (watching) {
+    localStorage.setItem(`WATCH_${address}`, 'true')
+  } else {
+    localStorage.removeItem(`WATCH_${address}`)
+  }
+
+  token.isWatching = watching
+  useIdeaMarketsStore.setState({ tokens: { [marketID]: { [tokenID]: token } } })
+}
+
 function handleNewMarket(market): void {
   const newMarket = <IdeaMarket>{
     name: market.name,
     marketID: market.marketID,
+    baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
+    rawBaseCost: new BN(market.baseCost),
     priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
     rawPriceRise: new BN(market.priceRise),
     tradingFeeRate: web3BNToFloatString(
@@ -157,6 +182,7 @@ function handleNewToken(token, marketID: number): void {
     rawDaiInToken: new BN(token.daiInToken),
     invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
     rawInvested: new BN(token.invested),
+    isWatching: localStorage.getItem(`WATCH_${token.id}`) === 'true',
   }
 
   let tokensState = useIdeaMarketsStore.getState().tokens[marketID]
@@ -167,16 +193,6 @@ function handleNewToken(token, marketID: number): void {
 
   tokensState[token.tokenID] = newToken
   useIdeaMarketsStore.setState({ tokens: { [marketID]: tokensState } })
-}
-
-function web3BNToFloatString(
-  bn: BN,
-  divideBy: BigNumber,
-  decimals: number
-): string {
-  const converted = new BigNumber(bn.toString())
-  const divided = converted.div(divideBy)
-  return divided.toFixed(decimals)
 }
 
 const queryGetAllMarketsWithNumTokens = (numTokens: number) => gql`
