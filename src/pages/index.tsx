@@ -46,7 +46,9 @@ export function TokenRow({
     >
       <div className="flex md:w-48">
         <div className="flex items-center">
-          <div className="w-7.5 h-7.5 rounded-full border"></div>
+          <div className="w-7.5 h-7.5 rounded-full border overflow-hidden">
+            <img src={`${token.iconURL}`} />
+          </div>
           <div className="ml-2.5">
             <h2 className="text-base font-medium leading-none tracking-tightest-2 text-very-dark-blue font-sf-pro-text">
               {token.name}
@@ -170,7 +172,7 @@ export function TokenRow({
 
 export default function Home() {
   async function clicked() {
-    await listToken('test.com', 1)
+    await listToken('medium.com', 1)
   }
 
   const TOKENS_PER_PAGE = 10

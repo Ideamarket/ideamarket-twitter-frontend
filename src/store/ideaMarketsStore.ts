@@ -64,6 +64,7 @@ export type IdeaToken = {
   dayChange: string
   dayVolume: string
   isWatching: boolean
+  iconURL: string
 }
 
 type State = {
@@ -171,11 +172,11 @@ function handleNewMarket(market): void {
 
   for (let i = 0; i < market.tokens.length; i++) {
     const token = market.tokens[i]
-    handleNewToken(token, market.marketID)
+    handleNewToken(token, market.marketID, market.name)
   }
 }
 
-function handleNewToken(token, marketID: number): void {
+function handleNewToken(token, marketID: number, marketName: string): void {
   const pricePoints = <IdeaTokenPricePoint[]>[]
   let dayVolume = 0.0
 
@@ -218,6 +219,7 @@ function handleNewToken(token, marketID: number): void {
     dayChange: dayChange,
     dayVolume: dayVolume.toFixed(2),
     isWatching: localStorage.getItem(`WATCH_${token.id}`) === 'true',
+    iconURL: getTokenIconURL(marketName, token.name),
   }
 
   let tokensState = useIdeaMarketsStore.getState().tokens[marketID]
@@ -228,6 +230,14 @@ function handleNewToken(token, marketID: number): void {
 
   tokensState[token.tokenID] = newToken
   useIdeaMarketsStore.setState({ tokens: { [marketID]: tokensState } })
+}
+
+function getTokenIconURL(marketName: string, tokenName: string): string {
+  if (marketName === 'TestMarket') {
+    return `https://${tokenName}/favicon.ico`
+  } else {
+    return ''
+  }
 }
 
 const queryGetAllMarketsWithNumTokens = (numTokens: number) => {
