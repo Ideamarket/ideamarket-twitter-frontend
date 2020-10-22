@@ -34,7 +34,8 @@ export function TokenRow({
   hideInMobile?: boolean
 }) {
   const yearIncome = (
-    parseFloat(token.daiInToken) * parseFloat(useCompoundStore().supplyRate)
+    parseFloat(token.daiInToken) *
+    parseFloat(useCompoundStore((state) => state.supplyRate))
   ).toFixed(2)
 
   return (
@@ -181,8 +182,12 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(0)
   const [selectedMarketID, setSelectedMarketID] = useState(1)
 
-  const selectedMarket = useIdeaMarketsStore().markets[selectedMarketID]
-  const tokensInSelectedMarket = useIdeaMarketsStore().tokens[selectedMarketID]
+  const selectedMarket = useIdeaMarketsStore(
+    (state) => state.markets[selectedMarketID]
+  )
+  const tokensInSelectedMarket = useIdeaMarketsStore(
+    (state) => state.tokens[selectedMarketID]
+  )
   const currentTokens = !tokensInSelectedMarket
     ? []
     : Object.values(tokensInSelectedMarket).slice(
