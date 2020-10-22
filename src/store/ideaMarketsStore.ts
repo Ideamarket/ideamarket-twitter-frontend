@@ -124,17 +124,19 @@ export function setIsWatching(
   tokenID: number,
   watching: boolean
 ): void {
-  const token = useIdeaMarketsStore.getState().tokens[marketID][tokenID]
-  const address = token.address
+  const tokensState = useIdeaMarketsStore.getState().tokens
 
   if (watching) {
-    localStorage.setItem(`WATCH_${address}`, 'true')
+    localStorage.setItem(
+      `WATCH_${tokensState[marketID][tokenID].address}`,
+      'true'
+    )
   } else {
-    localStorage.removeItem(`WATCH_${address}`)
+    localStorage.removeItem(`WATCH_${tokensState[marketID][tokenID].address}`)
   }
 
-  token.isWatching = watching
-  useIdeaMarketsStore.setState({ tokens: { [marketID]: { [tokenID]: token } } })
+  tokensState[marketID][tokenID].isWatching = watching
+  useIdeaMarketsStore.setState({ tokens: tokensState })
 }
 
 function handleNewMarket(market): void {
@@ -222,14 +224,14 @@ function handleNewToken(token, marketID: number, marketName: string): void {
     iconURL: getTokenIconURL(marketName, token.name),
   }
 
-  let tokensState = useIdeaMarketsStore.getState().tokens[marketID]
-  if (tokensState === undefined) {
-    tokensState = {}
+  let tokensState = useIdeaMarketsStore.getState().tokens
+  if (tokensState[marketID] === undefined) {
+    tokensState[marketID] = {}
     useIdeaMarketsStore.setState({ tokens: tokensState })
   }
 
-  tokensState[token.tokenID] = newToken
-  useIdeaMarketsStore.setState({ tokens: { [marketID]: tokensState } })
+  tokensState[marketID][token.tokenID] = newToken
+  useIdeaMarketsStore.setState({ tokens: tokensState })
 }
 
 function getTokenIconURL(marketName: string, tokenName: string): string {
