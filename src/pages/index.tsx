@@ -182,12 +182,10 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(0)
   const [selectedMarketID, setSelectedMarketID] = useState(1)
 
-  const selectedMarket = useIdeaMarketsStore(
-    (state) => state.markets[selectedMarketID]
-  )
-  const tokensInSelectedMarket = useIdeaMarketsStore(
-    (state) => state.tokens[selectedMarketID]
-  )
+  // TODO: Don't use useIdeaMarketsStore() without argument, but it breaks if we do
+  const selectedMarket = useIdeaMarketsStore().markets[selectedMarketID]
+  const tokensInSelectedMarket = useIdeaMarketsStore().tokens[selectedMarketID]
+
   const currentTokens = !tokensInSelectedMarket
     ? []
     : Object.values(tokensInSelectedMarket).slice(
