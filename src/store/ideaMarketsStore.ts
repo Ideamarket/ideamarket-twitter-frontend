@@ -35,7 +35,7 @@ type IdeaMarket = {
   platformFeeWithdrawer: string
 }
 
-type IdeaToken = {
+export type IdeaToken = {
   address: string
   marketID: number
   tokenID: number

@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useState } from 'react'
-// import Particles from 'react-particles-js'
+import { listToken } from '../actions/listToken'
 
 import { WalletStatus } from '../components'
 
@@ -12,36 +12,17 @@ import More from '../assets/more.svg'
 import Star from '../assets/star.svg'
 import StarOn from '../assets/star-on.svg'
 
-// import ParticlesConfig from '../assets/particlesjs-config.json'
-
-type Token = {
-  company: string
-  symbol: string
-  price: string
-  deposits: string
-  dayChange: string
-  dayVolume: string
-  yearIncome: string
-  isWatching: boolean
-}
+import { useIdeaMarketsStore, IdeaToken } from '../store/ideaMarketsStore'
 
 export function TokenRow({
   token,
   hideInMobile = false,
 }: {
-  token: Token
+  token: IdeaToken
   hideInMobile?: boolean
 }) {
-  const {
-    company,
-    symbol,
-    price,
-    deposits,
-    dayChange,
-    dayVolume,
-    yearIncome,
-    isWatching,
-  } = token
+  const { name, daiInToken } = token
+
   return (
     <div
       className={classNames(
@@ -54,11 +35,8 @@ export function TokenRow({
           <div className="w-7.5 h-7.5 rounded-full border"></div>
           <div className="ml-2.5">
             <h2 className="text-base font-medium leading-none tracking-tightest-2 text-very-dark-blue font-sf-pro-text">
-              {company}
+              {name}
             </h2>
-            <p className="text-sm font-medium tracking-tighter font-sf-pro-text text-brand-gray-2">
-              {symbol}
-            </p>
           </div>
         </div>
         <div className="flex items-center justify-center ml-auto md:hidden">
@@ -82,7 +60,7 @@ export function TokenRow({
             Price
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
-            {price ? price : <>&mdash;</>}
+            {'TODO' /*price ? price : <>&mdash;</> */}
           </p>
         </div>
         <div className="md:w-20">
@@ -90,7 +68,7 @@ export function TokenRow({
             Deposits
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
-            {deposits ? deposits : <>&mdash;</>}
+            {parseFloat(daiInToken) > 0.0 ? daiInToken : <>&mdash;</>}
           </p>
         </div>
         <div className="md:w-20">
@@ -98,13 +76,13 @@ export function TokenRow({
             24H Change
           </p>
           <p
-            className={classNames(
+          /*className={classNames(
               'text-base leading-4  font-medium tracking-tightest-2 text-very-dark-blue',
               dayChange &&
                 (dayChange[0] === '+' ? 'text-brand-green' : 'text-brand-red')
-            )}
+            )}*/
           >
-            {dayChange ? dayChange : <>&mdash;</>}
+            {'TODO' /*dayChange ? dayChange : <>&mdash;</> */}
           </p>
         </div>
         <div className="md:w-20">
@@ -112,7 +90,7 @@ export function TokenRow({
             24H Volume
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
-            {dayVolume ? dayVolume : <>&mdash;</>}
+            {'TODO' /* dayVolume ? dayVolume : <>&mdash;</> */}
           </p>
         </div>
         <div className="md:w-20">
@@ -120,14 +98,14 @@ export function TokenRow({
             1YR Income
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
-            {yearIncome ? yearIncome : <>&mdash;</>}
+            {'TODO' /*yearIncome ? yearIncome : <>&mdash;</> */}
           </p>
         </div>
         <div className="md:w-20 md:col-start-8 md:col-span-1 md:row-start-1 md:row-span-1 md:ml-10">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Watch
           </p>
-          {isWatching ? (
+          {false /*isWatching*/ ? (
             <StarOn className="w-5 fill-current text-brand-gray-4" />
           ) : (
             <Star className="w-5 fill-current text-brand-gray-4" />
@@ -153,7 +131,24 @@ export function TokenRow({
 }
 
 export default function Home() {
+  async function clicked() {
+    await listToken('test.com', 1)
+  }
+
+  const TOKENS_PER_PAGE = 10
+
   const [selectedTabId, setSelectedTabId] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [selectedMarketID, setSelectedMarketID] = useState(1)
+
+  const selectedMarket = useIdeaMarketsStore().markets[selectedMarketID]
+  const tokensInSelectedMarket = useIdeaMarketsStore().tokens[selectedMarketID]
+  const currentTokens = !tokensInSelectedMarket
+    ? []
+    : Object.values(tokensInSelectedMarket).slice(
+        currentPage * TOKENS_PER_PAGE,
+        (currentPage + 1) * TOKENS_PER_PAGE - 1
+      )
 
   const tabs = [
     {
@@ -171,79 +166,6 @@ export default function Home() {
     {
       id: 4,
       value: 'Watch List',
-    },
-  ]
-
-  const tokenRows: Token[] = [
-    {
-      company: 'Harvest Finance',
-      symbol: 'FARM',
-      price: '$150.25',
-      deposits: '$506',
-      dayChange: '+35%',
-      dayVolume: '$15,543,667',
-      yearIncome: '$478.55',
-      isWatching: false,
-    },
-    {
-      company: 'Chainlink',
-      symbol: 'LINK',
-      price: '$10.62',
-      deposits: '$40',
-      dayChange: '-12%',
-      dayVolume: '$74,524,891',
-      yearIncome: '$346.32',
-      isWatching: true,
-    },
-    {
-      company: 'Aave',
-      symbol: 'LEND',
-      price: '$0.53',
-      deposits: '',
-      dayChange: '+42%',
-      dayVolume: '$71,770,696',
-      yearIncome: '$552.32',
-      isWatching: true,
-    },
-    {
-      company: 'Uniswap',
-      symbol: 'UNI',
-      price: '$3.34',
-      deposits: '',
-      dayChange: '-2%',
-      dayVolume: '$57,521,547',
-      yearIncome: '$146.00',
-      isWatching: false,
-    },
-    {
-      company: 'Compound',
-      symbol: 'COMP',
-      price: '$116.67',
-      deposits: '$809',
-      dayChange: '+18%',
-      dayVolume: '$32,771,917',
-      yearIncome: '$8532.00',
-      isWatching: false,
-    },
-    {
-      company: 'Nexus Mutual',
-      symbol: 'NXM',
-      price: '$33.74',
-      deposits: '$21,043',
-      dayChange: '+5%',
-      dayVolume: '$39,881,080',
-      yearIncome: '$235.33',
-      isWatching: true,
-    },
-    {
-      company: 'Balancer',
-      symbol: 'BAL',
-      price: '$15.30',
-      deposits: '$14,000',
-      dayChange: '-4%',
-      dayVolume: '$57,342,954',
-      yearIncome: '$123.68',
-      isWatching: false,
     },
   ]
 
@@ -287,15 +209,14 @@ export default function Home() {
           </p>
         </div>
         <div className="inline-flex flex-col space-y-3 md:flex-row md:space-x-10 md:space-y-0 md:items-center mt-7">
-          <button className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-3 md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800">
+          <button
+            onClick={clicked}
+            className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-3 md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+          >
             Launch Your Token
           </button>
           <p className="text-lg font-sf-compact-medium">How it Works</p>
         </div>
-        {/* <Particles
-          params={ParticlesConfig as any}
-          className="absolute top-0 bottom-0 left-0 right-0 pointer-events-none"
-        ></Particles> */}
       </div>
 
       <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 md:-translate-y-28 font-sf-compact-medium">
@@ -386,9 +307,9 @@ export default function Home() {
                 Watch
               </div>
             </div>
-            {tokenRows.map((token: Token, index: number) => (
+            {currentTokens.map((token: IdeaToken, index: number) => (
               <TokenRow
-                key={token.symbol}
+                key={token.tokenID}
                 hideInMobile={index > 1}
                 token={token}
               />
