@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 
@@ -9,6 +8,15 @@ export function web3BNToFloatString(
 ): string {
   const converted = new BigNumber(bn.toString())
   const divided = converted.div(divideBy)
+  return divided.toFixed(decimals)
+}
+
+export function bnToFloatString(
+  bn: BigNumber,
+  divideBy: BigNumber,
+  decimals: number
+): string {
+  const divided = bn.div(divideBy)
   return divided.toFixed(decimals)
 }
 

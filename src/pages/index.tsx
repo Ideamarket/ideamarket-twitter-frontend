@@ -13,7 +13,12 @@ import More from '../assets/more.svg'
 import Star from '../assets/star.svg'
 import StarOn from '../assets/star-on.svg'
 
-import { web3BNToFloatString, calculateCurrentPriceBN } from '../util'
+import {
+  web3BNToFloatString,
+  bnToFloatString,
+  calculateCurrentPriceBN,
+} from '../util'
+import { useCompoundStore } from '../store/compoundStore'
 import {
   useIdeaMarketsStore,
   setIsWatching,
@@ -32,6 +37,10 @@ export function TokenRow({
   market: IdeaMarket
   hideInMobile?: boolean
 }) {
+  const yearIncome = (
+    parseFloat(token.daiInToken) * parseFloat(useCompoundStore().supplyRate)
+  ).toFixed(2)
+
   return (
     <div
       className={classNames(
@@ -122,7 +131,7 @@ export function TokenRow({
             1YR Income
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
-            {'TODO' /*yearIncome ? yearIncome : <>&mdash;</> */}
+            ${yearIncome}
           </p>
         </div>
         <div className="md:w-20 md:col-start-8 md:col-span-1 md:row-start-1 md:row-span-1 md:ml-10">
