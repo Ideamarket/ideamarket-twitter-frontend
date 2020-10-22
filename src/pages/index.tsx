@@ -13,11 +13,7 @@ import More from '../assets/more.svg'
 import Star from '../assets/star.svg'
 import StarOn from '../assets/star-on.svg'
 
-import {
-  web3BNToFloatString,
-  bnToFloatString,
-  calculateCurrentPriceBN,
-} from '../util'
+import { web3BNToFloatString, calculateCurrentPriceBN } from '../util'
 import { useCompoundStore } from '../store/compoundStore'
 import {
   useIdeaMarketsStore,
@@ -79,17 +75,15 @@ export function TokenRow({
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
             $
-            {
-              web3BNToFloatString(
-                calculateCurrentPriceBN(
-                  token.rawSupply,
-                  market.rawBaseCost,
-                  market.rawPriceRise
-                ),
-                tenPow18,
-                2
-              ) /*price ? price : <>&mdash;</> */
-            }
+            {web3BNToFloatString(
+              calculateCurrentPriceBN(
+                token.rawSupply,
+                market.rawBaseCost,
+                market.rawPriceRise
+              ),
+              tenPow18,
+              2
+            )}
           </p>
         </div>
         <div className="md:w-20">
@@ -109,13 +103,14 @@ export function TokenRow({
             24H Change
           </p>
           <p
-          /*className={classNames(
+            className={classNames(
               'text-base leading-4  font-medium tracking-tightest-2 text-very-dark-blue',
-              dayChange &&
-                (dayChange[0] === '+' ? 'text-brand-green' : 'text-brand-red')
-            )}*/
+              parseFloat(token.dayChange) >= 0.0
+                ? 'text-brand-green'
+                : 'text-brand-red'
+            )}
           >
-            {'TODO' /*dayChange ? dayChange : <>&mdash;</> */}
+            {parseFloat(token.dayChange) >= 0.0 ? '+' : '-'} {token.dayChange}%
           </p>
         </div>
         <div className="md:w-20">
@@ -123,7 +118,7 @@ export function TokenRow({
             24H Volume
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
-            {'TODO' /* dayVolume ? dayVolume : <>&mdash;</> */}
+            ${token.dayVolume}
           </p>
         </div>
         <div className="md:w-20">
