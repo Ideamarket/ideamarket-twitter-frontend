@@ -1,4 +1,5 @@
 import create from 'zustand'
+import produce from 'immer'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 
@@ -78,6 +79,10 @@ export const useIdeaMarketsStore = create<State>((set) => ({
   markets: {},
   tokens: {},
 }))
+
+function setNestedState(fn) {
+  useIdeaMarketsStore.setState(produce(useIdeaMarketsStore.getState(), fn))
+}
 
 export async function initIdeaMarketsStore() {
   const httpLink = new HttpLink({
@@ -168,10 +173,9 @@ function handleNewMarket(market): void {
     platformFeeWithdrawer: market.platformFeeWithdrawer,
   }
 
-  const marketsState = useIdeaMarketsStore.getState().markets
-  marketsState[market.marketID] = newMarket
-  useIdeaMarketsStore.setState({ markets: marketsState })
-
+  setNestedState((state: State) => {
+    state.markets[market.marketID] = newMarket
+  })
   for (let i = 0; i < market.tokens.length; i++) {
     const token = market.tokens[i]
     handleNewToken(token, market.marketID, market.name)
@@ -224,14 +228,12 @@ function handleNewToken(token, marketID: number, marketName: string): void {
     iconURL: getTokenIconURL(marketName, token.name),
   }
 
-  let tokensState = useIdeaMarketsStore.getState().tokens
-  if (tokensState[marketID] === undefined) {
-    tokensState[marketID] = {}
-    useIdeaMarketsStore.setState({ tokens: tokensState })
-  }
-
-  tokensState[marketID][token.tokenID] = newToken
-  useIdeaMarketsStore.setState({ tokens: tokensState })
+  setNestedState((state: State) => {
+    if (!state.tokens[marketID]) {
+      state.tokens[marketID] = {}
+    }
+    state.tokens[marketID][token.tokenID] = newToken
+  })
 }
 
 function getTokenIconURL(marketName: string, tokenName: string): string {
