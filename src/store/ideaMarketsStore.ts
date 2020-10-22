@@ -129,19 +129,18 @@ export function setIsWatching(
   tokenID: number,
   watching: boolean
 ): void {
-  const tokensState = useIdeaMarketsStore.getState().tokens
+  const address = useIdeaMarketsStore.getState().tokens[marketID][tokenID]
+    .address
 
   if (watching) {
-    localStorage.setItem(
-      `WATCH_${tokensState[marketID][tokenID].address}`,
-      'true'
-    )
+    localStorage.setItem(`WATCH_${address}`, 'true')
   } else {
-    localStorage.removeItem(`WATCH_${tokensState[marketID][tokenID].address}`)
+    localStorage.removeItem(`WATCH_${address}`)
   }
 
-  tokensState[marketID][tokenID].isWatching = watching
-  useIdeaMarketsStore.setState({ tokens: tokensState })
+  setNestedState((state: State) => {
+    state.tokens[marketID][tokenID].isWatching = watching
+  })
 }
 
 function handleNewMarket(market): void {
