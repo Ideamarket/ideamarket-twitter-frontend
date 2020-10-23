@@ -110,7 +110,12 @@ export async function queryMarket(queryKey: string, marketName: string) {
   return newMarket
 }
 
-export async function queryTokens(queryKey: string, market: IdeaMarket) {
+export async function queryTokens(
+  queryKey: string,
+  market: IdeaMarket,
+  skip: number,
+  num: number
+) {
   const tokens = <IdeaToken[]>[]
   if (!market) {
     return tokens
@@ -118,7 +123,7 @@ export async function queryTokens(queryKey: string, market: IdeaMarket) {
 
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
-    getQueryTokens(market.marketID)
+    getQueryTokens(market.marketID, skip, num)
   )
 
   for (let i = 0; i < result.ideaMarkets[0].tokens.length; i++) {
@@ -217,12 +222,12 @@ function getQueryMarket(marketName: string) {
   }`
 }
 
-function getQueryTokens(marketID: number) {
+function getQueryTokens(marketID: number, skip: number, num: number) {
   const dayAgo = Math.floor(Date.now() / 1000) - 86400
   return gql`
   {
     ideaMarkets(where:{marketID:${marketID.toString()}}) {
-      tokens {
+      tokens(skip:${skip}, first:${num}) {
         id
         tokenID
         name

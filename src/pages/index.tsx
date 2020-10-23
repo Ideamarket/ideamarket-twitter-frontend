@@ -45,14 +45,14 @@ export function TokenRow({
   return (
     <div
       className={classNames(
-        'flex flex-col p-5 space-x-2 md:flex-row md:items-center border-b overflow-x-scroll md:h-18 md:overflow-y-hidden',
+        'flex flex-col p-5 space-x-2 md:flex-row md:items-center border-b md:h-18 md:overflow-y-hidden',
         hideInMobile && 'hidden md:flex'
       )}
     >
       <div className="flex md:w-48">
         <div className="flex items-center">
-          <div className="w-7.5 h-7.5 rounded-full border overflow-hidden">
-            <img src={`${token.iconURL}`} />
+          <div className="w-7.5 h-7.5 rounded-full overflow-hidden">
+            <img src={`${token.iconURL}`} className="w-full h-full" />
           </div>
           <div className="ml-2.5">
             <h2 className="text-base font-medium leading-none tracking-tightest-2 text-very-dark-blue font-sf-pro-text">
@@ -180,7 +180,7 @@ export function TokenRow({
 
 export default function Home() {
   async function clicked() {
-    await listToken('medium.com', 1)
+    listToken('discord.com', 1)
   }
 
   const TOKENS_PER_PAGE = 10
@@ -191,7 +191,10 @@ export default function Home() {
 
   const compoundSupplyRate = useQuery('compound-supply-rate', querySupplyRate)
   const market = useQuery(['market', 'TestMarket'], queryMarket)
-  const tokens = useQuery(['tokens', market.data], queryTokens)
+  const tokens = useQuery(
+    ['tokens', market.data, currentPage * TOKENS_PER_PAGE, TOKENS_PER_PAGE],
+    queryTokens
+  )
 
   const tabs = [
     {
@@ -361,6 +364,24 @@ export default function Home() {
                   />
                 ))
               : ''}
+            <div className="flex flex-row items-stretch justify-center md:flex md:px-10 md:py-5 md:border-b md:space-x-10">
+              <div
+                onClick={() => {
+                  if (currentPage > 0) setCurrentPage(currentPage - 1)
+                }}
+                className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+              >
+                &larr; Previous
+              </div>
+              <div
+                onClick={() => {
+                  setCurrentPage(currentPage + 1)
+                }}
+                className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+              >
+                Next &rarr;
+              </div>
+            </div>
           </div>
         </div>
 
