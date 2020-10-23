@@ -45,7 +45,7 @@ export function TokenRow({
   return (
     <div
       className={classNames(
-        'flex flex-col p-5 space-x-2 md:flex-row md:items-center border-b md:h-18 md:overflow-y-hidden',
+        'hover:bg-brand-gray cursor-pointer flex flex-col p-5 space-x-2 md:flex-row md:items-center border-b md:h-18 md:overflow-y-hidden',
         hideInMobile && 'hidden md:flex'
       )}
     >
@@ -358,7 +358,7 @@ export default function Home() {
             </div>
           </div>
           <div>
-            <div className="hidden md:flex md:px-10 md:py-5 md:border-b md:space-x-10">
+            <div className="hidden bg-brand-gray md:flex md:px-10 md:py-5 md:border-b md:space-x-10">
               <div
                 onClick={() => {
                   headerClicked('name')
