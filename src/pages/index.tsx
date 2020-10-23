@@ -56,7 +56,13 @@ export function TokenRow({
           </div>
           <div className="ml-2.5">
             <h2 className="text-base font-medium leading-none tracking-tightest-2 text-very-dark-blue font-sf-pro-text">
-              {token.name}
+              <a
+                href={`${token.url}`}
+                target="_blank"
+                className="hover:underline"
+              >
+                {token.name}
+              </a>
             </h2>
           </div>
         </div>

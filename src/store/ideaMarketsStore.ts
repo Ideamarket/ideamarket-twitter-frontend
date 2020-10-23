@@ -51,6 +51,7 @@ export type IdeaToken = {
   dayPricePoints: IdeaTokenPricePoint[]
   dayChange: string
   dayVolume: string
+  url: string
   iconURL: string
 }
 
@@ -172,6 +173,7 @@ export async function queryTokens(
       dayPricePoints: pricePoints,
       dayChange: dayChange,
       dayVolume: dayVolume.toFixed(2),
+      url: getTokenURL(market.name, token.name),
       iconURL: getTokenIconURL(market.name, token.name),
     }
 
@@ -199,6 +201,14 @@ export function setIsWatching(token: IdeaToken, watching: boolean): void {
 
   localStorage.setItem('WATCHING_TOKENS', JSON.stringify(storage))
   useIdeaMarketsStore.setState({ watching: state })
+}
+
+function getTokenURL(marketName: string, tokenName: string): string {
+  if (marketName === 'TestMarket') {
+    return `https://${tokenName}`
+  } else {
+    return ''
+  }
 }
 
 function getTokenIconURL(marketName: string, tokenName: string): string {
