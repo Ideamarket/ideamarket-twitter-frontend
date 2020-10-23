@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { Chart } from 'react-charts'
 
 function randomDate(start: Date, end: Date) {
@@ -12,7 +12,7 @@ type DayPricePoint = {
   price: number
 }
 
-export default function PriceChart() {
+export default function PreviewPriceChart() {
   const NUMBER_OF_DATA_POINTS = 10
   const pricePoints: DayPricePoint[] = []
 
@@ -36,11 +36,25 @@ export default function PriceChart() {
     []
   )
 
+  const series = useMemo(
+    () => ({
+      showPoints: false,
+    }),
+    []
+  )
+
   const axes = useMemo(
     () => [
       { primary: true, type: 'time', position: 'bottom', show: false },
       { type: 'linear', position: 'left', show: false },
     ],
+    []
+  )
+
+  const getSeriesStyle = useCallback(
+    (series) => ({
+      color: '#0857e0',
+    }),
     []
   )
 
@@ -53,7 +67,12 @@ export default function PriceChart() {
         height: '50px',
       }}
     >
-      <Chart data={data} axes={axes} />
+      <Chart
+        series={series}
+        getSeriesStyle={getSeriesStyle}
+        data={data}
+        axes={axes}
+      />
     </div>
   )
 }

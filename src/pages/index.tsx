@@ -4,7 +4,7 @@ import { listToken } from '../actions/listToken'
 import BigNumber from 'bignumber.js'
 import { useQuery } from 'react-query'
 
-import { WalletStatus, PriceChart } from '../components'
+import { WalletStatus, PreviewPriceChart } from '../components'
 
 import YouTube from '../assets/youtube.svg'
 import Medium from '../assets/medium.svg'
@@ -162,7 +162,7 @@ export function TokenRow({
             Price Chart
           </p>
           <div>
-            <PriceChart />
+            <PreviewPriceChart />
           </div>
         </div>
         <div className="hidden md:block">
