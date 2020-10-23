@@ -470,6 +470,11 @@ export default function Home() {
                   />
                 ))
               : ''}
+            {Array.from(
+              Array(TOKENS_PER_PAGE - (tokens.data ? tokens.data.length : 0))
+            ).map((a, b) => (
+              <div className="hidden md:block md:h-18"></div>
+            ))}
             <div className="flex flex-row items-stretch justify-between px-10 py-5 md:justify-center md:flex md:border-b md:space-x-10">
               <div
                 onClick={() => {
@@ -481,7 +486,8 @@ export default function Home() {
               </div>
               <div
                 onClick={() => {
-                  setCurrentPage(currentPage + 1)
+                  if (tokens.data && tokens.data.length === TOKENS_PER_PAGE)
+                    setCurrentPage(currentPage + 1)
                 }}
                 className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
               >
