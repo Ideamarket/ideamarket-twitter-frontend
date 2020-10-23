@@ -188,18 +188,28 @@ export default function Home() {
   const [selectedTabId, setSelectedTabId] = useState(1)
   const [currentPage, setCurrentPage] = useState(0)
   const [selectedMarketID, setSelectedMarketID] = useState(1)
+  const [currentHeader, setCurrentHeader] = useState('price')
+  const [orderBy, setOrderBy] = useState('supply')
+  const [orderDirection, setOrderDirection] = useState('desc')
 
   const compoundSupplyRate = useQuery('compound-supply-rate', querySupplyRate)
   const market = useQuery(['market', 'TestMarket'], queryMarket)
   const tokens = useQuery(
-    ['tokens', market.data, currentPage * TOKENS_PER_PAGE, TOKENS_PER_PAGE],
+    [
+      'tokens',
+      market.data,
+      currentPage * TOKENS_PER_PAGE,
+      TOKENS_PER_PAGE,
+      orderBy,
+      orderDirection,
+    ],
     queryTokens
   )
 
-  const tabs = [
+  const categories = [
     {
       id: 1,
-      value: 'Top Tokens',
+      value: 'All Tokens',
     },
     {
       id: 2,
@@ -214,6 +224,30 @@ export default function Home() {
       value: 'Watch List',
     },
   ]
+
+  function headerClicked(header) {
+    if (currentHeader === header) {
+      if (orderDirection === 'asc') {
+        setOrderDirection('desc')
+      } else {
+        setOrderDirection('asc')
+      }
+    } else {
+      setCurrentHeader(header)
+
+      if (header === 'name') {
+        setOrderBy('name')
+      } else if (
+        header === 'price' ||
+        header === 'deposits' ||
+        header === 'income'
+      ) {
+        setOrderBy('supply')
+      }
+
+      setOrderDirection('desc')
+    }
+  }
 
   return (
     <div className="bg-brand-gray max-h-home">
@@ -304,7 +338,7 @@ export default function Home() {
             <div>
               <div className="font-sf-pro-text">
                 <nav className="flex -mb-px space-x-5">
-                  {tabs.map((tab) => (
+                  {categories.map((tab) => (
                     <a
                       onClick={() => setSelectedTabId(tab.id)}
                       key={tab.id}
@@ -325,23 +359,89 @@ export default function Home() {
           </div>
           <div>
             <div className="hidden md:flex md:px-10 md:py-5 md:border-b md:space-x-10">
-              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-43">
-                Name
+              <div
+                onClick={() => {
+                  headerClicked('name')
+                }}
+                className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-43"
+              >
+                {currentHeader === 'name' && orderDirection === 'asc' && (
+                  <span>&#x25B2;</span>
+                )}
+                {currentHeader === 'name' && orderDirection === 'desc' && (
+                  <span>&#x25bc;</span>
+                )}
+                &nbsp;Name
               </div>
-              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
-                Price
+              <div
+                onClick={() => {
+                  headerClicked('price')
+                }}
+                className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+              >
+                {currentHeader === 'price' && orderDirection === 'asc' && (
+                  <span>&#x25B2;</span>
+                )}
+                {currentHeader === 'price' && orderDirection === 'desc' && (
+                  <span>&#x25bc;</span>
+                )}
+                &nbsp;Price
               </div>
-              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
-                Deposits
+              <div
+                onClick={() => {
+                  headerClicked('deposits')
+                }}
+                className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+              >
+                {currentHeader === 'deposits' && orderDirection === 'asc' && (
+                  <span>&#x25B2;</span>
+                )}
+                {currentHeader === 'deposits' && orderDirection === 'desc' && (
+                  <span>&#x25bc;</span>
+                )}
+                &nbsp;Deposits
               </div>
-              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
-                24H Change
+              <div
+                onClick={() => {
+                  headerClicked('change')
+                }}
+                className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+              >
+                {currentHeader === 'change' && orderDirection === 'asc' && (
+                  <span>&#x25B2;</span>
+                )}
+                {currentHeader === 'change' && orderDirection === 'desc' && (
+                  <span>&#x25bc;</span>
+                )}
+                &nbsp;24H Change
               </div>
-              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
-                24H Volume
+              <div
+                onClick={() => {
+                  headerClicked('volume')
+                }}
+                className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+              >
+                {currentHeader === 'volume' && orderDirection === 'asc' && (
+                  <span>&#x25B2;</span>
+                )}
+                {currentHeader === 'volume' && orderDirection === 'desc' && (
+                  <span>&#x25bc;</span>
+                )}
+                &nbsp;24H Volume
               </div>
-              <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
-                1YR Income
+              <div
+                onClick={() => {
+                  headerClicked('income')
+                }}
+                className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+              >
+                {currentHeader === 'income' && orderDirection === 'asc' && (
+                  <span>&#x25B2;</span>
+                )}
+                {currentHeader === 'income' && orderDirection === 'desc' && (
+                  <span>&#x25bc;</span>
+                )}
+                &nbsp;1YR Income
               </div>
               <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
                 Price Chart
