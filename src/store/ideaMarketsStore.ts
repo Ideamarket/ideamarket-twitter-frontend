@@ -1,5 +1,4 @@
 import create from 'zustand'
-import produce from 'immer'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 
@@ -7,22 +6,17 @@ import { web3BNToFloatString } from '../util'
 
 import {
   gql,
-  split,
   HttpLink,
   ApolloClient,
   InMemoryCache,
   NormalizedCacheObject,
 } from '@apollo/client'
-import { getMainDefinition } from '@apollo/client/utilities'
-import { WebSocketLink } from '@apollo/client/link/ws'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 const HTTP_GRAPHQL_ENDPOINT =
   'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarket'
-const WS_GRAPHQL_ENDPOINT =
-  'wss://api.thegraph.com/subgraphs/name/ideamarket/ideamarket'
 
 export type IdeaMarket = {
   name: string
@@ -64,86 +58,46 @@ export type IdeaToken = {
   dayPricePoints: IdeaTokenPricePoint[]
   dayChange: string
   dayVolume: string
-  isWatching: boolean
   iconURL: string
 }
 
 type State = {
   client: ApolloClient<NormalizedCacheObject>
-  markets: { [id: number]: IdeaMarket }
-  tokens: { [marketID: number]: { [tokenID: number]: IdeaToken } }
+  watching: { [address: string]: string }
 }
 
 export const useIdeaMarketsStore = create<State>((set) => ({
   client: undefined,
-  markets: {},
-  tokens: {},
+  watching: {},
 }))
-
-function setNestedState(fn) {
-  useIdeaMarketsStore.setState(produce(useIdeaMarketsStore.getState(), fn))
-}
 
 export async function initIdeaMarketsStore() {
   const httpLink = new HttpLink({
     uri: HTTP_GRAPHQL_ENDPOINT,
   })
 
-  const wsLink = new WebSocketLink({
-    uri: WS_GRAPHQL_ENDPOINT,
-    options: {
-      reconnect: true,
-    },
-  })
-
-  const splitLink = split(
-    ({ query }) => {
-      const definition = getMainDefinition(query)
-      return (
-        definition.kind === 'OperationDefinition' &&
-        definition.operation === 'subscription'
-      )
-    },
-    wsLink,
-    httpLink
-  )
-
   const client = new ApolloClient({
-    link: splitLink,
+    link: httpLink,
     cache: new InMemoryCache(),
   })
 
-  useIdeaMarketsStore.setState({ client: client })
+  let storage = JSON.parse(localStorage.getItem('WATCHING_TOKENS'))
+  if (!storage) {
+    storage = {}
+  }
+
+  useIdeaMarketsStore.setState({ client: client, watching: storage })
+}
+
+export async function queryMarket(queryKey: string, marketName: string) {
+  const client = useIdeaMarketsStore.getState().client
 
   const result = await client.query({
-    query: queryGetAllMarketsWithNumTokens(20),
+    query: getQueryMarket(marketName),
   })
-  for (let i = 0; i < result.data.ideaMarkets.length; i++) {
-    const market = result.data.ideaMarkets[i]
-    handleNewMarket(market)
-  }
-}
 
-export function setIsWatching(
-  marketID: number,
-  tokenID: number,
-  watching: boolean
-): void {
-  const address = useIdeaMarketsStore.getState().tokens[marketID][tokenID]
-    .address
+  const market = result.data.ideaMarkets[0]
 
-  if (watching) {
-    localStorage.setItem(`WATCH_${address}`, 'true')
-  } else {
-    localStorage.removeItem(`WATCH_${address}`)
-  }
-
-  setNestedState((state: State) => {
-    state.tokens[marketID][tokenID].isWatching = watching
-  })
-}
-
-function handleNewMarket(market): void {
   const newMarket = <IdeaMarket>{
     name: market.name,
     marketID: market.marketID,
@@ -172,67 +126,92 @@ function handleNewMarket(market): void {
     platformFeeWithdrawer: market.platformFeeWithdrawer,
   }
 
-  setNestedState((state: State) => {
-    state.markets[market.marketID] = newMarket
-  })
-  for (let i = 0; i < market.tokens.length; i++) {
-    const token = market.tokens[i]
-    handleNewToken(token, market.marketID, market.name)
-  }
+  return newMarket
 }
 
-function handleNewToken(token, marketID: number, marketName: string): void {
-  const pricePoints = <IdeaTokenPricePoint[]>[]
-  let dayVolume = 0.0
-
-  for (let i = 0; i < token.pricePoints.length; i++) {
-    const pricePoint = token.pricePoints[i]
-    dayVolume += parseFloat(pricePoint.volume)
-
-    const newPricePoint = <IdeaTokenPricePoint>{
-      timestamp: pricePoint.timestamp,
-      price: parseFloat(pricePoint.price),
-      volume: parseFloat(pricePoint.volume),
-    }
-    pricePoints.push(newPricePoint)
+export async function queryTokens(queryKey: string, market: IdeaMarket) {
+  const tokens = <IdeaToken[]>[]
+  if (!market) {
+    return tokens
   }
 
-  let dayChange = '0.00'
-  if (pricePoints.length >= 2) {
-    const start = pricePoints[0]
-    const end = pricePoints[pricePoints.length - 1]
+  const client = useIdeaMarketsStore.getState().client
 
-    dayChange = ((end.price / start.price - 1) * 100).toFixed(2)
-  }
-
-  const newToken = <IdeaToken>{
-    address: token.id,
-    marketID: marketID,
-    tokenID: token.tokenID,
-    name: token.name,
-    supply: web3BNToFloatString(new BN(token.supply), tenPow18, 2),
-    rawSupply: new BN(token.supply),
-    holders: token.holders,
-    marketCap: web3BNToFloatString(new BN(token.marketCap), tenPow18, 2),
-    rawMarketCap: new BN(token.marketCap),
-    interestWithdrawer: token.interestWithdrawer,
-    daiInToken: web3BNToFloatString(new BN(token.daiInToken), tenPow18, 2),
-    rawDaiInToken: new BN(token.daiInToken),
-    invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
-    rawInvested: new BN(token.invested),
-    dayPricePoints: pricePoints,
-    dayChange: dayChange,
-    dayVolume: dayVolume.toFixed(2),
-    isWatching: localStorage.getItem(`WATCH_${token.id}`) === 'true',
-    iconURL: getTokenIconURL(marketName, token.name),
-  }
-
-  setNestedState((state: State) => {
-    if (!state.tokens[marketID]) {
-      state.tokens[marketID] = {}
-    }
-    state.tokens[marketID][token.tokenID] = newToken
+  const result = await client.query({
+    query: getQueryTokens(market.marketID),
   })
+
+  for (let i = 0; i < result.data.ideaMarkets[0].tokens.length; i++) {
+    const token = result.data.ideaMarkets[0].tokens[i]
+
+    const pricePoints = <IdeaTokenPricePoint[]>[]
+    let dayVolume = 0.0
+
+    for (let i = 0; i < token.pricePoints.length; i++) {
+      const pricePoint = token.pricePoints[i]
+      dayVolume += parseFloat(pricePoint.volume)
+
+      const newPricePoint = <IdeaTokenPricePoint>{
+        timestamp: pricePoint.timestamp,
+        price: parseFloat(pricePoint.price),
+        volume: parseFloat(pricePoint.volume),
+      }
+      pricePoints.push(newPricePoint)
+    }
+
+    let dayChange = '0.00'
+    if (pricePoints.length >= 2) {
+      const start = pricePoints[0]
+      const end = pricePoints[pricePoints.length - 1]
+
+      dayChange = ((end.price / start.price - 1) * 100).toFixed(2)
+    }
+
+    const newToken = <IdeaToken>{
+      address: token.id,
+      marketID: market.marketID,
+      tokenID: token.tokenID,
+      name: token.name,
+      supply: web3BNToFloatString(new BN(token.supply), tenPow18, 2),
+      rawSupply: new BN(token.supply),
+      holders: token.holders,
+      marketCap: web3BNToFloatString(new BN(token.marketCap), tenPow18, 2),
+      rawMarketCap: new BN(token.marketCap),
+      interestWithdrawer: token.interestWithdrawer,
+      daiInToken: web3BNToFloatString(new BN(token.daiInToken), tenPow18, 2),
+      rawDaiInToken: new BN(token.daiInToken),
+      invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
+      rawInvested: new BN(token.invested),
+      dayPricePoints: pricePoints,
+      dayChange: dayChange,
+      dayVolume: dayVolume.toFixed(2),
+      iconURL: getTokenIconURL(market.name, token.name),
+    }
+
+    tokens.push(newToken)
+  }
+
+  return tokens
+}
+
+export function setIsWatching(token: IdeaToken, watching: boolean): void {
+  const address = token.address
+  let storage = JSON.parse(localStorage.getItem('WATCHING_TOKENS'))
+  if (!storage) {
+    storage = {}
+  }
+
+  const state = useIdeaMarketsStore.getState().watching
+  if (watching) {
+    storage[address] = 'true'
+    state[address] = 'true'
+  } else {
+    delete storage[address]
+    delete state[address]
+  }
+
+  localStorage.setItem('WATCHING_TOKENS', JSON.stringify(storage))
+  useIdeaMarketsStore.setState({ watching: state })
 }
 
 function getTokenIconURL(marketName: string, tokenName: string): string {
@@ -243,12 +222,9 @@ function getTokenIconURL(marketName: string, tokenName: string): string {
   }
 }
 
-const queryGetAllMarketsWithNumTokens = (numTokens: number) => {
-  const dayAgo = Math.floor(Date.now() / 1000) - 86400
-
-  return gql`
-  {
-    ideaMarkets {
+function getQueryMarket(marketName: string) {
+  return gql`{
+    ideaMarkets(where:{name:${'"' + marketName + '"'}}) {
       marketID
       name
       baseCost
@@ -257,7 +233,16 @@ const queryGetAllMarketsWithNumTokens = (numTokens: number) => {
       platformFeeRate
       platformFeeWithdrawer
       platformFeeInvested
-      tokens(orderBy: marketCap, orderDirections: desc, first: ${numTokens}) {
+    }
+  }`
+}
+
+function getQueryTokens(marketID: number) {
+  const dayAgo = Math.floor(Date.now() / 1000) - 86400
+  return gql`
+  {
+    ideaMarkets(where:{marketID:${marketID.toString()}}) {
+      tokens {
         id
         tokenID
         name

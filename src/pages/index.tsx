@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import { useState } from 'react'
 import { listToken } from '../actions/listToken'
 import BigNumber from 'bignumber.js'
+import { useQuery } from 'react-query'
 
 import { WalletStatus, PriceChart } from '../components'
 
@@ -14,9 +15,11 @@ import Star from '../assets/star.svg'
 import StarOn from '../assets/star-on.svg'
 
 import { web3BNToFloatString, calculateCurrentPriceBN } from '../util'
-import { useCompoundStore } from '../store/compoundStore'
+import { querySupplyRate } from '../store/compoundStore'
 import {
   useIdeaMarketsStore,
+  queryTokens,
+  queryMarket,
   setIsWatching,
   IdeaToken,
   IdeaMarket,
@@ -27,15 +30,16 @@ const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 export function TokenRow({
   token,
   market,
+  compoundSupplyRate,
   hideInMobile = false,
 }: {
   token: IdeaToken
   market: IdeaMarket
+  compoundSupplyRate: number
   hideInMobile?: boolean
 }) {
   const yearIncome = (
-    parseFloat(token.daiInToken) *
-    parseFloat(useCompoundStore((state) => state.supplyRate))
+    parseFloat(token.daiInToken) * compoundSupplyRate
   ).toFixed(2)
 
   return (
@@ -136,18 +140,19 @@ export function TokenRow({
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Watch
           </p>
-          {token.isWatching ? (
+          {useIdeaMarketsStore((state) => state.watching[token.address]) ===
+          'true' ? (
             <StarOn
               className="w-5 cursor-pointer fill-current text-brand-gray-4"
               onClick={() => {
-                setIsWatching(market.marketID, token.tokenID, false)
+                setIsWatching(token, false)
               }}
             />
           ) : (
             <Star
               className="w-5 cursor-pointer fill-current text-brand-gray-4"
               onClick={() => {
-                setIsWatching(market.marketID, token.tokenID, true)
+                setIsWatching(token, true)
               }}
             />
           )}
@@ -184,19 +189,9 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(0)
   const [selectedMarketID, setSelectedMarketID] = useState(1)
 
-  const selectedMarket = useIdeaMarketsStore(
-    (state) => state.markets[selectedMarketID]
-  )
-  const tokensInSelectedMarket = useIdeaMarketsStore(
-    (state) => state.tokens[selectedMarketID]
-  )
-
-  const currentTokens = !tokensInSelectedMarket
-    ? []
-    : Object.values(tokensInSelectedMarket).slice(
-        currentPage * TOKENS_PER_PAGE,
-        (currentPage + 1) * TOKENS_PER_PAGE - 1
-      )
+  const compoundSupplyRate = useQuery('compound-supply-rate', querySupplyRate)
+  const market = useQuery(['market', 'TestMarket'], queryMarket)
+  const tokens = useQuery(['tokens', market.data], queryTokens)
 
   const tabs = [
     {
@@ -355,14 +350,17 @@ export default function Home() {
                 Watch
               </div>
             </div>
-            {currentTokens.map((token: IdeaToken, index: number) => (
-              <TokenRow
-                key={token.tokenID}
-                hideInMobile={index > 1}
-                token={token}
-                market={selectedMarket}
-              />
-            ))}
+            {tokens.data
+              ? tokens.data.map((token: IdeaToken, index: number) => (
+                  <TokenRow
+                    key={token.tokenID}
+                    hideInMobile={index > 1}
+                    token={token}
+                    compoundSupplyRate={compoundSupplyRate.data}
+                    market={market.data}
+                  />
+                ))
+              : ''}
           </div>
         </div>
 
