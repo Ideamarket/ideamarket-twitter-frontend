@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { listToken } from '../actions/listToken'
 import BigNumber from 'bignumber.js'
 
-import { WalletStatus } from '../components'
+import { WalletStatus, PriceChart } from '../components'
 
 import YouTube from '../assets/youtube.svg'
 import Medium from '../assets/medium.svg'
@@ -152,11 +152,13 @@ export function TokenRow({
             />
           )}
         </div>
-        <div className="md:w-20">
+        <div className="md:-ml-10 md:mr-2">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Price Chart
           </p>
-          <p>Chart</p>
+          <div>
+            <PriceChart />
+          </div>
         </div>
         <div className="hidden md:block">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
