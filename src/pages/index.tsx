@@ -45,7 +45,7 @@ export function TokenRow({
   return (
     <div
       className={classNames(
-        'hover:bg-brand-gray cursor-pointer flex flex-col p-5 space-x-2 md:flex-row md:items-center border-b md:h-18 md:overflow-y-hidden',
+        'hover:bg-brand-gray cursor-pointer flex flex-col p-5 space-x-2 md:flex-row md:items-center border-b md:h-18 md:overflow-hidden',
         hideInMobile && 'hidden md:flex'
       )}
     >
