@@ -364,7 +364,7 @@ export default function Home() {
                   />
                 ))
               : ''}
-            <div className="flex flex-row items-stretch justify-center md:flex md:px-10 md:py-5 md:border-b md:space-x-10">
+            <div className="flex flex-row items-stretch justify-between px-10 py-5 md:justify-center md:flex md:border-b md:space-x-10">
               <div
                 onClick={() => {
                   if (currentPage > 0) setCurrentPage(currentPage - 1)
