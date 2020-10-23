@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { listToken } from '../actions/listToken'
+import { buyToken } from '../actions/buyToken'
 import BigNumber from 'bignumber.js'
 import { useQuery } from 'react-query'
 
@@ -26,6 +27,10 @@ import {
 } from '../store/ideaMarketsStore'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
+
+async function buy(tokenID: number) {
+  buyToken(1, tokenID, 5)
+}
 
 export function TokenRow({
   token,
@@ -175,7 +180,12 @@ export function TokenRow({
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Trade
           </p>
-          <button className="w-32 h-10 text-base font-medium text-white rounded-lg tracking-tightest-2 font-sf-compact-medium bg-brand-blue hover:bg-blue-800">
+          <button
+            onClick={() => {
+              buy(token.tokenID)
+            }}
+            className="w-32 h-10 text-base font-medium text-white rounded-lg tracking-tightest-2 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+          >
             Trade
           </button>
         </div>
