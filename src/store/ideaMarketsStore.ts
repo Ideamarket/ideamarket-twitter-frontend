@@ -1,16 +1,9 @@
 import create from 'zustand'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
+import { request, gql } from 'graphql-request'
 
 import { web3BNToFloatString } from '../util'
-
-import {
-  gql,
-  HttpLink,
-  ApolloClient,
-  InMemoryCache,
-  NormalizedCacheObject,
-} from '@apollo/client'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -62,41 +55,29 @@ export type IdeaToken = {
 }
 
 type State = {
-  client: ApolloClient<NormalizedCacheObject>
   watching: { [address: string]: string }
 }
 
 export const useIdeaMarketsStore = create<State>((set) => ({
-  client: undefined,
   watching: {},
 }))
 
 export async function initIdeaMarketsStore() {
-  const httpLink = new HttpLink({
-    uri: HTTP_GRAPHQL_ENDPOINT,
-  })
-
-  const client = new ApolloClient({
-    link: httpLink,
-    cache: new InMemoryCache(),
-  })
-
   let storage = JSON.parse(localStorage.getItem('WATCHING_TOKENS'))
   if (!storage) {
     storage = {}
   }
 
-  useIdeaMarketsStore.setState({ client: client, watching: storage })
+  useIdeaMarketsStore.setState({ watching: storage })
 }
 
 export async function queryMarket(queryKey: string, marketName: string) {
-  const client = useIdeaMarketsStore.getState().client
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryMarket(marketName)
+  )
 
-  const result = await client.query({
-    query: getQueryMarket(marketName),
-  })
-
-  const market = result.data.ideaMarkets[0]
+  const market = result.ideaMarkets[0]
 
   const newMarket = <IdeaMarket>{
     name: market.name,
@@ -135,14 +116,13 @@ export async function queryTokens(queryKey: string, market: IdeaMarket) {
     return tokens
   }
 
-  const client = useIdeaMarketsStore.getState().client
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryTokens(market.marketID)
+  )
 
-  const result = await client.query({
-    query: getQueryTokens(market.marketID),
-  })
-
-  for (let i = 0; i < result.data.ideaMarkets[0].tokens.length; i++) {
-    const token = result.data.ideaMarkets[0].tokens[i]
+  for (let i = 0; i < result.ideaMarkets[0].tokens.length; i++) {
+    const token = result.ideaMarkets[0].tokens[i]
 
     const pricePoints = <IdeaTokenPricePoint[]>[]
     let dayVolume = 0.0
