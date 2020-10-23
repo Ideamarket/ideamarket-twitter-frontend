@@ -473,7 +473,10 @@ export default function Home() {
             {Array.from(
               Array(TOKENS_PER_PAGE - (tokens.data ? tokens.data.length : 0))
             ).map((a, b) => (
-              <div className="hidden md:block md:h-18"></div>
+              <div
+                key={`${'filler-' + b.toString()}`}
+                className="hidden md:block md:h-18"
+              ></div>
             ))}
             <div className="flex flex-row items-stretch justify-between px-10 py-5 md:justify-center md:flex md:border-b md:space-x-10">
               <div
