@@ -159,7 +159,7 @@ export function TokenRow({
         </div>
         <div className="md:-ml-10 md:mr-2">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
-            Price Chart
+            24H Chart
           </p>
           <div>
             <PreviewPriceChart />
@@ -444,7 +444,7 @@ export default function Home() {
                 &nbsp;1YR Income
               </div>
               <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30">
-                Price Chart
+                24H Chart
               </div>
               <div className="text-sm font-medium leading-none font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-36">
                 Trade
