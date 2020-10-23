@@ -193,13 +193,13 @@ export default function Home() {
 
   const [selectedTabId, setSelectedTabId] = useState(1)
   const [currentPage, setCurrentPage] = useState(0)
-  const [selectedMarketID, setSelectedMarketID] = useState(1)
+  const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
   const [currentHeader, setCurrentHeader] = useState('price')
   const [orderBy, setOrderBy] = useState('supply')
   const [orderDirection, setOrderDirection] = useState('desc')
 
   const compoundSupplyRate = useQuery('compound-supply-rate', querySupplyRate)
-  const market = useQuery(['market', 'TestMarket'], queryMarket)
+  const market = useQuery(['market', selectedMarketName], queryMarket)
   const tokens = useQuery(
     [
       'tokens',
@@ -307,25 +307,58 @@ export default function Home() {
 
       <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 md:-translate-y-28 font-sf-compact-medium">
         <div className="grid grid-cols-2 md:grid-cols-5">
-          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tl-xlg border-2 md:border-b-0">
+          <div
+            className={classNames(
+              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tl-xlg border-2 md:border-b-0',
+              selectedMarketName === 'TestMarket' &&
+                'bg-white text-very-dark-blue'
+            )}
+            onClick={() => {
+              setSelectedMarketName('TestMarket')
+            }}
+          >
             <div>
               <YouTube className="h-5" />
             </div>
             <p className="text-lg leading-none">YouTube</p>
           </div>
-          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0">
+          <div
+            className={classNames(
+              'flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
+              selectedMarketName === 'Medium' && 'bg-white text-very-dark-blue'
+            )}
+            onClick={() => {
+              setSelectedMarketName('Medium')
+            }}
+          >
             <div>
               <Medium className="h-5" />
             </div>
             <p className="text-lg leading-none">Medium</p>
           </div>
-          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0">
+          <div
+            className={classNames(
+              'flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0',
+              selectedMarketName === 'Twitter' && 'bg-white text-very-dark-blue'
+            )}
+            onClick={() => {
+              setSelectedMarketName('Twitter')
+            }}
+          >
             <div>
               <Twitter className="h-5" />
             </div>
             <p className="text-lg leading-none">Twitter</p>
           </div>
-          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0">
+          <div
+            className={classNames(
+              'flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 ',
+              selectedMarketName === 'Patreon' && 'bg-white text-very-dark-blue'
+            )}
+            onClick={() => {
+              setSelectedMarketName('Patreon')
+            }}
+          >
             <div>
               <Patreon className="h-5" />
             </div>
