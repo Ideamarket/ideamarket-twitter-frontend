@@ -196,6 +196,7 @@ export function TokenRow({
 
 export default function Home() {
   async function clicked() {
+    console.log('clicked')
     listToken('discord.com', 1)
   }
 
