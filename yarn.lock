@@ -5002,10 +5002,10 @@ eth-tx-summary@^3.1.2:
     ethereumjs-vm "^2.6.0"
     through2 "^2.0.3"
 
-eth-wallets@1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/eth-wallets/-/eth-wallets-1.0.7.tgz#8e59e7f88bfdef7372beb9eb3e131ab99e6b82c4"
-  integrity sha512-M/UE58pA79SubMdxskGeZBRtF/gIuaF1+ieg6fp+T8XJpP28A1NHo6bXvv2J2Iqg7bj4/YwG09T/pHPeGPaRMw==
+eth-wallets@1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/eth-wallets/-/eth-wallets-1.0.10.tgz#5488cd12c284438677d39e463acba246a77013c1"
+  integrity sha512-+28/8vzMY4Eq9yPcu/slAn0iLSFGQ7ROTz5UcXtvcVe6ipPeW9TFhYiDdvNrIYpYUZ9o3uV8G9FkzDWCzQeO3Q==
   dependencies:
     "@portis/web3" "^2.0.0-beta.59"
     "@walletconnect/web3-provider" "^1.3.1"
