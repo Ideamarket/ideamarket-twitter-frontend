@@ -29,8 +29,8 @@ export type IdeaMarket = {
 
 export type IdeaTokenPricePoint = {
   timestamp: number
+  oldPrice: number
   price: number
-  volume: number
 }
 
 export type IdeaToken = {
@@ -141,8 +141,8 @@ export async function queryTokens(
 
       const newPricePoint = <IdeaTokenPricePoint>{
         timestamp: pricePoint.timestamp,
+        oldPrice: parseFloat(pricePoint.oldPrice),
         price: parseFloat(pricePoint.price),
-        volume: parseFloat(pricePoint.volume),
       }
       pricePoints.push(newPricePoint)
     }
@@ -259,8 +259,8 @@ function getQueryTokens(
           '"' + dayAgo.toString() + '"'
         }}, orderBy:timestamp, orderDirection:asc) {
           timestamp
+          oldPrice
           price
-          volume
         }
       }
     }
