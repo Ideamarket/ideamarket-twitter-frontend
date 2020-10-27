@@ -1,5 +1,9 @@
 import { useState } from 'react'
-import { useWalletStore, setWeb3, unsetWeb3 } from '../store/walletStore'
+import {
+  useWalletStore,
+  setProvider,
+  unsetProvider,
+} from '../store/walletStore'
 
 import Metamask from '../assets/metamask.svg'
 import WalletConnect from '../assets/walletconnect.svg'
@@ -22,15 +26,15 @@ export default function WalletSelectionModal({
   setIsOpen: (b: boolean) => void
 }) {
   const [connectingWallet, setConnectingWallet] = useState(0)
-  const web3 = useWalletStore((state) => state.web3)
+  const provider = useWalletStore((state) => state.provider)
   const address = useWalletStore((state) => state.address)
 
   async function onWalletClicked(wallet) {
     setConnectingWallet(wallet)
 
-    let web3
+    let provider
     try {
-      web3 = await wallets.connect(wallet)
+      provider = await wallets.connect(wallet)
     } catch (ex) {
       console.log(ex)
       return
@@ -38,7 +42,7 @@ export default function WalletSelectionModal({
       setConnectingWallet(0)
     }
 
-    await setWeb3(web3, wallet)
+    await setProvider(provider, wallet)
     setIsOpen(false)
   }
 
@@ -50,7 +54,7 @@ export default function WalletSelectionModal({
       console.log(ex)
     }
 
-    unsetWeb3()
+    unsetProvider()
   }
 
   function makeWalletButton(svg: JSX.Element, name: string, wallet: number) {
@@ -150,8 +154,8 @@ export default function WalletSelectionModal({
 
         <hr className="m-4" />
         <div className="flex flex-row items-center mx-4 mb-4 ">
-          {web3 === undefined && <DotRed className="w-3 h-3" />}
-          {web3 !== undefined && <DotGreen className="w-3 h-3" />}
+          {provider === undefined && <DotRed className="w-3 h-3" />}
+          {provider !== undefined && <DotGreen className="w-3 h-3" />}
           <p className="ml-2 text-brand-gray-2">
             {address !== '' ? 'Connected with: ' : 'Not connected'}
             {address !== '' && (
@@ -167,10 +171,10 @@ export default function WalletSelectionModal({
           </p>
           <div className="flex justify-end flex-grow">
             <button
-              disabled={web3 === undefined}
+              disabled={provider === undefined}
               onClick={onDisconnectClicked}
               className={classNames(
-                web3 !== undefined
+                provider !== undefined
                   ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'
                   : 'cursor-not-allowed',
                 'p-2 text-xs text-center border-2 rounded-lg text-brand-gray-2 border-brand-gray-1 font-sf-compact-medium'
