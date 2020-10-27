@@ -35,7 +35,6 @@ export async function initContractsFromWeb3(web3: Web3) {
     from: web3.eth.defaultAccount,
   })
 
-  console.log(DeployedABIsKovan.ideaTokenFactory)
   const factoryContract = new web3.eth.Contract(
     DeployedABIsKovan.ideaTokenFactory as any,
     DeployedAddressesKovan.ideaTokenFactory,

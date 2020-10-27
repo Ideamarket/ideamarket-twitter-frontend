@@ -197,7 +197,14 @@ export function TokenRow({
 export default function Home() {
   async function clicked() {
     console.log('clicked')
-    listToken('discord.com', 1)
+    listToken('google.com', 1)
+    listToken('microsoft.com', 1)
+    listToken('apple.com', 1)
+    listToken('medium.com', 1)
+    listToken('hardhat.org', 1)
+    listToken('github.com', 1)
+    listToken('youtube.com', 1)
+    listToken('twitter.com', 1)
   }
 
   const TOKENS_PER_PAGE = 10
