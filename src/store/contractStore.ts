@@ -1,5 +1,5 @@
 import create from 'zustand'
-import ethers from 'ethers'
+import Web3 from 'web3'
 
 import { addresses } from '../util'
 import DeployedAddressesKovan from '../assets/deployed-kovan.json'
@@ -8,10 +8,10 @@ import ERC20ABI from '../assets/abi-erc20.json'
 import { useWalletStore } from './walletStore'
 
 type State = {
-  daiContract: ethers.Contract
-  factoryContract: ethers.Contract
-  exchangeContract: ethers.Contract
-  currencyConverterContract: ethers.Contract
+  daiContract: any
+  factoryContract: any
+  exchangeContract: any
+  currencyConverterContract: any
 }
 
 export const useContractStore = create<State>((set) => ({
@@ -30,29 +30,28 @@ export async function clearContracts() {
   })
 }
 
-export async function initContractsFromSigner(signer) {
-  const daiContract = new ethers.Contract(
-    addresses.dai,
-    ERC20ABI as any,
-    signer
-  )
+export async function initContractsFromWeb3(web3: Web3) {
+  const daiContract = new web3.eth.Contract(ERC20ABI as any, addresses.dai, {
+    from: web3.eth.defaultAccount,
+  })
 
-  const factoryContract = new ethers.Contract(
-    DeployedAddressesKovan.ideaTokenFactory,
+  console.log(DeployedABIsKovan.ideaTokenFactory)
+  const factoryContract = new web3.eth.Contract(
     DeployedABIsKovan.ideaTokenFactory as any,
-    signer
+    DeployedAddressesKovan.ideaTokenFactory,
+    { from: web3.eth.defaultAccount }
   )
 
-  const exchangeContract = new ethers.Contract(
-    DeployedAddressesKovan.ideaTokenExchange,
+  const exchangeContract = new web3.eth.Contract(
     DeployedABIsKovan.ideaTokenExchange as any,
-    signer
+    DeployedAddressesKovan.ideaTokenExchange,
+    { from: web3.eth.defaultAccount }
   )
 
-  const currencyConverterContract = new ethers.Contract(
-    DeployedAddressesKovan.currencyConverter,
+  const currencyConverterContract = new web3.eth.Contract(
     DeployedABIsKovan.currencyConverter as any,
-    signer
+    DeployedAddressesKovan.currencyConverter,
+    { from: web3.eth.defaultAccount }
   )
 
   useContractStore.setState({
@@ -64,6 +63,8 @@ export async function initContractsFromSigner(signer) {
 }
 
 export function getERC20Contract(address: string) {
-  const signer = useWalletStore.getState().signer
-  return new ethers.Contract(address, ERC20ABI as any, signer)
+  const web3 = useWalletStore.getState().web3
+  return new web3.eth.Contract(ERC20ABI as any, address, {
+    from: web3.eth.defaultAccount,
+  })
 }

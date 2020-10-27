@@ -1,10 +1,10 @@
 import create from 'zustand'
-import ethers from 'ethers'
+import Web3 from 'web3'
 
-import { initContractsFromSigner, clearContracts } from './contractStore'
+import { initContractsFromWeb3, clearContracts } from './contractStore'
 
 type State = {
-  signer: ethers.Signer
+  web3: Web3
   showWalletModal: boolean
   address: string
   toggleWalletModal: () => void
@@ -12,7 +12,7 @@ type State = {
 }
 
 export const useWalletStore = create<State>((set) => ({
-  signer: undefined,
+  web3: undefined,
   address: '',
   showWalletModal: false,
   toggleWalletModal: () =>
@@ -47,9 +47,8 @@ export const initWalletStore = async () => {
         (await wallets.isAvailable(wallet)) &&
         (await wallets.isConnected(wallet))
       ) {
-        const provider = await wallets.connect(wallet)
-        const signer = provider.getSigner()
-        await setSigner(signer, wallet)
+        const web3 = await wallets.connect(wallet)
+        await setWeb3(web3, wallet)
       }
     }
   } catch (ex) {
@@ -58,21 +57,22 @@ export const initWalletStore = async () => {
   }
 }
 
-export async function setSigner(signer, wallet) {
-  const address = 'todo' // signer.address
+export async function setWeb3(web3, wallet) {
+  const address = (await web3.eth.getAccounts())[0]
+  web3.eth.defaultAccount = address
   useWalletStore.setState({
-    signer: signer,
+    web3: web3,
     address: address,
   })
 
   localStorage.setItem('WALLET_TYPE', wallet.toString())
 
-  initContractsFromSigner(signer)
+  initContractsFromWeb3(web3)
 }
 
-export async function unsetSigner() {
+export async function unsetWeb3() {
   useWalletStore.setState({
-    signer: undefined,
+    web3: undefined,
     address: '',
   })
 

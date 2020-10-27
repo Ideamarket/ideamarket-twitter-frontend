@@ -1,13 +1,12 @@
 import { useWalletStore } from '../store/walletStore'
 import { useContractStore } from '../store/contractStore'
-import { BigNumber } from 'ethers'
 
 export async function buyToken(
   marketID: number,
   tokenID: number,
   amount: number
 ) {
-  const factory = useContractStore.getState().factoryContract
+  /* const factory = useContractStore.getState().factoryContract
   const exchange = useContractStore.getState().exchangeContract
   const info = await factory.getTokenInfo(
     marketID.toString(),
@@ -31,5 +30,5 @@ export async function buyToken(
     amountBN.toString(),
     cost,
     useWalletStore.getState().address
-  )
+  )*/
 }

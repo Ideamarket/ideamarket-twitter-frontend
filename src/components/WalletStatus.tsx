@@ -11,7 +11,7 @@ export default function WalletStatus() {
     ssr: false,
   })
 
-  const signer = useWalletStore((state) => state.signer)
+  const web3 = useWalletStore((state) => state.web3)
   const address = useWalletStore((state) => state.address)
   const isModalOpen = useWalletStore((state) => state.showWalletModal)
   const toggleWalletModal = useWalletStore((state) => state.toggleWalletModal)
@@ -27,13 +27,13 @@ export default function WalletStatus() {
         className="flex flex-row items-center px-2 border rounded cursor-pointer border-brand-gray-2"
         onClick={toggleWalletModal}
       >
-        {signer === undefined && <DotRed className="w-3 h-3" />}
-        {signer === undefined && (
+        {web3 === undefined && <DotRed className="w-3 h-3" />}
+        {web3 === undefined && (
           <div className="ml-3 text-gray-400 align-middle">No wallet</div>
         )}
 
-        {signer !== undefined && <DotGreen className="w-3 h-3" />}
-        {signer !== undefined && (
+        {web3 !== undefined && <DotGreen className="w-3 h-3" />}
+        {web3 !== undefined && (
           <div className="ml-3 text-gray-400 align-middle">
             {address.slice(0, 6)}...{address.slice(-4)}
           </div>
