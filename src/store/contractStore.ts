@@ -30,29 +30,29 @@ export async function clearContracts() {
   })
 }
 
-export async function initContractsFromProvider(provider) {
+export async function initContractsFromSigner(signer) {
   const daiContract = new ethers.Contract(
     addresses.dai,
     ERC20ABI as any,
-    provider.HttpProvider
+    signer
   )
 
   const factoryContract = new ethers.Contract(
     DeployedAddressesKovan.ideaTokenFactory,
     DeployedABIsKovan.ideaTokenFactory as any,
-    provider.HttpProvider
+    signer
   )
 
   const exchangeContract = new ethers.Contract(
     DeployedAddressesKovan.ideaTokenExchange,
     DeployedABIsKovan.ideaTokenExchange as any,
-    provider.HttpProvider
+    signer
   )
 
   const currencyConverterContract = new ethers.Contract(
     DeployedAddressesKovan.currencyConverter,
     DeployedABIsKovan.currencyConverter as any,
-    provider.HttpProvider
+    signer
   )
 
   useContractStore.setState({
@@ -63,7 +63,7 @@ export async function initContractsFromProvider(provider) {
   })
 }
 
-export function getERC20Contract(address: string, provider) {
-  const web3 = useWalletStore.getState().provider
-  return new ethers.Contract(address, ERC20ABI as any, provider.HttpProvider)
+export function getERC20Contract(address: string) {
+  const signer = useWalletStore.getState().signer
+  return new ethers.Contract(address, ERC20ABI as any, signer)
 }

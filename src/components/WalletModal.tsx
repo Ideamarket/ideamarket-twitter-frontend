@@ -1,9 +1,5 @@
 import { useState } from 'react'
-import {
-  useWalletStore,
-  setProvider,
-  unsetProvider,
-} from '../store/walletStore'
+import { useWalletStore, setSigner, unsetSigner } from '../store/walletStore'
 
 import Metamask from '../assets/metamask.svg'
 import WalletConnect from '../assets/walletconnect.svg'
@@ -26,15 +22,17 @@ export default function WalletSelectionModal({
   setIsOpen: (b: boolean) => void
 }) {
   const [connectingWallet, setConnectingWallet] = useState(0)
-  const provider = useWalletStore((state) => state.provider)
+  const signer = useWalletStore((state) => state.signer)
   const address = useWalletStore((state) => state.address)
 
   async function onWalletClicked(wallet) {
     setConnectingWallet(wallet)
 
-    let provider
+    let signer
     try {
-      provider = await wallets.connect(wallet)
+      const provider = await wallets.connect(wallet)
+      console.log(provider)
+      signer = provider.getSigner()
     } catch (ex) {
       console.log(ex)
       return
@@ -42,7 +40,7 @@ export default function WalletSelectionModal({
       setConnectingWallet(0)
     }
 
-    await setProvider(provider, wallet)
+    await setSigner(signer, wallet)
     setIsOpen(false)
   }
 
@@ -54,7 +52,7 @@ export default function WalletSelectionModal({
       console.log(ex)
     }
 
-    unsetProvider()
+    unsetSigner()
   }
 
   function makeWalletButton(svg: JSX.Element, name: string, wallet: number) {
@@ -154,8 +152,8 @@ export default function WalletSelectionModal({
 
         <hr className="m-4" />
         <div className="flex flex-row items-center mx-4 mb-4 ">
-          {provider === undefined && <DotRed className="w-3 h-3" />}
-          {provider !== undefined && <DotGreen className="w-3 h-3" />}
+          {signer === undefined && <DotRed className="w-3 h-3" />}
+          {signer !== undefined && <DotGreen className="w-3 h-3" />}
           <p className="ml-2 text-brand-gray-2">
             {address !== '' ? 'Connected with: ' : 'Not connected'}
             {address !== '' && (
@@ -171,10 +169,10 @@ export default function WalletSelectionModal({
           </p>
           <div className="flex justify-end flex-grow">
             <button
-              disabled={provider === undefined}
+              disabled={signer === undefined}
               onClick={onDisconnectClicked}
               className={classNames(
-                provider !== undefined
+                signer !== undefined
                   ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'
                   : 'cursor-not-allowed',
                 'p-2 text-xs text-center border-2 rounded-lg text-brand-gray-2 border-brand-gray-1 font-sf-compact-medium'
