@@ -267,6 +267,8 @@ export default function Home() {
         header === 'income'
       ) {
         setOrderBy('supply')
+      } else if (header === 'change') {
+        setOrderBy('dayChange')
       }
 
       setOrderDirection('desc')
