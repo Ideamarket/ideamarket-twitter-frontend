@@ -163,7 +163,7 @@ export async function queryTokens(
       invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
       rawInvested: new BN(token.invested),
       dayPricePoints: pricePoints,
-      dayChange: parseFloat(token.dayChange).toFixed(2),
+      dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
       dayVolume: dayVolume.toFixed(2),
       url: getTokenURL(market.name, token.name),
       iconURL: getTokenIconURL(market.name, token.name),
