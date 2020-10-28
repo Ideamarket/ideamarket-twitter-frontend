@@ -110,7 +110,7 @@ export function TokenRow({
           </p>
           <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
             {parseFloat(token.daiInToken) > 0.0 ? (
-              token.daiInToken
+              `$` + token.daiInToken
             ) : (
               <>&mdash;</>
             )}
