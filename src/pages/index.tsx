@@ -56,8 +56,24 @@ export default function Home() {
           <img className="w-8" src="/logo.png" alt="Logo" />
           <h2 className="text-xl leading-none font-gilroy-bold">IdeaMarkets</h2>
           <WalletStatus />
+          <nav className="flex-1 hidden md:block">
+            <ul className="flex justify-center font-sf-compact-medium">
+              <li className="mr-10 text-lg tracking-tighter cursor-pointer">
+                Overview
+              </li>
+              <li className="mr-10 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
+                My Tokens
+              </li>
+              <li className="mr-10 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
+                My Wallet
+              </li>
+              <li className="mr-5 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
+                Launch Token
+              </li>
+            </ul>
+          </nav>
           <svg
-            className="w-6 h-6 ml-auto"
+            className="w-6 h-6 ml-auto md:opacity-0"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"

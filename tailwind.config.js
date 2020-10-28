@@ -80,6 +80,9 @@ module.exports = {
       fontSize: {
         '6+xl': '4.2rem',
       },
+      textOpacity: {
+        60: '0.6',
+      },
     },
   },
   variants: {},
