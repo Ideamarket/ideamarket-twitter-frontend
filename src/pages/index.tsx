@@ -24,7 +24,6 @@ import {
   setIsWatching,
   IdeaToken,
   IdeaMarket,
-  IdeaTokenPricePoint,
 } from '../store/ideaMarketsStore'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -78,7 +77,7 @@ export function TokenRow({
       <div className="flex md:w-48">
         <div className="flex items-center">
           <div className="w-7.5 h-7.5 rounded-full overflow-hidden">
-            <img src={`${token.iconURL}`} className="w-full h-full" />
+            <img src={`${token.iconURL}`} className="w-full h-full" alt="" />
           </div>
           <div className="ml-2.5">
             <h2 className="text-base font-medium leading-none tracking-tightest-2 text-very-dark-blue font-sf-pro-text">
@@ -338,7 +337,7 @@ export default function Home() {
         <div className="inline-flex flex-col space-y-3 md:flex-row md:space-x-10 md:space-y-0 md:items-center mt-7">
           <button
             onClick={clicked}
-            className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-3 md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+            className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
           >
             Launch Your Token
           </button>
