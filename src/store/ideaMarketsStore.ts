@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { request, gql } from 'graphql-request'
 
-import { web3BNToFloatString } from '../util'
+import { web3BNToFloatString } from '../utils'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -81,7 +81,7 @@ export async function queryMarket(queryKey: string, marketName: string) {
 
   const market = result.ideaMarkets[0]
 
-  const newMarket = <IdeaMarket>{
+  const newMarket: IdeaMarket = {
     name: market.name,
     marketID: market.marketID,
     baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),

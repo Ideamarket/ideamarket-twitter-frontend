@@ -1,4 +1,4 @@
-import { useContractStore } from '../store/contractStore'
+import { useContractStore } from 'store/contractStore'
 
 export async function listToken(name: string, marketID: number) {
   const factoryContract = useContractStore.getState().factoryContract

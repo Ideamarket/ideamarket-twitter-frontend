@@ -1,7 +1,7 @@
 import create from 'zustand'
 import Web3 from 'web3'
 
-import { addresses } from '../util'
+import { addresses } from 'utils'
 import DeployedAddressesKovan from '../assets/deployed-kovan.json'
 import DeployedABIsKovan from '../assets/abis-kovan.json'
 import ERC20ABI from '../assets/abi-erc20.json'

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useWalletStore, setWeb3, unsetWeb3 } from '../store/walletStore'
+import { useWalletStore, setWeb3, unsetWeb3 } from 'store/walletStore'
 
 import Metamask from '../assets/metamask.svg'
 import WalletConnect from '../assets/walletconnect.svg'

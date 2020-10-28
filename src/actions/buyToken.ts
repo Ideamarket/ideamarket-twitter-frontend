@@ -1,5 +1,5 @@
-import { useWalletStore } from '../store/walletStore'
-import { useContractStore } from '../store/contractStore'
+import { useWalletStore } from 'store/walletStore'
+import { useContractStore } from 'store/contractStore'
 import BN from 'bn.js'
 
 export async function buyToken(
