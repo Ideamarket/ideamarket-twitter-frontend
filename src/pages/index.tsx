@@ -24,6 +24,7 @@ import {
   setIsWatching,
   IdeaToken,
   IdeaMarket,
+  IdeaTokenPricePoint,
 } from '../store/ideaMarketsStore'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -46,6 +47,26 @@ export function TokenRow({
   const yearIncome = (
     parseFloat(token.daiInToken) * compoundSupplyRate
   ).toFixed(2)
+
+  const currentUnixTs = Date.now() / 1000
+  const dayBackUnixTs = currentUnixTs - 86400
+  let beginPrice
+  let endPrice
+  if (token.dayPricePoints.length === 0) {
+    beginPrice = token.latestPricePoint.price
+    endPrice = token.latestPricePoint.price
+  } else {
+    beginPrice = token.dayPricePoints[0].oldPrice
+    endPrice = token.dayPricePoints[token.dayPricePoints.length - 1].price
+  }
+
+  const chartData = [[dayBackUnixTs, beginPrice]].concat(
+    token.dayPricePoints.map((pricePoint) => [
+      pricePoint.timestamp,
+      pricePoint.price,
+    ])
+  )
+  chartData.push([currentUnixTs, endPrice])
 
   return (
     <div
@@ -173,7 +194,7 @@ export function TokenRow({
             24H Chart
           </p>
           <div>
-            <PreviewPriceChart />
+            <PreviewPriceChart chartData={chartData} />
           </div>
         </div>
         <div className="hidden md:block">

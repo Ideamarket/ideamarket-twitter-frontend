@@ -1,36 +1,11 @@
 import { useMemo, useCallback } from 'react'
 import { Chart } from 'react-charts'
 
-function randomDate(start: Date, end: Date) {
-  return new Date(
-    start.getTime() + Math.random() * (end.getTime() - start.getTime())
-  )
-}
-
-type DayPricePoint = {
-  timestamp: number
-  price: number
-}
-
-export default function PreviewPriceChart() {
-  const NUMBER_OF_DATA_POINTS = 10
-  const pricePoints: DayPricePoint[] = []
-
-  for (let i = 0; i < NUMBER_OF_DATA_POINTS; i++) {
-    pricePoints.push({
-      timestamp: randomDate(new Date(2019, 7, 1), new Date()).getTime(),
-      price: Math.random() * 1000,
-    })
-  }
-  pricePoints.sort((a, b) => a.timestamp - b.timestamp)
-
+export default function PreviewPriceChart(props) {
   const data = useMemo(
     () => [
       {
-        data: pricePoints.map((pricePoint) => [
-          pricePoint.timestamp,
-          pricePoint.price,
-        ]),
+        data: props.chartData,
       },
     ],
     []

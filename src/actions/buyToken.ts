@@ -1,34 +1,33 @@
 import { useWalletStore } from '../store/walletStore'
 import { useContractStore } from '../store/contractStore'
+import BN from 'bn.js'
 
 export async function buyToken(
   marketID: number,
   tokenID: number,
   amount: number
 ) {
-  /* const factory = useContractStore.getState().factoryContract
+  const factory = useContractStore.getState().factoryContract
   const exchange = useContractStore.getState().exchangeContract
-  const info = await factory.getTokenInfo(
-    marketID.toString(),
-    tokenID.toString()
-  )
+  const info = await factory.methods
+    .getTokenInfo(marketID.toString(), tokenID.toString())
+    .call()
   const address = info.ideaToken
 
-  const amountBN = BigNumber.from(amount).mul(
-    BigNumber.from('10').pow(BigNumber.from('18'))
-  )
-  const cost = await exchange.getCostForBuyingTokens(
-    address,
-    amountBN.toString()
-  )
+  const amountBN = new BN(amount).mul(new BN('10').pow(new BN('18')))
+  const cost = await exchange.methods
+    .getCostForBuyingTokens(address, amountBN)
+    .call()
 
   const daiContract = useContractStore.getState().daiContract
-  await daiContract.approve(exchange.options.address, cost)
-  await exchange.buyTokens(
-    address,
-    amountBN.toString(),
-    amountBN.toString(),
-    cost,
-    useWalletStore.getState().address
-  )*/
+  await daiContract.methods.approve(exchange.options.address, cost).send()
+  await exchange.methods
+    .buyTokens(
+      address,
+      amountBN,
+      amountBN,
+      cost,
+      useWalletStore.getState().address
+    )
+    .send()
 }

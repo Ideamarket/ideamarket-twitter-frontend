@@ -48,6 +48,7 @@ export type IdeaToken = {
   rawDaiInToken: BN
   invested: string
   rawInvested: BN
+  latestPricePoint: IdeaTokenPricePoint
   dayPricePoints: IdeaTokenPricePoint[]
   dayChange: string
   dayVolume: string
@@ -132,21 +133,6 @@ export async function queryTokens(
   for (let i = 0; i < result.ideaMarkets[0].tokens.length; i++) {
     const token = result.ideaMarkets[0].tokens[i]
 
-    const pricePoints = <IdeaTokenPricePoint[]>[]
-    let dayVolume = 0.0
-
-    for (let i = 0; i < token.pricePoints.length; i++) {
-      const pricePoint = token.pricePoints[i]
-      dayVolume += parseFloat(pricePoint.volume)
-
-      const newPricePoint = <IdeaTokenPricePoint>{
-        timestamp: pricePoint.timestamp,
-        oldPrice: parseFloat(pricePoint.oldPrice),
-        price: parseFloat(pricePoint.price),
-      }
-      pricePoints.push(newPricePoint)
-    }
-
     const newToken = <IdeaToken>{
       address: token.id,
       marketID: market.marketID,
@@ -162,9 +148,10 @@ export async function queryTokens(
       rawDaiInToken: new BN(token.daiInToken),
       invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
       rawInvested: new BN(token.invested),
-      dayPricePoints: pricePoints,
+      latestPricePoint: token.latestPricePoint,
+      dayPricePoints: token.dayPricePoints,
       dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
-      dayVolume: dayVolume.toFixed(2),
+      dayVolume: '0.00',
       url: getTokenURL(market.name, token.name),
       iconURL: getTokenIconURL(market.name, token.name),
     }
@@ -247,10 +234,13 @@ function getQueryTokens(
         interestWithdrawer
         daiInToken
         invested
+        latestPricePoint {
+          timestamp
+          oldPrice
+          price
+        }
         dayChange
-        pricePoints(where:{timestamp_gt:${
-          '"' + dayAgo.toString() + '"'
-        }}, orderBy:timestamp, orderDirection:asc) {
+        dayPricePoints(orderBy:timestamp) {
           timestamp
           oldPrice
           price
