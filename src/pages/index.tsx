@@ -12,6 +12,7 @@ import YouTubeBlack from '../assets/youtube-black.svg'
 import MediumBlack from '../assets/medium-black.svg'
 import TwitterBlack from '../assets/twitter-black.svg'
 import PatreonBlack from '../assets/patreon-black.svg'
+import Search from '../assets/search.svg'
 
 export default function Home() {
   async function clicked() {
@@ -182,7 +183,7 @@ export default function Home() {
           <div className="border-r-2 md:hidden"></div>
         </div>
         <div className="bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">
-          <div className="px-5 border-b border-brand-gray-3">
+          <div className="flex ml-5 border-b md:ml-10 border-brand-gray-3">
             <div>
               <div className="font-sf-pro-text">
                 <nav className="flex -mb-px space-x-5">
@@ -202,6 +203,21 @@ export default function Home() {
                     </a>
                   ))}
                 </nav>
+              </div>
+            </div>
+            <div className="hidden w-2/5 ml-auto md:block">
+              <label htmlFor="search-input" className="sr-only">
+                Search
+              </label>
+              <div className="relative h-full rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <Search className="w-4 h-4 text-gray-400" />
+                </div>
+                <input
+                  id="search-input"
+                  className="block w-full h-full pl-10 border-0 border-l rounded-none form-input sm:text-sm sm:leading-5"
+                  placeholder="Search"
+                />
               </div>
             </div>
           </div>

@@ -12,6 +12,15 @@ module.exports = {
   },
   theme: {
     extend: {
+      customForms: {
+        default: {
+          input: {
+            '&:focus': {
+              boxShadow: `0 0 0 3px rgba(8,87,224, 0.45)`,
+            },
+          },
+        },
+      },
       colors: {
         'brand-blue': '#0857e0',
         'brand-gray': '#f6f6f6',
