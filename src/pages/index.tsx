@@ -183,7 +183,7 @@ export default function Home() {
           <div className="border-r-2 md:hidden"></div>
         </div>
         <div className="bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">
-          <div className="flex ml-5 border-b md:ml-10 border-brand-gray-3">
+          <div className="flex pl-5 border-b md:pl-10 border-brand-gray-3">
             <div>
               <div className="font-sf-pro-text">
                 <nav className="flex -mb-px space-x-5">
