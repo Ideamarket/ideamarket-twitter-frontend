@@ -147,14 +147,6 @@ export async function queryTokens(
       pricePoints.push(newPricePoint)
     }
 
-    let dayChange = '0.00'
-    if (pricePoints.length >= 2) {
-      const start = pricePoints[0]
-      const end = pricePoints[pricePoints.length - 1]
-
-      dayChange = ((end.price / start.price - 1) * 100).toFixed(2)
-    }
-
     const newToken = <IdeaToken>{
       address: token.id,
       marketID: market.marketID,
@@ -171,7 +163,7 @@ export async function queryTokens(
       invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
       rawInvested: new BN(token.invested),
       dayPricePoints: pricePoints,
-      dayChange: dayChange,
+      dayChange: parseFloat(token.dayChange).toFixed(2),
       dayVolume: dayVolume.toFixed(2),
       url: getTokenURL(market.name, token.name),
       iconURL: getTokenIconURL(market.name, token.name),
@@ -255,6 +247,7 @@ function getQueryTokens(
         interestWithdrawer
         daiInToken
         invested
+        dayChange
         pricePoints(where:{timestamp_gt:${
           '"' + dayAgo.toString() + '"'
         }}, orderBy:timestamp, orderDirection:asc) {
