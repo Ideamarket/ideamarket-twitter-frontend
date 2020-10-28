@@ -12,6 +12,10 @@ import Medium from '../assets/medium.svg'
 import Twitter from '../assets/twitter.svg'
 import Patreon from '../assets/patreon.svg'
 import More from '../assets/more.svg'
+import YouTubeBlack from '../assets/youtube-black.svg'
+import MediumBlack from '../assets/medium-black.svg'
+import TwitterBlack from '../assets/twitter-black.svg'
+import PatreonBlack from '../assets/patreon-black.svg'
 import Star from '../assets/star.svg'
 import StarOn from '../assets/star-on.svg'
 
@@ -84,6 +88,7 @@ export function TokenRow({
               <a
                 href={`${token.url}`}
                 target="_blank"
+                rel="noreferrer"
                 className="hover:underline"
               >
                 {token.name}
@@ -358,7 +363,11 @@ export default function Home() {
             }}
           >
             <div>
-              <YouTube className="h-5" />
+              {selectedMarketName === 'TestMarket' ? (
+                <YouTubeBlack className="h-5" />
+              ) : (
+                <YouTube className="h-5" />
+              )}
             </div>
             <p className="text-lg leading-none">YouTube</p>
           </div>
@@ -372,7 +381,11 @@ export default function Home() {
             }}
           >
             <div>
-              <Medium className="h-5" />
+              {selectedMarketName === 'Medium' ? (
+                <MediumBlack className="h-5" />
+              ) : (
+                <Medium className="h-5" />
+              )}
             </div>
             <p className="text-lg leading-none">Medium</p>
           </div>
@@ -386,7 +399,11 @@ export default function Home() {
             }}
           >
             <div>
-              <Twitter className="h-5" />
+              {selectedMarketName === 'Twitter' ? (
+                <TwitterBlack className="h-5" />
+              ) : (
+                <Twitter className="h-5" />
+              )}
             </div>
             <p className="text-lg leading-none">Twitter</p>
           </div>
@@ -400,7 +417,11 @@ export default function Home() {
             }}
           >
             <div>
-              <Patreon className="h-5" />
+              {selectedMarketName === 'Patreon' ? (
+                <PatreonBlack className="h-5" />
+              ) : (
+                <Patreon className="h-5" />
+              )}
             </div>
             <p className="text-lg leading-none">Patreon</p>
           </div>
@@ -422,7 +443,7 @@ export default function Home() {
                       onClick={() => setSelectedTabId(tab.id)}
                       key={tab.id}
                       className={classNames(
-                        'px-1 py-4 text-base leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none',
+                        'px-1 py-4 text-base leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none cursor-pointer',
                         tab.id === selectedTabId
                           ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
                           : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300',
