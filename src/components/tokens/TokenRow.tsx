@@ -147,7 +147,7 @@ export default function TokenRow({
           </p>
         </td>
 
-        <td className="col-span-3 row-span-1 row-start-4 px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap col-start-0">
+        <td className="col-span-3 row-span-1 row-start-4 px-6 py-4 whitespace-no-wrap col-start-0">
           <PreviewPriceChart chartData={getChartData(token)} />
         </td>
         <td className="hidden px-6 py-4 whitespace-no-wrap md:table-cell">

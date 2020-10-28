@@ -36,7 +36,7 @@ export default function PreviewPriceChart(props) {
   return (
     // A react-chart hyper-responsively and continuously fills the available
     // space of its parent element automatically
-    <div className="w-full h-6">
+    <div className="w-full min-h-6">
       <Chart
         series={series}
         getSeriesStyle={getSeriesStyle}
