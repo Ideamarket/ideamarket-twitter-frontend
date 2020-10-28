@@ -69,12 +69,15 @@ export default function Table({
   const [currentHeader, setCurrentHeader] = useState('price')
   const [orderBy, setOrderBy] = useState('supply')
   const [orderDirection, setOrderDirection] = useState('desc')
-  const { data: compoundSupplyRate } = useQuery(
-    'compound-supply-rate',
-    querySupplyRate
+  const {
+    data: compoundSupplyRate,
+    isLoading: isCompoundSupplyRateLoading,
+  } = useQuery('compound-supply-rate', querySupplyRate)
+  const { data: market, isLoading: isMarketLoading } = useQuery(
+    ['market', selectedMarketName],
+    queryMarket
   )
-  const { data: market } = useQuery(['market', selectedMarketName], queryMarket)
-  const { data: tokens } = useQuery(
+  const { data: tokens, isLoading: isTokensDataLoading } = useQuery(
     [
       'tokens',
       market,
@@ -85,6 +88,9 @@ export default function Table({
     ],
     queryTokens
   )
+
+  const isLoading =
+    isMarketLoading || isTokensDataLoading || isCompoundSupplyRateLoading
 
   function headerClicked(headerValue: string) {
     if (currentHeader === headerValue) {
@@ -151,11 +157,13 @@ export default function Table({
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {!tokens
-                    ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                        <TokenRowSkeleton key={token} />
-                      ))
-                    : tokens.map((token) => (
+                  {isLoading ? (
+                    Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
+                      <TokenRowSkeleton key={token} />
+                    ))
+                  ) : (
+                    <>
+                      {tokens.map((token) => (
                         <TokenRow
                           key={token.tokenID}
                           token={token}
@@ -163,15 +171,17 @@ export default function Table({
                           compoundSupplyRate={compoundSupplyRate}
                         />
                       ))}
-                  {tokens &&
-                    Array.from(
-                      Array(TOKENS_PER_PAGE - (tokens?.length ?? 0))
-                    ).map((a, b) => (
-                      <tr
-                        key={`${'filler-' + b.toString()}`}
-                        className="hidden h-18 md:table-row"
-                      ></tr>
-                    ))}
+
+                      {Array.from(
+                        Array(TOKENS_PER_PAGE - (tokens?.length ?? 0))
+                      ).map((a, b) => (
+                        <tr
+                          key={`${'filler-' + b.toString()}`}
+                          className="hidden h-18 md:table-row"
+                        ></tr>
+                      ))}
+                    </>
+                  )}
                 </tbody>
               </table>
             </div>
