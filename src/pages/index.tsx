@@ -51,7 +51,7 @@ export default function Home() {
 
   return (
     <div className="bg-brand-gray">
-      <div className="w-screen p-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
+      <div className="w-screen p-5 pt-8 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
         <div className="flex items-center mx-auto max-w-88 md:max-w-304">
           <img className="w-8" src="/logo.png" alt="Logo" />
           <h2 className="text-xl leading-none font-gilroy-bold">IdeaMarkets</h2>
