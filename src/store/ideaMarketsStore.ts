@@ -1,4 +1,5 @@
 import create from 'zustand'
+import produce from 'immer'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { request, gql } from 'graphql-request'
@@ -57,12 +58,16 @@ export type IdeaToken = {
 }
 
 type State = {
-  watching: { [address: string]: string }
+  watching: { [address: string]: boolean }
 }
 
 export const useIdeaMarketsStore = create<State>((set) => ({
   watching: {},
 }))
+
+function setNestedState(fn) {
+  useIdeaMarketsStore.setState(produce(useIdeaMarketsStore.getState(), fn))
+}
 
 export async function initIdeaMarketsStore() {
   let storage = JSON.parse(localStorage.getItem('WATCHING_TOKENS'))
@@ -70,7 +75,9 @@ export async function initIdeaMarketsStore() {
     storage = {}
   }
 
-  useIdeaMarketsStore.setState({ watching: storage })
+  setNestedState((s: State) => {
+    s.watching = storage
+  })
 }
 
 export async function queryMarket(queryKey: string, marketName: string) {
@@ -119,7 +126,8 @@ export async function queryTokens(
   num: number,
   orderBy: string,
   orderDirection: string,
-  search: string
+  search: string,
+  filterTokens: string[]
 ) {
   const tokens = <IdeaToken[]>[]
   if (!market) {
@@ -137,7 +145,8 @@ export async function queryTokens(
           num,
           orderBy,
           orderDirection,
-          search
+          search,
+          filterTokens
         )
       )
     ).tokenNameSearch
@@ -145,7 +154,14 @@ export async function queryTokens(
     result = (
       await request(
         HTTP_GRAPHQL_ENDPOINT,
-        getQueryTokens(market.marketID, skip, num, orderBy, orderDirection)
+        getQueryTokens(
+          market.marketID,
+          skip,
+          num,
+          orderBy,
+          orderDirection,
+          filterTokens
+        )
       )
     ).ideaMarkets[0].tokens
   }
@@ -184,22 +200,19 @@ export async function queryTokens(
 
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
   const address = token.address
-  let storage = JSON.parse(localStorage.getItem('WATCHING_TOKENS'))
-  if (!storage) {
-    storage = {}
-  }
 
-  const state = useIdeaMarketsStore.getState().watching
-  if (watching) {
-    storage[address] = 'true'
-    state[address] = 'true'
-  } else {
-    delete storage[address]
-    delete state[address]
-  }
+  setNestedState((s: State) => {
+    if (watching) {
+      s.watching[address] = true
+    } else {
+      delete s.watching[address]
+    }
+  })
 
-  localStorage.setItem('WATCHING_TOKENS', JSON.stringify(storage))
-  useIdeaMarketsStore.setState({ watching: state })
+  localStorage.setItem(
+    'WATCHING_TOKENS',
+    JSON.stringify(useIdeaMarketsStore.getState().watching)
+  )
 }
 
 function getTokenURL(marketName: string, tokenName: string): string {
@@ -238,12 +251,24 @@ function getQueryTokens(
   skip: number,
   num: number,
   orderBy: string,
-  orderDirection: string
+  orderDirection: string,
+  filterTokens: string[]
 ) {
+  let filterTokensQuery = ''
+  if (filterTokens) {
+    filterTokensQuery = ',where:{id_in:['
+    filterTokens.forEach((value, index) => {
+      if (index > 0) {
+        filterTokensQuery += ','
+      }
+      filterTokensQuery += `"${value}"`
+    })
+    filterTokensQuery += ']}'
+  }
   return gql`
   {
     ideaMarkets(where:{marketID:${marketID.toString()}}) {
-      tokens(skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}) {
+      tokens(skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}${filterTokensQuery}) {
         id
         tokenID
         name
@@ -276,14 +301,28 @@ function getQueryTokenNameTextSearch(
   num: number,
   orderBy: string,
   orderDirection: string,
-  search: string
+  search: string,
+  filterTokens: string[]
 ) {
   const hexMarketID = '0x' + marketID.toString(16)
+
+  let filterTokensQuery = ''
+  if (filterTokens) {
+    filterTokensQuery = ',id_in:['
+    filterTokens.forEach((value, index) => {
+      if (index > 0) {
+        filterTokensQuery += ','
+      }
+      filterTokensQuery += `"${value}"`
+    })
+    filterTokensQuery += ']'
+  }
+
   return gql`
   {
     tokenNameSearch(skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}, where:{market:${
     '"' + hexMarketID + '"'
-  }}, text:${'"' + search + ':*"'}) {
+  }${filterTokensQuery}}, text:${'"' + search + ':*"'}) {
         id
         tokenID
         name

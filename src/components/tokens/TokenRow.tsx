@@ -54,7 +54,7 @@ export default function TokenRow({
     parseFloat(token.daiInToken) * compoundSupplyRate
   ).toFixed(2)
   const watching = useIdeaMarketsStore((state) => state.watching[token.address])
-  const isWatching = watching === 'true'
+  const isWatching = watching === true
 
   return (
     <>

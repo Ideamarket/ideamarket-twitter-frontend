@@ -27,7 +27,7 @@ export default function Home() {
     listToken('twitter.com', 1)
   }
 
-  const [selectedTabId, setSelectedTabId] = useState(1)
+  const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
   const [nameSearch, setNameSearch] = useState('')
 
@@ -206,19 +206,19 @@ export default function Home() {
             <div>
               <div className="font-sf-pro-text">
                 <nav className="flex -mb-px space-x-5">
-                  {categories.map((tab) => (
+                  {categories.map((cat) => (
                     <a
-                      onClick={() => setSelectedTabId(tab.id)}
-                      key={tab.id}
+                      onClick={() => setSelectedCategoryId(cat.id)}
+                      key={cat.id}
                       className={classNames(
                         'px-1 py-4 text-base leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none cursor-pointer',
-                        tab.id === selectedTabId
+                        cat.id === selectedCategoryId
                           ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
                           : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300',
-                        tab.id === 4 && 'hidden md:block'
+                        cat.id === 4 && 'hidden md:block'
                       )}
                     >
-                      {tab.value}
+                      {cat.value}
                     </a>
                   ))}
                 </nav>
@@ -248,6 +248,7 @@ export default function Home() {
           <Table
             nameSearch={nameSearch}
             selectedMarketName={selectedMarketName}
+            selectedCategoryId={selectedCategoryId}
           />
         </div>
 

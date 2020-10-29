@@ -3,6 +3,7 @@ import { queryMarket, queryTokens } from 'store/ideaMarketsStore'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { querySupplyRate } from 'store/compoundStore'
+import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './TokenRow'
 import TokenRowSkeleton from './TokenRowSkeleton'
 
@@ -61,9 +62,11 @@ const headers: Header[] = [
 
 export default function Table({
   selectedMarketName,
+  selectedCategoryId,
   nameSearch,
 }: {
   selectedMarketName: string
+  selectedCategoryId: number
   nameSearch: string
 }) {
   const TOKENS_PER_PAGE = 10
@@ -80,6 +83,11 @@ export default function Table({
     ['market', selectedMarketName],
     queryMarket
   )
+
+  const watchingTokens = Object.keys(
+    useIdeaMarketsStore((store) => store.watching)
+  )
+  const filterTokens = selectedCategoryId === 4 ? watchingTokens : undefined
   const { data: tokens, isLoading: isTokensDataLoading } = useQuery(
     [
       'tokens',
@@ -89,6 +97,7 @@ export default function Table({
       orderBy,
       orderDirection,
       nameSearch,
+      filterTokens,
     ],
     queryTokens
   )
