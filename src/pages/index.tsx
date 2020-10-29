@@ -87,7 +87,7 @@ export default function Home() {
             />
           </svg>
         </div>
-        <div className="mt-8">
+        <div className="mt-20">
           <div className="flex items-center justify-center space-x-5">
             <div className="w-20 md:w-36">
               <p className="text-xs text-gray-600">as seen in</p>
