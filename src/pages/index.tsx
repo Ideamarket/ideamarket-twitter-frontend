@@ -52,10 +52,9 @@ export default function Home() {
   return (
     <div className="bg-brand-gray">
       <div className="w-screen p-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
-        <div className="flex items-center">
+        <div className="flex items-center mx-auto max-w-88 md:max-w-304">
           <img className="w-8" src="/logo.png" alt="Logo" />
           <h2 className="text-xl leading-none font-gilroy-bold">IdeaMarkets</h2>
-          <WalletStatus />
           <nav className="flex-1 hidden md:block">
             <ul className="flex justify-center font-sf-compact-medium">
               <li className="mr-10 text-lg tracking-tighter cursor-pointer">
@@ -72,6 +71,7 @@ export default function Home() {
               </li>
             </ul>
           </nav>
+          <WalletStatus />
           <svg
             className="w-6 h-6 ml-auto md:opacity-0"
             xmlns="http://www.w3.org/2000/svg"
