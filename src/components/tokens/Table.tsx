@@ -112,6 +112,8 @@ export default function Table({
         setOrderBy('supply')
       } else if (headerValue === 'change') {
         setOrderBy('dayChange')
+      } else if (headerValue === 'volume') {
+        setOrderBy('dayVolume')
       }
 
       setOrderDirection('desc')

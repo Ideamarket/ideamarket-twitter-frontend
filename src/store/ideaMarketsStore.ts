@@ -151,7 +151,7 @@ export async function queryTokens(
       latestPricePoint: token.latestPricePoint,
       dayPricePoints: token.dayPricePoints,
       dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
-      dayVolume: '0.00',
+      dayVolume: parseFloat(token.dayVolume).toFixed(2),
       url: getTokenURL(market.name, token.name),
       iconURL: getTokenIconURL(market.name, token.name),
     }
@@ -239,6 +239,7 @@ function getQueryTokens(
           oldPrice
           price
         }
+        dayVolume
         dayChange
         dayPricePoints(orderBy:timestamp) {
           timestamp
