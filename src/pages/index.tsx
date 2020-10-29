@@ -54,7 +54,9 @@ export default function Home() {
       <div className="w-screen p-5 pt-8 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
         <div className="flex items-center mx-auto max-w-88 md:max-w-304">
           <img className="w-8" src="/logo.png" alt="Logo" />
-          <h2 className="text-xl leading-none font-gilroy-bold">IdeaMarkets</h2>
+          <h2 className="text-3xl leading-none font-gilroy-bold">
+            IdeaMarkets
+          </h2>
           <nav className="flex-1 hidden md:block">
             <ul className="flex justify-center font-sf-compact-medium">
               <li className="mr-10 text-lg tracking-tighter cursor-pointer">
