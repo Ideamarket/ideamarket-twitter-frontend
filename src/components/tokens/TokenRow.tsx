@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import Star from '../../assets/star.svg'
 import StarOn from '../../assets/star-on.svg'
@@ -126,7 +127,14 @@ export default function TokenRow({
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             24H Change
           </p>
-          <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
+          <p
+            className={classNames(
+              'text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue',
+              parseFloat(token.dayChange) >= 0.0
+                ? 'text-brand-green'
+                : 'text-brand-red'
+            )}
+          >
             {parseFloat(token.dayChange) >= 0.0 ? '+' : '-'} {token.dayChange}%
           </p>
         </td>
