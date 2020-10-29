@@ -118,20 +118,40 @@ export async function queryTokens(
   skip: number,
   num: number,
   orderBy: string,
-  orderDirection: string
+  orderDirection: string,
+  search: string
 ) {
   const tokens = <IdeaToken[]>[]
   if (!market) {
     return tokens
   }
 
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryTokens(market.marketID, skip, num, orderBy, orderDirection)
-  )
+  let result
+  if (search.length >= 2) {
+    result = (
+      await request(
+        HTTP_GRAPHQL_ENDPOINT,
+        getQueryTokenNameTextSearch(
+          market.marketID,
+          skip,
+          num,
+          orderBy,
+          orderDirection,
+          search
+        )
+      )
+    ).tokenNameSearch
+  } else {
+    result = (
+      await request(
+        HTTP_GRAPHQL_ENDPOINT,
+        getQueryTokens(market.marketID, skip, num, orderBy, orderDirection)
+      )
+    ).ideaMarkets[0].tokens
+  }
 
-  for (let i = 0; i < result.ideaMarkets[0].tokens.length; i++) {
-    const token = result.ideaMarkets[0].tokens[i]
+  for (let i = 0; i < result.length; i++) {
+    const token = result[i]
 
     const newToken = <IdeaToken>{
       address: token.id,
@@ -220,7 +240,6 @@ function getQueryTokens(
   orderBy: string,
   orderDirection: string
 ) {
-  const dayAgo = Math.floor(Date.now() / 1000) - 86400
   return gql`
   {
     ideaMarkets(where:{marketID:${marketID.toString()}}) {
@@ -248,5 +267,44 @@ function getQueryTokens(
         }
       }
     }
+  }`
+}
+
+function getQueryTokenNameTextSearch(
+  marketID: number,
+  skip: number,
+  num: number,
+  orderBy: string,
+  orderDirection: string,
+  search: string
+) {
+  const hexMarketID = '0x' + marketID.toString(16)
+  return gql`
+  {
+    tokenNameSearch(skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}, where:{market:${
+    '"' + hexMarketID + '"'
+  }}, text:${'"' + search + ':*"'}) {
+        id
+        tokenID
+        name
+        supply
+        holders
+        marketCap
+        interestWithdrawer
+        daiInToken
+        invested
+        latestPricePoint {
+          timestamp
+          oldPrice
+          price
+        }
+        dayVolume
+        dayChange
+        dayPricePoints(orderBy:timestamp) {
+          timestamp
+          oldPrice
+          price
+        }
+      }
   }`
 }

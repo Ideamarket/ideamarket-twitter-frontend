@@ -61,14 +61,17 @@ const headers: Header[] = [
 
 export default function Table({
   selectedMarketName,
+  nameSearch,
 }: {
   selectedMarketName: string
+  nameSearch: string
 }) {
   const TOKENS_PER_PAGE = 10
   const [currentPage, setCurrentPage] = useState(0)
   const [currentHeader, setCurrentHeader] = useState('price')
   const [orderBy, setOrderBy] = useState('supply')
   const [orderDirection, setOrderDirection] = useState('desc')
+
   const {
     data: compoundSupplyRate,
     isLoading: isCompoundSupplyRateLoading,
@@ -85,6 +88,7 @@ export default function Table({
       TOKENS_PER_PAGE,
       orderBy,
       orderDirection,
+      nameSearch,
     ],
     queryTokens
   )

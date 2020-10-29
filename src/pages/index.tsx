@@ -29,6 +29,7 @@ export default function Home() {
 
   const [selectedTabId, setSelectedTabId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
+  const [nameSearch, setNameSearch] = useState('')
 
   const categories = [
     {
@@ -235,11 +236,19 @@ export default function Home() {
                   id="search-input"
                   className="block w-full h-full pl-10 border-0 border-l rounded-none form-input sm:text-sm sm:leading-5"
                   placeholder="Search"
+                  onChange={(event) => {
+                    setNameSearch(
+                      event.target.value.length >= 2 ? event.target.value : ''
+                    )
+                  }}
                 />
               </div>
             </div>
           </div>
-          <Table selectedMarketName={selectedMarketName} />
+          <Table
+            nameSearch={nameSearch}
+            selectedMarketName={selectedMarketName}
+          />
         </div>
 
         <div className="md:flex">
