@@ -24,15 +24,15 @@ export default function WalletStatus() {
     <React.Fragment>
       <NoSSRWalletModal isOpen={isModalOpen} setIsOpen={setIsWalletModalOpen} />
       <div
-        className="flex flex-row items-center px-2 border rounded cursor-pointer border-brand-gray-2"
+        className="flex flex-row items-center w-32 px-2 cursor-pointer justify-self-end"
         onClick={toggleWalletModal}
       >
-        {web3 === undefined && <DotRed className="w-3 h-3" />}
+        {web3 === undefined && <DotRed className="w-4 h-4" />}
         {web3 === undefined && (
           <div className="ml-3 text-gray-400 align-middle">No wallet</div>
         )}
 
-        {web3 !== undefined && <DotGreen className="w-3 h-3" />}
+        {web3 !== undefined && <DotGreen className="w-4 h-4" />}
         {web3 !== undefined && (
           <div className="ml-3 text-gray-400 align-middle">
             {address.slice(0, 6)}...{address.slice(-4)}
