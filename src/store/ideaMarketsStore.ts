@@ -53,6 +53,7 @@ export type IdeaToken = {
   dayPricePoints: IdeaTokenPricePoint[]
   dayChange: string
   dayVolume: string
+  listedAt: number
   url: string
   iconURL: string
 }
@@ -188,6 +189,7 @@ export async function queryTokens(
       dayPricePoints: token.dayPricePoints,
       dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
       dayVolume: parseFloat(token.dayVolume).toFixed(2),
+      listedAt: token.listedAt,
       url: getTokenURL(market.name, token.name),
       iconURL: getTokenIconURL(market.name, token.name),
     }

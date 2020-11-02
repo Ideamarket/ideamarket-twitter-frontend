@@ -64,10 +64,12 @@ export default function Table({
   selectedMarketName,
   selectedCategoryId,
   nameSearch,
+  onOrderByChanged,
 }: {
   selectedMarketName: string
   selectedCategoryId: number
   nameSearch: string
+  onOrderByChanged: (o: string, d: string) => void
 }) {
   const TOKENS_PER_PAGE = 10
   const [currentPage, setCurrentPage] = useState(0)
@@ -94,8 +96,14 @@ export default function Table({
       market,
       currentPage * TOKENS_PER_PAGE,
       TOKENS_PER_PAGE,
-      orderBy,
-      orderDirection,
+      selectedCategoryId === 2
+        ? 'dayChange'
+        : selectedCategoryId === 3
+        ? 'listedAt'
+        : orderBy,
+      selectedCategoryId === 2 || selectedCategoryId === 3
+        ? 'desc'
+        : orderDirection,
       nameSearch,
       filterTokens,
     ],
@@ -109,24 +117,30 @@ export default function Table({
     if (currentHeader === headerValue) {
       if (orderDirection === 'asc') {
         setOrderDirection('desc')
+        onOrderByChanged(orderBy, 'desc')
       } else {
         setOrderDirection('asc')
+        onOrderByChanged(orderBy, 'asc')
       }
     } else {
       setCurrentHeader(headerValue)
 
       if (headerValue === 'name') {
         setOrderBy('name')
+        onOrderByChanged('name', 'desc')
       } else if (
         headerValue === 'price' ||
         headerValue === 'deposits' ||
         headerValue === 'income'
       ) {
         setOrderBy('supply')
+        onOrderByChanged('supply', 'desc')
       } else if (headerValue === 'change') {
         setOrderBy('dayChange')
+        onOrderByChanged('dayChange', 'desc')
       } else if (headerValue === 'volume') {
         setOrderBy('dayVolume')
+        onOrderByChanged('dayVolume', 'desc')
       }
 
       setOrderDirection('desc')

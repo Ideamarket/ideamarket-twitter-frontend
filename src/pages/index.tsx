@@ -50,6 +50,20 @@ export default function Home() {
     },
   ]
 
+  function onOrderByChanged(orderBy: string, direction: string) {
+    if (selectedCategoryId === 4) {
+      return
+    }
+
+    if (orderBy === 'dayChange' && direction === 'desc') {
+      setSelectedCategoryId(2)
+    } else if (orderBy === 'listedAt' && direction === 'desc') {
+      setSelectedCategoryId(3)
+    } else {
+      setSelectedCategoryId(1)
+    }
+  }
+
   return (
     <div className="bg-brand-gray">
       <div className="w-screen p-5 pt-8 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
@@ -254,6 +268,7 @@ export default function Home() {
             nameSearch={nameSearch}
             selectedMarketName={selectedMarketName}
             selectedCategoryId={selectedCategoryId}
+            onOrderByChanged={onOrderByChanged}
           />
         </div>
 
