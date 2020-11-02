@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { useWindowSize } from 'utils'
 import { queryMarket, queryTokens } from 'store/ideaMarketsStore'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -71,7 +72,9 @@ export default function Table({
   nameSearch: string
   onOrderByChanged: (o: string, d: string) => void
 }) {
-  const TOKENS_PER_PAGE = 10
+  const windowSize = useWindowSize()
+  const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
+
   const [currentPage, setCurrentPage] = useState(0)
   const [currentHeader, setCurrentHeader] = useState('price')
   const [orderBy, setOrderBy] = useState('supply')

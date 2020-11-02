@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
+import { useState, useEffect } from 'react'
 
 // FIXME: Right now all addresses are kovan. Use .env.local file to set env vars, see Next docs
 // Unfortunately this is not working right now. Next is not supplying env vars to process.env,
@@ -38,4 +39,28 @@ export function calculateCurrentPriceBN(
   return rawBaseCost.add(
     rawPriceRise.mul(rawSupply).div(new BN('10').pow(new BN('18')))
   )
+}
+
+// https://usehooks.com/useWindowSize/
+export function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  })
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return windowSize
 }
