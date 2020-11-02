@@ -45,10 +45,12 @@ export default function TokenRow({
   token,
   market,
   compoundSupplyRate,
+  onTradeClicked,
 }: {
   token: IdeaToken
   market: IdeaMarket
   compoundSupplyRate: number
+  onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }) {
   const yearIncome = (
     parseFloat(token.daiInToken) * compoundSupplyRate
@@ -161,7 +163,7 @@ export default function TokenRow({
         <td className="hidden px-6 py-4 whitespace-no-wrap md:table-cell">
           <button
             onClick={() => {
-              buy(token.tokenID)
+              onTradeClicked(token, market)
             }}
             className="w-32 h-10 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
           >

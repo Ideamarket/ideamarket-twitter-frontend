@@ -1,6 +1,11 @@
 import classNames from 'classnames'
 import { useWindowSize } from 'utils'
-import { queryMarket, queryTokens } from 'store/ideaMarketsStore'
+import {
+  IdeaToken,
+  IdeaMarket,
+  queryMarket,
+  queryTokens,
+} from 'store/ideaMarketsStore'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { querySupplyRate } from 'store/compoundStore'
@@ -66,11 +71,13 @@ export default function Table({
   selectedCategoryId,
   nameSearch,
   onOrderByChanged,
+  onTradeClicked,
 }: {
   selectedMarketName: string
   selectedCategoryId: number
   nameSearch: string
   onOrderByChanged: (o: string, d: string) => void
+  onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }) {
   const windowSize = useWindowSize()
   const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
@@ -201,6 +208,7 @@ export default function Table({
                           token={token}
                           market={market}
                           compoundSupplyRate={compoundSupplyRate}
+                          onTradeClicked={onTradeClicked}
                         />
                       ))}
 

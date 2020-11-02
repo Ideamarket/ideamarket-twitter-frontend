@@ -7,11 +7,13 @@ import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
+import { initTokenList } from 'store/tokenListStore'
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     initWalletStore()
     initIdeaMarketsStore()
+    initTokenList()
   }, [])
 
   return (

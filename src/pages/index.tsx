@@ -1,7 +1,8 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { listToken } from 'actions/listToken'
-import { WalletStatus, Table } from 'components'
+import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
+import { WalletStatus, Table, TradeModal } from 'components'
 
 import YouTube from '../assets/youtube.svg'
 import Medium from '../assets/medium.svg'
@@ -30,6 +31,11 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
   const [nameSearch, setNameSearch] = useState('')
+  const [tradeModalData, setTradeModalData] = useState({
+    show: false,
+    token: undefined,
+    market: undefined,
+  })
 
   const categories = [
     {
@@ -62,6 +68,10 @@ export default function Home() {
     } else {
       setSelectedCategoryId(1)
     }
+  }
+
+  function onTradeClicked(token: IdeaToken, market: IdeaMarket) {
+    setTradeModalData({ show: true, token: token, market: market })
   }
 
   return (
@@ -269,6 +279,7 @@ export default function Home() {
             selectedMarketName={selectedMarketName}
             selectedCategoryId={selectedCategoryId}
             onOrderByChanged={onOrderByChanged}
+            onTradeClicked={onTradeClicked}
           />
         </div>
 
@@ -289,6 +300,12 @@ export default function Home() {
           </p>
         </div>
       </div>
+      <TradeModal
+        isOpen={tradeModalData.show}
+        setIsOpen={() => {}}
+        token={tradeModalData.token}
+        market={tradeModalData.market}
+      />
     </div>
   )
 }
