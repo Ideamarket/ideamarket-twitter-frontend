@@ -160,7 +160,7 @@ export default function Home() {
           </div>
           <div
             className={classNames(
-              'flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
+              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
               selectedMarketName === 'Medium' && 'bg-white text-very-dark-blue'
             )}
             onClick={() => {
@@ -178,7 +178,7 @@ export default function Home() {
           </div>
           <div
             className={classNames(
-              'flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0',
+              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0',
               selectedMarketName === 'Twitter' && 'bg-white text-very-dark-blue'
             )}
             onClick={() => {
@@ -196,7 +196,7 @@ export default function Home() {
           </div>
           <div
             className={classNames(
-              'flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 ',
+              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 ',
               selectedMarketName === 'Patreon' && 'bg-white text-very-dark-blue'
             )}
             onClick={() => {
