@@ -58,7 +58,7 @@ export default function TokenRow({
 
   return (
     <>
-      <tr className="grid grid-cols-3 md:table-row">
+      <tr className="grid grid-cols-3 cursor-pointer md:table-row hover:bg-brand-gray">
         <td className="col-span-3 px-6 py-4 whitespace-no-wrap">
           <div className="flex items-center">
             <div className="flex-shrink-0 w-7.5 h-7.5">
