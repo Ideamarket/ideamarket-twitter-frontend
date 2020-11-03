@@ -229,23 +229,35 @@ export default function Table({
         </div>
       </div>
       <div className="flex flex-row items-stretch justify-between px-10 py-5 md:justify-center md:flex md:border-b md:space-x-10">
-        <div
+        <button
           onClick={() => {
             if (currentPage > 0) setCurrentPage(currentPage - 1)
           }}
-          className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+          className={classNames(
+            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
+            currentPage <= 0
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-brand-gray'
+          )}
+          disabled={currentPage <= 0}
         >
           &larr; Previous
-        </div>
-        <div
+        </button>
+        <button
           onClick={() => {
             if (tokens && tokens.length === TOKENS_PER_PAGE)
               setCurrentPage(currentPage + 1)
           }}
-          className="text-sm font-medium leading-none cursor-pointer font-sf-pro-text text-brand-gray-4 tracking-tightest md:w-30"
+          className={classNames(
+            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
+            tokens?.length !== TOKENS_PER_PAGE
+              ? 'cursor-not-allowed opacity-50'
+              : 'hover:bg-brand-gray'
+          )}
+          disabled={tokens?.length !== TOKENS_PER_PAGE}
         >
           Next &rarr;
-        </div>
+        </button>
       </div>
     </>
   )
