@@ -181,8 +181,8 @@ export default function Home() {
           <div className="border-r-2 md:hidden"></div>
         </div>
         <div className="bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">
-          <div className="flex pl-5 border-b md:pl-10 border-brand-gray-3">
-            <div>
+          <div className="flex flex-col border-b md:flex-row border-brand-gray-3">
+            <div className="px-4 md:px-10">
               <div className="font-sf-pro-text">
                 <nav className="flex -mb-px space-x-5">
                   {categories.map((cat) => (
@@ -203,7 +203,7 @@ export default function Home() {
                 </nav>
               </div>
             </div>
-            <div className="hidden w-2/5 ml-auto md:block">
+            <div className="w-full mt-2 ml-auto md:mt-0 md:w-2/5 md:block">
               <label htmlFor="search-input" className="sr-only">
                 Search
               </label>
@@ -213,7 +213,7 @@ export default function Home() {
                 </div>
                 <input
                   id="search-input"
-                  className="block w-full h-full pl-10 border-0 border-l rounded-none form-input sm:text-sm sm:leading-5"
+                  className="block w-full h-full pl-10 border-0 rounded-none md:border-l form-input sm:text-sm sm:leading-5"
                   placeholder="Search"
                   onChange={(event) => {
                     setNameSearch(
