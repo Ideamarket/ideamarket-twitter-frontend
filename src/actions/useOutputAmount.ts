@@ -34,7 +34,7 @@ export function useOutputAmount(
     async function calculateOutput() {
       if (useWalletStore.getState().web3 && ideaToken && tokenAddress) {
         const amountBN = new BN(
-          new BigNumber(amount).multipliedBy(tenPow18).toString()
+          new BigNumber(amount).multipliedBy(tenPow18).toFixed()
         )
         const exchangeContract = useContractStore.getState().exchangeContract
         const requiredDaiAmount = new BN(
@@ -104,7 +104,7 @@ export function useOutputAmount(
         const requiredInputBN = new BN(
           new BigNumber(trade.inputAmount.toExact())
             .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-            .toString()
+            .toFixed()
         )
         const requiredInput = trade.inputAmount.toFixed(4)
 
