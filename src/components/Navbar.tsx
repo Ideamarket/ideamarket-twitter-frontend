@@ -7,8 +7,8 @@ export default function Navbar({
 }) {
   return (
     <div
-      className="grid mx-auto auto-cols-max max-w-88 md:max-w-304"
-      style={{ gridTemplateColumns: '1fr auto 1fr' }}
+      className="fixed top-0 z-20 grid w-screen py-6 pl-10 pr-4 mx-auto lg:pl-32 bg-top-desktop auto-cols-max"
+      style={{ gridTemplateColumns: 'auto 1fr auto' }}
     >
       <div className="flex flex-row items-center">
         <img className="w-8" src="/logo.png" alt="Logo" />
@@ -16,23 +16,23 @@ export default function Navbar({
       </div>
       <nav className="hidden md:block">
         <ul className="flex justify-center font-sf-compact-medium">
-          <li className="mr-10 text-lg tracking-tighter cursor-pointer">
+          <li className="mr-8 text-lg tracking-tighter cursor-pointer">
             Overview
           </li>
-          <li className="mr-10 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
+          <li className="mr-8 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
             My Tokens
           </li>
-          <li className="mr-10 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
+          <li className="mr-8 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
             My Wallet
           </li>
-          <li className="mr-5 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
+          <li className="text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
             Launch Token
           </li>
         </ul>
       </nav>
       <WalletStatus setIsWalletModalOpen={setIsWalletModalOpen} />
       <svg
-        className="w-6 h-6 ml-auto md:opacity-0"
+        className="w-6 h-6 ml-auto md:hidden"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
