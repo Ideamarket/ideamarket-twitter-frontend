@@ -10,7 +10,7 @@ type State = {
 
 export const useWalletStore = create<State>((set) => ({
   web3: undefined,
-  address: ''
+  address: '',
 }))
 
 export const initWalletStore = async () => {
