@@ -251,7 +251,7 @@ export default function Home() {
       </div>
       <TradeModal
         isOpen={tradeModalData.show}
-        setIsOpen={() => {}}
+        setIsOpen={() => setTradeModalData({ ...tradeModalData, show: false })}
         token={tradeModalData.token}
         market={tradeModalData.market}
       />

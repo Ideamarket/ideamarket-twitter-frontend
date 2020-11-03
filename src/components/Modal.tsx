@@ -5,12 +5,12 @@ export default function Modal({
   className = '',
   children,
   isOpen,
-  setIsOpen,
+  close,
 }: {
   className?: string
   children?: ReactNode
   isOpen: boolean
-  setIsOpen: (val: boolean) => void
+  close: () => void
 }) {
   if (!isOpen) {
     return <></>
@@ -46,6 +46,29 @@ export default function Modal({
             aria-modal="true"
             aria-labelledby="modal-headline"
           >
+            <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+              <button
+                type="button"
+                className="text-gray-400 transition duration-150 ease-in-out hover:text-gray-500 focus:outline-none focus:text-gray-500"
+                aria-label="Close"
+                onClick={() => close()}
+              >
+                <svg
+                  className="w-6 h-6"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
             <div>{children}</div>
           </Transition>
         </div>

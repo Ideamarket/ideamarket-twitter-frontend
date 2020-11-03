@@ -113,7 +113,7 @@ export default function WalletSelectionModal({
   }
 
   return (
-    <Modal isOpen={isOpen} setIsOpen={(b) => (isOpen = b)}>
+    <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
       <div className="lg:min-w-100">
         <div className="p-4 bg-top-mobile">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
