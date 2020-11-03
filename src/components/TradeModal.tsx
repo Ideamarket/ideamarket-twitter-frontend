@@ -2,6 +2,9 @@ import { useState } from 'react'
 import classNames from 'classnames'
 import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 import { useTokenListStore, TokenListEntry } from '../store/tokenListStore'
+import { useERC20Balance } from '../actions/erc20Balance'
+
+import Select from 'react-select'
 import Modal from './Modal'
 
 export default function TradeModal({
@@ -17,6 +20,32 @@ export default function TradeModal({
 }) {
   const [tradeType, setTradeType] = useState('buy')
   const tokenList = useTokenListStore((state) => state.tokens)
+  const selectTokensValues = tokenList.map((token) => ({
+    value: token.address,
+    token: token,
+  }))
+
+  const [selectedToken, setSelectedToken] = useState(tokenList[0])
+  const [
+    isIdeaTokenBalanceLoading,
+    ideaTokenBalanceBN,
+    ideaTokenBalance,
+  ] = useERC20Balance(token?.address)
+  const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useERC20Balance(
+    selectedToken?.address
+  )
+
+  const selectTokensFormat = (entry) => (
+    <div className="flex flex-row">
+      <div className="flex items-center">
+        <img className="w-7.5" src={'' + entry.token.logoURL} />
+      </div>
+      <div className="ml-2.5">
+        <div>{entry.token.symbol}</div>
+        <div className="text-xs text-brand-gray-2">{entry.token.name}</div>
+      </div>
+    </div>
+  )
 
   if (!isOpen) {
     return <></>
@@ -64,18 +93,46 @@ export default function TradeModal({
           {tradeType === 'buy' ? 'Pay with' : 'Receive'}
         </p>
         <div className="mx-5">
-          <select className="w-full">
-            {tokenList.map((t: TokenListEntry) => (
-              <option key={t.address}>{t.name}</option>
-            ))}
-          </select>
+          <Select
+            isClearable={false}
+            isSearchable={false}
+            onChange={(token) => {
+              setSelectedToken(token)
+            }}
+            options={selectTokensValues}
+            formatOptionLabel={selectTokensFormat}
+            defaultValue={selectTokensValues[0]}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 2,
+              colors: {
+                ...theme.colors,
+                primary25: '#f6f6f6', // brand-gray
+                primary: '#0857e0', // brand-blue
+              },
+            })}
+            styles={{
+              valueContainer: (provided) => ({
+                ...provided,
+                minHeight: '50px',
+              }),
+            }}
+          />
         </div>
 
-        <p className="mx-5 mt-5 text-sm text-brand-gray-2">
-          {tradeType === 'buy'
-            ? 'Amount of tokens to buy'
-            : 'Amount of tokens to sell'}
-        </p>
+        <div className="flex flex-row justify-between mx-5 mt-5 text-sm text-brand-gray-2">
+          <p>
+            {tradeType === 'buy'
+              ? 'Amount of tokens to buy'
+              : 'Amount of tokens to sell'}
+          </p>
+          <p>
+            {tradeType === 'buy'
+              ? ''
+              : 'Available: ' +
+                (isIdeaTokenBalanceLoading ? '...' : ideaTokenBalance)}
+          </p>
+        </div>
         <div className="mx-5">
           <input
             className="w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
@@ -83,9 +140,15 @@ export default function TradeModal({
           />
         </div>
 
-        <p className="mx-5 mt-5 text-sm text-brand-gray-2">
-          {tradeType === 'buy' ? 'You will pay' : 'You will receive'}
-        </p>
+        <div className="flex flex-row justify-between mx-5 mt-5 text-sm text-brand-gray-2">
+          <p>{tradeType === 'buy' ? 'You will pay' : 'You will receive'}</p>
+          <p>
+            {tradeType === 'buy'
+              ? 'Available: ' + (isTokenBalanceLoading ? '...' : tokenBalance)
+              : ''}
+          </p>
+        </div>
+
         <div className="mx-5">
           <input
             className="w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"

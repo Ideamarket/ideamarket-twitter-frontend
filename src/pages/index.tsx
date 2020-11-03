@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { listToken } from 'actions/listToken'
+import { buyToken } from 'actions/buyToken'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { WalletStatus, Table, TradeModal } from 'components'
 
@@ -17,15 +18,15 @@ import Search from '../assets/search.svg'
 
 export default function Home() {
   async function clicked() {
-    console.log('clicked')
-    listToken('google.com', 1)
+    buyToken(1, 1, 12)
+    /*listToken('google.com', 1)
     listToken('microsoft.com', 1)
     listToken('apple.com', 1)
     listToken('medium.com', 1)
     listToken('hardhat.org', 1)
     listToken('github.com', 1)
     listToken('youtube.com', 1)
-    listToken('twitter.com', 1)
+    listToken('twitter.com', 1)*/
   }
 
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
