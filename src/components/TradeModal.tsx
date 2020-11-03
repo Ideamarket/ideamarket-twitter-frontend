@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 import { useTokenListStore } from '../store/tokenListStore'
 import { useBalance } from '../actions/useBalance'
+import { useOutputAmount } from '../actions/useOutputAmount'
 
 import Select from 'react-select'
 import Modal from './Modal'
@@ -25,15 +26,25 @@ export default function TradeModal({
     token: token,
   }))
 
-  const [selectedToken, setSelectedToken] = useState(tokenList[0])
+  const [selectedToken, setSelectedToken] = useState(undefined)
   const [
     isIdeaTokenBalanceLoading,
     ideaTokenBalanceBN,
     ideaTokenBalance,
   ] = useBalance(token?.address, 18)
+
   const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
     selectedToken?.address,
     selectedToken?.decimals
+  )
+
+  const [inputAmount, setInputAmount] = useState('0')
+  const [isOutputAmountLoading, outputAmountBN, outputAmount] = useOutputAmount(
+    token,
+    selectedToken?.address,
+    inputAmount,
+    selectedToken?.decimals,
+    tradeType
   )
 
   const selectTokensFormat = (entry) => (
@@ -137,7 +148,10 @@ export default function TradeModal({
         <div className="mx-5">
           <input
             className="w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
-            type="text"
+            type="number"
+            onChange={(event) => {
+              setInputAmount(event.target.value)
+            }}
           />
         </div>
 
@@ -154,6 +168,8 @@ export default function TradeModal({
           <input
             className="w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
             type="text"
+            disabled={true}
+            value={isOutputAmountLoading ? '...' : outputAmount}
           />
         </div>
 

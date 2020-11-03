@@ -14,7 +14,11 @@
     "validate": "npm-run-all --parallel check-types check-format lint build"
   },
   "dependencies": {
+    "@ethersproject/contracts": "^5.0.5",
+    "@ethersproject/providers": "^5.0.14",
+    "@ethersproject/solidity": "^5.0.5",
     "@headlessui/react": "0.2.0",
+    "@uniswap/sdk": "^3.0.3",
     "bignumber.js": "^9.0.1",
     "classnames": "2.2.6",
     "eth-wallets": "1.0.10",

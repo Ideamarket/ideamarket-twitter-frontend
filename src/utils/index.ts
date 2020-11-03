@@ -12,6 +12,10 @@ export const addresses = {
     NETWORK === 'kovan'
       ? '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa'
       : '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+  weth:
+    NETWORK === 'kovan'
+      ? '0xd0A1E359811322d97991E03f863a0C30C2cF029C'
+      : '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
 }
 
 export function web3BNToFloatString(

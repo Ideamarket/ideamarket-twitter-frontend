@@ -54,7 +54,7 @@ export function useBalance(address: string, decimals: number) {
           })
       }
     }
-  })
+  }, [address])
 
   return [isLoading, balanceBN, balance]
 }
