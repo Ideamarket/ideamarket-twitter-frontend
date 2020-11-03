@@ -68,7 +68,7 @@ export default function Home() {
   }
 
   return (
-    <div className="bg-brand-gray">
+    <div className="overflow-x-hidden bg-brand-gray">
       <div className="w-screen pt-8 pb-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
         <Navbar setIsWalletModalOpen={setIsWalletModalOpen} />
 
