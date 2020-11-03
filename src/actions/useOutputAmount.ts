@@ -43,8 +43,6 @@ export function useOutputAmount(
             .call()
         )
 
-        console.log('rqdai:', requiredDaiAmount.toString())
-
         if (tokenAddress === addresses.dai) {
           setOutputBN(requiredDaiAmount)
           setOutput(web3BNToFloatString(requiredDaiAmount, tenPow18, 4))
