@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import classNames from 'classnames'
 import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
-import { useTokenListStore, TokenListEntry } from '../store/tokenListStore'
-import { useERC20Balance } from '../actions/erc20Balance'
+import { useTokenListStore } from '../store/tokenListStore'
+import { useBalance } from '../actions/useBalance'
 
 import Select from 'react-select'
 import Modal from './Modal'
@@ -30,9 +30,10 @@ export default function TradeModal({
     isIdeaTokenBalanceLoading,
     ideaTokenBalanceBN,
     ideaTokenBalance,
-  ] = useERC20Balance(token?.address)
-  const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useERC20Balance(
-    selectedToken?.address
+  ] = useBalance(token?.address, 18)
+  const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
+    selectedToken?.address,
+    selectedToken?.decimals
   )
 
   const selectTokensFormat = (entry) => (
@@ -96,8 +97,8 @@ export default function TradeModal({
           <Select
             isClearable={false}
             isSearchable={false}
-            onChange={(token) => {
-              setSelectedToken(token)
+            onChange={(value) => {
+              setSelectedToken(value.token)
             }}
             options={selectTokensValues}
             formatOptionLabel={selectTokensFormat}
