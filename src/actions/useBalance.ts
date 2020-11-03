@@ -39,7 +39,7 @@ export function useBalance(address: string, decimals: number) {
               return
             }
 
-            setBalanceBN(data)
+            setBalanceBN(new BN(data))
             setBalance(
               web3BNToFloatString(
                 data,

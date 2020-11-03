@@ -4,6 +4,7 @@ import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 import { useTokenListStore } from '../store/tokenListStore'
 import { useBalance } from '../actions/useBalance'
 import { useOutputAmount } from '../actions/useOutputAmount'
+import { floatToWeb3BN } from '../utils'
 
 import Select from 'react-select'
 import Modal from './Modal'
@@ -132,13 +133,21 @@ export default function TradeModal({
           />
         </div>
 
-        <div className="flex flex-row justify-between mx-5 mt-5 text-sm text-brand-gray-2">
-          <p>
+        <div className="flex flex-row justify-between mx-5 mt-5">
+          <p className="text-sm text-brand-gray-2">
             {tradeType === 'buy'
               ? 'Amount of tokens to buy'
               : 'Amount of tokens to sell'}
           </p>
-          <p>
+          <p
+            className={classNames(
+              'text-sm',
+              !isIdeaTokenBalanceLoading &&
+                ideaTokenBalanceBN.lt(floatToWeb3BN(inputAmount, 18))
+                ? 'text-brand-red font-bold'
+                : 'text-brand-gray-2'
+            )}
+          >
             {tradeType === 'buy'
               ? ''
               : 'Available: ' +
@@ -155,9 +164,18 @@ export default function TradeModal({
           />
         </div>
 
-        <div className="flex flex-row justify-between mx-5 mt-5 text-sm text-brand-gray-2">
-          <p>{tradeType === 'buy' ? 'You will pay' : 'You will receive'}</p>
-          <p>
+        <div className="flex flex-row justify-between mx-5 mt-5">
+          <p className="text-sm text-brand-gray-2">
+            {tradeType === 'buy' ? 'You will pay' : 'You will receive'}
+          </p>
+          <p
+            className={classNames(
+              'text-sm',
+              !isTokenBalanceLoading && tokenBalanceBN.lt(outputAmountBN)
+                ? 'text-brand-red font-bold'
+                : 'text-brand-gray-2'
+            )}
+          >
             {tradeType === 'buy'
               ? 'Available: ' + (isTokenBalanceLoading ? '...' : tokenBalance)
               : ''}

@@ -47,6 +47,12 @@ export function calculateCurrentPriceBN(
   )
 }
 
+export function floatToWeb3BN(float: string, decimals: number) {
+  const pow = new BigNumber('10').exponentiatedBy(decimals)
+  const big = new BigNumber(float).multipliedBy(pow)
+  return new BN(big.toFixed())
+}
+
 // https://usehooks.com/useWindowSize/
 export function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
