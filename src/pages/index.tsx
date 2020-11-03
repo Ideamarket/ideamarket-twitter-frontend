@@ -1,9 +1,8 @@
 import classNames from 'classnames'
 import { useState } from 'react'
-import { listToken } from 'actions/listToken'
-import { buyToken } from 'actions/buyToken'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { WalletStatus, Table, TradeModal } from 'components'
+import { Navbar, Table, TradeModal } from 'components'
+import dynamic from 'next/dynamic'
 
 import YouTube from '../assets/youtube.svg'
 import Medium from '../assets/medium.svg'
@@ -17,21 +16,14 @@ import PatreonBlack from '../assets/patreon-black.svg'
 import Search from '../assets/search.svg'
 
 export default function Home() {
-  async function clicked() {
-    buyToken(1, 1, 12)
-    /*listToken('google.com', 1)
-    listToken('microsoft.com', 1)
-    listToken('apple.com', 1)
-    listToken('medium.com', 1)
-    listToken('hardhat.org', 1)
-    listToken('github.com', 1)
-    listToken('youtube.com', 1)
-    listToken('twitter.com', 1)*/
-  }
+  const NoSSRWalletModal = dynamic(() => import('../components/WalletModal'), {
+    ssr: false,
+  })
 
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
   const [nameSearch, setNameSearch] = useState('')
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
   const [tradeModalData, setTradeModalData] = useState({
     show: false,
     token: undefined,
@@ -78,48 +70,7 @@ export default function Home() {
   return (
     <div className="bg-brand-gray">
       <div className="w-screen p-5 pt-8 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
-        <div
-          className="grid mx-auto auto-cols-max max-w-88 md:max-w-304"
-          style={{ gridTemplateColumns: '1fr auto 1fr' }}
-        >
-          <div className="flex flex-row items-center">
-            <img className="w-8" src="/logo.png" alt="Logo" />
-            <h2 className="text-3xl leading-none font-gilroy-bold">
-              IdeaMarkets
-            </h2>
-          </div>
-          <nav className="hidden md:block">
-            <ul className="flex justify-center font-sf-compact-medium">
-              <li className="mr-10 text-lg tracking-tighter cursor-pointer">
-                Overview
-              </li>
-              <li className="mr-10 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
-                My Tokens
-              </li>
-              <li className="mr-10 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
-                My Wallet
-              </li>
-              <li className="mr-5 text-lg tracking-normal cursor-pointer text-brand-gray text-opacity-60">
-                Launch Token
-              </li>
-            </ul>
-          </nav>
-          <WalletStatus />
-          <svg
-            className="w-6 h-6 ml-auto md:opacity-0"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </div>
+        <Navbar setIsWalletModalOpen={setIsWalletModalOpen} />
         <div className="mt-20">
           <div className="flex items-center justify-center space-x-5">
             <div className="w-20 md:w-36">
@@ -138,10 +89,7 @@ export default function Home() {
           </p>
         </div>
         <div className="inline-flex flex-col space-y-3 md:flex-row md:space-x-10 md:space-y-0 md:items-center mt-7">
-          <button
-            onClick={clicked}
-            className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
-          >
+          <button className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800">
             Launch Your Token
           </button>
           <p className="text-lg font-sf-compact-medium">How it Works</p>
@@ -306,6 +254,10 @@ export default function Home() {
         setIsOpen={() => {}}
         token={tradeModalData.token}
         market={tradeModalData.market}
+      />
+      <NoSSRWalletModal
+        isOpen={isWalletModalOpen}
+        setIsOpen={setIsWalletModalOpen}
       />
     </div>
   )

@@ -5,19 +5,12 @@ import { initContractsFromWeb3, clearContracts } from './contractStore'
 
 type State = {
   web3: Web3
-  showWalletModal: boolean
   address: string
-  toggleWalletModal: () => void
-  setShowWalletModal: (b: boolean) => void
 }
 
 export const useWalletStore = create<State>((set) => ({
   web3: undefined,
-  address: '',
-  showWalletModal: false,
-  toggleWalletModal: () =>
-    set((state) => ({ showWalletModal: !state.showWalletModal })),
-  setShowWalletModal: (b: boolean) => set((state) => ({ showWalletModal: b })),
+  address: ''
 }))
 
 export const initWalletStore = async () => {

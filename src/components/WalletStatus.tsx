@@ -4,28 +4,19 @@ import { useWalletStore } from 'store/walletStore'
 import DotRed from '../assets/dotred.svg'
 import DotGreen from '../assets/dotgreen.svg'
 
-import dynamic from 'next/dynamic'
-
-export default function WalletStatus() {
-  const NoSSRWalletModal = dynamic(() => import('./WalletModal'), {
-    ssr: false,
-  })
-
+export default function WalletStatus({
+  setIsWalletModalOpen,
+}: {
+  setIsWalletModalOpen: (b: boolean) => void
+}) {
   const web3 = useWalletStore((state) => state.web3)
   const address = useWalletStore((state) => state.address)
-  const isModalOpen = useWalletStore((state) => state.showWalletModal)
-  const toggleWalletModal = useWalletStore((state) => state.toggleWalletModal)
-
-  const setIsWalletModalOpen = function (b: boolean) {
-    useWalletStore.setState({ showWalletModal: b })
-  }
 
   return (
     <React.Fragment>
-      <NoSSRWalletModal isOpen={isModalOpen} setIsOpen={setIsWalletModalOpen} />
       <div
         className="flex flex-row items-center w-32 px-2 cursor-pointer justify-self-end"
-        onClick={toggleWalletModal}
+        onClick={() => setIsWalletModalOpen(true)}
       >
         {web3 === undefined && <DotRed className="w-4 h-4" />}
         {web3 === undefined && (
