@@ -1,3 +1,6 @@
+import { NETWORK } from '../utils'
+import TokenListMainnet from '../assets/token-list-mainnet.json'
+import TokenListKovan from '../assets/token-list-kovan.json'
 import create from 'zustand'
 import produce from 'immer'
 
@@ -22,8 +25,7 @@ function setNestedState(fn) {
 }
 
 export async function initTokenList() {
-  const result = await fetch('https://gateway.ipfs.io/ipns/tokens.uniswap.org')
-  const jsonTokens = (await result.json()).tokens
+  const jsonTokens = NETWORK === 'kovan' ? TokenListKovan : TokenListMainnet
   let tokens: TokenListEntry[] = jsonTokens.map(
     (token) =>
       <TokenListEntry>{

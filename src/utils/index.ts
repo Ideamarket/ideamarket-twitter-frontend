@@ -5,11 +5,13 @@ import { useState, useEffect } from 'react'
 // FIXME: Right now all addresses are kovan. Use .env.local file to set env vars, see Next docs
 // Unfortunately this is not working right now. Next is not supplying env vars to process.env,
 // even if they are defined as NEXT_PUBLIC_* .
+export const NETWORK = 'kovan'
+
 export const addresses = {
   dai:
-    process.env.NEXT_PUBLIC_NETWORK === 'kovan'
+    NETWORK === 'kovan'
       ? '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa'
-      : '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa',
+      : '0x6B175474E89094C44Da98b954EedeAC495271d0F',
 }
 
 export function web3BNToFloatString(
