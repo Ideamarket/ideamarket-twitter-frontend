@@ -46,7 +46,7 @@ export default function Modal({
             aria-modal="true"
             aria-labelledby="modal-headline"
           >
-            <div className="absolute top-0 right-0 hidden pt-4 pr-4 sm:block">
+            <div className="absolute top-0 right-0 pr-1 md:pr-4 md:pt-4">
               <button
                 type="button"
                 className="text-gray-400 transition duration-150 ease-in-out hover:text-gray-500 focus:outline-none focus:text-gray-500"
