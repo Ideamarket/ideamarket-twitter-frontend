@@ -132,7 +132,10 @@ export default function TokenRow({
                 : 'text-brand-red'
             )}
           >
-            {parseFloat(token.dayChange) >= 0.0 ? '+' : '-'} {token.dayChange}%
+            {parseFloat(token.dayChange) >= 0.0
+              ? `+ ${token.dayChange}`
+              : `- ${token.dayChange.slice(1)}`}
+            %
           </p>
         </td>
         <td className="px-6 py-4 whitespace-no-wrap">
