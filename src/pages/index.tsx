@@ -252,7 +252,7 @@ export default function Home() {
       <TradeModal
         isOpen={tradeModalData.show}
         setIsOpen={() => setTradeModalData({ ...tradeModalData, show: false })}
-        token={tradeModalData.token}
+        ideaToken={tradeModalData.token}
         market={tradeModalData.market}
       />
       <NoSSRWalletModal

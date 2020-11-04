@@ -31,7 +31,7 @@ export default function useOutputAmount(
   const [output, setOutput] = useState(undefined)
 
   useEffect(() => {
-    async function calculateOutput() {
+    async function calculateBuyCost() {
       if (useWalletStore.getState().web3 && ideaToken && tokenAddress) {
         const amountBN = new BN(
           new BigNumber(amount).multipliedBy(tenPow18).toFixed()
@@ -112,8 +112,93 @@ export default function useOutputAmount(
       }
     }
 
-    calculateOutput()
-  }, [ideaToken, tokenAddress, amount, decimals])
+    async function calculateSellPrice() {
+      if (useWalletStore.getState().web3 && ideaToken && tokenAddress) {
+        const amountBN = new BN(
+          new BigNumber(amount).multipliedBy(tenPow18).toFixed()
+        )
+        const exchangeContract = useContractStore.getState().exchangeContract
+        const daiOutputAmount = new BN(
+          await exchangeContract.methods
+            .getPriceForSellingTokens(ideaToken.address, amountBN)
+            .call()
+        )
+
+        if (tokenAddress === addresses.dai) {
+          setOutputBN(daiOutputAmount)
+          setOutput(web3BNToFloatString(daiOutputAmount, tenPow18, 4))
+          setIsLoading(false)
+          return
+        }
+
+        const chain = NETWORK === 'kovan' ? ChainId.KOVAN : ChainId.MAINNET
+        const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
+
+        let OUT
+        if (tokenAddress === addresses.ZERO) {
+          OUT = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
+        } else {
+          OUT = new Token(chain, tokenAddress, decimals, 'SOME', 'TOKEN')
+        }
+
+        const uniswapFactoryContract = useContractStore.getState()
+          .uniswapFactoryContract
+        const pairAddress = await uniswapFactoryContract.methods
+          .getPair(DAI.address, OUT.address)
+          .call()
+        const pairContract = getUniswapPairContract(pairAddress)
+
+        let token0, token1, reserves
+        await Promise.all([
+          (async () => {
+            token0 = await pairContract.methods.token0().call()
+          })(),
+          (async () => {
+            token1 = await pairContract.methods.token1().call()
+          })(),
+          (async () => {
+            reserves = await pairContract.methods.getReserves().call()
+          })(),
+        ])
+
+        let pair
+        if (token0 === DAI.address) {
+          pair = new Pair(
+            new TokenAmount(DAI, reserves._reserve0),
+            new TokenAmount(OUT, reserves._reserve1)
+          )
+        } else {
+          pair = new Pair(
+            new TokenAmount(DAI, reserves._reserve1),
+            new TokenAmount(OUT, reserves._reserve0)
+          )
+        }
+
+        const route = new Route([pair], DAI)
+        const trade = new Trade(
+          route,
+          new TokenAmount(DAI, daiOutputAmount.toString()),
+          TradeType.EXACT_INPUT
+        )
+        const outputBN = new BN(
+          new BigNumber(trade.outputAmount.toExact())
+            .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
+            .toFixed()
+        )
+        const output = trade.outputAmount.toFixed(4)
+
+        setOutputBN(outputBN)
+        setOutput(output)
+        setIsLoading(false)
+      }
+    }
+
+    if (tradeType === 'buy') {
+      calculateBuyCost()
+    } else {
+      calculateSellPrice()
+    }
+  }, [ideaToken, tokenAddress, amount, tradeType])
 
   return [isLoading, outputBN, output]
 }

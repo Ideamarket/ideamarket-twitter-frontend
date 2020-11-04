@@ -8,6 +8,7 @@ import {
   getTokenAllowance,
   approveToken,
   buyToken,
+  sellToken,
 } from '../actions'
 import { floatToWeb3BN, addresses, NETWORK } from '../utils'
 
@@ -18,12 +19,12 @@ import { useContractStore } from 'store/contractStore'
 export default function TradeModal({
   isOpen,
   setIsOpen,
-  token,
+  ideaToken,
   market,
 }: {
   isOpen: boolean
   setIsOpen: (b: boolean) => void
-  token: IdeaToken
+  ideaToken: IdeaToken
   market: IdeaMarket
 }) {
   const [tradeType, setTradeType] = useState('buy')
@@ -38,7 +39,7 @@ export default function TradeModal({
     isIdeaTokenBalanceLoading,
     ideaTokenBalanceBN,
     ideaTokenBalance,
-  ] = useBalance(token?.address, 18)
+  ] = useBalance(ideaToken?.address, 18)
 
   const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
     selectedToken?.address,
@@ -47,7 +48,7 @@ export default function TradeModal({
 
   const [ideaTokenAmount, setIdeaTokenAmount] = useState('0')
   const [isTokenAmountLoading, tokenAmountBN, tokenAmount] = useOutputAmount(
-    token,
+    ideaToken,
     selectedToken?.address,
     ideaTokenAmount,
     selectedToken?.decimals,
@@ -120,7 +121,7 @@ export default function TradeModal({
     setIsTxPending(true)
     try {
       await buyToken(
-        token.address,
+        ideaToken.address,
         selectedToken.address,
         buyAmount,
         payAmount,
@@ -142,7 +143,68 @@ export default function TradeModal({
     setIsOpen(false)
   }
 
-  async function onSellClicked() {}
+  async function onSellClicked() {
+    setIsTradeButtonDisabled(true)
+
+    const sellAmount = floatToWeb3BN(ideaTokenAmount, 18)
+    const receiveAmount = tokenAmountBN
+
+    if (selectedToken.address !== addresses.dai) {
+      const currencyConverterAddress = useContractStore.getState()
+        .currencyConverterContract.options.address
+
+      const allowance = await getTokenAllowance(
+        ideaToken.address,
+        currencyConverterAddress
+      )
+      if (allowance.lt(sellAmount)) {
+        setPendingTxName('Approve')
+        setIsTxPending(true)
+        try {
+          await approveToken(
+            ideaToken.address,
+            currencyConverterAddress,
+            sellAmount
+          ).on('transactionHash', (hash) => {
+            setPendingTxHash(hash)
+          })
+        } catch (ex) {
+          console.log(ex)
+          setIsTradeButtonDisabled(false)
+          return
+        } finally {
+          setPendingTxName('')
+          setPendingTxHash('')
+          setIsTxPending(false)
+        }
+      }
+    }
+
+    setPendingTxName('Sell')
+    setIsTxPending(true)
+    try {
+      await sellToken(
+        ideaToken.address,
+        selectedToken.address,
+        sellAmount,
+        receiveAmount,
+        slippage
+      ).on('transactionHash', (hash) => {
+        setPendingTxHash(hash)
+      })
+    } catch (ex) {
+      console.log(ex)
+      setIsTradeButtonDisabled(false)
+      return
+    } finally {
+      setPendingTxName('')
+      setPendingTxHash('')
+      setIsTxPending(false)
+    }
+
+    setIsTradeButtonDisabled(false)
+    setIsOpen(false)
+  }
 
   if (!isOpen) {
     return <></>
@@ -153,7 +215,7 @@ export default function TradeModal({
       <div className="lg:min-w-100">
         <div className="p-4 bg-top-mobile">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
-            Trade: {token.name}
+            Trade: {ideaToken.name}
           </p>
         </div>
         <nav className="flex">
