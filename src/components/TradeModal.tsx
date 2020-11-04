@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 import { useTokenListStore } from '../store/tokenListStore'
@@ -61,6 +61,13 @@ export default function TradeModal({
   const [isTradeButtonDisabled, setIsTradeButtonDisabled] = useState(false)
 
   let slippage = 0.01
+
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedToken(useTokenListStore.getState().tokens[0])
+      setInputAmount('')
+    }
+  }, [isOpen])
 
   const selectTokensFormat = (entry) => (
     <div className="flex flex-row">
