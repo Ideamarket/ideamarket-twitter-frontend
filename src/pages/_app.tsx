@@ -13,6 +13,8 @@ import { NavBar } from 'components'
 export const GlobalContext = createContext({
   isWalletModalOpen: false,
   setIsWalletModalOpen: (val: boolean) => {},
+  onWalletConnectedCallback: () => {},
+  setOnWalletConnectedCallback: (f: () => void) => {},
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -23,9 +25,20 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [])
 
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
+  const [
+    onWalletConnectedCallback,
+    setOnWalletConnectedCallback,
+  ] = useState(() => () => {})
 
   return (
-    <GlobalContext.Provider value={{ isWalletModalOpen, setIsWalletModalOpen }}>
+    <GlobalContext.Provider
+      value={{
+        isWalletModalOpen,
+        setIsWalletModalOpen,
+        onWalletConnectedCallback,
+        setOnWalletConnectedCallback,
+      }}
+    >
       <Head>
         <title>IdeaMarkets</title>
       </Head>

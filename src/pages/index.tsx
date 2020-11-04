@@ -25,7 +25,9 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
   const [nameSearch, setNameSearch] = useState('')
-  const { setIsWalletModalOpen } = useContext(GlobalContext)
+  const { setIsWalletModalOpen, setOnWalletConnectedCallback } = useContext(
+    GlobalContext
+  )
   const [tradeModalData, setTradeModalData] = useState({
     show: false,
     token: undefined,
@@ -67,9 +69,13 @@ export default function Home() {
 
   function onTradeClicked(token: IdeaToken, market: IdeaMarket) {
     if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        setTradeModalData({ show: true, token: token, market: market })
+      })
       setIsWalletModalOpen(true)
+    } else {
+      setTradeModalData({ show: true, token: token, market: market })
     }
-    setTradeModalData({ show: true, token: token, market: market })
   }
 
   return (

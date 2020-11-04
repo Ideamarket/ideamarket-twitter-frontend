@@ -17,9 +17,25 @@ import classNames from 'classnames'
 
 export default function WalletSelectionModal() {
   const [connectingWallet, setConnectingWallet] = useState(0)
-  const { isWalletModalOpen, setIsWalletModalOpen } = useContext(GlobalContext)
+  const {
+    isWalletModalOpen,
+    setIsWalletModalOpen,
+    onWalletConnectedCallback,
+    setOnWalletConnectedCallback,
+  } = useContext(GlobalContext)
   const web3 = useWalletStore((state) => state.web3)
   const address = useWalletStore((state) => state.address)
+
+  function close(success) {
+    if (onWalletConnectedCallback) {
+      if (success) {
+        onWalletConnectedCallback()
+      }
+      setOnWalletConnectedCallback(undefined)
+    }
+
+    setIsWalletModalOpen(false)
+  }
 
   async function onWalletClicked(wallet) {
     setConnectingWallet(wallet)
@@ -35,7 +51,7 @@ export default function WalletSelectionModal() {
     }
 
     await setWeb3(web3, wallet)
-    setIsWalletModalOpen(false)
+    close(true)
   }
 
   async function onDisconnectClicked() {
@@ -109,7 +125,7 @@ export default function WalletSelectionModal() {
   }
 
   return (
-    <Modal isOpen={isWalletModalOpen} close={() => setIsWalletModalOpen(false)}>
+    <Modal isOpen={isWalletModalOpen} close={() => close(false)}>
       <div className="lg:min-w-100">
         <div className="p-4 bg-top-mobile">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
