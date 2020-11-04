@@ -4,6 +4,7 @@ import '../styles/globals.css'
 
 import { createContext, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
+import Head from 'next/head'
 import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
@@ -25,6 +26,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <GlobalContext.Provider value={{ isWalletModalOpen, setIsWalletModalOpen }}>
+      <Head>
+        <title>IdeaMarkets</title>
+      </Head>
       <div className="min-h-screen bg-brand-gray">
         <NavBar />
         <div className="py-16">

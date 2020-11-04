@@ -50,7 +50,7 @@ export default function Nav() {
                   src="/logo.png"
                   alt="Workflow logo"
                 />
-                <div className="w-auto h-8 mt-2 text-2xl leading-none text-white md:text-3xl font-gilroy-bold">
+                <div className="w-auto h-8 mt-3 text-2xl leading-none text-white md:mt-2 md:text-3xl font-gilroy-bold">
                   IdeaMarkets
                 </div>
               </div>

@@ -16,7 +16,6 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <title>IdeaMarkets</title>
           <link rel="shortcut icon" href="/logo.png" />
         </Head>
         <body>
