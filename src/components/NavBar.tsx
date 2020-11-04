@@ -3,9 +3,11 @@ import { useRouter } from 'next/dist/client/router'
 import { useContext, useState } from 'react'
 import { WalletStatus } from 'components'
 import { GlobalContext } from 'pages/_app'
+import Close from '../assets/close.svg'
+import Hamburger from '../assets/hamburger.svg'
 
 export default function Nav() {
-  const [IsMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const router = useRouter()
   const closeMenu = () => setIsMobileNavOpen(false)
   const { setIsWalletModalOpen } = useContext(GlobalContext)
@@ -86,42 +88,20 @@ export default function Nav() {
                 className="inline-flex items-center justify-center p-2 text-gray-400 transition duration-150 ease-in-out rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500"
                 aria-label="Main menu"
                 aria-expanded="false"
-                onClick={() => setIsMobileNavOpen(!IsMobileNavOpen)}
+                onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
               >
-                <svg
+                <Hamburger
                   className={classNames(
                     'w-6 h-6',
-                    IsMobileNavOpen ? 'hidden' : 'block'
+                    isMobileNavOpen ? 'hidden' : 'block'
                   )}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-                <svg
+                />
+                <Close
                   className={classNames(
                     'w-6 h-6',
-                    IsMobileNavOpen ? 'block' : 'hidden'
+                    isMobileNavOpen ? 'block' : 'hidden'
                   )}
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                />
               </button>
             </div>
           </div>
@@ -130,7 +110,7 @@ export default function Nav() {
         <div
           className={classNames(
             'md:hidden',
-            IsMobileNavOpen ? 'block' : 'hidden'
+            isMobileNavOpen ? 'block' : 'hidden'
           )}
         >
           <div className="pt-2 pb-3">
