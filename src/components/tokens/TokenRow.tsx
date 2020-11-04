@@ -10,13 +10,8 @@ import {
   useIdeaMarketsStore,
 } from 'store/ideaMarketsStore'
 import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
-import { buyToken } from 'actions/buyToken'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
-
-async function buy(tokenID: number) {
-  buyToken(1, tokenID, 5)
-}
 
 function getChartData(token: IdeaToken) {
   const currentUnixTs = Date.now() / 1000

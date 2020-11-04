@@ -2,12 +2,18 @@ import { useState } from 'react'
 import classNames from 'classnames'
 import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 import { useTokenListStore } from '../store/tokenListStore'
-import { useBalance } from '../actions/useBalance'
-import { useOutputAmount } from '../actions/useOutputAmount'
-import { floatToWeb3BN } from '../utils'
+import {
+  useBalance,
+  useOutputAmount,
+  getTokenAllowance,
+  approveToken,
+  buyToken,
+} from '../actions'
+import { floatToWeb3BN, addresses, NETWORK } from '../utils'
 
 import Select from 'react-select'
 import Modal from './Modal'
+import { useContractStore } from 'store/contractStore'
 
 export default function TradeModal({
   isOpen,
@@ -48,6 +54,14 @@ export default function TradeModal({
     tradeType
   )
 
+  const [pendingTxName, setPendingTxName] = useState('')
+  const [pendingTxHash, setPendingTxHash] = useState('')
+  const [isTxPending, setIsTxPending] = useState(false)
+
+  const [isTradeButtonDisabled, setIsTradeButtonDisabled] = useState(false)
+
+  let slippage = 0.01
+
   const selectTokensFormat = (entry) => (
     <div className="flex flex-row">
       <div className="flex items-center">
@@ -59,6 +73,51 @@ export default function TradeModal({
       </div>
     </div>
   )
+
+  async function onBuyClicked() {
+    setIsTradeButtonDisabled(true)
+    let spender
+    if (selectedToken.address === addresses.dai) {
+      spender = useContractStore.getState().exchangeContract.options.address
+    } else {
+      spender = useContractStore.getState().currencyConverterContract.options
+        .address
+    }
+
+    const allowance = await getTokenAllowance(selectedToken.address, spender)
+    const buyAmount = floatToWeb3BN(inputAmount, 18)
+    const payAmount = outputAmountBN
+
+    if (allowance.lt(payAmount)) {
+      setPendingTxName('Approve')
+      setIsTxPending(true)
+      try {
+        await approveToken(selectedToken.address, spender, payAmount).on(
+          'transactionHash',
+          (hash) => {
+            setPendingTxHash(hash)
+          }
+        )
+      } catch (ex) {
+        console.log('caught', ex)
+      } finally {
+        setPendingTxName('')
+        setPendingTxHash('')
+        setIsTxPending(false)
+      }
+    }
+
+    await buyToken(
+      token.address,
+      selectedToken.address,
+      buyAmount,
+      payAmount,
+      slippage
+    )
+    setIsTradeButtonDisabled(false)
+  }
+
+  async function onSellClicked() {}
 
   if (!isOpen) {
     return <></>
@@ -143,6 +202,7 @@ export default function TradeModal({
             className={classNames(
               'text-sm',
               !isIdeaTokenBalanceLoading &&
+                ideaTokenBalanceBN &&
                 ideaTokenBalanceBN.lt(floatToWeb3BN(inputAmount, 18))
                 ? 'text-brand-red font-bold'
                 : 'text-brand-gray-2'
@@ -171,7 +231,10 @@ export default function TradeModal({
           <p
             className={classNames(
               'text-sm',
-              !isTokenBalanceLoading && tokenBalanceBN.lt(outputAmountBN)
+              !isTokenBalanceLoading &&
+                tokenBalanceBN &&
+                outputAmountBN &&
+                tokenBalanceBN.lt(outputAmountBN)
                 ? 'text-brand-red font-bold'
                 : 'text-brand-gray-2'
             )}
@@ -199,12 +262,16 @@ export default function TradeModal({
             Trading fee: {market.tradingFeeRate}%
           </div>
           <div>
-            <select>
-              <option>1% max. slippage</option>
-              <option>2% max. slippage</option>
-              <option>3% max. slippage</option>
-              <option>4% max. slippage</option>
-              <option>5% max. slippage</option>
+            <select
+              onChange={(event) => {
+                slippage = parseFloat(event.target.value)
+              }}
+            >
+              <option value={'0.01'}>1% max. slippage</option>
+              <option value={'0.02'}>2% max. slippage</option>
+              <option value={'0.03'}>3% max. slippage</option>
+              <option value={'0.04'}>4% max. slippage</option>
+              <option value={'0.05'}>5% max. slippage</option>
             </select>
           </div>
         </div>
@@ -220,9 +287,66 @@ export default function TradeModal({
               ? 'border-brand-green text-brand-green hover:bg-brand-green'
               : 'border-brand-red text-brand-red hover:bg-brand-red'
           )}
+          disabled={isTradeButtonDisabled}
+          onClick={async () => {
+            tradeType === 'buy' ? onBuyClicked() : onSellClicked()
+          }}
         >
           {tradeType === 'buy' ? 'Buy' : 'Sell'}
         </button>
+      </div>
+
+      <div
+        className={classNames(
+          'grid grid-cols-3 my-5 text-sm text-brand-gray-2',
+          isTxPending ? '' : 'invisible'
+        )}
+      >
+        <div className="font-bold justify-self-center">{pendingTxName}</div>
+        <div className="justify-self-center">
+          <a
+            className={classNames(
+              'underline',
+              pendingTxHash === '' ? 'hidden' : ''
+            )}
+            href={`https://${
+              NETWORK === 'kovan' ? 'kovan.' : ''
+            }etherscan.io/tx/${pendingTxHash}`}
+            target="_blank"
+          >
+            {pendingTxHash.slice(0, 8)}...{pendingTxHash.slice(-6)}
+          </a>
+        </div>
+        <div className="justify-self-center">
+          <svg
+            viewBox="0 0 100 100"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-5 h-5 animate-spin"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              style={{
+                fill: 'transparent',
+                stroke: '#0857e0', // brand-blue
+                strokeWidth: '10',
+              }}
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              style={{
+                fill: 'transparent',
+                stroke: 'white',
+                strokeWidth: '10',
+                strokeDasharray: '283',
+                strokeDashoffset: '75',
+              }}
+            />
+          </svg>
+        </div>
       </div>
     </Modal>
   )

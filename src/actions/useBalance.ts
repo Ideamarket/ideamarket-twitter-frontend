@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react'
-import { web3BNToFloatString } from '../utils'
+import { addresses, web3BNToFloatString } from '../utils'
 import { useWalletStore } from 'store/walletStore'
 import { getERC20Contract } from 'store/contractStore'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
-export function useBalance(address: string, decimals: number) {
+export default function useBalance(address: string, decimals: number) {
   const [isLoading, setIsLoading] = useState(true)
   const [balanceBN, setBalanceBN] = useState(undefined)
   const [balance, setBalance] = useState(undefined)
 
   useEffect(() => {
     if (useWalletStore.getState().web3 && address) {
-      if (address === '0x0000000000000000000000000000000000000000') {
+      if (address === addresses.ZERO) {
         useWalletStore
           .getState()
           .web3.eth.getBalance(useWalletStore.getState().address)

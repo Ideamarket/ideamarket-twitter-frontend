@@ -19,7 +19,7 @@ import BN from 'bn.js'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
-export function useOutputAmount(
+export default function useOutputAmount(
   ideaToken: IdeaToken,
   tokenAddress: string,
   amount: string,
@@ -54,7 +54,7 @@ export function useOutputAmount(
         const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
 
         let IN
-        if (tokenAddress === '0x0000000000000000000000000000000000000000') {
+        if (tokenAddress === addresses.ZERO) {
           IN = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
         } else {
           IN = new Token(chain, tokenAddress, decimals, 'SOME', 'TOKEN')
