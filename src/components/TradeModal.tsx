@@ -59,8 +59,6 @@ export default function TradeModal({
   const [pendingTxHash, setPendingTxHash] = useState('')
   const [isTxPending, setIsTxPending] = useState(false)
 
-  const [isTradeButtonDisabled, setIsTradeButtonDisabled] = useState(false)
-
   let slippage = 0.01
 
   useEffect(() => {
@@ -83,7 +81,6 @@ export default function TradeModal({
   )
 
   async function onBuyClicked() {
-    setIsTradeButtonDisabled(true)
     let spender
     if (selectedToken.address === addresses.dai) {
       spender = useContractStore.getState().exchangeContract.options.address
@@ -108,7 +105,6 @@ export default function TradeModal({
         )
       } catch (ex) {
         console.log(ex)
-        setIsTradeButtonDisabled(false)
         return
       } finally {
         setPendingTxName('')
@@ -131,7 +127,6 @@ export default function TradeModal({
       })
     } catch (ex) {
       console.log(ex)
-      setIsTradeButtonDisabled(false)
       return
     } finally {
       setPendingTxName('')
@@ -139,13 +134,10 @@ export default function TradeModal({
       setIsTxPending(false)
     }
 
-    setIsTradeButtonDisabled(false)
     setIsOpen(false)
   }
 
   async function onSellClicked() {
-    setIsTradeButtonDisabled(true)
-
     const sellAmount = floatToWeb3BN(ideaTokenAmount, 18)
     const receiveAmount = tokenAmountBN
 
@@ -170,7 +162,6 @@ export default function TradeModal({
           })
         } catch (ex) {
           console.log(ex)
-          setIsTradeButtonDisabled(false)
           return
         } finally {
           setPendingTxName('')
@@ -194,7 +185,6 @@ export default function TradeModal({
       })
     } catch (ex) {
       console.log(ex)
-      setIsTradeButtonDisabled(false)
       return
     } finally {
       setPendingTxName('')
@@ -202,7 +192,6 @@ export default function TradeModal({
       setIsTxPending(false)
     }
 
-    setIsTradeButtonDisabled(false)
     setIsOpen(false)
   }
 
@@ -221,7 +210,7 @@ export default function TradeModal({
         <nav className="flex">
           <a
             onClick={() => {
-              setTradeType('buy')
+              if (!isTxPending) setTradeType('buy')
             }}
             className={classNames(
               'ml-5 mr-2.5 text-center flex-grow px-1 py-4 text-base leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none cursor-pointer',
@@ -234,7 +223,7 @@ export default function TradeModal({
           </a>
           <a
             onClick={() => {
-              setTradeType('sell')
+              if (!isTxPending) setTradeType('sell')
             }}
             className={classNames(
               'ml-2.5 mr-5 text-center flex-grow px-1 py-4 text-base leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none cursor-pointer',
@@ -255,6 +244,7 @@ export default function TradeModal({
           <Select
             isClearable={false}
             isSearchable={false}
+            isDisabled={isTxPending}
             onChange={(value) => {
               setSelectedToken(value.token)
             }}
@@ -309,6 +299,7 @@ export default function TradeModal({
             onChange={(event) => {
               setIdeaTokenAmount(event.target.value)
             }}
+            disabled={isTxPending}
           />
         </div>
 
@@ -354,6 +345,7 @@ export default function TradeModal({
               onChange={(event) => {
                 slippage = parseFloat(event.target.value)
               }}
+              disabled={isTxPending}
             >
               <option value={'0.01'}>1% max. slippage</option>
               <option value={'0.02'}>2% max. slippage</option>
@@ -370,12 +362,14 @@ export default function TradeModal({
       <div className="flex flex-row justify-center mt-5">
         <button
           className={classNames(
-            'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg hover:text-white tracking-tightest-2 font-sf-compact-medium',
-            tradeType === 'buy'
-              ? 'border-brand-green text-brand-green hover:bg-brand-green'
-              : 'border-brand-red text-brand-red hover:bg-brand-red'
+            'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
+            isTxPending
+              ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
+              : tradeType === 'buy'
+              ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
+              : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
           )}
-          disabled={isTradeButtonDisabled}
+          disabled={isTxPending}
           onClick={async () => {
             tradeType === 'buy' ? onBuyClicked() : onSellClicked()
           }}
