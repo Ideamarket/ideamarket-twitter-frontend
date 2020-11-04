@@ -16,10 +16,10 @@ import classNames from 'classnames'
 
 export default function WalletSelectionModal({
   isOpen,
-  setIsOpen,
+  closeModal,
 }: {
   isOpen: boolean
-  setIsOpen: (b: boolean) => void
+  closeModal: () => void
 }) {
   const [connectingWallet, setConnectingWallet] = useState(0)
   const web3 = useWalletStore((state) => state.web3)
@@ -39,7 +39,7 @@ export default function WalletSelectionModal({
     }
 
     await setWeb3(web3, wallet)
-    setIsOpen(false)
+    closeModal()
   }
 
   async function onDisconnectClicked() {
@@ -113,7 +113,7 @@ export default function WalletSelectionModal({
   }
 
   return (
-    <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
+    <Modal isOpen={isOpen} close={() => closeModal()}>
       <div className="lg:min-w-100">
         <div className="p-4 bg-top-mobile">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">

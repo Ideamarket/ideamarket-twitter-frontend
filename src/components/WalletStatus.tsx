@@ -4,11 +4,7 @@ import { useWalletStore } from 'store/walletStore'
 import DotRed from '../assets/dotred.svg'
 import DotGreen from '../assets/dotgreen.svg'
 
-export default function WalletStatus({
-  setIsWalletModalOpen,
-}: {
-  setIsWalletModalOpen: (b: boolean) => void
-}) {
+export default function WalletStatus({ openModal }: { openModal: () => void }) {
   const web3 = useWalletStore((state) => state.web3)
   const address = useWalletStore((state) => state.address)
 
@@ -16,7 +12,7 @@ export default function WalletStatus({
     <React.Fragment>
       <div
         className="flex flex-row items-center w-32 px-2 cursor-pointer justify-self-end"
-        onClick={() => setIsWalletModalOpen(true)}
+        onClick={() => openModal()}
       >
         {web3 === undefined && <DotRed className="w-4 h-4" />}
         {web3 === undefined && (

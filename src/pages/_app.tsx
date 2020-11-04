@@ -2,12 +2,18 @@ import '../styles/fonts/gilroy/style.css'
 import '../styles/fonts/sf-compact-display/style.css'
 import '../styles/globals.css'
 
-import { useEffect } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
+import { NavBar } from 'components'
+
+export const GlobalContext = createContext({
+  isWalletModalOpen: false,
+  setIsWalletModalOpen: (val: boolean) => {},
+})
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -16,13 +22,20 @@ function MyApp({ Component, pageProps }: AppProps) {
     initTokenList()
   }, [])
 
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
+
   return (
-    <div>
-      <Head>
-        <title>IdeaMarkets</title>
-      </Head>
-      <Component {...pageProps} />
-    </div>
+    <GlobalContext.Provider value={{ isWalletModalOpen, setIsWalletModalOpen }}>
+      <div>
+        <Head>
+          <title>IdeaMarkets</title>
+        </Head>
+        <NavBar />
+        <div className="py-16">
+          <Component {...pageProps} />
+        </div>
+      </div>
+    </GlobalContext.Provider>
   )
 }
 

@@ -1,7 +1,7 @@
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { Navbar, Table, TradeModal } from 'components'
+import { Table, TradeModal } from 'components'
 import dynamic from 'next/dynamic'
 
 import YouTube from '../assets/youtube.svg'
@@ -14,6 +14,7 @@ import MediumBlack from '../assets/medium-black.svg'
 import TwitterBlack from '../assets/twitter-black.svg'
 import PatreonBlack from '../assets/patreon-black.svg'
 import Search from '../assets/search.svg'
+import { GlobalContext } from './_app'
 
 export default function Home() {
   const NoSSRWalletModal = dynamic(() => import('../components/WalletModal'), {
@@ -23,7 +24,7 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
   const [nameSearch, setNameSearch] = useState('')
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
+  const { isWalletModalOpen, setIsWalletModalOpen } = useContext(GlobalContext)
   const [tradeModalData, setTradeModalData] = useState({
     show: false,
     token: undefined,
@@ -69,10 +70,8 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden bg-brand-gray">
-      <div className="w-screen pt-8 pb-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
-        <Navbar setIsWalletModalOpen={setIsWalletModalOpen} />
-
-        <div className="mt-20">
+      <div className="w-screen pb-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
+        <div className="">
           <div className="flex items-center justify-center space-x-5">
             <div className="w-20 md:w-36">
               <p className="text-xs text-gray-600">as seen in</p>
@@ -258,7 +257,7 @@ export default function Home() {
       />
       <NoSSRWalletModal
         isOpen={isWalletModalOpen}
-        setIsOpen={setIsWalletModalOpen}
+        closeModal={() => setIsWalletModalOpen(false)}
       />
     </div>
   )
