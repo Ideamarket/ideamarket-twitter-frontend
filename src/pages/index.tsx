@@ -15,6 +15,7 @@ import TwitterBlack from '../assets/twitter-black.svg'
 import PatreonBlack from '../assets/patreon-black.svg'
 import Search from '../assets/search.svg'
 import { GlobalContext } from './_app'
+import { useWalletStore } from 'store/walletStore'
 
 export default function Home() {
   const NoSSRWalletModal = dynamic(() => import('../components/WalletModal'), {
@@ -24,7 +25,7 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
   const [nameSearch, setNameSearch] = useState('')
-  const { isWalletModalOpen, setIsWalletModalOpen } = useContext(GlobalContext)
+  const { setIsWalletModalOpen } = useContext(GlobalContext)
   const [tradeModalData, setTradeModalData] = useState({
     show: false,
     token: undefined,
@@ -65,6 +66,9 @@ export default function Home() {
   }
 
   function onTradeClicked(token: IdeaToken, market: IdeaMarket) {
+    if (!useWalletStore.getState().web3) {
+      setIsWalletModalOpen(true)
+    }
     setTradeModalData({ show: true, token: token, market: market })
   }
 
@@ -255,10 +259,7 @@ export default function Home() {
         ideaToken={tradeModalData.token}
         market={tradeModalData.market}
       />
-      <NoSSRWalletModal
-        isOpen={isWalletModalOpen}
-        closeModal={() => setIsWalletModalOpen(false)}
-      />
+      <NoSSRWalletModal />
     </div>
   )
 }

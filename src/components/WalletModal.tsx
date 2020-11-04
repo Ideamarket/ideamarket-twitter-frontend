@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useWalletStore, setWeb3, unsetWeb3 } from 'store/walletStore'
+import { GlobalContext } from '../pages/_app'
 
 import Metamask from '../assets/metamask.svg'
 import WalletConnect from '../assets/walletconnect.svg'
@@ -14,14 +15,9 @@ import Modal from './Modal'
 import * as wallets from 'eth-wallets'
 import classNames from 'classnames'
 
-export default function WalletSelectionModal({
-  isOpen,
-  closeModal,
-}: {
-  isOpen: boolean
-  closeModal: () => void
-}) {
+export default function WalletSelectionModal() {
   const [connectingWallet, setConnectingWallet] = useState(0)
+  const { isWalletModalOpen, setIsWalletModalOpen } = useContext(GlobalContext)
   const web3 = useWalletStore((state) => state.web3)
   const address = useWalletStore((state) => state.address)
 
@@ -39,7 +35,7 @@ export default function WalletSelectionModal({
     }
 
     await setWeb3(web3, wallet)
-    closeModal()
+    setIsWalletModalOpen(false)
   }
 
   async function onDisconnectClicked() {
@@ -113,7 +109,7 @@ export default function WalletSelectionModal({
   }
 
   return (
-    <Modal isOpen={isOpen} close={() => closeModal()}>
+    <Modal isOpen={isWalletModalOpen} close={() => setIsWalletModalOpen(false)}>
       <div className="lg:min-w-100">
         <div className="p-4 bg-top-mobile">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
