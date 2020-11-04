@@ -34,7 +34,7 @@ export default function buyToken(
       cost,
       userAddress
     )
-  } else if (inputTokenAddress === addresses.ZERO) {
+  } else {
     contractCall = currencyConverter.methods.buyTokens(
       inputTokenAddress,
       ideaTokenAddress,
@@ -44,8 +44,10 @@ export default function buyToken(
       userAddress
     )
 
-    contractCallOptions = {
-      value: cost,
+    if (inputTokenAddress === addresses.ZERO) {
+      contractCallOptions = {
+        value: cost,
+      }
     }
   }
 
