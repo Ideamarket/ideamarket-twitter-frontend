@@ -1,5 +1,12 @@
 [
   {
+    "name": "Dai Stablecoin",
+    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "symbol": "DAI",
+    "decimals": 18,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+  },
+  {
     "name": "Ethereum",
     "address": "0x0000000000000000000000000000000000000000",
     "symbol": "ETH",
@@ -159,13 +166,6 @@
     "symbol": "cUSDC",
     "decimals": 8,
     "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x39AA39c021dfbaE8faC545936693aC917d5E7563/logo.png"
-  },
-  {
-    "name": "Dai Stablecoin",
-    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-    "symbol": "DAI",
-    "decimals": 18,
-    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
   },
   {
     "name": "Streamr DATAcoin",
