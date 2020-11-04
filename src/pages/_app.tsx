@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <GlobalContext.Provider value={{ isWalletModalOpen, setIsWalletModalOpen }}>
-      <div>
+      <div className="bg-brand-gray">
         <NavBar />
         <div className="py-16">
           <Component {...pageProps} />
