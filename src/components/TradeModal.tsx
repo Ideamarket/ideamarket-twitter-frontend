@@ -99,7 +99,9 @@ export default function TradeModal({
           }
         )
       } catch (ex) {
-        console.log('caught', ex)
+        console.log(ex)
+        setIsTradeButtonDisabled(false)
+        return
       } finally {
         setPendingTxName('')
         setPendingTxHash('')
@@ -107,14 +109,30 @@ export default function TradeModal({
       }
     }
 
-    await buyToken(
-      token.address,
-      selectedToken.address,
-      buyAmount,
-      payAmount,
-      slippage
-    )
+    setPendingTxName('Buy')
+    setIsTxPending(true)
+    try {
+      await buyToken(
+        token.address,
+        selectedToken.address,
+        buyAmount,
+        payAmount,
+        slippage
+      ).on('transactionHash', (hash) => {
+        setPendingTxHash(hash)
+      })
+    } catch (ex) {
+      console.log(ex)
+      setIsTradeButtonDisabled(false)
+      return
+    } finally {
+      setPendingTxName('')
+      setPendingTxHash('')
+      setIsTxPending(false)
+    }
+
     setIsTradeButtonDisabled(false)
+    setIsOpen(false)
   }
 
   async function onSellClicked() {}
