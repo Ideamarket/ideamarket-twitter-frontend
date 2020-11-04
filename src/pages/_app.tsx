@@ -3,7 +3,6 @@ import '../styles/fonts/sf-compact-display/style.css'
 import '../styles/globals.css'
 
 import { createContext, useEffect, useState } from 'react'
-import Head from 'next/head'
 import type { AppProps } from 'next/app'
 import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
@@ -27,9 +26,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <GlobalContext.Provider value={{ isWalletModalOpen, setIsWalletModalOpen }}>
       <div>
-        <Head>
-          <title>IdeaMarkets</title>
-        </Head>
         <NavBar />
         <div className="py-16">
           <Component {...pageProps} />

@@ -15,7 +15,10 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head></Head>
+        <Head>
+          <title>IdeaMarkets</title>
+          <link rel="shortcut icon" href="/logo.png" />
+        </Head>
         <body>
           <Main />
           <NextScript />
