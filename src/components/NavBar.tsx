@@ -40,7 +40,7 @@ export default function Nav() {
       <nav className="fixed top-0 z-20 w-full shadow bg-top-desktop">
         <div className="px-4 mx-auto max-w-7xl md:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
               <div
                 className="flex items-center flex-shrink-0 cursor-pointer"
                 onClick={() => router.push('/')}
