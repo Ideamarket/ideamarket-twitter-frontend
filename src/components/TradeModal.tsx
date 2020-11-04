@@ -45,11 +45,11 @@ export default function TradeModal({
     selectedToken?.decimals
   )
 
-  const [inputAmount, setInputAmount] = useState('0')
-  const [isOutputAmountLoading, outputAmountBN, outputAmount] = useOutputAmount(
+  const [ideaTokenAmount, setIdeaTokenAmount] = useState('0')
+  const [isTokenAmountLoading, tokenAmountBN, tokenAmount] = useOutputAmount(
     token,
     selectedToken?.address,
-    inputAmount,
+    ideaTokenAmount,
     selectedToken?.decimals,
     tradeType
   )
@@ -65,7 +65,7 @@ export default function TradeModal({
   useEffect(() => {
     if (isOpen) {
       setSelectedToken(useTokenListStore.getState().tokens[0])
-      setInputAmount('')
+      setIdeaTokenAmount('')
     }
   }, [isOpen])
 
@@ -92,8 +92,8 @@ export default function TradeModal({
     }
 
     const allowance = await getTokenAllowance(selectedToken.address, spender)
-    const buyAmount = floatToWeb3BN(inputAmount, 18)
-    const payAmount = outputAmountBN
+    const buyAmount = floatToWeb3BN(ideaTokenAmount, 18)
+    const payAmount = tokenAmountBN
 
     if (allowance.lt(payAmount)) {
       setPendingTxName('Approve')
@@ -228,7 +228,7 @@ export default function TradeModal({
               'text-sm',
               !isIdeaTokenBalanceLoading &&
                 ideaTokenBalanceBN &&
-                ideaTokenBalanceBN.lt(floatToWeb3BN(inputAmount, 18))
+                ideaTokenBalanceBN.lt(floatToWeb3BN(ideaTokenAmount, 18))
                 ? 'text-brand-red font-bold'
                 : 'text-brand-gray-2'
             )}
@@ -244,7 +244,7 @@ export default function TradeModal({
             className="w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
             type="number"
             onChange={(event) => {
-              setInputAmount(event.target.value)
+              setIdeaTokenAmount(event.target.value)
             }}
           />
         </div>
@@ -258,8 +258,8 @@ export default function TradeModal({
               'text-sm',
               !isTokenBalanceLoading &&
                 tokenBalanceBN &&
-                outputAmountBN &&
-                tokenBalanceBN.lt(outputAmountBN)
+                tokenAmountBN &&
+                tokenBalanceBN.lt(tokenAmountBN)
                 ? 'text-brand-red font-bold'
                 : 'text-brand-gray-2'
             )}
@@ -275,7 +275,7 @@ export default function TradeModal({
             className="w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
             type="text"
             disabled={true}
-            value={isOutputAmountLoading ? '...' : outputAmount}
+            value={isTokenAmountLoading ? '...' : tokenAmount}
           />
         </div>
 
