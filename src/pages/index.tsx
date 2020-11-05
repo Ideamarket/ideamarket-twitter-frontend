@@ -38,18 +38,22 @@ export default function Home() {
     {
       id: 1,
       value: 'All Tokens',
+      mobileValue: 'All',
     },
     {
       id: 2,
       value: 'Trending',
+      mobileValue: 'Hot',
     },
     {
       id: 3,
       value: 'New Listings',
+      mobileValue: 'New',
     },
     {
       id: 4,
       value: 'Watch List',
+      mobileValue: 'Watch',
     },
   ]
 
@@ -202,11 +206,11 @@ export default function Home() {
                         'px-1 py-4 text-base leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none cursor-pointer',
                         cat.id === selectedCategoryId
                           ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
-                          : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300',
-                        cat.id === 4 && 'hidden md:block'
+                          : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
                       )}
                     >
-                      {cat.value}
+                      <span className="hidden md:inline">{cat.value}</span>
+                      <span className="md:hidden">{cat.mobileValue}</span>
                     </a>
                   ))}
                 </nav>
