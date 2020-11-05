@@ -77,3 +77,13 @@ export function useWindowSize() {
 
   return windowSize
 }
+
+export function scrollToContentWithId(id: string) {
+  const element = document.getElementById(id)
+  if (!element) {
+    return
+  }
+  const yOffset = 64
+  const y = element.getBoundingClientRect().top + window.pageYOffset - yOffset
+  window.scrollTo({ behavior: 'smooth', top: y })
+}
