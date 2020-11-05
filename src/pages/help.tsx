@@ -1,7 +1,10 @@
 import { Sidebar } from 'components'
 import { SidebarItemType } from 'components/sidebar'
+import { useState } from 'react'
+import Hamburger from '../assets/hamburger.svg'
 
 export default function Help() {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const items: SidebarItemType[] = [
     {
       title: 'Need Help?',
@@ -46,9 +49,24 @@ export default function Help() {
       ],
     },
   ]
+
   return (
     <>
-      <Sidebar items={items} />
+      <div className="fixed m-1 rounded bg-top-mobile md:hidden">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="inline-flex items-center justify-center w-10 h-10 text-gray-500 transition duration-150 ease-in-out rounded-md hover:text-gray-900 focus:outline-none focus:bg-gray-200"
+          aria-label="Open sidebar"
+        >
+          <Hamburger className="w-6 h-6 text-white" />
+        </button>
+      </div>
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+        items={items}
+      />
+
       <div className="px-6 prose-lg md:px-12 lg:px-16 xl:px-24 md:ml-64">
         <div id="need-help">
           <h2>1. Need Help?</h2>
