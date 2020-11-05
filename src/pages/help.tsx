@@ -1,7 +1,7 @@
 import { Sidebar } from 'components'
 import { SidebarItemType } from 'components/sidebar'
 import { useState } from 'react'
-import Hamburger from '../assets/hamburger.svg'
+import ChevronDoubleRight from '../assets/chevron-double-right.svg'
 
 export default function Help() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -58,7 +58,7 @@ export default function Help() {
           className="inline-flex items-center justify-center w-10 h-10 text-gray-500 transition duration-150 ease-in-out rounded-md hover:text-gray-900 focus:outline-none focus:bg-gray-200"
           aria-label="Open sidebar"
         >
-          <Hamburger className="w-6 h-6 text-white" />
+          <ChevronDoubleRight className="w-6 h-6 text-white" />
         </button>
       </div>
       <Sidebar
