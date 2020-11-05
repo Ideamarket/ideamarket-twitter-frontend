@@ -70,7 +70,7 @@ export default function Nav() {
                       closeMenu()
                     }}
                     className={classNames(
-                      'cursor-pointer inline-flex items-center px-1 pt-1 ml-8 text-lg font-medium leading-5 tracking-tighter transition duration-150 ease-in-out focus:outline-none focus:text-gray-700 focus:border-gray-300',
+                      'cursor-pointer inline-flex items-center px-1 ml-8 text-lg font-medium leading-5 tracking-tighter transition duration-150 ease-in-out focus:outline-none focus:text-gray-700 focus:border-gray-300',
                       menuItem.isSelected
                         ? 'text-white'
                         : 'text-brand-gray text-opacity-60 hover:text-brand-gray-2'
