@@ -42,7 +42,7 @@ export default function Nav() {
       <nav className="fixed top-0 z-20 w-full shadow bg-top-desktop">
         <div className="px-4 mx-auto max-w-7xl md:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center flex-1">
               <div
                 className="flex items-center flex-shrink-0 cursor-pointer"
                 onClick={() => router.push('/')}
@@ -52,15 +52,16 @@ export default function Nav() {
                   src="/logo.png"
                   alt="Workflow logo"
                 />
-                <div className="w-auto h-8 mt-3 text-2xl leading-none text-white md:mt-2 md:text-3xl font-gilroy-bold">
+
+                <span className="w-auto h-8 text-2xl leading-none text-white md:text-3xl font-gilroy-bold">
                   IdeaMarkets
-                </div>
+                </span>
               </div>
               <div className="md:hidden">
                 <WalletStatus openModal={() => setIsWalletModalOpen(true)} />
               </div>
 
-              <div className="hidden md:ml-6 md:flex">
+              <div className="hidden md:flex md:flex-1 md:justify-center">
                 {menuItems.map((menuItem) => (
                   <a
                     key={menuItem.value}
@@ -113,7 +114,7 @@ export default function Nav() {
             isMobileNavOpen ? 'block' : 'hidden'
           )}
         >
-          <div className="pt-2 pb-3">
+          <div className="pt-2 pb-3 text-center">
             {menuItems.map((menuItem) => (
               <a
                 onClick={() => {
