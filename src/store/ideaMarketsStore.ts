@@ -1,5 +1,5 @@
 import create from 'zustand'
-import produce from 'immer'
+import produce, { current } from 'immer'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { request, gql } from 'graphql-request'
@@ -50,7 +50,7 @@ export type IdeaToken = {
   invested: string
   rawInvested: BN
   latestPricePoint: IdeaTokenPricePoint
-  dayPricePoints: IdeaTokenPricePoint[]
+  weekPricePoints: IdeaTokenPricePoint[]
   dayChange: string
   dayVolume: string
   listedAt: number
@@ -186,7 +186,7 @@ export async function queryTokens(
       invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
       rawInvested: new BN(token.invested),
       latestPricePoint: token.latestPricePoint,
-      dayPricePoints: token.dayPricePoints,
+      weekPricePoints: token.pricePoints,
       dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
       dayVolume: parseFloat(token.dayVolume).toFixed(2),
       listedAt: token.listedAt,
@@ -267,6 +267,10 @@ function getQueryTokens(
     })
     filterTokensQuery += ']}'
   }
+
+  const currentTs = Math.floor(Date.now() / 1000)
+  const weekBack = currentTs - 604800
+
   return gql`
   {
     ideaMarkets(where:{marketID:${marketID.toString()}}) {
@@ -287,7 +291,7 @@ function getQueryTokens(
         }
         dayVolume
         dayChange
-        dayPricePoints(orderBy:timestamp) {
+        pricePoints(where:{timestamp_gt:${weekBack}} orderBy:timestamp) {
           timestamp
           oldPrice
           price
@@ -320,6 +324,9 @@ function getQueryTokenNameTextSearch(
     filterTokensQuery += ']'
   }
 
+  const currentTs = Math.floor(Date.now() / 1000)
+  const weekBack = currentTs - 604800
+
   return gql`
   {
     tokenNameSearch(skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}, where:{market:${
@@ -341,7 +348,7 @@ function getQueryTokenNameTextSearch(
         }
         dayVolume
         dayChange
-        dayPricePoints(orderBy:timestamp) {
+        pricePoints(where:{timestamp_gt:${weekBack}} orderBy:timestamp) {
           timestamp
           oldPrice
           price

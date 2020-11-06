@@ -14,25 +14,25 @@ import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 function getChartData(token: IdeaToken) {
-  const currentUnixTs = Date.now() / 1000
-  const dayBackUnixTs = currentUnixTs - 86400
+  const currentTs = Math.floor(Date.now() / 1000)
+  const weekBack = currentTs - 604800
   let beginPrice: number
   let endPrice: number
-  if (token.dayPricePoints.length === 0) {
+  if (token.weekPricePoints.length === 0) {
     beginPrice = token.latestPricePoint.price
     endPrice = token.latestPricePoint.price
   } else {
-    beginPrice = token.dayPricePoints[0].oldPrice
-    endPrice = token.dayPricePoints[token.dayPricePoints.length - 1].price
+    beginPrice = token.weekPricePoints[0].oldPrice
+    endPrice = token.weekPricePoints[token.weekPricePoints.length - 1].price
   }
 
-  const chartData = [[dayBackUnixTs, beginPrice]].concat(
-    token.dayPricePoints.map((pricePoint) => [
+  const chartData = [[weekBack, beginPrice]].concat(
+    token.weekPricePoints.map((pricePoint) => [
       pricePoint.timestamp,
       pricePoint.price,
     ])
   )
-  chartData.push([currentUnixTs, endPrice])
+  chartData.push([currentTs, endPrice])
   return chartData
 }
 

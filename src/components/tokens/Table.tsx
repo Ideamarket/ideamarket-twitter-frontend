@@ -50,7 +50,7 @@ const headers: Header[] = [
     sortable: true,
   },
   {
-    title: '24H Chart',
+    title: '7D Chart',
     value: 'chart',
     sortable: false,
   },
