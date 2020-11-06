@@ -200,6 +200,60 @@ export async function queryTokens(
   return tokens
 }
 
+export async function querySingleToken(queryKey: string, address: string) {
+  if (!address) {
+    return undefined
+  }
+
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQuerySingleToken(address.toLowerCase())
+  )
+  if (!result || !result.ideaToken) {
+    return undefined
+  }
+
+  const res = <IdeaToken>{
+    address: result.ideaToken.id,
+    tokenID: result.ideaToken,
+    name: result.ideaToken.name,
+    supply: web3BNToFloatString(new BN(result.ideaToken.supply), tenPow18, 2),
+    rawSupply: new BN(result.ideaToken.supply),
+    holders: result.ideaToken.holders,
+    marketCap: web3BNToFloatString(
+      new BN(result.ideaToken.marketCap),
+      tenPow18,
+      2
+    ),
+    rawMarketCap: new BN(result.ideaToken.marketCap),
+    interestWithdrawer: result.ideaToken.interestWithdrawer,
+    daiInToken: web3BNToFloatString(
+      new BN(result.ideaToken.daiInToken),
+      tenPow18,
+      2
+    ),
+    rawDaiInToken: new BN(result.ideaToken.daiInToken),
+    invested: web3BNToFloatString(
+      new BN(result.ideaToken.invested),
+      tenPow18,
+      2
+    ),
+    rawInvested: new BN(result.ideaToken.invested),
+    latestPricePoint: result.ideaToken.latestPricePoint,
+    weekPricePoints: result.ideaToken.pricePoints,
+    dayChange: (parseFloat(result.ideaToken.dayChange) * 100).toFixed(2),
+    dayVolume: parseFloat(result.ideaToken.dayVolume).toFixed(2),
+    listedAt: result.ideaToken.listedAt,
+    url: getTokenURL(result.ideaToken.market.name, result.ideaToken.name),
+    iconURL: getTokenIconURL(
+      result.ideaToken.market.name,
+      result.ideaToken.name
+    ),
+  }
+
+  return res
+}
+
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
   const address = token.address
 
@@ -284,6 +338,7 @@ function getQueryTokens(
         interestWithdrawer
         daiInToken
         invested
+        listedAt
         latestPricePoint {
           timestamp
           oldPrice
@@ -341,6 +396,7 @@ function getQueryTokenNameTextSearch(
         interestWithdrawer
         daiInToken
         invested
+        listedAt
         latestPricePoint {
           timestamp
           oldPrice
@@ -353,6 +409,34 @@ function getQueryTokenNameTextSearch(
           oldPrice
           price
         }
+      }
+  }`
+}
+
+function getQuerySingleToken(address: string) {
+  return gql`
+  {
+    ideaToken(id:${'"' + address + '"'}) {
+        id
+        tokenID
+        market {
+          name
+        }
+        name
+        supply
+        holders
+        marketCap
+        interestWithdrawer
+        daiInToken
+        invested
+        listedAt
+        latestPricePoint {
+          timestamp
+          oldPrice
+          price
+        }
+        dayVolume
+        dayChange
       }
   }`
 }
