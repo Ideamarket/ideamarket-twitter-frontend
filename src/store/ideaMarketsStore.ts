@@ -51,6 +51,7 @@ export type IdeaToken = {
   rawInvested: BN
   latestPricePoint: IdeaTokenPricePoint
   weekPricePoints: IdeaTokenPricePoint[]
+  pricePoints: IdeaTokenPricePoint[]
   dayChange: string
   dayVolume: string
   listedAt: number
@@ -209,6 +210,7 @@ export async function querySingleToken(queryKey: string, address: string) {
     HTTP_GRAPHQL_ENDPOINT,
     getQuerySingleToken(address.toLowerCase())
   )
+
   if (!result || !result.ideaToken) {
     return undefined
   }
@@ -252,6 +254,74 @@ export async function querySingleToken(queryKey: string, address: string) {
   }
 
   return res
+}
+
+export async function queryTokenChartData(
+  queryKey,
+  address: string,
+  fromTs: number
+) {
+  if (!address) {
+    return undefined
+  }
+
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryTokenChartData(address.toLowerCase(), fromTs)
+  )
+
+  if (!result || !result.ideaToken || !result.ideaToken.pricePoints) {
+    return undefined
+  }
+
+  return <IdeaToken>{
+    latestPricePoint: result.ideaToken.latestPricePoint,
+    pricePoints: result.ideaToken.pricePoints,
+  }
+}
+
+export async function queryMarketFromTokenAddress(queryKey, address: string) {
+  if (!address) {
+    return undefined
+  }
+
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryMarketFromTokenAddress(address.toLowerCase())
+  )
+
+  if (!result || !result.ideaToken || !result.ideaToken.market) {
+    return undefined
+  }
+
+  const market = result.ideaToken.market
+  return <IdeaMarket>{
+    name: market.name,
+    marketID: market.marketID,
+    baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
+    rawBaseCost: new BN(market.baseCost),
+    priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
+    rawPriceRise: new BN(market.priceRise),
+    tradingFeeRate: web3BNToFloatString(
+      new BN(market.tradingFeeRate),
+      tenPow2,
+      2
+    ),
+    rawTradingFeeRate: new BN(market.tradingFeeRate),
+    platformFeeInvested: web3BNToFloatString(
+      new BN(market.platformFeeInvested),
+      tenPow18,
+      2
+    ),
+    rawPlatformFeeInvested: new BN(market.platformFeeInvested),
+    platformFeeRate: web3BNToFloatString(
+      new BN(market.platformFeeRate),
+      tenPow2,
+      2
+    ),
+    rawPlatformFeeRate: new BN(market.platformFeeRate),
+    platformFeeWithdrawer: market.platformFeeWithdrawer,
+  }
 }
 
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
@@ -438,5 +508,41 @@ function getQuerySingleToken(address: string) {
         dayVolume
         dayChange
       }
+  }`
+}
+
+function getQueryTokenChartData(address: string, fromTs: number) {
+  return gql`
+  {
+    ideaToken(id:${'"' + address + '"'}) {
+      latestPricePoint {
+        timestamp
+        oldPrice
+        price
+      }
+      pricePoints(where:{timestamp_gt:${fromTs}} orderBy:timestamp) {
+          timestamp
+          oldPrice
+          price
+      }    
+    }
+  }`
+}
+
+function getQueryMarketFromTokenAddress(address: string) {
+  return gql`
+  {
+    ideaToken(id:${'"' + address + '"'}) {
+      market {
+        marketID
+        name
+        baseCost
+        priceRise
+        tradingFeeRate
+        platformFeeRate
+        platformFeeWithdrawer
+        platformFeeInvested
+      }    
+    }
   }`
 }
