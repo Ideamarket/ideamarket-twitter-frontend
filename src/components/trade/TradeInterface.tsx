@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import classNames from 'classnames'
-import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
-import { useTokenListStore } from '../store/tokenListStore'
+import { IdeaToken, IdeaMarket } from '../../store/ideaMarketsStore'
+import { useTokenListStore } from '../../store/tokenListStore'
 import {
   useBalance,
   useOutputAmount,
@@ -9,23 +9,22 @@ import {
   approveToken,
   buyToken,
   sellToken,
-} from '../actions'
-import { floatToWeb3BN, addresses, NETWORK } from '../utils'
+} from '../../actions'
+import { floatToWeb3BN, addresses, NETWORK } from '../../utils'
 
 import Select from 'react-select'
-import Modal from './Modal'
 import { useContractStore } from 'store/contractStore'
 
-export default function TradeModal({
-  isOpen,
-  setIsOpen,
+export default function TradeInterface({
   ideaToken,
   market,
+  onTradeSuccessful,
+  resetOn,
 }: {
-  isOpen: boolean
-  setIsOpen: (b: boolean) => void
   ideaToken: IdeaToken
   market: IdeaMarket
+  onTradeSuccessful: () => void
+  resetOn: boolean
 }) {
   const [tradeType, setTradeType] = useState('buy')
   const tokenList = useTokenListStore((state) => state.tokens)
@@ -62,11 +61,10 @@ export default function TradeModal({
   let slippage = 0.01
 
   useEffect(() => {
-    if (isOpen) {
-      setSelectedToken(useTokenListStore.getState().tokens[0])
-      setIdeaTokenAmount('')
-    }
-  }, [isOpen])
+    setSelectedToken(useTokenListStore.getState().tokens[0])
+    setIdeaTokenAmount('')
+    setTradeType('buy')
+  }, [resetOn])
 
   const selectTokensFormat = (entry) => (
     <div className="flex flex-row">
@@ -134,7 +132,7 @@ export default function TradeModal({
       setIsTxPending(false)
     }
 
-    setIsOpen(false)
+    onTradeSuccessful()
   }
 
   async function onSellClicked() {
@@ -192,15 +190,11 @@ export default function TradeModal({
       setIsTxPending(false)
     }
 
-    setIsOpen(false)
-  }
-
-  if (!isOpen) {
-    return <></>
+    onTradeSuccessful()
   }
 
   return (
-    <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
+    <>
       <div className="lg:min-w-100">
         <div className="p-4 bg-top-mobile">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
@@ -430,6 +424,6 @@ export default function TradeModal({
           </svg>
         </div>
       </div>
-    </Modal>
+    </>
   )
 }

@@ -52,7 +52,7 @@ export default function TokenRow({
       <tr
         className="grid grid-cols-3 cursor-pointer md:table-row hover:bg-brand-gray"
         onClick={() => {
-          router.push(`/details/${token.address}`)
+          //router.push(`/details/${token.address}`)
         }}
       >
         <td className="col-span-3 px-6 py-4 whitespace-no-wrap">
