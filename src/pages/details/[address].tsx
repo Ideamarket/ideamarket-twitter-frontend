@@ -228,7 +228,14 @@ export default function TokenDetails() {
           {makeContainerWithHeader(
             'Trade',
             isLoading ? (
-              ''
+              <div
+                className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
+                style={{
+                  minHeight: '518px',
+                  marginTop: '5px',
+                  marginBottom: '5px',
+                }}
+              ></div>
             ) : (
               <TradeInterface
                 ideaToken={token}
