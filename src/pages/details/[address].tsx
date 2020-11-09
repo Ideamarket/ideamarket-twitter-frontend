@@ -109,7 +109,7 @@ export default function TokenDetails() {
     return (
       <div className="flex flex-col overflow-hidden rounded-md bg-brand-gray">
         <div
-          className="flex items-center flex-grow-0 py-1 pl-1 text-sm border-gray-400 bg-very-dark-blue text-brand-gray"
+          className="flex items-center flex-grow-0 py-1 pl-2.5 text-sm border-gray-400 bg-very-dark-blue text-brand-gray"
           style={{ borderBottomWidth: '1px' }}
         >
           {header}
