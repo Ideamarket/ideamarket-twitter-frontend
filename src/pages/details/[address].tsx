@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import BigNumber from 'bignumber.js'
+import moment from 'moment'
 import { PriceChart, WatchingStar, TradeInterface } from '../../components'
 import { querySupplyRate } from '../../store/compoundStore'
 import {
@@ -176,6 +177,39 @@ export default function TokenDetails() {
               )}
 
               {makeDetailsEntry(
+                'Supply',
+                isLoading ? (
+                  makeDetailsSkeleton()
+                ) : parseFloat(token.supply) <= 0.0 ? (
+                  <>&mdash;</>
+                ) : (
+                  `${token.supply}`
+                )
+              )}
+
+              {makeDetailsEntry(
+                '24H Change',
+                isLoading ? (
+                  makeDetailsSkeleton()
+                ) : (
+                  <div
+                    className={
+                      parseFloat(token.dayChange) >= 0.0
+                        ? 'text-brand-green'
+                        : 'text-brand-red'
+                    }
+                  >
+                    {token.dayChange}%
+                  </div>
+                )
+              )}
+
+              {makeDetailsEntry(
+                '24H Volume',
+                isLoading ? makeDetailsSkeleton() : `$${token.dayVolume}`
+              )}
+
+              {makeDetailsEntry(
                 '1YR Income',
                 isLoading
                   ? makeDetailsSkeleton()
@@ -185,13 +219,15 @@ export default function TokenDetails() {
               )}
 
               {makeDetailsEntry(
-                '24H Change',
-                isLoading ? makeDetailsSkeleton() : token.dayChange
+                'Listed at',
+                isLoading
+                  ? makeDetailsSkeleton()
+                  : moment(token.listedAt * 1000).format('MMM Do YYYY')
               )}
 
               {makeDetailsEntry(
-                '24H Volume',
-                isLoading ? makeDetailsSkeleton() : token.dayVolume
+                'Holders',
+                isLoading ? makeDetailsSkeleton() : token.holders
               )}
 
               {makeDetailsEntry(
