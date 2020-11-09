@@ -1,14 +1,8 @@
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
-import Star from '../../assets/star.svg'
-import StarOn from '../../assets/star-on.svg'
-import PreviewPriceChart from 'components/PreviewPriceChart'
-import {
-  IdeaMarket,
-  IdeaToken,
-  setIsWatching,
-  useIdeaMarketsStore,
-} from 'store/ideaMarketsStore'
+import { useRouter } from 'next/dist/client/router'
+import { PreviewPriceChart, WatchingStar } from 'components'
+import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -47,15 +41,20 @@ export default function TokenRow({
   compoundSupplyRate: number
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }) {
+  const router = useRouter()
+
   const yearIncome = (
     parseFloat(token.daiInToken) * compoundSupplyRate
   ).toFixed(2)
-  const watching = useIdeaMarketsStore((state) => state.watching[token.address])
-  const isWatching = watching === true
 
   return (
     <>
-      <tr className="grid grid-cols-3 cursor-pointer md:table-row hover:bg-brand-gray">
+      <tr
+        className="grid grid-cols-3 cursor-pointer md:table-row hover:bg-brand-gray"
+        onClick={() => {
+          router.push(`/details/${token.address}`)
+        }}
+      >
         <td className="col-span-3 px-6 py-4 whitespace-no-wrap">
           <div className="flex items-center">
             <div className="flex-shrink-0 w-7.5 h-7.5">
@@ -169,21 +168,7 @@ export default function TokenRow({
           </button>
         </td>
         <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap">
-          {isWatching ? (
-            <StarOn
-              className="w-5 cursor-pointer fill-current text-brand-gray-4"
-              onClick={() => {
-                setIsWatching(token, false)
-              }}
-            />
-          ) : (
-            <Star
-              className="w-5 cursor-pointer fill-current text-brand-gray-4"
-              onClick={() => {
-                setIsWatching(token, true)
-              }}
-            />
-          )}
+          <WatchingStar token={token} />
         </td>
       </tr>
     </>
