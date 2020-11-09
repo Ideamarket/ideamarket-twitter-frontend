@@ -1,14 +1,14 @@
 import { useMemo, useCallback } from 'react'
 import { Chart } from 'react-charts'
 
-export default function PriceChart(props) {
+export default function PriceChart({ chartData }) {
   const data = useMemo(
     () => [
       {
-        data: props.chartData,
+        data: chartData,
       },
     ],
-    []
+    [chartData]
   )
 
   const series = useMemo(
@@ -23,7 +23,7 @@ export default function PriceChart(props) {
       { primary: true, type: 'time', position: 'bottom' },
       { type: 'linear', position: 'left' },
     ],
-    []
+    [chartData]
   )
 
   const getSeriesStyle = useCallback(

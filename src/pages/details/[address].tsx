@@ -2,7 +2,8 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import BigNumber from 'bignumber.js'
-import { PriceChart } from '../../components'
+import { PriceChart, WatchingStar } from '../../components'
+import { querySupplyRate } from '../../store/compoundStore'
 import {
   querySingleToken,
   queryTokenChartData,
@@ -40,7 +41,12 @@ export default function TokenDetails() {
     [`chartData-${address}`, address, chartFromTs],
     queryTokenChartData
   )
-  const [chartData, setChartData] = useState(undefined)
+  const [chartData, setChartData] = useState([])
+
+  const {
+    data: compoundSupplyRate,
+    isLoading: isCompoundSupplyRateLoading,
+  } = useQuery('compound-supply-rate', querySupplyRate)
 
   useEffect(() => {
     const currentTs = Math.floor(Date.now() / 1000)
@@ -48,7 +54,6 @@ export default function TokenDetails() {
     let endPrice: number
 
     if (!rawChartData) {
-      setChartData([])
       return
     } else if (rawChartData.pricePoints.length === 0) {
       beginPrice = rawChartData.latestPricePoint.price
@@ -69,13 +74,11 @@ export default function TokenDetails() {
     setChartData(finalChartData)
   }, [rawChartData])
 
+  const isLoading =
+    isTokenLoading || isMarketLoading || isCompoundSupplyRateLoading
+
   // Todo: Invalid token supplied
   if (!token) {
-    return <></>
-  }
-
-  // Todo: Loading
-  if (isTokenLoading) {
     return <></>
   }
 
@@ -83,7 +86,7 @@ export default function TokenDetails() {
     return (
       <div className="text-center">
         <div className="text-xs text-brand-gray-2">{header}</div>
-        <div>{content}</div>
+        <div className="text-xl">{content}</div>
       </div>
     )
   }
@@ -98,6 +101,14 @@ export default function TokenDetails() {
           {header}
         </div>
         <div className="p-1">{content}</div>
+      </div>
+    )
+  }
+
+  function makeDetailsSkeleton() {
+    return (
+      <div className="mx-auto bg-gray-400 rounded w-15 animate animate-pulse">
+        <span className="invisible">A</span>
       </div>
     )
   }
@@ -132,8 +143,9 @@ export default function TokenDetails() {
             <div className="grid grid-cols-3 gap-7">
               {makeDetailsEntry(
                 'Price',
-                !isTokenLoading && !isMarketLoading
-                  ? '$' +
+                isLoading
+                  ? makeDetailsSkeleton()
+                  : '$' +
                       web3BNToFloatString(
                         calculateCurrentPriceBN(
                           token.rawSupply,
@@ -143,33 +155,67 @@ export default function TokenDetails() {
                         tenPow18,
                         2
                       )
-                  : ''
               )}
 
               {makeDetailsEntry(
                 'Deposits',
-                isTokenLoading || parseFloat(token.daiInToken) <= 0.0 ? (
+                isLoading ? (
+                  makeDetailsSkeleton()
+                ) : parseFloat(token.daiInToken) <= 0.0 ? (
                   <>&mdash;</>
                 ) : (
-                  `$` + token.daiInToken
+                  `$${token.daiInToken}`
                 )
               )}
 
-              {makeDetailsEntry('1YR Income', 'todo')}
+              {makeDetailsEntry(
+                '1YR Income',
+                isLoading
+                  ? makeDetailsSkeleton()
+                  : `$${(
+                      parseFloat(token.daiInToken) * compoundSupplyRate
+                    ).toFixed(2)}`
+              )}
 
-              {makeDetailsEntry('24H Change', 'todo')}
+              {makeDetailsEntry(
+                '24H Change',
+                isLoading ? makeDetailsSkeleton() : token.dayChange
+              )}
 
-              {makeDetailsEntry('24H Volume', 'todo')}
+              {makeDetailsEntry(
+                '24H Volume',
+                isLoading ? makeDetailsSkeleton() : token.dayVolume
+              )}
 
-              {makeDetailsEntry('Watch', 'todo')}
+              {makeDetailsEntry(
+                'Watch',
+                isLoading ? (
+                  makeDetailsSkeleton()
+                ) : (
+                  <div className="flex justify-center mt-1">
+                    <WatchingStar token={token} />
+                  </div>
+                )
+              )}
             </div>
           )}
 
           {makeContainerWithHeader(
             'Chart',
-            <div style={{ minHeight: '200px' }}>
-              <PriceChart chartData={chartData} />
-            </div>
+            isLoading ? (
+              <div
+                className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
+                style={{
+                  minHeight: '190px',
+                  marginTop: '5px',
+                  marginBottom: '5px',
+                }}
+              ></div>
+            ) : (
+              <div style={{ minHeight: '200px' }}>
+                <PriceChart chartData={chartData} />
+              </div>
+            )
           )}
 
           {makeContainerWithHeader(
