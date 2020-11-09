@@ -95,14 +95,14 @@ export default function TokenDetails() {
 
   function makeContainerWithHeader(header, content) {
     return (
-      <div className="overflow-hidden rounded-md bg-brand-gray">
+      <div className="flex flex-col overflow-hidden rounded-md bg-brand-gray">
         <div
-          className="flex items-center py-1 pl-1 text-sm border-gray-400 bg-very-dark-blue text-brand-gray"
+          className="flex items-center flex-grow-0 py-1 pl-1 text-sm border-gray-400 bg-very-dark-blue text-brand-gray"
           style={{ borderBottomWidth: '1px' }}
         >
           {header}
         </div>
-        <div className="p-1">{content}</div>
+        <div className="flex-grow p-1">{content}</div>
       </div>
     )
   }
@@ -148,7 +148,7 @@ export default function TokenDetails() {
         <div className="grid grid-cols-1 gap-5 mx-5 mt-5 text-black md:grid-cols-2">
           {makeContainerWithHeader(
             'Details',
-            <div className="grid grid-cols-3 gap-7">
+            <div className="grid h-full grid-cols-3 gap-7">
               {makeDetailsEntry(
                 'Price',
                 isLoading
