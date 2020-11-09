@@ -309,6 +309,28 @@ export default function TokenDetails() {
               </div>
             )
           )}
+
+          {makeContainerWithHeader(
+            'Interest',
+            isLoading ? (
+              <div
+                className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
+                style={{
+                  minHeight: '190px',
+                  marginTop: '5px',
+                  marginBottom: '5px',
+                }}
+              ></div>
+            ) : (
+              <div>
+                TODO
+                <br />
+                Is this your token?
+                <br />
+                Withdraw interest
+              </div>
+            )
+          )}
         </div>
       </div>
       <NoSSRWalletModal />
