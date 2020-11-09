@@ -1,10 +1,13 @@
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import BigNumber from 'bignumber.js'
 import moment from 'moment'
+import { GlobalContext } from '../_app'
 import { PriceChart, WatchingStar, TradeInterface } from '../../components'
 import { querySupplyRate } from '../../store/compoundStore'
+import { useWalletStore } from '../../store/walletStore'
 import {
   querySingleToken,
   queryTokenChartData,
@@ -21,6 +24,15 @@ import ArrowLeft from '../../assets/arrow-left.svg'
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function TokenDetails() {
+  const NoSSRWalletModal = dynamic(
+    () => import('../../components/WalletModal'),
+    {
+      ssr: false,
+    }
+  )
+
+  const { setIsWalletModalOpen } = useContext(GlobalContext)
+  const web3 = useWalletStore((state) => state.web3)
   const router = useRouter()
   const address = isAddress(router.query.address as string)
     ? toChecksumedAddress(router.query.address as string)
@@ -272,17 +284,34 @@ export default function TokenDetails() {
                   marginBottom: '5px',
                 }}
               ></div>
-            ) : (
+            ) : web3 ? (
               <TradeInterface
                 ideaToken={token}
                 market={market}
                 onTradeSuccessful={() => {}}
                 resetOn={false}
               />
+            ) : (
+              <div
+                className="flex items-center justify-center"
+                style={{
+                  minHeight: '518px',
+                }}
+              >
+                <button
+                  onClick={() => {
+                    setIsWalletModalOpen(true)
+                  }}
+                  className="p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
+                >
+                  Connect wallet to Trade
+                </button>
+              </div>
             )
           )}
         </div>
       </div>
+      <NoSSRWalletModal />
     </div>
   )
 }
