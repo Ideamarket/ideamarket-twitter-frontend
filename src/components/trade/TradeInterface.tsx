@@ -196,11 +196,6 @@ export default function TradeInterface({
   return (
     <>
       <div className="lg:min-w-100">
-        <div className="p-4 bg-top-mobile">
-          <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
-            Trade: {ideaToken.name}
-          </p>
-        </div>
         <nav className="flex">
           <a
             onClick={() => {
