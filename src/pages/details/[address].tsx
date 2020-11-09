@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import BigNumber from 'bignumber.js'
-import { PriceChart, WatchingStar } from '../../components'
+import { PriceChart, WatchingStar, TradeInterface } from '../../components'
 import { querySupplyRate } from '../../store/compoundStore'
 import {
   querySingleToken,
@@ -95,7 +95,7 @@ export default function TokenDetails() {
     return (
       <div className="overflow-hidden rounded-md bg-brand-gray">
         <div
-          className="flex items-center py-1 pl-1 text-sm bg-gray-200 border-gray-400 text-brand-gray-2"
+          className="flex items-center py-1 pl-1 text-sm border-gray-400 bg-very-dark-blue text-brand-gray"
           style={{ borderBottomWidth: '1px' }}
         >
           {header}
@@ -220,7 +220,16 @@ export default function TokenDetails() {
 
           {makeContainerWithHeader(
             'Trade',
-            <div style={{ minHeight: '200px' }}></div>
+            isLoading ? (
+              ''
+            ) : (
+              <TradeInterface
+                ideaToken={token}
+                market={market}
+                onTradeSuccessful={() => {}}
+                resetOn={false}
+              />
+            )
           )}
         </div>
       </div>
