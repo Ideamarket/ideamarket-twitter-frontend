@@ -59,6 +59,13 @@ export default function TradeInterface({
   const [isTxPending, setIsTxPending] = useState(false)
 
   let slippage = 0.01
+  const slippageValues = [
+    { value: '0.01', label: '1% max. slippage' },
+    { value: '0.02', label: '2% max. slippage' },
+    { value: '0.03', label: '3% max. slippage' },
+    { value: '0.04', label: '4% max. slippage' },
+    { value: '0.05', label: '5% max. slippage' },
+  ]
 
   useEffect(() => {
     setSelectedToken(useTokenListStore.getState().tokens[0])
@@ -323,25 +330,32 @@ export default function TradeInterface({
         </div>
 
         <div className="grid grid-cols-3 mx-5 mt-5 text-xs text-brand-gray-2">
-          <div className="text-center">
+          <div className="flex items-center justify-center">
             Platform fee: {market.platformFeeRate}%
           </div>
-          <div className="text-center">
+          <div className="flex items-center justify-center">
             Trading fee: {market.tradingFeeRate}%
           </div>
           <div>
-            <select
-              onChange={(event) => {
-                slippage = parseFloat(event.target.value)
+            <Select
+              isClearable={false}
+              isSearchable={false}
+              isDisabled={isTxPending}
+              onChange={(value) => {
+                slippage = value
               }}
-              disabled={isTxPending}
-            >
-              <option value={'0.01'}>1% max. slippage</option>
-              <option value={'0.02'}>2% max. slippage</option>
-              <option value={'0.03'}>3% max. slippage</option>
-              <option value={'0.04'}>4% max. slippage</option>
-              <option value={'0.05'}>5% max. slippage</option>
-            </select>
+              options={slippageValues}
+              defaultValue={slippageValues[0]}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 2,
+                colors: {
+                  ...theme.colors,
+                  primary25: '#f6f6f6', // brand-gray
+                  primary: '#0857e0', // brand-blue
+                },
+              })}
+            />
           </div>
         </div>
       </div>

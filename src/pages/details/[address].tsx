@@ -15,6 +15,7 @@ import {
   calculateCurrentPriceBN,
   web3BNToFloatString,
 } from '../../utils'
+import ArrowLeft from '../../assets/arrow-left.svg'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -127,7 +128,13 @@ export default function TokenDetails() {
           className="flex flex-row items-center pl-5 bg-gray-200 border-gray-400 h-15"
           style={{ borderBottomWidth: '1px' }}
         >
-          <img src={token.iconURL} />
+          <ArrowLeft
+            className="cursor-pointer"
+            onClick={() => {
+              router.push('/')
+            }}
+          />
+          <img className="ml-12" src={token.iconURL} />
           <a
             className="ml-2.5 text-2xl text-brand-gray-4"
             href={token.url}
