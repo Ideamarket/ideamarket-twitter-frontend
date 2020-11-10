@@ -109,7 +109,10 @@ export default function TokenDetails() {
 
   function makeDetailsEntry(header, content) {
     return (
-      <div className="text-center">
+      <div
+        className="text-center rounded-sm"
+        style={{ backgroundColor: '#f9f9f9', border: '1px solid #cbd5e0' }}
+      >
         <div className="text-xs text-brand-gray-2">{header}</div>
         <div className="text-xl">{content}</div>
       </div>
