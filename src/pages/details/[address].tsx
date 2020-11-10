@@ -111,7 +111,7 @@ export default function TokenDetails() {
     return (
       <div
         className="text-center rounded-sm"
-        style={{ backgroundColor: '#f9f9f9', border: '1px solid #cbd5e0' }}
+        style={{ backgroundColor: '#fafafa', border: '1px solid #cbd5e0' }}
       >
         <div className="text-xs text-brand-gray-2">{header}</div>
         <div className="text-xl">{content}</div>
@@ -423,29 +423,7 @@ export default function TokenDetails() {
                 )}
               </div>
               <div className="flex-grow mt-5">
-                <div className="flex items-center text-xl">
-                  <div>
-                    {isLoading ? (
-                      <div className="w-6 h-6 bg-gray-400 rounded animate animate-pulse"></div>
-                    ) : (
-                      <img className="w-6" src={token.iconURL} />
-                    )}
-                  </div>
-                  {isLoading ? (
-                    <div className="w-full ml-1 bg-gray-400 rounded animate animate-pulse">
-                      <span className="invisible">A</span>
-                    </div>
-                  ) : (
-                    <>
-                      <a className="ml-1" href={token.url} target="_blank">
-                        {token.name}
-                      </a>
-                      <div className="mx-2.5">on</div>
-                      <div>{market.name}</div>
-                    </>
-                  )}
-                </div>
-
+                <span className="text-xl">Description</span>
                 <div className="mt-2.5 text-sm italic">
                   No description provided by token owner.
                 </div>
