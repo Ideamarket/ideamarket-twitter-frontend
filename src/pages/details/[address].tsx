@@ -158,7 +158,11 @@ export default function TokenDetails() {
               router.push('/')
             }}
           />
-          <img className="ml-12" src={token.iconURL} />
+          <img
+            className="ml-12"
+            style={{ maxHeight: '30px' }}
+            src={token.iconURL}
+          />
           <a
             className="ml-2.5 text-2xl text-brand-gray-4"
             href={token.url}
