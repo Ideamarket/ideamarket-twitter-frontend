@@ -152,27 +152,36 @@ export default function TokenDetails() {
         }}
       >
         <div
-          className="flex flex-row items-center pl-5 bg-gray-200 border-gray-400 h-15"
+          className="relative w-full p-5 mx-auto border-gray-400 bg-brand-gray"
           style={{ borderBottomWidth: '1px' }}
         >
-          <ArrowLeft
-            className="cursor-pointer"
-            onClick={() => {
-              router.push('/')
-            }}
-          />
           <img
-            className="ml-12"
-            style={{ maxHeight: '30px' }}
+            className="mx-auto"
+            style={{ maxWidth: '40px' }}
             src={token.iconURL}
           />
-          <a
-            className="ml-2.5 text-2xl text-brand-gray-4"
-            href={token.url}
-            target="_blank"
-          >
-            {token.name}
-          </a>
+          <div className="text-3xl font-semibold text-center text-brand-gray-2">
+            {token.name.toUpperCase()}
+          </div>
+
+          <div className="flex items-center justify-center mt-5 text-sm italic text-brand-gray-2">
+            <div>on</div>
+            <img
+              src="https://youtube.com/favicon.ico"
+              className="ml-2 mr-1"
+              style={{ maxHeight: '20px' }}
+            />
+            <div>{market.name}</div>
+          </div>
+
+          <div className="absolute top-0 left-0 flex items-center">
+            <ArrowLeft
+              className="cursor-pointer"
+              onClick={() => {
+                router.push('/')
+              }}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-5 mx-5 mt-5 text-black md:grid-cols-2">
