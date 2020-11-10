@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
@@ -6,7 +7,7 @@ import BigNumber from 'bignumber.js'
 import moment from 'moment'
 import { GlobalContext } from '../_app'
 import { PriceChart, WatchingStar, TradeInterface } from '../../components'
-import { querySupplyRate } from '../../store/compoundStore'
+import { querySupplyRate, queryExchangeRate } from '../../store/compoundStore'
 import { useWalletStore } from '../../store/walletStore'
 import {
   querySingleToken,
@@ -18,6 +19,7 @@ import {
   isAddress,
   calculateCurrentPriceBN,
   web3BNToFloatString,
+  addresses,
 } from '../../utils'
 import ArrowLeft from '../../assets/arrow-left.svg'
 
@@ -33,6 +35,7 @@ export default function TokenDetails() {
 
   const { setIsWalletModalOpen } = useContext(GlobalContext)
   const web3 = useWalletStore((state) => state.web3)
+  const connectedAddress = useWalletStore((state) => state.address)
   const router = useRouter()
   const address = isAddress(router.query.address as string)
     ? toChecksumedAddress(router.query.address as string)
@@ -62,6 +65,11 @@ export default function TokenDetails() {
     isLoading: isCompoundSupplyRateLoading,
   } = useQuery('compound-supply-rate', querySupplyRate)
 
+  const {
+    data: compoundExchangeRate,
+    isLoading: isCompoundExchangeRateLoading,
+  } = useQuery('compound-exchange-rate', queryExchangeRate)
+
   useEffect(() => {
     const currentTs = Math.floor(Date.now() / 1000)
     let beginPrice: number
@@ -89,7 +97,10 @@ export default function TokenDetails() {
   }, [rawChartData])
 
   const isLoading =
-    isTokenLoading || isMarketLoading || isCompoundSupplyRateLoading
+    isTokenLoading ||
+    isMarketLoading ||
+    isCompoundSupplyRateLoading ||
+    isCompoundExchangeRateLoading
 
   // Todo: Invalid token supplied
   if (!token) {
@@ -274,25 +285,206 @@ export default function TokenDetails() {
           )}
 
           {makeContainerWithHeader(
-            'Interest',
-            isLoading ? (
+            'Details',
+            <div className="flex flex-col h-full">
               <div
-                className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
-                style={{
-                  minHeight: '190px',
-                  marginTop: '5px',
-                  marginBottom: '5px',
-                }}
-              ></div>
-            ) : (
-              <div>
-                TODO
-                <br />
-                Is this your token?
-                <br />
-                Withdraw interest
+                className="grid w-full grid-cols-3 p-5 border-gray-400 gap-7"
+                style={{ borderBottomWidth: '1px' }}
+              >
+                {makeDetailsEntry(
+                  'Price',
+                  isLoading
+                    ? makeDetailsSkeleton()
+                    : '$' +
+                        web3BNToFloatString(
+                          calculateCurrentPriceBN(
+                            token.rawSupply,
+                            market.rawBaseCost,
+                            market.rawPriceRise
+                          ),
+                          tenPow18,
+                          2
+                        )
+                )}
+
+                {makeDetailsEntry(
+                  'Deposits',
+                  isLoading ? (
+                    makeDetailsSkeleton()
+                  ) : parseFloat(token.daiInToken) <= 0.0 ? (
+                    <>&mdash;</>
+                  ) : (
+                    `$${token.daiInToken}`
+                  )
+                )}
+
+                {makeDetailsEntry(
+                  'Supply',
+                  isLoading ? (
+                    makeDetailsSkeleton()
+                  ) : parseFloat(token.supply) <= 0.0 ? (
+                    <>&mdash;</>
+                  ) : (
+                    `${token.supply}`
+                  )
+                )}
+
+                {makeDetailsEntry(
+                  '24H Change',
+                  isLoading ? (
+                    makeDetailsSkeleton()
+                  ) : (
+                    <div
+                      className={
+                        parseFloat(token.dayChange) >= 0.0
+                          ? 'text-brand-green'
+                          : 'text-brand-red'
+                      }
+                    >
+                      {token.dayChange}%
+                    </div>
+                  )
+                )}
+
+                {makeDetailsEntry(
+                  '24H Volume',
+                  isLoading ? makeDetailsSkeleton() : `$${token.dayVolume}`
+                )}
+
+                {makeDetailsEntry(
+                  '1YR Income',
+                  isLoading
+                    ? makeDetailsSkeleton()
+                    : `$${(
+                        parseFloat(token.daiInToken) * compoundSupplyRate
+                      ).toFixed(2)}`
+                )}
+
+                {makeDetailsEntry(
+                  'Listed at',
+                  isLoading
+                    ? makeDetailsSkeleton()
+                    : moment(token.listedAt * 1000).format('MMM Do YYYY')
+                )}
+
+                {makeDetailsEntry(
+                  'Holders',
+                  isLoading ? makeDetailsSkeleton() : token.holders
+                )}
+
+                {makeDetailsEntry(
+                  'Watch',
+                  isLoading ? (
+                    makeDetailsSkeleton()
+                  ) : (
+                    <div className="flex justify-center mt-1">
+                      <WatchingStar token={token} />
+                    </div>
+                  )
+                )}
               </div>
-            )
+              <div className="flex-grow mt-5">
+                <div className="flex items-center text-xl">
+                  <div>
+                    {isLoading ? (
+                      <div className="w-6 h-6 bg-gray-400 rounded animate animate-pulse"></div>
+                    ) : (
+                      <img className="w-6" src={token.iconURL} />
+                    )}
+                  </div>
+                  {isLoading ? (
+                    <div className="w-full ml-1 bg-gray-400 rounded animate animate-pulse">
+                      <span className="invisible">A</span>
+                    </div>
+                  ) : (
+                    <>
+                      <a className="ml-1" href={token.url} target="_blank">
+                        {token.name}
+                      </a>
+                      <div className="mx-2.5">on</div>
+                      <div>{market.name}</div>
+                    </>
+                  )}
+                </div>
+
+                <div className="mt-2.5 text-sm italic">
+                  No description provided by token owner.
+                </div>
+              </div>
+              <div className="text-sm text-gray-500">
+                <div
+                  className="mb-1 border-gray-400"
+                  style={{ borderBottomWidth: '1px' }}
+                >
+                  Token Owner Options
+                </div>
+                <div className="text-xs">
+                  {isLoading ? (
+                    ''
+                  ) : token.interestWithdrawer === addresses.ZERO ? (
+                    <>
+                      <div className="italic">
+                        The owner of this token is not yet listed. If this token
+                        represents your account you can get listed as owner of
+                        this token by verifying access to the account. After
+                        successful verification you will be able to withdraw the
+                        accumulated interest.
+                      </div>
+                      <div className="flex justify-center">
+                        <button className="w-20 py-1 mt-1 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
+                          Verify
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="italic">
+                        {!web3 ||
+                        connectedAddress.toLowerCase() !==
+                          token.interestWithdrawer.toLowerCase()
+                          ? `The owner of this token is listed as ${token.interestWithdrawer.slice(
+                              0,
+                              8
+                            )}...${token.interestWithdrawer.slice(
+                              -6
+                            )}. This address does not match the wallet you have connected. If you are the owner of this token please connect the correct wallet to be able to withdraw interest.`
+                          : 'Your connected wallet is listed as owner of this token. You are able to withdraw the accumulated interest below.'}
+                      </div>
+                      <div className="italic mt-2.5">
+                        Available interest:{' '}
+                        {web3BNToFloatString(
+                          token.rawInvested
+                            .mul(compoundExchangeRate)
+                            .sub(token.rawDaiInToken),
+                          new BigNumber('10').exponentiatedBy('36'),
+                          2
+                        )}{' '}
+                        DAI
+                      </div>
+                      <div className="flex justify-center">
+                        <button
+                          disabled={
+                            !web3 ||
+                            connectedAddress.toLowerCase() !==
+                              token.interestWithdrawer.toLowerCase()
+                          }
+                          className={classNames(
+                            'w-20 py-1 ml-5 text-sm font-medium bg-white border-2 rounded-lg  tracking-tightest-2 font-sf-compact-medium',
+                            !web3 ||
+                              connectedAddress.toLowerCase() !==
+                                token.interestWithdrawer.toLowerCase()
+                              ? 'cursor-default'
+                              : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
+                          )}
+                        >
+                          Withdraw
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
           )}
 
           {makeContainerWithHeader(

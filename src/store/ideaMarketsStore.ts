@@ -1,9 +1,8 @@
 import create from 'zustand'
-import produce, { current } from 'immer'
+import produce from 'immer'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { request, gql } from 'graphql-request'
-
 import { web3BNToFloatString } from '../utils'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
