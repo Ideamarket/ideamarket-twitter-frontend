@@ -10,6 +10,7 @@ export default function WatchingStar({ token }: { token: IdeaToken }) {
   const watching = useIdeaMarketsStore((state) => state.watching[token.address])
 
   function onClick(e) {
+    e.stopPropagation()
     setIsWatching(token, !watching)
   }
 
