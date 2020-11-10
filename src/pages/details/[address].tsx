@@ -424,7 +424,18 @@ export default function TokenDetails() {
                 </div>
                 <div className="text-xs">
                   {isLoading ? (
-                    ''
+                    <>
+                      <div className="w-full mx-auto bg-gray-400 rounded animate animate-pulse">
+                        <div className="invisible">
+                          A<br />A
+                        </div>
+                      </div>
+                      <div className="flex justify-center ">
+                        <div className="w-20 py-1 mt-1 text-sm font-medium bg-gray-400 border-2 border-gray-400 rounded animate animate-pulse tracking-tightest-2 font-sf-compact-medium">
+                          <span className="invisible">A</span>
+                        </div>
+                      </div>
+                    </>
                   ) : token.interestWithdrawer === addresses.ZERO ? (
                     <>
                       <div className="italic">
