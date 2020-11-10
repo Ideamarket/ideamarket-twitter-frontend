@@ -118,11 +118,19 @@ export default function useOutputAmount(
           new BigNumber(amount).multipliedBy(tenPow18).toFixed()
         )
         const exchangeContract = useContractStore.getState().exchangeContract
-        const daiOutputAmount = new BN(
-          await exchangeContract.methods
-            .getPriceForSellingTokens(ideaToken.address, amountBN)
-            .call()
-        )
+        let daiOutputAmount
+        try {
+          daiOutputAmount = new BN(
+            await exchangeContract.methods
+              .getPriceForSellingTokens(ideaToken.address, amountBN)
+              .call()
+          )
+        } catch (ex) {
+          setOutputBN(new BN('0'))
+          setOutput(web3BNToFloatString(new BN('0'), tenPow18, 4))
+          setIsLoading(false)
+          return
+        }
 
         if (tokenAddress === addresses.dai) {
           setOutputBN(daiOutputAmount)
