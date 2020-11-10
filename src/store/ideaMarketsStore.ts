@@ -10,7 +10,7 @@ const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 const HTTP_GRAPHQL_ENDPOINT =
   NETWORK === 'kovan'
-    ? 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarket' // todo: ideamarketkovan when synced
+    ? 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarketkovan'
     : 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarket'
 
 export type IdeaMarket = {
