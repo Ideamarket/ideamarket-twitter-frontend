@@ -3,10 +3,12 @@ import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 import { useState, useEffect } from 'react'
 
-// FIXME: Right now all addresses are kovan. Use .env.local file to set env vars, see Next docs
-// Unfortunately this is not working right now. Next is not supplying env vars to process.env,
-// even if they are defined as NEXT_PUBLIC_* .
-export const NETWORK = 'kovan'
+export const NETWORK = process.env.NEXT_PUBLIC_NETWORK
+  ? process.env.NEXT_PUBLIC_NETWORK
+  : 'kovan'
+if (!process.env.NEXT_PUBLIC_NETWORK) {
+  console.log('WARNING: NEXT_PUBLIC_NETWORK not found. Defaulting to kovan')
+}
 
 export const addresses = {
   ZERO: '0x0000000000000000000000000000000000000000',
