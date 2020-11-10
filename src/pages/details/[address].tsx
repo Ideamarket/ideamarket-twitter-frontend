@@ -155,23 +155,46 @@ export default function TokenDetails() {
           className="relative w-full p-5 mx-auto border-gray-400 bg-brand-gray"
           style={{ borderBottomWidth: '1px' }}
         >
-          <img
-            className="mx-auto"
-            style={{ maxWidth: '40px' }}
-            src={token.iconURL}
-          />
-          <div className="text-3xl font-semibold text-center text-brand-gray-2">
-            {token.name.toUpperCase()}
+          {isLoading ? (
+            <div
+              className="mx-auto bg-gray-400 rounded animate animate-pulse"
+              style={{ width: '40px', height: '40px' }}
+            ></div>
+          ) : (
+            <img
+              className="mx-auto"
+              style={{ maxWidth: '40px' }}
+              src={token.iconURL}
+            />
+          )}
+
+          <div className="mt-1 text-3xl font-semibold text-center text-brand-gray-2">
+            {isLoading ? (
+              <div className="w-64 mx-auto bg-gray-400 rounded animate animate-pulse">
+                <span className="invisible">A</span>
+              </div>
+            ) : (
+              token.name.toUpperCase()
+            )}
           </div>
 
           <div className="flex items-center justify-center mt-5 text-sm italic text-brand-gray-2">
-            <div>on</div>
-            <img
-              src="https://youtube.com/favicon.ico"
-              className="ml-2 mr-1"
-              style={{ maxHeight: '20px' }}
-            />
-            <div>{market.name}</div>
+            {isLoading ? (
+              <div
+                className="w-32 mx-auto bg-gray-400 rounded animate animate-pulse"
+                style={{ height: '20px' }}
+              ></div>
+            ) : (
+              <>
+                <div>on</div>
+                <img
+                  src="https://youtube.com/favicon.ico"
+                  className="ml-2 mr-1"
+                  style={{ maxHeight: '20px' }}
+                />
+                <div>{market.name}</div>
+              </>
+            )}
           </div>
 
           <div className="absolute top-0 left-0 flex items-center">
