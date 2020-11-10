@@ -3,13 +3,15 @@ import produce from 'immer'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { request, gql } from 'graphql-request'
-import { web3BNToFloatString } from '../utils'
+import { web3BNToFloatString, NETWORK } from '../utils'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 const HTTP_GRAPHQL_ENDPOINT =
-  'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarket'
+  NETWORK === 'kovan'
+    ? 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarket' // todo: ideamarketkovan when synced
+    : 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarket'
 
 export type IdeaMarket = {
   name: string
