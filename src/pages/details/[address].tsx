@@ -51,6 +51,8 @@ export default function TokenDetails() {
     querySingleToken
   )
 
+  const [selectedChartDuration, setSelectedChartDuration] = useState('1W')
+
   const [chartFromTs, setChartFromTs] = useState(
     Math.floor(Date.now() / 1000) - 604800
   )
@@ -130,12 +132,31 @@ export default function TokenDetails() {
   function makeDetailsOverChartEntry(header, content, withBorder) {
     return (
       <div
-        className="text-center rounded-sm"
+        className="text-center"
         style={{ borderRight: withBorder && '1px solid #cbd5e0' }}
       >
         <div className="text-xs text-brand-gray-2">{header}</div>
         <div className="text-2xl">{content}</div>
       </div>
+    )
+  }
+
+  function makeChartDurationEntry(durationString, durationSeconds) {
+    return (
+      <a
+        onClick={() => {
+          setSelectedChartDuration(durationString)
+          setChartFromTs(Math.floor(Date.now() / 1000) - durationSeconds)
+        }}
+        className={classNames(
+          'ml-2.5 mr-2.5 text-center px-1 text-sm leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none cursor-pointer',
+          selectedChartDuration === durationString
+            ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
+            : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
+        )}
+      >
+        {durationString}
+      </a>
     )
   }
 
@@ -148,12 +169,12 @@ export default function TokenDetails() {
         )}
       >
         <div
-          className="flex items-center flex-grow-0 py-1 pl-2.5 text-sm border-gray-400 bg-very-dark-blue text-brand-gray"
-          style={{ borderBottomWidth: '1px' }}
+          className="flex items-center flex-grow-0 py-1 pl-2.5 text-sm bg-very-dark-blue text-brand-gray"
+          style={{ borderBottom: '1px solid #cbd5e0' }}
         >
           {header}
         </div>
-        <div className="flex-grow p-1">{content}</div>
+        <div className="flex-grow">{content}</div>
       </div>
     )
   }
@@ -228,7 +249,13 @@ export default function TokenDetails() {
           {makeContainerWithHeader(
             'Chart',
             <>
-              <div className="grid grid-cols-4">
+              <div
+                className="grid grid-cols-4 p-1 mb-1"
+                style={{
+                  backgroundColor: '#fafafa',
+                  borderBottom: '1px solid #cbd5e0',
+                }}
+              >
                 {makeDetailsOverChartEntry(
                   'Price',
                   isLoading
@@ -276,12 +303,8 @@ export default function TokenDetails() {
                   false
                 )}
               </div>
-              <div
-                className="my-1"
-                style={{ borderBottom: '1px solid #cbd5e0' }}
-              ></div>
               <div style={{ minHeight: '200px' }}>
-                {isLoading ? (
+                {isLoading || isRawChartDataLoading ? (
                   <div
                     className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
                     style={{
@@ -294,6 +317,24 @@ export default function TokenDetails() {
                   <PriceChart chartData={chartData} />
                 )}
               </div>
+              <div
+                className="mt-1"
+                style={{ borderBottom: '1px solid #cbd5e0' }}
+              ></div>
+              <nav
+                className="flex justify-end py-1.5 bg-gray-50"
+                style={{ backgroundColor: '#fafafa' }}
+              >
+                {makeChartDurationEntry('1H', 3600)}
+                {makeChartDurationEntry('1D', 86400)}
+                {makeChartDurationEntry('1W', 604800)}
+                {makeChartDurationEntry('1M', 2628000)}
+                {makeChartDurationEntry('1Y', 31536000)}
+                {makeChartDurationEntry(
+                  'ALL',
+                  Math.floor(Date.now() / 1000) - token.listedAt
+                )}
+              </nav>
             </>,
             2
           )}
