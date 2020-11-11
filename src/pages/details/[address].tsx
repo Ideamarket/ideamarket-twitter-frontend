@@ -160,12 +160,12 @@ export default function TokenDetails() {
     )
   }
 
-  function makeContainerWithHeader(header, content, spanCols?) {
+  function makeContainerWithHeader(header, content, customClasses?) {
     return (
       <div
         className={classNames(
           'flex flex-col overflow-hidden rounded-md bg-brand-gray',
-          spanCols ? `col-span-${spanCols}` : ''
+          customClasses ? customClasses : ''
         )}
       >
         <div
@@ -336,7 +336,7 @@ export default function TokenDetails() {
                 )}
               </nav>
             </>,
-            2
+            'md:col-span-2'
           )}
 
           {makeContainerWithHeader(
@@ -438,20 +438,20 @@ export default function TokenDetails() {
                   )
                 )}
               </div>
-              <div className="flex-grow mt-5">
+              <div className="flex-grow px-2 mt-5">
                 <span className="text-xl">Description</span>
-                <div className="mt-2.5 text-sm italic">
+                <div className="mt-2.5 mb-5 text-sm italic">
                   No description provided by token owner.
                 </div>
               </div>
               <div className="text-sm text-gray-500">
                 <div
-                  className="mb-1 border-gray-400"
+                  className="px-2 mb-1 border-gray-400"
                   style={{ borderBottomWidth: '1px' }}
                 >
                   Token Owner Options
                 </div>
-                <div className="text-xs">
+                <div className="px-1 pb-2 text-xs">
                   {isLoading ? (
                     <>
                       <div className="w-full mx-auto bg-gray-400 rounded animate animate-pulse">
@@ -475,7 +475,7 @@ export default function TokenDetails() {
                         accumulated interest.
                       </div>
                       <div className="flex justify-center">
-                        <button className="w-20 py-1 mt-1 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
+                        <button className="w-20 py-1 mt-2 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
                           Verify
                         </button>
                       </div>
