@@ -57,9 +57,6 @@ export default function Nav() {
                   IdeaMarkets
                 </span>
               </div>
-              <div className="md:hidden">
-                <WalletStatus openModal={() => setIsWalletModalOpen(true)} />
-              </div>
 
               <div className="hidden md:flex md:flex-1 md:justify-center">
                 {menuItems.map((menuItem) => (
@@ -132,6 +129,10 @@ export default function Nav() {
                 {menuItem.name}
               </a>
             ))}
+
+            <div className="flex justify-center mt-5">
+              <WalletStatus openModal={() => setIsWalletModalOpen(true)} />
+            </div>
           </div>
         </div>
       </nav>
