@@ -25,6 +25,20 @@ export default function PriceChart({ chartData }) {
     [chartData]
   )
 
+  const cursor = useMemo(
+    () => ({
+      snap: true,
+      showLine: true,
+      showLabel: true,
+      render: (props) => (
+        <div className="bg-very-dark-blue">
+          {(props.formattedValue || '').toString()}
+        </div>
+      ),
+    }),
+    []
+  )
+
   const getSeriesStyle = useCallback(
     (series) => ({
       color: '#0857e0',
@@ -37,6 +51,8 @@ export default function PriceChart({ chartData }) {
     // space of its parent element automatically
     <Chart
       series={series}
+      primaryCursor={cursor}
+      secondaryCursor={cursor}
       getSeriesStyle={getSeriesStyle}
       data={data}
       axes={axes}
