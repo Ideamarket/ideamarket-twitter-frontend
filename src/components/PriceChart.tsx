@@ -2,14 +2,13 @@ import { useMemo, useCallback } from 'react'
 import { Chart } from 'react-charts'
 
 export default function PriceChart({ chartData }) {
-  const data = useMemo(
-    () => [
+  const data = useMemo(() => {
+    return [
       {
-        data: chartData,
+        data: chartData.map((x) => [parseInt(x[0]) * 1000, x[1]]),
       },
-    ],
-    [chartData]
-  )
+    ]
+  }, [chartData])
 
   const series = useMemo(
     () => ({
@@ -20,7 +19,7 @@ export default function PriceChart({ chartData }) {
 
   const axes = useMemo(
     () => [
-      { primary: true, type: 'time', position: 'bottom' },
+      { primary: true, type: 'utc', position: 'bottom' },
       { type: 'linear', position: 'left' },
     ],
     [chartData]
