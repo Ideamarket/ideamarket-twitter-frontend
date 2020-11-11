@@ -27,6 +27,7 @@ export type IdeaMarket = {
   platformFeeRate: string
   rawPlatformFeeRate: BN
   platformFeeWithdrawer: string
+  nameVerifierAddress: string
 }
 
 export type IdeaTokenPricePoint = {
@@ -83,6 +84,45 @@ export async function initIdeaMarketsStore() {
   })
 }
 
+export async function queryMarkets(queryKey: string) {
+  const result = await request(HTTP_GRAPHQL_ENDPOINT, getQueryMarkets())
+
+  const markets = []
+  for (let i = 0; i < result.ideaMarkets.length; i++) {
+    const market = result.ideaMarkets[i]
+
+    markets.push({
+      name: market.name,
+      marketID: market.marketID,
+      baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
+      rawBaseCost: new BN(market.baseCost),
+      priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
+      rawPriceRise: new BN(market.priceRise),
+      tradingFeeRate: web3BNToFloatString(
+        new BN(market.tradingFeeRate),
+        tenPow2,
+        2
+      ),
+      rawTradingFeeRate: new BN(market.tradingFeeRate),
+      platformFeeInvested: web3BNToFloatString(
+        new BN(market.platformFeeInvested),
+        tenPow18,
+        2
+      ),
+      rawPlatformFeeInvested: new BN(market.platformFeeInvested),
+      platformFeeRate: web3BNToFloatString(
+        new BN(market.platformFeeRate),
+        tenPow2,
+        2
+      ),
+      rawPlatformFeeRate: new BN(market.platformFeeRate),
+      platformFeeWithdrawer: market.platformFeeWithdrawer,
+      nameVerifierAddress: market.nameVerifier,
+    })
+  }
+  return markets
+}
+
 export async function queryMarket(queryKey: string, marketName: string) {
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
@@ -117,6 +157,7 @@ export async function queryMarket(queryKey: string, marketName: string) {
     ),
     rawPlatformFeeRate: new BN(market.platformFeeRate),
     platformFeeWithdrawer: market.platformFeeWithdrawer,
+    nameVerifierAddress: market.nameVerifier,
   }
 
   return newMarket
@@ -322,6 +363,7 @@ export async function queryMarketFromTokenAddress(queryKey, address: string) {
     ),
     rawPlatformFeeRate: new BN(market.platformFeeRate),
     platformFeeWithdrawer: market.platformFeeWithdrawer,
+    nameVerifierAddress: market.nameVerifier,
   }
 }
 
@@ -358,6 +400,24 @@ function getTokenIconURL(marketName: string, tokenName: string): string {
   }
 }
 
+function getQueryMarkets() {
+  return gql`
+    {
+      ideaMarkets {
+        marketID
+        name
+        baseCost
+        priceRise
+        tradingFeeRate
+        platformFeeRate
+        platformFeeWithdrawer
+        platformFeeInvested
+        nameVerifier
+      }
+    }
+  `
+}
+
 function getQueryMarket(marketName: string) {
   return gql`{
     ideaMarkets(where:{name:${'"' + marketName + '"'}}) {
@@ -369,6 +429,7 @@ function getQueryMarket(marketName: string) {
       platformFeeRate
       platformFeeWithdrawer
       platformFeeInvested
+      nameVerifier
     }
   }`
 }
@@ -543,6 +604,7 @@ function getQueryMarketFromTokenAddress(address: string) {
         platformFeeRate
         platformFeeWithdrawer
         platformFeeInvested
+        nameVerifier
       }    
     }
   }`

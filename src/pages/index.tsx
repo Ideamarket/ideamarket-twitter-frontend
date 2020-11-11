@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useContext, useState } from 'react'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { Table, TradeModal } from 'components'
+import { Table, TradeModal, ListTokenModal } from 'components'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
@@ -26,9 +26,12 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
   const [nameSearch, setNameSearch] = useState('')
-  const { setIsWalletModalOpen, setOnWalletConnectedCallback } = useContext(
-    GlobalContext
-  )
+  const {
+    setIsWalletModalOpen,
+    setOnWalletConnectedCallback,
+    isListTokenModalOpen,
+    setIsListTokenModalOpen,
+  } = useContext(GlobalContext)
   const [tradeModalData, setTradeModalData] = useState({
     show: false,
     token: undefined,
@@ -83,6 +86,17 @@ export default function Home() {
     }
   }
 
+  function onListTokenClicked() {
+    if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        setIsListTokenModalOpen(true)
+      })
+      setIsWalletModalOpen(true)
+    } else {
+      setIsListTokenModalOpen(true)
+    }
+  }
+
   return (
     <div className="overflow-x-hidden bg-brand-gray">
       <div className="w-screen px-6 pt-12 md:pt-32 pb-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5">
@@ -104,7 +118,12 @@ export default function Home() {
           </p>
         </div>
         <div className="inline-flex flex-col space-y-3 md:flex-row md:space-x-10 md:space-y-0 md:items-center mt-7">
-          <button className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800">
+          <button
+            onClick={() => {
+              onListTokenClicked()
+            }}
+            className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+          >
             Launch Your Token
           </button>
           <p className="text-lg font-sf-compact-medium">How it Works</p>
@@ -277,6 +296,10 @@ export default function Home() {
         market={tradeModalData.market}
       />
       <NoSSRWalletModal />
+      <ListTokenModal
+        isOpen={isListTokenModalOpen}
+        setIsOpen={setIsListTokenModalOpen}
+      />
     </div>
   )
 }

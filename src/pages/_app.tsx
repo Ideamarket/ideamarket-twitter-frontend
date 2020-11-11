@@ -15,6 +15,8 @@ export const GlobalContext = createContext({
   setIsWalletModalOpen: (val: boolean) => {},
   onWalletConnectedCallback: () => {},
   setOnWalletConnectedCallback: (f: () => void) => {},
+  isListTokenModalOpen: false,
+  setIsListTokenModalOpen: (val: boolean) => {},
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -29,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     onWalletConnectedCallback,
     setOnWalletConnectedCallback,
   ] = useState(() => () => {})
+  const [isListTokenModalOpen, setIsListTokenModalOpen] = useState(false)
 
   return (
     <GlobalContext.Provider
@@ -37,6 +40,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         setIsWalletModalOpen,
         onWalletConnectedCallback,
         setOnWalletConnectedCallback,
+        isListTokenModalOpen,
+        setIsListTokenModalOpen,
       }}
     >
       <Head>
