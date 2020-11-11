@@ -749,6 +749,12 @@
           "internalType": "uint256",
           "name": "platformFeeRate",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "nameVerifier",
+          "type": "address"
         }
       ],
       "name": "NewMarket",
