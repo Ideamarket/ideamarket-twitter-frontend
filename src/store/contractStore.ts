@@ -85,14 +85,3 @@ export function getUniswapPairContract(pairAddress: string) {
     from: web3.eth.defaultAccount,
   })
 }
-
-export function getNameVerifierContract(address: string) {
-  const web3 = useWalletStore.getState().web3
-  return new web3.eth.Contract(
-    DeployedABIsKovan.twitterHandleNameVerifier as any,
-    address,
-    {
-      from: web3.eth.defaultAccount,
-    }
-  )
-}
