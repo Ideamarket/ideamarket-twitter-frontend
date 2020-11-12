@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import Close from '../assets/close.svg'
 
 export default function Modal({
@@ -13,12 +13,17 @@ export default function Modal({
   isOpen: boolean
   close: () => void
 }) {
+  // Disable Scroll
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+  }, [])
+
   if (!isOpen) {
     return <></>
   }
   return (
     <div className={className}>
-      <div className="fixed inset-0 z-10 overflow-y-auto">
+      <div className="fixed inset-0 z-10">
         <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center">
           <Transition
             show={isOpen}
