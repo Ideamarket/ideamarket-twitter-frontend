@@ -52,26 +52,4 @@ export default function buyToken(
   }
 
   return contractCall.send(contractCallOptions)
-
-  /*
-
-  const factory = useContractStore.getState().factoryContract
-  const exchange = useContractStore.getState().exchangeContract
-
-  const amountBN = new BN(amount).mul(new BN('10').pow(new BN('18')))
-  const cost = await exchange.methods
-    .getCostForBuyingTokens(address, amountBN)
-    .call()
-
-  const daiContract = useContractStore.getState().daiContract
-  await daiContract.methods.approve(exchange.options.address, cost).send()
-  await exchange.methods
-    .buyTokens(
-      address,
-      amountBN,
-      amountBN,
-      cost,
-      useWalletStore.getState().address
-    )
-    .send()*/
 }
