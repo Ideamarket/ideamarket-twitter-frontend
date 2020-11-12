@@ -15,8 +15,11 @@ export default function Modal({
 }) {
   // Disable Scroll
   useEffect(() => {
-    document.body.style.overflow = 'hidden'
-  }, [])
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    }
+    return () => (document.body.style.overflow = 'auto')
+  }, [isOpen])
 
   if (!isOpen) {
     return <></>
