@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import Select from 'react-select'
-import { listToken } from 'actions'
-import { queryMarkets } from 'store/ideaMarketsStore'
+import { listToken, verifyTokenName } from 'actions'
+import { queryMarkets, userInputToTokenName } from 'store/ideaMarketsStore'
 
 import { Modal } from './'
 
@@ -45,8 +45,16 @@ export default function ListTokenModal({
     </div>
   )
 
+  async function tokenNameInputChanged(val) {
+    setTokenName(val)
+    const finalTokenName = userInputToTokenName(selectedMarket.name, val)
+    console.log(await verifyTokenName(finalTokenName, selectedMarket.marketID))
+  }
+
   function listClicked() {
-    listToken(tokenName, selectedMarket.marketID)
+    const finalTokenName = userInputToTokenName(selectedMarket.name, tokenName)
+    console.log(finalTokenName, selectedMarket.marketID)
+    listToken(finalTokenName, selectedMarket.marketID)
   }
 
   if (!isOpen) {
@@ -99,7 +107,7 @@ export default function ListTokenModal({
           <input
             className="w-full py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
             onChange={(e) => {
-              setTokenName(e.target.value)
+              tokenNameInputChanged(e.target.value)
             }}
           />
         </div>

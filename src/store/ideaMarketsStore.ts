@@ -384,6 +384,14 @@ export function setIsWatching(token: IdeaToken, watching: boolean): void {
   )
 }
 
+export function userInputToTokenName(marketName: string, userInput: string) {
+  if (marketName === 'Twitter') {
+    return '@' + userInput
+  }
+
+  throw new Error('userInputToTokenName: Unknown market ' + marketName)
+}
+
 function getTokenURL(marketName: string, tokenName: string): string {
   if (marketName === 'TestMarket') {
     return `https://${tokenName}`
