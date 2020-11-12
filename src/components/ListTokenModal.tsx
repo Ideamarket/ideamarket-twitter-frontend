@@ -39,9 +39,9 @@ export default function ListTokenModal({
   const [tokenName, setTokenName] = useState('')
 
   const selectMarketFormat = (entry) => (
-    <div className="flex flex-col items-center">
+    <div className="flex items-center">
       <img className="w-7.5" src="https://youtube.com/favicon.ico" />
-      <div className="text-xs text-brand-gray-2">{entry.market.name}</div>
+      <div className="ml-2.5">{entry.market.name}</div>
     </div>
   )
 
@@ -55,7 +55,7 @@ export default function ListTokenModal({
 
   return (
     <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
-      <div className="p-4 bg-top-mobile">
+      <div className="p-4 bg-top-mobile min-w-100">
         <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
           List Token
         </p>
@@ -92,20 +92,26 @@ export default function ListTokenModal({
           />
         )}
       </div>
-      <div className="mx-5">
-        <input
-          className="w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
-          onChange={(e) => {
-            setTokenName(e.target.value)
-          }}
-        />
+      <p className="mx-5 mt-5 text-sm text-brand-gray-2">Token Name</p>
+      <div className="flex items-center mx-5">
+        <div className="text-base text-brand-gray-2 text-semibold">@</div>
+        <div className="flex-grow ml-0.5">
+          <input
+            className="w-full py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
+            onChange={(e) => {
+              setTokenName(e.target.value)
+            }}
+          />
+        </div>
       </div>
-      <button
-        onClick={listClicked}
-        className="w-32 h-10 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
-      >
-        List Token
-      </button>
+      <div className="flex justify-center mb-5">
+        <button
+          onClick={listClicked}
+          className="w-32 h-10 mt-5 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+        >
+          List Token
+        </button>
+      </div>
     </Modal>
   )
 }
