@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import classNames from 'classnames'
-import { IdeaToken, IdeaMarket } from '../../store/ideaMarketsStore'
-import { useTokenListStore } from '../../store/tokenListStore'
+import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
+import { useTokenListStore } from 'store/tokenListStore'
 import {
   useBalance,
   useOutputAmount,
@@ -9,8 +9,8 @@ import {
   approveToken,
   buyToken,
   sellToken,
-} from '../../actions'
-import { floatToWeb3BN, addresses, NETWORK } from '../../utils'
+} from 'actions'
+import { floatToWeb3BN, addresses, NETWORK } from 'utils'
 
 import Select from 'react-select'
 import { useContractStore } from 'store/contractStore'
@@ -59,12 +59,16 @@ export default function TradeInterface({
   const [isTxPending, setIsTxPending] = useState(false)
 
   let slippage = 0.01
-  const slippageValues = [
-    { value: '0.01', label: '1% max. slippage' },
-    { value: '0.02', label: '2% max. slippage' },
-    { value: '0.03', label: '3% max. slippage' },
-    { value: '0.04', label: '4% max. slippage' },
-    { value: '0.05', label: '5% max. slippage' },
+  type SlippageValue = {
+    value: number
+    label: string
+  }
+  const slippageValues: SlippageValue[] = [
+    { value: 0.01, label: '1% max. slippage' },
+    { value: 0.02, label: '2% max. slippage' },
+    { value: 0.03, label: '3% max. slippage' },
+    { value: 0.04, label: '4% max. slippage' },
+    { value: 0.05, label: '5% max. slippage' },
   ]
 
   useEffect(() => {
@@ -341,8 +345,8 @@ export default function TradeInterface({
               isClearable={false}
               isSearchable={false}
               isDisabled={isTxPending}
-              onChange={(value) => {
-                slippage = value
+              onChange={(option: SlippageValue) => {
+                slippage = option.value
               }}
               options={slippageValues}
               defaultValue={slippageValues[0]}

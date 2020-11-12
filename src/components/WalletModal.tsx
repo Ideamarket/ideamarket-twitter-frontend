@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react'
 import { useWalletStore, setWeb3, unsetWeb3 } from 'store/walletStore'
-import { GlobalContext } from '../pages/_app'
+import { GlobalContext } from 'pages/_app'
 
 import Metamask from '../assets/metamask.svg'
 import WalletConnect from '../assets/walletconnect.svg'
@@ -65,7 +65,15 @@ export default function WalletSelectionModal() {
     unsetWeb3()
   }
 
-  function makeWalletButton(svg: JSX.Element, name: string, wallet: number) {
+  function WalletButton({
+    svg,
+    name,
+    wallet,
+  }: {
+    svg: JSX.Element
+    name: string
+    wallet: number
+  }) {
     return (
       <div className="flex pl-4 pr-4 mt-4">
         <button
@@ -134,31 +142,31 @@ export default function WalletSelectionModal() {
           </p>
         </div>
 
-        {makeWalletButton(
-          <Metamask className="w-8 h-8" />,
-          'Metamask',
-          wallets.WALLETS.METAMASK
-        )}
-        {makeWalletButton(
-          <WalletConnect className="w-8 h-8" />,
-          'WalletConnect',
-          wallets.WALLETS.WALLETCONNECT
-        )}
-        {makeWalletButton(
-          <Coinbase className="w-7 h-7" />,
-          'Coinbase',
-          wallets.WALLETS.COINBASE
-        )}
-        {makeWalletButton(
-          <Fortmatic className="w-7 h-7" />,
-          'Fortmatic',
-          wallets.WALLETS.FORTMATIC
-        )}
-        {/* {makeWalletButton(
-          <Portis className="w-7 h-7" />,
-          'Portis',
-          wallets.WALLETS.PORTIS
-        )} */}
+        <WalletButton
+          svg={<Metamask className="w-8 h-8" />}
+          name="Metamask"
+          wallet={wallets.WALLETS.METAMASK}
+        />
+        <WalletButton
+          svg={<WalletConnect className="w-8 h-8" />}
+          name="WalletConnect"
+          wallet={wallets.WALLETS.WALLETCONNECT}
+        />
+        <WalletButton
+          svg={<Coinbase className="w-7 h-7" />}
+          name="Coinbase"
+          wallet={wallets.WALLETS.COINBASE}
+        />
+        <WalletButton
+          svg={<Fortmatic className="w-7 h-7" />}
+          name="Fortmatic"
+          wallet={wallets.WALLETS.FORTMATIC}
+        />
+        {/* <WalletButton
+          svg={<Portis className="w-7 h-7" />}
+          name="Portis"
+          wallet={wallets.WALLETS.PORTIS}
+        /> */}
 
         <hr className="m-4" />
         <div className="flex flex-row items-center mx-4 mb-4 ">

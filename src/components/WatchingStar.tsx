@@ -4,7 +4,7 @@ import {
   IdeaToken,
   setIsWatching,
   useIdeaMarketsStore,
-} from '../store/ideaMarketsStore'
+} from 'store/ideaMarketsStore'
 
 export default function WatchingStar({ token }: { token: IdeaToken }) {
   const watching = useIdeaMarketsStore((state) => state.watching[token.address])

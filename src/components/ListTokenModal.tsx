@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import Select from 'react-select'
-import { listToken } from '../actions'
-import { queryMarkets } from '../store/ideaMarketsStore'
+import { listToken } from 'actions'
+import { queryMarkets } from 'store/ideaMarketsStore'
 
 import { Modal } from './'
 

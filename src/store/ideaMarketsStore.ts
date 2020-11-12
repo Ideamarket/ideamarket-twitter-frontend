@@ -3,7 +3,7 @@ import produce from 'immer'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { request, gql } from 'graphql-request'
-import { web3BNToFloatString, NETWORK } from '../utils'
+import { web3BNToFloatString, NETWORK } from 'utils'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -173,7 +173,7 @@ export async function queryTokens(
   search: string,
   filterTokens: string[]
 ) {
-  const tokens = <IdeaToken[]>[]
+  const tokens: IdeaToken[] = []
   if (!market) {
     return tokens
   }
@@ -213,7 +213,7 @@ export async function queryTokens(
   for (let i = 0; i < result.length; i++) {
     const token = result[i]
 
-    const newToken = <IdeaToken>{
+    const newToken = {
       address: token.id,
       marketID: market.marketID,
       tokenID: token.tokenID,
@@ -235,7 +235,7 @@ export async function queryTokens(
       listedAt: token.listedAt,
       url: getTokenURL(market.name, token.name),
       iconURL: getTokenIconURL(market.name, token.name),
-    }
+    } as IdeaToken
 
     tokens.push(newToken)
   }
@@ -257,7 +257,7 @@ export async function querySingleToken(queryKey: string, address: string) {
     return undefined
   }
 
-  const res = <IdeaToken>{
+  const res = {
     address: result.ideaToken.id,
     tokenID: result.ideaToken,
     name: result.ideaToken.name,
@@ -293,7 +293,7 @@ export async function querySingleToken(queryKey: string, address: string) {
       result.ideaToken.market.name,
       result.ideaToken.name
     ),
-  }
+  } as IdeaToken
 
   return res
 }
@@ -316,10 +316,10 @@ export async function queryTokenChartData(
     return undefined
   }
 
-  return <IdeaToken>{
+  return {
     latestPricePoint: result.ideaToken.latestPricePoint,
     pricePoints: result.ideaToken.pricePoints,
-  }
+  } as IdeaToken
 }
 
 export async function queryMarketFromTokenAddress(queryKey, address: string) {
@@ -337,7 +337,7 @@ export async function queryMarketFromTokenAddress(queryKey, address: string) {
   }
 
   const market = result.ideaToken.market
-  return <IdeaMarket>{
+  return {
     name: market.name,
     marketID: market.marketID,
     baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
@@ -364,7 +364,7 @@ export async function queryMarketFromTokenAddress(queryKey, address: string) {
     rawPlatformFeeRate: new BN(market.platformFeeRate),
     platformFeeWithdrawer: market.platformFeeWithdrawer,
     nameVerifierAddress: market.nameVerifier,
-  }
+  } as IdeaMarket
 }
 
 export function setIsWatching(token: IdeaToken, watching: boolean): void {

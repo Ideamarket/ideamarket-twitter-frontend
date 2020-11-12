@@ -1,4 +1,4 @@
-import { NETWORK } from '../utils'
+import { NETWORK } from 'utils'
 import TokenListMainnet from '../assets/token-list-mainnet.json'
 import TokenListKovan from '../assets/token-list-kovan.json'
 import create from 'zustand'

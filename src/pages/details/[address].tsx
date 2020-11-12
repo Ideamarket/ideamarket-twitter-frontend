@@ -1,37 +1,34 @@
 import classNames from 'classnames'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import { ReactNode, useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import BigNumber from 'bignumber.js'
-import moment from 'moment'
-import { GlobalContext } from '../_app'
-import { PriceChart, WatchingStar, TradeInterface } from '../../components'
-import { querySupplyRate, queryExchangeRate } from '../../store/compoundStore'
-import { useWalletStore } from '../../store/walletStore'
+import { GlobalContext } from 'pages/_app'
+import { PriceChart, WatchingStar, TradeInterface } from 'components'
+import { querySupplyRate, queryExchangeRate } from 'store/compoundStore'
+import { useWalletStore } from 'store/walletStore'
 import {
   querySingleToken,
   queryTokenChartData,
   queryMarketFromTokenAddress,
-} from '../../store/ideaMarketsStore'
+} from 'store/ideaMarketsStore'
 import {
   toChecksumedAddress,
   isAddress,
   calculateCurrentPriceBN,
   web3BNToFloatString,
   addresses,
-} from '../../utils'
+} from 'utils'
 import ArrowLeft from '../../assets/arrow-left.svg'
+import { DateTime } from 'luxon'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function TokenDetails() {
-  const NoSSRWalletModal = dynamic(
-    () => import('../../components/WalletModal'),
-    {
-      ssr: false,
-    }
-  )
+  const NoSSRWalletModal = dynamic(() => import('components/WalletModal'), {
+    ssr: false,
+  })
 
   const { setIsWalletModalOpen } = useContext(GlobalContext)
   const web3 = useWalletStore((state) => state.web3)
@@ -96,7 +93,7 @@ export default function TokenDetails() {
     )
     finalChartData.push([currentTs, endPrice])
     setChartData(finalChartData)
-  }, [rawChartData])
+  }, [chartFromTs, rawChartData])
 
   const isLoading =
     isTokenLoading ||
@@ -109,7 +106,13 @@ export default function TokenDetails() {
     return <></>
   }
 
-  function makeDetailsEntry(header, content) {
+  function DetailsEntry({
+    header,
+    content,
+  }: {
+    header: ReactNode
+    content: ReactNode
+  }) {
     return (
       <div
         className="text-center rounded-sm"
@@ -121,7 +124,7 @@ export default function TokenDetails() {
     )
   }
 
-  function makeDetailsSkeleton() {
+  function DetailsSkeleton() {
     return (
       <div className="mx-auto bg-gray-400 rounded w-15 animate animate-pulse">
         <span className="invisible">A</span>
@@ -129,7 +132,15 @@ export default function TokenDetails() {
     )
   }
 
-  function makeDetailsOverChartEntry(header, content, withBorder) {
+  function DetailsOverChartEntry({
+    header,
+    content,
+    withBorder,
+  }: {
+    header: ReactNode
+    content: ReactNode
+    withBorder: boolean
+  }) {
     return (
       <div
         className="text-center"
@@ -141,7 +152,13 @@ export default function TokenDetails() {
     )
   }
 
-  function makeChartDurationEntry(durationString, durationSeconds) {
+  function ChartDurationEntry({
+    durationString,
+    durationSeconds,
+  }: {
+    durationString: string
+    durationSeconds: number
+  }) {
     return (
       <a
         onClick={() => {
@@ -160,12 +177,20 @@ export default function TokenDetails() {
     )
   }
 
-  function makeContainerWithHeader(header, content, customClasses?) {
+  function ContainerWithHeader({
+    header,
+    content,
+    customClasses = '',
+  }: {
+    header: ReactNode
+    content: ReactNode
+    customClasses?: string
+  }) {
     return (
       <div
         className={classNames(
           'flex flex-col overflow-hidden rounded-md bg-brand-gray',
-          customClasses ? customClasses : ''
+          customClasses
         )}
       >
         <div
@@ -203,6 +228,7 @@ export default function TokenDetails() {
               className="mx-auto"
               style={{ maxWidth: '40px' }}
               src={token.iconURL}
+              alt="token icon"
             />
           )}
 
@@ -229,6 +255,7 @@ export default function TokenDetails() {
                   src="https://youtube.com/favicon.ico"
                   className="ml-2 mr-1"
                   style={{ maxHeight: '20px' }}
+                  alt="Youtube Favicon"
                 />
                 <div>{market.name}</div>
               </>
@@ -246,111 +273,24 @@ export default function TokenDetails() {
         </div>
 
         <div className="grid grid-cols-1 gap-5 mx-5 mt-5 text-black md:grid-cols-2">
-          {makeContainerWithHeader(
-            'Chart',
-            <>
-              <div
-                className="grid grid-cols-4 p-1 mb-1"
-                style={{
-                  backgroundColor: '#fafafa',
-                  borderBottom: '1px solid #cbd5e0',
-                }}
-              >
-                {makeDetailsOverChartEntry(
-                  'Price',
-                  isLoading
-                    ? makeDetailsSkeleton()
-                    : '$' +
-                        web3BNToFloatString(
-                          calculateCurrentPriceBN(
-                            token.rawSupply,
-                            market.rawBaseCost,
-                            market.rawPriceRise
-                          ),
-                          tenPow18,
-                          2
-                        ),
-                  true
-                )}
-
-                {makeDetailsOverChartEntry(
-                  'Deposits',
-                  isLoading ? (
-                    makeDetailsSkeleton()
-                  ) : parseFloat(token.daiInToken) <= 0.0 ? (
-                    <>&mdash;</>
-                  ) : (
-                    `$${token.daiInToken}`
-                  ),
-                  true
-                )}
-
-                {makeDetailsOverChartEntry(
-                  'Supply',
-                  isLoading ? (
-                    makeDetailsSkeleton()
-                  ) : parseFloat(token.supply) <= 0.0 ? (
-                    <>&mdash;</>
-                  ) : (
-                    `${token.supply}`
-                  ),
-                  true
-                )}
-
-                {makeDetailsOverChartEntry(
-                  'Holders',
-                  isLoading ? makeDetailsSkeleton() : token.holders,
-                  false
-                )}
-              </div>
-              <div style={{ minHeight: '200px' }}>
-                {isLoading || isRawChartDataLoading ? (
-                  <div
-                    className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
-                    style={{
-                      minHeight: '190px',
-                      marginTop: '5px',
-                      marginBottom: '5px',
-                    }}
-                  ></div>
-                ) : (
-                  <PriceChart chartData={chartData} />
-                )}
-              </div>
-              <div
-                className="mt-1"
-                style={{ borderBottom: '1px solid #cbd5e0' }}
-              ></div>
-              <nav
-                className="flex justify-end py-1.5 bg-gray-50"
-                style={{ backgroundColor: '#fafafa' }}
-              >
-                {makeChartDurationEntry('1H', 3600)}
-                {makeChartDurationEntry('1D', 86400)}
-                {makeChartDurationEntry('1W', 604800)}
-                {makeChartDurationEntry('1M', 2628000)}
-                {makeChartDurationEntry('1Y', 31536000)}
-                {makeChartDurationEntry(
-                  'ALL',
-                  Math.floor(Date.now() / 1000) - token.listedAt
-                )}
-              </nav>
-            </>,
-            'md:col-span-2'
-          )}
-
-          {makeContainerWithHeader(
-            'Details',
-            <div className="flex flex-col h-full">
-              <div
-                className="grid w-full grid-cols-3 p-5 border-gray-400 gap-7"
-                style={{ borderBottomWidth: '1px' }}
-              >
-                {makeDetailsEntry(
-                  'Price',
-                  isLoading
-                    ? makeDetailsSkeleton()
-                    : '$' +
+          <ContainerWithHeader
+            header="Chart"
+            content={
+              <>
+                <div
+                  className="grid grid-cols-4 p-1 mb-1"
+                  style={{
+                    backgroundColor: '#fafafa',
+                    borderBottom: '1px solid #cbd5e0',
+                  }}
+                >
+                  <DetailsOverChartEntry
+                    header="Price"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : (
+                        '$' +
                         web3BNToFloatString(
                           calculateCurrentPriceBN(
                             token.rawSupply,
@@ -360,213 +300,359 @@ export default function TokenDetails() {
                           tenPow18,
                           2
                         )
-                )}
+                      )
+                    }
+                    withBorder={true}
+                  />
 
-                {makeDetailsEntry(
-                  'Deposits',
-                  isLoading ? (
-                    makeDetailsSkeleton()
-                  ) : parseFloat(token.daiInToken) <= 0.0 ? (
-                    <>&mdash;</>
-                  ) : (
-                    `$${token.daiInToken}`
-                  )
-                )}
+                  <DetailsOverChartEntry
+                    header="Deposits"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : parseFloat(token.daiInToken) <= 0.0 ? (
+                        <>&mdash;</>
+                      ) : (
+                        `$${token.daiInToken}`
+                      )
+                    }
+                    withBorder={true}
+                  />
 
-                {makeDetailsEntry(
-                  'Supply',
-                  isLoading ? (
-                    makeDetailsSkeleton()
-                  ) : parseFloat(token.supply) <= 0.0 ? (
-                    <>&mdash;</>
-                  ) : (
-                    `${token.supply}`
-                  )
-                )}
+                  <DetailsOverChartEntry
+                    header="Supply"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : parseFloat(token.supply) <= 0.0 ? (
+                        <>&mdash;</>
+                      ) : (
+                        `${token.supply}`
+                      )
+                    }
+                    withBorder={true}
+                  />
 
-                {makeDetailsEntry(
-                  '24H Change',
-                  isLoading ? (
-                    makeDetailsSkeleton()
-                  ) : (
+                  <DetailsOverChartEntry
+                    header="Holders"
+                    content={isLoading ? <DetailsSkeleton /> : token.holders}
+                    withBorder={false}
+                  />
+                </div>
+                <div style={{ minHeight: '200px' }}>
+                  {isLoading || isRawChartDataLoading ? (
                     <div
-                      className={
-                        parseFloat(token.dayChange) >= 0.0
-                          ? 'text-brand-green'
-                          : 'text-brand-red'
-                      }
-                    >
-                      {token.dayChange}%
-                    </div>
-                  )
-                )}
-
-                {makeDetailsEntry(
-                  '24H Volume',
-                  isLoading ? makeDetailsSkeleton() : `$${token.dayVolume}`
-                )}
-
-                {makeDetailsEntry(
-                  '1YR Income',
-                  isLoading
-                    ? makeDetailsSkeleton()
-                    : `$${(
-                        parseFloat(token.daiInToken) * compoundSupplyRate
-                      ).toFixed(2)}`
-                )}
-
-                {makeDetailsEntry(
-                  'Listed at',
-                  isLoading
-                    ? makeDetailsSkeleton()
-                    : moment(token.listedAt * 1000).format('MMM Do YYYY')
-                )}
-
-                {makeDetailsEntry(
-                  'Holders',
-                  isLoading ? makeDetailsSkeleton() : token.holders
-                )}
-
-                {makeDetailsEntry(
-                  'Watch',
-                  isLoading ? (
-                    makeDetailsSkeleton()
+                      className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
+                      style={{
+                        minHeight: '190px',
+                        marginTop: '5px',
+                        marginBottom: '5px',
+                      }}
+                    ></div>
                   ) : (
-                    <div className="flex justify-center mt-1">
-                      <WatchingStar token={token} />
-                    </div>
-                  )
-                )}
-              </div>
-              <div className="flex-grow px-2 mt-5">
-                <span className="text-xl">Description</span>
-                <div className="mt-2.5 mb-5 text-sm italic">
-                  No description provided by token owner.
-                </div>
-              </div>
-              <div className="text-sm text-gray-500">
-                <div
-                  className="px-2 mb-1 border-gray-400"
-                  style={{ borderBottomWidth: '1px' }}
-                >
-                  Token Owner Options
-                </div>
-                <div className="px-1 pb-2 text-xs">
-                  {isLoading ? (
-                    <>
-                      <div className="w-full mx-auto bg-gray-400 rounded animate animate-pulse">
-                        <div className="invisible">
-                          A<br />A
-                        </div>
-                      </div>
-                      <div className="flex justify-center ">
-                        <div className="w-20 py-1 mt-1 text-sm font-medium bg-gray-400 border-2 border-gray-400 rounded animate animate-pulse tracking-tightest-2 font-sf-compact-medium">
-                          <span className="invisible">A</span>
-                        </div>
-                      </div>
-                    </>
-                  ) : token.interestWithdrawer === addresses.ZERO ? (
-                    <>
-                      <div className="italic">
-                        The owner of this token is not yet listed. If this token
-                        represents your account you can get listed as owner of
-                        this token by verifying access to the account. After
-                        successful verification you will be able to withdraw the
-                        accumulated interest.
-                      </div>
-                      <div className="flex justify-center">
-                        <button className="w-20 py-1 mt-2 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
-                          Verify
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="italic">
-                        {!web3 ||
-                        connectedAddress.toLowerCase() !==
-                          token.interestWithdrawer.toLowerCase()
-                          ? `The owner of this token is listed as ${token.interestWithdrawer.slice(
-                              0,
-                              8
-                            )}...${token.interestWithdrawer.slice(
-                              -6
-                            )}. This address does not match the wallet you have connected. If you are the owner of this token please connect the correct wallet to be able to withdraw interest.`
-                          : 'Your connected wallet is listed as owner of this token. You are able to withdraw the accumulated interest below.'}
-                      </div>
-                      <div className="italic mt-2.5">
-                        Available interest:{' '}
-                        {web3BNToFloatString(
-                          token.rawInvested
-                            .mul(compoundExchangeRate)
-                            .sub(token.rawDaiInToken),
-                          new BigNumber('10').exponentiatedBy('36'),
-                          2
-                        )}{' '}
-                        DAI
-                      </div>
-                      <div className="flex justify-center">
-                        <button
-                          disabled={
-                            !web3 ||
-                            connectedAddress.toLowerCase() !==
-                              token.interestWithdrawer.toLowerCase()
-                          }
-                          className={classNames(
-                            'w-20 py-1 ml-5 text-sm font-medium bg-white border-2 rounded-lg  tracking-tightest-2 font-sf-compact-medium',
-                            !web3 ||
-                              connectedAddress.toLowerCase() !==
-                                token.interestWithdrawer.toLowerCase()
-                              ? 'cursor-default'
-                              : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
-                          )}
-                        >
-                          Withdraw
-                        </button>
-                      </div>
-                    </>
+                    <PriceChart chartData={chartData} />
                   )}
                 </div>
-              </div>
-            </div>
-          )}
-
-          {makeContainerWithHeader(
-            'Trade',
-            isLoading ? (
-              <div
-                className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
-                style={{
-                  minHeight: '518px',
-                  marginTop: '5px',
-                  marginBottom: '5px',
-                }}
-              ></div>
-            ) : web3 ? (
-              <TradeInterface
-                ideaToken={token}
-                market={market}
-                onTradeSuccessful={() => {}}
-                resetOn={false}
-              />
-            ) : (
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  minHeight: '518px',
-                }}
-              >
-                <button
-                  onClick={() => {
-                    setIsWalletModalOpen(true)
-                  }}
-                  className="p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
+                <div
+                  className="mt-1"
+                  style={{ borderBottom: '1px solid #cbd5e0' }}
+                ></div>
+                <nav
+                  className="flex justify-end py-1.5 bg-gray-50"
+                  style={{ backgroundColor: '#fafafa' }}
                 >
-                  Connect wallet to Trade
-                </button>
+                  <ChartDurationEntry
+                    durationString="1H"
+                    durationSeconds={3600}
+                  />
+                  <ChartDurationEntry
+                    durationString="1H"
+                    durationSeconds={3600}
+                  />
+                  <ChartDurationEntry
+                    durationString="1D"
+                    durationSeconds={86400}
+                  />
+                  <ChartDurationEntry
+                    durationString="1W"
+                    durationSeconds={604800}
+                  />
+                  <ChartDurationEntry
+                    durationString="1M"
+                    durationSeconds={2628000}
+                  />
+                  <ChartDurationEntry
+                    durationString="1Y"
+                    durationSeconds={31536000}
+                  />
+                  <ChartDurationEntry
+                    durationString="ALL"
+                    durationSeconds={
+                      Math.floor(Date.now() / 1000) - Number(token.listedAt)
+                    }
+                  />
+                </nav>
+              </>
+            }
+            customClasses="md:col-span-2"
+          />
+
+          <ContainerWithHeader
+            header="Details"
+            content={
+              <div className="flex flex-col h-full">
+                <div
+                  className="grid w-full grid-cols-3 p-5 border-gray-400 gap-7"
+                  style={{ borderBottomWidth: '1px' }}
+                >
+                  <DetailsEntry
+                    header="Price"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : (
+                        '$' +
+                        web3BNToFloatString(
+                          calculateCurrentPriceBN(
+                            token.rawSupply,
+                            market.rawBaseCost,
+                            market.rawPriceRise
+                          ),
+                          tenPow18,
+                          2
+                        )
+                      )
+                    }
+                  />
+
+                  <DetailsEntry
+                    header="Deposits"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : parseFloat(token.daiInToken) <= 0.0 ? (
+                        <>&mdash;</>
+                      ) : (
+                        `$${token.daiInToken}`
+                      )
+                    }
+                  />
+
+                  <DetailsEntry
+                    header="Supply"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : parseFloat(token.supply) <= 0.0 ? (
+                        <>&mdash;</>
+                      ) : (
+                        `${token.supply}`
+                      )
+                    }
+                  />
+
+                  <DetailsEntry
+                    header="24H Change"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : (
+                        <div
+                          className={
+                            parseFloat(token.dayChange) >= 0.0
+                              ? 'text-brand-green'
+                              : 'text-brand-red'
+                          }
+                        >
+                          {token.dayChange}%
+                        </div>
+                      )
+                    }
+                  />
+
+                  <DetailsEntry
+                    header="24H Volume"
+                    content={
+                      isLoading ? <DetailsSkeleton /> : `$${token.dayVolume}`
+                    }
+                  />
+
+                  <DetailsEntry
+                    header="1YR Income"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : (
+                        `$${(
+                          parseFloat(token.daiInToken) * compoundSupplyRate
+                        ).toFixed(2)}`
+                      )
+                    }
+                  />
+
+                  <DetailsEntry
+                    header={'Listed at'}
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : (
+                        DateTime.fromSeconds(Number(token.listedAt)).toFormat(
+                          'MMM dd yyyy'
+                        )
+                      )
+                    }
+                  />
+
+                  <DetailsEntry
+                    header="Holders"
+                    content={isLoading ? <DetailsSkeleton /> : token.holders}
+                  />
+
+                  <DetailsEntry
+                    header="Watch"
+                    content={
+                      isLoading ? (
+                        <DetailsSkeleton />
+                      ) : (
+                        <div className="flex justify-center mt-1">
+                          <WatchingStar token={token} />
+                        </div>
+                      )
+                    }
+                  />
+                </div>
+                <div className="flex-grow px-2 mt-5">
+                  <span className="text-xl">Description</span>
+                  <div className="mt-2.5 mb-5 text-sm italic">
+                    No description provided by token owner.
+                  </div>
+                </div>
+                <div className="text-sm text-gray-500">
+                  <div
+                    className="px-2 mb-1 border-gray-400"
+                    style={{ borderBottomWidth: '1px' }}
+                  >
+                    Token Owner Options
+                  </div>
+                  <div className="px-1 pb-2 text-xs">
+                    {isLoading ? (
+                      <>
+                        <div className="w-full mx-auto bg-gray-400 rounded animate animate-pulse">
+                          <div className="invisible">
+                            A<br />A
+                          </div>
+                        </div>
+                        <div className="flex justify-center ">
+                          <div className="w-20 py-1 mt-1 text-sm font-medium bg-gray-400 border-2 border-gray-400 rounded animate animate-pulse tracking-tightest-2 font-sf-compact-medium">
+                            <span className="invisible">A</span>
+                          </div>
+                        </div>
+                      </>
+                    ) : token.interestWithdrawer === addresses.ZERO ? (
+                      <>
+                        <div className="italic">
+                          The owner of this token is not yet listed. If this
+                          token represents your account you can get listed as
+                          owner of this token by verifying access to the
+                          account. After successful verification you will be
+                          able to withdraw the accumulated interest.
+                        </div>
+                        <div className="flex justify-center">
+                          <button className="w-20 py-1 mt-2 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
+                            Verify
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="italic">
+                          {!web3 ||
+                          connectedAddress.toLowerCase() !==
+                            token.interestWithdrawer.toLowerCase()
+                            ? `The owner of this token is listed as ${token.interestWithdrawer.slice(
+                                0,
+                                8
+                              )}...${token.interestWithdrawer.slice(
+                                -6
+                              )}. This address does not match the wallet you have connected. If you are the owner of this token please connect the correct wallet to be able to withdraw interest.`
+                            : 'Your connected wallet is listed as owner of this token. You are able to withdraw the accumulated interest below.'}
+                        </div>
+                        <div className="italic mt-2.5">
+                          Available interest:{' '}
+                          {web3BNToFloatString(
+                            token.rawInvested
+                              .mul(compoundExchangeRate)
+                              .sub(token.rawDaiInToken),
+                            new BigNumber('10').exponentiatedBy('36'),
+                            2
+                          )}{' '}
+                          DAI
+                        </div>
+                        <div className="flex justify-center">
+                          <button
+                            disabled={
+                              !web3 ||
+                              connectedAddress.toLowerCase() !==
+                                token.interestWithdrawer.toLowerCase()
+                            }
+                            className={classNames(
+                              'w-20 py-1 ml-5 text-sm font-medium bg-white border-2 rounded-lg  tracking-tightest-2 font-sf-compact-medium',
+                              !web3 ||
+                                connectedAddress.toLowerCase() !==
+                                  token.interestWithdrawer.toLowerCase()
+                                ? 'cursor-default'
+                                : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
+                            )}
+                          >
+                            Withdraw
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
-            )
-          )}
+            }
+          />
+
+          <ContainerWithHeader
+            header="Trade"
+            content={
+              isLoading ? (
+                <div
+                  className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
+                  style={{
+                    minHeight: '518px',
+                    marginTop: '5px',
+                    marginBottom: '5px',
+                  }}
+                ></div>
+              ) : web3 ? (
+                <TradeInterface
+                  ideaToken={token}
+                  market={market}
+                  onTradeSuccessful={() => {}}
+                  resetOn={false}
+                />
+              ) : (
+                <div
+                  className="flex items-center justify-center"
+                  style={{
+                    minHeight: '518px',
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      setIsWalletModalOpen(true)
+                    }}
+                    className="p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
+                  >
+                    Connect wallet to Trade
+                  </button>
+                </div>
+              )
+            }
+          />
         </div>
       </div>
       <NoSSRWalletModal />

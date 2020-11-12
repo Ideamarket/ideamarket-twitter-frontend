@@ -1,5 +1,5 @@
-import { IdeaToken, IdeaMarket } from '../../store/ideaMarketsStore'
-import { Modal, TradeInterface } from '..'
+import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
+import { Modal, TradeInterface } from 'components'
 
 export default function TradeModal({
   isOpen,
