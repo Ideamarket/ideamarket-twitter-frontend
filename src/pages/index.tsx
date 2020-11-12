@@ -24,7 +24,7 @@ export default function Home() {
   })
 
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
-  const [selectedMarketName, setSelectedMarketName] = useState('TestMarket')
+  const [selectedMarketName, setSelectedMarketName] = useState('Twitter')
   const [nameSearch, setNameSearch] = useState('')
   const {
     setIsWalletModalOpen,
