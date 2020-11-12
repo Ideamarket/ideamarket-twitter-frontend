@@ -131,47 +131,10 @@ export default function Home() {
       </div>
 
       <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 md:-translate-y-28 font-sf-compact-medium">
-        <div className="grid grid-cols-2 md:grid-cols-5">
+        <div className="grid grid-cols-1 md:grid-cols-5">
           <div
             className={classNames(
-              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tl-xlg border-2 md:border-b-0',
-              selectedMarketName === 'TestMarket' &&
-                'bg-white text-very-dark-blue'
-            )}
-            onClick={() => {
-              setSelectedMarketName('TestMarket')
-            }}
-          >
-            <div>
-              {selectedMarketName === 'TestMarket' ? (
-                <YouTubeBlack className="h-5" />
-              ) : (
-                <YouTube className="h-5" />
-              )}
-            </div>
-            <p className="text-lg leading-none">YouTube</p>
-          </div>
-          <div
-            className={classNames(
-              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
-              selectedMarketName === 'Medium' && 'bg-white text-very-dark-blue'
-            )}
-            onClick={() => {
-              setSelectedMarketName('Medium')
-            }}
-          >
-            <div>
-              {selectedMarketName === 'Medium' ? (
-                <MediumBlack className="h-5" />
-              ) : (
-                <Medium className="h-5" />
-              )}
-            </div>
-            <p className="text-lg leading-none">Medium</p>
-          </div>
-          <div
-            className={classNames(
-              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0',
+              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tl-xlg rounded-tr-xlg md:rounded-tr-none border-2 md:border-r-0 md:border-b-0',
               selectedMarketName === 'Twitter' && 'bg-white text-very-dark-blue'
             )}
             onClick={() => {
@@ -189,28 +152,23 @@ export default function Home() {
           </div>
           <div
             className={classNames(
-              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 ',
+              'hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
+              selectedMarketName === 'Medium' && 'bg-white text-very-dark-blue'
+            )}
+          ></div>
+          <div
+            className={classNames(
+              'hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0',
+              selectedMarketName === 'Youtube' && 'bg-white text-very-dark-blue'
+            )}
+          ></div>
+          <div
+            className={classNames(
+              'hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 ',
               selectedMarketName === 'Patreon' && 'bg-white text-very-dark-blue'
             )}
-            onClick={() => {
-              setSelectedMarketName('Patreon')
-            }}
-          >
-            <div>
-              {selectedMarketName === 'Patreon' ? (
-                <PatreonBlack className="h-5" />
-              ) : (
-                <Patreon className="h-5" />
-              )}
-            </div>
-            <p className="text-lg leading-none">Patreon</p>
-          </div>
-          <div className="flex md:justify-center items-center p-5 space-x-2.5 text-white border-l-2 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 md:rounded-tr-xlg">
-            <div>
-              <More className="h-5" />
-            </div>
-            <p className="text-lg leading-none">More</p>
-          </div>
+          ></div>
+          <div className="hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white border-l-2 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 md:rounded-tr-xlg"></div>
           <div className="border-r-2 md:hidden"></div>
         </div>
         <div className="bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">

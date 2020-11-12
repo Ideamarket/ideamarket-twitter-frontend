@@ -225,8 +225,8 @@ export default function TokenDetails() {
             ></div>
           ) : (
             <img
-              className="mx-auto"
-              style={{ maxWidth: '40px' }}
+              className="mx-auto rounded-full"
+              style={{ maxWidth: '80px' }}
               src={token.iconURL}
               alt="token icon"
             />
