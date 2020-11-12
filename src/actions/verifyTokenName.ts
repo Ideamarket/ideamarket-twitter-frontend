@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { useContractStore, getNameVerifierContract } from 'store/contractStore'
 
 export default async function verifyTokenName(name: string, marketID: number) {
@@ -9,8 +8,6 @@ export default async function verifyTokenName(name: string, marketID: number) {
       .call()
   ).nameVerifier
   const nameVerifier = getNameVerifierContract(nameVerifierAddress)
-
-  console.log(nameVerifierAddress, name)
 
   return await nameVerifier.methods.verifyTokenName(name).call()
 }

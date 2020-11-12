@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import Select from 'react-select'
@@ -37,6 +38,7 @@ export default function ListTokenModal({
   }, [markets])
 
   const [tokenName, setTokenName] = useState('')
+  const [isValidTokenName, setIsValidTokenName] = useState(true)
 
   const selectMarketFormat = (entry) => (
     <div className="flex items-center">
@@ -48,12 +50,13 @@ export default function ListTokenModal({
   async function tokenNameInputChanged(val) {
     setTokenName(val)
     const finalTokenName = userInputToTokenName(selectedMarket.name, val)
-    console.log(await verifyTokenName(finalTokenName, selectedMarket.marketID))
+    setIsValidTokenName(
+      await verifyTokenName(finalTokenName, selectedMarket.marketID)
+    )
   }
 
   function listClicked() {
     const finalTokenName = userInputToTokenName(selectedMarket.name, tokenName)
-    console.log(finalTokenName, selectedMarket.marketID)
     listToken(finalTokenName, selectedMarket.marketID)
   }
 
@@ -105,7 +108,12 @@ export default function ListTokenModal({
         <div className="text-base text-brand-gray-2 text-semibold">@</div>
         <div className="flex-grow ml-0.5">
           <input
-            className="w-full py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
+            className={classNames(
+              'w-full py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 rounded appearance-none focus:bg-white focus:outline-none',
+              !isValidTokenName && tokenName.length > 0
+                ? 'border-brand-red focus:border-brand-red'
+                : 'border-gray-200 focus:border-brand-blue'
+            )}
             onChange={(e) => {
               tokenNameInputChanged(e.target.value)
             }}
@@ -114,8 +122,14 @@ export default function ListTokenModal({
       </div>
       <div className="flex justify-center mb-5">
         <button
+          disabled={!isValidTokenName}
           onClick={listClicked}
-          className="w-32 h-10 mt-5 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+          className={classNames(
+            'w-32 h-10 mt-5 text-base font-medium bg-white border-2 rounded-lg  text-brand-blue  tracking-tightest-2 font-sf-compact-medium',
+            isValidTokenName
+              ? 'border-brand-blue hover:bg-brand-blue hover:text-white'
+              : 'border-brand-gray-2 text-brand-gray-2 cursor-default'
+          )}
         >
           List Token
         </button>
