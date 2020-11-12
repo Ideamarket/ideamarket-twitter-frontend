@@ -5,6 +5,8 @@ import BigNumber from 'bignumber.js'
 import { request, gql } from 'graphql-request'
 import { web3BNToFloatString, NETWORK } from 'utils'
 
+import TwitterBlack from '../assets/twitter-black.svg'
+
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -384,6 +386,14 @@ export function setIsWatching(token: IdeaToken, watching: boolean): void {
   )
 }
 
+export function getMarketSVGBlack(marketName) {
+  if (marketName === 'Twitter') {
+    return <TwitterBlack />
+  }
+
+  throw new Error('getMarketSVGBlack: Unknown market ' + marketName)
+}
+
 export function userInputToTokenName(marketName: string, userInput: string) {
   if (marketName === 'Twitter') {
     return '@' + userInput
@@ -395,17 +405,17 @@ export function userInputToTokenName(marketName: string, userInput: string) {
 function getTokenURL(marketName: string, tokenName: string): string {
   if (marketName === 'Twitter') {
     return `https://twitter.com/${tokenName.slice(1)}`
-  } else {
-    return ''
   }
+
+  throw new Error('getTokenURL: Unknown market ' + marketName)
 }
 
 function getTokenIconURL(marketName: string, tokenName: string): string {
   if (marketName === 'Twitter') {
     return `https://unavatar.now.sh/twitter/${tokenName.slice(1)}`
-  } else {
-    return ''
   }
+
+  throw new Error('getTokenIconURL: Unknown market ' + marketName)
 }
 
 function getQueryMarkets() {

@@ -12,6 +12,7 @@ import {
   querySingleToken,
   queryTokenChartData,
   queryMarketFromTokenAddress,
+  getMarketSVGBlack,
 } from 'store/ideaMarketsStore'
 import {
   toChecksumedAddress,
@@ -251,12 +252,9 @@ export default function TokenDetails() {
             ) : (
               <>
                 <div>on</div>
-                <img
-                  src="https://youtube.com/favicon.ico"
-                  className="ml-2 mr-1"
-                  style={{ maxHeight: '20px' }}
-                  alt="Youtube Favicon"
-                />
+                <div className="ml-2.5 mr-1">
+                  {getMarketSVGBlack(market.name)}
+                </div>
                 <div>{market.name}</div>
               </>
             )}
