@@ -1319,5 +1319,16 @@
       "stateMutability": "nonpayable",
       "type": "function"
     }
+  ],
+  "twitterHandleNameVerifier": [
+    {
+      "inputs": [
+        { "internalType": "string", "name": "name", "type": "string" }
+      ],
+      "name": "verifyTokenName",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "pure",
+      "type": "function"
+    }
   ]
 }
