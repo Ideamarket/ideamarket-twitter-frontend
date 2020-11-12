@@ -393,16 +393,16 @@ export function userInputToTokenName(marketName: string, userInput: string) {
 }
 
 function getTokenURL(marketName: string, tokenName: string): string {
-  if (marketName === 'TestMarket') {
-    return `https://${tokenName}`
+  if (marketName === 'Twitter') {
+    return `https://twitter.com/${tokenName.slice(1)}`
   } else {
     return ''
   }
 }
 
 function getTokenIconURL(marketName: string, tokenName: string): string {
-  if (marketName === 'TestMarket') {
-    return `https://${tokenName}/favicon.ico`
+  if (marketName === 'Twitter') {
+    return `https://unavatar.now.sh/twitter/${tokenName.slice(1)}`
   } else {
     return ''
   }
