@@ -40,43 +40,41 @@ export default function Nav() {
   return (
     <>
       <nav className="fixed top-0 z-20 w-full shadow bg-top-desktop">
-        <div className="px-4 mx-auto max-w-7xl md:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center flex-1">
-              <div
-                className="flex items-center flex-shrink-0 cursor-pointer"
-                onClick={() => router.push('/')}
-              >
-                <img
-                  className="block w-auto h-8"
-                  src="/logo.png"
-                  alt="Workflow logo"
-                />
+        <div className="px-4 mx-auto md:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div
+              className="flex items-center flex-shrink-0 cursor-pointer"
+              onClick={() => router.push('/')}
+            >
+              <img
+                className="block w-auto h-8"
+                src="/logo.png"
+                alt="Workflow logo"
+              />
 
-                <span className="w-auto h-full text-2xl leading-none text-white md:text-3xl font-gilroy-bold">
-                  IdeaMarkets
-                </span>
-              </div>
+              <span className="w-auto h-full text-2xl leading-none text-white md:text-3xl font-gilroy-bold">
+                IdeaMarkets
+              </span>
+            </div>
 
-              <div className="hidden md:flex md:flex-1 md:justify-center">
-                {menuItems.map((menuItem) => (
-                  <a
-                    key={menuItem.value}
-                    onClick={() => {
-                      menuItem.onClick()
-                      closeMenu()
-                    }}
-                    className={classNames(
-                      'cursor-pointer inline-flex items-center px-1 ml-8 text-lg font-medium leading-5 tracking-tighter transition duration-150 ease-in-out focus:outline-none focus:text-gray-700 focus:border-gray-300',
-                      menuItem.isSelected
-                        ? 'text-white'
-                        : 'text-brand-gray text-opacity-60 hover:text-brand-gray-2'
-                    )}
-                  >
-                    {menuItem.name}
-                  </a>
-                ))}
-              </div>
+            <div className="fixed hidden w-full -ml-4 space-x-8 text-center px-68 md:inline md:-ml-6 lg:-ml-8">
+              {menuItems.map((menuItem) => (
+                <a
+                  key={menuItem.value}
+                  onClick={() => {
+                    menuItem.onClick()
+                    closeMenu()
+                  }}
+                  className={classNames(
+                    'cursor-pointer inline-flex items-center px-1 text-lg font-medium leading-5 tracking-tighter transition duration-150 ease-in-out focus:outline-none focus:text-gray-700 focus:border-gray-300',
+                    menuItem.isSelected
+                      ? 'text-white'
+                      : 'text-brand-gray text-opacity-60 hover:text-brand-gray-2'
+                  )}
+                >
+                  {menuItem.name}
+                </a>
+              ))}
             </div>
             <div className="hidden md:ml-6 md:flex md:items-center">
               <WalletStatus openModal={() => setIsWalletModalOpen(true)} />
