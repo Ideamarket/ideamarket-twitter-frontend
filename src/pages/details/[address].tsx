@@ -239,7 +239,7 @@ export default function TokenDetails() {
                 <span className="invisible">A</span>
               </div>
             ) : (
-              token.name.toUpperCase()
+              token.name
             )}
           </div>
 
