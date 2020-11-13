@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import Select from 'react-select'
 import { listToken, verifyTokenName } from 'actions'
-import { queryMarkets, userInputToTokenName } from 'store/ideaMarketsStore'
+import {
+  queryMarkets,
+  userInputToTokenName,
+  getMarketSVGBlack,
+} from 'store/ideaMarketsStore'
 import { NETWORK } from 'utils'
 import { Modal } from './'
 
@@ -45,7 +49,7 @@ export default function ListTokenModal({
 
   const selectMarketFormat = (entry) => (
     <div className="flex items-center">
-      <img className="w-7.5" src="https://youtube.com/favicon.ico" />
+      <div>{selectedMarket ? getMarketSVGBlack(selectedMarket.name) : ''}</div>
       <div className="ml-2.5">{entry.market.name}</div>
     </div>
   )
@@ -100,7 +104,7 @@ export default function ListTokenModal({
             isClearable={false}
             isSearchable={false}
             onChange={(value) => {
-              setSelectedMarket(value.token)
+              setSelectedMarket(value.market)
             }}
             options={selectMarketValues}
             formatOptionLabel={selectMarketFormat}

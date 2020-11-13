@@ -364,10 +364,6 @@ export default function TokenDetails() {
                     durationSeconds={3600}
                   />
                   <ChartDurationEntry
-                    durationString="1H"
-                    durationSeconds={3600}
-                  />
-                  <ChartDurationEntry
                     durationString="1D"
                     durationSeconds={86400}
                   />
