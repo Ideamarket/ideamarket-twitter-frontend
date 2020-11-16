@@ -48,7 +48,11 @@ export default function MyTokens() {
           {isOwnedTokensLoading
             ? 'loading...'
             : ownedTokens.map((pair) => (
-                <TokenCard token={pair.token} market={pair.market} />
+                <TokenCard
+                  key={pair.token.address}
+                  token={pair.token}
+                  market={pair.market}
+                />
               ))}
         </div>
 
