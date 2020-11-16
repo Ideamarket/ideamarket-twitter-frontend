@@ -1,15 +1,10 @@
 import classNames from 'classnames'
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
-import Select from 'react-select'
 import { listToken, verifyTokenName } from 'actions'
-import {
-  queryMarkets,
-  userInputToTokenName,
-  getMarketSVGBlack,
-} from 'store/ideaMarketsStore'
+import { queryMarkets, userInputToTokenName } from 'store/ideaMarketsStore'
 import { NETWORK } from 'utils'
-import { Modal } from './'
+import { Modal, MarketSelect } from './'
 
 export default function ListTokenModal({
   isOpen,
@@ -46,13 +41,6 @@ export default function ListTokenModal({
 
   const [tokenName, setTokenName] = useState('')
   const [isValidTokenName, setIsValidTokenName] = useState(true)
-
-  const selectMarketFormat = (entry) => (
-    <div className="flex items-center">
-      <div>{selectedMarket ? getMarketSVGBlack(selectedMarket.name) : ''}</div>
-      <div className="ml-2.5">{entry.market.name}</div>
-    </div>
-  )
 
   async function tokenNameInputChanged(val) {
     setTokenName(val)
@@ -100,30 +88,12 @@ export default function ListTokenModal({
         {isMarketsLoading ? (
           ''
         ) : (
-          <Select
-            isClearable={false}
-            isSearchable={false}
+          <MarketSelect
             onChange={(value) => {
               setSelectedMarket(value.market)
             }}
             options={selectMarketValues}
-            formatOptionLabel={selectMarketFormat}
             defaultValue={selectMarketValues[0]}
-            theme={(theme) => ({
-              ...theme,
-              borderRadius: 2,
-              colors: {
-                ...theme.colors,
-                primary25: '#f6f6f6', // brand-gray
-                primary: '#0857e0', // brand-blue
-              },
-            })}
-            styles={{
-              valueContainer: (provided) => ({
-                ...provided,
-                minHeight: '50px',
-              }),
-            }}
           />
         )}
       </div>
