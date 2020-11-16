@@ -21,12 +21,11 @@ export default function TokenCard({
   return (
     <div
       className={classNames(
-        'p-5 border-gray-400 rounded text-brand-gray-2 border',
-        enabled &&
-          'hover:shadow-xl hover:border-brand-blue hover:border-2 cursor-pointer'
+        'border-gray-400 rounded text-brand-gray-2 border',
+        enabled && 'hover:shadow-xl hover:border-very-dark-blue cursor-pointer'
       )}
     >
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-5">
         {isLoading ? (
           <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
         ) : (
@@ -60,8 +59,8 @@ export default function TokenCard({
           </>
         )}
       </div>
-      <div className="text-3xl mt-7.5 text-center flex justify-center">
-        <div className="text-brand-gray-2">
+      <div className="text-3xl mt-7.5 text-center flex justify-center bg-very-dark-blue py-5 text-gray-300">
+        <div>
           {'$' +
             web3BNToFloatString(
               calculateCurrentPriceBN(
@@ -80,10 +79,15 @@ export default function TokenCard({
                 : 'text-brand-green'
             )}
           >
-            {token.dayChange}%
+            {(parseInt(token.dayChange) >= 0.0 ? '+' : '') + token.dayChange}%
           </span>
           )
         </div>
+      </div>
+      <div className="mt-5">
+        <br />
+        <br />
+        <br />
       </div>
     </div>
   )
