@@ -1,5 +1,6 @@
-import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
+import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
+import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSVGBlack } from '../../store/ideaMarketsStore'
 
 import { calculateCurrentPriceBN, web3BNToFloatString } from '../../utils'
@@ -63,7 +64,17 @@ export default function TokenCard({
               tenPow18,
               2
             )}
-          &nbsp;(<span className="text-brand-green">5.12%</span>)
+          &nbsp;(
+          <span
+            className={classNames(
+              parseFloat(token.dayChange) < 0
+                ? 'text-brand-red'
+                : 'text-brand-green'
+            )}
+          >
+            {token.dayChange}%
+          </span>
+          )
         </div>
       </div>
     </div>
