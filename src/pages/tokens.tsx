@@ -2,10 +2,7 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { MarketSelect, TokenCard } from '../components'
 import { useWalletStore } from '../store/walletStore'
-import {
-  queryOwnedTokensMaybeMarket,
-  queryTokens,
-} from '../store/ideaMarketsStore'
+import { queryOwnedTokensMaybeMarket } from '../store/ideaMarketsStore'
 
 export default function MyTokens() {
   const address = useWalletStore((state) => state.address)
@@ -28,14 +25,11 @@ export default function MyTokens() {
           borderRightWidth: '1px',
         }}
       >
-        <div
-          className="flex items-center mx-5 border-gray-400"
-          style={{ borderBottomWidth: '1px' }}
-        >
-          <div className="flex-grow text-3xl text-brand-gray-2">
+        <div className="flex items-center mx-5 border-gray-400 pb-2.5 border-b">
+          <div className="flex-grow text-2xl sm:text-3xl text-brand-gray-2">
             Tokens I Own
           </div>
-          <div className="p-2.5 pr-0" style={{ minWidth: '300px' }}>
+          <div className="w-48 pr-0 md:w-64">
             <MarketSelect
               onChange={(value) => {
                 setSelectedMarketOwnedTokens(value.market)
@@ -44,7 +38,7 @@ export default function MyTokens() {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 mx-5 mt-5">
+        <div className="grid grid-cols-1 gap-2 mx-5 mt-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {isOwnedTokensLoading
             ? 'loading...'
             : ownedTokens.map((pair) => (
@@ -52,16 +46,16 @@ export default function MyTokens() {
                   key={pair.token.address}
                   token={pair.token}
                   market={pair.market}
+                  enabled={true}
                 />
               ))}
         </div>
 
-        <div
-          className="flex items-center mx-5 mt-10 border-gray-400"
-          style={{ borderBottomWidth: '1px' }}
-        >
-          <div className="flex-grow text-3xl text-brand-gray-2">My Tokens</div>
-          <div className="p-2.5 pr-0" style={{ minWidth: '300px' }}>
+        <div className="flex items-center mx-5 border-gray-400 pb-2.5 border-b mt-10">
+          <div className="flex-grow text-2xl sm:text-3xl text-brand-gray-2">
+            My Tokens
+          </div>
+          <div className="w-48 pr-0 md:w-64">
             <MarketSelect
               onChange={(value) => {
                 setSelectedMarketOwnedTokens(value.market)
