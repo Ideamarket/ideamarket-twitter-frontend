@@ -25,12 +25,6 @@ export default function Nav() {
       isSelected: router.pathname === '/tokens',
     },
     {
-      name: 'My Wallet',
-      value: 'my-wallet',
-      onClick: () => router.push('/wallet'),
-      isSelected: router.pathname === '/wallet',
-    },
-    {
       name: 'Launch Token',
       value: 'launch-token',
       onClick: () => router.push('/launch'),
