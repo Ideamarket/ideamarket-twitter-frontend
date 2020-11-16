@@ -1,8 +1,7 @@
 import classNames from 'classnames'
-import { useState, useEffect } from 'react'
-import { useQuery } from 'react-query'
+import { useState } from 'react'
 import { listToken, verifyTokenName } from 'actions'
-import { queryMarkets, userInputToTokenName } from 'store/ideaMarketsStore'
+import { userInputToTokenName } from 'store/ideaMarketsStore'
 import { NETWORK } from 'utils'
 import { Modal, MarketSelect } from './'
 
@@ -13,31 +12,10 @@ export default function ListTokenModal({
   isOpen: boolean
   setIsOpen: (b: boolean) => void
 }) {
-  const { data: markets, isLoading: isMarketsLoading } = useQuery(
-    'all-markets',
-    queryMarkets
-  )
-
-  const [selectMarketValues, setSelectMarketValues] = useState([])
   const [selectedMarket, setSelectedMarket] = useState(undefined)
 
   const [pendingTxHash, setPendingTxHash] = useState('')
   const [isTxPending, setIsTxPending] = useState(false)
-
-  useEffect(() => {
-    if (markets) {
-      setSelectMarketValues(
-        markets.map((market) => ({
-          value: market.marketID.toString(),
-          market: market,
-        }))
-      )
-      setSelectedMarket(markets[0])
-    } else {
-      setSelectMarketValues([])
-      setSelectedMarket(undefined)
-    }
-  }, [markets])
 
   const [tokenName, setTokenName] = useState('')
   const [isValidTokenName, setIsValidTokenName] = useState(true)
@@ -85,17 +63,11 @@ export default function ListTokenModal({
       </div>
       <p className="mx-5 mt-5 text-sm text-brand-gray-2">Market</p>
       <div className="mx-5">
-        {isMarketsLoading ? (
-          ''
-        ) : (
-          <MarketSelect
-            onChange={(value) => {
-              setSelectedMarket(value.market)
-            }}
-            options={selectMarketValues}
-            defaultValue={selectMarketValues[0]}
-          />
-        )}
+        <MarketSelect
+          onChange={(value) => {
+            setSelectedMarket(value.market)
+          }}
+        />
       </div>
       <p className="mx-5 mt-5 text-sm text-brand-gray-2">Token Name</p>
       <div className="flex items-center mx-5">

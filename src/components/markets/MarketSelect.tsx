@@ -1,7 +1,30 @@
+import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import { getMarketSVGBlack } from 'store/ideaMarketsStore'
+import { useQuery } from 'react-query'
+import { queryMarkets } from 'store/ideaMarketsStore'
 
-export default function MarketSelect({ onChange, options, defaultValue }) {
+export default function MarketSelect({ onChange }) {
+  const [selectMarketValues, setSelectMarketValues] = useState([])
+
+  const { data: markets, isLoading: isMarketsLoading } = useQuery(
+    'all-markets',
+    queryMarkets
+  )
+
+  useEffect(() => {
+    if (markets) {
+      setSelectMarketValues(
+        markets.map((market) => ({
+          value: market.marketID.toString(),
+          market: market,
+        }))
+      )
+    } else {
+      setSelectMarketValues([])
+    }
+  }, [markets])
+
   const selectMarketFormat = (entry) => (
     <div className="flex items-center">
       <div>
@@ -16,9 +39,9 @@ export default function MarketSelect({ onChange, options, defaultValue }) {
       isClearable={false}
       isSearchable={false}
       onChange={onChange}
-      options={options}
+      options={selectMarketValues}
       formatOptionLabel={selectMarketFormat}
-      defaultValue={defaultValue}
+      defaultValue={isMarketsLoading ? undefined : selectMarketValues[0]}
       theme={(theme) => ({
         ...theme,
         borderRadius: 2,
