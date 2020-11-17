@@ -91,83 +91,22 @@ export async function initIdeaMarketsStore() {
   })
 }
 
-export async function queryMarkets(queryKey: string) {
+export async function queryMarkets(queryKey: string): Promise<IdeaMarket[]> {
   const result = await request(HTTP_GRAPHQL_ENDPOINT, getQueryMarkets())
-
-  const markets = []
-  for (let i = 0; i < result.ideaMarkets.length; i++) {
-    const market = result.ideaMarkets[i]
-
-    markets.push({
-      name: market.name,
-      marketID: market.marketID,
-      baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
-      rawBaseCost: new BN(market.baseCost),
-      priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
-      rawPriceRise: new BN(market.priceRise),
-      tradingFeeRate: web3BNToFloatString(
-        new BN(market.tradingFeeRate),
-        tenPow2,
-        2
-      ),
-      rawTradingFeeRate: new BN(market.tradingFeeRate),
-      platformFeeInvested: web3BNToFloatString(
-        new BN(market.platformFeeInvested),
-        tenPow18,
-        2
-      ),
-      rawPlatformFeeInvested: new BN(market.platformFeeInvested),
-      platformFeeRate: web3BNToFloatString(
-        new BN(market.platformFeeRate),
-        tenPow2,
-        2
-      ),
-      rawPlatformFeeRate: new BN(market.platformFeeRate),
-      platformFeeWithdrawer: market.platformFeeWithdrawer,
-      nameVerifierAddress: market.nameVerifier,
-    })
-  }
-  return markets
+  return result.ideaMarkets.map((market) => apiResponseToIdeaMarket(market))
 }
 
-export async function queryMarket(queryKey: string, marketName: string) {
+export async function queryMarket(
+  queryKey: string,
+  marketName: string
+): Promise<IdeaMarket> {
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
     getQueryMarket(marketName)
   )
 
   const market = result.ideaMarkets[0]
-
-  const newMarket: IdeaMarket = {
-    name: market.name,
-    marketID: market.marketID,
-    baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
-    rawBaseCost: new BN(market.baseCost),
-    priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
-    rawPriceRise: new BN(market.priceRise),
-    tradingFeeRate: web3BNToFloatString(
-      new BN(market.tradingFeeRate),
-      tenPow2,
-      2
-    ),
-    rawTradingFeeRate: new BN(market.tradingFeeRate),
-    platformFeeInvested: web3BNToFloatString(
-      new BN(market.platformFeeInvested),
-      tenPow18,
-      2
-    ),
-    rawPlatformFeeInvested: new BN(market.platformFeeInvested),
-    platformFeeRate: web3BNToFloatString(
-      new BN(market.platformFeeRate),
-      tenPow2,
-      2
-    ),
-    rawPlatformFeeRate: new BN(market.platformFeeRate),
-    platformFeeWithdrawer: market.platformFeeWithdrawer,
-    nameVerifierAddress: market.nameVerifier,
-  }
-
-  return newMarket
+  return apiResponseToIdeaMarket(market)
 }
 
 export async function queryOwnedTokensMaybeMarket(
@@ -180,64 +119,13 @@ export async function queryOwnedTokensMaybeMarket(
     getQueryOwnedTokensMaybeMarket(market ? market.marketID : undefined, owner)
   )
 
-  const ret = []
-  for (let i = 0; i < result.ideaTokenBalances.length; i++) {
-    const ideaTokenBalance = result.ideaTokenBalances[i]
-    const token = ideaTokenBalance.token
-    const market = ideaTokenBalance.market
-
-    ret.push({
-      token: {
-        address: token.id,
-        marketID: market.marketID,
-        tokenID: token.tokenID,
-        name: token.name,
-        supply: web3BNToFloatString(new BN(token.supply), tenPow18, 2),
-        rawSupply: new BN(token.supply),
-        holders: token.holders,
-        marketCap: web3BNToFloatString(new BN(token.marketCap), tenPow18, 2),
-        rawMarketCap: new BN(token.marketCap),
-        interestWithdrawer: token.interestWithdrawer,
-        daiInToken: web3BNToFloatString(new BN(token.daiInToken), tenPow18, 2),
-        rawDaiInToken: new BN(token.daiInToken),
-        invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
-        rawInvested: new BN(token.invested),
-        dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
-        listedAt: token.listedAt,
-        url: getTokenURL(market.name, token.name),
-        iconURL: getTokenIconURL(market.name, token.name),
-      } as IdeaToken,
-      market: {
-        name: market.name,
-        marketID: market.marketID,
-        baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
-        rawBaseCost: new BN(market.baseCost),
-        priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
-        rawPriceRise: new BN(market.priceRise),
-        tradingFeeRate: web3BNToFloatString(
-          new BN(market.tradingFeeRate),
-          tenPow2,
-          2
-        ),
-        rawTradingFeeRate: new BN(market.tradingFeeRate),
-        platformFeeInvested: web3BNToFloatString(
-          new BN(market.platformFeeInvested),
-          tenPow18,
-          2
-        ),
-        rawPlatformFeeInvested: new BN(market.platformFeeInvested),
-        platformFeeRate: web3BNToFloatString(
-          new BN(market.platformFeeRate),
-          tenPow2,
-          2
-        ),
-        rawPlatformFeeRate: new BN(market.platformFeeRate),
-        platformFeeWithdrawer: market.platformFeeWithdrawer,
-        nameVerifierAddress: market.nameVerifier,
-      } as IdeaMarket,
-    } as IdeaTokenMarketPair)
-  }
-  return ret
+  return result.ideaTokenBalances.map(
+    (balance) =>
+      ({
+        token: apiResponseToIdeaToken(balance.token, balance.market),
+        market: apiResponseToIdeaMarket(balance.market),
+      } as IdeaTokenMarketPair)
+  )
 }
 
 export async function queryTokensInterestReceiverMaybeMarket(
@@ -253,65 +141,13 @@ export async function queryTokensInterestReceiverMaybeMarket(
     )
   )
 
-  const ret = []
-  for (let i = 0; i < result.ideaTokens.length; i++) {
-    const token = result.ideaTokens[i]
-    const market = token.market
-    //const ideaTokenBalance = result.ideaTokenBalances[i] // todo
-
-    ret.push({
-      token: {
-        address: token.id,
-        marketID: market.marketID,
-        tokenID: token.tokenID,
-        name: token.name,
-        supply: web3BNToFloatString(new BN(token.supply), tenPow18, 2),
-        rawSupply: new BN(token.supply),
-        holders: token.holders,
-        marketCap: web3BNToFloatString(new BN(token.marketCap), tenPow18, 2),
-        rawMarketCap: new BN(token.marketCap),
-        interestWithdrawer: token.interestWithdrawer,
-        daiInToken: web3BNToFloatString(new BN(token.daiInToken), tenPow18, 2),
-        rawDaiInToken: new BN(token.daiInToken),
-        invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
-        rawInvested: new BN(token.invested),
-        dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
-        listedAt: token.listedAt,
-        url: getTokenURL(market.name, token.name),
-        iconURL: getTokenIconURL(market.name, token.name),
-      } as IdeaToken,
-      market: {
-        name: market.name,
-        marketID: market.marketID,
-        baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
-        rawBaseCost: new BN(market.baseCost),
-        priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
-        rawPriceRise: new BN(market.priceRise),
-        tradingFeeRate: web3BNToFloatString(
-          new BN(market.tradingFeeRate),
-          tenPow2,
-          2
-        ),
-        rawTradingFeeRate: new BN(market.tradingFeeRate),
-        platformFeeInvested: web3BNToFloatString(
-          new BN(market.platformFeeInvested),
-          tenPow18,
-          2
-        ),
-        rawPlatformFeeInvested: new BN(market.platformFeeInvested),
-        platformFeeRate: web3BNToFloatString(
-          new BN(market.platformFeeRate),
-          tenPow2,
-          2
-        ),
-        rawPlatformFeeRate: new BN(market.platformFeeRate),
-        platformFeeWithdrawer: market.platformFeeWithdrawer,
-        nameVerifierAddress: market.nameVerifier,
-      } as IdeaMarket,
-    } as IdeaTokenMarketPair)
-  }
-
-  return ret
+  return result.ideaTokens.map(
+    (token) =>
+      ({
+        token: apiResponseToIdeaToken(token, token.market),
+        market: apiResponseToIdeaMarket(token.market),
+      } as IdeaTokenMarketPair)
+  )
 }
 
 export async function queryTokens(
@@ -323,10 +159,9 @@ export async function queryTokens(
   orderDirection: string,
   search: string,
   filterTokens: string[]
-) {
-  const tokens: IdeaToken[] = []
+): Promise<IdeaToken[]> {
   if (!market) {
-    return tokens
+    return []
   }
 
   let result
@@ -361,40 +196,13 @@ export async function queryTokens(
     ).ideaMarkets[0].tokens
   }
 
-  for (let i = 0; i < result.length; i++) {
-    const token = result[i]
-
-    const newToken = {
-      address: token.id,
-      marketID: market.marketID,
-      tokenID: token.tokenID,
-      name: token.name,
-      supply: web3BNToFloatString(new BN(token.supply), tenPow18, 2),
-      rawSupply: new BN(token.supply),
-      holders: token.holders,
-      marketCap: web3BNToFloatString(new BN(token.marketCap), tenPow18, 2),
-      rawMarketCap: new BN(token.marketCap),
-      interestWithdrawer: token.interestWithdrawer,
-      daiInToken: web3BNToFloatString(new BN(token.daiInToken), tenPow18, 2),
-      rawDaiInToken: new BN(token.daiInToken),
-      invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
-      rawInvested: new BN(token.invested),
-      latestPricePoint: token.latestPricePoint,
-      weekPricePoints: token.pricePoints,
-      dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
-      dayVolume: parseFloat(token.dayVolume).toFixed(2),
-      listedAt: token.listedAt,
-      url: getTokenURL(market.name, token.name),
-      iconURL: getTokenIconURL(market.name, token.name),
-    } as IdeaToken
-
-    tokens.push(newToken)
-  }
-
-  return tokens
+  return result.map((token) => apiResponseToIdeaToken(token, market))
 }
 
-export async function querySingleToken(queryKey: string, address: string) {
+export async function querySingleToken(
+  queryKey: string,
+  address: string
+): Promise<IdeaToken> {
   if (!address) {
     return undefined
   }
@@ -408,52 +216,14 @@ export async function querySingleToken(queryKey: string, address: string) {
     return undefined
   }
 
-  const res = {
-    address: result.ideaToken.id,
-    tokenID: result.ideaToken,
-    name: result.ideaToken.name,
-    supply: web3BNToFloatString(new BN(result.ideaToken.supply), tenPow18, 2),
-    rawSupply: new BN(result.ideaToken.supply),
-    holders: result.ideaToken.holders,
-    marketCap: web3BNToFloatString(
-      new BN(result.ideaToken.marketCap),
-      tenPow18,
-      2
-    ),
-    rawMarketCap: new BN(result.ideaToken.marketCap),
-    interestWithdrawer: result.ideaToken.interestWithdrawer,
-    daiInToken: web3BNToFloatString(
-      new BN(result.ideaToken.daiInToken),
-      tenPow18,
-      2
-    ),
-    rawDaiInToken: new BN(result.ideaToken.daiInToken),
-    invested: web3BNToFloatString(
-      new BN(result.ideaToken.invested),
-      tenPow18,
-      2
-    ),
-    rawInvested: new BN(result.ideaToken.invested),
-    latestPricePoint: result.ideaToken.latestPricePoint,
-    weekPricePoints: result.ideaToken.pricePoints,
-    dayChange: (parseFloat(result.ideaToken.dayChange) * 100).toFixed(2),
-    dayVolume: parseFloat(result.ideaToken.dayVolume).toFixed(2),
-    listedAt: result.ideaToken.listedAt,
-    url: getTokenURL(result.ideaToken.market.name, result.ideaToken.name),
-    iconURL: getTokenIconURL(
-      result.ideaToken.market.name,
-      result.ideaToken.name
-    ),
-  } as IdeaToken
-
-  return res
+  return apiResponseToIdeaToken(result.ideaToken)
 }
 
 export async function queryTokenChartData(
   queryKey,
   address: string,
   fromTs: number
-) {
+): Promise<IdeaToken> {
   if (!address) {
     return undefined
   }
@@ -473,7 +243,10 @@ export async function queryTokenChartData(
   } as IdeaToken
 }
 
-export async function queryMarketFromTokenAddress(queryKey, address: string) {
+export async function queryMarketFromTokenAddress(
+  queryKey,
+  address: string
+): Promise<IdeaMarket> {
   if (!address) {
     return undefined
   }
@@ -488,34 +261,7 @@ export async function queryMarketFromTokenAddress(queryKey, address: string) {
   }
 
   const market = result.ideaToken.market
-  return {
-    name: market.name,
-    marketID: market.marketID,
-    baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
-    rawBaseCost: new BN(market.baseCost),
-    priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
-    rawPriceRise: new BN(market.priceRise),
-    tradingFeeRate: web3BNToFloatString(
-      new BN(market.tradingFeeRate),
-      tenPow2,
-      2
-    ),
-    rawTradingFeeRate: new BN(market.tradingFeeRate),
-    platformFeeInvested: web3BNToFloatString(
-      new BN(market.platformFeeInvested),
-      tenPow18,
-      2
-    ),
-    rawPlatformFeeInvested: new BN(market.platformFeeInvested),
-    platformFeeRate: web3BNToFloatString(
-      new BN(market.platformFeeRate),
-      tenPow2,
-      2
-    ),
-    rawPlatformFeeRate: new BN(market.platformFeeRate),
-    platformFeeWithdrawer: market.platformFeeWithdrawer,
-    nameVerifierAddress: market.nameVerifier,
-  } as IdeaMarket
+  return apiResponseToIdeaMarket(market)
 }
 
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
@@ -543,7 +289,10 @@ export function getMarketSVGBlack(marketName) {
   throw new Error('getMarketSVGBlack: Unknown market ' + marketName)
 }
 
-export function userInputToTokenName(marketName: string, userInput: string) {
+export function userInputToTokenName(
+  marketName: string,
+  userInput: string
+): string {
   if (marketName === 'Twitter') {
     return '@' + userInput
   }
@@ -567,7 +316,7 @@ function getTokenIconURL(marketName: string, tokenName: string): string {
   throw new Error('getTokenIconURL: Unknown market ' + marketName)
 }
 
-function getQueryMarkets() {
+function getQueryMarkets(): string {
   return gql`
     {
       ideaMarkets {
@@ -585,7 +334,7 @@ function getQueryMarkets() {
   `
 }
 
-function getQueryMarket(marketName: string) {
+function getQueryMarket(marketName: string): string {
   return gql`{
     ideaMarkets(where:{name:${'"' + marketName + '"'}}) {
       marketID
@@ -608,7 +357,7 @@ function getQueryTokens(
   orderBy: string,
   orderDirection: string,
   filterTokens: string[]
-) {
+): string {
   let filterTokensQuery = ''
   if (filterTokens) {
     filterTokensQuery = ',where:{id_in:['
@@ -655,7 +404,10 @@ function getQueryTokens(
   }`
 }
 
-function getQueryOwnedTokensMaybeMarket(marketID: number, owner: string) {
+function getQueryOwnedTokensMaybeMarket(
+  marketID: number,
+  owner: string
+): string {
   let where
 
   if (marketID) {
@@ -700,7 +452,7 @@ function getQueryOwnedTokensMaybeMarket(marketID: number, owner: string) {
 function getQueryTokensInterestReceiverMaybeMarket(
   marketID: number,
   interestReceiver: string
-) {
+): string {
   let where
 
   if (marketID) {
@@ -747,7 +499,7 @@ function getQueryTokenNameTextSearch(
   orderDirection: string,
   search: string,
   filterTokens: string[]
-) {
+): string {
   const hexMarketID = '0x' + marketID.toString(16)
 
   let filterTokensQuery = ''
@@ -796,7 +548,7 @@ function getQueryTokenNameTextSearch(
   }`
 }
 
-function getQuerySingleToken(address: string) {
+function getQuerySingleToken(address: string): string {
   return gql`
   {
     ideaToken(id:${'"' + address + '"'}) {
@@ -824,7 +576,7 @@ function getQuerySingleToken(address: string) {
   }`
 }
 
-function getQueryTokenChartData(address: string, fromTs: number) {
+function getQueryTokenChartData(address: string, fromTs: number): string {
   return gql`
   {
     ideaToken(id:${'"' + address + '"'}) {
@@ -842,7 +594,7 @@ function getQueryTokenChartData(address: string, fromTs: number) {
   }`
 }
 
-function getQueryMarketFromTokenAddress(address: string) {
+function getQueryMarketFromTokenAddress(address: string): string {
   return gql`
   {
     ideaToken(id:${'"' + address + '"'}) {
@@ -859,4 +611,110 @@ function getQueryMarketFromTokenAddress(address: string) {
       }    
     }
   }`
+}
+
+function apiResponseToIdeaToken(apiResponse, marketApiResponse?): IdeaToken {
+  let market
+  if (apiResponse.market) {
+    market = apiResponse.market
+  } else if (marketApiResponse) {
+    market = marketApiResponse
+  }
+
+  const ret = {
+    address: apiResponse.id,
+    marketID: market?.id,
+    tokenID: apiResponse.tokenID,
+    name: apiResponse.name,
+    supply: apiResponse.supply
+      ? web3BNToFloatString(new BN(apiResponse.supply), tenPow18, 2)
+      : undefined,
+    rawSupply: apiResponse.supply ? new BN(apiResponse.supply) : undefined,
+    holders: apiResponse.holders,
+    marketCap: apiResponse.marketCap
+      ? web3BNToFloatString(new BN(apiResponse.marketCap), tenPow18, 2)
+      : undefined,
+    rawMarketCap: apiResponse.marketCap
+      ? new BN(apiResponse.marketCap)
+      : undefined,
+    interestWithdrawer: apiResponse.interestWithdrawer
+      ? apiResponse.interestWithdrawer
+      : undefined,
+    daiInToken: apiResponse.daiInToken
+      ? web3BNToFloatString(new BN(apiResponse.daiInToken), tenPow18, 2)
+      : undefined,
+    rawDaiInToken: apiResponse.daiInToken
+      ? new BN(apiResponse.daiInToken)
+      : undefined,
+    invested: apiResponse.invested
+      ? web3BNToFloatString(new BN(apiResponse.invested), tenPow18, 2)
+      : undefined,
+    rawInvested: apiResponse.invested
+      ? new BN(apiResponse.invested)
+      : undefined,
+    latestPricePoint: apiResponse.latestPricePoint,
+    weekPricePoints: apiResponse.pricePoints,
+    dayChange: apiResponse.dayChange
+      ? (parseFloat(apiResponse.dayChange) * 100).toFixed(2)
+      : undefined,
+    dayVolume: apiResponse.dayVolume
+      ? parseFloat(apiResponse.dayVolume).toFixed(2)
+      : undefined,
+    listedAt: apiResponse.listedAt,
+    url:
+      market?.name && apiResponse.name
+        ? getTokenURL(market.name, apiResponse.name)
+        : undefined,
+    iconURL:
+      market?.name && apiResponse.name
+        ? getTokenIconURL(market.name, apiResponse.name)
+        : undefined,
+  } as IdeaToken
+
+  return ret
+}
+
+function apiResponseToIdeaMarket(apiResponse): IdeaMarket {
+  const ret = {
+    name: apiResponse.name,
+    marketID: apiResponse.marketID,
+    baseCost: apiResponse.baseCost
+      ? web3BNToFloatString(new BN(apiResponse.baseCost), tenPow18, 2)
+      : undefined,
+    rawBaseCost: apiResponse.baseCost
+      ? new BN(apiResponse.baseCost)
+      : undefined,
+    priceRise: apiResponse.priceRise
+      ? web3BNToFloatString(new BN(apiResponse.priceRise), tenPow18, 4)
+      : undefined,
+    rawPriceRise: apiResponse.priceRise
+      ? new BN(apiResponse.priceRise)
+      : undefined,
+    tradingFeeRate: apiResponse.tradingFeeRate
+      ? web3BNToFloatString(new BN(apiResponse.tradingFeeRate), tenPow2, 2)
+      : undefined,
+    rawTradingFeeRate: apiResponse.tradingFeeRate
+      ? new BN(apiResponse.tradingFeeRate)
+      : undefined,
+    platformFeeInvested: apiResponse.platformFeeInvested
+      ? web3BNToFloatString(
+          new BN(apiResponse.platformFeeInvested),
+          tenPow18,
+          2
+        )
+      : undefined,
+    rawPlatformFeeInvested: apiResponse.platformFeeInvested
+      ? new BN(apiResponse.platformFeeInvested)
+      : undefined,
+    platformFeeRate: apiResponse.platformFeeRate
+      ? web3BNToFloatString(new BN(apiResponse.platformFeeRate), tenPow2, 2)
+      : undefined,
+    rawPlatformFeeRate: apiResponse.platformFeeRate
+      ? new BN(apiResponse.platformFeeRate)
+      : undefined,
+    platformFeeWithdrawer: apiResponse.platformFeeWithdrawer,
+    nameVerifierAddress: apiResponse.nameVerifier,
+  } as IdeaMarket
+
+  return ret
 }

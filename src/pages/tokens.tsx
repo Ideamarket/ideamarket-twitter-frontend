@@ -64,12 +64,12 @@ export default function MyTokens() {
             ? 'loading...'
             : ownedTokens.map((pair) => (
                 <div
+                  key={'owned-' + pair.token.address}
                   onClick={() => {
                     router.push(`/details/${pair.token.address}`)
                   }}
                 >
                   <TokenCard
-                    key={pair.token.address}
                     token={pair.token}
                     market={pair.market}
                     enabled={true}
@@ -96,12 +96,12 @@ export default function MyTokens() {
             ? 'loading...'
             : interestReceiverTokens.map((pair) => (
                 <div
+                  key={'interest-receiver-' + pair.token.address}
                   onClick={() => {
                     router.push(`/details/${pair.token.address}`)
                   }}
                 >
                   <TokenCard
-                    key={pair.token.address}
                     token={pair.token}
                     market={pair.market}
                     enabled={true}
