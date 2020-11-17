@@ -109,17 +109,14 @@ export default function Home() {
             Earn passive income from your community's confidence in you.
           </p>
         </div>
-        <div className="inline-flex flex-col space-y-3 md:flex-row md:space-x-10 md:space-y-0 md:items-center mt-7">
-          <button
-            onClick={() => {
-              onListTokenClicked()
-            }}
-            className="px-4 py-1 text-lg font-bold text-white rounded-lg md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
-          >
-            Launch Your Token
-          </button>
-          <p className="text-lg font-sf-compact-medium">How it Works</p>
-        </div>
+        <button
+          onClick={() => {
+            onListTokenClicked()
+          }}
+          className="mx-auto mt-7 py-2 text-lg font-bold text-white rounded-lg md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+        >
+          Launch Your Token
+        </button>
       </div>
 
       <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 md:-translate-y-28 font-sf-compact-medium">
