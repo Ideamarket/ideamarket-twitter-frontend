@@ -25,10 +25,10 @@ export default function Nav() {
       isSelected: router.pathname === '/tokens',
     },
     {
-      name: 'Launch Token',
-      value: 'launch-token',
-      onClick: () => router.push('/launch'),
-      isSelected: router.pathname === '/launch',
+      name: 'How It Works',
+      value: 'how-it-works',
+      onClick: () => router.push('/help'),
+      isSelected: router.pathname === '/help',
     },
   ]
   return (
