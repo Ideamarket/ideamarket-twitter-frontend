@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import { useRouter } from 'next/router'
 import { MarketSelect, TokenCard } from '../components'
 import { useWalletStore } from '../store/walletStore'
 import {
@@ -8,6 +9,8 @@ import {
 } from '../store/ideaMarketsStore'
 
 export default function MyTokens() {
+  const router = useRouter()
+
   const address = useWalletStore((state) => state.address)
 
   const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] = useState(
@@ -60,13 +63,19 @@ export default function MyTokens() {
           {isOwnedTokensLoading
             ? 'loading...'
             : ownedTokens.map((pair) => (
-                <TokenCard
-                  key={pair.token.address}
-                  token={pair.token}
-                  market={pair.market}
-                  enabled={true}
-                  classes={'bg-brand-gray'}
-                />
+                <div
+                  onClick={() => {
+                    router.push(`/details/${pair.token.address}`)
+                  }}
+                >
+                  <TokenCard
+                    key={pair.token.address}
+                    token={pair.token}
+                    market={pair.market}
+                    enabled={true}
+                    classes={'bg-brand-gray'}
+                  />
+                </div>
               ))}
         </div>
 
@@ -86,13 +95,19 @@ export default function MyTokens() {
           {isInterestReceiverTokensLoading
             ? 'loading...'
             : interestReceiverTokens.map((pair) => (
-                <TokenCard
-                  key={pair.token.address}
-                  token={pair.token}
-                  market={pair.market}
-                  enabled={true}
-                  classes={'bg-brand-gray'}
-                />
+                <div
+                  onClick={() => {
+                    router.push(`/details/${pair.token.address}`)
+                  }}
+                >
+                  <TokenCard
+                    key={pair.token.address}
+                    token={pair.token}
+                    market={pair.market}
+                    enabled={true}
+                    classes={'bg-brand-gray'}
+                  />
+                </div>
               ))}
         </div>
       </div>
