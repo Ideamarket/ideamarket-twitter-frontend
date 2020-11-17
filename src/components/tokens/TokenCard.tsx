@@ -21,7 +21,7 @@ export default function TokenCard({
   return (
     <div
       className={classNames(
-        'border-gray-400 rounded text-brand-gray-2 border',
+        'border-gray-400 rounded text-brand-gray-2 border bg-brand-gray',
         enabled && 'hover:shadow-xl hover:border-very-dark-blue cursor-pointer'
       )}
     >

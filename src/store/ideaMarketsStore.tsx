@@ -240,6 +240,80 @@ export async function queryOwnedTokensMaybeMarket(
   return ret
 }
 
+export async function queryTokensInterestReceiverMaybeMarket(
+  queryKey: string,
+  market: IdeaMarket,
+  interestReceiver: string
+): Promise<IdeaTokenMarketPair[]> {
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryTokensInterestReceiverMaybeMarket(
+      market ? market.marketID : undefined,
+      interestReceiver
+    )
+  )
+
+  const ret = []
+  for (let i = 0; i < result.ideaTokens.length; i++) {
+    const token = result.ideaTokens[i]
+    const market = token.market
+    //const ideaTokenBalance = result.ideaTokenBalances[i] // todo
+
+    ret.push({
+      token: {
+        address: token.id,
+        marketID: market.marketID,
+        tokenID: token.tokenID,
+        name: token.name,
+        supply: web3BNToFloatString(new BN(token.supply), tenPow18, 2),
+        rawSupply: new BN(token.supply),
+        holders: token.holders,
+        marketCap: web3BNToFloatString(new BN(token.marketCap), tenPow18, 2),
+        rawMarketCap: new BN(token.marketCap),
+        interestWithdrawer: token.interestWithdrawer,
+        daiInToken: web3BNToFloatString(new BN(token.daiInToken), tenPow18, 2),
+        rawDaiInToken: new BN(token.daiInToken),
+        invested: web3BNToFloatString(new BN(token.invested), tenPow18, 2),
+        rawInvested: new BN(token.invested),
+        dayChange: (parseFloat(token.dayChange) * 100).toFixed(2),
+        listedAt: token.listedAt,
+        url: getTokenURL(market.name, token.name),
+        iconURL: getTokenIconURL(market.name, token.name),
+      } as IdeaToken,
+      market: {
+        name: market.name,
+        marketID: market.marketID,
+        baseCost: web3BNToFloatString(new BN(market.baseCost), tenPow18, 2),
+        rawBaseCost: new BN(market.baseCost),
+        priceRise: web3BNToFloatString(new BN(market.priceRise), tenPow18, 4),
+        rawPriceRise: new BN(market.priceRise),
+        tradingFeeRate: web3BNToFloatString(
+          new BN(market.tradingFeeRate),
+          tenPow2,
+          2
+        ),
+        rawTradingFeeRate: new BN(market.tradingFeeRate),
+        platformFeeInvested: web3BNToFloatString(
+          new BN(market.platformFeeInvested),
+          tenPow18,
+          2
+        ),
+        rawPlatformFeeInvested: new BN(market.platformFeeInvested),
+        platformFeeRate: web3BNToFloatString(
+          new BN(market.platformFeeRate),
+          tenPow2,
+          2
+        ),
+        rawPlatformFeeRate: new BN(market.platformFeeRate),
+        platformFeeWithdrawer: market.platformFeeWithdrawer,
+        nameVerifierAddress: market.nameVerifier,
+      } as IdeaMarket,
+    } as IdeaTokenMarketPair)
+  }
+
+  return ret
+}
+
 export async function queryTokens(
   queryKey: string,
   market: IdeaMarket,
@@ -586,9 +660,9 @@ function getQueryOwnedTokensMaybeMarket(marketID: number, owner: string) {
 
   if (marketID) {
     const hexMarketID = marketID ? '0x' + marketID.toString(16) : ''
-    where = `where:{holder:"${owner}", amount_gt:0, market:"${hexMarketID}"}`
+    where = `where:{holder:"${owner.toLowerCase()}", amount_gt:0, market:"${hexMarketID}"}`
   } else {
-    where = `where:{holder:"${owner}", amount_gt:0}`
+    where = `where:{holder:"${owner.toLowerCase()}", amount_gt:0}`
   }
 
   return gql`
@@ -620,6 +694,48 @@ function getQueryOwnedTokensMaybeMarket(marketID: number, owner: string) {
         nameVerifier
       }
     }
+  }`
+}
+
+function getQueryTokensInterestReceiverMaybeMarket(
+  marketID: number,
+  interestReceiver: string
+) {
+  let where
+
+  if (marketID) {
+    const hexMarketID = marketID ? '0x' + marketID.toString(16) : ''
+    where = `where:{interestWithdrawer:"${interestReceiver.toLowerCase()}", market:"${hexMarketID}"}`
+  } else {
+    where = `where:{interestWithdrawer:"${interestReceiver.toLowerCase()}"}`
+  }
+
+  return gql`
+  {
+    ideaTokens(${where}) {
+        id
+        tokenID
+        market {
+          marketID
+          name
+          baseCost
+          priceRise
+          tradingFeeRate
+          platformFeeRate
+          platformFeeWithdrawer
+          platformFeeInvested
+          nameVerifier
+        }
+        name
+        supply
+        holders
+        marketCap
+        interestWithdrawer
+        daiInToken
+        invested
+        listedAt
+        dayChange
+      }
   }`
 }
 

@@ -2,7 +2,10 @@ import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { MarketSelect, TokenCard } from '../components'
 import { useWalletStore } from '../store/walletStore'
-import { queryOwnedTokensMaybeMarket } from '../store/ideaMarketsStore'
+import {
+  queryOwnedTokensMaybeMarket,
+  queryTokensInterestReceiverMaybeMarket,
+} from '../store/ideaMarketsStore'
 
 export default function MyTokens() {
   const address = useWalletStore((state) => state.address)
@@ -13,6 +16,22 @@ export default function MyTokens() {
   const { data: ownedTokens, isLoading: isOwnedTokensLoading } = useQuery(
     ['query-owned-tokens-maybe-market', selectedMarketOwnedTokens, address],
     queryOwnedTokensMaybeMarket
+  )
+
+  const [
+    selectedMarketInterestReceiverTokens,
+    setSelectedMarketInterestReceiverTokens,
+  ] = useState(undefined)
+  const {
+    data: interestReceiverTokens,
+    isLoading: isInterestReceiverTokensLoading,
+  } = useQuery(
+    [
+      'query-interest-receiver-tokens-maybe-market',
+      selectedMarketInterestReceiverTokens,
+      address,
+    ],
+    queryTokensInterestReceiverMaybeMarket
   )
 
   return (
@@ -37,7 +56,6 @@ export default function MyTokens() {
             />
           </div>
         </div>
-
         <div className="grid grid-cols-1 gap-2 mx-5 mt-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {isOwnedTokensLoading
             ? 'loading...'
@@ -58,10 +76,22 @@ export default function MyTokens() {
           <div className="w-48 pr-0 md:w-64">
             <MarketSelect
               onChange={(value) => {
-                setSelectedMarketOwnedTokens(value.market)
+                setSelectedMarketInterestReceiverTokens(value.market)
               }}
             />
           </div>
+        </div>
+        <div className="grid grid-cols-1 gap-2 mx-5 mt-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {isInterestReceiverTokensLoading
+            ? 'loading...'
+            : interestReceiverTokens.map((pair) => (
+                <TokenCard
+                  key={pair.token.address}
+                  token={pair.token}
+                  market={pair.market}
+                  enabled={true}
+                />
+              ))}
         </div>
       </div>
     </div>
