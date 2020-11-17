@@ -55,14 +55,14 @@ export default function Modal({
             aria-modal="true"
             aria-labelledby="modal-headline"
           >
-            <div className="flex pb-1">
+            <div className="flex pb-2">
               <button
                 type="button"
-                className="ml-auto text-white transition duration-150 ease-in-out hover:text-gray-500 focus:outline-none focus:text-gray-500"
+                className="p-2 ml-auto text-white transition duration-150 ease-in-out rounded-xl w-9 h-9 bg-very-dark-blue hover:text-gray-500 focus:outline-none focus:text-gray-500"
                 aria-label="Close"
-                onClick={() => close()}
+                onClick={close}
               >
-                <Close className="w-6 h-6" />
+                <Close className="w-full h-full" />
               </button>
             </div>
             <div className="pb-1 overflow-hidden bg-white rounded-lg">
