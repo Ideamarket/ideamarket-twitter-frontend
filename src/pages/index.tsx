@@ -1,9 +1,8 @@
 import classNames from 'classnames'
 import { useContext, useState } from 'react'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { Table, TradeModal, ListTokenModal } from 'components'
+import { Table, TradeModal, ListTokenModal, Footer } from 'components'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
 
 import Twitter from '../assets/twitter.svg'
 import TwitterBlack from '../assets/twitter-black.svg'
@@ -217,28 +216,7 @@ export default function Home() {
           />
         </div>
 
-        <div className="md:flex">
-          <div className="flex justify-center mt-10 space-x-5 font-sf-pro-text">
-            <Link href="/help#need-help">
-              <a className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
-                Need Help?
-              </a>
-            </Link>
-            <Link href="/help#contact">
-              <a className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
-                Contact
-              </a>
-            </Link>
-            <Link href="/help#legal-and-privacy">
-              <a className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
-                Legal &amp; Privacy
-              </a>
-            </Link>
-          </div>
-          <p className="mt-5 text-sm leading-none text-center md:ml-auto md:mt-10 tracking-tightest-2 text-brand-gray-2">
-            &copy;2020 IdeaMarkets
-          </p>
-        </div>
+        <Footer />
       </div>
       <TradeModal
         isOpen={tradeModalData.show}
