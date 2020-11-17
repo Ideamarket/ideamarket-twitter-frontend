@@ -37,7 +37,7 @@ export default function Nav() {
         <div className="px-4 mx-auto md:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div
-              className="flex items-center flex-shrink-0 cursor-pointer"
+              className="z-20 flex items-center flex-shrink-0 cursor-pointer"
               onClick={() => router.push('/')}
             >
               <img
@@ -70,7 +70,7 @@ export default function Nav() {
                 </a>
               ))}
             </div>
-            <div className="hidden md:ml-6 md:flex md:items-center">
+            <div className="z-20 hidden md:ml-6 md:flex md:items-center">
               <WalletStatus openModal={() => setIsWalletModalOpen(true)} />
             </div>
             <div className="flex items-center -mr-2 md:hidden">
