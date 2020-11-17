@@ -65,6 +65,7 @@ export default function MyTokens() {
                   token={pair.token}
                   market={pair.market}
                   enabled={true}
+                  classes={'bg-brand-gray'}
                 />
               ))}
         </div>
@@ -90,6 +91,7 @@ export default function MyTokens() {
                   token={pair.token}
                   market={pair.market}
                   enabled={true}
+                  classes={'bg-brand-gray'}
                 />
               ))}
         </div>

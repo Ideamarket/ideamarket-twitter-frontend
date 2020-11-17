@@ -5,14 +5,13 @@ import { ReactNode, useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import BigNumber from 'bignumber.js'
 import { GlobalContext } from 'pages/_app'
-import { PriceChart, WatchingStar, TradeInterface } from 'components'
+import { PriceChart, WatchingStar, TradeInterface, TokenCard } from 'components'
 import { querySupplyRate, queryExchangeRate } from 'store/compoundStore'
 import { useWalletStore } from 'store/walletStore'
 import {
   querySingleToken,
   queryTokenChartData,
   queryMarketFromTokenAddress,
-  getMarketSVGBlack,
 } from 'store/ideaMarketsStore'
 import {
   toChecksumedAddress,
@@ -219,47 +218,16 @@ export default function TokenDetails() {
           className="relative w-full p-5 mx-auto border-gray-400 bg-brand-gray"
           style={{ borderBottomWidth: '1px' }}
         >
-          {isLoading ? (
-            <div
-              className="mx-auto bg-gray-400 rounded animate animate-pulse"
-              style={{ width: '40px', height: '40px' }}
-            ></div>
-          ) : (
-            <img
-              className="mx-auto rounded-full"
-              style={{ maxWidth: '80px' }}
-              src={token.iconURL}
-              alt="token icon"
-            />
-          )}
-
-          <div className="mt-1 text-3xl font-semibold text-center text-brand-gray-2">
-            {isLoading ? (
-              <div className="w-64 mx-auto bg-gray-400 rounded animate animate-pulse">
-                <span className="invisible">A</span>
-              </div>
-            ) : (
-              token.name
-            )}
+          <div className="flex justify-center">
+            <div className="w-80">
+              <TokenCard
+                token={token}
+                market={market}
+                enabled={false}
+                classes={'bg-white'}
+              />
+            </div>
           </div>
-
-          <div className="flex items-center justify-center mt-5 text-sm italic text-brand-gray-2">
-            {isLoading ? (
-              <div
-                className="w-32 mx-auto bg-gray-400 rounded animate animate-pulse"
-                style={{ height: '20px' }}
-              ></div>
-            ) : (
-              <>
-                <div>on</div>
-                <div className="ml-2.5 mr-1">
-                  {getMarketSVGBlack(market.name)}
-                </div>
-                <div>{market.name}</div>
-              </>
-            )}
-          </div>
-
           <div className="absolute top-0 left-0 flex items-center">
             <ArrowLeft
               className="cursor-pointer"

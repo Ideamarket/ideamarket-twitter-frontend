@@ -11,17 +11,20 @@ export default function TokenCard({
   token,
   market,
   enabled,
+  classes,
 }: {
   token: IdeaToken
   market: IdeaMarket
   enabled: boolean
+  classes?: string
 }) {
   const isLoading = !(token && market)
 
   return (
     <div
       className={classNames(
-        'border-gray-400 rounded text-brand-gray-2 border bg-brand-gray',
+        'border-gray-400 rounded text-brand-gray-2 border',
+        classes,
         enabled && 'hover:shadow-xl hover:border-very-dark-blue cursor-pointer'
       )}
     >
@@ -61,16 +64,18 @@ export default function TokenCard({
       </div>
       <div className="text-3xl mt-7.5 text-center flex justify-center bg-very-dark-blue py-5 text-gray-300">
         <div>
-          {'$' +
-            web3BNToFloatString(
-              calculateCurrentPriceBN(
-                token.rawSupply,
-                market.rawBaseCost,
-                market.rawPriceRise
-              ),
-              tenPow18,
-              2
-            )}
+          {isLoading
+            ? 'loading...'
+            : '$' +
+              web3BNToFloatString(
+                calculateCurrentPriceBN(
+                  token.rawSupply,
+                  market.rawBaseCost,
+                  market.rawPriceRise
+                ),
+                tenPow18,
+                2
+              )}
           &nbsp;(
           <span
             className={classNames(
