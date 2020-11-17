@@ -12,13 +12,15 @@ export default function TokenCard({
   market,
   enabled,
   classes,
+  isLoading,
 }: {
   token: IdeaToken
   market: IdeaMarket
   enabled: boolean
   classes?: string
+  isLoading?: boolean
 }) {
-  const isLoading = !(token && market)
+  const loading = (isLoading ? isLoading : false) || !(token && market)
 
   return (
     <div
@@ -29,7 +31,7 @@ export default function TokenCard({
       )}
     >
       <div className="flex justify-center mt-5">
-        {isLoading ? (
+        {loading ? (
           <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
         ) : (
           <img
@@ -40,7 +42,7 @@ export default function TokenCard({
         )}
       </div>
       <div className="mt-1 text-4xl font-semibold text-center">
-        {isLoading ? (
+        {loading ? (
           <div className="w-64 mx-auto bg-gray-400 rounded animate animate-pulse">
             <span className="invisible">A</span>
           </div>
@@ -49,7 +51,7 @@ export default function TokenCard({
         )}
       </div>
       <div className="flex items-center justify-center mt-1 text-xs italic">
-        {isLoading ? (
+        {loading ? (
           <div
             className="w-32 mx-auto bg-gray-400 rounded animate animate-pulse"
             style={{ height: '20px' }}
@@ -64,29 +66,42 @@ export default function TokenCard({
       </div>
       <div className="text-3xl mt-7.5 text-center flex justify-center bg-very-dark-blue py-5 text-gray-300">
         <div>
-          {isLoading
-            ? 'loading...'
-            : '$' +
-              web3BNToFloatString(
-                calculateCurrentPriceBN(
-                  token.rawSupply,
-                  market.rawBaseCost,
-                  market.rawPriceRise
-                ),
-                tenPow18,
-                2
-              )}
-          &nbsp;(
-          <span
-            className={classNames(
-              parseFloat(token.dayChange) < 0
-                ? 'text-brand-red'
-                : 'text-brand-green'
-            )}
-          >
-            {(parseInt(token.dayChange) >= 0.0 ? '+' : '') + token.dayChange}%
-          </span>
-          )
+          {loading ? (
+            <div className="bg-gray-400 rounded animate animate-pulse">
+              <span className="invisible">$$$$$$$$$$$$</span>
+            </div>
+          ) : (
+            '$' +
+            web3BNToFloatString(
+              calculateCurrentPriceBN(
+                token.rawSupply,
+                market.rawBaseCost,
+                market.rawPriceRise
+              ),
+              tenPow18,
+              2
+            )
+          )}
+          {isLoading ? (
+            ''
+          ) : (
+            <span>
+              &nbsp;(
+              <span
+                className={classNames(
+                  parseFloat(token.dayChange) < 0
+                    ? 'text-brand-red'
+                    : 'text-brand-green'
+                )}
+              >
+                {!isLoading &&
+                  (parseInt(token.dayChange) >= 0.0 ? '+' : '') +
+                    token.dayChange +
+                    '%'}
+              </span>
+              )
+            </span>
+          )}
         </div>
       </div>
       <div className="mt-5">

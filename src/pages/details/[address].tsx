@@ -230,6 +230,7 @@ export default function TokenDetails() {
                   market={market}
                   enabled={false}
                   classes={'bg-white'}
+                  isLoading={isLoading}
                 />
               </div>
             </div>
