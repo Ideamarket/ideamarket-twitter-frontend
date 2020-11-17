@@ -110,7 +110,9 @@ export default function MyTokens() {
                 ))}
           </div>
         </div>
-        <Footer />
+        <div className="px-1">
+          <Footer />
+        </div>
       </div>
     </div>
   )

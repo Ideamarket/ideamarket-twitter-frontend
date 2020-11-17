@@ -218,7 +218,7 @@ export default function TokenDetails() {
           maxWidth: '1500px',
         }}
       >
-        <div className="min-h-screen bg-white border-b border-l border-r border-gray-400 rounded-b">
+        <div className="min-h-screen pb-5 bg-white border-b border-l border-r border-gray-400 rounded-b">
           <div
             className="relative w-full p-5 mx-auto border-gray-400 bg-brand-gray"
             style={{ borderBottomWidth: '1px' }}
@@ -368,7 +368,7 @@ export default function TokenDetails() {
             <ContainerWithHeader
               header="Details"
               content={
-                <div className="flex flex-col h-full">
+                <div className="flex flex-col h-full pb-2">
                   <div
                     className="grid w-full grid-cols-3 p-5 border-gray-400 gap-7"
                     style={{ borderBottomWidth: '1px' }}
@@ -502,7 +502,7 @@ export default function TokenDetails() {
                     >
                       Token Owner Options
                     </div>
-                    <div className="px-1 pb-2 text-xs">
+                    <div className="px-2 pb-2 text-xs">
                       {isLoading ? (
                         <>
                           <div className="w-full mx-auto bg-gray-400 rounded animate animate-pulse">
@@ -623,7 +623,9 @@ export default function TokenDetails() {
             />
           </div>
         </div>
-        <Footer />
+        <div className="px-1">
+          <Footer />
+        </div>
       </div>
       <NoSSRWalletModal />
     </div>
