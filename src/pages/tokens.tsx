@@ -60,7 +60,7 @@ export default function MyTokens() {
           </div>
           <div className="grid grid-cols-1 gap-2 mx-5 mt-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {isOwnedTokensLoading
-              ? 'loading...'
+              ? ''
               : ownedTokens.map((pair) => (
                   <div
                     key={'owned-' + pair.token.address}
@@ -92,7 +92,7 @@ export default function MyTokens() {
           </div>
           <div className="grid grid-cols-1 gap-2 mx-5 mt-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {isInterestReceiverTokensLoading
-              ? 'loading...'
+              ? ''
               : interestReceiverTokens.map((pair) => (
                   <div
                     key={'interest-receiver-' + pair.token.address}
