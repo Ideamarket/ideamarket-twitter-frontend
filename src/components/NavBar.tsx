@@ -34,6 +34,10 @@ export default function Nav() {
   ]
 
   useEffect(() => {
+    NProgress.configure({ trickleSpeed: 100 })
+  }, [])
+
+  useEffect(() => {
     Router.events.on('routeChangeStart', () => NProgress.start())
     Router.events.on('routeChangeComplete', () => NProgress.done())
     Router.events.on('routeChangeError', () => NProgress.done())
