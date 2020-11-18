@@ -95,7 +95,7 @@ export default function TokenCard({
                 )}
               >
                 {!isLoading &&
-                  (parseInt(token.dayChange) >= 0.0 ? '+' : '') +
+                  (parseFloat(token.dayChange) >= 0.0 ? '+' : '') +
                     token.dayChange +
                     '%'}
               </span>
