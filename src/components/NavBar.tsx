@@ -1,10 +1,11 @@
 import classNames from 'classnames'
-import { useRouter } from 'next/dist/client/router'
-import { useContext, useState } from 'react'
+import { Router, useRouter } from 'next/dist/client/router'
+import { useContext, useState, useEffect } from 'react'
 import { WalletStatus } from 'components'
 import { GlobalContext } from 'pages/_app'
 import Close from '../assets/close.svg'
 import Hamburger from '../assets/hamburger.svg'
+import NProgress from 'nprogress'
 
 export default function Nav() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
@@ -31,6 +32,19 @@ export default function Nav() {
       isSelected: router.pathname === '/help',
     },
   ]
+
+  useEffect(() => {
+    Router.events.on('routeChangeStart', () => NProgress.start())
+    Router.events.on('routeChangeComplete', () => NProgress.done())
+    Router.events.on('routeChangeError', () => NProgress.done())
+
+    return () => {
+      Router.events.on('routeChangeStart', () => NProgress.start())
+      Router.events.on('routeChangeComplete', () => NProgress.done())
+      Router.events.on('routeChangeError', () => NProgress.done())
+    }
+  }, [])
+
   return (
     <>
       <nav className="fixed top-0 z-20 w-full shadow bg-top-desktop">
