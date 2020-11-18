@@ -52,8 +52,9 @@ export default function MyTokens() {
             </div>
             <div className="w-48 pr-0 md:w-64">
               <MarketSelect
+                isClearable={true}
                 onChange={(value) => {
-                  setSelectedMarketOwnedTokens(value.market)
+                  setSelectedMarketOwnedTokens(value?.market)
                 }}
               />
             </div>
@@ -84,8 +85,9 @@ export default function MyTokens() {
             </div>
             <div className="w-48 pr-0 md:w-64">
               <MarketSelect
+                isClearable={true}
                 onChange={(value) => {
-                  setSelectedMarketInterestReceiverTokens(value.market)
+                  setSelectedMarketInterestReceiverTokens(value?.market)
                 }}
               />
             </div>

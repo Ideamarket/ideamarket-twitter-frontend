@@ -4,7 +4,13 @@ import { getMarketSVGBlack } from 'store/ideaMarketsStore'
 import { useQuery } from 'react-query'
 import { queryMarkets } from 'store/ideaMarketsStore'
 
-export default function MarketSelect({ onChange }) {
+export default function MarketSelect({
+  onChange,
+  isClearable = false,
+}: {
+  isClearable?: boolean
+  onChange: (val: any) => void
+}) {
   const [selectMarketValues, setSelectMarketValues] = useState([])
 
   const { data: markets, isLoading: isMarketsLoading } = useQuery(
@@ -36,7 +42,7 @@ export default function MarketSelect({ onChange }) {
 
   return (
     <Select
-      isClearable={false}
+      isClearable={isClearable}
       isSearchable={false}
       onChange={onChange}
       options={selectMarketValues}
