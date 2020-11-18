@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSVGBlack } from '../../store/ideaMarketsStore'
-
+import { WatchingStar } from '../'
 import { calculateCurrentPriceBN, web3BNToFloatString } from '../../utils'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -25,7 +25,7 @@ export default function TokenCard({
   return (
     <div
       className={classNames(
-        'border-gray-400 rounded text-brand-gray-2 border',
+        'relative border-gray-400 rounded text-brand-gray-2 border',
         classes,
         enabled && 'hover:shadow-xl hover:border-very-dark-blue cursor-pointer'
       )}
@@ -108,6 +108,13 @@ export default function TokenCard({
         <br />
         <br />
         <br />
+      </div>
+      <div className="absolute top-0 right-0 mt-2 mr-2">
+        {isLoading ? (
+          <div className="w-5 h-5 bg-gray-400 rounded animate animate-pulse"></div>
+        ) : (
+          <WatchingStar token={token} />
+        )}
       </div>
     </div>
   )
