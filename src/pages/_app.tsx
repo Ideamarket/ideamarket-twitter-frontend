@@ -11,6 +11,11 @@ import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
 import { NavBar } from 'components'
+import dynamic from 'next/dynamic'
+
+const NoSSRWalletModal = dynamic(() => import('../components/WalletModal'), {
+  ssr: false,
+})
 
 export const GlobalContext = createContext({
   isWalletModalOpen: false,
@@ -55,6 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </div>
       </div>
+      <NoSSRWalletModal />
     </GlobalContext.Provider>
   )
 }

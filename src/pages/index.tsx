@@ -2,7 +2,6 @@ import classNames from 'classnames'
 import { useContext, useState } from 'react'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { Table, TradeModal, ListTokenModal, Footer } from 'components'
-import dynamic from 'next/dynamic'
 
 import Twitter from '../assets/twitter.svg'
 import TwitterBlack from '../assets/twitter-black.svg'
@@ -11,10 +10,6 @@ import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 
 export default function Home() {
-  const NoSSRWalletModal = dynamic(() => import('../components/WalletModal'), {
-    ssr: false,
-  })
-
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('Twitter')
   const [nameSearch, setNameSearch] = useState('')
@@ -222,7 +217,6 @@ export default function Home() {
         ideaToken={tradeModalData.token}
         market={tradeModalData.market}
       />
-      <NoSSRWalletModal />
       <ListTokenModal
         isOpen={isListTokenModalOpen}
         setIsOpen={setIsListTokenModalOpen}
