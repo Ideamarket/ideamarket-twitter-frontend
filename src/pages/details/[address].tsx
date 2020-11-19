@@ -25,7 +25,9 @@ import {
   calculateCurrentPriceBN,
   web3BNToFloatString,
   addresses,
+  NETWORK,
 } from 'utils'
+import { withdrawInterest } from '../../actions'
 import ArrowLeft from '../../assets/arrow-left.svg'
 import { DateTime } from 'luxon'
 
@@ -75,6 +77,10 @@ export default function TokenDetails() {
     isLoading: isCompoundExchangeRateLoading,
   } = useQuery('compound-exchange-rate', queryExchangeRate)
 
+  const [pendingTxName, setPendingTxName] = useState('')
+  const [pendingTxHash, setPendingTxHash] = useState('')
+  const [isTxPending, setIsTxPending] = useState(false)
+
   useEffect(() => {
     const currentTs = Math.floor(Date.now() / 1000)
     let beginPrice: number
@@ -106,6 +112,24 @@ export default function TokenDetails() {
     isMarketLoading ||
     isCompoundSupplyRateLoading ||
     isCompoundExchangeRateLoading
+
+  async function onWithdrawClicked() {
+    setPendingTxName('Withdraw')
+    setIsTxPending(true)
+
+    try {
+      await withdrawInterest(token.address).on('transactionHash', (hash) => {
+        setPendingTxHash(hash)
+      })
+    } catch (ex) {
+      console.log(ex)
+      return
+    } finally {
+      setPendingTxName('')
+      setPendingTxHash('')
+      setIsTxPending(false)
+    }
+  }
 
   // Todo: Invalid token supplied
   if (!token) {
@@ -560,20 +584,78 @@ export default function TokenDetails() {
                             <button
                               disabled={
                                 !web3 ||
+                                isTxPending ||
                                 connectedAddress.toLowerCase() !==
                                   token.interestWithdrawer.toLowerCase()
                               }
                               className={classNames(
                                 'w-20 py-1 ml-5 text-sm font-medium bg-white border-2 rounded-lg  tracking-tightest-2 font-sf-compact-medium',
                                 !web3 ||
+                                  isTxPending ||
                                   connectedAddress.toLowerCase() !==
                                     token.interestWithdrawer.toLowerCase()
                                   ? 'cursor-default'
                                   : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
                               )}
+                              onClick={onWithdrawClicked}
                             >
                               Withdraw
                             </button>
+                          </div>
+                          <div
+                            className={classNames(
+                              'grid grid-cols-3 mt-2 text-sm text-brand-gray-2',
+                              isTxPending ? '' : 'invisible'
+                            )}
+                          >
+                            <div className="font-bold justify-self-center">
+                              {pendingTxName}
+                            </div>
+                            <div className="justify-self-center">
+                              <a
+                                className={classNames(
+                                  'underline',
+                                  pendingTxHash === '' ? 'hidden' : ''
+                                )}
+                                href={`https://${
+                                  NETWORK === 'kovan' ? 'kovan.' : ''
+                                }etherscan.io/tx/${pendingTxHash}`}
+                                target="_blank"
+                              >
+                                {pendingTxHash.slice(0, 8)}...
+                                {pendingTxHash.slice(-6)}
+                              </a>
+                            </div>
+                            <div className="justify-self-center">
+                              <svg
+                                viewBox="0 0 100 100"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-5 h-5 animate-spin"
+                              >
+                                <circle
+                                  cx="50"
+                                  cy="50"
+                                  r="45"
+                                  style={{
+                                    fill: 'transparent',
+                                    stroke: '#0857e0', // brand-blue
+                                    strokeWidth: '10',
+                                  }}
+                                />
+                                <circle
+                                  cx="50"
+                                  cy="50"
+                                  r="45"
+                                  style={{
+                                    fill: 'transparent',
+                                    stroke: 'white',
+                                    strokeWidth: '10',
+                                    strokeDasharray: '283',
+                                    strokeDashoffset: '75',
+                                  }}
+                                />
+                              </svg>
+                            </div>
                           </div>
                         </>
                       )}
