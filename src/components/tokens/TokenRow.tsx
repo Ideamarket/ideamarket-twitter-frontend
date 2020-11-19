@@ -55,7 +55,7 @@ export default function TokenRow({
           router.push(`/details/${token.address}`)
         }}
       >
-        <td className="col-span-3 px-6 py-4 whitespace-no-wrap">
+        <td className="col-span-3 px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
             <div className="flex-shrink-0 w-7.5 h-7.5">
               <img
@@ -93,7 +93,7 @@ export default function TokenRow({
             </div>
           </div>
         </td>
-        <td className="px-6 py-4 whitespace-no-wrap">
+        <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Price
           </p>
@@ -110,7 +110,7 @@ export default function TokenRow({
             )}
           </p>
         </td>
-        <td className="px-6 py-4 whitespace-no-wrap">
+        <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             Deposits
           </p>
@@ -122,7 +122,7 @@ export default function TokenRow({
             )}
           </p>
         </td>
-        <td className="px-6 py-4 whitespace-no-wrap">
+        <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             24H Change
           </p>
@@ -140,7 +140,7 @@ export default function TokenRow({
             %
           </p>
         </td>
-        <td className="px-6 py-4 whitespace-no-wrap">
+        <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             24H Volume
           </p>
@@ -148,7 +148,7 @@ export default function TokenRow({
             ${token.dayVolume}
           </p>
         </td>
-        <td className="px-6 py-4 whitespace-no-wrap">
+        <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             1YR Income
           </p>
@@ -157,10 +157,10 @@ export default function TokenRow({
           </p>
         </td>
 
-        <td className="col-span-3 row-span-1 row-start-4 px-6 py-4 whitespace-no-wrap col-start-0">
+        <td className="col-span-3 row-span-1 row-start-4 px-6 py-4 whitespace-nowrap col-start-0">
           <PreviewPriceChart chartData={getChartData(token)} />
         </td>
-        <td className="hidden px-6 py-4 whitespace-no-wrap md:table-cell">
+        <td className="hidden px-6 py-4 whitespace-nowrap md:table-cell">
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -171,7 +171,7 @@ export default function TokenRow({
             Trade
           </button>
         </td>
-        <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap">
+        <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-nowrap">
           <WatchingStar token={token} />
         </td>
       </tr>

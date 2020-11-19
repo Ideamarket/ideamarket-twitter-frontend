@@ -172,7 +172,7 @@ export default function TokenDetails() {
           setChartFromTs(Math.floor(Date.now() / 1000) - durationSeconds)
         }}
         className={classNames(
-          'ml-2.5 mr-2.5 text-center px-1 text-sm leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none cursor-pointer',
+          'ml-2.5 mr-2.5 text-center px-1 text-sm leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
           selectedChartDuration === durationString
             ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
             : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'

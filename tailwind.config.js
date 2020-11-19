@@ -1,26 +1,12 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
-    defaultLineHeights: true,
-    standardFontWeights: true,
-  },
+  darkMode: false,
   purge: {
     content: ['./src/**/*.{js,ts,jsx,tsx}'],
   },
   theme: {
     extend: {
-      customForms: {
-        default: {
-          input: {
-            '&:focus': {
-              boxShadow: `0 0 0 3px rgba(8,87,224, 0.45)`,
-            },
-          },
-        },
-      },
       colors: {
         'brand-blue': '#0857e0',
         'brand-gray': '#f6f6f6',
@@ -88,5 +74,9 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [require('@tailwindcss/ui')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }

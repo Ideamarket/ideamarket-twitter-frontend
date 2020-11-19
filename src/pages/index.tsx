@@ -113,7 +113,7 @@ export default function Home() {
           onClick={() => {
             onListTokenClicked()
           }}
-          className="mx-auto mt-7 py-2 text-lg font-bold text-white rounded-lg md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+          className="py-2 mx-auto text-lg font-bold text-white rounded-lg mt-7 md:px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
         >
           Launch Your Token
         </button>
@@ -170,7 +170,7 @@ export default function Home() {
                       onClick={() => setSelectedCategoryId(cat.id)}
                       key={cat.id}
                       className={classNames(
-                        'px-1 py-4 text-base leading-none tracking-tightest whitespace-no-wrap border-b-2 focus:outline-none cursor-pointer',
+                        'px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
                         cat.id === selectedCategoryId
                           ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
                           : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
@@ -192,8 +192,9 @@ export default function Home() {
                   <Search className="w-4 h-4 text-gray-400" />
                 </div>
                 <input
+                  type="text"
                   id="search-input"
-                  className="block w-full h-full pl-10 border-0 rounded-none md:border-l form-input sm:text-sm sm:leading-5"
+                  className="block w-full h-full pl-10 border-0 border-gray-300 rounded-none md:border-l focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Search"
                   onChange={(event) => {
                     setNameSearch(

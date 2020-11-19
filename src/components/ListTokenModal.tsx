@@ -74,6 +74,7 @@ export default function ListTokenModal({
         <div className="text-base text-brand-gray-2 text-semibold">@</div>
         <div className="flex-grow ml-0.5">
           <input
+            type="text"
             disabled={isTxPending}
             className={classNames(
               'w-full py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 rounded appearance-none focus:bg-white focus:outline-none',
