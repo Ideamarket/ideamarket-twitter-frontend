@@ -25,7 +25,7 @@ export const useContractStore = create<State>((set) => ({
   uniswapFactoryContract: undefined,
 }))
 
-export async function clearContracts() {
+export function clearContracts() {
   useContractStore.setState({
     daiContract: undefined,
     factoryContract: undefined,
@@ -34,7 +34,7 @@ export async function clearContracts() {
   })
 }
 
-export async function initContractsFromWeb3(web3: Web3) {
+export function initContractsFromWeb3(web3: Web3) {
   const daiContract = new web3.eth.Contract(ERC20ABI as any, addresses.dai, {
     from: web3.eth.defaultAccount,
   })
