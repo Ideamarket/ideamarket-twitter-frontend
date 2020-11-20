@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 import { MarketSelect, TokenCard, Footer } from '../components'
@@ -7,11 +7,16 @@ import {
   queryOwnedTokensMaybeMarket,
   queryTokensInterestReceiverMaybeMarket,
 } from '../store/ideaMarketsStore'
+import { GlobalContext } from 'pages/_app'
 
 export default function MyTokens() {
   const router = useRouter()
-
   const address = useWalletStore((state) => state.address)
+  const { setIsWalletModalOpen } = useContext(GlobalContext)
+
+  useEffect(() => {
+    !address && setIsWalletModalOpen(true)
+  }, [])
 
   const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] = useState(
     undefined
