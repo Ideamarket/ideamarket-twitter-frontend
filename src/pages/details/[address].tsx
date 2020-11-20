@@ -156,7 +156,7 @@ export default function TokenDetails() {
 
   function DetailsSkeleton() {
     return (
-      <div className="mx-auto bg-gray-400 rounded w-15 animate animate-pulse">
+      <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
         <span className="invisible">A</span>
       </div>
     )
