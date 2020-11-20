@@ -51,6 +51,8 @@ export const initWalletStore = async () => {
 }
 
 export async function setWeb3(web3, wallet) {
+  initContractsFromWeb3(web3)
+
   const address = (await web3.eth.getAccounts())[0]
   web3.eth.defaultAccount = address
   useWalletStore.setState({
@@ -59,8 +61,6 @@ export async function setWeb3(web3, wallet) {
   })
 
   localStorage.setItem('WALLET_TYPE', wallet.toString())
-
-  initContractsFromWeb3(web3)
 }
 
 export async function unsetWeb3() {
