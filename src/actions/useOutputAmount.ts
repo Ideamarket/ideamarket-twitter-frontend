@@ -50,7 +50,7 @@ export default function useOutputAmount(
           return
         }
 
-        const chain = NETWORK === 'kovan' ? ChainId.KOVAN : ChainId.MAINNET
+        const chain = NETWORK === 'rinkeby' ? ChainId.RINKEBY : ChainId.MAINNET
         const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
 
         let IN
@@ -139,7 +139,7 @@ export default function useOutputAmount(
           return
         }
 
-        const chain = NETWORK === 'kovan' ? ChainId.KOVAN : ChainId.MAINNET
+        const chain = NETWORK === 'rinkeby' ? ChainId.RINKEBY : ChainId.MAINNET
         const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
 
         let OUT

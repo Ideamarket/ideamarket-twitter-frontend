@@ -2,8 +2,8 @@ import create from 'zustand'
 import Web3 from 'web3'
 
 import { addresses } from 'utils'
-import DeployedAddressesKovan from '../assets/deployed-kovan.json'
-import DeployedABIsKovan from '../assets/abis-kovan.json'
+import DeployedAddressesRinkeby from '../assets/deployed-rinkeby.json'
+import DeployedABIsRinkeby from '../assets/abis-rinkeby.json'
 import UniswapFactoryABI from '../assets/abi-uniswap-factory.json'
 import UniswapPairABI from '../assets/abi-uniswap-pair.json'
 import ERC20ABI from '../assets/abi-erc20.json'
@@ -40,20 +40,20 @@ export function initContractsFromWeb3(web3: Web3) {
   })
 
   const factoryContract = new web3.eth.Contract(
-    DeployedABIsKovan.ideaTokenFactory as any,
-    DeployedAddressesKovan.ideaTokenFactory,
+    DeployedABIsRinkeby.ideaTokenFactory as any,
+    DeployedAddressesRinkeby.ideaTokenFactory,
     { from: web3.eth.defaultAccount }
   )
 
   const exchangeContract = new web3.eth.Contract(
-    DeployedABIsKovan.ideaTokenExchange as any,
-    DeployedAddressesKovan.ideaTokenExchange,
+    DeployedABIsRinkeby.ideaTokenExchange as any,
+    DeployedAddressesRinkeby.ideaTokenExchange,
     { from: web3.eth.defaultAccount }
   )
 
   const currencyConverterContract = new web3.eth.Contract(
-    DeployedABIsKovan.currencyConverter as any,
-    DeployedAddressesKovan.currencyConverter,
+    DeployedABIsRinkeby.currencyConverter as any,
+    DeployedAddressesRinkeby.currencyConverter,
     { from: web3.eth.defaultAccount }
   )
 

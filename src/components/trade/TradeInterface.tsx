@@ -399,7 +399,7 @@ export default function TradeInterface({
               pendingTxHash === '' ? 'hidden' : ''
             )}
             href={`https://${
-              NETWORK === 'kovan' ? 'kovan.' : ''
+              NETWORK === 'rinkeby' ? 'rinkeby.' : ''
             }etherscan.io/tx/${pendingTxHash}`}
             target="_blank"
           >

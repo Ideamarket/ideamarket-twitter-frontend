@@ -1,6 +1,6 @@
 import { NETWORK } from 'utils'
 import TokenListMainnet from '../assets/token-list-mainnet.json'
-import TokenListKovan from '../assets/token-list-kovan.json'
+import TokenListRinkeby from '../assets/token-list-rinkeby.json'
 import create from 'zustand'
 import produce from 'immer'
 
@@ -25,7 +25,7 @@ function setNestedState(fn) {
 }
 
 export async function initTokenList() {
-  const jsonTokens = NETWORK === 'kovan' ? TokenListKovan : TokenListMainnet
+  const jsonTokens = NETWORK === 'rinkeby' ? TokenListRinkeby : TokenListMainnet
   let tokens: TokenListEntry[] = jsonTokens.map(
     (token) =>
       <TokenListEntry>{

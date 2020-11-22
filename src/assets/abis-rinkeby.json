@@ -771,6 +771,25 @@
         },
         {
           "indexed": false,
+          "internalType": "address",
+          "name": "nameVerifier",
+          "type": "address"
+        }
+      ],
+      "name": "NewNameVerifier",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "marketID",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
           "internalType": "uint256",
           "name": "platformFeeRate",
           "type": "uint256"
@@ -1093,6 +1112,16 @@
     },
     {
       "inputs": [
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        { "internalType": "address", "name": "nameVerifier", "type": "address" }
+      ],
+      "name": "setNameVerifier",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
         { "internalType": "address", "name": "newOwner", "type": "address" }
       ],
       "name": "setOwner",
@@ -1126,6 +1155,17 @@
       "name": "setTradingFee",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "twitterHandleNameVerifier": [
+    {
+      "inputs": [
+        { "internalType": "string", "name": "name", "type": "string" }
+      ],
+      "name": "verifyTokenName",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "pure",
       "type": "function"
     }
   ],
@@ -1249,17 +1289,6 @@
       "type": "function"
     }
   ],
-  "domainNoSubdomainNameVerifier": [
-    {
-      "inputs": [
-        { "internalType": "string", "name": "name", "type": "string" }
-      ],
-      "name": "verifyTokenName",
-      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-      "stateMutability": "pure",
-      "type": "function"
-    }
-  ],
   "authorizeInterestWithdrawerSpell": [
     {
       "inputs": [
@@ -1317,17 +1346,6 @@
       "name": "execute",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ],
-  "twitterHandleNameVerifier": [
-    {
-      "inputs": [
-        { "internalType": "string", "name": "name", "type": "string" }
-      ],
-      "name": "verifyTokenName",
-      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-      "stateMutability": "pure",
       "type": "function"
     }
   ]

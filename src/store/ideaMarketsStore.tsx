@@ -11,8 +11,8 @@ const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 const HTTP_GRAPHQL_ENDPOINT =
-  NETWORK === 'kovan'
-    ? 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarketkovan' // http://134.209.118.230:8000/subgraphs/name/ideamarket/ideamarketkovan
+  NETWORK === 'rinkeby'
+    ? 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarketrinkeby'
     : 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarket'
 
 export type IdeaMarket = {
