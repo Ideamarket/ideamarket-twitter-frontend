@@ -55,12 +55,12 @@ const headers: Header[] = [
     sortable: false,
   },
   {
-    title: 'Trade',
+    title: '',
     value: 'trade',
     sortable: false,
   },
   {
-    title: 'Watch',
+    title: '',
     value: 'watch',
     sortable: false,
   },

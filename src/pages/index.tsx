@@ -28,23 +28,19 @@ export default function Home() {
   const categories = [
     {
       id: 1,
-      value: 'All Tokens',
-      mobileValue: 'All',
+      value: 'All',
     },
     {
       id: 2,
-      value: 'Trending',
-      mobileValue: 'Hot',
+      value: 'Hot',
     },
     {
       id: 3,
-      value: 'New Listings',
-      mobileValue: 'New',
+      value: 'New',
     },
     {
       id: 4,
-      value: 'Watch List',
-      mobileValue: 'Watch',
+      value: 'Starred',
     },
   ]
 
@@ -171,8 +167,7 @@ export default function Home() {
                           : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
                       )}
                     >
-                      <span className="hidden md:inline">{cat.value}</span>
-                      <span className="md:hidden">{cat.mobileValue}</span>
+                      <span>{cat.value}</span>
                     </a>
                   ))}
                 </nav>

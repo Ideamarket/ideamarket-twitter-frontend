@@ -52,7 +52,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <Head>
-        <title>IdeaMarkets</title>
+        <title>Ideamarket</title>
       </Head>
       <div className="min-h-screen bg-brand-gray">
         <NavBar />

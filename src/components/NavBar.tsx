@@ -65,7 +65,7 @@ export default function Nav() {
               />
 
               <span className="w-auto h-full text-2xl leading-none text-white md:text-3xl font-gilroy-bold">
-                IdeaMarkets
+                Ideamarket
               </span>
             </div>
 
