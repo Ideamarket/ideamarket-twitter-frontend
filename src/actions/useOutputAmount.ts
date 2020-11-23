@@ -31,180 +31,190 @@ export default function useOutputAmount(
   const [output, setOutput] = useState(undefined)
 
   useEffect(() => {
+    let isCancelled = false
+
     async function calculateBuyCost() {
-      if (useWalletStore.getState().web3 && ideaToken && tokenAddress) {
-        const amountBN = new BN(
-          new BigNumber(amount).multipliedBy(tenPow18).toFixed()
-        )
-        const exchangeContract = useContractStore.getState().exchangeContract
-        const requiredDaiAmount = new BN(
-          await exchangeContract.methods
-            .getCostForBuyingTokens(ideaToken.address, amountBN)
-            .call()
-        )
-
-        if (tokenAddress === addresses.dai) {
-          setOutputBN(requiredDaiAmount)
-          setOutput(web3BNToFloatString(requiredDaiAmount, tenPow18, 4))
-          setIsLoading(false)
-          return
-        }
-
-        const chain = NETWORK === 'rinkeby' ? ChainId.RINKEBY : ChainId.MAINNET
-        const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
-
-        let IN
-        if (tokenAddress === addresses.ZERO) {
-          IN = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
-        } else {
-          IN = new Token(chain, tokenAddress, decimals, 'SOME', 'TOKEN')
-        }
-
-        const uniswapFactoryContract = useContractStore.getState()
-          .uniswapFactoryContract
-        const pairAddress = await uniswapFactoryContract.methods
-          .getPair(DAI.address, IN.address)
-          .call()
-        const pairContract = getUniswapPairContract(pairAddress)
-
-        let token0, token1, reserves
-        await Promise.all([
-          (async () => {
-            token0 = await pairContract.methods.token0().call()
-          })(),
-          (async () => {
-            token1 = await pairContract.methods.token1().call()
-          })(),
-          (async () => {
-            reserves = await pairContract.methods.getReserves().call()
-          })(),
-        ])
-
-        let pair
-        if (token0 === DAI.address) {
-          pair = new Pair(
-            new TokenAmount(DAI, reserves._reserve0),
-            new TokenAmount(IN, reserves._reserve1)
-          )
-        } else {
-          pair = new Pair(
-            new TokenAmount(DAI, reserves._reserve1),
-            new TokenAmount(IN, reserves._reserve0)
-          )
-        }
-
-        const route = new Route([pair], IN)
-        const trade = new Trade(
-          route,
-          new TokenAmount(DAI, requiredDaiAmount.toString()),
-          TradeType.EXACT_OUTPUT
-        )
-        const requiredInputBN = new BN(
-          new BigNumber(trade.inputAmount.toExact())
-            .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-            .toFixed()
-        )
-        const requiredInput = trade.inputAmount.toFixed(4)
-
-        setOutputBN(requiredInputBN)
-        setOutput(requiredInput)
-        setIsLoading(false)
+      if (!useWalletStore.getState().web3 || !ideaToken || !tokenAddress) {
+        return new BN('0')
       }
+
+      const amountBN = new BN(
+        new BigNumber(amount).multipliedBy(tenPow18).toFixed()
+      )
+
+      const exchangeContract = useContractStore.getState().exchangeContract
+      const requiredDaiAmount = new BN(
+        await exchangeContract.methods
+          .getCostForBuyingTokens(ideaToken.address, amountBN)
+          .call()
+      )
+
+      if (tokenAddress === addresses.dai) {
+        return requiredDaiAmount
+      }
+
+      const chain = NETWORK === 'rinkeby' ? ChainId.RINKEBY : ChainId.MAINNET
+      const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
+
+      let IN
+      if (tokenAddress === addresses.ZERO) {
+        IN = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
+      } else {
+        IN = new Token(chain, tokenAddress, decimals, 'SOME', 'TOKEN')
+      }
+
+      const uniswapFactoryContract = useContractStore.getState()
+        .uniswapFactoryContract
+      const pairAddress = await uniswapFactoryContract.methods
+        .getPair(DAI.address, IN.address)
+        .call()
+
+      const pairContract = getUniswapPairContract(pairAddress)
+
+      let token0, token1, reserves
+      await Promise.all([
+        (async () => {
+          token0 = await pairContract.methods.token0().call()
+        })(),
+        (async () => {
+          token1 = await pairContract.methods.token1().call()
+        })(),
+        (async () => {
+          reserves = await pairContract.methods.getReserves().call()
+        })(),
+      ])
+
+      let pair
+      if (token0 === DAI.address) {
+        pair = new Pair(
+          new TokenAmount(DAI, reserves._reserve0),
+          new TokenAmount(IN, reserves._reserve1)
+        )
+      } else {
+        pair = new Pair(
+          new TokenAmount(DAI, reserves._reserve1),
+          new TokenAmount(IN, reserves._reserve0)
+        )
+      }
+
+      const route = new Route([pair], IN)
+      const trade = new Trade(
+        route,
+        new TokenAmount(DAI, requiredDaiAmount.toString()),
+        TradeType.EXACT_OUTPUT
+      )
+      const requiredInputBN = new BN(
+        new BigNumber(trade.inputAmount.toExact())
+          .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
+          .toFixed()
+      )
+
+      return requiredInputBN
     }
 
     async function calculateSellPrice() {
-      if (useWalletStore.getState().web3 && ideaToken && tokenAddress) {
-        const amountBN = new BN(
-          new BigNumber(amount).multipliedBy(tenPow18).toFixed()
+      if (!useWalletStore.getState().web3 || !ideaToken || !tokenAddress) {
+        return new BN('0')
+      }
+
+      const amountBN = new BN(
+        new BigNumber(amount).multipliedBy(tenPow18).toFixed()
+      )
+
+      const exchangeContract = useContractStore.getState().exchangeContract
+      let daiOutputAmount
+      try {
+        daiOutputAmount = new BN(
+          await exchangeContract.methods
+            .getPriceForSellingTokens(ideaToken.address, amountBN)
+            .call()
         )
-        const exchangeContract = useContractStore.getState().exchangeContract
-        let daiOutputAmount
-        try {
-          daiOutputAmount = new BN(
-            await exchangeContract.methods
-              .getPriceForSellingTokens(ideaToken.address, amountBN)
-              .call()
-          )
-        } catch (ex) {
-          setOutputBN(new BN('0'))
-          setOutput(web3BNToFloatString(new BN('0'), tenPow18, 4))
-          setIsLoading(false)
-          return
-        }
+      } catch (ex) {
+        return [new BN('0'), web3BNToFloatString(new BN('0'), tenPow18, 4)]
+      }
 
-        if (tokenAddress === addresses.dai) {
-          setOutputBN(daiOutputAmount)
-          setOutput(web3BNToFloatString(daiOutputAmount, tenPow18, 4))
-          setIsLoading(false)
-          return
-        }
+      if (tokenAddress === addresses.dai) {
+        return daiOutputAmount
+      }
 
-        const chain = NETWORK === 'rinkeby' ? ChainId.RINKEBY : ChainId.MAINNET
-        const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
+      const chain = NETWORK === 'rinkeby' ? ChainId.RINKEBY : ChainId.MAINNET
+      const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
 
-        let OUT
-        if (tokenAddress === addresses.ZERO) {
-          OUT = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
-        } else {
-          OUT = new Token(chain, tokenAddress, decimals, 'SOME', 'TOKEN')
-        }
+      let OUT
+      if (tokenAddress === addresses.ZERO) {
+        OUT = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
+      } else {
+        OUT = new Token(chain, tokenAddress, decimals, 'SOME', 'TOKEN')
+      }
 
-        const uniswapFactoryContract = useContractStore.getState()
-          .uniswapFactoryContract
-        const pairAddress = await uniswapFactoryContract.methods
-          .getPair(DAI.address, OUT.address)
-          .call()
-        const pairContract = getUniswapPairContract(pairAddress)
+      const uniswapFactoryContract = useContractStore.getState()
+        .uniswapFactoryContract
+      const pairAddress = await uniswapFactoryContract.methods
+        .getPair(DAI.address, OUT.address)
+        .call()
 
-        let token0, token1, reserves
-        await Promise.all([
-          (async () => {
-            token0 = await pairContract.methods.token0().call()
-          })(),
-          (async () => {
-            token1 = await pairContract.methods.token1().call()
-          })(),
-          (async () => {
-            reserves = await pairContract.methods.getReserves().call()
-          })(),
-        ])
+      const pairContract = getUniswapPairContract(pairAddress)
 
-        let pair
-        if (token0 === DAI.address) {
-          pair = new Pair(
-            new TokenAmount(DAI, reserves._reserve0),
-            new TokenAmount(OUT, reserves._reserve1)
-          )
-        } else {
-          pair = new Pair(
-            new TokenAmount(DAI, reserves._reserve1),
-            new TokenAmount(OUT, reserves._reserve0)
-          )
-        }
+      let token0, token1, reserves
+      await Promise.all([
+        (async () => {
+          token0 = await pairContract.methods.token0().call()
+        })(),
+        (async () => {
+          token1 = await pairContract.methods.token1().call()
+        })(),
+        (async () => {
+          reserves = await pairContract.methods.getReserves().call()
+        })(),
+      ])
 
-        const route = new Route([pair], DAI)
-        const trade = new Trade(
-          route,
-          new TokenAmount(DAI, daiOutputAmount.toString()),
-          TradeType.EXACT_INPUT
+      let pair
+      if (token0 === DAI.address) {
+        pair = new Pair(
+          new TokenAmount(DAI, reserves._reserve0),
+          new TokenAmount(OUT, reserves._reserve1)
         )
-        const outputBN = new BN(
-          new BigNumber(trade.outputAmount.toExact())
-            .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-            .toFixed()
+      } else {
+        pair = new Pair(
+          new TokenAmount(DAI, reserves._reserve1),
+          new TokenAmount(OUT, reserves._reserve0)
         )
-        const output = trade.outputAmount.toFixed(4)
+      }
 
-        setOutputBN(outputBN)
-        setOutput(output)
+      const route = new Route([pair], DAI)
+      const trade = new Trade(
+        route,
+        new TokenAmount(DAI, daiOutputAmount.toString()),
+        TradeType.EXACT_INPUT
+      )
+      const outputBN = new BN(
+        new BigNumber(trade.outputAmount.toExact())
+          .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
+          .toFixed()
+      )
+
+      return outputBN
+    }
+
+    async function run(fn) {
+      const bn = await fn
+      if (!isCancelled) {
+        const pow = new BigNumber('10').pow(new BigNumber('18'))
+        setOutputBN(bn)
+        setOutput(web3BNToFloatString(bn, pow, 4))
         setIsLoading(false)
       }
     }
 
+    setIsLoading(true)
     if (tradeType === 'buy') {
-      calculateBuyCost()
+      run(calculateBuyCost())
     } else {
-      calculateSellPrice()
+      run(calculateSellPrice())
+    }
+
+    return () => {
+      isCancelled = true
     }
   }, [ideaToken, tokenAddress, amount, tradeType])
 

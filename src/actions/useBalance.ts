@@ -5,54 +5,63 @@ import { getERC20Contract } from 'store/contractStore'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 export default function useBalance(address: string, decimals: number) {
   const [isLoading, setIsLoading] = useState(true)
   const [balanceBN, setBalanceBN] = useState(undefined)
   const [balance, setBalance] = useState(undefined)
 
   useEffect(() => {
-    if (useWalletStore.getState().web3 && address) {
-      if (address === addresses.ZERO) {
-        useWalletStore
-          .getState()
-          .web3.eth.getBalance(useWalletStore.getState().address)
-          .then((value) => {
-            setBalanceBN(new BN(value))
-            setBalance(web3BNToFloatString(new BN(value), tenPow18, 4))
-            setIsLoading(false)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      } else {
-        const contract = getERC20Contract(address)
-        contract.methods
-          .balanceOf(useWalletStore.getState().address)
-          .call()
-          .then((data, error) => {
-            if (error) {
-              console.log(error)
-              setBalanceBN(new BN('0'))
-              setBalance('0.00')
-              setIsLoading(false)
-              return
-            }
+    let isCancelled = false
 
-            setBalanceBN(new BN(data))
-            setBalance(
-              web3BNToFloatString(
-                data,
-                new BigNumber('10').exponentiatedBy(new BigNumber(decimals)),
-                4
-              )
-            )
-            setIsLoading(false)
-          })
-          .catch((error) => {
-            console.log(error)
-          })
+    function getBalance() {
+      return new Promise<BN>((resolve) => {
+        if (!useWalletStore.getState().web3 || !address) {
+          resolve(new BN('0'))
+          return
+        }
+
+        if (address === addresses.ZERO) {
+          useWalletStore
+            .getState()
+            .web3.eth.getBalance(useWalletStore.getState().address)
+            .then((value) => {
+              resolve(new BN(value))
+            })
+            .catch((error) => {
+              console.log(error)
+              resolve(new BN('0'))
+            })
+        } else {
+          const contract = getERC20Contract(address)
+          contract.methods
+            .balanceOf(useWalletStore.getState().address)
+            .call()
+            .then((value) => {
+              resolve(new BN(value))
+            })
+            .catch((error) => {
+              console.log(error)
+              resolve(new BN('0'))
+            })
+        }
+      })
+    }
+
+    async function run() {
+      const bn = await getBalance()
+      if (!isCancelled) {
+        const pow = new BigNumber('10').pow(new BigNumber(decimals))
+        setBalanceBN(bn)
+        setBalance(web3BNToFloatString(bn, pow, 4))
+        setIsLoading(false)
       }
+    }
+
+    setIsLoading(true)
+    run()
+
+    return () => {
+      isCancelled = true
     }
   }, [address])
 
