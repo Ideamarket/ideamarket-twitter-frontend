@@ -741,6 +741,12 @@
         {
           "indexed": false,
           "internalType": "uint256",
+          "name": "hatchTokens",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
           "name": "tradingFeeRate",
           "type": "uint256"
         },
@@ -877,6 +883,7 @@
         },
         { "internalType": "uint256", "name": "baseCost", "type": "uint256" },
         { "internalType": "uint256", "name": "priceRise", "type": "uint256" },
+        { "internalType": "uint256", "name": "hatchTokens", "type": "uint256" },
         {
           "internalType": "uint256",
           "name": "tradingFeeRate",
@@ -936,6 +943,11 @@
             },
             {
               "internalType": "uint256",
+              "name": "hatchTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
               "name": "tradingFeeRate",
               "type": "uint256"
             },
@@ -982,6 +994,11 @@
             {
               "internalType": "uint256",
               "name": "priceRise",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hatchTokens",
               "type": "uint256"
             },
             {
@@ -1272,6 +1289,7 @@
         },
         { "internalType": "uint256", "name": "baseCost", "type": "uint256" },
         { "internalType": "uint256", "name": "priceRise", "type": "uint256" },
+        { "internalType": "uint256", "name": "hatchTokens", "type": "uint256" },
         {
           "internalType": "uint256",
           "name": "tradingFeeRate",
