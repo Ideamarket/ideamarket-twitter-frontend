@@ -44,10 +44,16 @@ export function bnToFloatString(
 export function calculateCurrentPriceBN(
   rawSupply: BN,
   rawBaseCost: BN,
-  rawPriceRise: BN
+  rawPriceRise: BN,
+  rawHatchTokens: BN
 ): BN {
+  if (rawSupply.lt(rawHatchTokens)) {
+    return rawBaseCost
+  }
+
+  const updatedSupply = rawSupply.sub(rawHatchTokens)
   return rawBaseCost.add(
-    rawPriceRise.mul(rawSupply).div(new BN('10').pow(new BN('18')))
+    rawPriceRise.mul(updatedSupply).div(new BN('10').pow(new BN('18')))
   )
 }
 

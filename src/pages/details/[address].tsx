@@ -291,7 +291,8 @@ export default function TokenDetails() {
                             calculateCurrentPriceBN(
                               token.rawSupply,
                               market.rawBaseCost,
-                              market.rawPriceRise
+                              market.rawPriceRise,
+                              market.rawHatchTokens
                             ),
                             tenPow18,
                             2
@@ -408,7 +409,8 @@ export default function TokenDetails() {
                             calculateCurrentPriceBN(
                               token.rawSupply,
                               market.rawBaseCost,
-                              market.rawPriceRise
+                              market.rawPriceRise,
+                              market.rawHatchTokens
                             ),
                             tenPow18,
                             2

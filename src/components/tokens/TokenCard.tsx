@@ -76,7 +76,8 @@ export default function TokenCard({
               calculateCurrentPriceBN(
                 token.rawSupply,
                 market.rawBaseCost,
-                market.rawPriceRise
+                market.rawPriceRise,
+                market.rawHatchTokens
               ),
               tenPow18,
               2

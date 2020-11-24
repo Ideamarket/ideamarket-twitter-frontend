@@ -22,6 +22,8 @@ export type IdeaMarket = {
   rawBaseCost: BN
   priceRise: string
   rawPriceRise: BN
+  hatchTokens: string
+  rawHatchTokens: BN
   tradingFeeRate: string
   rawTradingFeeRate: BN
   platformFeeInvested: string
@@ -324,6 +326,7 @@ function getQueryMarkets(): string {
         name
         baseCost
         priceRise
+        hatchTokens
         tradingFeeRate
         platformFeeRate
         platformFeeWithdrawer
@@ -341,6 +344,7 @@ function getQueryMarket(marketName: string): string {
       name
       baseCost
       priceRise
+      hatchTokens
       tradingFeeRate
       platformFeeRate
       platformFeeWithdrawer
@@ -439,6 +443,7 @@ function getQueryOwnedTokensMaybeMarket(
         name
         baseCost
         priceRise
+        hatchTokens
         tradingFeeRate
         platformFeeRate
         platformFeeWithdrawer
@@ -472,6 +477,7 @@ function getQueryTokensInterestReceiverMaybeMarket(
           name
           baseCost
           priceRise
+          hatchTokens
           tradingFeeRate
           platformFeeRate
           platformFeeWithdrawer
@@ -603,6 +609,7 @@ function getQueryMarketFromTokenAddress(address: string): string {
         name
         baseCost
         priceRise
+        hatchTokens
         tradingFeeRate
         platformFeeRate
         platformFeeWithdrawer
@@ -689,6 +696,12 @@ function apiResponseToIdeaMarket(apiResponse): IdeaMarket {
       : undefined,
     rawPriceRise: apiResponse.priceRise
       ? new BN(apiResponse.priceRise)
+      : undefined,
+    hatchTokens: apiResponse.hatchTokens
+      ? web3BNToFloatString(new BN(apiResponse.hatchTokens), tenPow18, 2)
+      : undefined,
+    rawHatchTokens: apiResponse.hatchTokens
+      ? new BN(apiResponse.hatchTokens)
       : undefined,
     tradingFeeRate: apiResponse.tradingFeeRate
       ? web3BNToFloatString(new BN(apiResponse.tradingFeeRate), tenPow2, 2)
