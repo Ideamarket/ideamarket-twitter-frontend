@@ -52,21 +52,28 @@ export const initWalletStore = async () => {
   }
 }
 
-async function handleWeb3ConfigChange(config) {}
+async function handleWeb3Change() {
+  const web3 = useWalletStore.getState().web3 as any
+  web3.currentProvider.off('networkChanged', handleWeb3Change)
+  web3.currentProvider.off('accountsChanged', handleWeb3Change)
+
+  await setWeb3(web3, localStorage.getItem('WALLET_TYPE'))
+}
 
 export async function setWeb3(web3, wallet) {
   const address = (await web3.eth.getAccounts())[0]
   web3.eth.defaultAccount = address
 
-  web3.currentProvider.publicConfigStore.on('update', handleWeb3ConfigChange)
+  web3.currentProvider.on('networkChanged', handleWeb3Change)
+  web3.currentProvider.on('accountsChanged', handleWeb3Change)
 
   initContractsFromWeb3(web3)
 
-  const network = await web3.eth.net.getNetworkType()
+  const web3Network = await web3.eth.net.getNetworkType()
   useWalletStore.setState({
     web3: web3,
     address: address,
-    network: network,
+    network: web3Network,
   })
 
   localStorage.setItem('WALLET_TYPE', wallet.toString())
