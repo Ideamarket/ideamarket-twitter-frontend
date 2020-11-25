@@ -10,15 +10,7 @@ import Head from 'next/head'
 import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
-import { NavBar, WrongNetworkOverlay } from 'components'
-import dynamic from 'next/dynamic'
-
-const NoSSRWalletModal = dynamic(
-  () => import('../components/wallet/WalletModal'),
-  {
-    ssr: false,
-  }
-)
+import { NavBar, WrongNetworkOverlay, WalletModal } from 'components'
 
 export const GlobalContext = createContext({
   isWalletModalOpen: false,
@@ -63,7 +55,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </div>
       </div>
-      <NoSSRWalletModal />
+      <WalletModal />
       <WrongNetworkOverlay />
     </GlobalContext.Provider>
   )

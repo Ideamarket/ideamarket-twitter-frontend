@@ -13,7 +13,11 @@ import DotGreen from '../../assets/dotgreen.svg'
 import * as wallets from 'eth-wallets'
 import classNames from 'classnames'
 
-export default function WalletInterface() {
+export default function WalletInterface({
+  onWalletConnected,
+}: {
+  onWalletConnected?: () => void
+}) {
   const [connectingWallet, setConnectingWallet] = useState(0)
   const {
     onWalletConnectedCallback,
@@ -21,15 +25,6 @@ export default function WalletInterface() {
   } = useContext(GlobalContext)
   const web3 = useWalletStore((state) => state.web3)
   const address = useWalletStore((state) => state.address)
-
-  function close(success) {
-    if (onWalletConnectedCallback) {
-      if (success) {
-        onWalletConnectedCallback()
-      }
-      setOnWalletConnectedCallback(undefined)
-    }
-  }
 
   async function onWalletClicked(wallet) {
     setConnectingWallet(wallet)
@@ -45,7 +40,15 @@ export default function WalletInterface() {
     }
 
     await setWeb3(web3, wallet)
-    close(true)
+
+    if (onWalletConnectedCallback) {
+      onWalletConnectedCallback()
+      setOnWalletConnectedCallback(undefined)
+    }
+
+    if (onWalletConnected) {
+      onWalletConnected()
+    }
   }
 
   async function onDisconnectClicked() {
