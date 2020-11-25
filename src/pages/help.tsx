@@ -124,24 +124,23 @@ export default function Help() {
           <p>
             Ideamarket listings are “market-curated endowments” in the sense
             that:
-            <ul style={{ listStyle: 'square inside' }}>
-              <li>
-                The principal is determined by{' '}
-                <strong>market confidence</strong>
-              </li>
-              <li>
-                The principal <strong>generates income</strong>, like an
-                endowment, for the listing owner via{' '}
-                <a
-                  href="https://compound.finance"
-                  target="_blank"
-                  className="underline"
-                >
-                  compound.finance
-                </a>
-              </li>
-            </ul>
           </p>
+          <ul style={{ listStyle: 'square inside' }}>
+            <li>
+              The principal is determined by <strong>market confidence</strong>
+            </li>
+            <li>
+              The principal <strong>generates income</strong>, like an
+              endowment, for the listing owner via{' '}
+              <a
+                href="https://compound.finance"
+                target="_blank"
+                className="underline"
+              >
+                compound.finance
+              </a>
+            </li>
+          </ul>
           <div className="flex justify-center">
             <img
               src="/how-it-works-endowments.png"
@@ -157,32 +156,31 @@ export default function Help() {
             <br />
             <br />
             Before Ideamarket:
-            <ul style={{ listStyle: 'square inside' }}>
-              <li>
-                If you have a large audience, you can only make money by selling
-                products or shilling affiliate links
-              </li>
-              <li>
-                If you discover a great account before it gets popular, nobody
-                cares, and you can’t make any money
-              </li>
-            </ul>
-            <br />
-            After Ideamarket:
-            <ul style={{ listStyle: 'square inside' }}>
-              <li>
-                If your audience finds your content worthwhile, they will buy
-                your token. Therefore, if you have a large audience, list your
-                account on Ideamarket to create a passive income stream
-                instantly, with no extra effort — just keep doing what you do.{' '}
-              </li>
-              <li>
-                If you discover a great account before it gets popular, list it
-                on Ideamarket and make money as others come to agree with your
-                judgment
-              </li>
-            </ul>
           </p>
+          <ul style={{ listStyle: 'square inside' }}>
+            <li>
+              If you have a large audience, you can only make money by selling
+              products or shilling affiliate links
+            </li>
+            <li>
+              If you discover a great account before it gets popular, nobody
+              cares, and you can’t make any money
+            </li>
+          </ul>
+          <p>After Ideamarket:</p>
+          <ul style={{ listStyle: 'square inside' }}>
+            <li>
+              If your audience finds your content worthwhile, they will buy your
+              token. Therefore, if you have a large audience, list your account
+              on Ideamarket to create a passive income stream instantly, with no
+              extra effort — just keep doing what you do.{' '}
+            </li>
+            <li>
+              If you discover a great account before it gets popular, list it on
+              Ideamarket and make money as others come to agree with your
+              judgment
+            </li>
+          </ul>
         </div>
         <div id="faq">
           <h2>2. FAQ</h2>
@@ -194,23 +192,22 @@ export default function Help() {
             <br />
             <br />
             On a prediction market:
-            <ul style={{ listStyle: 'square inside' }}>
-              <li>Winners and losers are decided by specific events</li>
-              <li>The market closes at a certain moment</li>
-              <li>An oracle reports what’s “true”</li>
-            </ul>
-            <br />
-            Ideamarket is like a commodity market: <br />
-            <ul style={{ listStyle: 'square inside' }}>
-              <li>Winners and losers are decided by market cycles</li>
-              <li>The market never closes — it’s perpetual</li>
-              <li>
-                There’s no oracle or “source of truth." Instead, the market
-                aggregates its participants’ subjective judgments from moment to
-                moment
-              </li>
-            </ul>
           </p>
+          <ul style={{ listStyle: 'square inside' }}>
+            <li>Winners and losers are decided by specific events</li>
+            <li>The market closes at a certain moment</li>
+            <li>An oracle reports what’s “true”</li>
+          </ul>
+          <p>Ideamarket is like a commodity market:</p>
+          <ul style={{ listStyle: 'square inside' }}>
+            <li>Winners and losers are decided by market cycles</li>
+            <li>The market never closes — it’s perpetual</li>
+            <li>
+              There’s no oracle or “source of truth." Instead, the market
+              aggregates its participants’ subjective judgments from moment to
+              moment
+            </li>
+          </ul>
         </div>
         <div id="faq-prediction-manipulation">
           <h3>Can’t [a rich person] manipulate the market?</h3>
@@ -237,21 +234,20 @@ export default function Help() {
           <h3>How do I claim the interest I’ve earned as a listing owner?</h3>
           <p>
             Different listing types require different verification processes.
-            <br />
-            <ul style={{ listStyle: 'square inside' }}>
-              <li>
-                For Twitter accounts, we’ll ask you to tweet a code to confirm
-                account ownership
-              </li>
-              <li>
-                For websites, we will invite you to add a TXT record to your DNS
-                settings to verify you own the domain named by the token. When
-                this is done, you will be granted permanent ownership of the
-                wallet to which your interest accrues
-              </li>
-              <li>Etc.</li>
-            </ul>
           </p>
+          <ul style={{ listStyle: 'square inside' }}>
+            <li>
+              For Twitter accounts, we’ll ask you to tweet a code to confirm
+              account ownership
+            </li>
+            <li>
+              For websites, we will invite you to add a TXT record to your DNS
+              settings to verify you own the domain named by the token. When
+              this is done, you will be granted permanent ownership of the
+              wallet to which your interest accrues
+            </li>
+            <li>Etc.</li>
+          </ul>
         </div>
         <div id="faq-prediction-special-rights">
           <h3>Do listings/votes provide any special rights?</h3>
