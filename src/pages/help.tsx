@@ -15,6 +15,18 @@ export default function Help() {
           value: 'how-it-works-overview',
         },
         {
+          title: 'Buy and sell',
+          value: 'how-it-works-buy-and-sell',
+        },
+        {
+          title: 'Add new listings',
+          value: 'how-it-works-add-new-listings',
+        },
+        {
+          title: 'Price history and details',
+          value: 'how-it-works-details',
+        },
+        {
           title: 'Market-curated endowments',
           value: 'how-it-works-endowments',
         },
@@ -113,11 +125,32 @@ export default function Help() {
               Ideamarket is a new passive income stream for creators — no new
               work needed.
             </strong>
-            <br />
-            Anyone can add new listings. If you add an account owned by someone
-            who doesn’t know about Ideamarket, interest will accrue to his
-            wallet anyway, and he can claim it anytime.
           </p>
+        </div>
+        <div id="how-it-works-buy-and-sell">
+          <h3>Buy and sell</h3>
+          <p>Buy and sell tokens at any time.</p>
+        </div>
+        <div id="how-it-works-add-new-listings">
+          <h3>Add new listings</h3>
+          <p>
+            Anyone can add new listings.
+            <br />
+            If you add an account owned by someone who doesn’t know about
+            Ideamarket, interest will accrue to his wallet anyway, and he can
+            claim it anytime.
+          </p>
+        </div>
+        <div id="how-it-works-details">
+          <h3>View price history and details</h3>
+          <p>Click each listing to open its listing page.</p>
+          <div className="flex justify-center">
+            <img
+              src="/how-it-works-details.png"
+              style={{ maxWidth: '800px' }}
+              className="rounded border border-gray-200 p-1"
+            />
+          </div>
         </div>
         <div id="how-it-works-endowments">
           <h3>Market-curated endowments</h3>
@@ -212,22 +245,33 @@ export default function Help() {
         <div id="faq-prediction-manipulation">
           <h3>Can’t [a rich person] manipulate the market?</h3>
           <p>
-            Like any existing market, there’s no mechanism to explicitly prevent
-            this. However, Ideamarket is superior to typical markets in that{' '}
-            <strong>short-selling is impossible by design</strong>. The rankings
-            are determined by each token’s circulating supply, and a
-            short-seller would need to borrow tokens in order to short them,
-            which would require minting them — thus increasing the circulating
-            supply. This means there’s no way to artificially reduce the ranking
-            of a listing you or [a rich person] would want to censor.
+            Ideamarket is superior to typical markets in that{' '}
+            <strong>listings can only be manipulated upwards</strong>.<br />
+            This is because rank is determined by each token’s circulating
+            supply. A short-seller would need to borrow tokens in order to
+            short-sell them, and borrowing them would require minting them —
+            increasing the circulating supply.
+            <strong>
+              Thus, short-selling is technically impossible on Ideamarket
+            </strong>
+            .<br />
+            Like any existing market, there’s nothing explicitly preventing a
+            rich person from inflating a listing’s capitalization. But no amount
+            of money can artificially reduce the ranking of a listing they don’t
+            like.
           </p>
+        </div>
+        <div id="faq-prediction-get-listed">
+          <h3>What do I need to get listed?</h3>
+          <p>Listing new accounts is completely trustless.</p>
         </div>
         <div id="faq-prediction-owning-vs-listing">
           <h3>Is a ‘listing owner’ the same as a ‘listing submitter’?</h3>
           <p>
             No. You can add @naval’s twitter account as a listing to the Twitter
             market, but only Naval can claim ownership of the interest that
-            accrues to his account.
+            accrues to his account. He can do this by clicking “Verify” at the
+            bottom of his token’s Listing Page.
           </p>
         </div>
         <div id="faq-prediction-claim-interest">
@@ -271,6 +315,11 @@ export default function Help() {
             >
               compound.finance
             </a>
+            . Check it out at{' '}
+            <a href="https://loanscan.io" target="_blank" className="underline">
+              loanscan.io
+            </a>{' '}
+            under “Earn Yield” —&gt; DAI/Compound.
           </p>
         </div>
         <div id="philosophy">
@@ -293,6 +342,16 @@ export default function Help() {
               className="rounded"
             />
           </div>
+          <p>
+            Read more about our philosophy on{' '}
+            <a
+              href="https://ideamarket.io/#philosophy"
+              target="_blank"
+              className="underline"
+            >
+              ideamarket.io
+            </a>
+          </p>
         </div>
       </div>
     </>
