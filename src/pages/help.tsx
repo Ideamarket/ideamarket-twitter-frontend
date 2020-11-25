@@ -80,8 +80,15 @@ export default function Help() {
           <h3>Overview</h3>
           <p>
             Ideamarket lists Twitter accounts on an exchange. To increase an
-            account’s rank, buy upvotes. Upvotes bought later cost more. Like
-            reddit, with a profit motive (“buy low, sell high”).
+            account’s rank, buy upvotes. Upvotes bought later cost more.
+            <br />
+            <br />
+            Token price and supply are managed by a bonding curve. The first
+            1,000 tokens for each listing cost $0.10 each. Price increases by
+            $0.01 for each 100 tokens minted thereafter.
+            <br />
+            <br />
+            Like reddit, with a profit motive (“buy low, sell high”).
           </p>
           <div className="flex justify-center">
             <img
@@ -343,7 +350,7 @@ export default function Help() {
             />
           </div>
           <p>
-            Read more about our philosophy on{' '}
+            Read more about our philosophy at{' '}
             <a
               href="https://ideamarket.io/#philosophy"
               target="_blank"
