@@ -38,11 +38,13 @@ export default function WrongNetworkOverlay() {
       <div className="flex items-center justify-center w-full h-full">
         <div className="flex flex-col items-center">
           <img
-            className="block w-auto h-64"
+            className="block w-auto h-32 md:h-64"
             src="/logo.png"
             alt="Workflow logo"
           />
-          <h1 className="mt-5 text-3xl">Wrong network configuration</h1>
+          <h1 className="mt-5 text-2xl md:text-3xl">
+            Wrong network configuration
+          </h1>
           <div className="mt-10 text-sm">
             Your wallet is connected to the wrong network.
           </div>
