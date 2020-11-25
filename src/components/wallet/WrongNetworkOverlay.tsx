@@ -43,7 +43,7 @@ export default function WrongNetworkOverlay() {
             alt="Workflow logo"
           />
           <h1 className="mt-5 text-2xl md:text-3xl">
-            Wrong network configuration
+            Change network selection
           </h1>
           <div className="mt-10 text-sm">
             Your wallet is connected to the wrong network.
