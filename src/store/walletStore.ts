@@ -64,8 +64,10 @@ export async function setWeb3(web3, wallet) {
   const address = (await web3.eth.getAccounts())[0]
   web3.eth.defaultAccount = address
 
-  web3.currentProvider.on('networkChanged', handleWeb3Change)
-  web3.currentProvider.on('accountsChanged', handleWeb3Change)
+  if (web3.currentProvider.on !== undefined) {
+    web3.currentProvider.on('networkChanged', handleWeb3Change)
+    web3.currentProvider.on('accountsChanged', handleWeb3Change)
+  }
 
   initContractsFromWeb3(web3)
 
