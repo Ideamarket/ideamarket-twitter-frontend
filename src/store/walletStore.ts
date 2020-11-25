@@ -6,11 +6,13 @@ import { initContractsFromWeb3, clearContracts } from './contractStore'
 type State = {
   web3: Web3
   address: string
+  network: string
 }
 
 export const useWalletStore = create<State>((set) => ({
   web3: undefined,
   address: '',
+  network: '',
 }))
 
 export const initWalletStore = async () => {
@@ -50,15 +52,21 @@ export const initWalletStore = async () => {
   }
 }
 
+async function handleWeb3ConfigChange(config) {}
+
 export async function setWeb3(web3, wallet) {
   const address = (await web3.eth.getAccounts())[0]
   web3.eth.defaultAccount = address
 
+  web3.currentProvider.publicConfigStore.on('update', handleWeb3ConfigChange)
+
   initContractsFromWeb3(web3)
 
+  const network = await web3.eth.net.getNetworkType()
   useWalletStore.setState({
     web3: web3,
     address: address,
+    network: network,
   })
 
   localStorage.setItem('WALLET_TYPE', wallet.toString())

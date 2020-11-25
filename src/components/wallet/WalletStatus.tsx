@@ -1,8 +1,8 @@
 import React from 'react'
 import { useWalletStore } from 'store/walletStore'
 
-import DotRed from '../assets/dotred.svg'
-import DotGreen from '../assets/dotgreen.svg'
+import DotRed from '../../assets/dotred.svg'
+import DotGreen from '../../assets/dotgreen.svg'
 
 export default function WalletStatus({ openModal }: { openModal: () => void }) {
   const web3 = useWalletStore((state) => state.web3)

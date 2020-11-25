@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { ReactNode, useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -34,10 +33,6 @@ import { DateTime } from 'luxon'
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function TokenDetails() {
-  const NoSSRWalletModal = dynamic(() => import('components/WalletModal'), {
-    ssr: false,
-  })
-
   const { setIsWalletModalOpen } = useContext(GlobalContext)
   const web3 = useWalletStore((state) => state.web3)
   const connectedAddress = useWalletStore((state) => state.address)
@@ -711,7 +706,6 @@ export default function TokenDetails() {
           <Footer />
         </div>
       </div>
-      <NoSSRWalletModal />
     </div>
   )
 }
