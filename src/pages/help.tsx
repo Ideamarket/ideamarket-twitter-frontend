@@ -92,7 +92,11 @@ export default function Help() {
           </p>
           <div className="flex justify-center">
             <div style={{ maxWidth: '800px' }}>
-              <img src="/how-it-works-listings.png" className="rounded" />
+              <img
+                src="/how-it-works-listings.png"
+                className="rounded"
+                alt="How it works - Listings"
+              />
             </div>
           </div>
           <p>
@@ -100,6 +104,7 @@ export default function Help() {
             <a
               href="https://compound.finance"
               target="_blank"
+              rel="noreferrer"
               className="underline"
             >
               compound.finance
@@ -109,7 +114,11 @@ export default function Help() {
           </p>
           <div className="flex justify-center">
             <div style={{ maxWidth: '800px' }}>
-              <img src="/how-it-works-deposits.png" className="rounded" />
+              <img
+                src="/how-it-works-deposits.png"
+                className="rounded"
+                alt="How it works - Deposits"
+              />
             </div>
           </div>
           <p>
@@ -118,7 +127,11 @@ export default function Help() {
           </p>
           <div className="flex justify-center">
             <div style={{ maxWidth: '800px' }}>
-              <img src="/how-it-works-income.png" className="rounded" />
+              <img
+                src="/how-it-works-income.png"
+                className="rounded"
+                alt="How it works - Income"
+              />
             </div>
           </div>
           <p>
@@ -147,7 +160,11 @@ export default function Help() {
           <p>Click each listing to open its listing page.</p>
           <div className="flex justify-center">
             <div style={{ maxWidth: '800px' }}>
-              <img src="/how-it-works-details.png" className="rounded" />
+              <img
+                src="/how-it-works-details.png"
+                className="rounded"
+                alt="How it works - Details"
+              />
             </div>
           </div>
         </div>
@@ -167,6 +184,7 @@ export default function Help() {
               <a
                 href="https://compound.finance"
                 target="_blank"
+                rel="noreferrer"
                 className="underline"
               >
                 compound.finance
@@ -175,7 +193,11 @@ export default function Help() {
           </ul>
           <div className="flex justify-center">
             <div style={{ maxWidth: '800px' }}>
-              <img src="/how-it-works-endowments.png" className="rounded" />
+              <img
+                src="/how-it-works-endowments.png"
+                className="rounded"
+                alt="How it works - Endowments"
+              />
             </div>
           </div>
         </div>
@@ -308,12 +330,18 @@ export default function Help() {
             <a
               href="https://compound.finance"
               target="_blank"
+              rel="noreferrer"
               className="underline"
             >
               compound.finance
             </a>
             . Check it out at{' '}
-            <a href="https://loanscan.io" target="_blank" className="underline">
+            <a
+              href="https://loanscan.io"
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
               loanscan.io
             </a>{' '}
             under “Earn Yield” —&gt; DAI/Compound.
@@ -334,7 +362,11 @@ export default function Help() {
           </p>
           <div className="flex justify-center">
             <div style={{ maxWidth: '800px' }}>
-              <img src="/how-it-works-philosophy.png" className="rounded" />
+              <img
+                src="/how-it-works-philosophy.png"
+                className="rounded"
+                alt="How it works - Philosophy"
+              />
             </div>
           </div>
           <p>
@@ -342,6 +374,7 @@ export default function Help() {
             <a
               href="https://ideamarket.io/#philosophy"
               target="_blank"
+              rel="noreferrer"
               className="underline"
             >
               ideamarket.io
