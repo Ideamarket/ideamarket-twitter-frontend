@@ -4351,10 +4351,10 @@ eth-tx-summary@^3.1.2:
     ethereumjs-vm "^2.6.0"
     through2 "^2.0.3"
 
-eth-wallets@1.0.10:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/eth-wallets/-/eth-wallets-1.0.10.tgz#5488cd12c284438677d39e463acba246a77013c1"
-  integrity sha512-+28/8vzMY4Eq9yPcu/slAn0iLSFGQ7ROTz5UcXtvcVe6ipPeW9TFhYiDdvNrIYpYUZ9o3uV8G9FkzDWCzQeO3Q==
+eth-wallets@1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/eth-wallets/-/eth-wallets-1.0.11.tgz#40946bf0ca7387214cdc6d473319cde0730548aa"
+  integrity sha512-98Exf0asVYxpVUVy3Edwcj1mwKnSsquCV27/Z7Y2ahEF5mOsCRUiW/YvG3WRhZj+tNkyieKv1yz88nyI08/NGA==
   dependencies:
     "@portis/web3" "^2.0.0-beta.59"
     "@walletconnect/web3-provider" "^1.3.1"
