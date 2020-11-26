@@ -2,6 +2,7 @@ import create from 'zustand'
 import Web3 from 'web3'
 
 import { initContractsFromWeb3, clearContracts } from './contractStore'
+import { NETWORK } from 'utils'
 
 type State = {
   web3: Web3
@@ -17,21 +18,36 @@ export const useWalletStore = create<State>((set) => ({
 
 export const initWalletStore = async () => {
   const wallets = require('eth-wallets')
-  wallets.setOption(
+  await wallets.setOption(
     wallets.WALLETS.WALLETCONNECT,
     wallets.OPTIONS.INFURA_KEY,
     '3399077c10a24059be2a6c5b4fa77c03'
   )
-  wallets.setOption(
+  await wallets.setOption(
     wallets.WALLETS.COINBASE,
     wallets.OPTIONS.JSON_RPC_URL,
     'https://mainnet.infura.io/v3/3399077c10a24059be2a6c5b4fa77c03'
   )
-  wallets.setOption(
-    wallets.WALLETS.FORTMATIC,
-    wallets.OPTIONS.API_KEY,
-    'pk_live_B3A1A25FBF96DCB5'
-  )
+
+  if (NETWORK === 'mainnet') {
+    await wallets.setOption(
+      wallets.WALLETS.FORTMATIC,
+      wallets.OPTIONS.API_KEY,
+      'pk_live_B3A1A25FBF96DCB5'
+    )
+  } else {
+    await wallets.setOption(
+      wallets.WALLETS.FORTMATIC,
+      wallets.OPTIONS.API_KEY,
+      'pk_test_4F838B34CAE38BC8'
+    )
+
+    await wallets.setOption(
+      wallets.WALLETS.FORTMATIC,
+      wallets.OPTIONS.CHAIN,
+      wallets.CHAINS.RINKEBY
+    )
+  }
 
   const walletStr = localStorage.getItem('WALLET_TYPE')
   try {
