@@ -1,9 +1,11 @@
 import create from 'zustand'
 import Web3 from 'web3'
 
-import { addresses } from 'utils'
+import { addresses, NETWORK } from 'utils'
 import DeployedAddressesRinkeby from '../assets/deployed-rinkeby.json'
+import DeployedAddressesTest from '../assets/deployed-test.json'
 import DeployedABIsRinkeby from '../assets/abis-rinkeby.json'
+import DeployedABIsTest from '../assets/abis-test.json'
 import UniswapFactoryABI from '../assets/abi-uniswap-factory.json'
 import UniswapPairABI from '../assets/abi-uniswap-pair.json'
 import ERC20ABI from '../assets/abi-erc20.json'
@@ -35,25 +37,37 @@ export function clearContracts() {
 }
 
 export function initContractsFromWeb3(web3: Web3) {
+  let deployedAddresses
+  let abis
+  if (NETWORK === 'rinkeby') {
+    deployedAddresses = DeployedAddressesRinkeby
+    abis = DeployedABIsRinkeby
+  } else if (NETWORK === 'test') {
+    deployedAddresses = DeployedAddressesTest
+    abis = DeployedABIsTest
+  } else {
+    throw 'initContractsFromWeb3: unknown network'
+  }
+
   const daiContract = new web3.eth.Contract(ERC20ABI as any, addresses.dai, {
     from: web3.eth.defaultAccount,
   })
 
   const factoryContract = new web3.eth.Contract(
-    DeployedABIsRinkeby.ideaTokenFactory as any,
-    DeployedAddressesRinkeby.ideaTokenFactory,
+    abis.ideaTokenFactory as any,
+    deployedAddresses.ideaTokenFactory,
     { from: web3.eth.defaultAccount }
   )
 
   const exchangeContract = new web3.eth.Contract(
-    DeployedABIsRinkeby.ideaTokenExchange as any,
-    DeployedAddressesRinkeby.ideaTokenExchange,
+    abis.ideaTokenExchange as any,
+    deployedAddresses.ideaTokenExchange,
     { from: web3.eth.defaultAccount }
   )
 
   const currencyConverterContract = new web3.eth.Contract(
-    DeployedABIsRinkeby.currencyConverter as any,
-    DeployedAddressesRinkeby.currencyConverter,
+    abis.currencyConverter as any,
+    deployedAddresses.currencyConverter,
     { from: web3.eth.defaultAccount }
   )
 
