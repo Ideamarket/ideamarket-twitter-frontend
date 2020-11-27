@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK
   ? process.env.NEXT_PUBLIC_NETWORK
   : 'rinkeby'
+
 if (!process.env.NEXT_PUBLIC_NETWORK) {
   console.log('WARNING: NEXT_PUBLIC_NETWORK not found. Defaulting to rinkeby')
 }
@@ -13,11 +14,11 @@ if (!process.env.NEXT_PUBLIC_NETWORK) {
 export const addresses = {
   ZERO: '0x0000000000000000000000000000000000000000',
   dai:
-    NETWORK === 'rinkeby'
+    NETWORK === 'rinkeby' || NETWORK === 'test'
       ? '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa'
       : '0x6B175474E89094C44Da98b954EedeAC495271d0F',
   weth:
-    NETWORK === 'rinkeby'
+    NETWORK === 'rinkeby' || NETWORK === 'test'
       ? '0xc778417E063141139Fce010982780140Aa0cD5Ab'
       : '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
 }

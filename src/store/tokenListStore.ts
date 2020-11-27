@@ -25,7 +25,10 @@ function setNestedState(fn) {
 }
 
 export async function initTokenList() {
-  const jsonTokens = NETWORK === 'rinkeby' ? TokenListRinkeby : TokenListMainnet
+  const jsonTokens =
+    NETWORK === 'rinkeby' || NETWORK === 'test'
+      ? TokenListRinkeby
+      : TokenListMainnet
   let tokens: TokenListEntry[] = jsonTokens.map(
     (token) =>
       <TokenListEntry>{
