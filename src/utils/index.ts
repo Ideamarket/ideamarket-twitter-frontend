@@ -64,7 +64,7 @@ export function floatToWeb3BN(float: string, decimals: number) {
   return new BN(big.toFixed())
 }
 
-// https://usehooks.com/useWindowSize/
+// https://usehooks.com/useWindowSize
 export function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
     width: undefined,
