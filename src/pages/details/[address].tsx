@@ -10,6 +10,7 @@ import {
   TradeInterface,
   TokenCard,
   Footer,
+  VerifyModal,
 } from 'components'
 import { querySupplyRate, queryExchangeRate } from 'store/compoundStore'
 import { useWalletStore } from 'store/walletStore'
@@ -706,6 +707,12 @@ export default function TokenDetails() {
           <Footer />
         </div>
       </div>
+      <VerifyModal
+        token={token}
+        market={market}
+        isOpen={true}
+        setIsOpen={(b) => {}}
+      />
     </div>
   )
 }
