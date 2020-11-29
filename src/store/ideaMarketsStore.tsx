@@ -741,3 +741,27 @@ export function getMarketVerificationExplanation(market: IdeaMarket): string {
 
   return '-'
 }
+
+export function getMarketUUIDPrompt(market: IdeaMarket, uuid: string): string {
+  if (market.name === 'Twitter') {
+    return `Ideamarket Verification: ${uuid}`
+  }
+
+  throw 'getMarketUUIDPrompt: unknown market'
+}
+
+export function getMarketUUIDPromptExplanation(market: IdeaMarket): string {
+  if (market.name === 'Twitter') {
+    return `This is your verification code. Please post a Tweet with the below content. After you posted the Tweet, click Next.`
+  }
+
+  throw 'getMarketUUIDPromptExplanation: unknown market'
+}
+
+export function getMarketConfirmCheckboxText(market: IdeaMarket): string {
+  if (market.name === 'Twitter') {
+    return `I have posted the Tweet.`
+  }
+
+  throw 'getMarketConfirmCheckboxText: unknown market'
+}
