@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import classNames from 'classnames'
 
+import { GlobalContext } from '../pages/_app'
 import { requestVerification, submitVerification } from 'actions'
 import {
   IdeaMarket,
@@ -38,6 +39,10 @@ export default function VerifyModal({
   const [ownerAddress, setOwnerAddress] = useState('')
   const isValidOwnerAddress = isAddress(ownerAddress)
 
+  const { setIsWalletModalOpen, setOnWalletConnectedCallback } = useContext(
+    GlobalContext
+  )
+
   const [uuid, setUUID] = useState('')
   const [tx, setTx] = useState('')
   const marketVerificationExplanation = getMarketVerificationExplanation(market)
@@ -48,6 +53,14 @@ export default function VerifyModal({
   const [confirmCheckboxChecked, setConfirmCheckboxChecked] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+
+  async function openWalletModal() {
+    setOnWalletConnectedCallback(() => () => {
+      const addr = useWalletStore.getState().address
+      setOwnerAddress(addr)
+    })
+    setIsWalletModalOpen(true)
+  }
 
   async function initiateVerification() {
     setIsLoading(true)
@@ -134,7 +147,9 @@ export default function VerifyModal({
                   className="mt-2 md:mt-0 md:ml-2.5 w-32 h-10 text-sm text-brand-blue bg-white border border-brand-blue rounded-lg tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue hover:text-white"
                   disabled={isLoading}
                   onClick={() => {
-                    setOwnerAddress(connectedAddress)
+                    connectedAddress !== undefined && connectedAddress !== ''
+                      ? setOwnerAddress(connectedAddress)
+                      : openWalletModal()
                   }}
                 >
                   Use connected
