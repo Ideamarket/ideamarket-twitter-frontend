@@ -35,6 +35,7 @@ const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function TokenDetails() {
   const { setIsWalletModalOpen } = useContext(GlobalContext)
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false)
   const web3 = useWalletStore((state) => state.web3)
   const connectedAddress = useWalletStore((state) => state.address)
   const router = useRouter()
@@ -548,7 +549,12 @@ export default function TokenDetails() {
                             able to withdraw the accumulated interest.
                           </div>
                           <div className="flex justify-center">
-                            <button className="w-20 py-1 mt-2 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
+                            <button
+                              className="w-20 py-1 mt-2 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+                              onClick={() => {
+                                setIsVerifyModalOpen(true)
+                              }}
+                            >
                               Verify
                             </button>
                           </div>
@@ -707,12 +713,14 @@ export default function TokenDetails() {
           <Footer />
         </div>
       </div>
-      <VerifyModal
-        token={token}
-        market={market}
-        isOpen={true}
-        setIsOpen={(b) => {}}
-      />
+      {!isLoading && (
+        <VerifyModal
+          token={token}
+          market={market}
+          isOpen={isVerifyModalOpen}
+          setIsOpen={setIsVerifyModalOpen}
+        />
+      )}
     </div>
   )
 }

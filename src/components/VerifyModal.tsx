@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import classNames from 'classnames'
 
 import { requestVerification, submitVerification } from 'actions'
@@ -74,6 +74,17 @@ export default function VerifyModal({
 
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    if (!isOpen) {
+      setPage(PAGES.OWNER_ADDRESS)
+      setOwnerAddress('')
+      setUUID('')
+      setTx('')
+      setIsLoading(false)
+      setErrorMessage('')
+    }
+  }, [isOpen])
 
   if (!isOpen) {
     return <></>
