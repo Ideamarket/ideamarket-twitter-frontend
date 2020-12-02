@@ -12,7 +12,7 @@ import { web3BNToFloatString, NETWORK } from '../utils'
 import { useWalletStore } from 'store/walletStore'
 import { getUniswapPairContract, useContractStore } from 'store/contractStore'
 import { addresses } from '../utils'
-import { IdeaToken } from '../store/ideaMarketsStore'
+import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
@@ -21,6 +21,7 @@ const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function useOutputAmount(
   ideaToken: IdeaToken,
+  market: IdeaMarket,
   tokenAddress: string,
   amount: string,
   decimals: number,
@@ -34,7 +35,11 @@ export default function useOutputAmount(
     let isCancelled = false
 
     async function calculateBuyCost() {
-      if (!useWalletStore.getState().web3 || !ideaToken || !tokenAddress) {
+      if (
+        !useWalletStore.getState().web3 ||
+        !tokenAddress ||
+        (!ideaToken && !market)
+      ) {
         return new BN('0')
       }
 
@@ -43,11 +48,27 @@ export default function useOutputAmount(
       )
 
       const exchangeContract = useContractStore.getState().exchangeContract
-      const requiredDaiAmount = new BN(
-        await exchangeContract.methods
-          .getCostForBuyingTokens(ideaToken.address, amountBN)
+
+      let requiredDaiAmount
+      if (!ideaToken) {
+        const factoryContract = useContractStore.getState().factoryContract
+        const marketDetails = await factoryContract.methods
+          .getMarketDetailsByID(market.marketID)
           .call()
-      )
+        requiredDaiAmount = new BN(
+          (
+            await exchangeContract.methods
+              .getCostsForBuyingTokens(marketDetails, new BN('0'), amountBN)
+              .call()
+          )[0]
+        )
+      } else {
+        requiredDaiAmount = new BN(
+          await exchangeContract.methods
+            .getCostForBuyingTokens(ideaToken.address, amountBN)
+            .call()
+        )
+      }
 
       if (tokenAddress === addresses.dai) {
         return requiredDaiAmount

@@ -31,7 +31,11 @@ export default function TradeModal({
         ideaToken={ideaToken}
         market={market}
         onTradeSuccessful={onTradeSuccessful}
+        onValuesChanged={() => {}}
         resetOn={isOpen}
+        showTypeSelection={true}
+        showTradeButton={true}
+        disabled={false}
       />
     </Modal>
   )

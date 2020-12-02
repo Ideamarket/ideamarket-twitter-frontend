@@ -1,9 +1,17 @@
 import classNames from 'classnames'
 import { useState } from 'react'
-import { listToken, verifyTokenName } from 'actions'
+import {
+  listToken,
+  listAndBuyToken,
+  verifyTokenName,
+  getTokenAllowance,
+  approveToken,
+} from 'actions'
 import { userInputToTokenName } from 'store/ideaMarketsStore'
-import { NETWORK } from 'utils'
-import { Modal, MarketSelect } from './'
+import { addresses, NETWORK } from 'utils'
+import { Modal, MarketSelect, TradeInterface } from './'
+import { useContractStore } from 'store/contractStore'
+import BN from 'bn.js'
 
 export default function ListTokenModal({
   isOpen,
@@ -14,11 +22,19 @@ export default function ListTokenModal({
 }) {
   const [selectedMarket, setSelectedMarket] = useState(undefined)
 
+  const [pendingTxName, setPendingTxName] = useState('')
   const [pendingTxHash, setPendingTxHash] = useState('')
   const [isTxPending, setIsTxPending] = useState(false)
 
   const [tokenName, setTokenName] = useState('')
-  const [isValidTokenName, setIsValidTokenName] = useState(true)
+  const [isValidTokenName, setIsValidTokenName] = useState(false)
+
+  const [isWantBuyChecked, setIsWantBuyChecked] = useState(false)
+  const [buyPayWithAddress, setBuyPayWithAddress] = useState(undefined)
+  const [buyInputAmountBN, setBuyInputAmountBN] = useState(undefined)
+  const [buyOutputAmountBN, setBuyOutputAmountBN] = useState(undefined)
+  const [buySlippage, setBuySlippage] = useState(undefined)
+  const [isBuyValid, setIsBuyValid] = useState(false)
 
   async function tokenNameInputChanged(val) {
     setTokenName(val)
@@ -28,23 +44,87 @@ export default function ListTokenModal({
     )
   }
 
+  function onTradeInterfaceValuesChanged(
+    ideaTokenAmount: BN,
+    tokenAddress: string,
+    tokenAmount: BN,
+    slippage: number,
+    isValid: boolean
+  ) {
+    setBuyInputAmountBN(tokenAmount)
+    setBuyPayWithAddress(tokenAddress)
+    setBuyOutputAmountBN(ideaTokenAmount)
+    setBuySlippage(slippage)
+    setIsBuyValid(isValid)
+  }
+
   async function listClicked() {
     const finalTokenName = userInputToTokenName(selectedMarket.name, tokenName)
 
-    setIsTxPending(true)
-    try {
-      await listToken(finalTokenName, selectedMarket.marketID).on(
-        'transactionHash',
-        (hash) => {
-          setPendingTxHash(hash)
+    if (isWantBuyChecked) {
+      if (buyPayWithAddress !== addresses.ZERO) {
+        const spender = useContractStore.getState().multiActionContract.options
+          .address
+        const allowance = await getTokenAllowance(buyPayWithAddress, spender)
+        if (allowance.lt(buyInputAmountBN)) {
+          setPendingTxName('Approve')
+          setIsTxPending(true)
+          try {
+            await approveToken(buyPayWithAddress, spender, buyInputAmountBN).on(
+              'transactionHash',
+              (hash) => {
+                setPendingTxHash(hash)
+              }
+            )
+          } catch (ex) {
+            console.log(ex)
+            return
+          } finally {
+            setPendingTxName('')
+            setPendingTxHash('')
+            setIsTxPending(false)
+          }
         }
-      )
-    } catch (ex) {
-      console.log(ex)
-      return
-    } finally {
-      setPendingTxHash('')
-      setIsTxPending(false)
+      }
+
+      setPendingTxName('List and buy')
+      setIsTxPending(true)
+      try {
+        await listAndBuyToken(
+          finalTokenName,
+          selectedMarket,
+          buyPayWithAddress,
+          buyOutputAmountBN,
+          buyInputAmountBN,
+          buySlippage
+        ).on('transactionHash', (hash) => {
+          setPendingTxHash(hash)
+        })
+      } catch (ex) {
+        console.log(ex)
+        return
+      } finally {
+        setPendingTxName('')
+        setPendingTxHash('')
+        setIsTxPending(false)
+      }
+    } else {
+      setIsTxPending(true)
+      setPendingTxName('List Token')
+      try {
+        await listToken(finalTokenName, selectedMarket.marketID).on(
+          'transactionHash',
+          (hash) => {
+            setPendingTxHash(hash)
+          }
+        )
+      } catch (ex) {
+        console.log(ex)
+        return
+      } finally {
+        setPendingTxHash('')
+        setIsTxPending(false)
+      }
     }
 
     setIsOpen(false)
@@ -64,6 +144,7 @@ export default function ListTokenModal({
       <p className="mx-5 mt-5 text-sm text-brand-gray-2">Market</p>
       <div className="mx-5">
         <MarketSelect
+          disabled={isTxPending}
           onChange={(value) => {
             setSelectedMarket(value.market)
           }}
@@ -88,18 +169,61 @@ export default function ListTokenModal({
           />
         </div>
       </div>
+      <div className="flex items-center justify-center mt-5 text-sm text-brand-gray-2">
+        <input
+          type="checkbox"
+          id="buyCheckbox"
+          disabled={
+            selectedMarket === undefined ||
+            !isValidTokenName ||
+            tokenName === '' ||
+            isTxPending
+          }
+          checked={isWantBuyChecked}
+          onChange={(e) => {
+            setIsWantBuyChecked(e.target.checked)
+          }}
+        />
+        <label htmlFor="buyCheckbox" className="ml-2">
+          I want to immediately buy this token
+        </label>
+      </div>
+      <div className="relative mt-2.5">
+        <hr className="my-1" />
+        <TradeInterface
+          market={selectedMarket}
+          ideaToken={undefined}
+          onTradeSuccessful={() => {}}
+          onValuesChanged={onTradeInterfaceValuesChanged}
+          resetOn={false}
+          showTypeSelection={false}
+          showTradeButton={false}
+          disabled={isTxPending}
+        />
+        {!isWantBuyChecked && (
+          <div className="absolute top-0 left-0 w-full h-full bg-gray-600 opacity-75"></div>
+        )}
+        <hr className="mt-2.5" />
+      </div>
       <div className="flex justify-center mb-5">
         <button
-          disabled={!isValidTokenName || isTxPending}
+          disabled={
+            !isValidTokenName ||
+            isTxPending ||
+            (isWantBuyChecked && !isBuyValid)
+          }
           onClick={listClicked}
           className={classNames(
-            'w-32 h-10 mt-5 text-base font-medium bg-white border-2 rounded-lg  text-brand-blue  tracking-tightest-2 font-sf-compact-medium',
-            isValidTokenName
+            'w-36 h-10 mt-5 text-base font-medium bg-white border-2 rounded-lg  text-brand-blue  tracking-tightest-2 font-sf-compact-medium',
+            selectedMarket !== undefined &&
+              isValidTokenName &&
+              !isTxPending &&
+              (!isWantBuyChecked || (isWantBuyChecked && isBuyValid))
               ? 'border-brand-blue hover:bg-brand-blue hover:text-white'
-              : 'border-brand-gray-2 text-brand-gray-2 cursor-default'
+              : 'border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
           )}
         >
-          List Token
+          {isWantBuyChecked ? 'List and buy Token' : 'List Token'}
         </button>
       </div>
       <div
@@ -108,7 +232,7 @@ export default function ListTokenModal({
           isTxPending ? '' : 'invisible'
         )}
       >
-        <div className="font-bold justify-self-center">List Token</div>
+        <div className="font-bold justify-self-center">{pendingTxName}</div>
         <div className="justify-self-center">
           <a
             className={classNames(
@@ -116,7 +240,7 @@ export default function ListTokenModal({
               pendingTxHash === '' ? 'hidden' : ''
             )}
             href={`https://${
-              NETWORK === 'rinkeby' ? 'rinkeby.' : ''
+              NETWORK === 'rinkeby' || NETWORK === 'test' ? 'rinkeby.' : ''
             }etherscan.io/tx/${pendingTxHash}`}
             target="_blank"
           >

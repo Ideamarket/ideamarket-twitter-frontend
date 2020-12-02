@@ -688,7 +688,11 @@ export default function TokenDetails() {
                     ideaToken={token}
                     market={market}
                     onTradeSuccessful={() => {}}
+                    onValuesChanged={() => {}}
                     resetOn={false}
+                    showTypeSelection={true}
+                    showTradeButton={true}
+                    disabled={false}
                   />
                 ) : (
                   <div

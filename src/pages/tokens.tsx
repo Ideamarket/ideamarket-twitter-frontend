@@ -61,6 +61,7 @@ export default function MyTokens() {
                 onChange={(value) => {
                   setSelectedMarketOwnedTokens(value?.market)
                 }}
+                disabled={false}
               />
             </div>
           </div>
@@ -94,6 +95,7 @@ export default function MyTokens() {
                 onChange={(value) => {
                   setSelectedMarketInterestReceiverTokens(value?.market)
                 }}
+                disabled={false}
               />
             </div>
           </div>

@@ -6,10 +6,12 @@ import { queryMarkets } from 'store/ideaMarketsStore'
 
 export default function MarketSelect({
   onChange,
+  disabled,
   isClearable = false,
 }: {
-  isClearable?: boolean
   onChange: (val: any) => void
+  disabled: boolean
+  isClearable?: boolean
 }) {
   const [selectMarketValues, setSelectMarketValues] = useState([])
 
@@ -42,6 +44,7 @@ export default function MarketSelect({
 
   return (
     <Select
+      isDisabled={disabled}
       isClearable={isClearable}
       isSearchable={false}
       onChange={onChange}

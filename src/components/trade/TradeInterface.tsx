@@ -11,20 +11,35 @@ import {
   sellToken,
 } from 'actions'
 import { floatToWeb3BN, addresses, NETWORK } from 'utils'
+import { useContractStore } from 'store/contractStore'
 
 import Select from 'react-select'
-import { useContractStore } from 'store/contractStore'
+import BN from 'bn.js'
 
 export default function TradeInterface({
   ideaToken,
   market,
   onTradeSuccessful,
+  onValuesChanged,
   resetOn,
+  showTypeSelection,
+  showTradeButton,
+  disabled,
 }: {
   ideaToken: IdeaToken
   market: IdeaMarket
   onTradeSuccessful: () => void
+  onValuesChanged: (
+    ideaTokenAmount: BN,
+    tokenAddress: string,
+    tokenAmount: BN,
+    slippage: number,
+    isValid: boolean
+  ) => void
   resetOn: boolean
+  showTypeSelection: boolean
+  showTradeButton: boolean
+  disabled: boolean
 }) {
   const [tradeType, setTradeType] = useState('buy')
   const tokenList = useTokenListStore((state) => state.tokens)
@@ -48,6 +63,7 @@ export default function TradeInterface({
   const [ideaTokenAmount, setIdeaTokenAmount] = useState('0')
   const [isTokenAmountLoading, tokenAmountBN, tokenAmount] = useOutputAmount(
     ideaToken,
+    market,
     selectedToken?.address,
     ideaTokenAmount,
     selectedToken?.decimals,
@@ -76,6 +92,36 @@ export default function TradeInterface({
     setIdeaTokenAmount('')
     setTradeType('buy')
   }, [resetOn])
+
+  useEffect(() => {
+    let isValid =
+      selectedToken !== undefined &&
+      ideaTokenAmount !== '' &&
+      tokenAmount !== '' &&
+      tokenAmountBN !== undefined &&
+      tokenAmountBN.gt(new BN('0')) &&
+      floatToWeb3BN(ideaTokenAmount, 18).gt(new BN('0'))
+
+    if (isValid) {
+      if (tradeType === 'buy') {
+        if (tokenAmountBN.gt(tokenBalanceBN)) {
+          isValid = false
+        }
+      } else {
+        if (floatToWeb3BN(ideaTokenAmount, 18).gt(ideaTokenBalanceBN)) {
+          isValid = false
+        }
+      }
+    }
+
+    onValuesChanged(
+      floatToWeb3BN(ideaTokenAmount, 18),
+      selectedToken?.address,
+      tokenAmountBN,
+      slippage,
+      isValid
+    )
+  }, [ideaTokenAmount, selectedToken, tokenAmountBN, slippage])
 
   const selectTokensFormat = (entry) => (
     <div className="flex flex-row">
@@ -206,36 +252,39 @@ export default function TradeInterface({
   return (
     <>
       <div className="lg:min-w-100">
-        <nav className="flex">
-          <a
-            onClick={() => {
-              if (!isTxPending) setTradeType('buy')
-            }}
-            className={classNames(
-              'ml-5 mr-2.5 text-center flex-grow px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
-              tradeType === 'buy'
-                ? 'font-semibold text-brand-green border-brand-green focus:text-brand-green focus:border-very-dark-blue-2'
-                : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
-            )}
-          >
-            Buy
-          </a>
-          <a
-            onClick={() => {
-              if (!isTxPending) setTradeType('sell')
-            }}
-            className={classNames(
-              'ml-2.5 mr-5 text-center flex-grow px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
-              tradeType === 'sell'
-                ? 'font-semibold text-brand-red border-brand-red focus:text-brand-red focus:border-brand-red'
-                : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
-            )}
-          >
-            Sell
-          </a>
-        </nav>
-        <hr className="my-2.5" />
-
+        {showTypeSelection && (
+          <>
+            <nav className="flex">
+              <a
+                onClick={() => {
+                  if (!isTxPending) setTradeType('buy')
+                }}
+                className={classNames(
+                  'ml-5 mr-2.5 text-center flex-grow px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
+                  tradeType === 'buy'
+                    ? 'font-semibold text-brand-green border-brand-green focus:text-brand-green focus:border-very-dark-blue-2'
+                    : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
+                )}
+              >
+                Buy
+              </a>
+              <a
+                onClick={() => {
+                  if (!isTxPending) setTradeType('sell')
+                }}
+                className={classNames(
+                  'ml-2.5 mr-5 text-center flex-grow px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
+                  tradeType === 'sell'
+                    ? 'font-semibold text-brand-red border-brand-red focus:text-brand-red focus:border-brand-red'
+                    : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
+                )}
+              >
+                Sell
+              </a>
+            </nav>
+            <hr className="my-2.5" />
+          </>
+        )}
         <p className="mx-5 mt-5 text-sm text-brand-gray-2">
           {tradeType === 'buy' ? 'Pay with' : 'Receive'}
         </p>
@@ -243,7 +292,7 @@ export default function TradeInterface({
           <Select
             isClearable={false}
             isSearchable={false}
-            isDisabled={isTxPending}
+            isDisabled={isTxPending || disabled}
             onChange={(value) => {
               setSelectedToken(value.token)
             }}
@@ -298,7 +347,7 @@ export default function TradeInterface({
             onChange={(event) => {
               setIdeaTokenAmount(event.target.value)
             }}
-            disabled={isTxPending}
+            disabled={isTxPending || disabled}
           />
         </div>
 
@@ -334,16 +383,16 @@ export default function TradeInterface({
 
         <div className="grid grid-cols-3 mx-5 mt-5 text-xs text-brand-gray-2">
           <div className="flex items-center justify-center">
-            Platform fee: {market.platformFeeRate}%
+            Platform fee: {market?.platformFeeRate || '-'}%
           </div>
           <div className="flex items-center justify-center">
-            Trading fee: {market.tradingFeeRate}%
+            Trading fee: {market?.tradingFeeRate || '-'}%
           </div>
           <div>
             <Select
               isClearable={false}
               isSearchable={false}
-              isDisabled={isTxPending}
+              isDisabled={isTxPending || disabled}
               onChange={(option: SlippageValue) => {
                 slippage = option.value
               }}
@@ -363,79 +412,83 @@ export default function TradeInterface({
         </div>
       </div>
 
-      <hr className="mt-5" />
+      {showTradeButton && (
+        <>
+          <hr className="mt-5" />
 
-      <div className="flex flex-row justify-center mt-5">
-        <button
-          className={classNames(
-            'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
-            isTxPending
-              ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
-              : tradeType === 'buy'
-              ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
-              : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
-          )}
-          disabled={isTxPending}
-          onClick={async () => {
-            tradeType === 'buy' ? onBuyClicked() : onSellClicked()
-          }}
-        >
-          {tradeType === 'buy' ? 'Buy' : 'Sell'}
-        </button>
-      </div>
+          <div className="flex flex-row justify-center mt-5">
+            <button
+              className={classNames(
+                'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
+                isTxPending
+                  ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
+                  : tradeType === 'buy'
+                  ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
+                  : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
+              )}
+              disabled={isTxPending}
+              onClick={async () => {
+                tradeType === 'buy' ? onBuyClicked() : onSellClicked()
+              }}
+            >
+              {tradeType === 'buy' ? 'Buy' : 'Sell'}
+            </button>
+          </div>
 
-      <div
-        className={classNames(
-          'grid grid-cols-3 my-5 text-sm text-brand-gray-2',
-          isTxPending ? '' : 'invisible'
-        )}
-      >
-        <div className="font-bold justify-self-center">{pendingTxName}</div>
-        <div className="justify-self-center">
-          <a
+          <div
             className={classNames(
-              'underline',
-              pendingTxHash === '' ? 'hidden' : ''
+              'grid grid-cols-3 my-5 text-sm text-brand-gray-2',
+              isTxPending ? '' : 'invisible'
             )}
-            href={`https://${
-              NETWORK === 'rinkeby' || NETWORK === 'test' ? 'rinkeby.' : ''
-            }etherscan.io/tx/${pendingTxHash}`}
-            target="_blank"
           >
-            {pendingTxHash.slice(0, 8)}...{pendingTxHash.slice(-6)}
-          </a>
-        </div>
-        <div className="justify-self-center">
-          <svg
-            viewBox="0 0 100 100"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 animate-spin"
-          >
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              style={{
-                fill: 'transparent',
-                stroke: '#0857e0', // brand-blue
-                strokeWidth: '10',
-              }}
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="45"
-              style={{
-                fill: 'transparent',
-                stroke: 'white',
-                strokeWidth: '10',
-                strokeDasharray: '283',
-                strokeDashoffset: '75',
-              }}
-            />
-          </svg>
-        </div>
-      </div>
+            <div className="font-bold justify-self-center">{pendingTxName}</div>
+            <div className="justify-self-center">
+              <a
+                className={classNames(
+                  'underline',
+                  pendingTxHash === '' ? 'hidden' : ''
+                )}
+                href={`https://${
+                  NETWORK === 'rinkeby' || NETWORK === 'test' ? 'rinkeby.' : ''
+                }etherscan.io/tx/${pendingTxHash}`}
+                target="_blank"
+              >
+                {pendingTxHash.slice(0, 8)}...{pendingTxHash.slice(-6)}
+              </a>
+            </div>
+            <div className="justify-self-center">
+              <svg
+                viewBox="0 0 100 100"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5 animate-spin"
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="45"
+                  style={{
+                    fill: 'transparent',
+                    stroke: '#0857e0', // brand-blue
+                    strokeWidth: '10',
+                  }}
+                />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="45"
+                  style={{
+                    fill: 'transparent',
+                    stroke: 'white',
+                    strokeWidth: '10',
+                    strokeDasharray: '283',
+                    strokeDashoffset: '75',
+                  }}
+                />
+              </svg>
+            </div>
+          </div>
+        </>
+      )}
     </>
   )
 }
