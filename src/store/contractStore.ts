@@ -15,7 +15,7 @@ type State = {
   daiContract: any
   factoryContract: any
   exchangeContract: any
-  currencyConverterContract: any
+  multiActionContract: any
   uniswapFactoryContract: any
 }
 
@@ -23,7 +23,7 @@ export const useContractStore = create<State>((set) => ({
   daiContract: undefined,
   factoryContract: undefined,
   exchangeContract: undefined,
-  currencyConverterContract: undefined,
+  multiActionContract: undefined,
   uniswapFactoryContract: undefined,
 }))
 
@@ -32,7 +32,8 @@ export function clearContracts() {
     daiContract: undefined,
     factoryContract: undefined,
     exchangeContract: undefined,
-    currencyConverterContract: undefined,
+    multiActionContract: undefined,
+    uniswapFactoryContract: undefined,
   })
 }
 
@@ -65,9 +66,9 @@ export function initContractsFromWeb3(web3: Web3) {
     { from: web3.eth.defaultAccount }
   )
 
-  const currencyConverterContract = new web3.eth.Contract(
-    abis.currencyConverter as any,
-    deployedAddresses.currencyConverter,
+  const multiActionContract = new web3.eth.Contract(
+    abis.multiAction as any,
+    deployedAddresses.multiAction,
     { from: web3.eth.defaultAccount }
   )
 
@@ -81,7 +82,7 @@ export function initContractsFromWeb3(web3: Web3) {
     daiContract: daiContract,
     factoryContract: factoryContract,
     exchangeContract: exchangeContract,
-    currencyConverterContract: currencyConverterContract,
+    multiActionContract: multiActionContract,
     uniswapFactoryContract: uniswapFactoryContract,
   })
 }

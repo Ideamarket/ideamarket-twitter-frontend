@@ -94,8 +94,7 @@ export default function TradeInterface({
     if (selectedToken.address === addresses.dai) {
       spender = useContractStore.getState().exchangeContract.options.address
     } else {
-      spender = useContractStore.getState().currencyConverterContract.options
-        .address
+      spender = useContractStore.getState().multiActionContract.options.address
     }
 
     const allowance = await getTokenAllowance(selectedToken.address, spender)
@@ -151,12 +150,12 @@ export default function TradeInterface({
     const receiveAmount = tokenAmountBN
 
     if (selectedToken.address !== addresses.dai) {
-      const currencyConverterAddress = useContractStore.getState()
-        .currencyConverterContract.options.address
+      const multiActionContractAddress = useContractStore.getState()
+        .multiActionContract.options.address
 
       const allowance = await getTokenAllowance(
         ideaToken.address,
-        currencyConverterAddress
+        multiActionContractAddress
       )
       if (allowance.lt(sellAmount)) {
         setPendingTxName('Approve')
@@ -164,7 +163,7 @@ export default function TradeInterface({
         try {
           await approveToken(
             ideaToken.address,
-            currencyConverterAddress,
+            multiActionContractAddress,
             sellAmount
           ).on('transactionHash', (hash) => {
             setPendingTxHash(hash)

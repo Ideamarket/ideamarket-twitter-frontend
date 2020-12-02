@@ -13,8 +13,7 @@ export default function buyToken(
 ) {
   const userAddress = useWalletStore.getState().address
   const exchange = useContractStore.getState().exchangeContract
-  const currencyConverter = useContractStore.getState()
-    .currencyConverterContract
+  const multiAction = useContractStore.getState().multiActionContract
 
   const slippageAmount = new BN(
     new BigNumber(amount.toString())
@@ -35,13 +34,14 @@ export default function buyToken(
       userAddress
     )
   } else {
-    contractCall = currencyConverter.methods.buyTokens(
+    contractCall = multiAction.methods.convertAndBuy(
       inputTokenAddress,
       ideaTokenAddress,
       amount,
       fallbackAmount,
       cost,
-      userAddress
+      userAddress,
+      false
     )
 
     if (inputTokenAddress === addresses.ZERO) {

@@ -13,8 +13,7 @@ export default function sellToken(
 ) {
   const userAddress = useWalletStore.getState().address
   const exchange = useContractStore.getState().exchangeContract
-  const currencyConverter = useContractStore.getState()
-    .currencyConverterContract
+  const multiAction = useContractStore.getState().multiActionContract
 
   const slippageAmount = new BN(
     new BigNumber(price.toString())
@@ -32,7 +31,7 @@ export default function sellToken(
       userAddress
     )
   } else {
-    contractCall = currencyConverter.methods.sellTokens(
+    contractCall = multiAction.methods.sellAndConvert(
       outputTokenAddress,
       ideaTokenAddress,
       amount,
