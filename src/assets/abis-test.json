@@ -630,14 +630,30 @@
           "type": "tuple"
         },
         { "internalType": "uint256", "name": "supply", "type": "uint256" },
-        { "internalType": "uint256", "name": "amount", "type": "uint256" }
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "bool", "name": "feesDisabled", "type": "bool" }
       ],
       "name": "getCostsForBuyingTokens",
       "outputs": [
-        { "internalType": "uint256", "name": "", "type": "uint256" },
-        { "internalType": "uint256", "name": "", "type": "uint256" },
-        { "internalType": "uint256", "name": "", "type": "uint256" },
-        { "internalType": "uint256", "name": "", "type": "uint256" }
+        {
+          "components": [
+            { "internalType": "uint256", "name": "total", "type": "uint256" },
+            { "internalType": "uint256", "name": "raw", "type": "uint256" },
+            {
+              "internalType": "uint256",
+              "name": "tradingFee",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "platformFee",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct CostAndPriceAmounts",
+          "name": "",
+          "type": "tuple"
+        }
       ],
       "stateMutability": "pure",
       "type": "function"
@@ -725,14 +741,30 @@
           "type": "tuple"
         },
         { "internalType": "uint256", "name": "supply", "type": "uint256" },
-        { "internalType": "uint256", "name": "amount", "type": "uint256" }
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "bool", "name": "feesDisabled", "type": "bool" }
       ],
       "name": "getPricesForSellingTokens",
       "outputs": [
-        { "internalType": "uint256", "name": "", "type": "uint256" },
-        { "internalType": "uint256", "name": "", "type": "uint256" },
-        { "internalType": "uint256", "name": "", "type": "uint256" },
-        { "internalType": "uint256", "name": "", "type": "uint256" }
+        {
+          "components": [
+            { "internalType": "uint256", "name": "total", "type": "uint256" },
+            { "internalType": "uint256", "name": "raw", "type": "uint256" },
+            {
+              "internalType": "uint256",
+              "name": "tradingFee",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "platformFee",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct CostAndPriceAmounts",
+          "name": "",
+          "type": "tuple"
+        }
       ],
       "stateMutability": "pure",
       "type": "function"
@@ -763,6 +795,15 @@
       "name": "initialize",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" }
+      ],
+      "name": "isTokenFeeDisabled",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -800,6 +841,16 @@
         { "internalType": "address", "name": "newOwner", "type": "address" }
       ],
       "name": "setOwner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "bool", "name": "set", "type": "bool" }
+      ],
+      "name": "setTokenFeeKillswitch",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1090,6 +1141,61 @@
         { "internalType": "string", "name": "marketName", "type": "string" }
       ],
       "name": "getMarketDetailsByName",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "bool", "name": "exists", "type": "bool" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "name", "type": "string" },
+            {
+              "internalType": "contract IIdeaTokenNameVerifier",
+              "name": "nameVerifier",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "numTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "baseCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "priceRise",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hatchTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tradingFeeRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "platformFeeRate",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct MarketDetails",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" }
+      ],
+      "name": "getMarketDetailsByTokenAddress",
       "outputs": [
         {
           "components": [
