@@ -156,7 +156,7 @@ export default function useOutputAmount(
             .call()
         )
       } catch (ex) {
-        return [new BN('0'), web3BNToFloatString(new BN('0'), tenPow18, 4)]
+        return new BN('0')
       }
 
       if (tokenAddress === addresses.dai) {
@@ -223,6 +223,13 @@ export default function useOutputAmount(
     }
 
     async function run(fn) {
+      if (!amount || amount === '') {
+        setOutputBN(new BigNumber('0'))
+        setOutput('0.0000')
+        setIsLoading(false)
+        return
+      }
+
       const bn = await fn
       if (!isCancelled) {
         const pow = new BigNumber('10').pow(new BigNumber('18'))
