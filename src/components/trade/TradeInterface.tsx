@@ -97,10 +97,6 @@ export default function TradeInterface({
   }, [resetOn])
 
   useEffect(() => {
-    if (tokenAmountBN) {
-      console.log(tokenAmountBN.toString(), typeof tokenAmountBN)
-    }
-
     let isValid =
       selectedToken !== undefined &&
       ideaTokenAmount !== '' &&
