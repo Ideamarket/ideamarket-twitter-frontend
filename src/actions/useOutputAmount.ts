@@ -58,9 +58,14 @@ export default function useOutputAmount(
         requiredDaiAmount = new BN(
           (
             await exchangeContract.methods
-              .getCostsForBuyingTokens(marketDetails, new BN('0'), amountBN)
+              .getCostsForBuyingTokens(
+                marketDetails,
+                new BN('0'),
+                amountBN,
+                false
+              )
               .call()
-          )[0]
+          ).total
         )
       } else {
         requiredDaiAmount = new BN(
