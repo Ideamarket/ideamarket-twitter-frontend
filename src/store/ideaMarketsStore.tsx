@@ -63,6 +63,8 @@ export type IdeaToken = {
   dayChange: string
   dayVolume: string
   listedAt: number
+  lockedAmount: string
+  rawLockedAmount: BN
   url: string
   iconURL: string
 }
@@ -393,6 +395,7 @@ function getQueryTokens(
         daiInToken
         invested
         listedAt
+        lockedAmount
         latestPricePoint {
           timestamp
           oldPrice
@@ -670,6 +673,12 @@ function apiResponseToIdeaToken(apiResponse, marketApiResponse?): IdeaToken {
       ? parseFloat(apiResponse.dayVolume).toFixed(2)
       : undefined,
     listedAt: apiResponse.listedAt,
+    lockedAmount: apiResponse.lockedAmount
+      ? web3BNToFloatString(new BN(apiResponse.lockedAmount), tenPow18, 2)
+      : undefined,
+    rawLockedAmount: apiResponse.lockedAmount
+      ? new BN(apiResponse.lockedAmount)
+      : undefined,
     url:
       market?.name && apiResponse.name
         ? getTokenURL(market.name, apiResponse.name)

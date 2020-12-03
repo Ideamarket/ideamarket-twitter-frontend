@@ -125,6 +125,23 @@ export default function TokenRow({
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
+            % Locked
+          </p>
+          <p className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue">
+            {(parseFloat(token.lockedAmount) / parseFloat(token.supply)) *
+              100.0 >
+            0.0 ? (
+              (
+                (parseFloat(token.lockedAmount) / parseFloat(token.supply)) *
+                100.0
+              ).toFixed(2) + ' %'
+            ) : (
+              <>&mdash;</>
+            )}
+          </p>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             24H Change
           </p>
           <p

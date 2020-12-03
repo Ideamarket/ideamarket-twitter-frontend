@@ -35,6 +35,11 @@ const headers: Header[] = [
     sortable: true,
   },
   {
+    title: '% Locked',
+    value: 'locked',
+    sortable: true,
+  },
+  {
     title: '24H Change',
     value: 'change',
     sortable: true,
@@ -151,6 +156,9 @@ export default function Table({
       } else if (headerValue === 'volume') {
         setOrderBy('dayVolume')
         onOrderByChanged('dayVolume', 'desc')
+      } else if (headerValue === 'locked') {
+        setOrderBy('lockedAmount')
+        onOrderByChanged('lockedAmount', 'desc')
       }
 
       setOrderDirection('desc')
