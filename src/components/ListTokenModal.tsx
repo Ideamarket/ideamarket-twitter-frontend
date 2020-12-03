@@ -34,6 +34,7 @@ export default function ListTokenModal({
   const [buyInputAmountBN, setBuyInputAmountBN] = useState(undefined)
   const [buyOutputAmountBN, setBuyOutputAmountBN] = useState(undefined)
   const [buySlippage, setBuySlippage] = useState(undefined)
+  const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
 
   async function tokenNameInputChanged(val) {
@@ -49,12 +50,14 @@ export default function ListTokenModal({
     tokenAddress: string,
     tokenAmount: BN,
     slippage: number,
+    lock: boolean,
     isValid: boolean
   ) {
     setBuyInputAmountBN(tokenAmount)
     setBuyPayWithAddress(tokenAddress)
     setBuyOutputAmountBN(ideaTokenAmount)
     setBuySlippage(slippage)
+    setBuyLock(lock)
     setIsBuyValid(isValid)
   }
 
@@ -96,7 +99,8 @@ export default function ListTokenModal({
           buyPayWithAddress,
           buyOutputAmountBN,
           buyInputAmountBN,
-          buySlippage
+          buySlippage,
+          buyLock
         ).on('transactionHash', (hash) => {
           setPendingTxHash(hash)
         })
@@ -169,7 +173,7 @@ export default function ListTokenModal({
           />
         </div>
       </div>
-      <div className="flex items-center justify-center mt-5 text-sm text-brand-gray-2">
+      <div className="flex items-center justify-center mt-5 text-sm">
         <input
           type="checkbox"
           id="buyCheckbox"
@@ -184,7 +188,15 @@ export default function ListTokenModal({
             setIsWantBuyChecked(e.target.checked)
           }}
         />
-        <label htmlFor="buyCheckbox" className="ml-2">
+        <label
+          htmlFor="buyCheckbox"
+          className={classNames(
+            'ml-2',
+            isWantBuyChecked
+              ? 'text-brand-blue font-medium'
+              : 'text-brand-gray-2'
+          )}
+        >
           I want to immediately buy this token
         </label>
       </div>
@@ -203,7 +215,6 @@ export default function ListTokenModal({
         {!isWantBuyChecked && (
           <div className="absolute top-0 left-0 w-full h-full bg-gray-600 opacity-75"></div>
         )}
-        <hr className="mt-2.5" />
       </div>
       <div className="flex justify-center mb-5">
         <button

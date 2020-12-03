@@ -34,6 +34,7 @@ export default function TradeInterface({
     tokenAddress: string,
     tokenAmount: BN,
     slippage: number,
+    lock: boolean,
     isValid: boolean
   ) => void
   resetOn: boolean
@@ -87,6 +88,8 @@ export default function TradeInterface({
     { value: 0.05, label: '5% max. slippage' },
   ]
 
+  const [isLockChecked, setIsLockChecked] = useState(false)
+
   useEffect(() => {
     setSelectedToken(useTokenListStore.getState().tokens[0])
     setIdeaTokenAmount('')
@@ -119,9 +122,10 @@ export default function TradeInterface({
       selectedToken?.address,
       tokenAmountBN,
       slippage,
+      isLockChecked,
       isValid
     )
-  }, [ideaTokenAmount, selectedToken, tokenAmountBN, slippage])
+  }, [ideaTokenAmount, selectedToken, tokenAmountBN, isLockChecked, slippage])
 
   const selectTokensFormat = (entry) => (
     <div className="flex flex-row">
@@ -137,7 +141,7 @@ export default function TradeInterface({
 
   async function onBuyClicked() {
     let spender
-    if (selectedToken.address === addresses.dai) {
+    if (selectedToken.address === addresses.dai && isLockChecked === false) {
       spender = useContractStore.getState().exchangeContract.options.address
     } else {
       spender = useContractStore.getState().multiActionContract.options.address
@@ -175,7 +179,8 @@ export default function TradeInterface({
         selectedToken.address,
         buyAmount,
         payAmount,
-        slippage
+        slippage,
+        isLockChecked
       ).on('transactionHash', (hash) => {
         setPendingTxHash(hash)
       })
@@ -411,11 +416,35 @@ export default function TradeInterface({
           </div>
         </div>
       </div>
+      <hr className="mt-5" />
 
+      <div
+        className={classNames(
+          'flex items-center justify-center mt-5 text-sm',
+          tradeType === 'sell' && 'invisible'
+        )}
+      >
+        <input
+          type="checkbox"
+          id="lockCheckbox"
+          disabled={isTxPending || disabled}
+          checked={isLockChecked}
+          onChange={(e) => {
+            setIsLockChecked(e.target.checked)
+          }}
+        />
+        <label
+          htmlFor="buyCheckbox"
+          className={classNames(
+            'ml-2',
+            isLockChecked ? 'text-brand-blue font-medium' : 'text-brand-gray-2'
+          )}
+        >
+          I want to lock the purchased tokens for 1YR
+        </label>
+      </div>
       {showTradeButton && (
         <>
-          <hr className="mt-5" />
-
           <div className="flex flex-row justify-center mt-5">
             <button
               className={classNames(

@@ -11,7 +11,8 @@ export default function listAndBuyToken(
   inputTokenAddress: string,
   amount: BN,
   cost: BN,
-  slippage: number
+  slippage: number,
+  lock: boolean
 ) {
   const userAddress = useWalletStore.getState().address
   const multiAction = useContractStore.getState().multiActionContract
@@ -32,7 +33,7 @@ export default function listAndBuyToken(
       market.marketID,
       amount,
       userAddress,
-      false
+      lock
     )
   } else {
     contractCall = multiAction.methods.convertAddAndBuy(
@@ -43,7 +44,7 @@ export default function listAndBuyToken(
       fallbackAmount,
       cost,
       userAddress,
-      false
+      lock
     )
 
     if (inputTokenAddress === addresses.ZERO) {
