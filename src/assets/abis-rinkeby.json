@@ -584,6 +584,82 @@
     },
     {
       "inputs": [
+        {
+          "components": [
+            { "internalType": "bool", "name": "exists", "type": "bool" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "name", "type": "string" },
+            {
+              "internalType": "contract IIdeaTokenNameVerifier",
+              "name": "nameVerifier",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "numTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "baseCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "priceRise",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hatchTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tradingFeeRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "platformFeeRate",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct MarketDetails",
+          "name": "marketDetails",
+          "type": "tuple"
+        },
+        { "internalType": "uint256", "name": "supply", "type": "uint256" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "bool", "name": "feesDisabled", "type": "bool" }
+      ],
+      "name": "getCostsForBuyingTokens",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "uint256", "name": "total", "type": "uint256" },
+            { "internalType": "uint256", "name": "raw", "type": "uint256" },
+            {
+              "internalType": "uint256",
+              "name": "tradingFee",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "platformFee",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct CostAndPriceAmounts",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
         { "internalType": "address", "name": "token", "type": "address" }
       ],
       "name": "getInterestPayable",
@@ -618,6 +694,82 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "components": [
+            { "internalType": "bool", "name": "exists", "type": "bool" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "name", "type": "string" },
+            {
+              "internalType": "contract IIdeaTokenNameVerifier",
+              "name": "nameVerifier",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "numTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "baseCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "priceRise",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hatchTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tradingFeeRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "platformFeeRate",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct MarketDetails",
+          "name": "marketDetails",
+          "type": "tuple"
+        },
+        { "internalType": "uint256", "name": "supply", "type": "uint256" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "bool", "name": "feesDisabled", "type": "bool" }
+      ],
+      "name": "getPricesForSellingTokens",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "uint256", "name": "total", "type": "uint256" },
+            { "internalType": "uint256", "name": "raw", "type": "uint256" },
+            {
+              "internalType": "uint256",
+              "name": "tradingFee",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "platformFee",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct CostAndPriceAmounts",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "getTradingFeePayable",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
@@ -643,6 +795,15 @@
       "name": "initialize",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" }
+      ],
+      "name": "isTokenFeeDisabled",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -680,6 +841,16 @@
         { "internalType": "address", "name": "newOwner", "type": "address" }
       ],
       "name": "setOwner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "bool", "name": "set", "type": "bool" }
+      ],
+      "name": "setTokenFeeKillswitch",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -957,7 +1128,7 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct IIdeaTokenFactory.MarketDetails",
+          "internalType": "struct MarketDetails",
           "name": "",
           "type": "tuple"
         }
@@ -1012,7 +1183,62 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct IIdeaTokenFactory.MarketDetails",
+          "internalType": "struct MarketDetails",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" }
+      ],
+      "name": "getMarketDetailsByTokenAddress",
+      "outputs": [
+        {
+          "components": [
+            { "internalType": "bool", "name": "exists", "type": "bool" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "name", "type": "string" },
+            {
+              "internalType": "contract IIdeaTokenNameVerifier",
+              "name": "nameVerifier",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "numTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "baseCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "priceRise",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hatchTokens",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tradingFeeRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "platformFeeRate",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct MarketDetails",
           "name": "",
           "type": "tuple"
         }
@@ -1069,7 +1295,7 @@
             },
             { "internalType": "uint256", "name": "tokenID", "type": "uint256" }
           ],
-          "internalType": "struct IIdeaTokenFactory.IDPair",
+          "internalType": "struct IDPair",
           "name": "",
           "type": "tuple"
         }
@@ -1095,7 +1321,7 @@
               "type": "address"
             }
           ],
-          "internalType": "struct IIdeaTokenFactory.TokenInfo",
+          "internalType": "struct TokenInfo",
           "name": "",
           "type": "tuple"
         }
@@ -1366,5 +1592,348 @@
       "stateMutability": "nonpayable",
       "type": "function"
     }
+  ],
+  "changeLogicSpell": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "proxyAdmin", "type": "address" },
+        {
+          "internalType": "address payable",
+          "name": "proxy",
+          "type": "address"
+        },
+        { "internalType": "address", "name": "newLogic", "type": "address" }
+      ],
+      "name": "execute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "ideaTokenVault": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "ideaToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "lockedUntil",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "lockedAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "Locked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "ideaToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "Withdrawn",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "address", "name": "owner", "type": "address" }
+      ],
+      "name": "getLockedAmount",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "address", "name": "owner", "type": "address" }
+      ],
+      "name": "getLockedEntries",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "lockedUntil",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "lockedAmount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct LockedEntry[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" }
+      ],
+      "name": "getTotalLockedAmount",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "address", "name": "owner", "type": "address" }
+      ],
+      "name": "getWithdrawableAmount",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "ideaTokenFactory",
+          "type": "address"
+        }
+      ],
+      "name": "initialize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "address", "name": "recipient", "type": "address" }
+      ],
+      "name": "lock",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "address", "name": "recipient", "type": "address" }
+      ],
+      "name": "withdraw",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "address", "name": "recipient", "type": "address" },
+        { "internalType": "uint256", "name": "maxEntries", "type": "uint256" }
+      ],
+      "name": "withdrawMaxEntries",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "multiAction": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "ideaTokenExchange",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "ideaTokenFactory",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "ideaTokenVault",
+          "type": "address"
+        },
+        { "internalType": "address", "name": "dai", "type": "address" },
+        {
+          "internalType": "address",
+          "name": "uniswapV2Router02",
+          "type": "address"
+        },
+        { "internalType": "address", "name": "weth", "type": "address" }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "_dai",
+      "outputs": [
+        { "internalType": "contract IERC20", "name": "", "type": "address" }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "_uniswapV2Router02",
+      "outputs": [
+        {
+          "internalType": "contract IUniswapV2Router02",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "_weth",
+      "outputs": [
+        { "internalType": "contract IWETH", "name": "", "type": "address" }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "string", "name": "tokenName", "type": "string" },
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "address", "name": "recipient", "type": "address" },
+        { "internalType": "bool", "name": "lock", "type": "bool" }
+      ],
+      "name": "addAndBuy",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "fallbackAmount",
+          "type": "uint256"
+        },
+        { "internalType": "uint256", "name": "cost", "type": "uint256" },
+        { "internalType": "address", "name": "recipient", "type": "address" }
+      ],
+      "name": "buyAndLock",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "string", "name": "tokenName", "type": "string" },
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        {
+          "internalType": "address",
+          "name": "inputCurrency",
+          "type": "address"
+        },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "fallbackAmount",
+          "type": "uint256"
+        },
+        { "internalType": "uint256", "name": "cost", "type": "uint256" },
+        { "internalType": "address", "name": "recipient", "type": "address" },
+        { "internalType": "bool", "name": "lock", "type": "bool" }
+      ],
+      "name": "convertAddAndBuy",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "inputCurrency",
+          "type": "address"
+        },
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "fallbackAmount",
+          "type": "uint256"
+        },
+        { "internalType": "uint256", "name": "cost", "type": "uint256" },
+        { "internalType": "address", "name": "recipient", "type": "address" },
+        { "internalType": "bool", "name": "lock", "type": "bool" }
+      ],
+      "name": "convertAndBuy",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "outputCurrency",
+          "type": "address"
+        },
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "uint256", "name": "minPrice", "type": "uint256" },
+        {
+          "internalType": "address payable",
+          "name": "recipient",
+          "type": "address"
+        }
+      ],
+      "name": "sellAndConvert",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    { "stateMutability": "payable", "type": "receive" }
   ]
 }
