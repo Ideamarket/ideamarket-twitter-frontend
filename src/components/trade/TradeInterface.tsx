@@ -180,7 +180,7 @@ export default function TradeInterface({
         buyAmount,
         payAmount,
         slippage,
-        isLockChecked
+        isLockChecked ? 31556952 : 0
       ).on('transactionHash', (hash) => {
         setPendingTxHash(hash)
       })

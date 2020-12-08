@@ -10,7 +10,7 @@ export default function buyToken(
   amount: BN,
   cost: BN,
   slippage: number,
-  lock: boolean
+  lockDuration: number
 ) {
   const userAddress = useWalletStore.getState().address
   const exchange = useContractStore.getState().exchangeContract
@@ -27,12 +27,13 @@ export default function buyToken(
   let contractCallOptions = {}
 
   if (inputTokenAddress === addresses.dai) {
-    if (lock) {
+    if (lockDuration > 0) {
       contractCall = multiAction.methods.buyAndLock(
         ideaTokenAddress,
         amount,
         fallbackAmount,
         cost,
+        lockDuration,
         userAddress
       )
     } else {
@@ -51,8 +52,8 @@ export default function buyToken(
       amount,
       fallbackAmount,
       cost,
-      userAddress,
-      lock
+      lockDuration,
+      userAddress
     )
 
     if (inputTokenAddress === addresses.ZERO) {

@@ -104,7 +104,7 @@ export default function ListTokenModal({
           buyOutputAmountBN,
           buyInputAmountBN,
           buySlippage,
-          buyLock
+          buyLock ? 31556952 : 0
         ).on('transactionHash', (hash) => {
           setPendingTxHash(hash)
         })
