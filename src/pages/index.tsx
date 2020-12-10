@@ -13,6 +13,8 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
   const [selectedMarketName, setSelectedMarketName] = useState('Twitter')
   const [nameSearch, setNameSearch] = useState('')
+  const [tablePage, setTablePage] = useState(0)
+
   const {
     setIsWalletModalOpen,
     setOnWalletConnectedCallback,
@@ -44,7 +46,20 @@ export default function Home() {
     },
   ]
 
+  function onNameSearchChanged(nameSearch) {
+    setTablePage(0)
+    setSelectedCategoryId(1)
+    setNameSearch(nameSearch)
+  }
+
+  function onCategoryChanged(categoryID) {
+    setTablePage(0)
+    setSelectedCategoryId(categoryID)
+  }
+
   function onOrderByChanged(orderBy: string, direction: string) {
+    setTablePage(0)
+
     if (selectedCategoryId === 4) {
       return
     }
@@ -158,7 +173,7 @@ export default function Home() {
                 <nav className="flex -mb-px space-x-5">
                   {categories.map((cat) => (
                     <a
-                      onClick={() => setSelectedCategoryId(cat.id)}
+                      onClick={() => onCategoryChanged(cat.id)}
                       key={cat.id}
                       className={classNames(
                         'px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
@@ -187,7 +202,7 @@ export default function Home() {
                   className="block w-full h-full pl-10 border-0 border-gray-300 rounded-none md:border-l focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="Search"
                   onChange={(event) => {
-                    setNameSearch(
+                    onNameSearchChanged(
                       event.target.value.length >= 2 ? event.target.value : ''
                     )
                   }}
@@ -196,6 +211,8 @@ export default function Home() {
             </div>
           </div>
           <Table
+            currentPage={tablePage}
+            setCurrentPage={setTablePage}
             nameSearch={nameSearch}
             selectedMarketName={selectedMarketName}
             selectedCategoryId={selectedCategoryId}

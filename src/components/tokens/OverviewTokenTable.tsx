@@ -75,19 +75,22 @@ export default function Table({
   selectedMarketName,
   selectedCategoryId,
   nameSearch,
+  currentPage,
+  setCurrentPage,
   onOrderByChanged,
   onTradeClicked,
 }: {
   selectedMarketName: string
   selectedCategoryId: number
   nameSearch: string
+  currentPage: number
+  setCurrentPage: (p: number) => void
   onOrderByChanged: (o: string, d: string) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }) {
   const windowSize = useWindowSize()
   const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
 
-  const [currentPage, setCurrentPage] = useState(0)
   const [currentHeader, setCurrentHeader] = useState('price')
   const [orderBy, setOrderBy] = useState('supply')
   const [orderDirection, setOrderDirection] = useState('desc')
@@ -129,6 +132,8 @@ export default function Table({
     isMarketLoading || isTokensDataLoading || isCompoundSupplyRateLoading
 
   function headerClicked(headerValue: string) {
+    setCurrentPage(0)
+
     if (currentHeader === headerValue) {
       if (orderDirection === 'asc') {
         setOrderDirection('desc')
