@@ -340,7 +340,7 @@ export default function TokenDetails() {
                       withBorder={false}
                     />
                   </div>
-                  <div style={{ minHeight: '200px' }}>
+                  <div style={{ minHeight: '200px' }} className="flex flex-col">
                     {isLoading || isRawChartDataLoading ? (
                       <div
                         className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"

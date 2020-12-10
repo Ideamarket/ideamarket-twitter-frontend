@@ -1,54 +1,80 @@
-import { useMemo, useCallback } from 'react'
-//import { Chart } from 'react-charts'
+import { useMemo, useEffect, useRef } from 'react'
+import Chart from 'chart.js'
 
 export default function PriceChart({ chartData }) {
-  /*const data = useMemo(() => {
-    return [
-      {
-        data: chartData.map((x) => [parseInt(x[0]) * 1000, x[1]]),
+  const labels = useMemo(
+    () => chartData.map((pair) => parseInt(pair[0]) * 1000),
+    []
+  )
+  const data = useMemo(() => chartData.map((pair) => parseFloat(pair[1])), [])
+
+  const ref = useRef(null)
+
+  useEffect(() => {
+    let min = Math.min(...data)
+    let max = Math.max(...data)
+
+    if (min === max) {
+      min = 0.0
+      max = max * 2.0
+    }
+
+    new Chart(ref.current.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            data: data,
+            pointRadius: 0,
+            fill: false,
+            borderColor: '#0857e0',
+            lineTension: 0,
+          },
+        ],
       },
-    ]
-  }, [chartData])
-
-  const series = useMemo(
-    () => ({
-      showPoints: false,
-    }),
-    []
-  )
-
-  const axes = useMemo(
-    () => [
-      { primary: true, type: 'utc', position: 'bottom' },
-      { type: 'linear', position: 'left' },
-    ],
-    [chartData]
-  )
-
-  const cursor = useMemo(
-    () => ({
-      snap: true,
-      showLine: true,
-      showLabel: true,
-      render: (props) => (
-        <div className="bg-very-dark-blue">
-          {(props.formattedValue || '').toString()}
-        </div>
-      ),
-    }),
-    []
-  )
-
-  const getSeriesStyle = useCallback(
-    (series) => ({
-      color: '#0857e0',
-    }),
-    []
-  )*/
+      options: {
+        animation: {
+          duration: 0,
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+          display: false,
+        },
+        scales: {
+          xAxes: [
+            {
+              ticks: { display: false },
+              gridLines: { display: true, drawBorder: false },
+            },
+          ],
+          yAxes: [
+            {
+              ticks: {
+                display: false,
+                min: min,
+                max: max,
+              },
+              gridLines: { display: true, drawBorder: false },
+            },
+          ],
+        },
+        layout: {
+          padding: {
+            left: 0,
+            right: 0,
+            top: 7,
+            bottom: 0,
+          },
+        },
+      },
+    })
+  }, [labels, data])
 
   return (
-    // A react-chart hyper-responsively and continuously fills the available
-    // space of its parent element automatically
-    <div></div>
+    <div className="flex-grow">
+      <canvas ref={ref}></canvas>
+    </div>
   )
 }
