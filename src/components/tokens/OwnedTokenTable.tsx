@@ -57,7 +57,13 @@ const headers: Header[] = [
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
-export default function OwnedTokenTable({ market }: { market: IdeaMarket }) {
+export default function OwnedTokenTable({
+  market,
+  setTotalValue,
+}: {
+  market: IdeaMarket
+  setTotalValue: (v: string) => void
+}) {
   const windowSize = useWindowSize()
   const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
 
@@ -79,6 +85,7 @@ export default function OwnedTokenTable({ market }: { market: IdeaMarket }) {
 
   useEffect(() => {
     if (!rawPairs) {
+      setTotalValue('0.00')
       setPairs([])
       return
     }
@@ -168,6 +175,25 @@ export default function OwnedTokenTable({ market }: { market: IdeaMarket }) {
       currentPage * TOKENS_PER_PAGE + TOKENS_PER_PAGE
     )
     setPairs(sliced)
+
+    // Calculate the total value
+    let total = 0.0
+    for (const pair of rawPairs) {
+      total +=
+        parseFloat(
+          web3BNToFloatString(
+            calculateCurrentPriceBN(
+              pair.token.rawSupply,
+              pair.market.rawBaseCost,
+              pair.market.rawPriceRise,
+              pair.market.rawHatchTokens
+            ),
+            tenPow18,
+            2
+          )
+        ) * parseFloat(pair.balance)
+    }
+    setTotalValue(total.toFixed(2))
   }, [rawPairs, orderBy, orderDirection, currentPage, TOKENS_PER_PAGE])
 
   function headerClicked(headerValue: string) {

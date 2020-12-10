@@ -20,6 +20,8 @@ export default function MyTokens() {
     undefined
   )
 
+  const [ownedTokenTotalValue, setOwnedTokensTotalValue] = useState('0.00')
+
   const [selectedMarketMyTokens, setSelectedMarketMyTokens] = useState(
     undefined
   )
@@ -28,9 +30,12 @@ export default function MyTokens() {
     <div className="min-h-screen bg-brand-gray">
       <div className="mx-auto md:px-4 max-w-88 md:max-w-304">
         <div className="min-h-screen py-5 bg-white border-b border-l border-r border-gray-400 rounded-b">
-          <div className="flex items-center mx-5 pb-2.5">
-            <div className="flex-grow text-2xl sm:text-3xl text-brand-gray-2">
+          <div className="flex items-center justify-between mx-5 pb-2.5">
+            <div className="text-2xl sm:text-3xl text-brand-gray-2">
               Tokens I Own
+            </div>
+            <div className="text-2xl sm:text-3xl text-brand-gray-2">
+              Total: ${ownedTokenTotalValue}
             </div>
             <div className="w-48 pr-0 md:w-64">
               <MarketSelect
@@ -43,7 +48,10 @@ export default function MyTokens() {
             </div>
           </div>
           <div className="mx-5 border border-gray-300 rounded">
-            <OwnedTokenTable market={selectedMarketOwnedTokens} />
+            <OwnedTokenTable
+              market={selectedMarketOwnedTokens}
+              setTotalValue={setOwnedTokensTotalValue}
+            />
           </div>
 
           <div className="flex items-center mx-5 pb-2.5 mt-10">
