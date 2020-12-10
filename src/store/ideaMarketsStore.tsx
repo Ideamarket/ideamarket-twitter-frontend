@@ -105,6 +105,10 @@ export async function queryMarket(
   queryKey: string,
   marketName: string
 ): Promise<IdeaMarket> {
+  if (!marketName) {
+    return undefined
+  }
+
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
     getQueryMarket(marketName)
