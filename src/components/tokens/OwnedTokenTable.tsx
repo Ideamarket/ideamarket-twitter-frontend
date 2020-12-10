@@ -59,9 +59,13 @@ const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function OwnedTokenTable({
   market,
+  currentPage,
+  setCurrentPage,
   setTotalValue,
 }: {
   market: IdeaMarket
+  currentPage: number
+  setCurrentPage: (p: number) => void
   setTotalValue: (v: string) => void
 }) {
   const windowSize = useWindowSize()
@@ -69,7 +73,6 @@ export default function OwnedTokenTable({
 
   const address = useWalletStore((state) => state.address)
 
-  const [currentPage, setCurrentPage] = useState(0)
   const [currentHeader, setCurrentHeader] = useState('price')
   const [orderBy, setOrderBy] = useState('price')
   const [orderDirection, setOrderDirection] = useState('desc')
@@ -197,6 +200,7 @@ export default function OwnedTokenTable({
   }, [rawPairs, orderBy, orderDirection, currentPage, TOKENS_PER_PAGE])
 
   function headerClicked(headerValue: string) {
+    setCurrentPage(0)
     if (currentHeader === headerValue) {
       if (orderDirection === 'asc') {
         setOrderDirection('desc')

@@ -51,15 +51,20 @@ const headers: Header[] = [
   },
 ]
 
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
-
-export default function MyTokenTable({ market }: { market: IdeaMarket }) {
+export default function MyTokenTable({
+  market,
+  currentPage,
+  setCurrentPage,
+}: {
+  market: IdeaMarket
+  currentPage: number
+  setCurrentPage: (p: number) => void
+}) {
   const windowSize = useWindowSize()
   const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
 
   const address = useWalletStore((state) => state.address)
 
-  const [currentPage, setCurrentPage] = useState(0)
   const [currentHeader, setCurrentHeader] = useState('price')
   const [orderBy, setOrderBy] = useState('price')
   const [orderDirection, setOrderDirection] = useState('desc')
@@ -143,6 +148,7 @@ export default function MyTokenTable({ market }: { market: IdeaMarket }) {
   ])
 
   function headerClicked(headerValue: string) {
+    setCurrentPage(0)
     if (currentHeader === headerValue) {
       if (orderDirection === 'asc') {
         setOrderDirection('desc')

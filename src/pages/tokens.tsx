@@ -16,12 +16,13 @@ export default function MyTokens() {
     !address && setIsWalletModalOpen(true)
   }, [])
 
+  const [ownedTokensTablePage, setOwnedTokensTablePage] = useState(0)
   const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] = useState(
     undefined
   )
-
   const [ownedTokenTotalValue, setOwnedTokensTotalValue] = useState('0.00')
 
+  const [myTokensTablePage, setMyTokensTablePage] = useState(0)
   const [selectedMarketMyTokens, setSelectedMarketMyTokens] = useState(
     undefined
   )
@@ -41,6 +42,7 @@ export default function MyTokens() {
               <MarketSelect
                 isClearable={true}
                 onChange={(value) => {
+                  setOwnedTokensTablePage(0)
                   setSelectedMarketOwnedTokens(value?.market)
                 }}
                 disabled={false}
@@ -50,6 +52,8 @@ export default function MyTokens() {
           <div className="mx-5 border border-gray-300 rounded">
             <OwnedTokenTable
               market={selectedMarketOwnedTokens}
+              currentPage={ownedTokensTablePage}
+              setCurrentPage={setOwnedTokensTablePage}
               setTotalValue={setOwnedTokensTotalValue}
             />
           </div>
@@ -62,6 +66,7 @@ export default function MyTokens() {
               <MarketSelect
                 isClearable={true}
                 onChange={(value) => {
+                  setMyTokensTablePage(0)
                   setSelectedMarketMyTokens(value?.market)
                 }}
                 disabled={false}
@@ -69,7 +74,11 @@ export default function MyTokens() {
             </div>
           </div>
           <div className="mx-5 border border-gray-300 rounded">
-            <MyTokenTable market={selectedMarketMyTokens} />
+            <MyTokenTable
+              currentPage={myTokensTablePage}
+              setCurrentPage={setMyTokensTablePage}
+              market={selectedMarketMyTokens}
+            />
           </div>
         </div>
         <div className="px-1">
