@@ -53,7 +53,7 @@ export default function TokenRow({
         className="grid grid-cols-3 cursor-pointer md:table-row hover:bg-brand-gray"
         onClick={() => {
           router.push(
-            `/details/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
+            `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
               token.name
             )}`
           )
@@ -115,7 +115,7 @@ export default function TokenRow({
             Price
           </p>
           <p
-            className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + tokenPrice}
           >
             ${formatNumber(tokenPrice)}
@@ -149,7 +149,7 @@ export default function TokenRow({
             Balance
           </p>
           <p
-            className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={balance}
           >
             {formatNumber(balance)}
@@ -160,7 +160,7 @@ export default function TokenRow({
             Value
           </p>
           <p
-            className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + balanceValue}
           >
             ${formatNumber(balanceValue)}

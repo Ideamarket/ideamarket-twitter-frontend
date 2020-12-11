@@ -25,7 +25,7 @@ export default function MyTokenRow({
         className="grid grid-cols-3 cursor-pointer md:table-row hover:bg-brand-gray"
         onClick={() => {
           router.push(
-            `/details/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
+            `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
               token.name
             )}`
           )

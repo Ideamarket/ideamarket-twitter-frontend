@@ -69,7 +69,7 @@ export default function TokenRow({
         className="grid grid-cols-3 cursor-pointer md:table-row hover:bg-brand-gray"
         onClick={() => {
           router.push(
-            `/details/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
+            `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
               token.name
             )}`
           )
@@ -118,7 +118,7 @@ export default function TokenRow({
             Price
           </p>
           <p
-            className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + tokenPrice}
           >
             ${formatNumber(tokenPrice)}
@@ -129,7 +129,7 @@ export default function TokenRow({
             Deposits
           </p>
           <p
-            className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + token.daiInToken}
           >
             {parseFloat(token.daiInToken) > 0.0 ? (
@@ -144,7 +144,7 @@ export default function TokenRow({
             % Locked
           </p>
           <p
-            className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={
               (
                 (parseFloat(token.lockedAmount) / parseFloat(token.supply)) *
@@ -194,7 +194,7 @@ export default function TokenRow({
             24H Volume
           </p>
           <p
-            className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + token.dayVolume}
           >
             ${formatNumber(token.dayVolume)}
@@ -205,7 +205,7 @@ export default function TokenRow({
             1YR Income
           </p>
           <p
-            className="text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + yearIncome}
           >
             ${formatNumber(yearIncome)}
