@@ -64,6 +64,7 @@ export type IdeaToken = {
   listedAt: number
   lockedAmount: string
   rawLockedAmount: BN
+  lockedPercentage: string
 }
 
 export type IdeaTokenMarketPair = {
@@ -353,6 +354,7 @@ function getQueryTokens(
         invested
         listedAt
         lockedAmount
+        lockedPercentage
         latestPricePoint {
           timestamp
           oldPrice
@@ -499,6 +501,8 @@ function getQueryTokenNameTextSearch(
         daiInToken
         invested
         listedAt
+        lockedAmount
+        lockedPercentage
         latestPricePoint {
           timestamp
           oldPrice
@@ -614,6 +618,9 @@ function apiResponseToIdeaToken(apiResponse, marketApiResponse?): IdeaToken {
     rawLockedAmount: apiResponse.lockedAmount
       ? new BN(apiResponse.lockedAmount)
       : undefined,
+    lockedPercentage: apiResponse.lockedPercentage
+      ? parseFloat(apiResponse.lockedPercentage).toFixed(2)
+      : '',
   } as IdeaToken
 
   return ret

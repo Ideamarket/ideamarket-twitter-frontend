@@ -145,22 +145,10 @@ export default function TokenRow({
           </p>
           <p
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={
-              (
-                (parseFloat(token.lockedAmount) / parseFloat(token.supply)) *
-                100.0
-              ).toFixed(2) + ' %'
-            }
+            title={parseFloat(token.lockedPercentage).toFixed(2) + ' %'}
           >
-            {(parseFloat(token.lockedAmount) / parseFloat(token.supply)) *
-              100.0 >
-            0.0 ? (
-              formatNumber(
-                (
-                  (parseFloat(token.lockedAmount) / parseFloat(token.supply)) *
-                  100.0
-                ).toFixed(2)
-              ) + ' %'
+            {parseFloat(token.lockedPercentage) * 100.0 > 0.0 ? (
+              formatNumber(parseFloat(token.lockedPercentage).toFixed(2)) + ' %'
             ) : (
               <>&mdash;</>
             )}

@@ -162,7 +162,7 @@ export default function Table({
         setOrderBy('dayVolume')
         onOrderByChanged('dayVolume', 'desc')
       } else if (headerValue === 'locked') {
-        setOrderBy('lockedAmount')
+        setOrderBy('lockedPercentage')
         onOrderByChanged('lockedAmount', 'desc')
       }
 
