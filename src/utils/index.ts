@@ -120,5 +120,5 @@ export function isAddress(addr: string): boolean {
 }
 
 export function formatNumber(number: string | number): string {
-  return numeral(Number(number)).format('0.[00]a')
+  return numeral(Number(number)).format('0.00a')
 }
