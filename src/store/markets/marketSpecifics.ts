@@ -9,6 +9,7 @@ export type IMarketSpecifics = {
   // Tokens
   getTokenURL(tokenName: string): string
   getTokenIconURL(tokenName: string): string
+  normalizeUserInputTokenName(userInput: string): string
   convertUserInputToTokenName(userInput: string): string
   getTokenNameURLRepresentation(tokenName: string): string
   getTokenNameFromURLRepresentation(

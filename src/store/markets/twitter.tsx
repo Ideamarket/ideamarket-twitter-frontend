@@ -26,6 +26,10 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
     return `https://unavatar.now.sh/twitter/${tokenName.slice(1)}`
   }
 
+  normalizeUserInputTokenName(userInput: string): string {
+    return userInput.toLowerCase()
+  }
+
   convertUserInputToTokenName(userInput: string): string {
     return `@${userInput}`
   }

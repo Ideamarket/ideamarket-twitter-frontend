@@ -40,7 +40,7 @@ export default function ListTokenModal({
 
   async function tokenNameInputChanged(val) {
     setIsTokenIconLoading(true)
-    setTokenName(val)
+    setTokenName(marketSpecifics.normalizeUserInputTokenName(val))
     const finalTokenName = getMarketSpecificsByMarketName(
       selectedMarket.name
     ).convertUserInputToTokenName(val)
@@ -178,6 +178,7 @@ export default function ListTokenModal({
             onChange={(e) => {
               tokenNameInputChanged(e.target.value)
             }}
+            value={tokenName}
           />
           {(isTokenIconLoading || !isValidTokenName) && (
             <div
