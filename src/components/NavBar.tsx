@@ -28,8 +28,8 @@ export default function Nav() {
     {
       name: 'How It Works',
       value: 'how-it-works',
-      onClick: () => router.push('/help'),
-      isSelected: router.pathname === '/help',
+      onClick: () => router.push('https://docs.ideamarket.io'),
+      isSelected: false,
     },
   ]
 
