@@ -386,12 +386,16 @@ export default function TradeInterface({
           />
         </div>
 
-        <div className="grid grid-cols-3 mx-5 mt-5 text-xs text-brand-gray-2">
-          <div className="flex items-center justify-center">
-            Platform fee: {market?.platformFeeRate || '-'}%
-          </div>
-          <div className="flex items-center justify-center">
-            Trading fee: {market?.tradingFeeRate || '-'}%
+        <div className="grid grid-cols-2 mx-5 mt-5 text-xs text-brand-gray-2">
+          <div className="flex items-center">
+            Trading fee:{' '}
+            {market && market.platformFeeRate && market.tradingFeeRate
+              ? (
+                  parseFloat(market.platformFeeRate) +
+                  parseFloat(market.tradingFeeRate)
+                ).toFixed(2)
+              : '-'}
+            %
           </div>
           <div>
             <Select
