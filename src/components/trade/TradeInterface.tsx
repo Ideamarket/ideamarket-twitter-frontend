@@ -434,7 +434,7 @@ export default function TradeInterface({
           }}
         />
         <label
-          htmlFor="buyCheckbox"
+          htmlFor="lockCheckbox"
           className={classNames(
             'ml-2',
             isLockChecked ? 'text-brand-blue font-medium' : 'text-brand-gray-2'
