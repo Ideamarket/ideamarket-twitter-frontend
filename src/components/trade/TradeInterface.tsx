@@ -10,10 +10,18 @@ import {
   buyToken,
   sellToken,
 } from 'actions'
-import { floatToWeb3BN, addresses, NETWORK } from 'utils'
+import {
+  floatToWeb3BN,
+  addresses,
+  NETWORK,
+  calculateMaxIdeaTokensBuyable,
+  formatBigNumber,
+  getUniswapDaiOutputSwap,
+} from 'utils'
 import { useContractStore } from 'store/contractStore'
 
 import Select from 'react-select'
+import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 
 export default function TradeInterface({
@@ -138,6 +146,42 @@ export default function TradeInterface({
       </div>
     </div>
   )
+
+  async function maxButtonClicked() {
+    if (tradeType === 'sell') {
+      const balanceBN = new BigNumber(ideaTokenBalanceBN.toString())
+      setIdeaTokenAmount(
+        formatBigNumber(
+          balanceBN.div(new BigNumber('10').pow(new BigNumber('18'))),
+          18,
+          BigNumber.ROUND_DOWN
+        )
+      )
+    } else {
+      let balanceAsDai
+      if (selectedToken.symbol === 'Dai') {
+        balanceAsDai = tokenBalanceBN
+      } else {
+        balanceAsDai = await getUniswapDaiOutputSwap(
+          selectedToken.address,
+          selectedToken.decimals,
+          tokenBalanceBN
+        )
+      }
+      const buyableBN = calculateMaxIdeaTokensBuyable(
+        balanceAsDai,
+        ideaToken.rawSupply,
+        market
+      )
+      setIdeaTokenAmount(
+        formatBigNumber(
+          buyableBN.div(new BigNumber('10').pow(new BigNumber('18'))),
+          18,
+          BigNumber.ROUND_DOWN
+        )
+      )
+    }
+  }
 
   async function onBuyClicked() {
     let spender
@@ -344,16 +388,24 @@ export default function TradeInterface({
                 (isIdeaTokenBalanceLoading ? '...' : ideaTokenBalance)}
           </p>
         </div>
-        <div className="mx-5">
+        <div className="flex items-center mx-5">
           <input
-            className="w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
+            className="flex-grow w-full px-4 py-2 leading-tight bg-gray-200 border-2 border-gray-200 rounded appearance-none focus:outline-none focus:bg-white focus:border-brand-blue"
             type="number"
             min="0"
+            value={ideaTokenAmount}
             onChange={(event) => {
               setIdeaTokenAmount(event.target.value)
             }}
             disabled={isTxPending || disabled}
           />
+          <button
+            className="w-20 py-1 ml-2 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+            disabled={isTxPending || disabled}
+            onClick={maxButtonClicked}
+          >
+            Max
+          </button>
         </div>
 
         <div className="flex flex-row justify-between mx-5 mt-5">

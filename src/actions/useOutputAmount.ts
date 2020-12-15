@@ -79,7 +79,7 @@ export default function useOutputAmount(
         return requiredDaiAmount
       }
 
-      const chain = NETWORK === 'rinkeby' ? ChainId.RINKEBY : ChainId.MAINNET
+      const chain = NETWORK === 'mainnet' ? ChainId.MAINNET : ChainId.RINKEBY
       const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
 
       let IN
@@ -163,7 +163,7 @@ export default function useOutputAmount(
         return daiOutputAmount
       }
 
-      const chain = NETWORK === 'rinkeby' ? ChainId.RINKEBY : ChainId.MAINNET
+      const chain = NETWORK === 'mainnet' ? ChainId.MAINNET : ChainId.RINKEBY
       const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
 
       let OUT
