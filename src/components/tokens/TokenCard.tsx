@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName } from 'store/markets/marketSpecifics'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import { WatchingStar } from '../'
 import {
   calculateCurrentPriceBN,
@@ -75,7 +75,9 @@ export default function TokenCard({
         ) : (
           <>
             <div>on</div>
-            <div className="ml-2.5 mr-1">{marketSpecifics.getMarketSVG()}</div>
+            <div className="ml-2.5 mr-1">
+              {marketSpecifics.getMarketSVGBlack()}
+            </div>
             <div>{market.name}</div>
           </>
         )}

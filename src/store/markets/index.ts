@@ -1,10 +1,12 @@
 import TwitterMarketSpecifics from './twitter'
+import SubstackMarketSpecifics from './substack'
 
 export type IMarketSpecifics = {
   // Market
   getMarketName(): string
   getMarketNameURLRepresentation(): string
-  getMarketSVG(): JSX.Element
+  getMarketSVGBlack(): JSX.Element
+  getMarketSVGWhite(): JSX.Element
 
   // Tokens
   getTokenURL(tokenName: string): string
@@ -16,6 +18,10 @@ export type IMarketSpecifics = {
     tokenNameInURLRepresentation: string
   ): string
 
+  // List Token
+  getListTokenPrefix(): string
+  getListTokenSuffix(): string
+
   // Verification
   getVerificationExplanation(): string
   getVerificationUUIDPrompt(uuid: string): string
@@ -23,7 +29,10 @@ export type IMarketSpecifics = {
   getVerificationConfirmCheckboxLabel(): string
 }
 
-const specifics: IMarketSpecifics[] = [new TwitterMarketSpecifics()]
+const specifics: IMarketSpecifics[] = [
+  new TwitterMarketSpecifics(),
+  new SubstackMarketSpecifics(),
+]
 
 export function getMarketSpecificsByMarketName(
   marketName: string

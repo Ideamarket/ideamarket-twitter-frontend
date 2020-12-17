@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Select from 'react-select'
-import { getMarketSpecificsByMarketName } from 'store/markets/marketSpecifics'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import { useQuery } from 'react-query'
 import { queryMarkets } from 'store/ideaMarketsStore'
 
@@ -37,7 +37,9 @@ export default function MarketSelect({
     <div className="flex items-center">
       <div>
         {entry?.market?.name
-          ? getMarketSpecificsByMarketName(entry.market.name).getMarketSVG()
+          ? getMarketSpecificsByMarketName(
+              entry.market.name
+            ).getMarketSVGBlack()
           : ''}
       </div>
       <div className="ml-2.5">{entry.market.name}</div>

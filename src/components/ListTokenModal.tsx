@@ -7,7 +7,7 @@ import {
   getTokenAllowance,
   approveToken,
 } from 'actions'
-import { getMarketSpecificsByMarketName } from 'store/markets/marketSpecifics'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import { addresses, NETWORK } from 'utils'
 import { Modal, MarketSelect, TradeInterface } from './'
 import { useContractStore } from 'store/contractStore'
@@ -48,10 +48,19 @@ export default function ListTokenModal({
   const marketSpecifics =
     selectedMarket && getMarketSpecificsByMarketName(selectedMarket.name)
 
+  const tokenNamePrefix =
+    marketSpecifics && marketSpecifics.getListTokenPrefix() !== ''
+      ? marketSpecifics.getListTokenPrefix()
+      : undefined
+  const tokenNameSuffix =
+    marketSpecifics && marketSpecifics.getListTokenSuffix() !== ''
+      ? marketSpecifics.getListTokenSuffix()
+      : undefined
+
   const tweetTemplate = encodeURIComponent(
     `Just listed ${marketSpecifics?.convertUserInputToTokenName(
       tokenName
-    )} on #Ideamarket @IdeaMarkets_`
+    )} on @IdeaMarkets_`
   )
 
   async function tokenNameInputChanged(val) {
@@ -194,8 +203,15 @@ export default function ListTokenModal({
           </div>
           <p className="mx-5 mt-5 text-sm text-brand-gray-2">Token Name</p>
           <div className="flex items-center mx-5">
-            <div className="text-base text-brand-gray-2 text-semibold">@</div>
-            <div className="flex justify-between items-center flex-grow ml-0.5">
+            <div className="text-base text-brand-gray-2 text-semibold">
+              {tokenNamePrefix || ''}
+            </div>
+            <div
+              className={classNames(
+                'flex justify-between items-center flex-grow',
+                tokenNamePrefix && 'ml-0.5'
+              )}
+            >
               <input
                 type="text"
                 disabled={isTxPending || !selectedMarket}
@@ -210,41 +226,49 @@ export default function ListTokenModal({
                 }}
                 value={tokenName}
               />
-              {(isTokenIconLoading || !isValidTokenName) && (
-                <div
-                  className={classNames(
-                    'inline-block w-12 h-12 ml-3 align-middle bg-gray-400 rounded-full',
-                    isValidTokenName && 'animate animate-pulse'
-                  )}
-                ></div>
+            </div>
+            <div
+              className={classNames(
+                'text-base text-brand-gray-2 text-semibold',
+                tokenNameSuffix && 'ml-0.5'
               )}
-              <a
-                href={
-                  !marketSpecifics
-                    ? ''
-                    : marketSpecifics.getTokenURL(
-                        marketSpecifics.convertUserInputToTokenName(tokenName)
-                      )
-                }
-                target="_blank"
-              >
-                <img
-                  className={classNames(
-                    'rounded-full max-w-12 max-h-12 ml-3 inline-block',
-                    (isTokenIconLoading || !isValidTokenName) && 'hidden'
-                  )}
-                  onLoad={() => setIsTokenIconLoading(false)}
-                  src={
-                    selectedMarket &&
-                    marketSpecifics &&
-                    marketSpecifics.getTokenIconURL(
+            >
+              {tokenNameSuffix || ''}
+            </div>
+            {(isTokenIconLoading || !isValidTokenName) && (
+              <div
+                className={classNames(
+                  'inline-block w-12 h-12 ml-3 align-middle bg-gray-400 rounded-full',
+                  isValidTokenName && 'animate animate-pulse'
+                )}
+              ></div>
+            )}
+            <a
+              href={
+                !marketSpecifics
+                  ? ''
+                  : marketSpecifics.getTokenURL(
                       marketSpecifics.convertUserInputToTokenName(tokenName)
                     )
-                  }
-                  alt=""
-                />
-              </a>
-            </div>
+              }
+              target="_blank"
+            >
+              <img
+                className={classNames(
+                  'rounded-full max-w-12 max-h-12 ml-3 inline-block',
+                  (isTokenIconLoading || !isValidTokenName) && 'hidden'
+                )}
+                onLoad={() => setIsTokenIconLoading(false)}
+                src={
+                  selectedMarket &&
+                  marketSpecifics &&
+                  marketSpecifics.getTokenIconURL(
+                    marketSpecifics.convertUserInputToTokenName(tokenName)
+                  )
+                }
+                alt=""
+              />
+            </a>
           </div>
           <div className="flex items-center justify-center mt-5 text-sm">
             <input

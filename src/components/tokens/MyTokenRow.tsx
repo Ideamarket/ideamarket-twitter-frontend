@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName } from 'store/markets/marketSpecifics'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -75,7 +75,7 @@ export default function MyTokenRow({
           </p>
           <div className="flex items-center">
             <div className="w-full h-full md:w-auto md:h-auto">
-              {marketSpecifics.getMarketSVG()}
+              {marketSpecifics.getMarketSVGBlack()}
             </div>
             <div className="ml-1 md:ml-3">
               {marketSpecifics.getMarketName()}

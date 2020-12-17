@@ -1,34 +1,34 @@
 import { IMarketSpecifics } from '.'
-import TwitterWhite from '../../assets/twitter-white.svg'
-import TwitterBlack from '../../assets/twitter-black.svg'
+import SubstackWhite from '../../assets/substack-white.svg'
+import SubstackBlack from '../../assets/substack-black.svg'
 
-export default class TwitterMarketSpecifics implements IMarketSpecifics {
+export default class SubstackMarketSpecifics implements IMarketSpecifics {
   // Market
 
   getMarketName(): string {
-    return 'Twitter'
+    return 'Substack'
   }
 
   getMarketNameURLRepresentation(): string {
-    return 'twitter'
+    return 'substack'
   }
 
   getMarketSVGBlack(): JSX.Element {
-    return <TwitterBlack />
+    return <SubstackBlack />
   }
 
   getMarketSVGWhite(): JSX.Element {
-    return <TwitterWhite />
+    return <SubstackWhite />
   }
 
   // Tokens
 
   getTokenURL(tokenName: string): string {
-    return `https://twitter.com/${tokenName.slice(1)}`
+    return `https://${tokenName}.substack.com/`
   }
 
   getTokenIconURL(tokenName: string): string {
-    return `https://unavatar.now.sh/twitter/${tokenName.slice(1)}`
+    return `https://unavatar.now.sh/substack/${tokenName}`
   }
 
   normalizeUserInputTokenName(userInput: string): string {
@@ -36,27 +36,27 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
   }
 
   convertUserInputToTokenName(userInput: string): string {
-    return `@${userInput}`
+    return userInput
   }
 
   getTokenNameURLRepresentation(tokenName: string): string {
-    return tokenName.slice(1)
+    return tokenName
   }
 
   getTokenNameFromURLRepresentation(
     tokenNameInURLRepresentation: string
   ): string {
-    return `@${tokenNameInURLRepresentation}`
+    return tokenNameInURLRepresentation
   }
 
   // List Token
 
   getListTokenPrefix(): string {
-    return '@'
+    return ''
   }
 
   getListTokenSuffix(): string {
-    return ''
+    return '.substack.com'
   }
 
   // Verification

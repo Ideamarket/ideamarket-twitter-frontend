@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
 import { PreviewPriceChart, WatchingStar } from 'components'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName } from 'store/markets/marketSpecifics'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   calculateCurrentPriceBN,
   formatNumber,

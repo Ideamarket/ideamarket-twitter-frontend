@@ -4,7 +4,6 @@ import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { request, gql } from 'graphql-request'
 import { web3BNToFloatString, NETWORK } from 'utils'
-import { getMarketSpecificsByMarketName } from './markets/marketSpecifics'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))

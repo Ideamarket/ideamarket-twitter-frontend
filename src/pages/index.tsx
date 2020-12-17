@@ -1,10 +1,9 @@
 import classNames from 'classnames'
 import { useContext, useState } from 'react'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import { Table, TradeModal, ListTokenModal, Footer } from 'components'
 
-import Twitter from '../assets/twitter.svg'
-import TwitterBlack from '../assets/twitter-black.svg'
 import Search from '../assets/search.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
@@ -137,20 +136,31 @@ export default function Home() {
             }}
           >
             <div>
-              {selectedMarketName === 'Twitter' ? (
-                <TwitterBlack className="h-5" />
-              ) : (
-                <Twitter className="h-5" />
-              )}
+              {selectedMarketName === 'Twitter'
+                ? getMarketSpecificsByMarketName('Twitter').getMarketSVGBlack()
+                : getMarketSpecificsByMarketName('Twitter').getMarketSVGWhite()}
             </div>
             <p className="text-lg leading-none">Twitter</p>
           </div>
           <div
             className={classNames(
-              'hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
-              selectedMarketName === 'Medium' && 'bg-white text-very-dark-blue'
+              'hidden cursor-pointer md:flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
+              selectedMarketName === 'Substack' &&
+                'bg-white text-very-dark-blue'
             )}
-          ></div>
+            onClick={() => {
+              setSelectedMarketName('Substack')
+            }}
+          >
+            <div>
+              {selectedMarketName === 'Substack'
+                ? getMarketSpecificsByMarketName('Substack').getMarketSVGBlack()
+                : getMarketSpecificsByMarketName(
+                    'Substack'
+                  ).getMarketSVGWhite()}
+            </div>
+            <p className="text-lg leading-none">Substack</p>
+          </div>
           <div
             className={classNames(
               'hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0',

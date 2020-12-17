@@ -19,7 +19,7 @@ import {
   queryTokenChartData,
   queryMarket,
 } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets/marketSpecifics'
+import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
 import {
   calculateCurrentPriceBN,
   web3BNToFloatString,
