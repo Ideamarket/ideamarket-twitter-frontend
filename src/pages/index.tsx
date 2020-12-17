@@ -125,10 +125,10 @@ export default function Home() {
       </div>
 
       <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 md:-translate-y-28 font-sf-compact-medium">
-        <div className="grid grid-cols-1 md:grid-cols-5">
+        <div className="grid grid-cols-2 md:grid-cols-5">
           <div
             className={classNames(
-              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tl-xlg rounded-tr-xlg md:rounded-tr-none border-2 md:border-r-0 md:border-b-0',
+              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tl-xlg md:rounded-tr-none border-2 md:border-r-0 md:border-b-0',
               selectedMarketName === 'Twitter' && 'bg-white text-very-dark-blue'
             )}
             onClick={() => {
@@ -144,7 +144,7 @@ export default function Home() {
           </div>
           <div
             className={classNames(
-              'hidden cursor-pointer md:flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
+              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
               selectedMarketName === 'Substack' &&
                 'bg-white text-very-dark-blue'
             )}
