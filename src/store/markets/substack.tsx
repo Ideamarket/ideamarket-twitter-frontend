@@ -62,7 +62,7 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
   // Verification
 
   getVerificationExplanation(): string {
-    return 'Upon initiation of the verification process you will be given a verification code. This code will be used to verify that you have access to the listed account by asking you to post a Tweet containing said code from the corresponding Twitter account.'
+    return 'Upon initiation of the verification process you will be given a verification code. This code will be used to verify that you have access to the listed account by asking you to edit your publication\'s "About" section to contain said code.'
   }
 
   getVerificationUUIDPrompt(uuid: string): string {
@@ -70,10 +70,10 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
   }
 
   getVerificationUUIDPromptExplanation(): string {
-    return `This is your verification code. Please post a Tweet with the below content. After you posted the Tweet, click Next.`
+    return `This is your verification code. Please edit your publication's "About" section to contain the below content. After you made the edit, click Next.`
   }
 
   getVerificationConfirmCheckboxLabel(): string {
-    return `I have posted the Tweet.`
+    return `I have edited the "About" section.`
   }
 }

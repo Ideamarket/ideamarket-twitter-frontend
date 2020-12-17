@@ -88,6 +88,7 @@ export default function VerifyModal({
       setPage(PAGES.OWNER_ADDRESS)
       setOwnerAddress('')
       setUUID('')
+      setConfirmCheckboxChecked(false)
       setTx('')
       setIsLoading(false)
       setErrorMessage('')
@@ -184,6 +185,7 @@ export default function VerifyModal({
                 <input
                   type="checkbox"
                   id="confirmCheckbox"
+                  checked={confirmCheckboxChecked}
                   onChange={(e) => {
                     setConfirmCheckboxChecked(e.target.checked)
                   }}
