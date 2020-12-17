@@ -21,7 +21,8 @@
         "property": "createElement"
       }
     ],
-    ["babel-plugin-inline-react-svg",
+    [
+      "babel-plugin-inline-react-svg",
       {
         "svgo": false
       }
