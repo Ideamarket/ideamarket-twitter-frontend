@@ -496,7 +496,7 @@ export default function TradeInterface({
             isLockChecked ? 'text-brand-blue font-medium' : 'text-brand-gray-2'
           )}
         >
-          I want to lock the purchased tokens for 1YR
+          Lock purchased tokens for 1YR
         </label>
       </div>
       {showTradeButton && (

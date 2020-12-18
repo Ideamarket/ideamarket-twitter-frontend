@@ -149,17 +149,18 @@ export default function Home() {
                 'bg-white text-very-dark-blue'
             )}
             onClick={() => {
-              setSelectedMarketName('Substack')
+              //setSelectedMarketName('Substack')
             }}
           >
             <div>
-              {selectedMarketName === 'Substack'
+              {/*selectedMarketName === 'Substack'
                 ? getMarketSpecificsByMarketName('Substack').getMarketSVGBlack()
                 : getMarketSpecificsByMarketName(
                     'Substack'
-                  ).getMarketSVGWhite()}
+                  ).getMarketSVGWhite()
+                */}
             </div>
-            <p className="text-lg leading-none">Substack</p>
+            <p className="text-lg leading-none">{/*Substack*/}</p>
           </div>
           <div
             className={classNames(

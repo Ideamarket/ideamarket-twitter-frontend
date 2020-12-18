@@ -32,7 +32,7 @@ export default function WalletModal() {
       <div className="p-4 bg-top-mobile">
         <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
           {' '}
-          Connect your Wallet
+          Payment Method
         </p>
       </div>
       <NoSSRWalletInterface

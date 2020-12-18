@@ -34,10 +34,10 @@ export default function MyTokens() {
         <div className="min-h-screen py-5 bg-white border-b border-l border-r border-gray-400 rounded-b">
           <div className="flex items-center justify-between mx-5 pb-2.5">
             <div className="text-2xl sm:text-3xl text-brand-gray-2">
-              Tokens I Own
+              My Holdings
             </div>
             <div className="text-2xl sm:text-3xl text-brand-gray-2">
-              <span>Total: </span>
+              <span>Total value: </span>
               <span title={'$' + ownedTokenTotalValue} className="uppercase">
                 ${formatNumber(ownedTokenTotalValue)}
               </span>
@@ -64,7 +64,7 @@ export default function MyTokens() {
 
           <div className="flex items-center mx-5 pb-2.5 mt-10">
             <div className="flex-grow text-2xl sm:text-3xl text-brand-gray-2">
-              My Tokens
+              My Listings
             </div>
             <div className="w-48 pr-0 md:w-64">
               <MarketSelect

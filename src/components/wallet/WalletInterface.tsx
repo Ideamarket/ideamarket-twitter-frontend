@@ -154,12 +154,11 @@ export default function WalletInterface({
       >
         <WalletButton
           svg={<WalletIcon className="w-8 h-8" />}
-          name="Crypto Wallets"
+          name="Pay with Crypto"
         />
         <WalletButton
           svg={<CreditCard className="w-7 h-7" />}
-          rightSvg={<Portis className="w-7 h-7" />}
-          name="Credit Card (Portis)"
+          name="Pay with Credit Card (via Portis)"
           wallet={wallets.WALLETS.PORTIS}
         />
       </div>
