@@ -12,11 +12,10 @@ class MyDocument extends Document {
     return { ...initialProps }
   }
 
-  static GA_TRACKING_ID = process.browser
-    ? process.env.NEXT_PUBLIC_NETWORK === 'mainnet'
+  static GA_TRACKING_ID =
+    process.env.NEXT_PUBLIC_NETWORK === 'mainnet'
       ? 'UA-185970351-2'
       : 'UA-185970351-2'
-    : ''
 
   static pageview = (url) => {
     ;(window as any).gtag('config', MyDocument.GA_TRACKING_ID, {
