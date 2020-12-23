@@ -253,16 +253,19 @@ export default function TokenDetails() {
     return <></>
   }
 
-  const tokenPrice = web3BNToFloatString(
-    calculateCurrentPriceBN(
-      token.rawSupply,
-      market.rawBaseCost,
-      market.rawPriceRise,
-      market.rawHatchTokens
-    ),
-    tenPow18,
-    2
-  )
+  const tokenPrice =
+    token && market
+      ? web3BNToFloatString(
+          calculateCurrentPriceBN(
+            token.rawSupply,
+            market.rawBaseCost,
+            market.rawPriceRise,
+            market.rawHatchTokens
+          ),
+          tenPow18,
+          2
+        )
+      : ''
 
   return (
     <div className="min-h-screen bg-brand-gray">
