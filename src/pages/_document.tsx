@@ -52,10 +52,6 @@ class MyDocument extends Document {
           `,
             }}
           />
-          <script
-            type="text/javascript"
-            src="//app.sgwidget.com/js/sg-widget-v2.js"
-          ></script>
         </Head>
         <body>
           <Main />
