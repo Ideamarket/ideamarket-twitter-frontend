@@ -18,15 +18,14 @@ export default function EmailNewsletterModal() {
       <div className="mb-5 w-100 max-w-100">
         <div className="p-4 bg-top-mobile">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
-            Email Newsletter
+            New Markets
           </p>
         </div>
         <p className="m-5 break-normal">
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet.
+          If you missed the mad rush to list your favorite Twitter accounts,
+          don't worry. More <strong>new markets are on the way</strong>.<br />
+          <br />
+          Sign up to be notified 24 hours before they launch:
         </p>
         <iframe
           className="w-full"

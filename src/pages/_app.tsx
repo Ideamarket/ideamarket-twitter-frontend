@@ -43,17 +43,29 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const [isListTokenModalOpen, setIsListTokenModalOpen] = useState(false)
 
-  const [isEmailNewsletterModalOpen, setIsEmailNewsletterModalOpen] = useState(
+  const [isEmailNewsletterModalOpen, _setIsEmailNewsletterModalOpen] = useState(
     false
   )
 
+  const setIsEmailNewsletterModalOpen = (b: boolean) => {
+    localStorage.setItem('EMAIL_NEWSLETTER_WAS_SEEN', 'true')
+    _setIsEmailNewsletterModalOpen(b)
+  }
+
   useEffect(() => {
     const emailNewsletterModalWasOpened = localStorage.getItem(
-      'EMAIL_NEWSLETTER'
+      'EMAIL_NEWSLETTER_WAS_SEEN'
     )
+
     if (!emailNewsletterModalWasOpened) {
-      setIsEmailNewsletterModalOpen(true)
-      localStorage.setItem('EMAIL_NEWSLETTER', 'true')
+      setTimeout(() => {
+        const emailNewsletterModalWasOpened = localStorage.getItem(
+          'EMAIL_NEWSLETTER_WAS_SEEN'
+        )
+        if (!emailNewsletterModalWasOpened) {
+          setIsEmailNewsletterModalOpen(true)
+        }
+      }, 30000)
     }
   }, [])
 

@@ -16,12 +16,6 @@ export default function Nav() {
   )
   const menuItems = [
     {
-      name: 'Overview',
-      value: 'overview',
-      onClick: () => router.push('/'),
-      isSelected: router.pathname === '/',
-    },
-    {
       name: 'My Tokens',
       value: 'my-tokens',
       onClick: () => router.push('/tokens'),
@@ -34,8 +28,8 @@ export default function Nav() {
       isSelected: false,
     },
     {
-      name: 'Newsletter',
-      value: 'newsletter',
+      name: 'New Markets',
+      value: 'new-markets',
       onClick: () => setIsEmailNewsletterModalOpen(true),
       isSelected: false,
     },
