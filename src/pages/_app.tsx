@@ -10,7 +10,12 @@ import Head from 'next/head'
 import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
-import { NavBar, WrongNetworkOverlay, WalletModal } from 'components'
+import {
+  NavBar,
+  WrongNetworkOverlay,
+  WalletModal,
+  EmailNewsletterModal,
+} from 'components'
 
 export const GlobalContext = createContext({
   isWalletModalOpen: false,
@@ -19,6 +24,8 @@ export const GlobalContext = createContext({
   setOnWalletConnectedCallback: (f: () => void) => {},
   isListTokenModalOpen: false,
   setIsListTokenModalOpen: (val: boolean) => {},
+  isEmailNewsletterModalOpen: false,
+  setIsEmailNewsletterModalOpen: (val: boolean) => {},
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -33,7 +40,22 @@ function MyApp({ Component, pageProps }: AppProps) {
     onWalletConnectedCallback,
     setOnWalletConnectedCallback,
   ] = useState(() => () => {})
+
   const [isListTokenModalOpen, setIsListTokenModalOpen] = useState(false)
+
+  const [isEmailNewsletterModalOpen, setIsEmailNewsletterModalOpen] = useState(
+    false
+  )
+
+  useEffect(() => {
+    const emailNewsletterModalWasOpened = localStorage.getItem(
+      'EMAIL_NEWSLETTER'
+    )
+    if (!emailNewsletterModalWasOpened) {
+      setIsEmailNewsletterModalOpen(true)
+      localStorage.setItem('EMAIL_NEWSLETTER', 'true')
+    }
+  }, [])
 
   return (
     <GlobalContext.Provider
@@ -44,6 +66,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         setOnWalletConnectedCallback,
         isListTokenModalOpen,
         setIsListTokenModalOpen,
+        isEmailNewsletterModalOpen,
+        setIsEmailNewsletterModalOpen,
       }}
     >
       <Head>
@@ -57,6 +81,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       </div>
       <WalletModal />
       <WrongNetworkOverlay />
+      <EmailNewsletterModal />
     </GlobalContext.Provider>
   )
 }

@@ -11,7 +11,9 @@ export default function Nav() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const router = useRouter()
   const closeMenu = () => setIsMobileNavOpen(false)
-  const { setIsWalletModalOpen } = useContext(GlobalContext)
+  const { setIsWalletModalOpen, setIsEmailNewsletterModalOpen } = useContext(
+    GlobalContext
+  )
   const menuItems = [
     {
       name: 'Overview',
@@ -29,6 +31,12 @@ export default function Nav() {
       name: 'How It Works',
       value: 'how-it-works',
       onClick: () => router.push('https://docs.ideamarket.io'),
+      isSelected: false,
+    },
+    {
+      name: 'Newsletter',
+      value: 'newsletter',
+      onClick: () => setIsEmailNewsletterModalOpen(true),
       isSelected: false,
     },
   ]
