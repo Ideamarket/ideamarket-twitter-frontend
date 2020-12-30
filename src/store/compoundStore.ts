@@ -3,7 +3,7 @@ import BN from 'bn.js'
 
 const DAI_ADDRESS = '0x6b175474e89094c44da98b954eedeac495271d0f'
 const HTTP_GRAPHQL_ENDPOINT =
-  'https://api.thegraph.com/subgraphs/name/graphprotocol/compound-v2'
+  'https://subgraph.backend.ideamarket.io:8080/subgraphs/name/graphprotocol/compound-v2'
 
 export async function querySupplyRate(queryKey: string) {
   const result = await request(

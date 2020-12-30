@@ -13,7 +13,7 @@ const HTTP_GRAPHQL_ENDPOINT =
     ? 'https://subgraph-rinkeby.backend.ideamarket.io:8080/subgraphs/name/Ideamarket/IdeamarketRINKEBY'
     : NETWORK === 'test'
     ? 'https://subgraph-test.backend.ideamarket.io:8080/subgraphs/name/Ideamarket/IdeamarketTEST'
-    : 'https://api.thegraph.com/subgraphs/name/ideamarket/ideamarket'
+    : 'https://subgraph.backend.ideamarket.io:8080/subgraphs/name/Ideamarket/Ideamarket'
 
 export type IdeaMarket = {
   name: string
