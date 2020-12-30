@@ -24,8 +24,10 @@ export default function TokenCard({
   classes?: string
   isLoading?: boolean
 }) {
-  const loading = (isLoading ? isLoading : false) || !(token && market)
-  const marketSpecifics = getMarketSpecificsByMarketName(market.name)
+  const loading = isLoading || !(token && market)
+  const marketSpecifics = isLoading
+    ? undefined
+    : getMarketSpecificsByMarketName(market.name)
   const tokenPrice = isLoading
     ? ''
     : web3BNToFloatString(
