@@ -1,18 +1,10 @@
 import axios from 'axios'
 
-import { IdeaToken } from 'store/ideaMarketsStore'
-import { NETWORK } from 'utils'
-
 export default async function submitVerification(
-  token: IdeaToken,
-  ownerAddress: string,
   uuid: string
-): Promise<string> {
+): Promise<{ wantFee: boolean; weiFee?: string; to?: string; tx?: string }> {
   const payload = {
-    tokenAddress: token.address,
-    ownerAddress: ownerAddress,
     uuid: uuid,
-    chain: NETWORK,
   }
 
   try {
@@ -20,7 +12,20 @@ export default async function submitVerification(
       'https://verification.backend.ideamarket.io:8080/verificationSubmitted',
       payload
     )
-    return response.data.data.tx
+
+    const data = response.data.data
+    if (data.wantFee) {
+      return {
+        wantFee: true,
+        weiFee: data.wei,
+        to: data.to,
+      }
+    }
+
+    return {
+      wantFee: false,
+      tx: data.tx,
+    }
   } catch (ex) {
     if (ex.response?.data?.message) {
       throw ex.response.data.message

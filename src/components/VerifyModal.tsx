@@ -1,13 +1,23 @@
 import { useState, useEffect, useContext } from 'react'
 import classNames from 'classnames'
+import BN from 'bn.js'
+import BigNumber from 'bignumber.js'
+import { SHA3 } from 'sha3'
 
 import { GlobalContext } from '../pages/_app'
-import { requestVerification, submitVerification } from 'actions'
+import {
+  requestVerification,
+  submitVerification,
+  submitVerificationFee,
+  submitVerificationFeeHash,
+} from 'actions'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { useWalletStore } from 'store/walletStore'
-import { isAddress, NETWORK } from '../utils'
+import { isAddress, NETWORK, web3BNToFloatString } from '../utils'
 import { Modal, CircleSpinner } from './'
+
+const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function VerifyModal({
   isOpen,
@@ -22,9 +32,11 @@ export default function VerifyModal({
 }) {
   const PAGES = {
     OWNER_ADDRESS: 0,
-    SHOW_UUID: 1,
-    SUCCESS: 2,
-    ERROR: 3,
+    SHOW_SHA: 1,
+    SHOW_FEE_TX: 2,
+    AWAIT_FEE_TX: 3,
+    SUCCESS: 4,
+    ERROR: 5,
   }
 
   const [page, setPage] = useState(PAGES.OWNER_ADDRESS)
@@ -38,11 +50,15 @@ export default function VerifyModal({
   )
 
   const [uuid, setUUID] = useState('')
+  const sha = new SHA3(256).update(uuid).digest('hex').toString().substr(0, 12)
   const [tx, setTx] = useState('')
+  const [weiFee, setWeiFee] = useState('0')
+  const [feeTo, setFeeTo] = useState('')
+  const [feeTx, setFeeTx] = useState('')
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
   const marketVerificationExplanation = marketSpecifics.getVerificationExplanation()
-  const uuidPromptExplanation = marketSpecifics.getVerificationUUIDPromptExplanation()
-  const uuidPrompt = marketSpecifics.getVerificationUUIDPrompt(uuid)
+  const shaPromptExplanation = marketSpecifics.getVerificationSHAPromptExplanation()
+  const shaPrompt = marketSpecifics.getVerificationSHAPrompt(sha)
   const confirmCheckboxText = marketSpecifics.getVerificationConfirmCheckboxLabel()
 
   const [confirmCheckboxChecked, setConfirmCheckboxChecked] = useState(false)
@@ -61,7 +77,7 @@ export default function VerifyModal({
     setIsLoading(true)
     try {
       setUUID(await requestVerification(token, ownerAddress))
-      setPage(PAGES.SHOW_UUID)
+      setPage(PAGES.SHOW_SHA)
     } catch (ex) {
       setErrorMessage(ex)
       setPage(PAGES.ERROR)
@@ -70,17 +86,62 @@ export default function VerifyModal({
     setIsLoading(false)
   }
 
-  async function submit() {
+  async function verificationSubmitted() {
     setIsLoading(true)
+    let response: {
+      wantFee: boolean
+      weiFee?: string
+      to?: string
+      tx?: string
+    }
     try {
-      setTx(await submitVerification(token, ownerAddress, uuid))
+      response = await submitVerification(uuid)
+    } catch (ex) {
+      setErrorMessage(ex)
+      setPage(PAGES.ERROR)
+    }
+
+    if (response.wantFee) {
+      setWeiFee(response.weiFee)
+      setFeeTo(response.to)
+      setPage(PAGES.SHOW_FEE_TX)
+    } else {
+      setTx(response.tx)
+      setPage(PAGES.SUCCESS)
+    }
+
+    setIsLoading(false)
+  }
+
+  async function submitFee() {
+    setIsLoading(true)
+    let feeTx: string
+    try {
+      await submitVerificationFee(feeTo, new BN(weiFee), sha).on(
+        'transactionHash',
+        (hash) => {
+          setPage(PAGES.AWAIT_FEE_TX)
+          setFeeTx(hash)
+          feeTx = hash
+        }
+      )
+    } catch (ex) {
+      setErrorMessage('The verification fee transaction failed.')
+      setPage(PAGES.ERROR)
+      setIsLoading(true)
+      return
+    }
+
+    try {
+      setTx(await submitVerificationFeeHash(uuid, feeTx))
       setPage(PAGES.SUCCESS)
     } catch (ex) {
       setErrorMessage(ex)
       setPage(PAGES.ERROR)
     }
 
-    setIsLoading(false)
+    setFeeTx('')
+    setIsLoading(true)
   }
 
   useEffect(() => {
@@ -92,6 +153,7 @@ export default function VerifyModal({
       setTx('')
       setIsLoading(false)
       setErrorMessage('')
+      setFeeTx('')
     }
   }, [isOpen])
 
@@ -117,10 +179,10 @@ export default function VerifyModal({
               </p>
               <br />
               <p>{marketVerificationExplanation}</p>
-              <div className="text-center mt-10 text-lg">
+              <div className="mt-10 text-lg text-center">
                 <strong>Address to be listed as owner</strong>
               </div>
-              <div className="flex flex-col md:flex-row md:mx-2 mt-1 items-center justify-center">
+              <div className="flex flex-col items-center justify-center mt-1 md:flex-row md:mx-2">
                 <div className="w-full md:flex-grow">
                   <input
                     className={classNames(
@@ -151,7 +213,7 @@ export default function VerifyModal({
                   Use connected
                 </button>
               </div>
-              <div className="mt-10 flex justify-center">
+              <div className="flex justify-center mt-10">
                 <button
                   disabled={isLoading || !isValidOwnerAddress}
                   className={classNames(
@@ -175,13 +237,13 @@ export default function VerifyModal({
               </div>
             </>
           )}
-          {page === PAGES.SHOW_UUID && (
+          {page === PAGES.SHOW_SHA && (
             <>
-              <p>{uuidPromptExplanation}</p>
+              <p>{shaPromptExplanation}</p>
               <div className="mt-7.5 p-5 border border-brand-gray-2 bg-gray-200 rounded text-black">
-                {uuidPrompt}
+                {shaPrompt}
               </div>
-              <div className="mt-10 flex justify-center items-center">
+              <div className="flex items-center justify-center mt-10">
                 <input
                   type="checkbox"
                   id="confirmCheckbox"
@@ -205,7 +267,7 @@ export default function VerifyModal({
                       ? 'bg-brand-blue text-white border-brand-blue'
                       : 'bg-white border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
                   )}
-                  onClick={submit}
+                  onClick={verificationSubmitted}
                 >
                   {isLoading ? (
                     <div className="flex justify-center">
@@ -218,9 +280,72 @@ export default function VerifyModal({
               </div>
             </>
           )}
+          {page === PAGES.SHOW_FEE_TX && (
+            <>
+              <div className="text-xl text-center">
+                <strong>Verification fee</strong>
+              </div>
+              <p className="mt-5">
+                Your identity has been successfully verified and a verification
+                transaction can be submitted to the blockchain. To cover the
+                transaction cost for this transaction please use the button
+                below to transfer{' '}
+                <i>{web3BNToFloatString(new BN(weiFee), tenPow18, 5)} ETH</i> to
+                the authorization service.
+                <br />
+                This is a one-time payment which will authorize you to withdraw
+                interest for this token indefinitely.
+              </p>
+              <div className="flex justify-center">
+                <button
+                  disabled={isLoading}
+                  className={classNames(
+                    'mt-2 w-32 h-10 text-base border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
+                    isLoading
+                      ? 'border-brand-blue'
+                      : 'bg-brand-blue text-white border-brand-blue'
+                  )}
+                  onClick={submitFee}
+                >
+                  {isLoading ? (
+                    <div className="flex justify-center">
+                      <CircleSpinner color="#0857e0" />
+                    </div>
+                  ) : (
+                    'Transfer'
+                  )}
+                </button>
+              </div>
+            </>
+          )}
+          {page === PAGES.AWAIT_FEE_TX && (
+            <>
+              <div className="text-xl text-center">
+                <strong>Transaction is pending</strong>
+              </div>
+              <div className="flex justify-center mt-5">
+                <CircleSpinner color="#0857e0" />
+              </div>
+              <div className="mt-2 text-center">
+                Please wait for transaction{' '}
+                <a
+                  className={classNames('underline')}
+                  href={`https://${
+                    NETWORK === 'rinkeby' || NETWORK === 'test'
+                      ? 'rinkeby.'
+                      : ''
+                  }etherscan.io/tx/${feeTx}`}
+                  target="_blank"
+                >
+                  {feeTx && feeTx.slice(0, 8)}...{feeTx && feeTx.slice(-6)}
+                </a>{' '}
+                to confirm
+              </div>
+            </>
+          )}
           {page === PAGES.SUCCESS && (
             <>
-              <div className="text-center text-2xl text-brand-green">
+              <div className="text-2xl text-center text-brand-green">
                 <strong>Verification successful</strong>
               </div>
               <p className="mt-5">
@@ -231,7 +356,7 @@ export default function VerifyModal({
                 transaction has been confirmed you will be able to withdraw the
                 accumulated interest.
               </p>
-              <div className="mt-5 p-5 border border-brand-gray-2 bg-gray-200 rounded text-black">
+              <div className="p-5 mt-5 text-black bg-gray-200 border rounded border-brand-gray-2">
                 <a
                   className="underline"
                   href={`https://${
@@ -246,7 +371,7 @@ export default function VerifyModal({
               </div>
               <div className="flex justify-center mt-10">
                 <button
-                  className="hover:bg-brand-blue hover:text-white w-32 h-10 text-base border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium bg-white text-brand-blue border-brand-blue"
+                  className="w-32 h-10 text-base bg-white border-2 rounded-lg hover:bg-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium text-brand-blue border-brand-blue"
                   onClick={() => {
                     setIsOpen(false)
                   }}
@@ -258,13 +383,13 @@ export default function VerifyModal({
           )}
           {page === PAGES.ERROR && (
             <>
-              <div className="text-center text-2xl text-brand-red">
+              <div className="text-2xl text-center text-brand-red">
                 <strong>Something went wrong</strong>
               </div>
               <p className="mt-5 text-center">{errorMessage}</p>
               <div className="flex justify-center mt-10">
                 <button
-                  className="hover:bg-brand-blue hover:text-white w-32 h-10 text-base border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium bg-white text-brand-blue border-brand-blue"
+                  className="w-32 h-10 text-base bg-white border-2 rounded-lg hover:bg-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium text-brand-blue border-brand-blue"
                   onClick={() => {
                     setIsOpen(false)
                   }}

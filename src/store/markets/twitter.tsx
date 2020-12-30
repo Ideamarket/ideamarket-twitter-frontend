@@ -67,11 +67,11 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
     return 'Upon initiation of the verification process you will be given a verification code. This code will be used to verify that you have access to the listed account by asking you to post a Tweet containing said code from the corresponding Twitter account.'
   }
 
-  getVerificationUUIDPrompt(uuid: string): string {
-    return `Ideamarket Verification: ${uuid}`
+  getVerificationSHAPrompt(sha: string): string {
+    return `Ideamarket Verification: ${sha}`
   }
 
-  getVerificationUUIDPromptExplanation(): string {
+  getVerificationSHAPromptExplanation(): string {
     return `This is your verification code. Please post a Tweet with the below content. After you posted the Tweet, click Next.`
   }
 
