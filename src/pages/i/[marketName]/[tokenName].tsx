@@ -259,9 +259,7 @@ export default function TokenDetails() {
       endPrice = rawPriceChartData.latestPricePoint.price
     } else {
       beginPrice = rawPriceChartData.pricePoints[0].oldPrice
-      endPrice =
-        rawPriceChartData.pricePoints[rawPriceChartData.pricePoints.length - 1]
-          .price
+      endPrice = array.last(rawPriceChartData.pricePoints).price
     }
 
     const finalChartData = [[chartFromTs, beginPrice]].concat(
@@ -297,7 +295,6 @@ export default function TokenDetails() {
 
     finalChartData.push([chartToTs, remainingLocked])
 
-    console.log(finalChartData)
     setLockedChartData(finalChartData)
   }, [chartToTs, rawLockedChartData])
 
@@ -525,15 +522,6 @@ export default function TokenDetails() {
                     <ChartDurationEntry
                       durationString="1Y"
                       durationSeconds={31536000}
-                      selectedChartDuration={selectedChartDuration}
-                      changeChartDuration={changeChartDuration}
-                      setSelectedChartDuration={setSelectedChartDuration}
-                    />
-                    <ChartDurationEntry
-                      durationString="ALL"
-                      durationSeconds={
-                        Math.floor(Date.now() / 1000) - Number(token.listedAt)
-                      }
                       selectedChartDuration={selectedChartDuration}
                       changeChartDuration={changeChartDuration}
                       setSelectedChartDuration={setSelectedChartDuration}
