@@ -14,8 +14,7 @@ export default function WrongNetworkOverlay() {
   const web3Network = useWalletStore((state) => state.network)
   const isWrongNetwork =
     (NETWORK === 'mainnet' && web3Network !== 'main') ||
-    (NETWORK === 'rinkeby' && web3Network !== 'rinkeby') ||
-    (web3Network !== 'main' && web3Network !== 'rinkeby')
+    ((NETWORK === 'rinkeby' || NETWORK === 'test') && web3Network !== 'rinkeby')
 
   const { isWalletModalOpen } = useContext(GlobalContext)
 
