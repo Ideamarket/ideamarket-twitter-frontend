@@ -39,6 +39,9 @@ export default function PreviewPriceChart({ chartData }) {
         legend: {
           display: false,
         },
+        animation: {
+          duration: 0,
+        },
         scales: {
           xAxes: [
             {
