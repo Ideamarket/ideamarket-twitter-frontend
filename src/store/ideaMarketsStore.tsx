@@ -324,6 +324,29 @@ export async function queryTokenChartData(
   } as IdeaToken
 }
 
+export async function queryTokenLockedChartData(
+  queryKey,
+  tokenAddres: string,
+  toTs: number
+): Promise<LockedAmount[]> {
+  if (!tokenAddres) {
+    return undefined
+  }
+
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryTokenLockedChartData(tokenAddres.toLowerCase(), toTs)
+  )
+
+  if (!result || !result.lockedIdeaTokenAmounts) {
+    return undefined
+  }
+
+  return result.lockedIdeaTokenAmounts.map((locked) =>
+    apiResponseToLockedAmount(locked)
+  )
+}
+
 export async function queryLockedAmounts(
   queryKey,
   tokenAddress: string,
@@ -767,6 +790,7 @@ function getQuerySingleToken(marketName: string, tokenName: string): string {
           daiInToken
           invested
           listedAt
+          lockedAmount
           latestPricePoint {
             timestamp
             oldPrice
@@ -793,6 +817,22 @@ function getQueryTokenChartData(address: string, fromTs: number): string {
           oldPrice
           price
       }    
+    }
+  }`
+}
+
+function getQueryTokenLockedChartData(
+  tokenAddress: string,
+  toTs: number
+): string {
+  const now = Math.floor(Date.now() / 1000)
+  return gql`
+  {
+    lockedIdeaTokenAmounts(where:{token:${
+      '"' + tokenAddress + '"'
+    },lockedUntil_gt:${now},lockedUntil_lt:${toTs}}) {
+      amount
+      lockedUntil
     }
   }`
 }

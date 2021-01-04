@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import array from 'lodash/array'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -12,6 +13,7 @@ import {
   Footer,
   VerifyModal,
   LockedTokenTable,
+  LockedTokenChart,
 } from 'components'
 import {
   querySupplyRate,
@@ -22,6 +24,7 @@ import { useWalletStore } from 'store/walletStore'
 import {
   querySingleToken,
   queryTokenChartData,
+  queryTokenLockedChartData,
   queryMarket,
 } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
@@ -126,19 +129,19 @@ function ChartDurationEntry({
   durationSeconds,
   selectedChartDuration,
   setSelectedChartDuration,
-  setChartFromTs,
+  changeChartDuration,
 }: {
   durationString: string
   durationSeconds: number
   selectedChartDuration: string
   setSelectedChartDuration: (d: string) => void
-  setChartFromTs: (s: number) => void
+  changeChartDuration: (s: number) => void
 }) {
   return (
     <a
       onClick={() => {
         setSelectedChartDuration(durationString)
-        setChartFromTs(Math.floor(Date.now() / 1000) - durationSeconds)
+        changeChartDuration(durationSeconds)
       }}
       className={classNames(
         'ml-2.5 mr-2.5 text-center px-1 text-sm leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
@@ -153,6 +156,11 @@ function ChartDurationEntry({
 }
 
 export default function TokenDetails() {
+  const CHART = {
+    PRICE: 0,
+    LOCKED: 1,
+  }
+
   const router = useRouter()
 
   const { setIsWalletModalOpen } = useContext(GlobalContext)
@@ -190,16 +198,40 @@ export default function TokenDetails() {
     'sell'
   )
 
+  const [selectedChart, setSelectedChart] = useState(CHART.PRICE)
   const [selectedChartDuration, setSelectedChartDuration] = useState('1W')
 
   const [chartFromTs, setChartFromTs] = useState(
     Math.floor(Date.now() / 1000) - 604800
   )
-  const { data: rawChartData, isLoading: isRawChartDataLoading } = useQuery(
-    [`chartData-${token?.address}`, token?.address, chartFromTs],
+
+  const [chartToTs, setChartToTs] = useState(
+    Math.floor(Date.now() / 1000) + 604800
+  )
+
+  function changeChartDuration(seconds: number) {
+    const now = Math.floor(Date.now() / 1000)
+    setChartFromTs(now - seconds)
+    setChartToTs(now + seconds)
+  }
+
+  const {
+    data: rawPriceChartData,
+    isLoading: isRawPriceChartDataLoading,
+  } = useQuery(
+    [`priceChartData-${token?.address}`, token?.address, chartFromTs],
     queryTokenChartData
   )
-  const [chartData, setChartData] = useState([])
+
+  const {
+    data: rawLockedChartData,
+    isLoading: isRawLockedChartDataLoading,
+  } = useQuery(
+    [`lockedChartData-${token?.address}`, token?.address, chartToTs],
+    queryTokenLockedChartData
+  )
+  const [priceChartData, setPriceChartData] = useState([])
+  const [lockedChartData, setLockedChartData] = useState([])
 
   const {
     data: compoundSupplyRate,
@@ -220,26 +252,54 @@ export default function TokenDetails() {
     let beginPrice: number
     let endPrice: number
 
-    if (!rawChartData) {
+    if (!rawPriceChartData) {
       return
-    } else if (rawChartData.pricePoints.length === 0) {
-      beginPrice = rawChartData.latestPricePoint.price
-      endPrice = rawChartData.latestPricePoint.price
+    } else if (rawPriceChartData.pricePoints.length === 0) {
+      beginPrice = rawPriceChartData.latestPricePoint.price
+      endPrice = rawPriceChartData.latestPricePoint.price
     } else {
-      beginPrice = rawChartData.pricePoints[0].oldPrice
+      beginPrice = rawPriceChartData.pricePoints[0].oldPrice
       endPrice =
-        rawChartData.pricePoints[rawChartData.pricePoints.length - 1].price
+        rawPriceChartData.pricePoints[rawPriceChartData.pricePoints.length - 1]
+          .price
     }
 
     const finalChartData = [[chartFromTs, beginPrice]].concat(
-      rawChartData.pricePoints.map((pricePoint) => [
+      rawPriceChartData.pricePoints.map((pricePoint) => [
         pricePoint.timestamp,
         pricePoint.price,
       ])
     )
     finalChartData.push([currentTs, endPrice])
-    setChartData(finalChartData)
-  }, [chartFromTs, rawChartData])
+    setPriceChartData(finalChartData)
+  }, [chartFromTs, rawPriceChartData])
+
+  useEffect(() => {
+    if (!rawLockedChartData) {
+      return
+    }
+
+    const now = Math.floor(Date.now() / 1000)
+    const beginLocked = parseFloat(token.lockedAmount)
+    const finalChartData = [[now, beginLocked]]
+    let remainingLocked = beginLocked
+
+    for (const lockedAmount of rawLockedChartData) {
+      remainingLocked -= parseFloat(lockedAmount.amount)
+
+      if (remainingLocked < 0.0) {
+        // rounding error
+        remainingLocked = 0.0
+      }
+
+      finalChartData.push([lockedAmount.lockedUntil, remainingLocked])
+    }
+
+    finalChartData.push([chartToTs, remainingLocked])
+
+    console.log(finalChartData)
+    setLockedChartData(finalChartData)
+  }, [chartToTs, rawLockedChartData])
 
   const isLoading =
     isTokenLoading ||
@@ -381,7 +441,7 @@ export default function TokenDetails() {
                   </DetailsOverChartEntry>
                 </div>
                 <div style={{ minHeight: '200px' }} className="flex flex-col">
-                  {isLoading || isRawChartDataLoading ? (
+                  {isLoading || isRawPriceChartDataLoading ? (
                     <div
                       className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
                       style={{
@@ -390,8 +450,10 @@ export default function TokenDetails() {
                         marginBottom: '5px',
                       }}
                     ></div>
+                  ) : selectedChart === CHART.PRICE ? (
+                    <PriceChart chartData={priceChartData} />
                   ) : (
-                    <PriceChart chartData={chartData} />
+                    <LockedTokenChart chartData={lockedChartData} />
                   )}
                 </div>
                 <div
@@ -399,53 +461,84 @@ export default function TokenDetails() {
                   style={{ borderBottom: '1px solid #cbd5e0' }}
                 ></div>
                 <nav
-                  className="flex justify-end py-1.5 bg-gray-50"
+                  className="flex justify-between py-1.5 bg-gray-50"
                   style={{ backgroundColor: '#fafafa' }}
                 >
-                  <ChartDurationEntry
-                    durationString="1H"
-                    durationSeconds={3600}
-                    selectedChartDuration={selectedChartDuration}
-                    setChartFromTs={setChartFromTs}
-                    setSelectedChartDuration={setSelectedChartDuration}
-                  />
-                  <ChartDurationEntry
-                    durationString="1D"
-                    durationSeconds={86400}
-                    selectedChartDuration={selectedChartDuration}
-                    setChartFromTs={setChartFromTs}
-                    setSelectedChartDuration={setSelectedChartDuration}
-                  />
-                  <ChartDurationEntry
-                    durationString="1W"
-                    durationSeconds={604800}
-                    selectedChartDuration={selectedChartDuration}
-                    setChartFromTs={setChartFromTs}
-                    setSelectedChartDuration={setSelectedChartDuration}
-                  />
-                  <ChartDurationEntry
-                    durationString="1M"
-                    durationSeconds={2628000}
-                    selectedChartDuration={selectedChartDuration}
-                    setChartFromTs={setChartFromTs}
-                    setSelectedChartDuration={setSelectedChartDuration}
-                  />
-                  <ChartDurationEntry
-                    durationString="1Y"
-                    durationSeconds={31536000}
-                    selectedChartDuration={selectedChartDuration}
-                    setChartFromTs={setChartFromTs}
-                    setSelectedChartDuration={setSelectedChartDuration}
-                  />
-                  <ChartDurationEntry
-                    durationString="ALL"
-                    durationSeconds={
-                      Math.floor(Date.now() / 1000) - Number(token.listedAt)
-                    }
-                    selectedChartDuration={selectedChartDuration}
-                    setChartFromTs={setChartFromTs}
-                    setSelectedChartDuration={setSelectedChartDuration}
-                  />
+                  <div>
+                    <a
+                      onClick={() => {
+                        setSelectedChart(CHART.PRICE)
+                      }}
+                      className={classNames(
+                        'ml-2.5 mr-2.5 text-center px-1 text-sm leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
+                        selectedChart === CHART.PRICE
+                          ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
+                          : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
+                      )}
+                    >
+                      Price
+                    </a>
+
+                    <a
+                      onClick={() => {
+                        setSelectedChart(CHART.LOCKED)
+                      }}
+                      className={classNames(
+                        'ml-2.5 mr-2.5 text-center px-1 text-sm leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
+                        selectedChart === CHART.LOCKED
+                          ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
+                          : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
+                      )}
+                    >
+                      Locked
+                    </a>
+                  </div>
+                  <div>
+                    <ChartDurationEntry
+                      durationString="1H"
+                      durationSeconds={3600}
+                      selectedChartDuration={selectedChartDuration}
+                      changeChartDuration={changeChartDuration}
+                      setSelectedChartDuration={setSelectedChartDuration}
+                    />
+                    <ChartDurationEntry
+                      durationString="1D"
+                      durationSeconds={86400}
+                      selectedChartDuration={selectedChartDuration}
+                      changeChartDuration={changeChartDuration}
+                      setSelectedChartDuration={setSelectedChartDuration}
+                    />
+                    <ChartDurationEntry
+                      durationString="1W"
+                      durationSeconds={604800}
+                      selectedChartDuration={selectedChartDuration}
+                      changeChartDuration={changeChartDuration}
+                      setSelectedChartDuration={setSelectedChartDuration}
+                    />
+                    <ChartDurationEntry
+                      durationString="1M"
+                      durationSeconds={2628000}
+                      selectedChartDuration={selectedChartDuration}
+                      changeChartDuration={changeChartDuration}
+                      setSelectedChartDuration={setSelectedChartDuration}
+                    />
+                    <ChartDurationEntry
+                      durationString="1Y"
+                      durationSeconds={31536000}
+                      selectedChartDuration={selectedChartDuration}
+                      changeChartDuration={changeChartDuration}
+                      setSelectedChartDuration={setSelectedChartDuration}
+                    />
+                    <ChartDurationEntry
+                      durationString="ALL"
+                      durationSeconds={
+                        Math.floor(Date.now() / 1000) - Number(token.listedAt)
+                      }
+                      selectedChartDuration={selectedChartDuration}
+                      changeChartDuration={changeChartDuration}
+                      setSelectedChartDuration={setSelectedChartDuration}
+                    />
+                  </div>
                 </nav>
               </>
             </ContainerWithHeader>
@@ -797,7 +890,7 @@ export default function TokenDetails() {
                     </div>
                     <LockedTokenTable token={token} owner={connectedAddress} />
                     <div className="flex justify-end mt-4">
-                      <button className="py-1 mr-2 px-1 ml-5 text-sm font-medium bg-white border-2 rounded-lg  tracking-tightest-2 font-sf-compact-medium cursor-default text-brand-gray-2">
+                      <button className="px-1 py-1 ml-5 mr-2 text-sm font-medium bg-white border-2 rounded-lg cursor-default tracking-tightest-2 font-sf-compact-medium text-brand-gray-2">
                         Withdraw unlocked
                       </button>
                     </div>
