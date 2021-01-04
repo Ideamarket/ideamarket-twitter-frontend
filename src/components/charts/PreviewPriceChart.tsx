@@ -1,16 +1,18 @@
-import { useMemo, useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import Chart from 'chart.js'
 
 export default function PreviewPriceChart({ chartData }) {
-  const labels = useMemo(() => chartData.map((pair) => parseFloat(pair[0])), [])
-
-  const data = useMemo(() => chartData.map((pair) => parseFloat(pair[1])), [])
-
   const ref = useRef(null)
 
   useEffect(() => {
-    let min = Math.min(...data)
-    let max = Math.max(...data)
+    const data = chartData.map(([x, y]) => ({
+      x,
+      y,
+    }))
+
+    const ys = data.map(({ y }) => y)
+    let min = Math.min(...ys)
+    let max = Math.max(...ys)
 
     if (min === max) {
       min = 0.0
@@ -20,7 +22,6 @@ export default function PreviewPriceChart({ chartData }) {
     new Chart(ref.current.getContext('2d'), {
       type: 'line',
       data: {
-        labels: labels,
         datasets: [
           {
             data: data,
@@ -41,6 +42,7 @@ export default function PreviewPriceChart({ chartData }) {
         scales: {
           xAxes: [
             {
+              type: 'time',
               ticks: { display: false },
               gridLines: { display: false },
             },
@@ -66,7 +68,7 @@ export default function PreviewPriceChart({ chartData }) {
         },
       },
     })
-  }, [labels, data])
+  }, [chartData])
 
   return (
     <div className="h-10 max-w-xs max-h-10">
