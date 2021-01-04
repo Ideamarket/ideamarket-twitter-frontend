@@ -6,14 +6,13 @@ import { useQuery } from 'react-query'
 import BigNumber from 'bignumber.js'
 import { GlobalContext } from 'pages/_app'
 import {
-  PriceChart,
+  TimeXFloatYChart,
   WatchingStar,
   TradeInterface,
   TokenCard,
   Footer,
   VerifyModal,
   LockedTokenTable,
-  LockedTokenChart,
 } from 'components'
 import {
   querySupplyRate,
@@ -438,7 +437,9 @@ export default function TokenDetails() {
                   </DetailsOverChartEntry>
                 </div>
                 <div style={{ minHeight: '200px' }} className="flex flex-col">
-                  {isLoading || isRawPriceChartDataLoading ? (
+                  {isLoading ||
+                  isRawPriceChartDataLoading ||
+                  isRawLockedChartDataLoading ? (
                     <div
                       className="w-full mx-auto bg-gray-400 rounded animate animate-pulse"
                       style={{
@@ -448,9 +449,9 @@ export default function TokenDetails() {
                       }}
                     ></div>
                   ) : selectedChart === CHART.PRICE ? (
-                    <PriceChart chartData={priceChartData} />
+                    <TimeXFloatYChart chartData={priceChartData} />
                   ) : (
-                    <LockedTokenChart chartData={lockedChartData} />
+                    <TimeXFloatYChart chartData={lockedChartData} />
                   )}
                 </div>
                 <div

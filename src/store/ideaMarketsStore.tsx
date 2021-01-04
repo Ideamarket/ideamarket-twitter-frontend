@@ -319,8 +319,12 @@ export async function queryTokenChartData(
   }
 
   return {
-    latestPricePoint: result.ideaToken.latestPricePoint,
-    pricePoints: result.ideaToken.pricePoints,
+    latestPricePoint: apiResponseToPricePoint(
+      result.ideaToken.latestPricePoint
+    ),
+    pricePoints: result.ideaToken.pricePoints.map((p) =>
+      apiResponseToPricePoint(p)
+    ),
   } as IdeaToken
 }
 
@@ -905,8 +909,12 @@ function apiResponseToIdeaToken(apiResponse, marketApiResponse?): IdeaToken {
     rawTokenInterestRedeemed: apiResponse.tokenInterestRedeemed
       ? new BN(apiResponse.tokenInterestRedeemed)
       : undefined,
-    latestPricePoint: apiResponse.latestPricePoint,
-    weekPricePoints: apiResponse.pricePoints,
+    latestPricePoint:
+      apiResponse.latestPricePoint &&
+      apiResponseToPricePoint(apiResponse.latestPricePoint),
+    weekPricePoints:
+      apiResponse.pricePoints &&
+      apiResponse.pricePoints.map((p) => apiResponseToPricePoint(p)),
     dayChange: apiResponse.dayChange
       ? (parseFloat(apiResponse.dayChange) * 100).toFixed(2)
       : undefined,
@@ -993,6 +1001,14 @@ function apiResponseToIdeaMarket(apiResponse): IdeaMarket {
   } as IdeaMarket
 
   return ret
+}
+
+function apiResponseToPricePoint(apiResponse): IdeaTokenPricePoint {
+  return {
+    timestamp: parseInt(apiResponse.timestamp),
+    oldPrice: parseFloat(apiResponse.oldPrice),
+    price: parseFloat(apiResponse.price),
+  } as IdeaTokenPricePoint
 }
 
 function apiResponseToLockedAmount(apiResponse): LockedAmount {

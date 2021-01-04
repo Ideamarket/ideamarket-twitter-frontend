@@ -1,18 +1,18 @@
-import { useMemo, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import Chart from 'chart.js'
 
-export default function LockedTokenChart({ chartData }) {
-  const labels = useMemo(
-    () => chartData.map((pair) => parseInt(pair[0]) * 1000),
-    []
-  )
-  const data = useMemo(() => chartData.map((pair) => parseFloat(pair[1])), [])
-
+export default function TimeXFloatYChart({ chartData }) {
   const ref = useRef(null)
 
   useEffect(() => {
-    let min = Math.min(...data)
-    let max = Math.max(...data)
+    const data = chartData.map((pair) => ({
+      x: new Date(Math.floor(pair[0] * 1000)),
+      y: parseFloat(pair[1]),
+    }))
+
+    const ys = data.map(({ y }) => y)
+    let min = Math.min(...ys)
+    let max = Math.max(...ys)
 
     if (min === max) {
       min = 0.0
@@ -22,7 +22,6 @@ export default function LockedTokenChart({ chartData }) {
     new Chart(ref.current.getContext('2d'), {
       type: 'line',
       data: {
-        labels: labels,
         datasets: [
           {
             data: data,
@@ -45,8 +44,9 @@ export default function LockedTokenChart({ chartData }) {
         scales: {
           xAxes: [
             {
+              type: 'time',
               ticks: { display: false },
-              gridLines: { display: true, drawBorder: false },
+              gridLines: { display: false, drawBorder: false },
             },
           ],
           yAxes: [
@@ -70,7 +70,7 @@ export default function LockedTokenChart({ chartData }) {
         },
       },
     })
-  }, [labels, data])
+  }, [chartData])
 
   return (
     <div className="flex-grow">
