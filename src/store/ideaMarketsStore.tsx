@@ -30,7 +30,7 @@ export type IdeaMarket = {
   rawPlatformFeeInvested: BN
   platformFeeRate: string
   rawPlatformFeeRate: BN
-  platformFeeWithdrawer: string
+  platformOwner: string
   platformInterestRedeemed: string
   rawPlatformInterestRedeemed: BN
   platformFeeRedeemed: string
@@ -54,7 +54,7 @@ export type IdeaToken = {
   holders: number
   marketCap: string
   rawMarketCap: BN
-  interestWithdrawer: string
+  tokenOwner: string
   daiInToken: string
   rawDaiInToken: BN
   invested: string
@@ -413,7 +413,7 @@ function getQueryMarkets(): string {
         hatchTokens
         tradingFeeRate
         platformFeeRate
-        platformFeeWithdrawer
+        platformOwner
         platformFeeInvested
         nameVerifier
       }
@@ -431,7 +431,7 @@ function getQueryMarket(marketName: string): string {
       hatchTokens
       tradingFeeRate
       platformFeeRate
-      platformFeeWithdrawer
+      platformOwner
       platformFeeInvested
       platformFeeRedeemed
       platformInterestRedeemed
@@ -473,7 +473,7 @@ function getQueryTokens(
         supply
         holders
         marketCap
-        interestWithdrawer
+        tokenOwner
         daiInToken
         invested
         listedAt
@@ -532,7 +532,7 @@ function getQueryTokensAllMarkets(
           hatchTokens
           tradingFeeRate
           platformFeeRate
-          platformFeeWithdrawer
+          platformOwner
           platformFeeInvested
           platformFeeRedeemed
           platformInterestRedeemed
@@ -541,7 +541,7 @@ function getQueryTokensAllMarkets(
         supply
         holders
         marketCap
-        interestWithdrawer
+        tokenOwner
         daiInToken
         invested
         tokenInterestRedeemed
@@ -588,7 +588,7 @@ function getQueryOwnedTokensMaybeMarket(
         supply
         holders
         marketCap
-        interestWithdrawer
+        tokenOwner
         daiInToken
         invested
         listedAt
@@ -602,7 +602,7 @@ function getQueryOwnedTokensMaybeMarket(
         hatchTokens
         tradingFeeRate
         platformFeeRate
-        platformFeeWithdrawer
+        platformOwner
         platformFeeInvested
         nameVerifier
       }
@@ -615,9 +615,9 @@ function getQueryMyTokensMaybeMarket(marketID: number, owner: string): string {
 
   if (marketID) {
     const hexMarketID = marketID ? '0x' + marketID.toString(16) : ''
-    where = `where:{interestWithdrawer:"${owner.toLowerCase()}", market:"${hexMarketID}"}`
+    where = `where:{tokenOwner:"${owner.toLowerCase()}", market:"${hexMarketID}"}`
   } else {
-    where = `where:{interestWithdrawer:"${owner.toLowerCase()}"}`
+    where = `where:{tokenOwner:"${owner.toLowerCase()}"}`
   }
 
   //where = 'where:{}'
@@ -635,7 +635,7 @@ function getQueryMyTokensMaybeMarket(marketID: number, owner: string): string {
           hatchTokens
           tradingFeeRate
           platformFeeRate
-          platformFeeWithdrawer
+          platformOwner
           platformFeeInvested
           nameVerifier
         }
@@ -643,7 +643,7 @@ function getQueryMyTokensMaybeMarket(marketID: number, owner: string): string {
         supply
         holders
         marketCap
-        interestWithdrawer
+        tokenOwner
         daiInToken
         invested
         listedAt
@@ -689,7 +689,7 @@ function getQueryTokenNameTextSearch(
         supply
         holders
         marketCap
-        interestWithdrawer
+        tokenOwner
         daiInToken
         invested
         listedAt
@@ -750,14 +750,14 @@ function getQueryTokenNameTextSearchAllMarkets(
           hatchTokens
           tradingFeeRate
           platformFeeRate
-          platformFeeWithdrawer
+          platformOwner
           platformFeeInvested
           nameVerifier
         }
         supply
         holders
         marketCap
-        interestWithdrawer
+        tokenOwner
         daiInToken
         invested
         listedAt
@@ -790,7 +790,7 @@ function getQuerySingleToken(marketName: string, tokenName: string): string {
           supply
           holders
           marketCap
-          interestWithdrawer
+          tokenOwner
           daiInToken
           invested
           listedAt
@@ -884,9 +884,7 @@ function apiResponseToIdeaToken(apiResponse, marketApiResponse?): IdeaToken {
     rawMarketCap: apiResponse.marketCap
       ? new BN(apiResponse.marketCap)
       : undefined,
-    interestWithdrawer: apiResponse.interestWithdrawer
-      ? apiResponse.interestWithdrawer
-      : undefined,
+    tokenOwner: apiResponse.tokenOwner ? apiResponse.tokenOwner : undefined,
     daiInToken: apiResponse.daiInToken
       ? web3BNToFloatString(new BN(apiResponse.daiInToken), tenPow18, 2)
       : undefined,
@@ -980,7 +978,7 @@ function apiResponseToIdeaMarket(apiResponse): IdeaMarket {
     rawPlatformFeeRate: apiResponse.platformFeeRate
       ? new BN(apiResponse.platformFeeRate)
       : undefined,
-    platformFeeWithdrawer: apiResponse.platformFeeWithdrawer,
+    platformOwner: apiResponse.platformOwner,
     platformInterestRedeemed: apiResponse.platformInterestRedeemed
       ? web3BNToFloatString(
           new BN(apiResponse.platformInterestRedeemed),

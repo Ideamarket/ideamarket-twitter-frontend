@@ -36,7 +36,7 @@ import {
   formatNumber,
   formatNumberInt,
 } from 'utils'
-import { withdrawInterest, useBalance, useOutputAmount } from 'actions'
+import { withdrawTokenInterest, useBalance, useOutputAmount } from 'actions'
 import ArrowLeft from '../../../assets/arrow-left.svg'
 import { DateTime } from 'luxon'
 
@@ -308,9 +308,12 @@ export default function TokenDetails() {
     setIsTxPending(true)
 
     try {
-      await withdrawInterest(token.address).on('transactionHash', (hash) => {
-        setPendingTxHash(hash)
-      })
+      await withdrawTokenInterest(token.address).on(
+        'transactionHash',
+        (hash) => {
+          setPendingTxHash(hash)
+        }
+      )
     } catch (ex) {
       console.log(ex)
       return
@@ -678,7 +681,7 @@ export default function TokenDetails() {
                           </div>
                         </div>
                       </>
-                    ) : token.interestWithdrawer === addresses.ZERO ? (
+                    ) : token.tokenOwner === addresses.ZERO ? (
                       <>
                         <div className="italic">
                           The owner of this token is not yet listed. If this
@@ -703,11 +706,11 @@ export default function TokenDetails() {
                         <div className="italic">
                           {!web3 ||
                           connectedAddress.toLowerCase() !==
-                            token.interestWithdrawer.toLowerCase()
-                            ? `The owner of this token is listed as ${token.interestWithdrawer.slice(
+                            token.tokenOwner.toLowerCase()
+                            ? `The owner of this token is listed as ${token.tokenOwner.slice(
                                 0,
                                 8
-                              )}...${token.interestWithdrawer.slice(
+                              )}...${token.tokenOwner.slice(
                                 -6
                               )}. This address does not match the wallet you have connected. If you are the owner of this token please connect the correct wallet to be able to withdraw interest.`
                             : 'Your connected wallet is listed as owner of this token. You are able to withdraw the accumulated interest below.'}
@@ -730,14 +733,14 @@ export default function TokenDetails() {
                               !web3 ||
                               isTxPending ||
                               connectedAddress.toLowerCase() !==
-                                token.interestWithdrawer.toLowerCase()
+                                token.tokenOwner.toLowerCase()
                             }
                             className={classNames(
                               'w-20 py-1 ml-5 text-sm font-medium bg-white border-2 rounded-lg  tracking-tightest-2 font-sf-compact-medium',
                               !web3 ||
                                 isTxPending ||
                                 connectedAddress.toLowerCase() !==
-                                  token.interestWithdrawer.toLowerCase()
+                                  token.tokenOwner.toLowerCase()
                                 ? 'cursor-default'
                                 : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
                             )}
