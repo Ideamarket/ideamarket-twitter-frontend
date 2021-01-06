@@ -427,25 +427,6 @@
       "inputs": [
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "ideaToken",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "withdrawer",
-          "type": "address"
-        }
-      ],
-      "name": "NewInterestWithdrawer",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
           "internalType": "uint256",
           "name": "marketID",
           "type": "uint256"
@@ -453,11 +434,30 @@
         {
           "indexed": false,
           "internalType": "address",
-          "name": "withdrawer",
+          "name": "owner",
           "type": "address"
         }
       ],
-      "name": "NewPlatformFeeWithdrawer",
+      "name": "NewPlatformOwner",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "ideaToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "NewTokenOwner",
       "type": "event"
     },
     {
@@ -560,26 +560,6 @@
       ],
       "name": "TradingFeeRedeemed",
       "type": "event"
-    },
-    {
-      "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" },
-        { "internalType": "address", "name": "withdrawer", "type": "address" }
-      ],
-      "name": "authorizeInterestWithdrawer",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
-        { "internalType": "address", "name": "withdrawer", "type": "address" }
-      ],
-      "name": "authorizePlatformFeeWithdrawer",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
     },
     {
       "inputs": [
@@ -892,6 +872,16 @@
     },
     {
       "inputs": [
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        { "internalType": "address", "name": "owner", "type": "address" }
+      ],
+      "name": "setPlatformOwner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
         { "internalType": "address", "name": "ideaToken", "type": "address" },
         { "internalType": "bool", "name": "set", "type": "bool" }
       ],
@@ -902,9 +892,10 @@
     },
     {
       "inputs": [
-        { "internalType": "address", "name": "token", "type": "address" }
+        { "internalType": "address", "name": "token", "type": "address" },
+        { "internalType": "address", "name": "owner", "type": "address" }
       ],
-      "name": "withdrawInterest",
+      "name": "setTokenOwner",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -923,6 +914,15 @@
         { "internalType": "uint256", "name": "marketID", "type": "uint256" }
       ],
       "name": "withdrawPlatformInterest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        { "internalType": "address", "name": "token", "type": "address" }
+      ],
+      "name": "withdrawTokenInterest",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1488,112 +1488,6 @@
       "type": "function"
     }
   ],
-  "twitterHandleNameVerifier": [
-    {
-      "inputs": [
-        { "internalType": "string", "name": "name", "type": "string" }
-      ],
-      "name": "verifyTokenName",
-      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-      "stateMutability": "pure",
-      "type": "function"
-    }
-  ],
-  "addMarketSpell": [
-    {
-      "inputs": [
-        { "internalType": "address", "name": "factory", "type": "address" },
-        { "internalType": "string", "name": "marketName", "type": "string" },
-        {
-          "internalType": "address",
-          "name": "nameVerifier",
-          "type": "address"
-        },
-        { "internalType": "uint256", "name": "baseCost", "type": "uint256" },
-        { "internalType": "uint256", "name": "priceRise", "type": "uint256" },
-        { "internalType": "uint256", "name": "hatchTokens", "type": "uint256" },
-        {
-          "internalType": "uint256",
-          "name": "tradingFeeRate",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "platformFeeRate",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bool",
-          "name": "allInterestToPlatform",
-          "type": "bool"
-        }
-      ],
-      "name": "execute",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ],
-  "authorizeInterestWithdrawerSpell": [
-    {
-      "inputs": [
-        { "internalType": "address", "name": "exchange", "type": "address" },
-        { "internalType": "address", "name": "ideaToken", "type": "address" },
-        { "internalType": "address", "name": "withdrawer", "type": "address" }
-      ],
-      "name": "execute",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ],
-  "authorizePlatformFeeWithdrawerSpell": [
-    {
-      "inputs": [
-        { "internalType": "address", "name": "exchange", "type": "address" },
-        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
-        { "internalType": "address", "name": "withdrawer", "type": "address" }
-      ],
-      "name": "execute",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ],
-  "setTradingFeeSpell": [
-    {
-      "inputs": [
-        { "internalType": "address", "name": "factory", "type": "address" },
-        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
-        {
-          "internalType": "uint256",
-          "name": "tradingFeeRate",
-          "type": "uint256"
-        }
-      ],
-      "name": "execute",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ],
-  "setPlatformFeeSpell": [
-    {
-      "inputs": [
-        { "internalType": "address", "name": "factory", "type": "address" },
-        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
-        {
-          "internalType": "uint256",
-          "name": "platformFeeRate",
-          "type": "uint256"
-        }
-      ],
-      "name": "execute",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ],
   "ideaTokenVault": [
     {
       "anonymous": false,
@@ -1885,6 +1779,101 @@
     },
     { "stateMutability": "payable", "type": "receive" }
   ],
+  "addMarketSpell": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "factory", "type": "address" },
+        { "internalType": "string", "name": "marketName", "type": "string" },
+        {
+          "internalType": "address",
+          "name": "nameVerifier",
+          "type": "address"
+        },
+        { "internalType": "uint256", "name": "baseCost", "type": "uint256" },
+        { "internalType": "uint256", "name": "priceRise", "type": "uint256" },
+        { "internalType": "uint256", "name": "hatchTokens", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "tradingFeeRate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "platformFeeRate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "allInterestToPlatform",
+          "type": "bool"
+        }
+      ],
+      "name": "execute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "setTokenOwnerSpell": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "exchange", "type": "address" },
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "address", "name": "owner", "type": "address" }
+      ],
+      "name": "execute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "setPlatformOwnerSpell": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "exchange", "type": "address" },
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        { "internalType": "address", "name": "owner", "type": "address" }
+      ],
+      "name": "execute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "setTradingFeeSpell": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "factory", "type": "address" },
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "tradingFeeRate",
+          "type": "uint256"
+        }
+      ],
+      "name": "execute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "setPlatformFeeSpell": [
+    {
+      "inputs": [
+        { "internalType": "address", "name": "factory", "type": "address" },
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "platformFeeRate",
+          "type": "uint256"
+        }
+      ],
+      "name": "execute",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
   "changeLogicSpell": [
     {
       "inputs": [
@@ -1899,6 +1888,17 @@
       "name": "execute",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "twitterHandleNameVerifier": [
+    {
+      "inputs": [
+        { "internalType": "string", "name": "name", "type": "string" }
+      ],
+      "name": "verifyTokenName",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "pure",
       "type": "function"
     }
   ],
