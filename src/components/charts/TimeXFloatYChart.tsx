@@ -5,6 +5,7 @@ export default function TimeXFloatYChart({ chartData }) {
   const ref = useRef(null)
 
   useEffect(() => {
+    console.log('trigger')
     const data = chartData.map((pair) => ({
       x: new Date(Math.floor(pair[0] * 1000)),
       y: parseFloat(pair[1]),
@@ -62,11 +63,11 @@ export default function TimeXFloatYChart({ chartData }) {
             },
           ],
         },
-        tooltips: {
+        /*tooltips: {
           enabled: true,
           mode: 'nearest',
           intersect: false,
-        },
+        },*/
         layout: {
           padding: {
             left: 0,
