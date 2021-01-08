@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import TwitterMarketSpecifics from './twitter'
 import SubstackMarketSpecifics from './substack'
 
@@ -37,23 +39,14 @@ const specifics: IMarketSpecifics[] = [
 export function getMarketSpecificsByMarketName(
   marketName: string
 ): IMarketSpecifics {
-  for (const s of specifics) {
-    if (s.getMarketName() === marketName) {
-      return s
-    }
-  }
-
-  return undefined
+  return _.find(specifics, (s) => s.getMarketName() === marketName)
 }
 
 export function getMarketSpecificsByMarketNameInURLRepresentation(
   marketNameInURLRepresentation: string
 ): IMarketSpecifics {
-  for (const s of specifics) {
-    if (s.getMarketNameURLRepresentation() === marketNameInURLRepresentation) {
-      return s
-    }
-  }
-
-  return undefined
+  return _.find(
+    specifics,
+    (s) => s.getMarketNameURLRepresentation() === marketNameInURLRepresentation
+  )
 }
