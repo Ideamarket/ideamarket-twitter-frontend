@@ -45,20 +45,27 @@ export default function TimeXFloatYChart({ chartData }) {
           xAxes: [
             {
               type: 'time',
-              ticks: { display: false },
+              ticks: {
+                display: true,
+              },
               gridLines: { display: false, drawBorder: false },
             },
           ],
           yAxes: [
             {
               ticks: {
-                display: false,
+                display: true,
                 min: min,
                 max: max,
               },
-              gridLines: { display: true, drawBorder: false },
+              gridLines: { display: false, drawBorder: false },
             },
           ],
+        },
+        tooltips: {
+          enabled: true,
+          mode: 'nearest',
+          intersect: false,
         },
         layout: {
           padding: {
