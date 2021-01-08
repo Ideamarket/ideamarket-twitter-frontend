@@ -23,15 +23,10 @@ export default function MarketSelect({
   useEffect(() => {
     if (markets) {
       setSelectMarketValues(
-        // TODO: Remove filter when we do not want to hide "Substack" market anymore (launch)
-        markets
-          .filter((v) => {
-            return v.name === 'Twitter' || v.name === 'Substack'
-          })
-          .map((market) => ({
-            value: market.marketID.toString(),
-            market: market,
-          }))
+        markets.map((market) => ({
+          value: market.marketID.toString(),
+          market: market,
+        }))
       )
     } else {
       setSelectMarketValues([])
