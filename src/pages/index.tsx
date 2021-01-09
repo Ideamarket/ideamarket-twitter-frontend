@@ -5,14 +5,12 @@ import { getMarketSpecificsByMarketName } from 'store/markets'
 import { Table, TradeModal, ListTokenModal, Footer } from 'components'
 
 import Search from '../assets/search.svg'
-import AllBlack from '../assets/all-black.svg'
-import AllWhite from '../assets/all-white.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 
 export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(1)
-  const [selectedMarketName, setSelectedMarketName] = useState('ALL')
+  const [selectedMarketName, setSelectedMarketName] = useState('Twitter')
   const [nameSearch, setNameSearch] = useState('')
   const [tablePage, setTablePage] = useState(0)
 
@@ -136,20 +134,6 @@ export default function Home() {
           <div
             className={classNames(
               'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tl-xlg md:rounded-tr-none border-2 md:border-b-0',
-              selectedMarketName === 'ALL' && 'bg-white text-very-dark-blue'
-            )}
-            onClick={() => {
-              onMarketChanged('ALL')
-            }}
-          >
-            <div>
-              {selectedMarketName === 'ALL' ? <AllBlack /> : <AllWhite />}
-            </div>
-            <p className="text-lg leading-none">All</p>
-          </div>
-          <div
-            className={classNames(
-              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
               selectedMarketName === 'Twitter' && 'bg-white text-very-dark-blue'
             )}
             onClick={() => {
@@ -165,7 +149,7 @@ export default function Home() {
           </div>
           <div
             className={classNames(
-              'flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0',
+              'cursor-pointer flex md:justify-center items-center p-5 space-x-2.5 text-white rounded-tr-xlg md:rounded-none border-2 border-l-0 md:border-b-0',
               selectedMarketName === 'Substack' &&
                 'bg-white text-very-dark-blue'
             )}
@@ -184,8 +168,12 @@ export default function Home() {
           </div>
           <div
             className={classNames(
-              'hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 ',
-              selectedMarketName === 'Patreon' && 'bg-white text-very-dark-blue'
+              'flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0'
+            )}
+          ></div>
+          <div
+            className={classNames(
+              'hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 '
             )}
           ></div>
           <div className="hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white border-l-2 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 md:rounded-tr-xlg"></div>
