@@ -20,9 +20,6 @@ export default function getQueryTokens(
     filterTokensQuery += ']}'
   }
 
-  const currentTs = Math.floor(Date.now() / 1000)
-  const weekBack = currentTs - 604800
-
   return gql`
     {
       ideaMarkets(where:{marketID:${marketID.toString()}}) {
@@ -41,16 +38,12 @@ export default function getQueryTokens(
           lockedPercentage
           latestPricePoint {
             timestamp
+            counter
             oldPrice
             price
           }
           dayVolume
           dayChange
-          pricePoints(where:{timestamp_gt:${weekBack}} orderBy:timestamp) {
-            timestamp
-            oldPrice
-            price
-          }
         }
       }
     }`

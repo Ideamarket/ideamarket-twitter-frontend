@@ -23,9 +23,6 @@ export default function getQueryTokenNameTextSearch(
     filterTokensQuery += ']'
   }
 
-  const currentTs = Math.floor(Date.now() / 1000)
-  const weekBack = currentTs - 604800
-
   return gql`
     {
       tokenNameSearch(skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}, where:{market:${
@@ -45,16 +42,12 @@ export default function getQueryTokenNameTextSearch(
           lockedPercentage
           latestPricePoint {
             timestamp
+            counter
             oldPrice
             price
           }
           dayVolume
           dayChange
-          pricePoints(where:{timestamp_gt:${weekBack}} orderBy:timestamp) {
-            timestamp
-            oldPrice
-            price
-          }
         }
     }`
 }

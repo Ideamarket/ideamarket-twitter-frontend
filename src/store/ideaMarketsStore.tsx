@@ -17,6 +17,7 @@ import {
   getQueryTokenNameTextSearchAllMarkets,
   getQueryTokens,
   getQueryTokensAllMarkets,
+  getQuerySinglePricePoint,
 } from './queries'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
@@ -54,6 +55,7 @@ export type IdeaMarket = {
 
 export type IdeaTokenPricePoint = {
   timestamp: number
+  counter: number
   oldPrice: number
   price: number
 }
@@ -76,8 +78,6 @@ export type IdeaToken = {
   tokenInterestRedeemed: string
   rawTokenInterestRedeemed: BN
   latestPricePoint: IdeaTokenPricePoint
-  weekPricePoints: IdeaTokenPricePoint[]
-  pricePoints: IdeaTokenPricePoint[]
   dayChange: string
   dayVolume: string
   listedAt: number
@@ -316,30 +316,63 @@ export async function querySingleToken(
 
 export async function queryTokenChartData(
   queryKey,
-  address: string,
-  fromTs: number
-): Promise<IdeaToken> {
-  if (!address) {
+  tokenAddress: string,
+  fromTs: number,
+  latestPricePoint: IdeaTokenPricePoint,
+  maxPricePoints: number
+): Promise<IdeaTokenPricePoint[]> {
+  if (!tokenAddress) {
     return undefined
+  }
+
+  const earliestPricePointResult = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQuerySinglePricePoint(tokenAddress, fromTs)
+  )
+
+  if (
+    !earliestPricePointResult ||
+    !earliestPricePointResult.ideaTokenPricePoints ||
+    earliestPricePointResult.ideaTokenPricePoints.length === 0
+  ) {
+    return []
+  }
+
+  const earliestPricePoint = apiResponseToPricePoint(
+    earliestPricePointResult.ideaTokenPricePoints[0]
+  )
+  const numPricePoints =
+    latestPricePoint.counter - earliestPricePoint.counter + 1
+
+  let getCounters = []
+  if (numPricePoints <= maxPricePoints) {
+    for (
+      let i = earliestPricePoint.counter;
+      i <= latestPricePoint.counter;
+      i++
+    ) {
+      getCounters.push(i)
+    }
+  } else {
+    const w = numPricePoints / maxPricePoints
+
+    for (let i = 0; i < maxPricePoints - 1; i++) {
+      getCounters.push(earliestPricePoint.counter + Math.floor((i + 1) * w))
+    }
+
+    getCounters.push(latestPricePoint.counter)
   }
 
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
-    getQueryTokenChartData(address.toLowerCase(), fromTs)
+    getQueryTokenChartData(tokenAddress.toLowerCase(), getCounters)
   )
 
-  if (!result || !result.ideaToken || !result.ideaToken.pricePoints) {
-    return undefined
+  if (!result || !result.ideaTokenPricePoints) {
+    return []
   }
 
-  return {
-    latestPricePoint: apiResponseToPricePoint(
-      result.ideaToken.latestPricePoint
-    ),
-    pricePoints: result.ideaToken.pricePoints.map((p) =>
-      apiResponseToPricePoint(p)
-    ),
-  } as IdeaToken
+  return result.ideaTokenPricePoints.map((p) => apiResponseToPricePoint(p))
 }
 
 export async function queryTokenLockedChartData(
@@ -560,6 +593,7 @@ function apiResponseToIdeaMarket(apiResponse): IdeaMarket {
 function apiResponseToPricePoint(apiResponse): IdeaTokenPricePoint {
   return {
     timestamp: parseInt(apiResponse.timestamp),
+    counter: parseInt(apiResponse.counter),
     oldPrice: parseFloat(apiResponse.oldPrice),
     price: parseFloat(apiResponse.price),
   } as IdeaTokenPricePoint

@@ -21,6 +21,7 @@ export default function getQuerySingleToken(
             lockedAmount
             latestPricePoint {
               timestamp
+              counter
               oldPrice
               price
             }

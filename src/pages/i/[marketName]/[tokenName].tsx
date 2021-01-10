@@ -218,7 +218,13 @@ export default function TokenDetails() {
     data: rawPriceChartData,
     isLoading: isRawPriceChartDataLoading,
   } = useQuery(
-    [`priceChartData-${token?.address}`, token?.address, chartFromTs],
+    [
+      `${token?.address}-chartdata`,
+      token?.address,
+      chartFromTs,
+      token?.latestPricePoint,
+      500,
+    ],
     queryTokenChartData
   )
 
@@ -253,16 +259,16 @@ export default function TokenDetails() {
 
     if (!rawPriceChartData) {
       return
-    } else if (rawPriceChartData.pricePoints.length === 0) {
-      beginPrice = rawPriceChartData.latestPricePoint.price
-      endPrice = rawPriceChartData.latestPricePoint.price
+    } else if (rawPriceChartData.length === 0) {
+      beginPrice = token.latestPricePoint.price
+      endPrice = token.latestPricePoint.price
     } else {
-      beginPrice = rawPriceChartData.pricePoints[0].oldPrice
-      endPrice = array.last(rawPriceChartData.pricePoints).price
+      beginPrice = rawPriceChartData[0].oldPrice
+      endPrice = array.last(rawPriceChartData).price
     }
 
     const finalChartData = [[chartFromTs, beginPrice]].concat(
-      rawPriceChartData.pricePoints.map((pricePoint) => [
+      rawPriceChartData.map((pricePoint) => [
         pricePoint.timestamp,
         pricePoint.price,
       ])

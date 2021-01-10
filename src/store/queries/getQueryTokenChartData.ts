@@ -1,22 +1,20 @@
 import { gql } from 'graphql-request'
 
 export default function getQueryTokenChartData(
-  address: string,
-  fromTs: number
+  tokenAddress: string,
+  ids: number[]
 ): string {
   return gql`
     {
-      ideaToken(id:${'"' + address + '"'}) {
-        latestPricePoint {
-          timestamp
-          oldPrice
-          price
-        }
-        pricePoints(where:{timestamp_gt:${fromTs}} orderBy:timestamp) {
+        ideaTokenPricePoints(first:${
+          ids.length
+        },orderBy:"timestamp", orderDirection:"asc", where:{token:"${tokenAddress}", counter_in:[${ids.join(
+    ','
+  )}]}) {
+            counter
             timestamp
             oldPrice
             price
-        }    
-      }
+        }
     }`
 }
