@@ -14,10 +14,9 @@ import {
   getQueryTokenChartData,
   getQueryTokenLockedChartData,
   getQueryTokenNameTextSearch,
-  getQueryTokenNameTextSearchAllMarkets,
   getQueryTokens,
-  getQueryTokensAllMarkets,
   getQuerySinglePricePoint,
+  getQueryTokensChartData,
 } from './queries'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
@@ -78,6 +77,7 @@ export type IdeaToken = {
   tokenInterestRedeemed: string
   rawTokenInterestRedeemed: BN
   latestPricePoint: IdeaTokenPricePoint
+  earliestPricePoint: IdeaTokenPricePoint
   dayChange: string
   dayVolume: string
   listedAt: number
@@ -199,6 +199,7 @@ export async function queryTokens(
   market: IdeaMarket,
   skip: number,
   num: number,
+  fromTs: number,
   orderBy: string,
   orderDirection: string,
   search: string,
@@ -217,6 +218,7 @@ export async function queryTokens(
           market.marketID,
           skip,
           num,
+          fromTs,
           orderBy,
           orderDirection,
           search,
@@ -232,6 +234,7 @@ export async function queryTokens(
           market.marketID,
           skip,
           num,
+          fromTs,
           orderBy,
           orderDirection,
           filterTokens
@@ -241,56 +244,6 @@ export async function queryTokens(
   }
 
   return result.map((token) => apiResponseToIdeaToken(token, market))
-}
-
-export async function queryTokensAllMarkets(
-  queryKey: string,
-  skip: number,
-  num: number,
-  orderBy: string,
-  orderDirection: string,
-  search: string,
-  filterTokens: string[]
-): Promise<IdeaTokenMarketPair[]> {
-  let result
-  if (search.length >= 2) {
-    result = (
-      await request(
-        HTTP_GRAPHQL_ENDPOINT,
-        getQueryTokenNameTextSearchAllMarkets(
-          skip,
-          num,
-          orderBy,
-          orderDirection,
-          search,
-          filterTokens
-        )
-      )
-    ).tokenNameSearch
-  } else {
-    result = (
-      await request(
-        HTTP_GRAPHQL_ENDPOINT,
-        getQueryTokensAllMarkets(
-          skip,
-          num,
-          orderBy,
-          orderDirection,
-          filterTokens
-        )
-      )
-    ).ideaTokens
-  }
-
-  return result.map(
-    (t) =>
-      ({
-        token: apiResponseToIdeaToken(t, t.market),
-        market: apiResponseToIdeaMarket(t.market),
-        rawBalance: undefined,
-        balance: undefined,
-      } as IdeaTokenMarketPair)
-  )
 }
 
 export async function querySingleToken(
@@ -373,6 +326,61 @@ export async function queryTokenChartData(
   }
 
   return result.ideaTokenPricePoints.map((p) => apiResponseToPricePoint(p))
+}
+
+export async function queryTokensChartData(
+  queryKey,
+  tokens: IdeaToken[],
+  maxPricePoints: number
+): Promise<any> {
+  if (!tokens || tokens.length === 0) {
+    return undefined
+  }
+
+  const tokenAddresses = []
+  const ids = []
+
+  for (let token of tokens) {
+    tokenAddresses.push(token.address.toLowerCase())
+
+    const { latestPricePoint, earliestPricePoint } = token
+    const numPricePoints =
+      latestPricePoint.counter - earliestPricePoint.counter + 1
+
+    let getCounters = []
+    if (numPricePoints <= maxPricePoints) {
+      for (
+        let i = earliestPricePoint.counter;
+        i <= latestPricePoint.counter;
+        i++
+      ) {
+        getCounters.push(i)
+      }
+    } else {
+      const w = numPricePoints / maxPricePoints
+
+      for (let i = 0; i < maxPricePoints - 1; i++) {
+        getCounters.push(earliestPricePoint.counter + Math.floor((i + 1) * w))
+      }
+
+      getCounters.push(latestPricePoint.counter)
+    }
+
+    ids.push(getCounters)
+  }
+
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryTokensChartData(tokenAddresses, ids)
+  )
+
+  const ret = {}
+  for (let token of tokens) {
+    const alias = 'a' + token.address.toLowerCase() // Hack, because a alias in Graphql cannot begin with 0, so we just prepend an 'a'
+    ret[token.address] = result[alias].map((p) => apiResponseToPricePoint(p))
+  }
+
+  return ret
 }
 
 export async function queryTokenLockedChartData(
@@ -499,9 +507,10 @@ function apiResponseToIdeaToken(apiResponse, marketApiResponse?): IdeaToken {
     latestPricePoint:
       apiResponse.latestPricePoint &&
       apiResponseToPricePoint(apiResponse.latestPricePoint),
-    weekPricePoints:
-      apiResponse.pricePoints &&
-      apiResponse.pricePoints.map((p) => apiResponseToPricePoint(p)),
+    earliestPricePoint:
+      apiResponse.earliestPricePoint &&
+      apiResponse.earliestPricePoint.length > 0 &&
+      apiResponseToPricePoint(apiResponse.earliestPricePoint[0]),
     dayChange: apiResponse.dayChange
       ? (parseFloat(apiResponse.dayChange) * 100).toFixed(2)
       : undefined,

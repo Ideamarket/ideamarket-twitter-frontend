@@ -1,12 +1,12 @@
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import { PreviewPriceChart, WatchingStar } from 'components'
 import {
   IdeaMarket,
   IdeaToken,
-  queryTokenChartData,
+  IdeaTokenPricePoint,
 } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
@@ -14,7 +14,6 @@ import {
   formatNumber,
   web3BNToFloatString,
 } from 'utils'
-import { useQuery } from 'react-query'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -23,12 +22,16 @@ export default function TokenRow({
   market,
   showMarketSVG,
   compoundSupplyRate,
+  chartData,
+  chartFromTs,
   onTradeClicked,
 }: {
   token: IdeaToken
   market: IdeaMarket
   showMarketSVG: boolean
   compoundSupplyRate: number
+  chartData: IdeaTokenPricePoint[]
+  chartFromTs: number
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }) {
   const router = useRouter()
@@ -49,40 +52,20 @@ export default function TokenRow({
     2
   )
 
-  const [chartData, setChartData] = useState([])
-  const weekAgo = Math.floor(Date.now() / 1000) - 604800
-  const { data: pricePoints, isLoading: isPricePointsLoading } = useQuery(
-    [
-      token.address + '-chartdata',
-      token.address,
-      weekAgo,
-      token.latestPricePoint,
-      100,
-    ],
-    queryTokenChartData
+  let beginPrice: number
+  let endPrice: number
+  if (chartData.length === 0) {
+    beginPrice = token.latestPricePoint.price
+    endPrice = token.latestPricePoint.price
+  } else {
+    beginPrice = chartData[0].oldPrice
+    endPrice = chartData[chartData.length - 1].price
+  }
+
+  const parsedChartData = [[chartFromTs, beginPrice]].concat(
+    chartData.map((p) => [p.timestamp, p.price])
   )
-
-  useEffect(() => {
-    if (isPricePointsLoading) {
-      return
-    }
-
-    let beginPrice: number
-    let endPrice: number
-    if (pricePoints.length === 0) {
-      beginPrice = token.latestPricePoint.price
-      endPrice = token.latestPricePoint.price
-    } else {
-      beginPrice = pricePoints[0].oldPrice
-      endPrice = pricePoints[pricePoints.length - 1].price
-    }
-
-    const data = [[weekAgo, beginPrice]].concat(
-      pricePoints.map((p) => [p.timestamp, p.price])
-    )
-    data.push([Math.floor(Date.now() / 1000), endPrice])
-    setChartData(data)
-  }, [pricePoints, isPricePointsLoading])
+  parsedChartData.push([Math.floor(Date.now() / 1000), endPrice])
 
   return (
     <>
@@ -228,7 +211,7 @@ export default function TokenRow({
         </td>
 
         <td className="col-span-3 row-span-1 row-start-4 px-1 py-1 whitespace-nowrap col-start-0">
-          <PreviewPriceChart chartData={chartData} />
+          <PreviewPriceChart chartData={parsedChartData} />
         </td>
         <td className="hidden px-6 py-4 whitespace-nowrap md:table-cell">
           <button

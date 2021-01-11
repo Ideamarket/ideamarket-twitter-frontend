@@ -4,6 +4,7 @@ export default function getQueryTokens(
   marketID: number,
   skip: number,
   num: number,
+  fromTs: number,
   orderBy: string,
   orderDirection: string,
   filterTokens: string[]
@@ -39,6 +40,12 @@ export default function getQueryTokens(
           latestPricePoint {
             timestamp
             counter
+            oldPrice
+            price
+          }
+          earliestPricePoint: pricePoints(first:1, orderBy:"timestamp", orderDirection:"asc", where:{timestamp_gt:"${fromTs}"}) {
+            counter
+            timestamp
             oldPrice
             price
           }
