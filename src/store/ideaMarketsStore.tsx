@@ -199,7 +199,7 @@ export async function queryTokens(
   market: IdeaMarket,
   skip: number,
   num: number,
-  fromTs: number,
+  duration: number,
   orderBy: string,
   orderDirection: string,
   search: string,
@@ -208,6 +208,8 @@ export async function queryTokens(
   if (!market) {
     return []
   }
+
+  const fromTs = Math.floor(Date.now() / 1000) - duration
 
   let result
   if (search.length >= 2) {
@@ -270,13 +272,15 @@ export async function querySingleToken(
 export async function queryTokenChartData(
   queryKey,
   tokenAddress: string,
-  fromTs: number,
+  duration: number,
   latestPricePoint: IdeaTokenPricePoint,
   maxPricePoints: number
 ): Promise<IdeaTokenPricePoint[]> {
   if (!tokenAddress) {
     return undefined
   }
+
+  const fromTs = Math.floor(Date.now() / 1000) - duration
 
   const earliestPricePointResult = await request(
     HTTP_GRAPHQL_ENDPOINT,
@@ -386,11 +390,13 @@ export async function queryTokensChartData(
 export async function queryTokenLockedChartData(
   queryKey,
   tokenAddres: string,
-  toTs: number
+  duration: number
 ): Promise<LockedAmount[]> {
   if (!tokenAddres) {
     return undefined
   }
+
+  const toTs = Math.floor(Date.now() / 1000) + duration
 
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,

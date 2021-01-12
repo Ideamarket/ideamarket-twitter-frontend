@@ -23,7 +23,7 @@ export default function TokenRow({
   showMarketSVG,
   compoundSupplyRate,
   chartData,
-  chartFromTs,
+  chartDuration,
   onTradeClicked,
 }: {
   token: IdeaToken
@@ -31,9 +31,10 @@ export default function TokenRow({
   showMarketSVG: boolean
   compoundSupplyRate: number
   chartData: IdeaTokenPricePoint[]
-  chartFromTs: number
+  chartDuration: number
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }) {
+  const fromTs = Math.floor(Date.now() / 1000) - chartDuration
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
 
@@ -62,7 +63,7 @@ export default function TokenRow({
     endPrice = chartData[chartData.length - 1].price
   }
 
-  const parsedChartData = [[chartFromTs, beginPrice]].concat(
+  const parsedChartData = [[fromTs, beginPrice]].concat(
     chartData.map((p) => [p.timestamp, p.price])
   )
   parsedChartData.push([Math.floor(Date.now() / 1000), endPrice])

@@ -4,6 +4,7 @@ import {
   formatNumber,
   bigNumberTenPow18,
   web3BNToFloatString,
+  WEEK_SECONDS,
 } from 'utils'
 import {
   IdeaToken,
@@ -138,7 +139,6 @@ export default function Table({
 
   const filterTokens = selectedCategoryId === 4 ? watchingTokens : undefined
 
-  const chartFromTs = Math.floor(Date.now() / 1000) - 604800
   const {
     data: tokenData = [],
     isLoading: isTokenDataLoading,
@@ -151,7 +151,7 @@ export default function Table({
       market,
       currentPage * TOKENS_PER_PAGE,
       TOKENS_PER_PAGE,
-      chartFromTs,
+      WEEK_SECONDS,
       selectedCategoryId === 2
         ? 'dayChange'
         : selectedCategoryId === 3
@@ -294,7 +294,7 @@ export default function Table({
                           showMarketSVG={false}
                           compoundSupplyRate={compoundSupplyRate}
                           chartData={chartData[token.address]}
-                          chartFromTs={chartFromTs}
+                          chartDuration={WEEK_SECONDS}
                           onTradeClicked={onTradeClicked}
                         />
                       ))}

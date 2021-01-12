@@ -39,6 +39,12 @@ export const web3TenPow18 = new BN('10').pow(new BN('18'))
 export const web3UintMax = new BN('2').pow(new BN('256')).sub(new BN('1'))
 export const bigNumberTenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
+export const HOUR_SECONDS = 3600
+export const DAY_SECONDS = 86400
+export const WEEK_SECONDS = 604800
+export const MONTH_SECONDS = 2628000
+export const YEAR_SECONDS = 31536000
+
 export function web3BNToFloatString(
   bn: BN,
   divideBy: BigNumber,

@@ -33,6 +33,11 @@ import {
   bigNumberTenPow18,
   addresses,
   NETWORK,
+  HOUR_SECONDS,
+  DAY_SECONDS,
+  WEEK_SECONDS,
+  MONTH_SECONDS,
+  YEAR_SECONDS,
   formatNumber,
   formatNumberInt,
 } from 'utils'
@@ -128,19 +133,19 @@ function ChartDurationEntry({
   durationSeconds,
   selectedChartDuration,
   setSelectedChartDuration,
-  changeChartDuration,
+  setChartDurationSeconds,
 }: {
   durationString: string
   durationSeconds: number
   selectedChartDuration: string
   setSelectedChartDuration: (d: string) => void
-  changeChartDuration: (s: number) => void
+  setChartDurationSeconds: (s: number) => void
 }) {
   return (
     <a
       onClick={() => {
         setSelectedChartDuration(durationString)
-        changeChartDuration(durationSeconds)
+        setChartDurationSeconds(durationSeconds)
       }}
       className={classNames(
         'ml-2.5 mr-2.5 text-center px-1 text-sm leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
@@ -200,19 +205,7 @@ export default function TokenDetails() {
   const [selectedChart, setSelectedChart] = useState(CHART.PRICE)
   const [selectedChartDuration, setSelectedChartDuration] = useState('1W')
 
-  const [chartFromTs, setChartFromTs] = useState(
-    Math.floor(Date.now() / 1000) - 604800
-  )
-
-  const [chartToTs, setChartToTs] = useState(
-    Math.floor(Date.now() / 1000) + 604800
-  )
-
-  function changeChartDuration(seconds: number) {
-    const now = Math.floor(Date.now() / 1000)
-    setChartFromTs(now - seconds)
-    setChartToTs(now + seconds)
-  }
+  const [chartDurationSeconds, setChartDurationSeconds] = useState(WEEK_SECONDS)
 
   const {
     data: rawPriceChartData,
@@ -221,7 +214,7 @@ export default function TokenDetails() {
     [
       `${token?.address}-chartdata`,
       token?.address,
-      chartFromTs,
+      chartDurationSeconds,
       token?.latestPricePoint,
       500,
     ],
@@ -232,7 +225,7 @@ export default function TokenDetails() {
     data: rawLockedChartData,
     isLoading: isRawLockedChartDataLoading,
   } = useQuery(
-    [`lockedChartData-${token?.address}`, token?.address, chartToTs],
+    [`lockedChartData-${token?.address}`, token?.address, chartDurationSeconds],
     queryTokenLockedChartData
   )
   const [priceChartData, setPriceChartData] = useState([])
@@ -253,7 +246,8 @@ export default function TokenDetails() {
   const [isTxPending, setIsTxPending] = useState(false)
 
   useEffect(() => {
-    const currentTs = Math.floor(Date.now() / 1000)
+    const now = Math.floor(Date.now() / 1000)
+    const chartFromTs = now - chartDurationSeconds
     let beginPrice: number
     let endPrice: number
 
@@ -273,9 +267,9 @@ export default function TokenDetails() {
         pricePoint.price,
       ])
     )
-    finalChartData.push([currentTs, endPrice])
+    finalChartData.push([now, endPrice])
     setPriceChartData(finalChartData)
-  }, [chartFromTs, rawPriceChartData])
+  }, [chartDurationSeconds, rawPriceChartData])
 
   useEffect(() => {
     if (!rawLockedChartData) {
@@ -283,6 +277,8 @@ export default function TokenDetails() {
     }
 
     const now = Math.floor(Date.now() / 1000)
+    const chartToTs = now + chartDurationSeconds
+
     const beginLocked = parseFloat(token.lockedAmount)
     const finalChartData = [[now, beginLocked]]
     let remainingLocked = beginLocked
@@ -301,7 +297,7 @@ export default function TokenDetails() {
     finalChartData.push([chartToTs, remainingLocked])
 
     setLockedChartData(finalChartData)
-  }, [chartToTs, rawLockedChartData])
+  }, [chartDurationSeconds, rawLockedChartData])
 
   const isLoading =
     isTokenLoading ||
@@ -503,37 +499,37 @@ export default function TokenDetails() {
                   <div>
                     <ChartDurationEntry
                       durationString="1H"
-                      durationSeconds={3600}
+                      durationSeconds={HOUR_SECONDS}
                       selectedChartDuration={selectedChartDuration}
-                      changeChartDuration={changeChartDuration}
+                      setChartDurationSeconds={setChartDurationSeconds}
                       setSelectedChartDuration={setSelectedChartDuration}
                     />
                     <ChartDurationEntry
                       durationString="1D"
-                      durationSeconds={86400}
+                      durationSeconds={DAY_SECONDS}
                       selectedChartDuration={selectedChartDuration}
-                      changeChartDuration={changeChartDuration}
+                      setChartDurationSeconds={setChartDurationSeconds}
                       setSelectedChartDuration={setSelectedChartDuration}
                     />
                     <ChartDurationEntry
                       durationString="1W"
-                      durationSeconds={604800}
+                      durationSeconds={WEEK_SECONDS}
                       selectedChartDuration={selectedChartDuration}
-                      changeChartDuration={changeChartDuration}
+                      setChartDurationSeconds={setChartDurationSeconds}
                       setSelectedChartDuration={setSelectedChartDuration}
                     />
                     <ChartDurationEntry
                       durationString="1M"
-                      durationSeconds={2628000}
+                      durationSeconds={MONTH_SECONDS}
                       selectedChartDuration={selectedChartDuration}
-                      changeChartDuration={changeChartDuration}
+                      setChartDurationSeconds={setChartDurationSeconds}
                       setSelectedChartDuration={setSelectedChartDuration}
                     />
                     <ChartDurationEntry
                       durationString="1Y"
-                      durationSeconds={31536000}
+                      durationSeconds={YEAR_SECONDS}
                       selectedChartDuration={selectedChartDuration}
-                      changeChartDuration={changeChartDuration}
+                      setChartDurationSeconds={setChartDurationSeconds}
                       setSelectedChartDuration={setSelectedChartDuration}
                     />
                   </div>
