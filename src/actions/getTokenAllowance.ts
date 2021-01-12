@@ -7,6 +7,10 @@ export default async function getTokenAllowance(
   tokenAddress: string,
   spenderAddress: string
 ) {
+  if (!tokenAddress || !spenderAddress) {
+    return new BN('0')
+  }
+
   if (tokenAddress === addresses.ZERO) {
     return new BN('2').pow(new BN('256')).sub(new BN('1'))
   }

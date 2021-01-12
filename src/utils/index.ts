@@ -36,6 +36,7 @@ export const addresses = {
 }
 
 export const web3TenPow18 = new BN('10').pow(new BN('18'))
+export const web3UintMax = new BN('2').pow(new BN('256')).sub(new BN('1'))
 export const bigNumberTenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export function web3BNToFloatString(
