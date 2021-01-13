@@ -4,8 +4,7 @@ import BN from 'bn.js'
 import _ from 'lodash'
 
 import { useTokenAllowance, approveToken } from '../../actions'
-import { web3UintMax } from '../../utils'
-import { TransactionManager } from '../../utils/TransactionManager'
+import { TransactionManager, web3UintMax } from '../../utils'
 export default function ApproveButton({
   tokenAddress,
   spenderAddress,

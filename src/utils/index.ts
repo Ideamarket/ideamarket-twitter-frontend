@@ -15,7 +15,8 @@ import {
 } from '@uniswap/sdk'
 import { getUniswapPairContract, useContractStore } from 'store/contractStore'
 
-export { default as useTransactionManager } from './TransactionManager'
+export { default as TransactionManager } from './TransactionManager'
+export { default as useTransactionManager } from './useTransactionManager'
 
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK
   ? process.env.NEXT_PUBLIC_NETWORK

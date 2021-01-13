@@ -1,6 +1,4 @@
-import { useState } from 'react'
-
-export class TransactionManager {
+export default class TransactionManager {
   name: string
   setName: React.Dispatch<React.SetStateAction<string>>
 
@@ -35,8 +33,4 @@ export class TransactionManager {
       this.setHash('')
     }
   }
-}
-
-export default function useTransactionManager() {
-  return new TransactionManager(useState(''), useState(false), useState(''))
 }
