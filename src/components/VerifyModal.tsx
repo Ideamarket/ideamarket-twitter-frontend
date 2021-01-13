@@ -14,7 +14,12 @@ import {
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { useWalletStore } from 'store/walletStore'
-import { isAddress, NETWORK, web3BNToFloatString } from '../utils'
+import {
+  isAddress,
+  NETWORK,
+  useTransactionManager,
+  web3BNToFloatString,
+} from '../utils'
 import { Modal, CircleSpinner } from './'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -54,7 +59,7 @@ export default function VerifyModal({
   const [tx, setTx] = useState('')
   const [weiFee, setWeiFee] = useState('0')
   const [feeTo, setFeeTo] = useState('')
-  const [feeTx, setFeeTx] = useState('')
+  const txManager = useTransactionManager()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
   const marketVerificationExplanation = marketSpecifics.getVerificationExplanation()
   const shaPromptExplanation = marketSpecifics.getVerificationSHAPromptExplanation()
@@ -115,33 +120,37 @@ export default function VerifyModal({
 
   async function submitFee() {
     setIsLoading(true)
-    let feeTx: string
+    let hash: string
     try {
-      await submitVerificationFee(feeTo, new BN(weiFee), sha).on(
-        'transactionHash',
-        (hash) => {
-          setPage(PAGES.AWAIT_FEE_TX)
-          setFeeTx(hash)
-          feeTx = hash
-        }
+      await txManager.executeTxWithCallbacks(
+        'Verification Fee',
+        submitVerificationFee,
+        {
+          onHash: (h: string) => {
+            hash = h
+            setPage(PAGES.AWAIT_FEE_TX)
+          },
+        },
+        feeTo,
+        new BN(weiFee),
+        sha
       )
     } catch (ex) {
       setErrorMessage('The verification fee transaction failed.')
       setPage(PAGES.ERROR)
-      setIsLoading(true)
+      setIsLoading(false)
       return
     }
 
     try {
-      setTx(await submitVerificationFeeHash(uuid, feeTx))
+      setTx(await submitVerificationFeeHash(uuid, hash))
       setPage(PAGES.SUCCESS)
     } catch (ex) {
       setErrorMessage(ex)
       setPage(PAGES.ERROR)
     }
 
-    setFeeTx('')
-    setIsLoading(true)
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -153,7 +162,6 @@ export default function VerifyModal({
       setTx('')
       setIsLoading(false)
       setErrorMessage('')
-      setFeeTx('')
     }
   }, [isOpen])
 
@@ -334,10 +342,11 @@ export default function VerifyModal({
                     NETWORK === 'rinkeby' || NETWORK === 'test'
                       ? 'rinkeby.'
                       : ''
-                  }etherscan.io/tx/${feeTx}`}
+                  }etherscan.io/tx/${txManager.hash}`}
                   target="_blank"
                 >
-                  {feeTx && feeTx.slice(0, 8)}...{feeTx && feeTx.slice(-6)}
+                  {txManager.hash && txManager.hash.slice(0, 8)}...
+                  {txManager.hash && txManager.hash.slice(-6)}
                 </a>{' '}
                 to confirm
               </div>

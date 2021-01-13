@@ -17,13 +17,21 @@ export default class TransactionManager {
     this.setHash = setHash
   }
 
-  async executeTx(name: string, func: (...args: any[]) => any, ...args: any[]) {
+  async executeTxWithCallbacks(
+    name: string,
+    func: (...args: any[]) => any,
+    callbacks: { onHash?: (hash: string) => void },
+    ...args: any[]
+  ) {
+    const { onHash } = callbacks
+
     this.setIsPending(true)
     this.setName(name)
 
     try {
       await func(...args).on('transactionHash', (hash: string) => {
         this.setHash(hash)
+        onHash && onHash(hash)
       })
     } catch (ex) {
       throw `Transaction execution failed: ${ex}`
@@ -32,5 +40,9 @@ export default class TransactionManager {
       this.setName('')
       this.setHash('')
     }
+  }
+
+  async executeTx(name: string, func: (...args: any[]) => any, ...args: any[]) {
+    await this.executeTxWithCallbacks(name, func, {}, ...args)
   }
 }

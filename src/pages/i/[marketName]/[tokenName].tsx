@@ -40,6 +40,7 @@ import {
   YEAR_SECONDS,
   formatNumber,
   formatNumberInt,
+  useTransactionManager,
 } from 'utils'
 import { withdrawTokenInterest, useBalance, useOutputAmount } from 'actions'
 import ArrowLeft from '../../../assets/arrow-left.svg'
@@ -241,9 +242,7 @@ export default function TokenDetails() {
     isLoading: isCompoundExchangeRateLoading,
   } = useQuery('compound-exchange-rate', queryExchangeRate)
 
-  const [pendingTxName, setPendingTxName] = useState('')
-  const [pendingTxHash, setPendingTxHash] = useState('')
-  const [isTxPending, setIsTxPending] = useState(false)
+  const txManager = useTransactionManager()
 
   useEffect(() => {
     const now = Math.floor(Date.now() / 1000)
@@ -306,23 +305,14 @@ export default function TokenDetails() {
     isCompoundExchangeRateLoading
 
   async function onWithdrawClicked() {
-    setPendingTxName('Withdraw')
-    setIsTxPending(true)
-
     try {
-      await withdrawTokenInterest(token.address).on(
-        'transactionHash',
-        (hash) => {
-          setPendingTxHash(hash)
-        }
+      await txManager.executeTx(
+        'Withdraw',
+        withdrawTokenInterest,
+        token.address
       )
     } catch (ex) {
       console.log(ex)
-      return
-    } finally {
-      setPendingTxName('')
-      setPendingTxHash('')
-      setIsTxPending(false)
     }
   }
 
@@ -733,14 +723,14 @@ export default function TokenDetails() {
                           <button
                             disabled={
                               !web3 ||
-                              isTxPending ||
+                              txManager.isPending ||
                               connectedAddress.toLowerCase() !==
                                 token.tokenOwner.toLowerCase()
                             }
                             className={classNames(
                               'w-20 py-1 ml-5 text-sm font-medium bg-white border-2 rounded-lg  tracking-tightest-2 font-sf-compact-medium',
                               !web3 ||
-                                isTxPending ||
+                                txManager.isPending ||
                                 connectedAddress.toLowerCase() !==
                                   token.tokenOwner.toLowerCase()
                                 ? 'cursor-default'
@@ -754,27 +744,27 @@ export default function TokenDetails() {
                         <div
                           className={classNames(
                             'grid grid-cols-3 mt-2 text-sm text-brand-gray-2',
-                            isTxPending ? '' : 'invisible'
+                            txManager.isPending ? '' : 'invisible'
                           )}
                         >
                           <div className="font-bold justify-self-center">
-                            {pendingTxName}
+                            {txManager.name}
                           </div>
                           <div className="justify-self-center">
                             <a
                               className={classNames(
                                 'underline',
-                                pendingTxHash === '' ? 'hidden' : ''
+                                txManager.hash === '' ? 'hidden' : ''
                               )}
                               href={`https://${
                                 NETWORK === 'rinkeby' || NETWORK === 'test'
                                   ? 'rinkeby.'
                                   : ''
-                              }etherscan.io/tx/${pendingTxHash}`}
+                              }etherscan.io/tx/${txManager.hash}`}
                               target="_blank"
                             >
-                              {pendingTxHash.slice(0, 8)}...
-                              {pendingTxHash.slice(-6)}
+                              {txManager.hash.slice(0, 8)}...
+                              {txManager.hash.slice(-6)}
                             </a>
                           </div>
                           <div className="justify-self-center">
