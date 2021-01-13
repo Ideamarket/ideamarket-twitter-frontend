@@ -1,6 +1,6 @@
 import { useWalletStore } from 'store/walletStore'
 import { getERC20Contract } from 'store/contractStore'
-import { addresses } from '../utils'
+import { addresses, web3UintMax } from '../utils'
 import BN from 'bn.js'
 
 export default async function getTokenAllowance(
@@ -8,11 +8,11 @@ export default async function getTokenAllowance(
   spenderAddress: string
 ) {
   if (!tokenAddress || !spenderAddress) {
-    return new BN('0')
+    return web3UintMax
   }
 
   if (tokenAddress === addresses.ZERO) {
-    return new BN('2').pow(new BN('256')).sub(new BN('1'))
+    return web3UintMax
   }
 
   const ownerAddress = useWalletStore.getState().address

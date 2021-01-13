@@ -23,7 +23,7 @@ export default function ApproveButton({
   const [isAllowanceLoading, allowance] = useTokenAllowance(
     tokenAddress,
     spenderAddress,
-    []
+    [tokenAddress, spenderAddress]
   )
 
   const [hasAllowanceFor, setHasAllowanceFor] = useState({})
