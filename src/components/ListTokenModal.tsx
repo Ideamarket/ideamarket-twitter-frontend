@@ -10,6 +10,8 @@ import {
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { addresses, NETWORK, useTransactionManager } from 'utils'
 import { Modal, MarketSelect, TradeInterface } from './'
+import AdvancedOptions from './trade/AdvancedOptions'
+import ApproveButton from './trade/ApproveButton'
 import { useContractStore } from 'store/contractStore'
 import BN from 'bn.js'
 
@@ -42,6 +44,18 @@ export default function ListTokenModal({
   const [buySlippage, setBuySlippage] = useState(undefined)
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
+
+  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
+    false
+  )
+
+  const [isMissingAllowance, setIsMissingAllowance] = useState(false)
+  const [approveButtonKey, setApproveButtonKey] = useState(0)
+
+  const multiActionContractAddress = useContractStore(
+    (state) => state.multiActionContract
+  )?.options.address
 
   const marketSpecifics =
     selectedMarket && getMarketSpecificsByMarketName(selectedMarket.name)
@@ -98,16 +112,17 @@ export default function ListTokenModal({
 
     if (isWantBuyChecked) {
       if (buyPayWithAddress !== addresses.ZERO) {
-        const spender = useContractStore.getState().multiActionContract.options
-          .address
-        const allowance = await getTokenAllowance(buyPayWithAddress, spender)
+        const allowance = await getTokenAllowance(
+          buyPayWithAddress,
+          multiActionContractAddress
+        )
         if (allowance.lt(buyInputAmountBN)) {
           try {
             await txManager.executeTx(
               'Unlock',
               approveToken,
               buyPayWithAddress,
-              spender,
+              multiActionContractAddress,
               buyInputAmountBN
             )
           } catch (ex) {
@@ -297,26 +312,50 @@ export default function ListTokenModal({
             )}
           </div>
           <div className="flex justify-center mb-5">
-            <button
-              disabled={
-                !isValidTokenName ||
-                txManager.isPending ||
-                (isWantBuyChecked && !isBuyValid)
-              }
-              onClick={listClicked}
-              className={classNames(
-                'w-36 h-10 mt-5 text-base font-medium bg-white border-2 rounded-lg  text-brand-blue  tracking-tightest-2 font-sf-compact-medium',
-                selectedMarket !== undefined &&
-                  isValidTokenName &&
-                  !txManager.isPending &&
-                  (!isWantBuyChecked || (isWantBuyChecked && isBuyValid))
-                  ? 'border-brand-blue hover:bg-brand-blue hover:text-white'
-                  : 'border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
-              )}
-            >
-              {isWantBuyChecked ? 'List and buy Token' : 'List Token'}
-            </button>
+            <div className="mt-5">
+              <ApproveButton
+                tokenAddress={buyPayWithAddress}
+                spenderAddress={multiActionContractAddress}
+                requiredAllowance={
+                  isWantBuyChecked ? buyInputAmountBN : new BN('0')
+                }
+                unlockPermanent={isUnlockPermanentChecked}
+                txManager={txManager}
+                setIsMissingAllowance={setIsMissingAllowance}
+                key={approveButtonKey}
+              />
+            </div>
+            {!isMissingAllowance && (
+              <button
+                disabled={
+                  !isValidTokenName ||
+                  txManager.isPending ||
+                  (isWantBuyChecked && !isBuyValid)
+                }
+                onClick={listClicked}
+                className={classNames(
+                  'w-40 h-12 mt-5 text-base font-medium bg-white border-2 rounded-lg  text-brand-blue  tracking-tightest-2 font-sf-compact-medium',
+                  selectedMarket !== undefined &&
+                    isValidTokenName &&
+                    !txManager.isPending &&
+                    (!isWantBuyChecked || (isWantBuyChecked && isBuyValid))
+                    ? 'border-brand-blue hover:bg-brand-blue hover:text-white'
+                    : 'border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
+                )}
+              >
+                {isWantBuyChecked ? 'List and buy Token' : 'List Token'}
+              </button>
+            )}
           </div>
+
+          <AdvancedOptions
+            isUnlockOnceChecked={isUnlockOnceChecked}
+            setIsUnlockOnceChecked={setIsUnlockOnceChecked}
+            isUnlockPermanentChecked={isUnlockPermanentChecked}
+            setIsUnlockPermanentChecked={setIsUnlockPermanentChecked}
+            disabled={txManager.isPending}
+          />
+
           <div
             className={classNames(
               'grid grid-cols-3 my-5 text-sm text-brand-gray-2',
