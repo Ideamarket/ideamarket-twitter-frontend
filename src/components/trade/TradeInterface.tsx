@@ -3,15 +3,7 @@ import { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
 import { useTokenListStore } from 'store/tokenListStore'
-import {
-  useBalance,
-  useTokenAllowance,
-  useOutputAmount,
-  getTokenAllowance,
-  approveToken,
-  buyToken,
-  sellToken,
-} from 'actions'
+import { useBalance, useOutputAmount, buyToken, sellToken } from 'actions'
 import {
   floatToWeb3BN,
   addresses,
@@ -19,13 +11,14 @@ import {
   calculateMaxIdeaTokensBuyable,
   formatBigNumber,
   getUniswapDaiOutputSwap,
-  web3UintMax,
+  useTransactionManager,
 } from 'utils'
 import { useContractStore } from 'store/contractStore'
 
 import Select from 'react-select'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
+import ApproveButton from './ApproveButton'
 import { Tooltip } from '..'
 
 export default function TradeInterface({
@@ -106,42 +99,15 @@ export default function TradeInterface({
       ? multiActionContractAddress
       : undefined
 
-  const [isAllowanceLoading, allowance] = useTokenAllowance(
-    tradeType === 'buy' ? selectedToken?.address : ideaToken.address,
-    spender,
-    [
-      selectedToken,
-      ideaToken,
-      tokenAmountBN,
-      isLockChecked,
-      exchangeContractAddress,
-      multiActionContractAddress,
-      resetOn,
-    ]
-  )
+  const spendToken =
+    tradeType === 'buy' ? selectedToken?.address : ideaToken.address
 
-  const [hasAllowanceFor, setHasAllowanceFor] = useState({})
+  const requiredAllowance =
+    tradeType === 'buy' ? tokenAmountBN : floatToWeb3BN(ideaTokenAmount, 18)
 
-  const isMissingAllowance =
-    tradeType === 'buy'
-      ? hasAllowanceFor[selectedToken?.address]?.[spender]
-        ? hasAllowanceFor[selectedToken.address][spender].lt(tokenAmountBN)
-        : allowance
-        ? allowance.lt(tokenAmountBN)
-        : false
-      : selectedToken?.address === addresses.dai
-      ? false
-      : hasAllowanceFor[ideaToken.address]?.[spender]
-      ? hasAllowanceFor[ideaToken.address][spender].lt(
-          floatToWeb3BN(ideaTokenAmount, 18)
-        )
-      : allowance
-      ? allowance.lt(floatToWeb3BN(ideaTokenAmount, 18))
-      : false
-
-  const [pendingTxName, setPendingTxName] = useState('')
-  const [pendingTxHash, setPendingTxHash] = useState('')
-  const [isTxPending, setIsTxPending] = useState(false)
+  const [isMissingAllowance, setIsMissingAllowance] = useState(false)
+  const [approveButtonKey, setApproveButtonKey] = useState(0)
+  const txManager = useTransactionManager()
 
   let slippage = 0.01
   type SlippageValue = {
@@ -158,9 +124,9 @@ export default function TradeInterface({
 
   useEffect(() => {
     setSelectedToken(useTokenListStore.getState().tokens[0])
-    setHasAllowanceFor({})
     setIdeaTokenAmount('')
     setTradeType('buy')
+    setApproveButtonKey(approveButtonKey + 1)
   }, [resetOn])
 
   useEffect(() => {
@@ -242,127 +208,35 @@ export default function TradeInterface({
     }
   }
 
-  async function approve() {
-    const permanent = isUnlockPermanentChecked
-    const spendToken =
-      tradeType === 'buy' ? selectedToken.address : ideaToken.address
-    const allowance = await getTokenAllowance(spendToken, spender)
-    const payAmount =
-      tradeType === 'buy' ? tokenAmountBN : floatToWeb3BN(ideaTokenAmount, 18)
-    const allowanceAmount = permanent ? web3UintMax : payAmount
-
-    if (allowance.lt(payAmount)) {
-      setPendingTxName(permanent ? 'Unlock permanent' : 'Unlock once')
-      setIsTxPending(true)
-      try {
-        await approveToken(spendToken, spender, allowanceAmount).on(
-          'transactionHash',
-          (hash) => {
-            setPendingTxHash(hash)
-          }
-        )
-      } catch (ex) {
-        console.log(ex)
-        return
-      } finally {
-        setPendingTxName('')
-        setPendingTxHash('')
-        setIsTxPending(false)
-      }
-    }
-
-    const allowances = _.cloneDeep(hasAllowanceFor)
-    if (!allowances[spendToken]) {
-      allowances[spendToken] = {}
-    }
-    allowances[spendToken][spender] = allowanceAmount
-    setHasAllowanceFor(allowances)
-  }
-
-  async function onBuyClicked() {
-    const buyAmount = floatToWeb3BN(ideaTokenAmount, 18)
-    const payAmount = tokenAmountBN
-
-    setPendingTxName('Buy')
-    setIsTxPending(true)
-    try {
-      await buyToken(
-        ideaToken.address,
-        selectedToken.address,
-        buyAmount,
-        payAmount,
-        slippage,
-        isLockChecked ? 31556952 : 0
-      ).on('transactionHash', (hash) => {
-        setPendingTxHash(hash)
-      })
-    } catch (ex) {
-      console.log(ex)
-      return
-    } finally {
-      setPendingTxName('')
-      setPendingTxHash('')
-      setIsTxPending(false)
-    }
-
-    onTradeSuccessful()
-  }
-
-  async function onSellClicked() {
-    const sellAmount = floatToWeb3BN(ideaTokenAmount, 18)
-    const receiveAmount = tokenAmountBN
-
-    if (selectedToken.address !== addresses.dai) {
-      const multiActionContractAddress = useContractStore.getState()
-        .multiActionContract.options.address
-
-      const allowance = await getTokenAllowance(
-        ideaToken.address,
-        multiActionContractAddress
-      )
-      if (allowance.lt(sellAmount)) {
-        setPendingTxName('Approve')
-        setIsTxPending(true)
-        try {
-          await approveToken(
+  async function onTradeClicked() {
+    const name = tradeType === 'buy' ? 'Buy' : 'Sell'
+    const func = tradeType === 'buy' ? buyToken : sellToken
+    const args =
+      tradeType === 'buy'
+        ? [
             ideaToken.address,
-            multiActionContractAddress,
-            sellAmount
-          ).on('transactionHash', (hash) => {
-            setPendingTxHash(hash)
-          })
-        } catch (ex) {
-          console.log(ex)
-          return
-        } finally {
-          setPendingTxName('')
-          setPendingTxHash('')
-          setIsTxPending(false)
-        }
-      }
-    }
+            selectedToken.address,
+            floatToWeb3BN(ideaTokenAmount, 18),
+            tokenAmountBN,
+            slippage,
+            isLockChecked ? 31556952 : 0,
+          ]
+        : [
+            ideaToken.address,
+            selectedToken.address,
+            floatToWeb3BN(ideaTokenAmount, 18),
+            tokenAmountBN,
+            slippage,
+          ]
 
-    setPendingTxName('Sell')
-    setIsTxPending(true)
     try {
-      await sellToken(
-        ideaToken.address,
-        selectedToken.address,
-        sellAmount,
-        receiveAmount,
-        slippage
-      ).on('transactionHash', (hash) => {
-        setPendingTxHash(hash)
-      })
+      await txManager.executeTx(name, func, ...args)
     } catch (ex) {
       console.log(ex)
       return
-    } finally {
-      setPendingTxName('')
-      setPendingTxHash('')
-      setIsTxPending(false)
     }
 
+    setApproveButtonKey(approveButtonKey + 1)
     onTradeSuccessful()
   }
 
@@ -374,7 +248,7 @@ export default function TradeInterface({
             <nav className="flex">
               <a
                 onClick={() => {
-                  if (!isTxPending) setTradeType('buy')
+                  if (!txManager.isPending) setTradeType('buy')
                 }}
                 className={classNames(
                   'ml-5 mr-2.5 text-center flex-grow px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
@@ -387,7 +261,7 @@ export default function TradeInterface({
               </a>
               <a
                 onClick={() => {
-                  if (!isTxPending) setTradeType('sell')
+                  if (!txManager.isPending) setTradeType('sell')
                 }}
                 className={classNames(
                   'ml-2.5 mr-5 text-center flex-grow px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
@@ -409,7 +283,7 @@ export default function TradeInterface({
           <Select
             isClearable={false}
             isSearchable={false}
-            isDisabled={isTxPending || disabled}
+            isDisabled={txManager.isPending || disabled}
             onChange={(value) => {
               setSelectedToken(value.token)
             }}
@@ -465,16 +339,16 @@ export default function TradeInterface({
             onChange={(event) => {
               setIdeaTokenAmount(event.target.value)
             }}
-            disabled={isTxPending || disabled}
+            disabled={txManager.isPending || disabled}
           />
           <button
             className={classNames(
               'w-20 py-1 ml-2 text-sm font-medium bg-white border-2 rounded-lg tracking-tightest-2',
-              isTxPending
+              txManager.isPending
                 ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
                 : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
             )}
-            disabled={isTxPending || disabled}
+            disabled={txManager.isPending || disabled}
             onClick={maxButtonClicked}
           >
             Max
@@ -526,7 +400,7 @@ export default function TradeInterface({
             <Select
               isClearable={false}
               isSearchable={false}
-              isDisabled={isTxPending || disabled}
+              isDisabled={txManager.isPending || disabled}
               onChange={(option: SlippageValue) => {
                 slippage = option.value
               }}
@@ -556,7 +430,7 @@ export default function TradeInterface({
         <input
           type="checkbox"
           id="lockCheckbox"
-          disabled={isTxPending || disabled}
+          disabled={txManager.isPending || disabled}
           checked={isLockChecked}
           onChange={(e) => {
             setIsLockChecked(e.target.checked)
@@ -597,34 +471,34 @@ export default function TradeInterface({
               'flex items-center justify-center mt-5 text-xs'
             )}
           >
-            <button
-              className={classNames(
-                'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
-                isTxPending
-                  ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
-                  : isMissingAllowance
-                  ? 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
-                  : tradeType === 'buy'
-                  ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
-                  : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
-              )}
-              disabled={isTxPending}
-              onClick={async () => {
-                isMissingAllowance
-                  ? approve()
-                  : tradeType === 'buy'
-                  ? onBuyClicked()
-                  : onSellClicked()
-              }}
-            >
-              {isMissingAllowance
-                ? 'Unlock'
-                : tradeType === 'buy'
-                ? 'Buy'
-                : 'Sell'}
-            </button>
+            <ApproveButton
+              tokenAddress={spendToken}
+              spenderAddress={spender}
+              requiredAllowance={requiredAllowance}
+              unlockPermanent={isUnlockPermanentChecked}
+              txManager={txManager}
+              setIsMissingAllowance={setIsMissingAllowance}
+              key={approveButtonKey}
+            />
+            {!isMissingAllowance && (
+              <button
+                className={classNames(
+                  'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
+                  txManager.isPending
+                    ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
+                    : isMissingAllowance
+                    ? 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
+                    : tradeType === 'buy'
+                    ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
+                    : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
+                )}
+                disabled={txManager.isPending}
+                onClick={onTradeClicked}
+              >
+                {tradeType === 'buy' ? 'Buy' : 'Sell'}
+              </button>
+            )}
           </div>
-
           <div
             className="mt-5 text-xs text-center underline cursor-pointer text-brand-gray-2"
             onClick={() => {
@@ -645,7 +519,7 @@ export default function TradeInterface({
                 type="checkbox"
                 id="unlockOnceCheckbox"
                 className="cursor-pointer"
-                disabled={isTxPending || disabled}
+                disabled={txManager.isPending || disabled}
                 checked={isUnlockOncedChecked}
                 onChange={(e) => {
                   setIsUnlockOncedChecked(e.target.checked)
@@ -670,7 +544,7 @@ export default function TradeInterface({
                 type="checkbox"
                 id="unlockPermanentCheckbox"
                 className="cursor-pointer"
-                disabled={isTxPending || disabled}
+                disabled={txManager.isPending || disabled}
                 checked={isUnlockPermanentChecked}
                 onChange={(e) => {
                   setIsUnlockPermanentChecked(e.target.checked)
@@ -694,22 +568,24 @@ export default function TradeInterface({
           <div
             className={classNames(
               'grid grid-cols-3 my-5 text-sm text-brand-gray-2',
-              isTxPending ? '' : 'invisible'
+              txManager.isPending ? '' : 'invisible'
             )}
           >
-            <div className="font-bold justify-self-center">{pendingTxName}</div>
+            <div className="font-bold justify-self-center">
+              {txManager.name}
+            </div>
             <div className="justify-self-center">
               <a
                 className={classNames(
                   'underline',
-                  pendingTxHash === '' ? 'hidden' : ''
+                  txManager.hash === '' ? 'hidden' : ''
                 )}
                 href={`https://${
                   NETWORK === 'rinkeby' || NETWORK === 'test' ? 'rinkeby.' : ''
-                }etherscan.io/tx/${pendingTxHash}`}
+                }etherscan.io/tx/${txManager.hash}`}
                 target="_blank"
               >
-                {pendingTxHash.slice(0, 8)}...{pendingTxHash.slice(-6)}
+                {txManager.hash.slice(0, 8)}...{txManager.hash.slice(-6)}
               </a>
             </div>
             <div className="justify-self-center">
