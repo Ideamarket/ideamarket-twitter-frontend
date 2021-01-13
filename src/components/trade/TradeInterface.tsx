@@ -19,7 +19,8 @@ import Select from 'react-select'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import ApproveButton from './ApproveButton'
-import { Tooltip } from '..'
+import AdvancedOptions from './AdvancedOptions'
+import Tooltip from '../tooltip/Tooltip'
 
 export default function TradeInterface({
   ideaToken,
@@ -49,7 +50,7 @@ export default function TradeInterface({
 }) {
   const [tradeType, setTradeType] = useState('buy')
   const [isLockChecked, setIsLockChecked] = useState(false)
-  const [isUnlockOncedChecked, setIsUnlockOncedChecked] = useState(true)
+  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
     false
   )
@@ -499,75 +500,18 @@ export default function TradeInterface({
               </button>
             )}
           </div>
-          <div
-            className="mt-5 text-xs text-center underline cursor-pointer text-brand-gray-2"
-            onClick={() => {
-              setShowAdvancedOptions(!showAdvancedOptions)
-            }}
-          >
-            {showAdvancedOptions ? 'Hide' : 'Show'} Advanced Options
-          </div>
+
+          <AdvancedOptions
+            disabled={txManager.isPending || disabled}
+            isUnlockOnceChecked={isUnlockOnceChecked}
+            setIsUnlockOnceChecked={setIsUnlockOnceChecked}
+            isUnlockPermanentChecked={isUnlockPermanentChecked}
+            setIsUnlockPermanentChecked={setIsUnlockPermanentChecked}
+          />
 
           <div
             className={classNames(
-              'text-sm mx-5 mt-2',
-              !showAdvancedOptions && 'hidden'
-            )}
-          >
-            <div>
-              <input
-                type="checkbox"
-                id="unlockOnceCheckbox"
-                className="cursor-pointer"
-                disabled={txManager.isPending || disabled}
-                checked={isUnlockOncedChecked}
-                onChange={(e) => {
-                  setIsUnlockOncedChecked(e.target.checked)
-                  setIsUnlockPermanentChecked(!e.target.checked)
-                }}
-              />
-              <label
-                htmlFor="unlockOnceCheckbox"
-                className={classNames(
-                  'ml-2 cursor-pointer',
-                  isUnlockOncedChecked
-                    ? 'text-brand-blue font-medium'
-                    : 'text-brand-gray-2'
-                )}
-              >
-                Unlock once
-              </label>
-            </div>
-
-            <div>
-              <input
-                type="checkbox"
-                id="unlockPermanentCheckbox"
-                className="cursor-pointer"
-                disabled={txManager.isPending || disabled}
-                checked={isUnlockPermanentChecked}
-                onChange={(e) => {
-                  setIsUnlockPermanentChecked(e.target.checked)
-                  setIsUnlockOncedChecked(!e.target.checked)
-                }}
-              />
-              <label
-                htmlFor="unlockPermanentCheckbox"
-                className={classNames(
-                  'ml-2 cursor-pointer',
-                  isUnlockPermanentChecked
-                    ? 'text-brand-blue font-medium'
-                    : 'text-brand-gray-2'
-                )}
-              >
-                Unlock permanent
-              </label>
-            </div>
-          </div>
-
-          <div
-            className={classNames(
-              'grid grid-cols-3 my-5 text-sm text-brand-gray-2',
+              'grid grid-cols-3 my-5 ml-5 text-sm text-brand-gray-2',
               txManager.isPending ? '' : 'invisible'
             )}
           >

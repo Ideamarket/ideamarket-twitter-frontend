@@ -8,7 +8,7 @@ import {
   approveToken,
 } from 'actions'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import { addresses, NETWORK } from 'utils'
+import { addresses, NETWORK, useTransactionManager } from 'utils'
 import { Modal, MarketSelect, TradeInterface } from './'
 import { useContractStore } from 'store/contractStore'
 import BN from 'bn.js'
@@ -29,9 +29,7 @@ export default function ListTokenModal({
   const [page, setPage] = useState(PAGES.LIST)
   const [selectedMarket, setSelectedMarket] = useState(undefined)
 
-  const [pendingTxName, setPendingTxName] = useState('')
-  const [pendingTxHash, setPendingTxHash] = useState('')
-  const [isTxPending, setIsTxPending] = useState(false)
+  const txManager = useTransactionManager()
 
   const [tokenName, setTokenName] = useState('')
   const [isValidTokenName, setIsValidTokenName] = useState(false)
@@ -104,31 +102,26 @@ export default function ListTokenModal({
           .address
         const allowance = await getTokenAllowance(buyPayWithAddress, spender)
         if (allowance.lt(buyInputAmountBN)) {
-          setPendingTxName('Approve')
-          setIsTxPending(true)
           try {
-            await approveToken(buyPayWithAddress, spender, buyInputAmountBN).on(
-              'transactionHash',
-              (hash) => {
-                setPendingTxHash(hash)
-              }
+            await txManager.executeTx(
+              'Unlock',
+              approveToken,
+              buyPayWithAddress,
+              spender,
+              buyInputAmountBN
             )
           } catch (ex) {
             console.log(ex)
             setPage(PAGES.ERROR)
             return
-          } finally {
-            setPendingTxName('')
-            setPendingTxHash('')
-            setIsTxPending(false)
           }
         }
       }
 
-      setPendingTxName('List and buy')
-      setIsTxPending(true)
       try {
-        await listAndBuyToken(
+        await txManager.executeTx(
+          'List and buy',
+          listAndBuyToken,
           finalTokenName,
           selectedMarket,
           buyPayWithAddress,
@@ -136,36 +129,26 @@ export default function ListTokenModal({
           buyInputAmountBN,
           buySlippage,
           buyLock ? 31556952 : 0
-        ).on('transactionHash', (hash) => {
-          setPendingTxHash(hash)
-        })
-      } catch (ex) {
-        console.log(ex)
-        setPage(PAGES.ERROR)
-        return
-      } finally {
-        setPendingTxName('')
-        setPendingTxHash('')
-        setIsTxPending(false)
-      }
-      setPage(PAGES.SUCCESS)
-    } else {
-      setIsTxPending(true)
-      setPendingTxName('List Token')
-      try {
-        await listToken(finalTokenName, selectedMarket.marketID).on(
-          'transactionHash',
-          (hash) => {
-            setPendingTxHash(hash)
-          }
         )
       } catch (ex) {
         console.log(ex)
         setPage(PAGES.ERROR)
         return
-      } finally {
-        setPendingTxHash('')
-        setIsTxPending(false)
+      }
+
+      setPage(PAGES.SUCCESS)
+    } else {
+      try {
+        await txManager.executeTx(
+          'List Token',
+          listToken,
+          finalTokenName,
+          selectedMarket.marketID
+        )
+      } catch (ex) {
+        console.log(ex)
+        setPage(PAGES.ERROR)
+        return
       }
       setPage(PAGES.SUCCESS)
     }
@@ -195,7 +178,7 @@ export default function ListTokenModal({
           <p className="mx-5 mt-5 text-sm text-brand-gray-2">Market</p>
           <div className="mx-5">
             <MarketSelect
-              disabled={isTxPending}
+              disabled={txManager.isPending}
               onChange={(value) => {
                 setSelectedMarket(value.market)
               }}
@@ -214,7 +197,7 @@ export default function ListTokenModal({
             >
               <input
                 type="text"
-                disabled={isTxPending || !selectedMarket}
+                disabled={txManager.isPending || !selectedMarket}
                 className={classNames(
                   'flex-grow py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 rounded appearance-none focus:bg-white focus:outline-none',
                   !isValidTokenName && tokenName.length > 0
@@ -278,7 +261,7 @@ export default function ListTokenModal({
                 selectedMarket === undefined ||
                 !isValidTokenName ||
                 tokenName === '' ||
-                isTxPending
+                txManager.isPending
               }
               checked={isWantBuyChecked}
               onChange={(e) => {
@@ -307,7 +290,7 @@ export default function ListTokenModal({
               resetOn={false}
               showTypeSelection={false}
               showTradeButton={false}
-              disabled={isTxPending}
+              disabled={txManager.isPending}
             />
             {!isWantBuyChecked && (
               <div className="absolute top-0 left-0 w-full h-full bg-gray-600 opacity-75"></div>
@@ -317,7 +300,7 @@ export default function ListTokenModal({
             <button
               disabled={
                 !isValidTokenName ||
-                isTxPending ||
+                txManager.isPending ||
                 (isWantBuyChecked && !isBuyValid)
               }
               onClick={listClicked}
@@ -325,7 +308,7 @@ export default function ListTokenModal({
                 'w-36 h-10 mt-5 text-base font-medium bg-white border-2 rounded-lg  text-brand-blue  tracking-tightest-2 font-sf-compact-medium',
                 selectedMarket !== undefined &&
                   isValidTokenName &&
-                  !isTxPending &&
+                  !txManager.isPending &&
                   (!isWantBuyChecked || (isWantBuyChecked && isBuyValid))
                   ? 'border-brand-blue hover:bg-brand-blue hover:text-white'
                   : 'border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
@@ -337,22 +320,24 @@ export default function ListTokenModal({
           <div
             className={classNames(
               'grid grid-cols-3 my-5 text-sm text-brand-gray-2',
-              isTxPending ? '' : 'invisible'
+              txManager.isPending ? '' : 'invisible'
             )}
           >
-            <div className="font-bold justify-self-center">{pendingTxName}</div>
+            <div className="font-bold justify-self-center">
+              {txManager.name}
+            </div>
             <div className="justify-self-center">
               <a
                 className={classNames(
                   'underline',
-                  pendingTxHash === '' ? 'hidden' : ''
+                  txManager.hash === '' ? 'hidden' : ''
                 )}
                 href={`https://${
                   NETWORK === 'rinkeby' || NETWORK === 'test' ? 'rinkeby.' : ''
-                }etherscan.io/tx/${pendingTxHash}`}
+                }etherscan.io/tx/${txManager.hash}`}
                 target="_blank"
               >
-                {pendingTxHash.slice(0, 8)}...{pendingTxHash.slice(-6)}
+                {txManager.hash.slice(0, 8)}...{txManager.hash.slice(-6)}
               </a>
             </div>
             <div className="justify-self-center">
