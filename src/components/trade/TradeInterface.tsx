@@ -56,6 +56,11 @@ export default function TradeInterface({
 }) {
   const [tradeType, setTradeType] = useState('buy')
   const [isLockChecked, setIsLockChecked] = useState(false)
+  const [isUnlockOncedChecked, setIsUnlockOncedChecked] = useState(true)
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
+    false
+  )
+  const [showAdvancedOptions, setShowAdvancedOptions] = useState(false)
 
   const tokenList = useTokenListStore((state) => state.tokens)
   const selectTokensValues = tokenList.map((token) => ({
@@ -237,7 +242,8 @@ export default function TradeInterface({
     }
   }
 
-  async function approve(permanent: boolean) {
+  async function approve() {
+    const permanent = isUnlockPermanentChecked
     const spendToken =
       tradeType === 'buy' ? selectedToken.address : ideaToken.address
     const allowance = await getTokenAllowance(spendToken, spender)
@@ -246,7 +252,7 @@ export default function TradeInterface({
     const allowanceAmount = permanent ? web3UintMax : payAmount
 
     if (allowance.lt(payAmount)) {
-      setPendingTxName(permanent ? 'Allow forever' : 'Allow once')
+      setPendingTxName(permanent ? 'Unlock permanent' : 'Unlock once')
       setIsTxPending(true)
       try {
         await approveToken(spendToken, spender, allowanceAmount).on(
@@ -588,60 +594,101 @@ export default function TradeInterface({
         <>
           <div
             className={classNames(
-              'flex items-center justify-center mt-5 text-xs',
-              isMissingAllowance ? 'flex-col' : 'flex-row'
+              'flex items-center justify-center mt-5 text-xs'
             )}
           >
-            {isMissingAllowance ? (
-              <>
-                <button
-                  className={classNames(
-                    'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2',
-                    isTxPending
-                      ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
-                      : 'border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white'
-                  )}
-                  disabled={isTxPending}
-                  onClick={async () => {
-                    approve(false)
-                  }}
-                >
-                  Allow once
-                </button>
+            <button
+              className={classNames(
+                'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
+                isTxPending
+                  ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
+                  : isMissingAllowance
+                  ? 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
+                  : tradeType === 'buy'
+                  ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
+                  : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
+              )}
+              disabled={isTxPending}
+              onClick={async () => {
+                isMissingAllowance
+                  ? approve()
+                  : tradeType === 'buy'
+                  ? onBuyClicked()
+                  : onSellClicked()
+              }}
+            >
+              {isMissingAllowance
+                ? 'Unlock'
+                : tradeType === 'buy'
+                ? 'Buy'
+                : 'Sell'}
+            </button>
+          </div>
 
-                <button
-                  className={classNames(
-                    'w-40 h-8 mt-2.5 text-sm bg-white border-2 rounded-lg tracking-tightest-2',
-                    isTxPending
-                      ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
-                      : 'border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white'
-                  )}
-                  disabled={isTxPending}
-                  onClick={async () => {
-                    approve(true)
-                  }}
-                >
-                  Allow forever
-                </button>
-              </>
-            ) : (
-              <button
-                className={classNames(
-                  'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
-                  isTxPending
-                    ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
-                    : tradeType === 'buy'
-                    ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
-                    : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
-                )}
-                disabled={isTxPending}
-                onClick={async () => {
-                  tradeType === 'buy' ? onBuyClicked() : onSellClicked()
-                }}
-              >
-                {tradeType === 'buy' ? 'Buy' : 'Sell'}
-              </button>
+          <div
+            className="mt-5 text-xs text-center underline cursor-pointer text-brand-gray-2"
+            onClick={() => {
+              setShowAdvancedOptions(!showAdvancedOptions)
+            }}
+          >
+            {showAdvancedOptions ? 'Hide' : 'Show'} Advanced Options
+          </div>
+
+          <div
+            className={classNames(
+              'text-sm mx-5 mt-2',
+              !showAdvancedOptions && 'hidden'
             )}
+          >
+            <div>
+              <input
+                type="checkbox"
+                id="unlockOnceCheckbox"
+                className="cursor-pointer"
+                disabled={isTxPending || disabled}
+                checked={isUnlockOncedChecked}
+                onChange={(e) => {
+                  setIsUnlockOncedChecked(e.target.checked)
+                  setIsUnlockPermanentChecked(!e.target.checked)
+                }}
+              />
+              <label
+                htmlFor="unlockOnceCheckbox"
+                className={classNames(
+                  'ml-2 cursor-pointer',
+                  isUnlockOncedChecked
+                    ? 'text-brand-blue font-medium'
+                    : 'text-brand-gray-2'
+                )}
+              >
+                Unlock once
+              </label>
+            </div>
+
+            <div>
+              <input
+                type="checkbox"
+                id="unlockPermanentCheckbox"
+                className="cursor-pointer"
+                disabled={isTxPending || disabled}
+                checked={isUnlockPermanentChecked}
+                onChange={(e) => {
+                  setIsUnlockPermanentChecked(e.target.checked)
+                  setIsUnlockOncedChecked(!e.target.checked)
+                }}
+              />
+              <label
+                htmlFor="unlockPermanentCheckbox"
+                className={classNames(
+                  'ml-2 cursor-pointer',
+                  isUnlockPermanentChecked
+                    ? 'text-brand-blue font-medium'
+                    : 'text-brand-gray-2'
+                )}
+              >
+                Unlock permanent
+              </label>
+            </div>
           </div>
 
           <div
