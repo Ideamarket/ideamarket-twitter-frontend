@@ -492,13 +492,21 @@ export default function TradeInterface({
               <button
                 className={classNames(
                   'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
-                  txManager.isPending || exceedsBalance
+                  txManager.isPending ||
+                    exceedsBalance ||
+                    !parseFloat(ideaTokenAmount) ||
+                    parseFloat(ideaTokenAmount) <= 0.0
                     ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
                     : tradeType === 'buy'
                     ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
                     : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
                 )}
-                disabled={txManager.isPending || exceedsBalance}
+                disabled={
+                  txManager.isPending ||
+                  exceedsBalance ||
+                  !parseFloat(ideaTokenAmount) ||
+                  parseFloat(ideaTokenAmount) <= 0.0
+                }
                 onClick={onTradeClicked}
               >
                 {tradeType === 'buy' ? 'Buy' : 'Sell'}
