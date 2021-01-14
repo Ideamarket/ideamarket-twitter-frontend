@@ -32,7 +32,7 @@ export default function MyTokens() {
     <div className="min-h-screen bg-brand-gray">
       <div className="mx-auto md:px-4 max-w-88 md:max-w-304">
         <div className="min-h-screen py-5 bg-white border-b border-l border-r border-gray-400 rounded-b">
-          <div className="flex items-center justify-between mx-5 pb-2.5">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mx-5 pb-2.5">
             <div className="text-2xl sm:text-3xl text-brand-gray-2">
               My Holdings
             </div>
