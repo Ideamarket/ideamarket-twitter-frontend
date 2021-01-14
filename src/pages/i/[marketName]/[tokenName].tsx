@@ -454,7 +454,7 @@ export default function TokenDetails() {
                   style={{ borderBottom: '1px solid #cbd5e0' }}
                 ></div>
                 <nav
-                  className="flex justify-between py-1.5 bg-gray-50"
+                  className="flex flex-col md:flex-row items-begin md:justify-between py-1.5 bg-gray-50"
                   style={{ backgroundColor: '#fafafa' }}
                 >
                   <div>
@@ -486,7 +486,7 @@ export default function TokenDetails() {
                       Locked
                     </a>
                   </div>
-                  <div>
+                  <div className="pt-2 md:pt-0">
                     <ChartDurationEntry
                       durationString="1H"
                       durationSeconds={HOUR_SECONDS}
