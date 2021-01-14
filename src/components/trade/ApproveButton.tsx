@@ -43,7 +43,7 @@ export default function ApproveButton({
 
     try {
       await txManager.executeTx(
-        unlockPermanent ? 'Unlock Permanent' : 'Unlock Once',
+        'Unlock',
         approveToken,
         tokenAddress,
         spenderAddress,
