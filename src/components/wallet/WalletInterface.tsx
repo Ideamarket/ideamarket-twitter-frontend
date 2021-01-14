@@ -97,7 +97,7 @@ export default function WalletInterface({
         >
           <div className="flex flex-row items-center">
             <div className="flex-none">{svg}</div>
-            <div className="ml-2">{name}</div>
+            <div className="ml-2 text-left">{name}</div>
             <div
               className={classNames(
                 connectingWallet !== wallet && 'display: hidden',
@@ -134,7 +134,7 @@ export default function WalletInterface({
               </svg>
             </div>
             {rightSvg && (
-              <div className="flex flex-row justify-end ml-auto pl-2">
+              <div className="flex flex-row justify-end pl-2 ml-auto">
                 {rightSvg}
               </div>
             )}
@@ -145,7 +145,7 @@ export default function WalletInterface({
   }
 
   return (
-    <div className="lg:min-w-100 relative overflow-hidden">
+    <div className="relative overflow-hidden lg:min-w-100">
       <div
         className={classNames(
           'absolute w-full transition-all ease-in-out duration-1000 transform',
@@ -171,7 +171,7 @@ export default function WalletInterface({
         <div className="flex pl-4 pr-4 mt-4">
           <button
             onClick={() => setShowAllWallets(false)}
-            className="hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer p-0 border-2 rounded-lg border-brand-gray-1 font-sf-compact-medium"
+            className="p-0 border-2 rounded-lg cursor-pointer hover:border-transparent hover:bg-brand-blue hover:text-brand-gray border-brand-gray-1 font-sf-compact-medium"
           >
             <div className="flex flex-row items-center">
               <div className="flex-none">
