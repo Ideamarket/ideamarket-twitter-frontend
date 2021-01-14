@@ -349,7 +349,7 @@ export default function TradeInterface({
           <button
             className={classNames(
               'w-20 py-1 ml-2 text-sm font-medium bg-white border-2 rounded-lg tracking-tightest-2',
-              txManager.isPending
+              txManager.isPending || disabled
                 ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
                 : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
             )}
