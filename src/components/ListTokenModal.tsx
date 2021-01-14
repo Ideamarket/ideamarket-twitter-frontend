@@ -183,7 +183,7 @@ export default function ListTokenModal({
 
   return (
     <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
-      <div className="p-4 bg-top-mobile min-w-100">
+      <div className="p-4 bg-top-mobile md:min-w-100">
         <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
           Add Listing
         </p>
@@ -214,7 +214,7 @@ export default function ListTokenModal({
                 type="text"
                 disabled={txManager.isPending || !selectedMarket}
                 className={classNames(
-                  'flex-grow py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 rounded appearance-none focus:bg-white focus:outline-none',
+                  'w-12 md:w-full flex-grow py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 rounded appearance-none focus:bg-white focus:outline-none',
                   !isValidTokenName && tokenName.length > 0
                     ? 'border-brand-red focus:border-brand-red'
                     : 'border-gray-200 focus:border-brand-blue'
