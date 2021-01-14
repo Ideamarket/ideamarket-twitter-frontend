@@ -13,6 +13,7 @@ import {
   Footer,
   VerifyModal,
   LockedTokenTable,
+  CircleSpinner,
 } from 'components'
 import {
   querySupplyRate,
@@ -768,34 +769,7 @@ export default function TokenDetails() {
                             </a>
                           </div>
                           <div className="justify-self-center">
-                            <svg
-                              viewBox="0 0 100 100"
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-5 h-5 animate-spin"
-                            >
-                              <circle
-                                cx="50"
-                                cy="50"
-                                r="45"
-                                style={{
-                                  fill: 'transparent',
-                                  stroke: '#0857e0', // brand-blue
-                                  strokeWidth: '10',
-                                }}
-                              />
-                              <circle
-                                cx="50"
-                                cy="50"
-                                r="45"
-                                style={{
-                                  fill: 'transparent',
-                                  stroke: 'white',
-                                  strokeWidth: '10',
-                                  strokeDasharray: '283',
-                                  strokeDashoffset: '75',
-                                }}
-                              />
-                            </svg>
+                            <CircleSpinner color="#0857e0" bgcolor="#f6f6f6" />
                           </div>
                         </div>
                       </>
@@ -825,6 +799,7 @@ export default function TokenDetails() {
                   showTypeSelection={true}
                   showTradeButton={true}
                   disabled={false}
+                  bgcolor="#f6f6f6"
                 />
               ) : (
                 <div

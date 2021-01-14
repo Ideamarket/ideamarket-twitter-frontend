@@ -21,6 +21,7 @@ import BN from 'bn.js'
 import ApproveButton from './ApproveButton'
 import AdvancedOptions from './AdvancedOptions'
 import Tooltip from '../tooltip/Tooltip'
+import CircleSpinner from '../animations/CircleSpinner'
 
 export default function TradeInterface({
   ideaToken,
@@ -31,6 +32,7 @@ export default function TradeInterface({
   showTypeSelection,
   showTradeButton,
   disabled,
+  bgcolor,
 }: {
   ideaToken: IdeaToken
   market: IdeaMarket
@@ -47,6 +49,7 @@ export default function TradeInterface({
   showTypeSelection: boolean
   showTradeButton: boolean
   disabled: boolean
+  bgcolor?: string
 }) {
   const [tradeType, setTradeType] = useState('buy')
   const [isLockChecked, setIsLockChecked] = useState(false)
@@ -251,7 +254,10 @@ export default function TradeInterface({
 
   return (
     <>
-      <div className="lg:min-w-100">
+      <div
+        className="lg:min-w-100"
+        style={bgcolor ? { backgroundColor: bgcolor } : {}}
+      >
         {showTypeSelection && (
           <>
             <nav className="flex">
@@ -532,34 +538,7 @@ export default function TradeInterface({
               </a>
             </div>
             <div className="justify-self-center">
-              <svg
-                viewBox="0 0 100 100"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 animate-spin"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  style={{
-                    fill: 'transparent',
-                    stroke: '#0857e0', // brand-blue
-                    strokeWidth: '10',
-                  }}
-                />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  style={{
-                    fill: 'transparent',
-                    stroke: 'white',
-                    strokeWidth: '10',
-                    strokeDasharray: '283',
-                    strokeDashoffset: '75',
-                  }}
-                />
-              </svg>
+              <CircleSpinner color="#0857e0" bgcolor={bgcolor} />
             </div>
           </div>
         </>

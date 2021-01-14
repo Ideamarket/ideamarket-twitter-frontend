@@ -1,4 +1,10 @@
-export default function CircleSpinner({ color }: { color: string }) {
+export default function CircleSpinner({
+  color,
+  bgcolor,
+}: {
+  color: string
+  bgcolor?: string
+}) {
   return (
     <svg
       viewBox="0 0 100 100"
@@ -9,23 +15,20 @@ export default function CircleSpinner({ color }: { color: string }) {
         cx="50"
         cy="50"
         r="45"
-        style={{
-          fill: 'transparent',
-          stroke: color,
-          strokeWidth: '10',
-        }}
+        fill="transparent"
+        strokeWidth="10"
+        stroke={color}
       />
+
       <circle
         cx="50"
         cy="50"
         r="45"
-        style={{
-          fill: 'transparent',
-          stroke: 'white',
-          strokeWidth: '10',
-          strokeDasharray: '283',
-          strokeDashoffset: '75',
-        }}
+        fill="transparent"
+        stroke={bgcolor || 'white'}
+        strokeWidth="15"
+        strokeDasharray="283"
+        strokeDashoffset="75"
       />
     </svg>
   )

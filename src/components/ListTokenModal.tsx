@@ -14,6 +14,7 @@ import AdvancedOptions from './trade/AdvancedOptions'
 import ApproveButton from './trade/ApproveButton'
 import { useContractStore } from 'store/contractStore'
 import BN from 'bn.js'
+import CircleSpinner from './animations/CircleSpinner'
 
 export default function ListTokenModal({
   isOpen,
@@ -380,34 +381,7 @@ export default function ListTokenModal({
               </a>
             </div>
             <div className="justify-self-center">
-              <svg
-                viewBox="0 0 100 100"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 animate-spin"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  style={{
-                    fill: 'transparent',
-                    stroke: '#0857e0', // brand-blue
-                    strokeWidth: '10',
-                  }}
-                />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  style={{
-                    fill: 'transparent',
-                    stroke: 'white',
-                    strokeWidth: '10',
-                    strokeDasharray: '283',
-                    strokeDashoffset: '75',
-                  }}
-                />
-              </svg>
+              <CircleSpinner color="#0857e0" />
             </div>
           </div>
         </>

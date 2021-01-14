@@ -2,6 +2,7 @@ import { useState, useContext } from 'react'
 import { useWalletStore, setWeb3, unsetWeb3 } from 'store/walletStore'
 import { GlobalContext } from 'pages/_app'
 
+import CircleSpinner from '../animations/CircleSpinner'
 import Metamask from '../../assets/metamask.svg'
 import WalletConnect from '../../assets/walletconnect.svg'
 import Coinbase from '../../assets/coinbase.svg'
@@ -104,34 +105,7 @@ export default function WalletInterface({
                 'flex flex-row justify-end flex-grow'
               )}
             >
-              <svg
-                viewBox="0 0 100 100"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-5 h-5 animate-spin"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  style={{
-                    fill: 'transparent',
-                    stroke: 'hsl(235, 42%, 17%)',
-                    strokeWidth: '10',
-                  }}
-                />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  style={{
-                    fill: 'transparent',
-                    stroke: 'white',
-                    strokeWidth: '10',
-                    strokeDasharray: '283',
-                    strokeDashoffset: '75',
-                  }}
-                />
-              </svg>
+              <CircleSpinner color="white" bgcolor="#0857e0" />
             </div>
             {rightSvg && (
               <div className="flex flex-row justify-end pl-2 ml-auto">
