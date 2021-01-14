@@ -194,9 +194,9 @@ export default function VerifyModal({
                 <div className="w-full md:flex-grow">
                   <input
                     className={classNames(
-                      'pl-2 w-full h-10 leading-tight bg-gray-200 border-2 rounded appearance-none focus:outline-none focus:bg-white',
+                      'pl-2 w-full h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white',
                       ownerAddress.length === 0
-                        ? 'border-gray-200 focus:border-brand-blue'
+                        ? 'border-gray-200 focus:border-brand-blue bg-gray-200'
                         : isValidOwnerAddress
                         ? 'border-brand-green'
                         : 'border-brand-red'
