@@ -105,6 +105,15 @@ export default function TradeInterface({
   const requiredAllowance =
     tradeType === 'buy' ? tokenAmountBN : floatToWeb3BN(ideaTokenAmount, 18)
 
+  const exceedsBalance =
+    tradeType === 'buy'
+      ? isTokenBalanceLoading || !tokenAmountBN
+        ? false
+        : tokenBalanceBN.lt(tokenAmountBN)
+      : isIdeaTokenBalanceLoading
+      ? false
+      : ideaTokenBalanceBN.lt(floatToWeb3BN(ideaTokenAmount, 18))
+
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
   const [approveButtonKey, setApproveButtonKey] = useState(0)
   const txManager = useTransactionManager()
@@ -317,11 +326,7 @@ export default function TradeInterface({
           <p
             className={classNames(
               'text-sm',
-              !isIdeaTokenBalanceLoading &&
-                ideaTokenBalanceBN &&
-                ideaTokenBalanceBN.lt(floatToWeb3BN(ideaTokenAmount, 18))
-                ? 'text-brand-red font-bold'
-                : 'text-brand-gray-2'
+              exceedsBalance ? 'text-brand-red font-bold' : 'text-brand-gray-2'
             )}
           >
             {tradeType === 'buy'
@@ -362,12 +367,7 @@ export default function TradeInterface({
           <p
             className={classNames(
               'text-sm',
-              !isTokenBalanceLoading &&
-                tokenBalanceBN &&
-                tokenAmountBN &&
-                tokenBalanceBN.lt(tokenAmountBN)
-                ? 'text-brand-red font-bold'
-                : 'text-brand-gray-2'
+              exceedsBalance ? 'text-brand-red font-bold' : 'text-brand-gray-2'
             )}
           >
             {tradeType === 'buy'
@@ -471,28 +471,28 @@ export default function TradeInterface({
               'flex items-center justify-center mt-5 text-xs'
             )}
           >
-            <ApproveButton
-              tokenAddress={spendToken}
-              spenderAddress={spender}
-              requiredAllowance={requiredAllowance}
-              unlockPermanent={isUnlockPermanentChecked}
-              txManager={txManager}
-              setIsMissingAllowance={setIsMissingAllowance}
-              key={approveButtonKey}
-            />
-            {!isMissingAllowance && (
+            {!exceedsBalance && (
+              <ApproveButton
+                tokenAddress={spendToken}
+                spenderAddress={spender}
+                requiredAllowance={requiredAllowance}
+                unlockPermanent={isUnlockPermanentChecked}
+                txManager={txManager}
+                setIsMissingAllowance={setIsMissingAllowance}
+                key={approveButtonKey}
+              />
+            )}
+            {(!isMissingAllowance || exceedsBalance) && (
               <button
                 className={classNames(
                   'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
-                  txManager.isPending
+                  txManager.isPending || exceedsBalance
                     ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
-                    : isMissingAllowance
-                    ? 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
                     : tradeType === 'buy'
                     ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
                     : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
                 )}
-                disabled={txManager.isPending}
+                disabled={txManager.isPending || exceedsBalance}
                 onClick={onTradeClicked}
               >
                 {tradeType === 'buy' ? 'Buy' : 'Sell'}
@@ -510,7 +510,7 @@ export default function TradeInterface({
 
           <div
             className={classNames(
-              'grid grid-cols-3 my-5 ml-5 text-sm text-brand-gray-2',
+              'grid grid-cols-3 my-5 text-sm text-brand-gray-2',
               txManager.isPending ? '' : 'invisible'
             )}
           >
