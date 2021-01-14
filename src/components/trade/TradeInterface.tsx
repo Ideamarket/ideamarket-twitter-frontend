@@ -204,7 +204,7 @@ export default function TradeInterface({
       }
       const buyableBN = calculateMaxIdeaTokensBuyable(
         balanceAsDai,
-        ideaToken.rawSupply,
+        ideaToken?.rawSupply || new BN('0'),
         market
       )
       setIdeaTokenAmount(
