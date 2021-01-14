@@ -28,7 +28,7 @@ export default function TimeXFloatYChart({ chartData }) {
             pointRadius: 0,
             fill: false,
             borderColor: '#0857e0',
-            lineTension: 0,
+            steppedLine: true,
           },
         ],
       },
