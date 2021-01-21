@@ -347,7 +347,13 @@ export async function queryTokensChartData(
   for (let token of tokens) {
     tokenAddresses.push(token.address.toLowerCase())
 
-    const { latestPricePoint, earliestPricePoint } = token
+    const { latestPricePoint } = token
+    let { earliestPricePoint } = token
+
+    if (!earliestPricePoint) {
+      earliestPricePoint = latestPricePoint
+    }
+
     const numPricePoints =
       latestPricePoint.counter - earliestPricePoint.counter + 1
 
