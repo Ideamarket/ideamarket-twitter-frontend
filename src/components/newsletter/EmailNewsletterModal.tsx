@@ -27,11 +27,16 @@ export default function EmailNewsletterModal() {
           <br />
           Sign up to be notified 24 hours before they launch:
         </p>
-        <iframe
-          className="w-full"
-          style={{ height: '260px' }}
-          src="https://cdn.forms-content.sg-form.com/61e4a0fe-4506-11eb-b308-8a2567f282a7"
-        />
+        <div className="flex justify-center">
+          <iframe
+            src="https://ideamarkets.substack.com/embed"
+            width="350"
+            height="320"
+            style={{ border: '1px solid #EEE', backgroundColor: 'white' }}
+            frameBorder="0"
+            scrolling="no"
+          />
+        </div>
       </div>
     </Modal>
   )
