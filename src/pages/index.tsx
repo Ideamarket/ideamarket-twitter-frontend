@@ -118,9 +118,9 @@ export default function Home() {
           onClick={() => {
             onListTokenClicked()
           }}
-          className="py-2 mx-auto text-lg font-bold text-white rounded-lg mt-7 px-5 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+          className="px-5 py-2 mx-auto text-lg font-bold text-white rounded-lg mt-7 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
         >
-          Launch Your Token
+          Add Listing
         </button>
       </div>
 

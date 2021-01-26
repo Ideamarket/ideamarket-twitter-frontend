@@ -187,7 +187,7 @@ export default function ListTokenModal({
     <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
       <div className="p-4 bg-top-mobile min-w-100">
         <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
-          List Token
+          Add Listing
         </p>
       </div>
       {page === PAGES.LIST && (
