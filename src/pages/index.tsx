@@ -174,7 +174,14 @@ export default function Home() {
             className={classNames(
               'flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0'
             )}
-          ></div>
+          >
+            <div>
+              {selectedMarketName === 'Youtube'
+                ? getMarketSpecificsByMarketName('Youtube').getMarketSVGBlack()
+                : getMarketSpecificsByMarketName('Youtube').getMarketSVGWhite()}
+            </div>
+            <p className="text-lg leading-none">{'Youtube (2/21)'}</p>
+          </div>
           <div
             className={classNames(
               'hidden md:flex md:justify-center items-center p-5 space-x-2.5 text-white border-2 border-l-0 border-t-0 md:border-t-2 md:border-l-0 md:border-r-2 md:border-b-0 '
