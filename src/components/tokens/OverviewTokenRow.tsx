@@ -211,7 +211,7 @@ export default function TokenRow({
           </p>
         </td>
 
-        <td className="col-span-3 row-span-1 row-start-4 px-1 py-1 whitespace-nowrap col-start-0">
+        <td className="col-span-3 row-span-1 row-start-4 py-1 pl-1 whitespace-nowrap col-start-0">
           <PreviewPriceChart chartData={parsedChartData} />
         </td>
         <td className="hidden px-6 py-4 whitespace-nowrap md:table-cell">
@@ -220,12 +220,12 @@ export default function TokenRow({
               e.stopPropagation()
               onTradeClicked(token, market)
             }}
-            className="w-32 h-10 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+            className="w-24 h-10 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
           >
             Trade
           </button>
         </td>
-        <td className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-nowrap">
+        <td className="py-4 pl-3 pr-6 text-sm leading-5 text-gray-500 whitespace-nowrap">
           <WatchingStar token={token} />
         </td>
       </tr>
