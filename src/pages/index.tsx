@@ -5,6 +5,7 @@ import { getMarketSpecificsByMarketName } from 'store/markets'
 import { Table, TradeModal, ListTokenModal, Footer } from 'components'
 
 import Search from '../assets/search.svg'
+import Plus from '../assets/plus-white.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 
@@ -125,7 +126,10 @@ export default function Home() {
           }}
           className="px-5 py-2 mx-auto text-lg font-bold text-white rounded-lg mt-7 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
         >
-          Add Listing
+          <div className="flex flex-row items-center">
+            <Plus width="30" height="30" />
+            <div className="ml-2">Add Listing</div>
+          </div>
         </button>
       </div>
 
