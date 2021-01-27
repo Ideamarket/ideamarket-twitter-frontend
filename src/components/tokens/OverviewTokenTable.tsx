@@ -273,7 +273,18 @@ export default function Table({
                               )
                             )}
                           <br />
-                          earned for {market.name}
+                          <div className="flex flex-row items-center justify-end">
+                            earned for {market.name}
+                            <Tooltip className="ml-1">
+                              <div className="w-32 md:w-64">
+                                Platforms get a new income stream too — half of
+                                the trading fees for each market are paid to the
+                                platform it curates. To get authorized to claim
+                                funds on behalf of {market.name}, contact us at
+                                team@ideamarkets.org.
+                              </div>
+                            </Tooltip>
+                          </div>
                         </div>
                       )}
                     </th>
