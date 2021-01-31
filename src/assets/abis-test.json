@@ -1647,6 +1647,19 @@
     },
     {
       "inputs": [],
+      "name": "_uniswapV2Factory",
+      "outputs": [
+        {
+          "internalType": "contract IUniswapV2Factory",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "_uniswapV2Router02",
       "outputs": [
         {
