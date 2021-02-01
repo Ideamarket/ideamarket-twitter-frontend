@@ -32,6 +32,11 @@ type Header = {
 }
 const headers: Header[] = [
   {
+    content: '#',
+    value: 'rank',
+    sortable: true,
+  },
+  {
     content: 'Name',
     value: 'name',
     sortable: true,
@@ -114,9 +119,9 @@ export default function Table({
   const windowSize = useWindowSize()
   const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
 
-  const [currentHeader, setCurrentHeader] = useState('price')
-  const [orderBy, setOrderBy] = useState('supply')
-  const [orderDirection, setOrderDirection] = useState('desc')
+  const [currentHeader, setCurrentHeader] = useState('rank')
+  const [orderBy, setOrderBy] = useState('rank')
+  const [orderDirection, setOrderDirection] = useState('asc')
 
   const {
     data: compoundExchangeRate,
@@ -229,8 +234,9 @@ export default function Table({
                     {headers.map((header) => (
                       <th
                         className={classNames(
-                          'px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50',
-                          header.sortable && 'cursor-pointer'
+                          'pl-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50',
+                          header.sortable && 'cursor-pointer',
+                          header.value !== 'rank' && 'pr-6'
                         )}
                         key={header.value}
                         onClick={() => {

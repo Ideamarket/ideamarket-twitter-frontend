@@ -31,6 +31,7 @@ export default function getQueryTokens(
           supply
           holders
           marketCap
+          rank
           tokenOwner
           daiInToken
           invested

@@ -69,6 +69,7 @@ export type IdeaToken = {
   holders: number
   marketCap: string
   rawMarketCap: BN
+  rank: number
   tokenOwner: string
   daiInToken: string
   rawDaiInToken: BN
@@ -493,6 +494,7 @@ function apiResponseToIdeaToken(apiResponse, marketApiResponse?): IdeaToken {
     rawMarketCap: apiResponse.marketCap
       ? new BN(apiResponse.marketCap)
       : undefined,
+    rank: apiResponse.rank,
     tokenOwner: apiResponse.tokenOwner ? apiResponse.tokenOwner : undefined,
     daiInToken: apiResponse.daiInToken
       ? web3BNToFloatString(new BN(apiResponse.daiInToken), tenPow18, 2)

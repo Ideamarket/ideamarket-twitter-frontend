@@ -4,6 +4,9 @@ export default function TokenRowSkeleton() {
   return (
     <>
       <tr className="grid grid-cols-3 md:table-row animate animate-pulse">
+        <td className="px-3 py-4 whitespace-nowrap">
+          <div className="w-8 h-5 bg-gray-400 rounded"></div>
+        </td>
         <td className="col-span-3 px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
             <div
