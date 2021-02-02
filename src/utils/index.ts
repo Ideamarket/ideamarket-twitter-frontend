@@ -17,6 +17,8 @@ import { getUniswapPairContract, useContractStore } from 'store/contractStore'
 
 export { default as TransactionManager } from './TransactionManager'
 export { default as useTransactionManager } from './useTransactionManager'
+export { getUniswapPath } from './uniswap'
+export type { UniswapPairDetails } from './uniswap'
 
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK
   ? process.env.NEXT_PUBLIC_NETWORK

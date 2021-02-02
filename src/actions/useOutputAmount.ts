@@ -1,17 +1,9 @@
 import { useState, useEffect } from 'react'
-import {
-  ChainId,
-  Token,
-  TokenAmount,
-  Pair,
-  Trade,
-  Route,
-  TradeType,
-} from '@uniswap/sdk'
-import { web3BNToFloatString, NETWORK } from '../utils'
+import { TokenAmount, Trade, TradeType } from '@uniswap/sdk'
+import { web3BNToFloatString } from '../utils'
 import { useWalletStore } from 'store/walletStore'
-import { getUniswapPairContract, useContractStore } from 'store/contractStore'
-import { addresses } from '../utils'
+import { useContractStore } from 'store/contractStore'
+import { addresses, getUniswapPath } from '../utils'
 import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 
 import BigNumber from 'bignumber.js'
@@ -79,54 +71,18 @@ export default function useOutputAmount(
         return requiredDaiAmount
       }
 
-      const chain = NETWORK === 'mainnet' ? ChainId.MAINNET : ChainId.RINKEBY
-      const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
+      const inputTokenAddress =
+        tokenAddress === addresses.ZERO ? addresses.weth : tokenAddress
+      const outputTokenAddress = addresses.dai
+      const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
 
-      let IN
-      if (tokenAddress === addresses.ZERO) {
-        IN = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
-      } else {
-        IN = new Token(chain, tokenAddress, decimals, 'SOME', 'TOKEN')
+      if (!path) {
+        throw 'No Uniswap path exists'
       }
 
-      const uniswapFactoryContract = useContractStore.getState()
-        .uniswapFactoryContract
-      const pairAddress = await uniswapFactoryContract.methods
-        .getPair(DAI.address, IN.address)
-        .call()
-
-      const pairContract = getUniswapPairContract(pairAddress)
-
-      let token0, token1, reserves
-      await Promise.all([
-        (async () => {
-          token0 = await pairContract.methods.token0().call()
-        })(),
-        (async () => {
-          token1 = await pairContract.methods.token1().call()
-        })(),
-        (async () => {
-          reserves = await pairContract.methods.getReserves().call()
-        })(),
-      ])
-
-      let pair
-      if (token0 === DAI.address) {
-        pair = new Pair(
-          new TokenAmount(DAI, reserves._reserve0),
-          new TokenAmount(IN, reserves._reserve1)
-        )
-      } else {
-        pair = new Pair(
-          new TokenAmount(DAI, reserves._reserve1),
-          new TokenAmount(IN, reserves._reserve0)
-        )
-      }
-
-      const route = new Route([pair], IN)
       const trade = new Trade(
-        route,
-        new TokenAmount(DAI, requiredDaiAmount.toString()),
+        path.route,
+        new TokenAmount(path.outToken, requiredDaiAmount.toString()),
         TradeType.EXACT_OUTPUT
       )
       const requiredInputBN = new BN(
@@ -163,54 +119,18 @@ export default function useOutputAmount(
         return daiOutputAmount
       }
 
-      const chain = NETWORK === 'mainnet' ? ChainId.MAINNET : ChainId.RINKEBY
-      const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
+      const inputTokenAddress = addresses.dai
+      const outputTokenAddress =
+        tokenAddress === addresses.ZERO ? addresses.weth : tokenAddress
+      const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
 
-      let OUT
-      if (tokenAddress === addresses.ZERO) {
-        OUT = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
-      } else {
-        OUT = new Token(chain, tokenAddress, decimals, 'SOME', 'TOKEN')
+      if (!path) {
+        throw 'No Uniswap path exists'
       }
 
-      const uniswapFactoryContract = useContractStore.getState()
-        .uniswapFactoryContract
-      const pairAddress = await uniswapFactoryContract.methods
-        .getPair(DAI.address, OUT.address)
-        .call()
-
-      const pairContract = getUniswapPairContract(pairAddress)
-
-      let token0, token1, reserves
-      await Promise.all([
-        (async () => {
-          token0 = await pairContract.methods.token0().call()
-        })(),
-        (async () => {
-          token1 = await pairContract.methods.token1().call()
-        })(),
-        (async () => {
-          reserves = await pairContract.methods.getReserves().call()
-        })(),
-      ])
-
-      let pair
-      if (token0 === DAI.address) {
-        pair = new Pair(
-          new TokenAmount(DAI, reserves._reserve0),
-          new TokenAmount(OUT, reserves._reserve1)
-        )
-      } else {
-        pair = new Pair(
-          new TokenAmount(DAI, reserves._reserve1),
-          new TokenAmount(OUT, reserves._reserve0)
-        )
-      }
-
-      const route = new Route([pair], DAI)
       const trade = new Trade(
-        route,
-        new TokenAmount(DAI, daiOutputAmount.toString()),
+        path.route,
+        new TokenAmount(path.inToken, daiOutputAmount.toString()),
         TradeType.EXACT_INPUT
       )
       const outputBN = new BN(
