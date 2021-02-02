@@ -283,11 +283,16 @@ export default function Table({
                             earned for {market.name}
                             <Tooltip className="ml-1">
                               <div className="w-32 md:w-64">
-                                Platforms get a new income stream too — half of
+                                Platforms get a new income stream too. Half of
                                 the trading fees for each market are paid to the
-                                platform it curates. To get authorized to claim
-                                funds on behalf of {market.name}, contact us at
-                                team@ideamarkets.org.
+                                platform it curates. To claim funds on behalf of
+                                Twitter, email{' '}
+                                <a
+                                  className="underline"
+                                  href="mailto:team@ideamarkets.org"
+                                >
+                                  team@ideamarkets.org
+                                </a>
                               </div>
                             </Tooltip>
                           </div>
