@@ -485,6 +485,7 @@ export default function TradeInterface({
                 unlockPermanent={isUnlockPermanentChecked}
                 txManager={txManager}
                 setIsMissingAllowance={setIsMissingAllowance}
+                isBuy={tradeType === 'buy'}
                 key={approveButtonKey}
               />
             )}

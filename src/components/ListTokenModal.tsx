@@ -323,6 +323,7 @@ export default function ListTokenModal({
                 unlockPermanent={isUnlockPermanentChecked}
                 txManager={txManager}
                 setIsMissingAllowance={setIsMissingAllowance}
+                isBuy={true}
                 key={approveButtonKey}
               />
             </div>

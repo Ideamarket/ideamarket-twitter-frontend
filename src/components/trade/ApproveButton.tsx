@@ -11,6 +11,7 @@ export default function ApproveButton({
   requiredAllowance,
   unlockPermanent,
   txManager,
+  isBuy,
   setIsMissingAllowance,
 }: {
   tokenAddress: string
@@ -18,6 +19,7 @@ export default function ApproveButton({
   requiredAllowance: BN
   unlockPermanent: boolean
   txManager: TransactionManager
+  isBuy: boolean
   setIsMissingAllowance: (b: boolean) => void
 }) {
   const [isAllowanceLoading, allowance] = useTokenAllowance(
@@ -43,7 +45,7 @@ export default function ApproveButton({
 
     try {
       await txManager.executeTx(
-        'Unlock',
+        'Authorize',
         approveToken,
         tokenAddress,
         spenderAddress,
@@ -75,7 +77,7 @@ export default function ApproveButton({
       disabled={txManager.isPending}
       onClick={approve}
     >
-      Unlock
+      Authorize {isBuy ? 'Buy' : 'Sell'}
     </button>
   )
 }
