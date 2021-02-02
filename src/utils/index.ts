@@ -4,20 +4,11 @@ import Web3 from 'web3'
 import { useState, useEffect } from 'react'
 import numeral from 'numeral'
 import { IdeaMarket } from 'store/ideaMarketsStore'
-import {
-  ChainId,
-  Token,
-  TokenAmount,
-  Pair,
-  Trade,
-  Route,
-  TradeType,
-} from '@uniswap/sdk'
 import { getUniswapPairContract, useContractStore } from 'store/contractStore'
 
 export { default as TransactionManager } from './TransactionManager'
 export { default as useTransactionManager } from './useTransactionManager'
-export { getUniswapPath } from './uniswap'
+export { getUniswapPath, getUniswapDaiOutputSwap } from './uniswap'
 export type { UniswapPairDetails } from './uniswap'
 
 export const NETWORK = process.env.NEXT_PUBLIC_NETWORK
@@ -239,74 +230,4 @@ export function calculateMaxIdeaTokensBuyable(
   const numerator = root.minus(bf).minus(frs)
   const denominator = fr
   return buyable.plus(numerator.div(denominator).multipliedBy(tenPow18))
-}
-
-export async function getUniswapDaiOutputSwap(
-  inputTokenAddress: string,
-  inputTokenDecimals: number,
-  inputAmount: BN
-) {
-  const chain = NETWORK === 'mainnet' ? ChainId.MAINNET : ChainId.RINKEBY
-  const DAI = new Token(chain, addresses.dai, 18, 'DAI', 'DAI')
-
-  let IN
-  if (inputTokenAddress === addresses.ZERO) {
-    IN = new Token(chain, addresses.weth, 18, 'WETH', 'WETH')
-  } else {
-    IN = new Token(
-      chain,
-      inputTokenAddress,
-      inputTokenDecimals,
-      'SOME',
-      'TOKEN'
-    )
-  }
-
-  const uniswapFactoryContract = useContractStore.getState()
-    .uniswapFactoryContract
-  const pairAddress = await uniswapFactoryContract.methods
-    .getPair(DAI.address, IN.address)
-    .call()
-
-  const pairContract = getUniswapPairContract(pairAddress)
-
-  let token0, token1, reserves
-  await Promise.all([
-    (async () => {
-      token0 = await pairContract.methods.token0().call()
-    })(),
-    (async () => {
-      token1 = await pairContract.methods.token1().call()
-    })(),
-    (async () => {
-      reserves = await pairContract.methods.getReserves().call()
-    })(),
-  ])
-
-  let pair
-  if (token0 === DAI.address) {
-    pair = new Pair(
-      new TokenAmount(DAI, reserves._reserve0),
-      new TokenAmount(IN, reserves._reserve1)
-    )
-  } else {
-    pair = new Pair(
-      new TokenAmount(DAI, reserves._reserve1),
-      new TokenAmount(IN, reserves._reserve0)
-    )
-  }
-
-  const route = new Route([pair], IN)
-  const trade = new Trade(
-    route,
-    new TokenAmount(IN, inputAmount.toString()),
-    TradeType.EXACT_INPUT
-  )
-  const outputBN = new BN(
-    new BigNumber(trade.outputAmount.toExact())
-      .multipliedBy(new BigNumber('10').exponentiatedBy(18))
-      .toFixed()
-  )
-
-  return outputBN
 }

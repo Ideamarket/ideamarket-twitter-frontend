@@ -1,4 +1,14 @@
-import { ChainId, Token, TokenAmount, Pair, Route } from '@uniswap/sdk'
+import BN from 'bn.js'
+import BigNumber from 'bignumber.js'
+import {
+  ChainId,
+  Token,
+  TokenAmount,
+  Pair,
+  Route,
+  TradeType,
+  Trade,
+} from '@uniswap/sdk'
 import {
   getERC20Contract,
   getUniswapPairContract,
@@ -132,6 +142,34 @@ export async function getUniswapPath(
       outToken: outputToken,
     }
   }
+}
+
+export async function getUniswapDaiOutputSwap(
+  inputAddress: string,
+  inputAmount: BN
+) {
+  const inputTokenAddress =
+    inputAddress === addresses.ZERO ? addresses.weth : inputAddress
+  const outputTokenAddress = addresses.dai
+  const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
+
+  if (!path) {
+    throw 'No Uniswap path exists'
+  }
+
+  const trade = new Trade(
+    path.route,
+    new TokenAmount(path.inToken, inputAmount.toString()),
+    TradeType.EXACT_INPUT
+  )
+
+  const outputBN = new BN(
+    new BigNumber(trade.outputAmount.toExact())
+      .multipliedBy(new BigNumber('10').exponentiatedBy(18))
+      .toFixed()
+  )
+
+  return outputBN
 }
 
 async function getPair(

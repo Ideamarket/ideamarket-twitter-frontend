@@ -201,7 +201,6 @@ export default function TradeInterface({
       } else {
         balanceAsDai = await getUniswapDaiOutputSwap(
           selectedToken.address,
-          selectedToken.decimals,
           tokenBalanceBN
         )
       }
