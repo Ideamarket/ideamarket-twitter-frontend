@@ -2149,5 +2149,16 @@
       "stateMutability": "nonpayable",
       "type": "function"
     }
+  ],
+  "mirrorNameVerifier": [
+    {
+      "inputs": [
+        { "internalType": "string", "name": "name", "type": "string" }
+      ],
+      "name": "verifyTokenName",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+      "stateMutability": "pure",
+      "type": "function"
+    }
   ]
 }
