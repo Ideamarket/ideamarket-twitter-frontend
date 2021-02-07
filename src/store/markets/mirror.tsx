@@ -1,24 +1,24 @@
 import { IMarketSpecifics } from '.'
-import YoutubeWhite from '../../assets/youtube.svg'
-import YoutubeBlack from '../../assets/youtube-black.svg'
+import MirrorWhite from '../../assets/mirror-white.svg'
+import MirrorBlack from '../../assets/mirror-black.svg'
 
 export default class YoutubeMarketSpecifics implements IMarketSpecifics {
   // Market
 
   getMarketName(): string {
-    return 'Youtube'
+    return 'Mirror'
   }
 
   getMarketNameURLRepresentation(): string {
-    return 'youtube'
+    return 'mirror'
   }
 
   getMarketSVGBlack(): JSX.Element {
-    return <YoutubeBlack />
+    return <MirrorBlack />
   }
 
   getMarketSVGWhite(): JSX.Element {
-    return <YoutubeWhite />
+    return <MirrorWhite />
   }
 
   // Tokens
