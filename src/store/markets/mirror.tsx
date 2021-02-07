@@ -2,7 +2,7 @@ import { IMarketSpecifics } from '.'
 import MirrorWhite from '../../assets/mirror-white.svg'
 import MirrorBlack from '../../assets/mirror-black.svg'
 
-export default class YoutubeMarketSpecifics implements IMarketSpecifics {
+export default class MirrorMarketSpecifics implements IMarketSpecifics {
   // Market
 
   getMarketName(): string {
