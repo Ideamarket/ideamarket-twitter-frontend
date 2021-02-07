@@ -11,7 +11,9 @@ export default function Nav() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const router = useRouter()
   const closeMenu = () => setIsMobileNavOpen(false)
-  const { setIsWalletModalOpen } = useContext(GlobalContext)
+  const { setIsWalletModalOpen, setIsEmailNewsletterModalOpen } = useContext(
+    GlobalContext
+  )
   const menuItems = [
     {
       name: 'My Tokens',
@@ -22,13 +24,19 @@ export default function Nav() {
     {
       name: 'How It Works',
       value: 'how-it-works',
-      onClick: () => router.push('https://docs.ideamarket.io'),
+      onClick: () => window.open('https://docs.ideamarket.io', '_blank'),
       isSelected: false,
     },
     {
-      name: 'Blog',
-      value: 'blog',
-      onClick: () => router.push('https://ideamarkets.substack.com/'),
+      name: 'Notifications',
+      value: 'notifications',
+      onClick: () => setIsEmailNewsletterModalOpen(true),
+      isSelected: false,
+    },
+    {
+      name: 'Community',
+      value: 'community',
+      onClick: () => window.open('https://discord.gg/zaXZXGE4Ke', '_blank'),
       isSelected: false,
     },
   ]
