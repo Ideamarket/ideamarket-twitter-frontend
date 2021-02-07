@@ -16,14 +16,14 @@ export default function Nav() {
   )
   const menuItems = [
     {
-      name: 'My Tokens',
-      value: 'my-tokens',
-      onClick: () => router.push('/tokens'),
-      isSelected: router.pathname === '/tokens',
+      name: 'Account',
+      value: 'account',
+      onClick: () => router.push('/account'),
+      isSelected: router.pathname === '/account',
     },
     {
-      name: 'How It Works',
-      value: 'how-it-works',
+      name: 'Docs',
+      value: 'docs',
       onClick: () => window.open('https://docs.ideamarket.io', '_blank'),
       isSelected: false,
     },
