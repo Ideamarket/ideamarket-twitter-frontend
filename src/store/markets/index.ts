@@ -27,6 +27,7 @@ export type IMarketSpecifics = {
   getListTokenSuffix(): string
 
   // Verification
+  isVerificationEnabled(): boolean
   getVerificationExplanation(): string
   getVerificationSHAPrompt(uuid: string): string
   getVerificationSHAPromptExplanation(): string

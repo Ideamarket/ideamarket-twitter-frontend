@@ -684,14 +684,20 @@ export default function TokenDetails() {
                           able to withdraw the accumulated interest.
                         </div>
                         <div className="flex justify-center">
-                          <button
-                            className="w-20 py-1 mt-2 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
-                            onClick={() => {
-                              setIsVerifyModalOpen(true)
-                            }}
-                          >
-                            Verify
-                          </button>
+                          {marketSpecifics.isVerificationEnabled() ? (
+                            <button
+                              className="w-20 py-1 mt-2 text-sm font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+                              onClick={() => {
+                                setIsVerifyModalOpen(true)
+                              }}
+                            >
+                              Verify
+                            </button>
+                          ) : (
+                            <div className="mt-2 font-semibold">
+                              Verification not yet enabled
+                            </div>
+                          )}
                         </div>
                       </>
                     ) : (

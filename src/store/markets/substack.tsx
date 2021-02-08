@@ -61,6 +61,10 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
 
   // Verification
 
+  isVerificationEnabled(): boolean {
+    return true
+  }
+
   getVerificationExplanation(): string {
     return 'Upon initiation of the verification process you will be given a verification code. This code will be used to verify that you have access to the listed account by asking you to edit your publication\'s "About" section to contain said code.'
   }

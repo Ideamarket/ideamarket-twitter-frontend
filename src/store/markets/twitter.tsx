@@ -63,6 +63,10 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
 
   // Verification
 
+  isVerificationEnabled(): boolean {
+    return true
+  }
+
   getVerificationExplanation(): string {
     return 'Upon initiation of the verification process you will be given a verification code. This code will be used to verify that you have access to the listed account by asking you to post a Tweet containing said code from the corresponding Twitter account.'
   }

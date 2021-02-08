@@ -61,6 +61,10 @@ export default class YoutubeMarketSpecifics implements IMarketSpecifics {
 
   // Verification
 
+  isVerificationEnabled(): boolean {
+    return true
+  }
+
   getVerificationExplanation(): string {
     throw `not implemented`
   }

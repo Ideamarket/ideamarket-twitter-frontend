@@ -24,56 +24,60 @@ export default class MirrorMarketSpecifics implements IMarketSpecifics {
   // Tokens
 
   getTokenURL(tokenName: string): string {
-    throw `not implemented`
+    return `https://${tokenName}.mirror.xyz`
   }
 
   getTokenIconURL(tokenName: string): string {
-    throw `not implemented`
+    return `https://unavatar.backend.ideamarket.io:8080/mirror/${tokenName}`
   }
 
   normalizeUserInputTokenName(userInput: string): string {
-    throw `not implemented`
+    return userInput.toLowerCase()
   }
 
   convertUserInputToTokenName(userInput: string): string {
-    throw `not implemented`
+    return userInput
   }
 
   getTokenNameURLRepresentation(tokenName: string): string {
-    throw `not implemented`
+    return tokenName
   }
 
   getTokenNameFromURLRepresentation(
     tokenNameInURLRepresentation: string
   ): string {
-    throw `not implemented`
+    return tokenNameInURLRepresentation
   }
 
   // List Token
 
   getListTokenPrefix(): string {
-    throw `not implemented`
+    return ''
   }
 
   getListTokenSuffix(): string {
-    throw `not implemented`
+    return '.mirror.xyz'
   }
 
   // Verification
 
+  isVerificationEnabled(): boolean {
+    return false
+  }
+
   getVerificationExplanation(): string {
-    throw `not implemented`
+    return `not implemented`
   }
 
   getVerificationSHAPrompt(sha: string): string {
-    throw `not implemented`
+    return `not implemented`
   }
 
   getVerificationSHAPromptExplanation(): string {
-    throw `not implemented`
+    return `not implemented`
   }
 
   getVerificationConfirmCheckboxLabel(): string {
-    throw `not implemented`
+    return `not implemented`
   }
 }
