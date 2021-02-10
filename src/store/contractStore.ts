@@ -2,8 +2,10 @@ import create from 'zustand'
 import Web3 from 'web3'
 
 import { addresses, NETWORK } from 'utils'
+import DeployedAddressesMainnet from '../assets/deployed-mainnet.json'
 import DeployedAddressesRinkeby from '../assets/deployed-rinkeby.json'
 import DeployedAddressesTest from '../assets/deployed-test.json'
+import DeployedABIsMainnet from '../assets/abis-mainnet.json'
 import DeployedABIsRinkeby from '../assets/abis-rinkeby.json'
 import DeployedABIsTest from '../assets/abis-test.json'
 import UniswapFactoryABI from '../assets/abi-uniswap-factory.json'
@@ -46,6 +48,9 @@ export function initContractsFromWeb3(web3: Web3) {
   } else if (NETWORK === 'test') {
     deployedAddresses = DeployedAddressesTest
     abis = DeployedABIsTest
+  } else if (NETWORK === 'mainnet') {
+    deployedAddresses = DeployedAddressesMainnet
+    abis = DeployedABIsMainnet
   } else {
     throw 'initContractsFromWeb3: unknown network'
   }
