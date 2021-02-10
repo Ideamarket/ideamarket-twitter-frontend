@@ -4,7 +4,6 @@ import Web3 from 'web3'
 import { useState, useEffect } from 'react'
 import numeral from 'numeral'
 import { IdeaMarket } from 'store/ideaMarketsStore'
-import { getUniswapPairContract, useContractStore } from 'store/contractStore'
 
 export { default as TransactionManager } from './TransactionManager'
 export { default as useTransactionManager } from './useTransactionManager'
