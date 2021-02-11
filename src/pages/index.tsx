@@ -113,7 +113,7 @@ export default function Home() {
               <img src="/ethereum.png" alt="" />
             </div>
             <div className="w-20 md:w-36">
-              <p className="text-xs text-gray-600">auditted by</p>
+              <p className="text-xs text-gray-600">audited by</p>
               <img src="/qs.png" alt="" />
             </div>
           </div>
