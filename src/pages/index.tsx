@@ -118,10 +118,11 @@ export default function Home() {
             </div>
           </div>
           <h2 className="mt-8 md:mt-18 text-3xl md:text-6+xl font-gilroy-bold">
-            Cash in on your <span className="text-brand-blue">clout.</span>
+            The common knowledge{' '}
+            <span className="text-brand-blue">exchange</span>
           </h2>
           <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
-            Earn passive income from your community's confidence in you.
+            Make lying expensive.
           </p>
         </div>
         <button
