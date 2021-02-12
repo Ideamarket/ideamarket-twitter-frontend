@@ -2,10 +2,17 @@ import classNames from 'classnames'
 import { useContext, useState } from 'react'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import { Table, TradeModal, ListTokenModal, Footer } from 'components'
+import {
+  Table,
+  TradeModal,
+  ListTokenModal,
+  PromoVideoModal,
+  Footer,
+} from 'components'
 
 import Search from '../assets/search.svg'
 import Plus from '../assets/plus-white.svg'
+import Play from '../assets/play.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 
@@ -14,6 +21,8 @@ export default function Home() {
   const [selectedMarketName, setSelectedMarketName] = useState('Twitter')
   const [nameSearch, setNameSearch] = useState('')
   const [tablePage, setTablePage] = useState(0)
+  const [isHoveringWatchVideo, setIsHoveringWatchVideo] = useState(false)
+  const [isPromoVideoModalOpen, setIsPromoVideoModalOpen] = useState(false)
 
   const {
     setIsWalletModalOpen,
@@ -125,17 +134,41 @@ export default function Home() {
             Make lying expensive.
           </p>
         </div>
-        <button
-          onClick={() => {
-            onListTokenClicked()
-          }}
-          className="px-5 py-2 mx-auto text-lg font-bold text-white rounded-lg mt-7 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
-        >
-          <div className="flex flex-row items-center">
-            <Plus width="30" height="30" />
-            <div className="ml-2">Add Listing</div>
-          </div>
-        </button>
+        <div className="flex justify-center mt-7">
+          <button
+            onClick={() => {
+              onListTokenClicked()
+            }}
+            className="w-44 py-2 text-lg font-bold text-white rounded-lg font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+          >
+            <div className="flex flex-row items-center justify-center">
+              <Plus width="30" height="30" />
+              <div className="ml-2">Add Listing</div>
+            </div>
+          </button>
+
+          <button
+            onClick={() => {
+              setIsPromoVideoModalOpen(true)
+            }}
+            onMouseEnter={() => {
+              setIsHoveringWatchVideo(true)
+            }}
+            onMouseLeave={() => {
+              setIsHoveringWatchVideo(false)
+            }}
+            className="w-44 py-2 text-lg text-white rounded-lg font-sf-compact-medium border-white border ml-5 hover:bg-white hover:text-black hover:font-bold"
+          >
+            <div className="flex flex-row items-center justify-center">
+              <Play
+                width="30"
+                height="30"
+                stroke={isHoveringWatchVideo ? '#000000' : '#ffffff'}
+              />
+              <div className="ml-2">Watch Video</div>
+            </div>
+          </button>
+        </div>
       </div>
 
       <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 md:-translate-y-28 font-sf-compact-medium">
@@ -254,6 +287,10 @@ export default function Home() {
       <ListTokenModal
         isOpen={isListTokenModalOpen}
         setIsOpen={setIsListTokenModalOpen}
+      />
+      <PromoVideoModal
+        isOpen={isPromoVideoModalOpen}
+        setIsOpen={setIsPromoVideoModalOpen}
       />
     </div>
   )
