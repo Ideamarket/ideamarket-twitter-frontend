@@ -346,14 +346,14 @@ export default function TokenDetails() {
         <div className="mx-auto max-w-88 md:max-w-304">
           <span className="text-brand-alto font-sf-compact-medium">
             <span
-              className="cursor-pointer text-base font-medium text-brand-gray text-opacity-60 hover:text-brand-gray-2"
+              className="text-base font-medium cursor-pointer text-brand-gray text-opacity-60 hover:text-brand-gray-2"
               onClick={() => router.push('/')}
             >
               Listings
             </span>
             <span>
               <img
-                className="inline-block w-2 mr-2 ml-2"
+                className="inline-block w-2 ml-2 mr-2"
                 src="/arrow@3x.png"
                 alt=""
               />
@@ -362,7 +362,7 @@ export default function TokenDetails() {
               {market?.name || '..'}
             </span>
           </span>
-          <div className="flex flex-wrap md:flex-nowrap items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between md:flex-nowrap">
             <ListingOverview
               token={token}
               market={market}
@@ -459,30 +459,30 @@ export default function TokenDetails() {
         </div>
       </div>
 
-      <div className="px-2 pt-12 md:pt-10 pb-5 text-white transform -translate-y-30 md:-translate-y-28 mx-auto max-w-88 md:max-w-304">
+      <div className="px-2 pt-12 pb-5 mx-auto text-white transform md:pt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
         <div className="flex flex-col md:flex-row">
-          <div className="flex-1 bg-white mb-5 md:mr-5 rounded-md p-5 border border-brand-border-gray">
-            <div className="flex flex-col md:flex-row justify-between">
+          <div className="flex-1 p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+            <div className="flex flex-col justify-between md:flex-row">
               <div>
                 {isLoading ? (
                   <DetailsSkeleton />
                 ) : (
                   <>
                     <div className="inline-block pr-6">
-                      <div className="text-brand-new-dark font-semibold text-sm">
+                      <div className="text-sm font-semibold text-brand-new-dark">
                         Listed on
                       </div>
-                      <div className="text-brand-new-dark font-semibold text-base mt-2">
+                      <div className="mt-2 text-base font-semibold text-brand-new-dark">
                         {DateTime.fromSeconds(Number(token.listedAt)).toFormat(
                           'MMM dd yyyy'
                         )}
                       </div>
                     </div>
                     <div className="inline-block">
-                      <div className="text-brand-new-dark font-semibold text-sm">
+                      <div className="text-sm font-semibold text-brand-new-dark">
                         Token Owner
                       </div>
-                      <div className="text-brand-new-dark font-semibold text-base mt-2">
+                      <div className="mt-2 text-base font-semibold text-brand-new-dark">
                         {addresses.ZERO === token.address ? (
                           'Not yet set'
                         ) : (
@@ -495,10 +495,10 @@ export default function TokenDetails() {
                               e.stopPropagation()
                             }}
                           >
-                            {`${token.address.slice(
+                            {`${token.tokenOwner.slice(
                               0,
                               8
-                            )}...${token.address.slice(-6)}`}
+                            )}...${token.tokenOwner.slice(-6)}`}
                           </a>
                         )}
                       </div>
@@ -516,7 +516,7 @@ export default function TokenDetails() {
                 )}
               </div>
             </div>
-            <div className="text-sm font-semibold mb-3 mt-5 md:mt-8 text-brand-gray-2">
+            <div className="mt-5 mb-3 text-sm font-semibold md:mt-8 text-brand-gray-2">
               Token Owner Options
             </div>
             {isLoading ? (
@@ -543,7 +543,7 @@ export default function TokenDetails() {
                     interest.
                   </div>
                 </div>
-                <div className="mt-3 mb-2 md:mb-5 text-sm text-brand-blue">
+                <div className="mt-3 mb-2 text-sm md:mb-5 text-brand-blue">
                   {marketSpecifics.isVerificationEnabled() ? (
                     <div
                       className="font-semibold cursor-pointer hover:underline"
@@ -562,7 +562,7 @@ export default function TokenDetails() {
               </>
             ) : (
               <>
-                <div className="md:mt-8 font-medium text-brand-gray-2">
+                <div className="font-medium text-brand-gray-2">
                   <div className="text-xs">
                     {!web3 ||
                     connectedAddress.toLowerCase() !==
@@ -588,7 +588,7 @@ export default function TokenDetails() {
                   )}{' '}
                   DAI
                 </div>
-                <div className="flex mt-3 mb-2 md:mb-5 text-sm text-brand-blue">
+                <div className="flex mt-3 mb-2 text-sm md:mb-5 text-brand-blue">
                   <button
                     disabled={
                       !web3 ||
@@ -599,9 +599,10 @@ export default function TokenDetails() {
                     className={classNames(
                       'font-semibold text-sm text-brand-blue',
                       !web3 ||
-                        txManager.isPending ||
                         connectedAddress.toLowerCase() !==
                           token.tokenOwner.toLowerCase()
+                        ? 'hidden'
+                        : txManager.isPending
                         ? 'cursor-default'
                         : 'cursor-pointer hover:underline'
                     )}
@@ -644,27 +645,27 @@ export default function TokenDetails() {
               </>
             )}
           </div>
-          <div className="flex-1 bg-white mb-5 rounded-md p-5 border border-brand-border-gray">
+          <div className="flex-1 p-5 mb-5 bg-white border rounded-md border-brand-border-gray">
             {isLoading ? (
               <div className="h-full p-18 md:p-0">loading</div>
             ) : web3 ? (
               <div>
-                <div className="font-semibold text-base text-brand-new-dark">
+                <div className="text-base font-semibold text-brand-new-dark">
                   My Wallet
                 </div>
-                <div className="font-semibold text-sm text-brand-new-dark mt-3">
+                <div className="mt-3 text-sm font-semibold text-brand-new-dark">
                   Balance
                 </div>
 
-                <div className="flex font-semibold text-center text-brand-new-dark text-2xl mt-2">
-                  <span className="flex-1 text-left md:text-right mr-5">
+                <div className="flex mt-2 text-2xl font-semibold text-center text-brand-new-dark">
+                  <span className="flex-1 mr-5 text-left md:text-right">
                     {!isBalanceLoading && formatNumber(balance)} tokens
                   </span>
-                  <span className="font-normal flex-1 text-left text-brand-gray-2">
+                  <span className="flex-1 font-normal text-left text-brand-gray-2">
                     {!isValueLoading && formatNumber(value)} USD
                   </span>
                 </div>
-                <div className="font-semibold text-sm text-brand-new-dark mt-3 mb-2">
+                <div className="mt-3 mb-2 text-sm font-semibold text-brand-new-dark">
                   Locked
                 </div>
                 <LockedTokenRowsTable token={token} owner={connectedAddress} />
@@ -684,7 +685,7 @@ export default function TokenDetails() {
           </div>
         </div>
         {web3 && (
-          <div className="flex-1 bg-white rounded-md p-5 mb-5 border border-brand-border-gray">
+          <div className="flex-1 p-5 mb-5 bg-white border rounded-md border-brand-border-gray">
             {isLoading ? (
               <div className="h-full p-18 md:p-0">loading</div>
             ) : (

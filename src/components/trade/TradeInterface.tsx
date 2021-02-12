@@ -391,7 +391,7 @@ export default function TradeInterface({
             />
           </div>
 
-          <div className="flex flex-col flex-col-reverse justify-between mx-5 mt-5 text-sm font-semibold md:flex-row text-brand-gray-2">
+          <div className="flex flex-col justify-between mx-5 mt-5 text-sm font-semibold md:flex-row text-brand-gray-2">
             <div className="flex items-center">
               Trading fee:{' '}
               {market && market.platformFeeRate && market.tradingFeeRate
