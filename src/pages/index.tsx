@@ -137,18 +137,6 @@ export default function Home() {
         <div className="flex justify-center mt-7">
           <button
             onClick={() => {
-              onListTokenClicked()
-            }}
-            className="w-44 py-2 text-lg font-bold text-white rounded-lg font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
-          >
-            <div className="flex flex-row items-center justify-center">
-              <Plus width="30" height="30" />
-              <div className="ml-0.5 md:ml-2">Add Listing</div>
-            </div>
-          </button>
-
-          <button
-            onClick={() => {
               setIsPromoVideoModalOpen(true)
             }}
             onMouseEnter={() => {
@@ -157,7 +145,7 @@ export default function Home() {
             onMouseLeave={() => {
               setIsHoveringWatchVideo(false)
             }}
-            className="w-44 py-2 text-lg text-white rounded-lg font-sf-compact-medium border-white border ml-5 hover:bg-white hover:text-black hover:font-bold"
+            className="w-44 py-2 text-lg text-white rounded-lg font-sf-compact-medium border-white border  hover:bg-white hover:text-black hover:font-bold"
           >
             <div className="flex flex-row items-center justify-center">
               <Play
@@ -166,8 +154,22 @@ export default function Home() {
                 stroke={isHoveringWatchVideo ? '#000000' : '#ffffff'}
               />
               <div className="ml-0.5 md:ml-2">
-                Watch <div className="hidden md:display">Video</div>
+                <div className="flex">
+                  Watch<div className="hidden md:block">&nbsp;Video</div>
+                </div>
               </div>
+            </div>
+          </button>
+
+          <button
+            onClick={() => {
+              onListTokenClicked()
+            }}
+            className="w-44 py-2 text-lg font-bold text-white rounded-lg font-sf-compact-medium bg-brand-blue hover:bg-blue-800 ml-5"
+          >
+            <div className="flex flex-row items-center justify-center">
+              <Plus width="30" height="30" />
+              <div className="ml-0.5 md:ml-2">Add Listing</div>
             </div>
           </button>
         </div>
