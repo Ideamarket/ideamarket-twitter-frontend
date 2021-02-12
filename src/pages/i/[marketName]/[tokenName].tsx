@@ -483,8 +483,8 @@ export default function TokenDetails() {
                         Token Owner
                       </div>
                       <div className="mt-2 text-base font-semibold text-brand-new-dark">
-                        {addresses.ZERO === token.address ? (
-                          'Not yet set'
+                        {addresses.ZERO === token.tokenOwner ? (
+                          'None'
                         ) : (
                           <a
                             href={`https://etherscan.io/address/${token.address}`}
