@@ -82,8 +82,11 @@ export const initWalletStore = async () => {
 
 async function handleWeb3Change() {
   const web3 = useWalletStore.getState().web3 as any
-  web3.currentProvider.off('networkChanged', handleWeb3Change)
-  web3.currentProvider.off('accountsChanged', handleWeb3Change)
+
+  if (web3.currentProvider.off !== undefined) {
+    web3.currentProvider.off('networkChanged', handleWeb3Change)
+    web3.currentProvider.off('accountsChanged', handleWeb3Change)
+  }
 
   await setWeb3(web3, localStorage.getItem('WALLET_TYPE'))
 }
