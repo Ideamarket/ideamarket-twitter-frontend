@@ -17,20 +17,20 @@ export default function WatchingStar({ token }: { token: IdeaToken }) {
   if (watching) {
     return (
       <button
-        className="flex justify-center items-center w-30 h-12 text-base font-medium bg-white hover:bg-brand-blue hover:text-white border-2 rounded-lg border-brand-blue text-brand-blue tracking-tightest-2 font-sf-compact-medium text-center"
+        className="flex items-center justify-center h-12 text-base font-medium text-center text-white border-2 rounded-lg w-30 bg-brand-blue border-brand-blue tracking-tightest-2 font-sf-compact-medium"
         onClick={onClick}
       >
-        <StarOn className="w-5 cursor-pointer fill-current text-brand-blue  font-semibold text-base mr-2" />
+        <StarOn className="w-5 mr-2 text-base font-semibold cursor-pointer fill-current text-brand-blue" />
         Watch
       </button>
     )
   } else {
     return (
       <button
-        className="flex justify-center hover:bg-brand-blue hover:text-white items-center w-30 h-12 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue tracking-tightest-2 font-sf-compact-medium text-center"
+        className="flex items-center justify-center h-12 text-base font-medium text-center bg-white border-2 rounded-lg hover:bg-brand-blue hover:text-white w-30 border-brand-blue text-brand-blue tracking-tightest-2 font-sf-compact-medium"
         onClick={onClick}
       >
-        <Star className="w-5 cursor-pointer fill-current font-semibold text-base mr-2" />
+        <Star className="w-5 mr-2 text-base font-semibold cursor-pointer fill-current" />
         Watch
       </button>
     )

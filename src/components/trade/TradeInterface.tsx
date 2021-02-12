@@ -179,7 +179,7 @@ export default function TradeInterface({
       </div>
       <div className="ml-2.5">
         <div>{entry.token.symbol}</div>
-        <div className="text-xs text-brand-new-dark font-semibold">
+        <div className="text-xs font-semibold text-brand-new-dark">
           {entry.token.name}
         </div>
       </div>
@@ -287,12 +287,12 @@ export default function TradeInterface({
       )}
       <div className="mx-auto" style={{ maxWidth: 550 }}>
         <div style={bgcolor ? { backgroundColor: bgcolor } : {}}>
-          <p className="mx-5 mt-5 mb-2 text-sm text-brand-new-dark font-semibold">
+          <p className="mx-5 mt-5 mb-2 text-sm font-semibold text-brand-new-dark">
             {tradeType === 'buy' ? 'Pay with' : 'Receive'}
           </p>
           <div className="mx-5">
             <Select
-              className="border-2 border-gray-200 text-brand-gray-4 rounded-md trade-select"
+              className="border-2 border-gray-200 rounded-md text-brand-gray-4 trade-select"
               isClearable={false}
               isSearchable={false}
               isDisabled={txManager.isPending || disabled}
@@ -320,7 +320,7 @@ export default function TradeInterface({
             />
           </div>
           <div className="flex flex-row justify-between mx-5 mt-5">
-            <p className="text-sm text-brand-new-dark font-semibold mb-2">
+            <p className="mb-2 text-sm font-semibold text-brand-new-dark">
               {tradeType === 'buy'
                 ? 'Amount of tokens to buy'
                 : 'Amount of tokens to sell'}
@@ -341,7 +341,7 @@ export default function TradeInterface({
           </div>
           <div className="flex items-center mx-5">
             <input
-              className="flex-grow w-full px-4 py-2 border-2 border-gray-200 text-brand-gray-2 rounded-md focus:outline-none focus:bg-white focus:border-brand-blue"
+              className="flex-grow w-full px-4 py-2 border-2 border-gray-200 rounded-md text-brand-gray-2 focus:outline-none focus:bg-white focus:border-brand-blue"
               type="number"
               min="0"
               value={ideaTokenAmount}
@@ -365,7 +365,7 @@ export default function TradeInterface({
           </div>
 
           <div className="flex flex-row justify-between mx-5 mt-5">
-            <p className="text-sm text-brand-new-dark font-semibold mb-2">
+            <p className="mb-2 text-sm font-semibold text-brand-new-dark">
               {tradeType === 'buy' ? 'You will pay' : 'You will receive'}
             </p>
             <p
@@ -391,7 +391,7 @@ export default function TradeInterface({
             />
           </div>
 
-          <div className="flex flex-col flex-col-reverse md:flex-row justify-between mx-5 mt-5 text-sm text-brand-gray-2 font-semibold">
+          <div className="flex flex-col flex-col-reverse justify-between mx-5 mt-5 text-sm font-semibold md:flex-row text-brand-gray-2">
             <div className="flex items-center">
               Trading fee:{' '}
               {market && market.platformFeeRate && market.tradingFeeRate
@@ -402,9 +402,9 @@ export default function TradeInterface({
                 : '-'}
               %
             </div>
-            <div className="flex-1 md:ml-8 mb-3 md:mb-0 text-base text-brand-gray-2">
+            <div className="flex-1 mb-3 text-base md:ml-8 md:mb-0 text-brand-gray-2">
               <Select
-                className="border-2 border-gray-200 text-brand-gray-2 rounded-md trade-select"
+                className="border-2 border-gray-200 rounded-md text-brand-gray-2 trade-select"
                 isClearable={false}
                 isSearchable={false}
                 isDisabled={txManager.isPending || disabled}
@@ -506,10 +506,8 @@ export default function TradeInterface({
                       exceedsBalance ||
                       !parseFloat(ideaTokenAmount) ||
                       parseFloat(ideaTokenAmount) <= 0.0
-                      ? 'text-brand-blue font-semibold cursor-default border-brand-blue text-brand-blue'
-                      : tradeType === 'buy'
-                      ? 'border-brand-green text-brand-green hover:bg-brand-green hover:text-white'
-                      : 'border-brand-red text-brand-red hover:bg-brand-red hover:text-white'
+                      ? 'text-brand-gray-2 font-semibold cursor-default border-brand-gray-2'
+                      : 'border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white'
                   )}
                   disabled={
                     txManager.isPending ||

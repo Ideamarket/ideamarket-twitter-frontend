@@ -17,6 +17,7 @@ module.exports = {
         'very-dark-blue-2': 'hsl(235, 42%, 10%)',
         'very-dark-blue-3': 'hsl(235, 42%, 5%)',
         'brand-green': '#329300',
+        'brand-neon-green': '#5de200',
         'brand-red': '#8f0033',
         'brand-alto': '#d8d8d8',
         'brand-new-blue': '#074ef0',

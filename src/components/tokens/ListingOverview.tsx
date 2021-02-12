@@ -32,13 +32,10 @@ function DetailsOverChartEntry({
 }) {
   return (
     <div className={classNames('text-center p-2 pt-6 md:pt-2', customClasses)}>
-      <div className="text-base font-medium text-brand-gray text-opacity-60 mb-1">
+      <div className="mb-1 text-base font-medium text-brand-gray text-opacity-60">
         {header}
       </div>
-      <div
-        className="text-base font-medium text-2xl uppercase"
-        title={contentTitle}
-      >
+      <div className="text-2xl font-medium uppercase" title={contentTitle}>
         {children}
       </div>
     </div>
@@ -73,7 +70,7 @@ export default function TokenCard({
   return (
     <>
       <div className="flex flex-none mt-7">
-        <div className="mr-5 w-20 h-20">
+        <div className="w-20 h-20 mr-5">
           {loading ? (
             <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
           ) : (
@@ -121,7 +118,7 @@ export default function TokenCard({
         </div>
       </div>
       <div>
-        <div className="grid grid-cols-3 md:grid-cols-6 p-1 mb-1">
+        <div className="grid grid-cols-3 p-1 mb-1 md:grid-cols-6">
           <DetailsOverChartEntry header="Price" contentTitle={'$' + tokenPrice}>
             {isLoading ? (
               <DetailsSkeleton />
@@ -187,7 +184,7 @@ export default function TokenCard({
               <div
                 className={
                   parseFloat(token.dayChange) >= 0.0
-                    ? 'text-brand-green'
+                    ? 'text-brand-neon-green'
                     : 'text-brand-red'
                 }
               >

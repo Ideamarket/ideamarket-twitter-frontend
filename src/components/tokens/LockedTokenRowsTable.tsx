@@ -19,10 +19,6 @@ export default function LockedTokenTable({
 
   const [page, setPage] = useState(0)
 
-  const [currentHeader, setCurrentHeader] = useState('lockedUntil')
-  const [orderBy, setOrderBy] = useState('lockedUntil')
-  const [orderDirection, setOrderDirection] = useState('asc')
-
   const { data: lockedTokens, isLoading: isLockedTokensLoading } = useQuery(
     [
       'locked-tokens',
@@ -30,8 +26,8 @@ export default function LockedTokenTable({
       owner,
       page * TOKENS_PER_PAGE,
       TOKENS_PER_PAGE,
-      orderBy,
-      orderDirection,
+      'lockedUntil',
+      'asc',
     ],
     queryLockedAmounts
   )
@@ -48,7 +44,7 @@ export default function LockedTokenTable({
             {lockedTokens.map((lockedAmount, i) => (
               <div
                 key={lockedAmount.lockedUntil}
-                className="flex flex-col md:flex-row text-brand-new-dark font-semibold text-base justify-between p-5 rounded-md"
+                className="flex flex-col justify-between p-5 text-base font-semibold rounded-md md:flex-row text-brand-new-dark"
                 style={{ backgroundColor: '#f9fbfd' }}
               >
                 <div>
@@ -68,10 +64,12 @@ export default function LockedTokenTable({
           </>
         )}
       </div>
-      {lockedTokens?.length ? (
+      {isLockedTokensLoading ? (
+        <></>
+      ) : page > 0 || lockedTokens.length > 0 ? (
         <>
           <div
-            className="flex flex-row absolute"
+            className="absolute flex flex-row"
             style={{ top: -38, right: 0 }}
           >
             <button
@@ -108,10 +106,12 @@ export default function LockedTokenTable({
             </button>
           </div>
         </>
-      ) : (
-        <div className="text-center font-semibold text-brand-gray-2 text-lg">
+      ) : page === 0 ? (
+        <div className="text-lg font-semibold text-center text-brand-gray-2">
           No Locked Tokens
         </div>
+      ) : (
+        <></>
       )}
     </div>
   )
