@@ -304,6 +304,7 @@ export default function ListTokenModal({
               onTradeSuccessful={() => {}}
               onValuesChanged={onTradeInterfaceValuesChanged}
               resetOn={false}
+              centerTypeSelection={false}
               showTypeSelection={false}
               showTradeButton={false}
               disabled={txManager.isPending}

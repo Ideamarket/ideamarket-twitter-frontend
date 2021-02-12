@@ -695,6 +695,7 @@ export default function TokenDetails() {
                 onTradeSuccessful={() => {}}
                 onValuesChanged={() => {}}
                 resetOn={false}
+                centerTypeSelection={false}
                 showTypeSelection={true}
                 showTradeButton={true}
                 disabled={false}

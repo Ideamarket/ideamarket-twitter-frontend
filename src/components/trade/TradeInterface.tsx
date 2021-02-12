@@ -29,6 +29,7 @@ export default function TradeInterface({
   onTradeSuccessful,
   onValuesChanged,
   resetOn,
+  centerTypeSelection,
   showTypeSelection,
   showTradeButton,
   disabled,
@@ -46,6 +47,7 @@ export default function TradeInterface({
     isValid: boolean
   ) => void
   resetOn: boolean
+  centerTypeSelection: boolean
   showTypeSelection: boolean
   showTradeButton: boolean
   disabled: boolean
@@ -262,7 +264,8 @@ export default function TradeInterface({
               if (!txManager.isPending) setTradeType('buy')
             }}
             className={classNames(
-              'text-base cursor-pointer pb-4 px-3 m-1 font-semibold',
+              'text-base cursor-pointer pb-2 m-1 font-semibold',
+              centerTypeSelection ? 'flex-grow text-center' : 'px-3',
               tradeType === 'buy'
                 ? 'text-brand-new-dark border-brand-new-dark border-b-2'
                 : 'text-brand-new-dark font-semibold border-transparent'
@@ -275,7 +278,8 @@ export default function TradeInterface({
               if (!txManager.isPending) setTradeType('sell')
             }}
             className={classNames(
-              'text-base cursor-pointer pb-4 px-3 m-1 font-semibold',
+              'text-base cursor-pointer pb-2 m-1 font-semibold',
+              centerTypeSelection ? 'flex-grow text-center' : 'px-3',
               tradeType === 'sell'
                 ? 'text-brand-new-dark border-brand-new-dark border-b-2'
                 : 'text-brand-new-dark font-semibold border-transparent'

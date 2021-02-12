@@ -27,16 +27,19 @@ export default function TradeModal({
           Trade: {ideaToken.name}
         </p>
       </div>
-      <TradeInterface
-        ideaToken={ideaToken}
-        market={market}
-        onTradeSuccessful={onTradeSuccessful}
-        onValuesChanged={() => {}}
-        resetOn={isOpen}
-        showTypeSelection={true}
-        showTradeButton={true}
-        disabled={false}
-      />
+      <div className="pt-2">
+        <TradeInterface
+          ideaToken={ideaToken}
+          market={market}
+          onTradeSuccessful={onTradeSuccessful}
+          onValuesChanged={() => {}}
+          resetOn={isOpen}
+          centerTypeSelection={true}
+          showTypeSelection={true}
+          showTradeButton={true}
+          disabled={false}
+        />
+      </div>
     </Modal>
   )
 }
