@@ -143,7 +143,7 @@ export default function Home() {
           >
             <div className="flex flex-row items-center justify-center">
               <Plus width="30" height="30" />
-              <div className="ml-2">Add Listing</div>
+              <div className="ml-0.5 md:ml-2">Add Listing</div>
             </div>
           </button>
 
@@ -165,7 +165,9 @@ export default function Home() {
                 height="30"
                 stroke={isHoveringWatchVideo ? '#000000' : '#ffffff'}
               />
-              <div className="ml-2">Watch Video</div>
+              <div className="ml-0.5 md:ml-2">
+                Watch <div className="hidden md:display">Video</div>
+              </div>
             </div>
           </button>
         </div>
