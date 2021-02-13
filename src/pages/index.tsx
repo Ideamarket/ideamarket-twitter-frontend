@@ -111,7 +111,7 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden bg-brand-gray">
-      <div className="w-screen px-6 pt-12 md:pt-10 pb-5 text-center text-white bg-top-mobile md:bg-top-desktop h-156.5 md:h-140">
+      <div className="w-screen px-6 pt-12 md:pt-10 text-center text-white bg-top-mobile md:bg-top-desktop pb-40">
         <div>
           <div className="flex items-center justify-center space-x-12">
             <div className="w-20 md:w-36">
@@ -126,7 +126,7 @@ export default function Home() {
               <img src="/qs.png" alt="" />
             </div>
           </div>
-          <h2 className="mt-8 md:mt-18 text-3xl md:text-6+xl font-gilroy-bold">
+          <h2 className="mt-8 md:mt-18 text-3xl md:text-6xl font-gilroy-bold">
             The common knowledge{' '}
             <span className="text-brand-blue">exchange</span>
           </h2>
@@ -175,7 +175,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-60 md:-translate-y-28 font-sf-compact-medium">
+      <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-28 font-sf-compact-medium">
         <div className="grid grid-cols-2 md:grid-cols-5">
           <div
             className={classNames(
