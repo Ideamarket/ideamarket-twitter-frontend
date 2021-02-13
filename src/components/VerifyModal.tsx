@@ -181,9 +181,8 @@ export default function VerifyModal({
           {page === PAGES.OWNER_ADDRESS && (
             <>
               <p className="text-sm">
-                If this listing represents your account you have the possibility
-                to verify ownership of this listing. Ownership will allow you to
-                withdraw the accumulated interest at any time.
+                Verify ownership of this listing to withdraw the accumulated
+                interest at any time.
               </p>
               <br />
               <p>{marketVerificationExplanation}</p>
@@ -294,15 +293,17 @@ export default function VerifyModal({
                 <strong>Verification fee</strong>
               </div>
               <p className="mt-5">
-                Your identity has been successfully verified and a verification
-                transaction can be submitted to the blockchain. To cover the
-                transaction cost for this transaction please use the button
-                below to transfer{' '}
-                <i>{web3BNToFloatString(new BN(weiFee), tenPow18, 5)} ETH</i> to
-                the authorization service.
+                Ownership verified!
                 <br />
-                This is a one-time payment which will authorize you to withdraw
-                interest for this token indefinitely.
+                <br />A one-time payment of{' '}
+                <i>{web3BNToFloatString(new BN(weiFee), tenPow18, 5)} ETH</i> is
+                required to cover the Ethereum network fee for transferring
+                listing ownership to you.
+                <br />
+                <br />
+                After payment, you will be permanently able to withdraw your
+                interest from this wallet at any time.
+                <br />
               </p>
               <div className="flex justify-center">
                 <button

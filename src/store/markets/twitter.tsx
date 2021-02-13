@@ -68,7 +68,7 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
   }
 
   getVerificationExplanation(): string {
-    return 'Upon initiation of the verification process you will be given a verification code. This code will be used to verify that you have access to the listed account by asking you to post a Tweet containing said code from the corresponding Twitter account.'
+    return 'To verify, you will be asked to post a Tweet from this Twitter account containing a verification code.'
   }
 
   getVerificationSHAPrompt(sha: string): string {
@@ -76,7 +76,7 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
   }
 
   getVerificationSHAPromptExplanation(): string {
-    return `This is your verification code. Please post a Tweet with the below content. After you posted the Tweet, click Next.`
+    return 'Please post a Tweet containing the content in the box below. After you have posted the Tweet, click Next. (Note: This must be a new Tweet — a reply to another Tweet will not work properly.)'
   }
 
   getVerificationConfirmCheckboxLabel(): string {

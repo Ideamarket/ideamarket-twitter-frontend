@@ -536,9 +536,8 @@ export default function TokenDetails() {
               <>
                 <div className="font-medium text-brand-gray-2">
                   <div className="text-xs">
-                    If you own the account represented by this token, verify
-                    access to the account to enable withdrawal of the
-                    accumulated interest.
+                    Verify ownership of this {market ? market.name : ''} account
+                    to withdraw accumulated interest.
                   </div>
                 </div>
                 <div className="mt-3 mb-2 text-sm md:mb-5 text-brand-blue">
@@ -571,7 +570,7 @@ export default function TokenDetails() {
                         )}...${token.tokenOwner.slice(
                           -6
                         )}. This address does not match the wallet you have connected. If you are the owner of this listing please connect the correct wallet to be able to withdraw interest.`
-                      : 'Your connected wallet the owner of this listing. You are able to withdraw the accumulated interest below.'}
+                      : 'Your connected wallet owns this listing.'}
                   </div>
                 </div>
                 <div className="mt-2.5 text-sm text-brand-blue">
