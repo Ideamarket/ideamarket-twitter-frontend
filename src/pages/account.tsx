@@ -11,12 +11,8 @@ import { GlobalContext } from 'pages/_app'
 import { formatNumber } from 'utils'
 
 export default function MyTokens() {
-  const address = useWalletStore((state) => state.address)
+  const web3 = useWalletStore((state) => state.web3)
   const { setIsWalletModalOpen } = useContext(GlobalContext)
-
-  useEffect(() => {
-    !address && setIsWalletModalOpen(true)
-  }, [])
 
   const [ownedTokensTablePage, setOwnedTokensTablePage] = useState(0)
   const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] = useState(
@@ -35,22 +31,21 @@ export default function MyTokens() {
       <div className="px-4 md:px-6 pt-8 md:pt-6 pb-5 text-white bg-top-mobile md:bg-top-desktop h-64 md:h-96">
         <div className="mx-auto md:px-4 max-w-88 md:max-w-304">
           <div className="flex justify-between">
-            <div className="text-2xl mb-10 font-semibold">My Tokens</div>
+            <div className="text-2xl font-semibold flex flex-col justify-end mb-2.5">
+              My Account
+            </div>
             <div className=" text-center">
               <div className="text-sm font-semibold text-brand-gray text-opacity-60">
                 Total Value
               </div>
               <div
-                className="text-2xl mb-10 font-semibold uppercase"
+                className="text-2xl mb-2.5 font-semibold uppercase"
                 title={'$' + ownedTokenTotalValue}
               >
                 ${formatNumber(ownedTokenTotalValue)}
               </div>
             </div>
           </div>
-          {/* <div className="text-sm font-semibold mb-10">
-            Holding: 14 tokens | Listing: 1 token
-          </div> */}
           <div className="pt-2 bg-white border rounded-md border-brand-border-gray">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mx-5">
               <div>
@@ -110,7 +105,19 @@ export default function MyTokens() {
               </div>
             </div>
             <div className="border-t border-brand-border-gray shadow-home ">
-              {table === 'holdings' && (
+              {!web3 && (
+                <div className="flex items-center justify-center">
+                  <button
+                    onClick={() => {
+                      setIsWalletModalOpen(true)
+                    }}
+                    className="my-40 p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
+                  >
+                    Connect Wallet to View
+                  </button>
+                </div>
+              )}
+              {table === 'holdings' && web3 !== undefined && (
                 <OwnedTokenTable
                   market={selectedMarketOwnedTokens}
                   currentPage={ownedTokensTablePage}
@@ -118,7 +125,7 @@ export default function MyTokens() {
                   setTotalValue={setOwnedTokensTotalValue}
                 />
               )}
-              {table === 'listings' && (
+              {table === 'listings' && web3 !== undefined && (
                 <MyTokenTable
                   currentPage={myTokensTablePage}
                   setCurrentPage={setMyTokensTablePage}
