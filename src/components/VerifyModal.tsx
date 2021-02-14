@@ -36,15 +36,16 @@ export default function VerifyModal({
   token: IdeaToken
 }) {
   const PAGES = {
-    OWNER_ADDRESS: 0,
-    SHOW_SHA: 1,
-    SHOW_FEE_TX: 2,
-    AWAIT_FEE_TX: 3,
-    SUCCESS: 4,
-    ERROR: 5,
+    TOS: 0,
+    OWNER_ADDRESS: 1,
+    SHOW_SHA: 2,
+    SHOW_FEE_TX: 3,
+    AWAIT_FEE_TX: 4,
+    SUCCESS: 5,
+    ERROR: 6,
   }
 
-  const [page, setPage] = useState(PAGES.OWNER_ADDRESS)
+  const [page, setPage] = useState(PAGES.TOS)
 
   const connectedAddress = useWalletStore((state) => state.address)
   const [ownerAddress, setOwnerAddress] = useState('')
@@ -66,6 +67,7 @@ export default function VerifyModal({
   const shaPrompt = marketSpecifics.getVerificationSHAPrompt(sha)
   const confirmCheckboxText = marketSpecifics.getVerificationConfirmCheckboxLabel()
 
+  const [tosCheckboxChecked, setTOSCheckboxChecked] = useState(false)
   const [confirmCheckboxChecked, setConfirmCheckboxChecked] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -155,9 +157,10 @@ export default function VerifyModal({
 
   useEffect(() => {
     if (!isOpen) {
-      setPage(PAGES.OWNER_ADDRESS)
+      setPage(PAGES.TOS)
       setOwnerAddress('')
       setUUID('')
+      setTOSCheckboxChecked(false)
       setConfirmCheckboxChecked(false)
       setTx('')
       setIsLoading(false)
@@ -178,6 +181,94 @@ export default function VerifyModal({
           </p>
         </div>
         <div className="p-5 text-brand-gray-2">
+          {page === PAGES.TOS && (
+            <>
+              <p className="mt-5 text-xl text-center font-bold">
+                Terms of Service
+              </p>
+              <div className="max-h-96 w-full overflow-y-auto mt-5">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                diam nonumy eirmod tempor invidunt ut labore et dolore magna
+                aliquyam erat, sed diam voluptua. At vero eos et accusam et
+                justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
+                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
+                eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+                sed diam voluptua. At vero eos et accusam et justo duo dolores
+                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+                est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+                consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                invidunt ut labore et dolore magna aliquyam erat, sed diam
+                voluptua. At vero eos et accusam et justo duo dolores et ea
+                rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in
+                hendrerit in vulputate velit esse molestie consequat, vel illum
+                dolore eu feugiat nulla facilisis at vero eros et accumsan et
+                iusto odio dignissim qui blandit praesent luptatum zzril delenit
+                augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor
+                sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
+                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Ut wisi enim ad minim veniam, quis nostrud exerci tation
+                ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
+                consequat. Duis autem vel eum iriure dolor in hendrerit in
+                vulputate velit esse molestie consequat, vel illum dolore eu
+                feugiat nulla facilisis at vero eros et accumsan et iusto odio
+                dignissim qui blandit praesent luptatum zzril delenit augue duis
+                dolore te feugait nulla facilisi. Nam liber tempor cum soluta
+                nobis eleifend option congue nihil imperdiet doming id quod
+                mazim placerat facer possim assum. Lorem ipsum dolor sit amet,
+                consectetuer adipiscing elit, sed diam nonummy nibh euismod
+                tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi
+                enim ad minim veniam, quis nostrud exerci tation ullamcorper
+                suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis
+                autem vel eum iriure dolor in hendrerit in vulputate velit esse
+                molestie consequat, vel illum dolore eu feugiat nulla facilisis.
+                At vero eos et accusam et justo duo dolores et ea rebum. Stet
+                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
+                dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+                sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+                labore et dolore magna aliquyam erat, sed diam voluptua. At vero
+                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+                amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+                At accusam aliquyam diam diam dolore dolores duo eirmod eos
+                erat, et nonumy sed tempor et et invidunt justo labore Stet
+                clita ea et gubergren, kasd magna no rebum. sanctus sea sed
+                takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem
+                ipsum dolor sit amet, consetetur
+              </div>
+              <div className="flex items-center justify-center mt-5">
+                <input
+                  type="checkbox"
+                  id="tosCheckbox"
+                  className="cursor-pointer"
+                  checked={tosCheckboxChecked}
+                  onChange={(e) => {
+                    setTOSCheckboxChecked(e.target.checked)
+                  }}
+                />
+                <label htmlFor="tosCheckbox" className="ml-2 cursor-pointer">
+                  I have read and agree to the above
+                </label>
+              </div>
+              <div className="flex justify-center">
+                <button
+                  disabled={!tosCheckboxChecked}
+                  className={classNames(
+                    'mt-5 w-32 h-10 text-base border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
+                    tosCheckboxChecked
+                      ? 'bg-brand-blue text-white border-brand-blue'
+                      : 'bg-white border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
+                  )}
+                  onClick={() => {
+                    setPage(PAGES.OWNER_ADDRESS)
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            </>
+          )}
           {page === PAGES.OWNER_ADDRESS && (
             <>
               <p className="text-sm">
