@@ -438,7 +438,7 @@ export default function TradeInterface({
         >
           <input
             type="checkbox"
-            className="border-2 border-gray-200 rounded-sm"
+            className="border-2 border-gray-200 rounded-sm cursor-pointer"
             id="lockCheckbox"
             disabled={txManager.isPending || disabled}
             checked={isLockChecked}
@@ -449,7 +449,7 @@ export default function TradeInterface({
           <label
             htmlFor="lockCheckbox"
             className={classNames(
-              'ml-2',
+              'ml-2 cursor-pointer',
               isLockChecked
                 ? 'text-brand-blue font-medium'
                 : 'text-brand-new-dark font-semibold'
