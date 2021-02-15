@@ -187,55 +187,62 @@ export default function VerifyModal({
                 Terms of Service
               </p>
               <div className="max-h-96 w-full overflow-y-auto mt-5">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-                takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum
-                dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-                eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-                sed diam voluptua. At vero eos et accusam et justo duo dolores
-                et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
-                est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                invidunt ut labore et dolore magna aliquyam erat, sed diam
-                voluptua. At vero eos et accusam et justo duo dolores et ea
-                rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-                Lorem ipsum dolor sit amet. Duis autem vel eum iriure dolor in
-                hendrerit in vulputate velit esse molestie consequat, vel illum
-                dolore eu feugiat nulla facilisis at vero eros et accumsan et
-                iusto odio dignissim qui blandit praesent luptatum zzril delenit
-                augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor
-                sit amet, consectetuer adipiscing elit, sed diam nonummy nibh
-                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                Ut wisi enim ad minim veniam, quis nostrud exerci tation
-                ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-                consequat. Duis autem vel eum iriure dolor in hendrerit in
-                vulputate velit esse molestie consequat, vel illum dolore eu
-                feugiat nulla facilisis at vero eros et accumsan et iusto odio
-                dignissim qui blandit praesent luptatum zzril delenit augue duis
-                dolore te feugait nulla facilisi. Nam liber tempor cum soluta
-                nobis eleifend option congue nihil imperdiet doming id quod
-                mazim placerat facer possim assum. Lorem ipsum dolor sit amet,
-                consectetuer adipiscing elit, sed diam nonummy nibh euismod
-                tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi
-                enim ad minim veniam, quis nostrud exerci tation ullamcorper
-                suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis
-                autem vel eum iriure dolor in hendrerit in vulputate velit esse
-                molestie consequat, vel illum dolore eu feugiat nulla facilisis.
-                At vero eos et accusam et justo duo dolores et ea rebum. Stet
-                clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-                dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-                sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
-                labore et dolore magna aliquyam erat, sed diam voluptua. At vero
-                eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-                gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-                amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                At accusam aliquyam diam diam dolore dolores duo eirmod eos
-                erat, et nonumy sed tempor et et invidunt justo labore Stet
-                clita ea et gubergren, kasd magna no rebum. sanctus sea sed
-                takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem
-                ipsum dolor sit amet, consetetur
+                By using Ideamarket, you are agreeing to become bound by and
+                comply with the{' '}
+                <a
+                  href="https://docs.ideamarket.io/legal/terms-of-service"
+                  className="underline"
+                  target="_blank"
+                >
+                  Ideamarket Terms and Conditions
+                </a>
+                , as they may be updated from time to time in the sole
+                discretion of Idea Markets, Inc. Among other things, the Terms
+                and Conditions provide that, in order to use Ideamarket: <br />
+                <br />
+                <ul>
+                  <li>
+                    - you must be an adult of sound mind and the ability to
+                    understand and evaluate the risks of using Ideamarket;{' '}
+                  </li>
+                  <li>
+                    - your use of Ideamarket must comply with all applicable
+                    laws, rules and regulations;{' '}
+                  </li>
+                  <li>
+                    - you must not subject to national or international
+                    sanctions or located or ordinarily resident in Cuba, Iran,
+                    North Korea, Sudan, Syria, the Crimea region or any other
+                    country or jurisdiction against which the U.S. maintains
+                    economic sanctions;{' '}
+                  </li>
+                  <li>
+                    - you use Ideamarket solely for its intended purposes of
+                    providing support signals for accounts on supported
+                    third-party social media platforms, and must not use
+                    Ideamarket to conduct any ICO or securities offering or
+                    other regulated financial activity; and
+                  </li>
+                  <li>
+                    - will not hold Idea Markets, Inc. or its representatives or
+                    affiliates liable for any damages you suffer in connection
+                    with your use of Ideamarket.{' '}
+                  </li>
+                </ul>
+                <br />
+                <br />
+                The above is only a partial summary of the Ideamarket Terms and
+                Conditions. You should read the{' '}
+                <a
+                  href="https://docs.ideamarket.io/legal/terms-of-service"
+                  className="underline"
+                  target="_blank"
+                >
+                  Terms and Conditions
+                </a>{' '}
+                in their entirety. In the event of any conflict or consistency
+                between this summary and the Terms and Conditions, the Terms and
+                Conditions will prevail.
               </div>
               <div className="flex items-center justify-center mt-5">
                 <input
@@ -264,7 +271,7 @@ export default function VerifyModal({
                     setPage(PAGES.OWNER_ADDRESS)
                   }}
                 >
-                  Next
+                  I understand
                 </button>
               </div>
             </>
