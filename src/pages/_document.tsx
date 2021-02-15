@@ -14,7 +14,7 @@ class MyDocument extends Document {
 
   static GA_TRACKING_ID =
     process.env.NEXT_PUBLIC_NETWORK === 'mainnet'
-      ? 'UA-185970351-2'
+      ? 'UA-185970351-3'
       : 'UA-185970351-2'
 
   static pageview = (url) => {
