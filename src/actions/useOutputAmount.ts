@@ -152,7 +152,7 @@ export default function useOutputAmount(
 
       const bn = await fn
       if (!isCancelled) {
-        const pow = new BigNumber('10').pow(new BigNumber('18'))
+        const pow = new BigNumber('10').pow(new BigNumber(decimals))
         setOutputBN(bn)
         setOutput(web3BNToFloatString(bn, pow, 4))
         setIsLoading(false)
