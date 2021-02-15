@@ -14,7 +14,7 @@ export default function Footer() {
             Contact
           </a>
         </Link>
-        <Link href="https://docs.ideamarket.io">
+        <Link href="https://docs.ideamarket.io/legal/terms-of-service">
           <a className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
             Legal &amp; Privacy
           </a>
