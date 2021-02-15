@@ -53,23 +53,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     _setIsEmailNewsletterModalOpen(b)
   }
 
-  useEffect(() => {
-    const emailNewsletterModalWasOpened = localStorage.getItem(
-      'EMAIL_NEWSLETTER_WAS_SEEN'
-    )
-
-    if (!emailNewsletterModalWasOpened) {
-      setTimeout(() => {
-        const emailNewsletterModalWasOpened = localStorage.getItem(
-          'EMAIL_NEWSLETTER_WAS_SEEN'
-        )
-        if (!emailNewsletterModalWasOpened) {
-          setIsEmailNewsletterModalOpen(true)
-        }
-      }, 30000)
-    }
-  }, [])
-
   return (
     <GlobalContext.Provider
       value={{
