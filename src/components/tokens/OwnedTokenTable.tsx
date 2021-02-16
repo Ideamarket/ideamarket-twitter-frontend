@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
+import BN from 'bn.js'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import {
@@ -11,7 +12,8 @@ import { useWalletStore } from 'store/walletStore'
 import {
   calculateCurrentPriceBN,
   web3BNToFloatString,
-  useWindowSize,
+  calculateIdeaTokenDaiValue,
+  bigNumberTenPow18,
 } from 'utils'
 import OwnedTokenRow from './OwnedTokenRow'
 import OwnedTokenRowSkeleton from './OwnedTokenRowSkeleton'
@@ -68,8 +70,6 @@ export default function OwnedTokenTable({
   setCurrentPage: (p: number) => void
   setTotalValue: (v: string) => void
 }) {
-  const windowSize = useWindowSize()
-  // const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
   const TOKENS_PER_PAGE = 6
 
   const address = useWalletStore((state) => state.address)
@@ -181,23 +181,13 @@ export default function OwnedTokenTable({
     setPairs(sliced)
 
     // Calculate the total value
-    let total = 0.0
+    let total = new BN('0')
     for (const pair of rawPairs) {
-      total +=
-        parseFloat(
-          web3BNToFloatString(
-            calculateCurrentPriceBN(
-              pair.token.rawSupply,
-              pair.market.rawBaseCost,
-              pair.market.rawPriceRise,
-              pair.market.rawHatchTokens
-            ),
-            tenPow18,
-            2
-          )
-        ) * parseFloat(pair.balance)
+      total = total.add(
+        calculateIdeaTokenDaiValue(pair.token, pair.market, pair.rawBalance)
+      )
     }
-    setTotalValue(total.toFixed(2))
+    setTotalValue(web3BNToFloatString(total, bigNumberTenPow18, 18))
   }, [rawPairs, orderBy, orderDirection, currentPage, TOKENS_PER_PAGE])
 
   function headerClicked(headerValue: string) {

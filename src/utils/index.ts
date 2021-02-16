@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 import { useState, useEffect } from 'react'
 import numeral from 'numeral'
-import { IdeaMarket } from 'store/ideaMarketsStore'
+import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
 
 export { default as TransactionManager } from './TransactionManager'
 export { default as useTransactionManager } from './useTransactionManager'
@@ -158,6 +158,58 @@ export function formatNumber(number: string | number): string {
 
 export function formatNumberInt(number: string | number): string {
   return numeral(Number(number)).format('0 a')
+}
+
+export function calculateIdeaTokenDaiValue(
+  token: IdeaToken,
+  market: IdeaMarket,
+  amount: BN
+): BN {
+  if (!token || !market || !amount) {
+    return new BN('0')
+  }
+
+  const FEE_SCALE = new BN('10000')
+
+  const baseCost = market.rawBaseCost
+  const priceRise = market.rawPriceRise
+  const hatchTokens = market.rawHatchTokens
+  const supply = token.rawSupply
+
+  const tradingFeeRate = market.rawTradingFeeRate
+  const platformFeeRate = market.rawPlatformFeeRate
+
+  let hatchPrice = new BN('0')
+  let updatedAmount = amount
+  let updatedSupply = supply
+
+  if (supply.sub(amount) < hatchTokens) {
+    if (supply <= hatchTokens) {
+      return baseCost.mul(amount).div(web3TenPow18)
+    }
+
+    const tokensInHatch = hatchTokens.sub(supply.sub(amount))
+    hatchPrice = baseCost.mul(tokensInHatch).div(web3TenPow18)
+    updatedAmount = amount.sub(tokensInHatch)
+    updatedSupply = supply.sub(hatchTokens)
+  } else {
+    updatedSupply = supply.sub(hatchTokens)
+  }
+
+  const priceAtSupply = baseCost.add(
+    priceRise.mul(updatedSupply).div(web3TenPow18)
+  )
+  const priceAtSupplyMinusAmount = baseCost.add(
+    priceRise.mul(updatedSupply.sub(updatedAmount)).div(web3TenPow18)
+  )
+  const average = priceAtSupply.add(priceAtSupplyMinusAmount).div(new BN('2'))
+
+  const rawPrice = hatchPrice.add(average.mul(updatedAmount).div(web3TenPow18))
+
+  const tradingFee = rawPrice.mul(tradingFeeRate).div(FEE_SCALE)
+  const platformFee = rawPrice.mul(platformFeeRate).div(FEE_SCALE)
+
+  return rawPrice.sub(tradingFee).sub(platformFee)
 }
 
 export function calculateMaxIdeaTokensBuyable(

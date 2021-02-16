@@ -29,7 +29,6 @@ import {
 } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
 import {
-  calculateCurrentPriceBN,
   web3BNToFloatString,
   bigNumberTenPow18,
   addresses,
@@ -40,6 +39,7 @@ import {
   MONTH_SECONDS,
   YEAR_SECONDS,
   formatNumber,
+  calculateIdeaTokenDaiValue,
   useTransactionManager,
 } from 'utils'
 import { withdrawTokenInterest, useBalance, useOutputAmount } from 'actions'
@@ -120,6 +120,12 @@ export default function TokenDetails() {
   )
 
   const [isBalanceLoading, balanceBN, balance] = useBalance(token?.address, 18)
+
+  const isValueLoading = false
+  const valueBN = calculateIdeaTokenDaiValue(token, market, balanceBN)
+  const value = web3BNToFloatString(valueBN, bigNumberTenPow18, 18)
+
+  /*
   const [isValueLoading, valueBN, value] = useOutputAmount(
     token,
     market,
@@ -128,7 +134,7 @@ export default function TokenDetails() {
     18,
     'sell'
   )
-
+*/
   const [selectedChart, setSelectedChart] = useState(CHART.PRICE)
   const [selectedChartDuration, setSelectedChartDuration] = useState('1W')
 
