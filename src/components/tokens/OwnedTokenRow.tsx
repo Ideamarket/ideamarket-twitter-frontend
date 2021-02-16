@@ -1,12 +1,15 @@
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
+import BN from 'bn.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   calculateCurrentPriceBN,
+  bigNumberTenPow18,
   formatNumber,
   web3BNToFloatString,
+  calculateIdeaTokenDaiValue,
 } from 'utils'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -15,10 +18,12 @@ export default function TokenRow({
   token,
   market,
   balance,
+  balanceBN,
 }: {
   token: IdeaToken
   market: IdeaMarket
   balance: string
+  balanceBN: BN
 }) {
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
@@ -32,20 +37,11 @@ export default function TokenRow({
     tenPow18,
     2
   )
-  const balanceValue = (
-    parseFloat(
-      web3BNToFloatString(
-        calculateCurrentPriceBN(
-          token.rawSupply,
-          market.rawBaseCost,
-          market.rawPriceRise,
-          market.rawHatchTokens
-        ),
-        tenPow18,
-        2
-      )
-    ) * parseFloat(balance)
-  ).toFixed(2)
+
+  const balanceValueBN = calculateIdeaTokenDaiValue(token, market, balanceBN)
+  const balanceValue = formatNumber(
+    web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 18)
+  )
 
   return (
     <>
@@ -163,7 +159,7 @@ export default function TokenRow({
             className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + balanceValue}
           >
-            ${formatNumber(balanceValue)}
+            ${balanceValue}
           </p>
         </td>
       </tr>
