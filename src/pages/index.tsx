@@ -131,7 +131,8 @@ export default function Home() {
             <span className="text-brand-blue">exchange</span>
           </h2>
           <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
-            Make lying expensive.
+            Vote with your dollars, and give underrated voices the visibility
+            they deserve.
           </p>
         </div>
         <div className="flex justify-center mt-7">
