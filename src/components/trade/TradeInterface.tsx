@@ -34,6 +34,7 @@ export default function TradeInterface({
   showTradeButton,
   disabled,
   bgcolor,
+  unlockText,
 }: {
   ideaToken: IdeaToken
   market: IdeaMarket
@@ -54,6 +55,7 @@ export default function TradeInterface({
   showTradeButton: boolean
   disabled: boolean
   bgcolor?: string
+  unlockText?: string
 }) {
   const [tradeType, setTradeType] = useState('buy')
   const [isLockChecked, setIsLockChecked] = useState(false)
@@ -494,6 +496,7 @@ export default function TradeInterface({
           setIsUnlockOnceChecked={setIsUnlockOnceChecked}
           isUnlockPermanentChecked={isUnlockPermanentChecked}
           setIsUnlockPermanentChecked={setIsUnlockPermanentChecked}
+          unlockText={unlockText || 'for trading'}
         />
         {showTradeButton && (
           <>

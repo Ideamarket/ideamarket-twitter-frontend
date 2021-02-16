@@ -7,12 +7,14 @@ export default function AdvancedOptions({
   setIsUnlockOnceChecked,
   isUnlockPermanentChecked,
   setIsUnlockPermanentChecked,
+  unlockText,
 }: {
   disabled: boolean
   isUnlockOnceChecked: boolean
   setIsUnlockOnceChecked: (b: boolean) => void
   isUnlockPermanentChecked: boolean
   setIsUnlockPermanentChecked: (b: boolean) => void
+  unlockText: string
 }) {
   const [show, setShow] = useState(false)
 
@@ -48,7 +50,7 @@ export default function AdvancedOptions({
                 : 'text-brand-gray-2'
             )}
           >
-            Unlock once
+            Unlock once {unlockText}
           </label>
         </div>
 
@@ -73,7 +75,7 @@ export default function AdvancedOptions({
                 : 'text-brand-gray-2'
             )}
           >
-            Unlock permanent
+            Unlock permanent {unlockText}
           </label>
         </div>
       </div>
