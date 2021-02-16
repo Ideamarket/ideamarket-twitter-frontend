@@ -7,16 +7,12 @@ import BigNumber from 'bignumber.js'
 import { GlobalContext } from 'pages/_app'
 import {
   TimeXFloatYChartInLine,
-  TimeXFloatYChart,
-  WatchingStar,
   TradeInterface,
   ListingOverview,
-  TokenCard,
-  Footer,
   VerifyModal,
-  LockedTokenTable,
   CircleSpinner,
   WatchingStarButton,
+  AddToMetamaskButton,
   LockedTokenRowsTable,
 } from 'components'
 import {
@@ -44,92 +40,17 @@ import {
   MONTH_SECONDS,
   YEAR_SECONDS,
   formatNumber,
-  formatNumberInt,
   useTransactionManager,
 } from 'utils'
 import { withdrawTokenInterest, useBalance, useOutputAmount } from 'actions'
-import ArrowLeft from '../../../assets/arrow-left.svg'
 import { DateTime } from 'luxon'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
-
-function ContainerWithHeader({
-  header,
-  children,
-  customClasses = '',
-}: {
-  header: JSX.Element | string
-  children: JSX.Element
-  customClasses?: string
-}) {
-  return (
-    <div
-      className={classNames(
-        'flex flex-col overflow-hidden rounded-md bg-brand-gray',
-        customClasses
-      )}
-    >
-      <div
-        className="flex items-center flex-grow-0 py-1 pl-2.5 text-sm bg-very-dark-blue text-brand-gray"
-        style={{ borderBottom: '1px solid #cbd5e0' }}
-      >
-        {header}
-      </div>
-      <div className="flex-grow">{children}</div>
-    </div>
-  )
-}
-
-function DetailsEntry({
-  header,
-  children,
-  contentTitle,
-}: {
-  header: JSX.Element | string
-  children: JSX.Element
-  contentTitle?: string
-}) {
-  return (
-    <div
-      className="text-center rounded-sm"
-      style={{ backgroundColor: '#fafafa', border: '1px solid #cbd5e0' }}
-    >
-      <div className="text-xs text-brand-gray-2">{header}</div>
-      <div className="text-xl uppercase" title={contentTitle}>
-        {children}
-      </div>
-    </div>
-  )
-}
 
 function DetailsSkeleton() {
   return (
     <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
       <span className="invisible">A</span>
-    </div>
-  )
-}
-
-function DetailsOverChartEntry({
-  header,
-  children,
-  withBorder,
-  contentTitle,
-}: {
-  header: JSX.Element | string
-  children: JSX.Element
-  withBorder: boolean
-  contentTitle?: string
-}) {
-  return (
-    <div
-      className="text-center"
-      style={{ borderRight: withBorder && '1px solid #cbd5e0' }}
-    >
-      <div className="text-xs text-brand-gray-2">{header}</div>
-      <div className="text-base uppercase md:text-2xl" title={contentTitle}>
-        {children}
-      </div>
     </div>
   )
 }
@@ -462,7 +383,7 @@ export default function TokenDetails() {
       <div className="px-2 pt-12 pb-5 mx-auto text-white transform md:pt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
         <div className="flex flex-col md:flex-row">
           <div className="flex-1 p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
-            <div className="flex flex-col justify-between md:flex-row">
+            <div className="flex flex-col justify-between lg:flex-row">
               <div>
                 {isLoading ? (
                   <DetailsSkeleton />
@@ -510,7 +431,8 @@ export default function TokenDetails() {
                 {isLoading ? (
                   <DetailsSkeleton />
                 ) : (
-                  <div className="flex mt-5 md:mt-0">
+                  <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0">
+                    <AddToMetamaskButton token={token} />
                     <WatchingStarButton token={token} />
                   </div>
                 )}
