@@ -149,7 +149,7 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden bg-brand-gray">
-      <div className="w-screen px-6 pt-12 md:pt-10 text-center text-white bg-top-mobile md:bg-top-desktop pb-40">
+      <div className="w-screen px-6 pt-12 md:pt-10 text-center text-white bg-top-mobile md:bg-top-desktop pb-40 bg-cover">
         <div>
           <div className="flex items-center justify-center space-x-12">
             <div className="w-20 md:w-36">
@@ -212,7 +212,7 @@ export default function Home() {
             </div>
           </button>
         </div>
-        <div className="flex justify-center text-2xl font-gilroy-bold mt-10">
+        <div className="text-center text-5xl font-gilroy-bold mt-10">
           <span className="text-brand-blue">${cDaiBalanceInDai}</span>&nbsp;in
           deposits
         </div>
