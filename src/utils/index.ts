@@ -24,6 +24,10 @@ export const addresses = {
     NETWORK === 'rinkeby' || NETWORK === 'test'
       ? '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa'
       : '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+  cDai:
+    NETWORK === 'rinkeby' || NETWORK === 'test'
+      ? '0x6D7F0754FFeb405d23C51CE938289d4835bE3b14'
+      : '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643',
   weth:
     NETWORK === 'rinkeby' || NETWORK === 'test'
       ? '0xc778417E063141139Fce010982780140Aa0cD5Ab'
@@ -158,6 +162,12 @@ export function formatNumber(number: string | number): string {
 
 export function formatNumberInt(number: string | number): string {
   return numeral(Number(number)).format('0 a')
+}
+
+export function formatNumberWithCommasAsThousandsSerperator(
+  number: string | number
+): string {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
 
 export function calculateIdeaTokenDaiValue(

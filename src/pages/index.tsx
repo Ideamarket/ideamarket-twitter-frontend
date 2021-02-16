@@ -1,7 +1,19 @@
 import classNames from 'classnames'
 import { useContext, useState } from 'react'
+import { useQuery } from 'react-query'
+import { getContractAddress } from 'store/contractStore'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
+import {
+  queryCDaiBalance,
+  queryExchangeRate,
+  investmentTokenToUnderlying,
+} from 'store/compoundStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
+import {
+  web3BNToFloatString,
+  bigNumberTenPow18,
+  formatNumberWithCommasAsThousandsSerperator,
+} from 'utils'
 import {
   Table,
   TradeModal,
@@ -23,6 +35,32 @@ export default function Home() {
   const [tablePage, setTablePage] = useState(0)
   const [isHoveringWatchVideo, setIsHoveringWatchVideo] = useState(false)
   const [isPromoVideoModalOpen, setIsPromoVideoModalOpen] = useState(false)
+
+  const interestManagerAddress = getContractAddress('interestManager')
+
+  const {
+    data: compoundExchangeRate,
+    isLoading: isCompoundExchangeRateLoading,
+  } = useQuery('compound-exchange-rate', queryExchangeRate)
+
+  const {
+    data: interestManagerCDaiBalance,
+    isLoading: isInterestManagerCDaiBalance,
+  } = useQuery(
+    ['interest-manager-cdai-balance', interestManagerAddress],
+    queryCDaiBalance
+  )
+
+  const cDaiBalanceInDai = formatNumberWithCommasAsThousandsSerperator(
+    web3BNToFloatString(
+      investmentTokenToUnderlying(
+        interestManagerCDaiBalance,
+        compoundExchangeRate
+      ),
+      bigNumberTenPow18,
+      0
+    )
+  )
 
   const {
     setIsWalletModalOpen,
@@ -126,7 +164,7 @@ export default function Home() {
               <img src="/qs.png" alt="" />
             </div>
           </div>
-          <h2 className="mt-8 md:mt-18 text-3xl md:text-6xl font-gilroy-bold">
+          <h2 className="mt-8 md:mt-10 text-3xl md:text-6xl font-gilroy-bold">
             The common knowledge{' '}
             <span className="text-brand-blue">exchange</span>
           </h2>
@@ -135,7 +173,7 @@ export default function Home() {
             they deserve.
           </p>
         </div>
-        <div className="flex justify-center mt-7">
+        <div className="flex justify-center mt-10">
           <button
             onClick={() => {
               setIsPromoVideoModalOpen(true)
@@ -173,6 +211,10 @@ export default function Home() {
               <div className="ml-0.5 md:ml-2">Add Listing</div>
             </div>
           </button>
+        </div>
+        <div className="flex justify-center text-2xl font-gilroy-bold mt-10">
+          <span className="text-brand-blue">${cDaiBalanceInDai}</span>&nbsp;in
+          deposits
         </div>
       </div>
 

@@ -1,9 +1,11 @@
 import { request, gql } from 'graphql-request'
-import { web3TenPow18 } from '../utils'
+import { web3TenPow18, addresses } from '../utils'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 
 const DAI_ADDRESS = '0x6b175474e89094c44da98b954eedeac495271d0f'
+const CDAI_ADDRESS = addresses.cDai
+
 const HTTP_GRAPHQL_ENDPOINT =
   'https://subgraph.backend.ideamarket.io:8080/subgraphs/name/graphprotocol/compound-v2'
 
@@ -29,25 +31,53 @@ export async function queryExchangeRate(queryKey: string): Promise<BN> {
   )
 }
 
+export async function queryCDaiBalance(
+  queryKey: string,
+  address: string
+): Promise<BN> {
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryCDaiBalance(CDAI_ADDRESS, address)
+  )
+
+  return new BN(
+    new BigNumber(result.accountCTokens[0].cTokenBalance)
+      .multipliedBy(new BigNumber('10').exponentiatedBy(new BigNumber('8')))
+      .toFixed(0)
+  )
+}
+
 export function investmentTokenToUnderlying(
   invested: BN,
   exchangeRate: BN
 ): BN {
+  if (!invested || !exchangeRate) {
+    return new BN('0')
+  }
+
   return invested.mul(exchangeRate).div(web3TenPow18)
 }
 
-function getQuerySupplyRate(address: string) {
+function getQuerySupplyRate(asset: string) {
   return gql`{
-    markets(where:{underlyingAddress:${'"' + address + '"'}}) {
+    markets(where:{underlyingAddress:${'"' + asset.toLowerCase() + '"'}}) {
         supplyRate
     }
   }`
 }
 
-function getQueryExchangeRate(address: string) {
+function getQueryExchangeRate(asset: string) {
   return gql`{
-    markets(where:{underlyingAddress:${'"' + address + '"'}}) {
+    markets(where:{underlyingAddress:${'"' + asset.toLowerCase() + '"'}}) {
         exchangeRate
+    }
+  }`
+}
+
+function getQueryCDaiBalance(asset: string, address: string) {
+  return gql`{
+    accountCTokens(where:{id:"${asset.toLowerCase()}-${address.toLowerCase()}"}) {
+      cTokenBalance
     }
   }`
 }
