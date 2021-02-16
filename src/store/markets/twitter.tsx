@@ -72,7 +72,7 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
   }
 
   getVerificationSHAPrompt(sha: string): string {
-    return `Ideamarket Verification: ${sha}`
+    return `Verifying myself on ideamarket.io: ${sha}`
   }
 
   getVerificationSHAPromptExplanation(): string {
