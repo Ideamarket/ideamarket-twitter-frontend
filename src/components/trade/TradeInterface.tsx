@@ -44,6 +44,8 @@ export default function TradeInterface({
     tokenAmount: BN,
     slippage: number,
     lock: boolean,
+    isUnlockOnceChecked: boolean,
+    isUnlockPermanentChecked: boolean,
     isValid: boolean
   ) => void
   resetOn: boolean
@@ -170,9 +172,19 @@ export default function TradeInterface({
       tokenAmountBN,
       slippage,
       isLockChecked,
+      isUnlockOnceChecked,
+      isUnlockPermanentChecked,
       isValid
     )
-  }, [ideaTokenAmount, selectedToken, tokenAmountBN, isLockChecked, slippage])
+  }, [
+    ideaTokenAmount,
+    selectedToken,
+    tokenAmountBN,
+    isLockChecked,
+    slippage,
+    isUnlockOnceChecked,
+    isUnlockPermanentChecked,
+  ])
 
   const selectTokensFormat = (entry) => (
     <div className="flex flex-row">

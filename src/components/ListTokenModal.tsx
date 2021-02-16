@@ -46,7 +46,6 @@ export default function ListTokenModal({
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
 
-  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
     false
   )
@@ -96,6 +95,8 @@ export default function ListTokenModal({
     tokenAmount: BN,
     slippage: number,
     lock: boolean,
+    isUnlockOnceChecked: boolean,
+    isUnlockPermanentChecked: boolean,
     isValid: boolean
   ) {
     setBuyInputAmountBN(tokenAmount)
@@ -103,6 +104,7 @@ export default function ListTokenModal({
     setBuyOutputAmountBN(ideaTokenAmount)
     setBuySlippage(slippage)
     setBuyLock(lock)
+    setIsUnlockPermanentChecked(isUnlockPermanentChecked)
     setIsBuyValid(isValid)
   }
 
@@ -112,28 +114,6 @@ export default function ListTokenModal({
     ).convertUserInputToTokenName(tokenName)
 
     if (isWantBuyChecked) {
-      if (buyPayWithAddress !== addresses.ZERO) {
-        const allowance = await getTokenAllowance(
-          buyPayWithAddress,
-          multiActionContractAddress
-        )
-        if (allowance.lt(buyInputAmountBN)) {
-          try {
-            await txManager.executeTx(
-              'Unlock',
-              approveToken,
-              buyPayWithAddress,
-              multiActionContractAddress,
-              buyInputAmountBN
-            )
-          } catch (ex) {
-            console.log(ex)
-            setPage(PAGES.ERROR)
-            return
-          }
-        }
-      }
-
       try {
         await txManager.executeTx(
           'List and buy',
