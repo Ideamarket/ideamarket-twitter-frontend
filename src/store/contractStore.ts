@@ -39,21 +39,33 @@ export function clearContracts() {
   })
 }
 
-export function initContractsFromWeb3(web3: Web3) {
-  let deployedAddresses
-  let abis
+function getDeployedAddresses() {
   if (NETWORK === 'rinkeby') {
-    deployedAddresses = DeployedAddressesRinkeby
-    abis = DeployedABIsRinkeby
+    return DeployedAddressesRinkeby
   } else if (NETWORK === 'test') {
-    deployedAddresses = DeployedAddressesTest
-    abis = DeployedABIsTest
+    return DeployedAddressesTest
   } else if (NETWORK === 'mainnet') {
-    deployedAddresses = DeployedAddressesMainnet
-    abis = DeployedABIsMainnet
+    return DeployedAddressesMainnet
   } else {
-    throw 'initContractsFromWeb3: unknown network'
+    throw 'getDeployedAddresses: unknown network'
   }
+}
+
+function getDeployedABIs() {
+  if (NETWORK === 'rinkeby') {
+    return DeployedABIsRinkeby
+  } else if (NETWORK === 'test') {
+    return DeployedABIsTest
+  } else if (NETWORK === 'mainnet') {
+    return DeployedABIsMainnet
+  } else {
+    throw 'getDeployedABIs: unknown network'
+  }
+}
+
+export function initContractsFromWeb3(web3: Web3) {
+  const deployedAddresses = getDeployedAddresses()
+  const abis = getDeployedABIs()
 
   const daiContract = new web3.eth.Contract(ERC20ABI as any, addresses.dai, {
     from: web3.eth.defaultAccount,
@@ -97,6 +109,10 @@ export function getERC20Contract(address: string) {
   return new web3.eth.Contract(ERC20ABI as any, address, {
     from: web3.eth.defaultAccount,
   })
+}
+
+export function getContractAddress(name: string) {
+  return getDeployedAddresses()[name]
 }
 
 export function getUniswapPairContract(pairAddress: string) {
