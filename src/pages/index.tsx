@@ -214,7 +214,7 @@ export default function Home() {
         </div>
         <div className="text-center text-5xl font-gilroy-bold mt-10">
           <span className="text-brand-blue">${cDaiBalanceInDai}</span>&nbsp;in
-          deposits
+          trust signaled
         </div>
       </div>
 
