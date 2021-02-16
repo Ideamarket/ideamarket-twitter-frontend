@@ -247,20 +247,6 @@ export default function TokenDetails() {
     return <></>
   }
 
-  const tokenPrice =
-    token && market
-      ? web3BNToFloatString(
-          calculateCurrentPriceBN(
-            token.rawSupply,
-            market.rawBaseCost,
-            market.rawPriceRise,
-            market.rawHatchTokens
-          ),
-          tenPow18,
-          2
-        )
-      : ''
-
   return (
     <div className="min-h-screen bg-brand-gray">
       <div className="px-4 md:px-6 pt-12 md:pt-10 pb-5 text-white bg-top-mobile md:bg-top-desktop h-156.5 md:max-h-96">
@@ -380,7 +366,7 @@ export default function TokenDetails() {
         </div>
       </div>
 
-      <div className="px-2 pt-12 pb-5 mx-auto text-white transform md:pt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
+      <div className="px-2 mt-12 pb-5 mx-auto text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
         <div className="flex flex-col md:flex-row">
           <div className="flex-1 p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
             <div className="flex flex-col justify-between lg:flex-row">
