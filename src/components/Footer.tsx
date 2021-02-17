@@ -38,7 +38,7 @@ export default function Footer() {
           <BrandDefiPulse stroke="#303030" className="w-7 h-7" />
         </a>
         <p className="pl-2 text-sm leading-none text-center tracking-tightest-2 text-brand-gray-2">
-          &copy;2020 IdeaMarkets
+          &copy;2021 IdeaMarkets
         </p>
       </div>
     </div>
