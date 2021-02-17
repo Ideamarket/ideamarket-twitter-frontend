@@ -46,9 +46,11 @@ export default function buyToken(
       )
 
       // In this case, direct buy with Dai and no lock, we set the gas amount to 450k
-      contractCallOptions = {
+      /*contractCallOptions = {
         gasLimit: 450000,
-      }
+      }*/
+
+      contractCall.estimateGas(contractCallOptions)
     }
   } else {
     contractCall = multiAction.methods.convertAndBuy(
