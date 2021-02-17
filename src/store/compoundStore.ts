@@ -40,6 +40,10 @@ export async function queryCDaiBalance(
     getQueryCDaiBalance(CDAI_ADDRESS, address)
   )
 
+  if (result.accountCTokens[0] === undefined) {
+    return new BN('0')
+  }
+
   return new BN(
     new BigNumber(result.accountCTokens[0].cTokenBalance)
       .multipliedBy(new BigNumber('10').exponentiatedBy(new BigNumber('8')))
