@@ -28,8 +28,8 @@ export default function Nav() {
       isSelected: false,
     },
     {
-      name: 'Notifications',
-      value: 'notifications',
+      name: 'Newsletter',
+      value: 'newsletter',
       onClick: () => setIsEmailNewsletterModalOpen(true),
       isSelected: false,
     },
