@@ -18,8 +18,12 @@ export default function Footer() {
             Contact
           </a>
         </Link>
-        <Link href="https://docs.ideamarket.io/legal/terms-of-service">
-          <a className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
+        <Link href="">
+          <a
+            href="/TOS.pdf"
+            target="_blank"
+            className="text-sm leading-none tracking-tightest-2 text-brand-gray-2"
+          >
             Legal &amp; Privacy
           </a>
         </Link>
