@@ -77,7 +77,7 @@ export default function ApproveButton({
       disabled={txManager.isPending}
       onClick={approve}
     >
-      Unlock {tokenSymbol}
+      Unlock {tokenSymbol?.toUpperCase()}
     </button>
   )
 }
