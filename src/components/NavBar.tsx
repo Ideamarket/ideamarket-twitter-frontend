@@ -22,8 +22,8 @@ export default function Nav() {
       isSelected: router.pathname === '/account',
     },
     {
-      name: 'Docs',
-      value: 'docs',
+      name: 'About',
+      value: 'about',
       onClick: () => window.open('https://docs.ideamarket.io', '_blank'),
       isSelected: false,
     },
