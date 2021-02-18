@@ -40,6 +40,7 @@ export default function ListTokenModal({
 
   const [isWantBuyChecked, setIsWantBuyChecked] = useState(false)
   const [buyPayWithAddress, setBuyPayWithAddress] = useState(undefined)
+  const [buyPayWithSymbol, setBuyPayWithSymbol] = useState(undefined)
   const [buyInputAmountBN, setBuyInputAmountBN] = useState(undefined)
   const [buyOutputAmountBN, setBuyOutputAmountBN] = useState(undefined)
   const [buySlippage, setBuySlippage] = useState(undefined)
@@ -92,6 +93,7 @@ export default function ListTokenModal({
   function onTradeInterfaceValuesChanged(
     ideaTokenAmount: BN,
     tokenAddress: string,
+    tokenSymbol: string,
     tokenAmount: BN,
     slippage: number,
     lock: boolean,
@@ -101,6 +103,7 @@ export default function ListTokenModal({
   ) {
     setBuyInputAmountBN(tokenAmount)
     setBuyPayWithAddress(tokenAddress)
+    setBuyPayWithSymbol(tokenSymbol)
     setBuyOutputAmountBN(ideaTokenAmount)
     setBuySlippage(slippage)
     setBuyLock(lock)
@@ -294,10 +297,11 @@ export default function ListTokenModal({
               <div className="absolute top-0 left-0 w-full h-full bg-gray-600 opacity-75"></div>
             )}
           </div>
-          <div className="flex justify-center mb-5">
+          <div className="flex justify-center">
             <div className="mt-5">
               <ApproveButton
                 tokenAddress={buyPayWithAddress}
+                tokenSymbol={buyPayWithSymbol}
                 spenderAddress={multiActionContractAddress}
                 requiredAllowance={
                   isWantBuyChecked ? buyInputAmountBN : new BN('0')
@@ -305,7 +309,6 @@ export default function ListTokenModal({
                 unlockPermanent={isUnlockPermanentChecked}
                 txManager={txManager}
                 setIsMissingAllowance={setIsMissingAllowance}
-                isBuy={true}
                 key={approveButtonKey}
               />
             </div>
@@ -330,6 +333,15 @@ export default function ListTokenModal({
                 {isWantBuyChecked ? 'List and buy Token' : 'List Token'}
               </button>
             )}
+          </div>
+
+          <div
+            className={classNames(
+              'text-center text-sm h-3 text-brand-gray-2 font-bold mt-1',
+              !isMissingAllowance && 'invisible'
+            )}
+          >
+            Important: Transaction 1 of 2
           </div>
 
           <div

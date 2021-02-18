@@ -7,19 +7,19 @@ import { useTokenAllowance, approveToken } from '../../actions'
 import { TransactionManager, web3UintMax } from '../../utils'
 export default function ApproveButton({
   tokenAddress,
+  tokenSymbol,
   spenderAddress,
   requiredAllowance,
   unlockPermanent,
   txManager,
-  isBuy,
   setIsMissingAllowance,
 }: {
   tokenAddress: string
+  tokenSymbol: string
   spenderAddress: string
   requiredAllowance: BN
   unlockPermanent: boolean
   txManager: TransactionManager
-  isBuy: boolean
   setIsMissingAllowance: (b: boolean) => void
 }) {
   const [isAllowanceLoading, allowance] = useTokenAllowance(
@@ -45,7 +45,7 @@ export default function ApproveButton({
 
     try {
       await txManager.executeTx(
-        'Authorize',
+        'Unlock',
         approveToken,
         tokenAddress,
         spenderAddress,
@@ -77,7 +77,7 @@ export default function ApproveButton({
       disabled={txManager.isPending}
       onClick={approve}
     >
-      Authorize {isBuy ? 'Buy' : 'Sell'}
+      Unlock {tokenSymbol}
     </button>
   )
 }

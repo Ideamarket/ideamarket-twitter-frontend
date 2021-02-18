@@ -42,6 +42,7 @@ export default function TradeInterface({
   onValuesChanged: (
     ideaTokenAmount: BN,
     tokenAddress: string,
+    tokenSymbol: string,
     tokenAmount: BN,
     slippage: number,
     lock: boolean,
@@ -108,8 +109,10 @@ export default function TradeInterface({
       ? multiActionContractAddress
       : undefined
 
-  const spendToken =
+  const spendTokenAddress =
     tradeType === 'buy' ? selectedToken?.address : ideaToken.address
+
+  const spendTokenSymbol = tradeType === 'buy' ? selectedToken?.symbol : 'IDT'
 
   const requiredAllowance =
     tradeType === 'buy' ? tokenAmountBN : floatToWeb3BN(ideaTokenAmount, 18)
@@ -171,6 +174,7 @@ export default function TradeInterface({
     onValuesChanged(
       floatToWeb3BN(ideaTokenAmount, 18),
       selectedToken?.address,
+      selectedToken?.symbol,
       tokenAmountBN,
       slippage,
       isLockChecked,
@@ -507,13 +511,13 @@ export default function TradeInterface({
             >
               {!exceedsBalance && (
                 <ApproveButton
-                  tokenAddress={spendToken}
+                  tokenAddress={spendTokenAddress}
+                  tokenSymbol={spendTokenSymbol}
                   spenderAddress={spender}
                   requiredAllowance={requiredAllowance}
                   unlockPermanent={isUnlockPermanentChecked}
                   txManager={txManager}
                   setIsMissingAllowance={setIsMissingAllowance}
-                  isBuy={tradeType === 'buy'}
                   key={approveButtonKey}
                 />
               )}
@@ -539,6 +543,15 @@ export default function TradeInterface({
                   {tradeType === 'buy' ? 'Buy' : 'Sell'}
                 </button>
               )}
+            </div>
+
+            <div
+              className={classNames(
+                'text-center text-sm h-3 text-brand-gray-2 font-bold mt-1',
+                !isMissingAllowance && 'invisible'
+              )}
+            >
+              Important: Transaction 1 of 2
             </div>
 
             <div
