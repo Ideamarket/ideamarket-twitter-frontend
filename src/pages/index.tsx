@@ -212,7 +212,7 @@ export default function Home() {
             </div>
           </button>
         </div>
-        <div className="text-center text-5xl font-gilroy-bold mt-10">
+        <div className="text-center text-lg md:text-5xl font-gilroy-bold mt-10">
           <span className="text-brand-blue">${cDaiBalanceInDai}</span>&nbsp;in
           trust signaled
         </div>
