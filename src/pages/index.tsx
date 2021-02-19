@@ -165,8 +165,8 @@ export default function Home() {
             </div>
           </div>
           <h2 className="mt-8 md:mt-10 text-3xl md:text-6xl font-gilroy-bold">
-            The common knowledge{' '}
-            <span className="text-brand-blue">exchange</span>
+            Credibility without{' '}
+            <span className="text-brand-blue">corporations</span>
           </h2>
           <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
             Vote with your dollars, and give underrated voices the visibility
