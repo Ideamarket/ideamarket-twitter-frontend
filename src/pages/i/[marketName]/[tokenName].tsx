@@ -400,7 +400,7 @@ export default function TokenDetails() {
                           'None'
                         ) : (
                           <a
-                            href={`https://etherscan.io/address/${token.address}`}
+                            href={`https://etherscan.io/address/${token.tokenOwner}`}
                             target="_blank"
                             rel="noreferrer"
                             className="hover:underline"
