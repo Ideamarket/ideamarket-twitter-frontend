@@ -84,7 +84,7 @@ export default function ListTokenModal({
 
     const finalTokenName = getMarketSpecificsByMarketName(
       selectedMarket.name
-    ).convertUserInputToTokenName(val)
+    ).convertUserInputToTokenName(normalized)
     setIsValidTokenName(
       await verifyTokenName(finalTokenName, selectedMarket.marketID)
     )
