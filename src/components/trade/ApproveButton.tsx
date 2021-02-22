@@ -12,6 +12,7 @@ export default function ApproveButton({
   requiredAllowance,
   unlockPermanent,
   txManager,
+  disable,
   setIsMissingAllowance,
 }: {
   tokenAddress: string
@@ -19,6 +20,7 @@ export default function ApproveButton({
   spenderAddress: string
   requiredAllowance: BN
   unlockPermanent: boolean
+  disable?: boolean
   txManager: TransactionManager
   setIsMissingAllowance: (b: boolean) => void
 }) {
@@ -67,14 +69,12 @@ export default function ApproveButton({
   return (
     <button
       className={classNames(
-        'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
-        !isMissingAllowance
-          ? 'hidden'
-          : txManager.isPending
-          ? 'border-brand-gray-2 text-brand-gray-2 cursor-default'
-          : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
+        'w-40 h-12 text-base bg-white border-2 rounded-lg tracking-tightest-2',
+        disable
+          ? 'bg-brand-gray border-brand-gray text-brand-gray-2 cursor-default'
+          : 'border-brand-blue text-white bg-brand-blue text-white font-medium'
       )}
-      disabled={txManager.isPending}
+      disabled={disable}
       onClick={approve}
     >
       Unlock {tokenSymbol?.toUpperCase()}

@@ -1,16 +1,9 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import {
-  listToken,
-  listAndBuyToken,
-  verifyTokenName,
-  getTokenAllowance,
-  approveToken,
-} from 'actions'
+import { listToken, listAndBuyToken, verifyTokenName } from 'actions'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import { addresses, NETWORK, useTransactionManager } from 'utils'
+import { NETWORK, useTransactionManager } from 'utils'
 import { Modal, MarketSelect, TradeInterface } from './'
-import AdvancedOptions from './trade/AdvancedOptions'
 import ApproveButton from './trade/ApproveButton'
 import { useContractStore } from 'store/contractStore'
 import BN from 'bn.js'
@@ -155,6 +148,7 @@ export default function ListTokenModal({
 
   useEffect(() => {
     setSelectedMarket(undefined)
+    setIsValidTokenName(false)
     setTokenName('')
     setIsWantBuyChecked(false)
     setBuyLock(false)
@@ -297,53 +291,95 @@ export default function ListTokenModal({
               <div className="absolute top-0 left-0 w-full h-full bg-gray-600 opacity-75"></div>
             )}
           </div>
-          <div className="flex justify-center">
-            <div className="mt-5">
-              <ApproveButton
-                tokenAddress={buyPayWithAddress}
-                tokenSymbol={buyPayWithSymbol}
-                spenderAddress={multiActionContractAddress}
-                requiredAllowance={
-                  isWantBuyChecked ? buyInputAmountBN : new BN('0')
-                }
-                unlockPermanent={isUnlockPermanentChecked}
-                txManager={txManager}
-                setIsMissingAllowance={setIsMissingAllowance}
-                key={approveButtonKey}
-              />
+
+          <div className="max-w-sm mx-auto">
+            <div className={classNames('flex mt-8 mx-5 text-xs')}>
+              <div className="justify-start flex-grow">
+                <ApproveButton
+                  tokenAddress={buyPayWithAddress}
+                  tokenSymbol={buyPayWithSymbol}
+                  spenderAddress={multiActionContractAddress}
+                  requiredAllowance={
+                    isWantBuyChecked ? buyInputAmountBN : new BN('0')
+                  }
+                  unlockPermanent={isUnlockPermanentChecked}
+                  txManager={txManager}
+                  setIsMissingAllowance={setIsMissingAllowance}
+                  disable={
+                    selectedMarket === undefined ||
+                    !isMissingAllowance ||
+                    !isValidTokenName ||
+                    txManager.isPending ||
+                    (isWantBuyChecked && !isBuyValid)
+                  }
+                  key={approveButtonKey}
+                />
+              </div>
+              <div className="justify-end flex-grow">
+                <button
+                  className={classNames(
+                    'ml-6 w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
+                    selectedMarket === undefined ||
+                      !isValidTokenName ||
+                      txManager.isPending ||
+                      (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
+                      ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
+                      : 'border-brand-blue text-white bg-brand-blue font-medium'
+                  )}
+                  disabled={
+                    selectedMarket === undefined ||
+                    !isValidTokenName ||
+                    txManager.isPending ||
+                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
+                  }
+                  onClick={listClicked}
+                >
+                  {isWantBuyChecked ? 'List & Buy' : 'List'}
+                </button>
+              </div>
             </div>
-            {!isMissingAllowance && (
-              <button
-                disabled={
-                  !isValidTokenName ||
-                  txManager.isPending ||
-                  (isWantBuyChecked && !isBuyValid)
-                }
-                onClick={listClicked}
+
+            <div
+              className={classNames(
+                'flex w-1/2 mt-2.5 mx-auto justify-center items-center text-xs'
+              )}
+            >
+              <div
                 className={classNames(
-                  'w-40 h-12 mt-5 text-base font-medium bg-white border-2 rounded-lg  text-brand-blue  tracking-tightest-2 font-sf-compact-medium',
-                  selectedMarket !== undefined &&
-                    isValidTokenName &&
-                    !txManager.isPending &&
-                    (!isWantBuyChecked || (isWantBuyChecked && isBuyValid))
-                    ? 'border-brand-blue hover:bg-brand-blue hover:text-white'
-                    : 'border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
+                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
+                  selectedMarket === undefined ||
+                    !isValidTokenName ||
+                    (isWantBuyChecked && !isBuyValid)
+                    ? 'bg-brand-gray text-brand-gray-2'
+                    : 'bg-brand-blue text-white'
                 )}
               >
-                {isWantBuyChecked ? 'List and buy Token' : 'List Token'}
-              </button>
-            )}
+                1
+              </div>
+              <div
+                className={classNames(
+                  'flex-grow h-0.5',
+                  selectedMarket === undefined ||
+                    !isValidTokenName ||
+                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
+                    ? 'bg-brand-gray'
+                    : 'bg-brand-blue'
+                )}
+              ></div>
+              <div
+                className={classNames(
+                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
+                  selectedMarket === undefined ||
+                    !isValidTokenName ||
+                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
+                    ? 'bg-brand-gray text-brand-gray-2'
+                    : 'bg-brand-blue text-white'
+                )}
+              >
+                2
+              </div>
+            </div>
           </div>
-
-          <div
-            className={classNames(
-              'text-center text-sm h-3 text-brand-gray-2 font-bold mt-1',
-              !isMissingAllowance && 'invisible'
-            )}
-          >
-            Important: Transaction 1 of 2
-          </div>
-
           <div
             className={classNames(
               'grid grid-cols-3 my-5 text-sm text-brand-gray-2',

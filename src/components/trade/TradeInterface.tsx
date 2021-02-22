@@ -128,6 +128,7 @@ export default function TradeInterface({
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
   const [approveButtonKey, setApproveButtonKey] = useState(0)
+  const [isValid, setIsValid] = useState(false)
   const txManager = useTransactionManager()
 
   let slippage = 0.01
@@ -170,6 +171,8 @@ export default function TradeInterface({
         }
       }
     }
+
+    setIsValid(isValid)
 
     onValuesChanged(
       floatToWeb3BN(ideaTokenAmount, 18),
@@ -503,13 +506,9 @@ export default function TradeInterface({
           unlockText={unlockText || 'for trading'}
         />
         {showTradeButton && (
-          <>
-            <div
-              className={classNames(
-                'flex items-center justify-center mt-5 text-xs'
-              )}
-            >
-              {!exceedsBalance && (
+          <div className="max-w-sm mx-auto">
+            <div className={classNames('flex mt-8 mx-5 text-xs')}>
+              <div className="flex-grow justify-start">
                 <ApproveButton
                   tokenAddress={spendTokenAddress}
                   tokenSymbol={spendTokenSymbol}
@@ -518,19 +517,27 @@ export default function TradeInterface({
                   unlockPermanent={isUnlockPermanentChecked}
                   txManager={txManager}
                   setIsMissingAllowance={setIsMissingAllowance}
+                  disable={
+                    !isValid ||
+                    exceedsBalance ||
+                    !isMissingAllowance ||
+                    txManager.isPending
+                  }
                   key={approveButtonKey}
                 />
-              )}
-              {(!isMissingAllowance || exceedsBalance) && (
+              </div>
+              <div className="flex-grow justify-end">
                 <button
                   className={classNames(
-                    'w-40 h-12 text-base font-medium bg-white border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
+                    'ml-6 w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
                     txManager.isPending ||
+                      !isValid ||
                       exceedsBalance ||
+                      isMissingAllowance ||
                       !parseFloat(ideaTokenAmount) ||
                       parseFloat(ideaTokenAmount) <= 0.0
-                      ? 'text-brand-gray-2 font-semibold cursor-default border-brand-gray-2'
-                      : 'border-brand-blue text-brand-blue hover:bg-brand-blue hover:text-white'
+                      ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
+                      : 'border-brand-blue text-white bg-brand-blue text-white font-medium'
                   )}
                   disabled={
                     txManager.isPending ||
@@ -542,16 +549,42 @@ export default function TradeInterface({
                 >
                   {tradeType === 'buy' ? 'Buy' : 'Sell'}
                 </button>
-              )}
+              </div>
             </div>
 
             <div
               className={classNames(
-                'text-center text-sm h-3 text-brand-gray-2 font-bold mt-1',
-                !isMissingAllowance && 'invisible'
+                'flex w-1/2 mt-2.5 mx-auto justify-center items-center text-xs'
               )}
             >
-              Important: Transaction 1 of 2
+              <div
+                className={classNames(
+                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
+                  !isValid || exceedsBalance
+                    ? 'bg-brand-gray text-brand-gray-2'
+                    : 'bg-brand-blue text-white'
+                )}
+              >
+                1
+              </div>
+              <div
+                className={classNames(
+                  'flex-grow h-0.5',
+                  !isValid || isMissingAllowance || exceedsBalance
+                    ? 'bg-brand-gray'
+                    : 'bg-brand-blue'
+                )}
+              ></div>
+              <div
+                className={classNames(
+                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
+                  !isValid || isMissingAllowance || exceedsBalance
+                    ? 'bg-brand-gray text-brand-gray-2'
+                    : 'bg-brand-blue text-white'
+                )}
+              >
+                2
+              </div>
             </div>
 
             <div
@@ -583,7 +616,7 @@ export default function TradeInterface({
                 <CircleSpinner color="#0857e0" bgcolor={bgcolor} />
               </div>
             </div>
-          </>
+          </div>
         )}
       </div>
     </>
