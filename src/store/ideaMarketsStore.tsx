@@ -344,6 +344,7 @@ export async function queryTokensChartData(
 
   const tokenAddresses = []
   const ids = []
+  let hasAtLeastOne = false
 
   for (let token of tokens) {
     tokenAddresses.push(token.address.toLowerCase())
@@ -379,12 +380,16 @@ export async function queryTokensChartData(
     }
 
     ids.push(getCounters)
+    hasAtLeastOne = true
   }
 
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryTokensChartData(tokenAddresses, ids)
-  )
+  let result = {}
+  if (hasAtLeastOne) {
+    result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryTokensChartData(tokenAddresses, ids)
+    )
+  }
 
   const ret = {}
   for (let token of tokens) {
