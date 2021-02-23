@@ -80,7 +80,7 @@ export default function TokenRow({
           )
         }}
       >
-        <td className="hidden md:block py-4 pl-3 pr-1 text-sm leading-5 text-center text-gray-500 whitespace-nowrap">
+        <td className="hidden py-4 pl-3 pr-1 text-sm leading-5 text-center text-gray-500 md:block whitespace-nowrap">
           {token.rank}
         </td>
         <td className="col-span-3 px-6 py-4 whitespace-nowrap">

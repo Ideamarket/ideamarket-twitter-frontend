@@ -9,17 +9,21 @@ export default function getQueryTokensChartData(
         ${tokenAddresses
           .map((address, index) => {
             const i = ids[index]
-            return `
+            if (i.length === 0) {
+              return ''
+            } else {
+              return `
                 a${address}:ideaTokenPricePoints(first:${
-              i.length
-            },orderBy:"timestamp", orderDirection:"asc", where:{token:"${address}", counter_in:[${i.join(
-              ','
-            )}]}) {
+                i.length
+              },orderBy:"timestamp", orderDirection:"asc", where:{token:"${address}", counter_in:[${i.join(
+                ','
+              )}]}) {
                     counter
                     timestamp
                     oldPrice
                     price
                 }`
+            }
           })
           .join('\n')}
     }`
