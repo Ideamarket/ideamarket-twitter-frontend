@@ -153,10 +153,6 @@ export default function Home() {
         <div>
           <div className="flex items-center justify-center space-x-12">
             <div className="w-20 md:w-36">
-              <p className="text-xs text-gray-600">as seen in</p>
-              <img src="/coindesk.png" alt="" />
-            </div>
-            <div className="w-20 md:w-36">
               <img src="/ethereum.png" alt="" />
             </div>
             <div className="w-20 md:w-36">
@@ -173,7 +169,33 @@ export default function Home() {
             they deserve.
           </p>
         </div>
-        <div className="flex justify-center mt-10">
+        <div className="flex items-center justify-center mt-8 space-x-12">
+          <div className="w-20 md:w-44">
+            <a
+              target="_blank"
+              href="https://www.coindesk.com/ideamarket-online-ideas-online-reputation"
+            >
+              <img src="/coindesk.png" alt="" />
+            </a>
+          </div>
+          <div className="w-20 md:w-44">
+            <a
+              target="_blank"
+              href="https://www.nasdaq.com/articles/ideamarket-is-a-literal-marketplace-for-ideas-and-online-reputation-2021-02-19"
+            >
+              <img src="/nasdaq.png" alt="" />
+            </a>
+          </div>
+          <div className="w-20 md:w-44">
+            <a
+              target="_blank"
+              href="https://www.vice.com/en/article/pkd8nb/people-have-spent-over-dollar1-million-on-a-literal-marketplace-of-ideas"
+            >
+              <img src="/vice.png" alt="" />
+            </a>
+          </div>
+        </div>
+        <div className="flex justify-center mt-8">
           <button
             onClick={() => {
               setIsPromoVideoModalOpen(true)
