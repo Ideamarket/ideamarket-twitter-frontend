@@ -149,7 +149,7 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden bg-brand-gray">
-      <div className="w-screen px-6 pt-12 md:pt-10 text-center text-white bg-top-mobile md:bg-top-desktop pb-40 bg-cover">
+      <div className="w-screen px-6 pt-12 pb-40 text-center text-white bg-cover md:pt-10 bg-top-mobile md:bg-top-desktop">
         <div>
           <div className="flex items-center justify-center space-x-12">
             <div className="w-20 md:w-36">
@@ -160,7 +160,7 @@ export default function Home() {
               <img src="/qs.png" alt="" />
             </div>
           </div>
-          <h2 className="mt-8 md:mt-10 text-3xl md:text-6xl font-gilroy-bold">
+          <h2 className="mt-8 text-3xl md:mt-10 md:text-6xl font-gilroy-bold">
             Credibility without{' '}
             <span className="text-brand-blue">corporations</span>
           </h2>
@@ -170,14 +170,6 @@ export default function Home() {
           </p>
         </div>
         <div className="flex items-center justify-center mt-8 space-x-12">
-          <div className="w-20 md:w-44">
-            <a
-              target="_blank"
-              href="https://www.coindesk.com/ideamarket-online-ideas-online-reputation"
-            >
-              <img src="/coindesk.png" alt="" />
-            </a>
-          </div>
           <div className="w-20 md:w-44">
             <a
               target="_blank"
@@ -194,6 +186,14 @@ export default function Home() {
               <img src="/vice.png" alt="" />
             </a>
           </div>
+          <div className="w-20 md:w-44">
+            <a
+              target="_blank"
+              href="https://www.coindesk.com/ideamarket-online-ideas-online-reputation"
+            >
+              <img src="/coindesk.png" alt="" />
+            </a>
+          </div>
         </div>
         <div className="flex justify-center mt-8">
           <button
@@ -206,7 +206,7 @@ export default function Home() {
             onMouseLeave={() => {
               setIsHoveringWatchVideo(false)
             }}
-            className="w-44 py-2 text-lg text-white rounded-lg font-sf-compact-medium border-white border  hover:bg-white hover:text-black hover:font-bold"
+            className="py-2 text-lg text-white border border-white rounded-lg w-44 font-sf-compact-medium hover:bg-white hover:text-black hover:font-bold"
           >
             <div className="flex flex-row items-center justify-center">
               <Play
@@ -226,7 +226,7 @@ export default function Home() {
             onClick={() => {
               onListTokenClicked()
             }}
-            className="w-44 py-2 text-lg font-bold text-white rounded-lg font-sf-compact-medium bg-brand-blue hover:bg-blue-800 ml-5"
+            className="py-2 ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
           >
             <div className="flex flex-row items-center justify-center">
               <Plus width="30" height="30" />
@@ -234,7 +234,7 @@ export default function Home() {
             </div>
           </button>
         </div>
-        <div className="text-center text-lg md:text-5xl font-gilroy-bold mt-10">
+        <div className="mt-10 text-lg text-center md:text-5xl font-gilroy-bold">
           <span className="text-brand-blue">${cDaiBalanceInDai}</span>&nbsp;in
           trust signaled
         </div>
