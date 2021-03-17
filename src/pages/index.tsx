@@ -27,6 +27,7 @@ import Plus from '../assets/plus-white.svg'
 import Play from '../assets/play.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
+import { Categories } from 'store/models/category'
 
 export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(2)
@@ -100,11 +101,11 @@ export default function Home() {
 
   function onNameSearchChanged(nameSearch) {
     setTablePage(0)
-    setSelectedCategoryId(1)
+    setSelectedCategoryId(Categories.ALL.id)
     setNameSearch(nameSearch)
   }
 
-  function onCategoryChanged(categoryID) {
+  function onCategoryChanged(categoryID: number) {
     setTablePage(0)
     setSelectedCategoryId(categoryID)
   }
@@ -112,16 +113,16 @@ export default function Home() {
   function onOrderByChanged(orderBy: string, direction: string) {
     setTablePage(0)
 
-    if (selectedCategoryId === 4) {
+    if (selectedCategoryId === Categories.STARRED.id) {
       return
     }
 
     if (orderBy === 'dayChange' && direction === 'desc') {
-      setSelectedCategoryId(2)
+      setSelectedCategoryId(Categories.HOT.id)
     } else if (orderBy === 'listedAt' && direction === 'desc') {
-      setSelectedCategoryId(3)
+      setSelectedCategoryId(Categories.NEW.id)
     } else {
-      setSelectedCategoryId(1)
+      setSelectedCategoryId(Categories.ALL.id)
     }
   }
 
@@ -295,7 +296,7 @@ export default function Home() {
             <div className="px-4 md:px-10">
               <div className="font-sf-pro-text">
                 <nav className="flex -mb-px space-x-5">
-                  {categories.map((cat) => (
+                  {Object.values(Categories).map((cat) => (
                     <a
                       onClick={() => onCategoryChanged(cat.id)}
                       key={cat.id}

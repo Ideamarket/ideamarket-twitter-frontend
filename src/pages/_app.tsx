@@ -1,3 +1,4 @@
+import '../../scripts/wdyr'
 import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
 import '../styles/fonts/gilroy/style.css'

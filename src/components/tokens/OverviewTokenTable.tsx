@@ -13,8 +13,8 @@ import {
   queryTokens,
   queryTokensChartData,
 } from 'store/ideaMarketsStore'
-import { ReactNode, useState } from 'react'
-import { useQuery } from 'react-query'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { useInfiniteQuery, useQuery } from 'react-query'
 import {
   querySupplyRate,
   queryExchangeRate,
@@ -24,6 +24,10 @@ import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './OverviewTokenRow'
 import TokenRowSkeleton from './OverviewTokenRowSkeleton'
 import Tooltip from '../tooltip/Tooltip'
+import { Categories } from 'store/models/category'
+import { debounce, throttle } from 'lodash'
+
+const page = 0
 
 type Header = {
   content: ReactNode | string
@@ -133,43 +137,153 @@ export default function Table({
     isLoading: isCompoundSupplyRateLoading,
   } = useQuery('compound-supply-rate', querySupplyRate)
 
-  const { data: market, isLoading: isMarketLoading } = useQuery(
+  const {
+    data: market,
+    isLoading: isMarketLoading,
+    refetch: refetchMarket,
+  } = useQuery(
     [`market-${selectedMarketName}`, selectedMarketName],
-    queryMarket
+    queryMarket,
+    {
+      enabled: false,
+    }
   )
+
+  useEffect(() => {
+    refetchMarket()
+  }, [selectedMarketName])
+
+  // useEffect(() => {
+  //   fetchMore()
+  // }, [market])
 
   const watchingTokens = Object.keys(
     useIdeaMarketsStore((store) => store.watching)
   )
 
-  const filterTokens = selectedCategoryId === 4 ? watchingTokens : undefined
+  const filterTokens =
+    selectedCategoryId === Categories.STARRED.id ? watchingTokens : undefined
+
+  // const {
+  //   data: tokenData = [],
+  //   isLoading: isTokenDataLoading,
+  // }: {
+  //   data: IdeaToken[]
+  //   isLoading: boolean
+  // } = useQuery(
+  //   [
+  //     `tokens-${selectedMarketName}`,
+  //     [
+  //       market,
+  //       currentPage * TOKENS_PER_PAGE,
+  //       TOKENS_PER_PAGE,
+  //       WEEK_SECONDS,
+  //       selectedCategoryId === Categories.HOT.id
+  //         ? 'dayChange'
+  //         : selectedCategoryId === Categories.NEW.id
+  //         ? 'listedAt'
+  //         : orderBy,
+  //       selectedCategoryId === Categories.HOT.id ||
+  //       selectedCategoryId === Categories.NEW.id
+  //         ? 'desc'
+  //         : orderDirection,
+  //       nameSearch,
+  //       filterTokens,
+  //     ],
+  //   ],
+  //   queryTokens
+  // )
 
   const {
-    data: tokenData = [],
-    isLoading: isTokenDataLoading,
-  }: {
-    data: IdeaToken[]
-    isLoading: boolean
-  } = useQuery(
+    status,
+    data: infiniteData,
+    error,
+    isFetching: isTokenDataLoading,
+    isLoading: asd,
+    fetchMore,
+  } = useInfiniteQuery(
     [
       `tokens-${selectedMarketName}`,
-      market,
-      currentPage * TOKENS_PER_PAGE,
-      TOKENS_PER_PAGE,
-      WEEK_SECONDS,
-      selectedCategoryId === 2
-        ? 'dayChange'
-        : selectedCategoryId === 3
-        ? 'listedAt'
-        : orderBy,
-      selectedCategoryId === 2 || selectedCategoryId === 3
-        ? 'desc'
-        : orderDirection,
-      nameSearch,
-      filterTokens,
+      // [
+      //   market,
+      //   currentPage * TOKENS_PER_PAGE,
+      //   TOKENS_PER_PAGE,
+      //   WEEK_SECONDS,
+      //   selectedCategoryId === Categories.HOT.id
+      //     ? 'dayChange'
+      //     : selectedCategoryId === Categories.NEW.id
+      //     ? 'listedAt'
+      //     : orderBy,
+      //   selectedCategoryId === Categories.HOT.id ||
+      //   selectedCategoryId === Categories.NEW.id
+      //     ? 'desc'
+      //     : orderDirection,
+      //   nameSearch,
+      //   filterTokens,
+      // ],
     ],
-    queryTokens
+    queryTokens,
+    {
+      getFetchMore: (lastGroup, allGroups) => {
+        const morePagesExist =
+          lastGroup?.length === 10 || lastGroup?.length === 0
+
+        if (!morePagesExist) return false
+
+        console.log(morePagesExist, lastGroup, allGroups)
+
+        return [
+          market,
+          (allGroups.length - 1) * 10,
+          TOKENS_PER_PAGE,
+          WEEK_SECONDS,
+          selectedCategoryId === Categories.HOT.id
+            ? 'dayChange'
+            : selectedCategoryId === Categories.NEW.id
+            ? 'listedAt'
+            : orderBy,
+          selectedCategoryId === Categories.HOT.id ||
+          selectedCategoryId === Categories.NEW.id
+            ? 'desc'
+            : orderDirection,
+          nameSearch,
+          filterTokens,
+        ]
+      },
+      // refetchOnWindowFocus: false,
+      // refetchOnMount: false,
+      forceFetchOnMount: true,
+      enabled: !!market,
+    }
   )
+
+  const tokenData = []
+
+  ;(infiniteData || []).forEach((page) => {
+    page.forEach((char) => {
+      tokenData.push(char)
+    })
+  })
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      const height = document.documentElement.scrollHeight
+      const windowHeight = window.innerHeight
+      const diff = height - windowHeight - currentScrollY
+      if (diff < 100 && (!isChartDataLoading || !isTokenDataLoading)) {
+        loadMore()
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const loadMore = throttle(() => {
+    fetchMore()
+  }, 1000)
 
   const { data: chartData, isLoading: isChartDataLoading } = useQuery(
     ['chartdata', tokenData, 100],
@@ -226,7 +340,7 @@ export default function Table({
     <>
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div className="inline-block w-full py-2 align-middle sm:px-6 lg:px-8">
             <div className="overflow-hidden border-b border-gray-200 sm:rounded-t-lg">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="hidden md:table-header-group">
@@ -301,36 +415,36 @@ export default function Table({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {isLoading ? (
-                    Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                      <TokenRowSkeleton key={token} />
-                    ))
-                  ) : (
-                    <>
-                      {(tokenData as IdeaToken[]).map((token) => (
-                        <TokenRow
-                          key={market.marketID + '-' + token.tokenID}
-                          token={token}
-                          market={market}
-                          showMarketSVG={false}
-                          compoundSupplyRate={compoundSupplyRate}
-                          chartData={chartData[token.address]}
-                          chartDuration={WEEK_SECONDS}
-                          onTradeClicked={onTradeClicked}
-                        />
-                      ))}
+                <tbody className="bg-white w-full divide-y divide-gray-200">
+                  <>
+                    {(tokenData as IdeaToken[]).map((token) => (
+                      <TokenRow
+                        key={market.marketID + '-' + token.tokenID}
+                        token={token}
+                        market={market}
+                        showMarketSVG={false}
+                        compoundSupplyRate={compoundSupplyRate}
+                        chartData={chartData ? chartData[token.address] : []}
+                        chartDuration={WEEK_SECONDS}
+                        onTradeClicked={onTradeClicked}
+                      />
+                    ))}
 
-                      {Array.from(
-                        Array(TOKENS_PER_PAGE - (tokenData?.length ?? 0))
+                    {/* {Array.from(
+                      Array(TOKENS_PER_PAGE - (tokenData?.length ?? 0))
                       ).map((a, b) => (
-                        <tr
-                          key={`${'filler-' + b.toString()}`}
-                          className="hidden h-18 md:table-row"
-                        ></tr>
-                      ))}
-                    </>
-                  )}
+                      <tr
+                      key={`${'filler-' + b.toString()}`}
+                      className="hidden h-18 md:table-row"
+                      ></tr>
+                      ))} */}
+                  </>
+                  {/* ) : null} */}
+                  {isLoading
+                    ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
+                        <TokenRowSkeleton key={token} />
+                      ))
+                    : null}{' '}
                 </tbody>
               </table>
             </div>
@@ -354,8 +468,9 @@ export default function Table({
         </button>
         <button
           onClick={() => {
-            if (tokenData && tokenData.length === TOKENS_PER_PAGE)
-              setCurrentPage(currentPage + 1)
+            fetchMore()
+            // if (tokenData && tokenData.length === TOKENS_PER_PAGE)
+            // setCurrentPage(currentPage + 1)
           }}
           className={classNames(
             'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
@@ -363,7 +478,7 @@ export default function Table({
               ? 'cursor-not-allowed opacity-50'
               : 'hover:bg-brand-gray'
           )}
-          disabled={tokenData?.length !== TOKENS_PER_PAGE}
+          // disabled={tokenData?.length !== TOKENS_PER_PAGE}
         >
           Next &rarr;
         </button>
