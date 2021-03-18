@@ -13,7 +13,13 @@ import {
   queryTokens,
   queryTokensChartData,
 } from 'store/ideaMarketsStore'
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import {
   querySupplyRate,
@@ -26,82 +32,9 @@ import TokenRowSkeleton from './OverviewTokenRowSkeleton'
 import Tooltip from '../tooltip/Tooltip'
 import { Categories } from 'store/models/category'
 import { debounce, throttle } from 'lodash'
+import { Header } from './table/Header'
 
 const page = 0
-
-type Header = {
-  content: ReactNode | string
-  value: string
-  sortable: boolean
-}
-const headers: Header[] = [
-  {
-    content: '#',
-    value: 'rank',
-    sortable: true,
-  },
-  {
-    content: 'Name',
-    value: 'name',
-    sortable: true,
-  },
-  {
-    content: 'Price',
-    value: 'price',
-    sortable: true,
-  },
-  {
-    content: 'Deposits',
-    value: 'deposits',
-    sortable: true,
-  },
-  {
-    content: '% Locked',
-    value: 'locked',
-    sortable: true,
-  },
-  {
-    content: '24H Change',
-    value: 'change',
-    sortable: true,
-  },
-  {
-    content: '24H Volume',
-    value: 'volume',
-    sortable: true,
-  },
-  {
-    content: (
-      <>
-        1YR
-        <br />
-        <div className="flex items-center">
-          Income
-          <Tooltip className="ml-1">
-            <div className="w-32 md:w-64">
-              Estimated annual passive income paid to the listing owner.
-              Calculated by Deposits * Lending APY at{' '}
-              <a
-                href="https://compound.finance"
-                target="_blank"
-                className="underline"
-              >
-                compound.finance
-              </a>
-            </div>
-          </Tooltip>
-        </div>
-      </>
-    ),
-    value: 'income',
-    sortable: true,
-  },
-  {
-    content: '7D Chart',
-    value: 'chart',
-    sortable: false,
-  },
-]
 
 export default function Table({
   selectedMarketName,
@@ -294,34 +227,11 @@ export default function Table({
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="hidden md:table-header-group">
                   <tr>
-                    {headers.map((header) => (
-                      <th
-                        className={classNames(
-                          'pl-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50',
-                          header.sortable && 'cursor-pointer',
-                          header.value !== 'rank' && 'pr-6'
-                        )}
-                        key={header.value}
-                        onClick={() => {
-                          if (header.sortable) {
-                            headerClicked(header.value)
-                          }
-                        }}
-                      >
-                        {header.sortable && (
-                          <>
-                            {currentHeader === header.value &&
-                              orderDirection === 'asc' && <span>&#x25B2;</span>}
-                            {currentHeader === header.value &&
-                              orderDirection === 'desc' && (
-                                <span>&#x25bc;</span>
-                              )}
-                            &nbsp;
-                          </>
-                        )}
-                        {header.content}
-                      </th>
-                    ))}
+                    <Header
+                      currentHeader={currentHeader}
+                      orderDirection={orderDirection}
+                      headerClicked={headerClicked}
+                    />
                     <th
                       colSpan={2}
                       className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50"
