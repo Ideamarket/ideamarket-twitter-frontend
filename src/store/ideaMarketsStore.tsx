@@ -210,7 +210,6 @@ export async function queryTokens(
   queryKey: string,
   params: Params
 ): Promise<IdeaToken[]> {
-  // console.log('YO', params)
   if (!params) {
     return []
   }
@@ -225,16 +224,7 @@ export async function queryTokens(
     search,
     filterTokens,
   ] = params
-  // console.log(
-  //   market,
-  //   skip,
-  //   num,
-  //   duration,
-  //   orderBy,
-  //   orderDirection,
-  //   search,
-  //   filterTokens
-  // )
+
   const fromTs = Math.floor(Date.now() / 1000) - duration
 
   let result

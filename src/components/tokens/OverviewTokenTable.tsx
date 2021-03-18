@@ -1,4 +1,7 @@
-import classNames from 'classnames'
+import React, { useEffect, useRef, useState } from 'react'
+import { useInfiniteQuery, useQuery } from 'react-query'
+import { flatten } from 'lodash'
+
 import { useWindowSize, WEEK_SECONDS } from 'utils'
 import {
   IdeaToken,
@@ -7,8 +10,6 @@ import {
   queryTokens,
   queryTokensChartData,
 } from 'store/ideaMarketsStore'
-import React, { useEffect, useRef, useState } from 'react'
-import { useInfiniteQuery, useQuery } from 'react-query'
 import { querySupplyRate, queryExchangeRate } from 'store/compoundStore'
 import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './OverviewTokenRow'
@@ -35,25 +36,38 @@ export default function Table({
 }) {
   const windowSize = useWindowSize()
   const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
+  const LOADING_MARGIN = 200
 
   const [currentHeader, setCurrentHeader] = useState('rank')
   const [orderBy, setOrderBy] = useState('rank')
   const [orderDirection, setOrderDirection] = useState('asc')
-  const stateRef = useRef<any>()
+  const infiniteDataRef = useRef<IdeaToken[][]>()
 
   const {
     data: compoundExchangeRate,
     isLoading: isCompoundExchangeRateLoading,
-  } = useQuery('compound-exchange-rate', queryExchangeRate)
+  } = useQuery(
+    'compound-exchange-rate',
+    queryExchangeRate,
+
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
 
   const {
     data: compoundSupplyRate,
     isLoading: isCompoundSupplyRateLoading,
-  } = useQuery('compound-supply-rate', querySupplyRate)
+  } = useQuery('compound-supply-rate', querySupplyRate, {
+    refetchOnWindowFocus: false,
+  })
 
   const { data: market, isLoading: isMarketLoading } = useQuery(
     [`market-${selectedMarketName}`, selectedMarketName],
-    queryMarket
+    queryMarket,
+    {
+      refetchOnWindowFocus: false,
+    }
   )
 
   useEffect(() => {
@@ -73,14 +87,15 @@ export default function Table({
     fetchMore,
   } = useInfiniteQuery([`tokens-${selectedMarketName}`], queryTokens, {
     getFetchMore: (lastGroup, allGroups) => {
-      const morePagesExist =
-        allGroups.length === 1 ? true : lastGroup?.length === 10
+      const morePagesExist = allGroups.length === 1 || lastGroup?.length === 10
 
-      if (!morePagesExist) return false
+      if (!morePagesExist) {
+        return false
+      }
 
       return [
         market,
-        (allGroups.length - 1) * 10,
+        (allGroups.length - 1) * TOKENS_PER_PAGE,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
         selectedCategoryId === Categories.HOT.id
@@ -100,19 +115,13 @@ export default function Table({
     forceFetchOnMount: true,
     enabled: !!market,
   })
-  stateRef.current = infiniteData
 
-  const tokenData = []
-  ;(infiniteData || []).forEach((page) => {
-    page.forEach((char) => {
-      tokenData.push(char)
-    })
-  })
+  infiniteDataRef.current = infiniteData
 
-  const hasMore = (infiniteData: Array<Array<IdeaToken>>) => {
-    return !infiniteData || infiniteData.length <= 1
-      ? true
-      : infiniteData[infiniteData.length - 1].length === 10
+  const tokenData = flatten(infiniteData || [])
+
+  const hasMore = (infiniteData: IdeaToken[][]) => {
+    return infiniteData[infiniteData.length - 1].length === 10
   }
 
   useEffect(() => {
@@ -121,7 +130,8 @@ export default function Table({
       const height = document.documentElement.scrollHeight
       const windowHeight = window.innerHeight
       const diff = height - windowHeight - currentScrollY
-      if (diff < 100 && hasMore(stateRef.current)) {
+
+      if (diff < LOADING_MARGIN && hasMore(infiniteDataRef.current)) {
         fetchMore()
       }
     }
@@ -226,38 +236,6 @@ export default function Table({
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex flex-row items-stretch justify-between px-10 py-5 md:justify-center md:flex md:border-b md:space-x-10">
-        <button
-          onClick={() => {
-            if (currentPage > 0) setCurrentPage(currentPage - 1)
-          }}
-          className={classNames(
-            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
-            currentPage <= 0
-              ? 'cursor-not-allowed opacity-50'
-              : 'hover:bg-brand-gray'
-          )}
-          disabled={currentPage <= 0}
-        >
-          &larr; Previous
-        </button>
-        <button
-          onClick={() => {
-            fetchMore()
-            // if (tokenData && tokenData.length === TOKENS_PER_PAGE)
-            // setCurrentPage(currentPage + 1)
-          }}
-          className={classNames(
-            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
-            tokenData?.length !== TOKENS_PER_PAGE
-              ? 'cursor-not-allowed opacity-50'
-              : 'hover:bg-brand-gray'
-          )}
-          // disabled={tokenData?.length !== TOKENS_PER_PAGE}
-        >
-          Next &rarr;
-        </button>
       </div>
     </>
   )
