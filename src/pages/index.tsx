@@ -28,13 +28,14 @@ import Play from '../assets/play.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 import { Categories } from 'store/models/category'
+import React from 'react'
 
 export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(2)
   const [selectedMarketName, setSelectedMarketName] = useState('Twitter')
   const [nameSearch, setNameSearch] = useState('')
   const [tablePage, setTablePage] = useState(0)
-  const [isHoveringWatchVideo, setIsHoveringWatchVideo] = useState(false)
+  // const [isHoveringWatchVideo, setIsHoveringWatchVideo] = useState(false)
   const [isPromoVideoModalOpen, setIsPromoVideoModalOpen] = useState(false)
 
   const interestManagerAddress = getContractAddress('interestManager')
@@ -202,10 +203,10 @@ export default function Home() {
               setIsPromoVideoModalOpen(true)
             }}
             onMouseEnter={() => {
-              setIsHoveringWatchVideo(true)
+              // setIsHoveringWatchVideo(true)
             }}
             onMouseLeave={() => {
-              setIsHoveringWatchVideo(false)
+              // setIsHoveringWatchVideo(false)
             }}
             className="py-2 text-lg text-white border border-white rounded-lg w-44 font-sf-compact-medium hover:bg-white hover:text-black hover:font-bold"
           >
@@ -213,7 +214,7 @@ export default function Home() {
               <Play
                 width="30"
                 height="30"
-                stroke={isHoveringWatchVideo ? '#000000' : '#ffffff'}
+                // stroke={isHoveringWatchVideo ? '#000000' : '#ffffff'}
               />
               <div className="ml-0.5 md:ml-2">
                 <div className="flex">
@@ -365,3 +366,10 @@ export default function Home() {
     </div>
   )
 }
+
+const memoHome = React.memo(Home, (props, next) => {
+  console.log(props, next)
+  return false
+})
+
+export default memoHome

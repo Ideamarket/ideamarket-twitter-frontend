@@ -13,7 +13,7 @@ import {
   queryTokens,
   queryTokensChartData,
 } from 'store/ideaMarketsStore'
-import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import {
   querySupplyRate,
@@ -126,6 +126,8 @@ export default function Table({
   const [currentHeader, setCurrentHeader] = useState('rank')
   const [orderBy, setOrderBy] = useState('rank')
   const [orderDirection, setOrderDirection] = useState('asc')
+  const [allListingsLoaded, setAllListingsLoaded] = useState(false)
+  const stateRef = useRef<any>()
 
   const {
     data: compoundExchangeRate,
@@ -137,25 +139,15 @@ export default function Table({
     isLoading: isCompoundSupplyRateLoading,
   } = useQuery('compound-supply-rate', querySupplyRate)
 
-  const {
-    data: market,
-    isLoading: isMarketLoading,
-    refetch: refetchMarket,
-  } = useQuery(
+  const { data: market, isLoading: isMarketLoading } = useQuery(
     [`market-${selectedMarketName}`, selectedMarketName],
-    queryMarket,
-    {
-      enabled: false,
-    }
+    queryMarket
   )
 
   useEffect(() => {
-    refetchMarket()
-  }, [selectedMarketName])
-
-  // useEffect(() => {
-  //   fetchMore()
-  // }, [market])
+    console.log('EFFECT')
+    fetchMore()
+  }, [selectedMarketName && !!market])
 
   const watchingTokens = Object.keys(
     useIdeaMarketsStore((store) => store.watching)
@@ -164,36 +156,6 @@ export default function Table({
   const filterTokens =
     selectedCategoryId === Categories.STARRED.id ? watchingTokens : undefined
 
-  // const {
-  //   data: tokenData = [],
-  //   isLoading: isTokenDataLoading,
-  // }: {
-  //   data: IdeaToken[]
-  //   isLoading: boolean
-  // } = useQuery(
-  //   [
-  //     `tokens-${selectedMarketName}`,
-  //     [
-  //       market,
-  //       currentPage * TOKENS_PER_PAGE,
-  //       TOKENS_PER_PAGE,
-  //       WEEK_SECONDS,
-  //       selectedCategoryId === Categories.HOT.id
-  //         ? 'dayChange'
-  //         : selectedCategoryId === Categories.NEW.id
-  //         ? 'listedAt'
-  //         : orderBy,
-  //       selectedCategoryId === Categories.HOT.id ||
-  //       selectedCategoryId === Categories.NEW.id
-  //         ? 'desc'
-  //         : orderDirection,
-  //       nameSearch,
-  //       filterTokens,
-  //     ],
-  //   ],
-  //   queryTokens
-  // )
-
   const {
     status,
     data: infiniteData,
@@ -201,69 +163,51 @@ export default function Table({
     isFetching: isTokenDataLoading,
     isLoading: asd,
     fetchMore,
-  } = useInfiniteQuery(
-    [
-      `tokens-${selectedMarketName}`,
-      // [
-      //   market,
-      //   currentPage * TOKENS_PER_PAGE,
-      //   TOKENS_PER_PAGE,
-      //   WEEK_SECONDS,
-      //   selectedCategoryId === Categories.HOT.id
-      //     ? 'dayChange'
-      //     : selectedCategoryId === Categories.NEW.id
-      //     ? 'listedAt'
-      //     : orderBy,
-      //   selectedCategoryId === Categories.HOT.id ||
-      //   selectedCategoryId === Categories.NEW.id
-      //     ? 'desc'
-      //     : orderDirection,
-      //   nameSearch,
-      //   filterTokens,
-      // ],
-    ],
-    queryTokens,
-    {
-      getFetchMore: (lastGroup, allGroups) => {
-        const morePagesExist =
-          lastGroup?.length === 10 || lastGroup?.length === 0
+    clear,
+  } = useInfiniteQuery([`tokens-${selectedMarketName}`], queryTokens, {
+    getFetchMore: (lastGroup, allGroups) => {
+      const morePagesExist =
+        allGroups.length === 1 ? true : lastGroup?.length === 10
 
-        if (!morePagesExist) return false
+      if (!morePagesExist) return false
 
-        console.log(morePagesExist, lastGroup, allGroups)
-
-        return [
-          market,
-          (allGroups.length - 1) * 10,
-          TOKENS_PER_PAGE,
-          WEEK_SECONDS,
-          selectedCategoryId === Categories.HOT.id
-            ? 'dayChange'
-            : selectedCategoryId === Categories.NEW.id
-            ? 'listedAt'
-            : orderBy,
-          selectedCategoryId === Categories.HOT.id ||
-          selectedCategoryId === Categories.NEW.id
-            ? 'desc'
-            : orderDirection,
-          nameSearch,
-          filterTokens,
-        ]
-      },
-      // refetchOnWindowFocus: false,
-      // refetchOnMount: false,
-      forceFetchOnMount: true,
-      enabled: !!market,
-    }
-  )
+      return [
+        market,
+        (allGroups.length - 1) * 10,
+        TOKENS_PER_PAGE,
+        WEEK_SECONDS,
+        selectedCategoryId === Categories.HOT.id
+          ? 'dayChange'
+          : selectedCategoryId === Categories.NEW.id
+          ? 'listedAt'
+          : orderBy,
+        selectedCategoryId === Categories.HOT.id ||
+        selectedCategoryId === Categories.NEW.id
+          ? 'desc'
+          : orderDirection,
+        nameSearch,
+        filterTokens,
+      ]
+    },
+    refetchOnWindowFocus: false,
+    forceFetchOnMount: true,
+    enabled: !!market,
+  })
+  stateRef.current = infiniteData
 
   const tokenData = []
-
   ;(infiniteData || []).forEach((page) => {
     page.forEach((char) => {
       tokenData.push(char)
     })
   })
+
+  const hasMore = (infiniteData: Array<Array<IdeaToken>>) => {
+    console.log('DUPA', infiniteData)
+    return !infiniteData || infiniteData.length <= 1
+      ? true
+      : infiniteData[infiniteData.length - 1].length === 10
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -271,7 +215,11 @@ export default function Table({
       const height = document.documentElement.scrollHeight
       const windowHeight = window.innerHeight
       const diff = height - windowHeight - currentScrollY
-      if (diff < 100 && (!isChartDataLoading || !isTokenDataLoading)) {
+      if (
+        diff < 100 &&
+        (!isChartDataLoading || !isTokenDataLoading) &&
+        hasMore(stateRef.current)
+      ) {
         loadMore()
       }
     }
@@ -282,6 +230,7 @@ export default function Table({
   }, [])
 
   const loadMore = throttle(() => {
+    console.log('loadMore')
     fetchMore()
   }, 1000)
 
