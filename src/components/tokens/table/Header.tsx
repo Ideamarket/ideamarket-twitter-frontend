@@ -1,6 +1,8 @@
 import classNames from 'classnames'
 import Tooltip from 'components/tooltip/Tooltip'
 import React, { ReactNode } from 'react'
+import { investmentTokenToUnderlying } from 'store/compoundStore'
+import { bigNumberTenPow18, formatNumber, web3BNToFloatString } from 'utils'
 
 type Header = {
   content: ReactNode | string
@@ -76,7 +78,14 @@ const headers: Header[] = [
   },
 ]
 
-export const Header = ({ currentHeader, orderDirection, headerClicked }) => (
+export const Header = ({
+  currentHeader,
+  orderDirection,
+  headerClicked,
+  isLoading,
+  market,
+  compoundExchangeRate,
+}) => (
   <>
     {headers.map((header) => (
       <th
@@ -106,5 +115,41 @@ export const Header = ({ currentHeader, orderDirection, headerClicked }) => (
         {header.content}
       </th>
     ))}
+    <th
+      colSpan={2}
+      className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50"
+    >
+      {!isLoading && (
+        <div className="text-right">
+          {'$' +
+            formatNumber(
+              parseFloat(
+                web3BNToFloatString(
+                  investmentTokenToUnderlying(
+                    market.rawPlatformFeeInvested,
+                    compoundExchangeRate
+                  ).add(market.rawPlatformFeeRedeemed),
+                  bigNumberTenPow18,
+                  4
+                )
+              )
+            )}
+          <br />
+          <div className="flex flex-row items-center justify-end">
+            earned for {market.name}
+            <Tooltip className="ml-1">
+              <div className="w-32 md:w-64">
+                Platforms get a new income stream too. Half of the trading fees
+                for each market are paid to the platform it curates. To claim
+                funds on behalf of Twitter, email{' '}
+                <a className="underline" href="mailto:team@ideamarkets.org">
+                  team@ideamarkets.org
+                </a>
+              </div>
+            </Tooltip>
+          </div>
+        </div>
+      )}
+    </th>
   </>
 )
