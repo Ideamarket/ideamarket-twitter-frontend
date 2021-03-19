@@ -393,7 +393,7 @@ export async function queryTokensChartData(
 
   const ret = {}
   for (let token of tokens) {
-    const alias = 'a' + token.address.toLowerCase() // Hack, because a alias in Graphql cannot begin with 0, so we just prepend an 'a'
+    const alias = 'a' + token.address.toLowerCase() // Hack, because a alias in Graphql cannot begin with 0, so we just prepend an 'a'.
     ret[token.address] = result[alias]
       ? result[alias].map((p) => apiResponseToPricePoint(p))
       : []
