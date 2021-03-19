@@ -1,6 +1,7 @@
-import classNames from 'classnames'
-import Tooltip from 'components/tooltip/Tooltip'
 import React, { ReactNode } from 'react'
+import classNames from 'classnames'
+
+import Tooltip from 'components/tooltip/Tooltip'
 import { investmentTokenToUnderlying } from 'store/compoundStore'
 import { bigNumberTenPow18, formatNumber, web3BNToFloatString } from 'utils'
 
