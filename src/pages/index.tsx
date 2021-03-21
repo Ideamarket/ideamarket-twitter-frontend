@@ -34,7 +34,6 @@ export default function Home() {
   )
   const [selectedMarketName, setSelectedMarketName] = useState('Twitter')
   const [nameSearch, setNameSearch] = useState('')
-  const [tablePage, setTablePage] = useState(0)
 
   const [isPromoVideoModalOpen, setIsPromoVideoModalOpen] = useState(false)
 
@@ -43,16 +42,20 @@ export default function Home() {
   const {
     data: compoundExchangeRate,
     isLoading: isCompoundExchangeRateLoading,
-  } = useQuery('compound-exchange-rate', queryExchangeRate)
+  } = useQuery('compound-exchange-rate', queryExchangeRate, {
+    refetchOnWindowFocus: false,
+  })
 
   const {
     data: interestManagerCDaiBalance,
     isLoading: isInterestManagerCDaiBalance,
   } = useQuery(
     ['interest-manager-cdai-balance', interestManagerAddress],
-    queryCDaiBalance
+    queryCDaiBalance,
+    {
+      refetchOnWindowFocus: false,
+    }
   )
-
   const cDaiBalanceInDai = formatNumberWithCommasAsThousandsSerperator(
     web3BNToFloatString(
       investmentTokenToUnderlying(
@@ -96,24 +99,19 @@ export default function Home() {
   ]
 
   function onMarketChanged(market) {
-    setTablePage(0)
     setSelectedMarketName(market)
   }
 
   function onNameSearchChanged(nameSearch) {
-    setTablePage(0)
     setSelectedCategoryId(Categories.ALL.id)
     setNameSearch(nameSearch)
   }
 
   function onCategoryChanged(categoryID: number) {
-    setTablePage(0)
     setSelectedCategoryId(categoryID)
   }
 
   function onOrderByChanged(orderBy: string, direction: string) {
-    setTablePage(0)
-
     if (selectedCategoryId === Categories.STARRED.id) {
       return
     }
@@ -302,8 +300,6 @@ export default function Home() {
             </div>
           </div>
           <Table
-            currentPage={tablePage}
-            setCurrentPage={setTablePage}
             nameSearch={nameSearch}
             selectedMarketName={selectedMarketName}
             selectedCategoryId={selectedCategoryId}

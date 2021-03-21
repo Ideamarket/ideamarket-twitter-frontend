@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useInfiniteQuery, useQuery } from 'react-query'
+import { useInfiniteQuery, useQuery, useQueryCache } from 'react-query'
 import { flatten } from 'lodash'
 
 import { useWindowSize, WEEK_SECONDS } from 'utils'
@@ -21,16 +21,12 @@ export default function Table({
   selectedMarketName,
   selectedCategoryId,
   nameSearch,
-  currentPage,
-  setCurrentPage,
   onOrderByChanged,
   onTradeClicked,
 }: {
   selectedMarketName: string
   selectedCategoryId: number
   nameSearch: string
-  currentPage: number
-  setCurrentPage: (p: number) => void
   onOrderByChanged: (o: string, d: string) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }) {
@@ -41,7 +37,8 @@ export default function Table({
   const [currentHeader, setCurrentHeader] = useState('rank')
   const [orderBy, setOrderBy] = useState('rank')
   const [orderDirection, setOrderDirection] = useState('asc')
-  const infiniteDataRef = useRef<IdeaToken[][]>()
+  const canFetchMoreRef = useRef<boolean>()
+  const queryCache = useQueryCache()
 
   const {
     data: compoundExchangeRate,
@@ -70,10 +67,6 @@ export default function Table({
     }
   )
 
-  useEffect(() => {
-    fetchMore()
-  }, [selectedMarketName && !!market])
-
   const watchingTokens = Object.keys(
     useIdeaMarketsStore((store) => store.watching)
   )
@@ -81,21 +74,29 @@ export default function Table({
   const filterTokens =
     selectedCategoryId === Categories.STARRED.id ? watchingTokens : undefined
 
-  const {
+  useEffect(() => {
+    queryCache.removeQueries(`market-${selectedMarketName}`)
+    queryCache.removeQueries(`tokens-${selectedMarketName}`)
+  }, [selectedMarketName])
+
+  useEffect(() => {
+    if (typeof market !== 'undefined') {
+      refetch()
+    }
+  }, [selectedMarketName + market?.name])
+
+  let {
     data: infiniteData,
     isFetching: isTokenDataLoading,
     fetchMore,
-  } = useInfiniteQuery([`tokens-${selectedMarketName}`], queryTokens, {
-    getFetchMore: (lastGroup, allGroups) => {
-      const morePagesExist = allGroups.length === 1 || lastGroup?.length === 10
-
-      if (!morePagesExist) {
-        return false
-      }
-
-      return [
+    refetch,
+    remove,
+    canFetchMore,
+  } = useInfiniteQuery(
+    [
+      `tokens-${selectedMarketName}`,
+      [
         market,
-        (allGroups.length - 1) * TOKENS_PER_PAGE,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
         selectedCategoryId === Categories.HOT.id
@@ -109,20 +110,27 @@ export default function Table({
           : orderDirection,
         nameSearch,
         filterTokens,
-      ]
-    },
-    refetchOnWindowFocus: false,
-    forceFetchOnMount: true,
-    enabled: !!market,
-  })
+      ],
+    ],
+    queryTokens,
+    {
+      getFetchMore: (lastGroup, allGroups) => {
+        const morePagesExist = lastGroup?.length === 10
 
-  infiniteDataRef.current = infiniteData
+        if (!morePagesExist) {
+          return false
+        }
+
+        return allGroups.length * TOKENS_PER_PAGE
+      },
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      enabled: false,
+    }
+  )
+  canFetchMoreRef.current = canFetchMore
 
   const tokenData = flatten(infiniteData || [])
-
-  const hasMore = (infiniteData: IdeaToken[][]) => {
-    return infiniteData[infiniteData.length - 1].length === 10
-  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -131,7 +139,7 @@ export default function Table({
       const windowHeight = window.innerHeight
       const diff = height - windowHeight - currentScrollY
 
-      if (diff < LOADING_MARGIN && hasMore(infiniteDataRef.current)) {
+      if (diff < LOADING_MARGIN && canFetchMoreRef.current) {
         fetchMore()
       }
     }
@@ -154,8 +162,6 @@ export default function Table({
     isCompoundExchangeRateLoading
 
   function headerClicked(headerValue: string) {
-    setCurrentPage(0)
-
     if (currentHeader === headerValue) {
       if (orderDirection === 'asc') {
         setOrderDirection('desc')

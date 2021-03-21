@@ -197,7 +197,6 @@ export async function queryMyTokensMaybeMarket(
 
 type Params = [
   market: IdeaMarket,
-  skip: number,
   num: number,
   duration: number,
   orderBy: string,
@@ -208,7 +207,8 @@ type Params = [
 
 export async function queryTokens(
   queryKey: string,
-  params: Params
+  params: Params,
+  skip = 0
 ): Promise<IdeaToken[]> {
   if (!params) {
     return []
@@ -216,7 +216,6 @@ export async function queryTokens(
 
   const [
     market,
-    skip,
     num,
     duration,
     orderBy,
