@@ -27,6 +27,7 @@ import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 import { Categories } from 'store/models/category'
 import { HeaderButtons } from 'components/tokens/HeaderButtons'
+import { ScrollToTop } from 'components/tokens/ScrollToTop'
 
 export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(
@@ -308,6 +309,8 @@ export default function Home() {
           />
         </div>
       </div>
+
+      <ScrollToTop />
       <TradeModal
         isOpen={tradeModalData.show}
         setIsOpen={() => setTradeModalData({ ...tradeModalData, show: false })}
