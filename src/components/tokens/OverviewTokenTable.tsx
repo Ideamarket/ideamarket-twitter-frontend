@@ -225,25 +225,23 @@ export default function Table({
                   </tr>
                 </thead>
                 <tbody className="bg-white w-full divide-y divide-gray-200">
-                  <>
-                    {(tokenData as IdeaToken[]).map((token) => (
-                      <TokenRow
-                        key={market.marketID + '-' + token.tokenID}
-                        token={token}
-                        market={market}
-                        showMarketSVG={false}
-                        compoundSupplyRate={compoundSupplyRate}
-                        chartData={chartData ? chartData[token.address] : []}
-                        chartDuration={WEEK_SECONDS}
-                        onTradeClicked={onTradeClicked}
-                      />
-                    ))}
-                  </>
+                  {(tokenData as IdeaToken[]).map((token) => (
+                    <TokenRow
+                      key={market.marketID + '-' + token.tokenID}
+                      token={token}
+                      market={market}
+                      showMarketSVG={false}
+                      compoundSupplyRate={compoundSupplyRate}
+                      chartData={chartData ? chartData[token.address] : []}
+                      chartDuration={WEEK_SECONDS}
+                      onTradeClicked={onTradeClicked}
+                    />
+                  ))}
                   {isLoading
                     ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                         <TokenRowSkeleton key={token} />
                       ))
-                    : null}{' '}
+                    : null}
                 </tbody>
               </table>
             </div>
