@@ -307,8 +307,6 @@ export default function Home() {
             onTradeClicked={onTradeClicked}
           />
         </div>
-
-        <Footer />
       </div>
       <TradeModal
         isOpen={tradeModalData.show}
