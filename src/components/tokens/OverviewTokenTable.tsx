@@ -39,7 +39,6 @@ export default function Table({
   const [orderDirection, setOrderDirection] = useState('asc')
   const [market, setMarket] = useState<IdeaMarket>()
   const canFetchMoreRef = useRef<boolean>()
-  const queryCache = useQueryCache()
 
   const watchingTokens = Object.keys(
     useIdeaMarketsStore((store) => store.watching)
@@ -67,11 +66,7 @@ export default function Table({
     refetchOnWindowFocus: false,
   })
 
-  const {
-    // data: market,
-    isLoading: isMarketLoading,
-    refetch: refetchMarket,
-  } = useQuery(
+  const { isLoading: isMarketLoading, refetch: refetchMarket } = useQuery(
     [`market-${selectedMarketName}`, selectedMarketName],
     queryMarket,
     {
@@ -127,12 +122,13 @@ export default function Table({
 
   const tokenData = flatten(infiniteData || [])
 
-  useEffect(() => {
-    // queryCache.removeQueries(`market-${selectedMarketName}`)
-    // queryCache.removeQueries(`tokens-${selectedMarketName}`)
-    // console.log('1')
-    refetch()
-  }, [selectedCategoryId, orderBy, orderDirection, nameSearch])
+  const { data: chartData, isLoading: isChartDataLoading } = useQuery(
+    ['chartdata', tokenData, 100],
+    queryTokensChartData,
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
 
   useEffect(() => {
     const fetch = async () => {
@@ -146,7 +142,7 @@ export default function Table({
     if (!!market) {
       refetch()
     }
-  }, [market])
+  }, [market, selectedCategoryId, orderBy, orderDirection, nameSearch])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -164,11 +160,6 @@ export default function Table({
 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const { data: chartData, isLoading: isChartDataLoading } = useQuery(
-    ['chartdata', tokenData, 100],
-    queryTokensChartData
-  )
 
   const isLoading =
     isMarketLoading ||
