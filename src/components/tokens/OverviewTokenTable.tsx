@@ -37,8 +37,16 @@ export default function Table({
   const [currentHeader, setCurrentHeader] = useState('rank')
   const [orderBy, setOrderBy] = useState('rank')
   const [orderDirection, setOrderDirection] = useState('asc')
+  const [market, setMarket] = useState<IdeaMarket>()
   const canFetchMoreRef = useRef<boolean>()
   const queryCache = useQueryCache()
+
+  const watchingTokens = Object.keys(
+    useIdeaMarketsStore((store) => store.watching)
+  )
+
+  const filterTokens =
+    selectedCategoryId === Categories.STARRED.id ? watchingTokens : undefined
 
   const {
     data: compoundExchangeRate,
@@ -59,38 +67,24 @@ export default function Table({
     refetchOnWindowFocus: false,
   })
 
-  const { data: market, isLoading: isMarketLoading } = useQuery(
+  const {
+    // data: market,
+    isLoading: isMarketLoading,
+    refetch: refetchMarket,
+  } = useQuery(
     [`market-${selectedMarketName}`, selectedMarketName],
     queryMarket,
     {
       refetchOnWindowFocus: false,
+      enabled: false,
     }
   )
 
-  const watchingTokens = Object.keys(
-    useIdeaMarketsStore((store) => store.watching)
-  )
-
-  const filterTokens =
-    selectedCategoryId === Categories.STARRED.id ? watchingTokens : undefined
-
-  useEffect(() => {
-    queryCache.removeQueries(`market-${selectedMarketName}`)
-    queryCache.removeQueries(`tokens-${selectedMarketName}`)
-  }, [selectedMarketName])
-
-  useEffect(() => {
-    if (typeof market !== 'undefined') {
-      refetch()
-    }
-  }, [selectedMarketName + market?.name])
-
-  let {
+  const {
     data: infiniteData,
     isFetching: isTokenDataLoading,
     fetchMore,
     refetch,
-    remove,
     canFetchMore,
   } = useInfiniteQuery(
     [
@@ -128,9 +122,31 @@ export default function Table({
       enabled: false,
     }
   )
+
   canFetchMoreRef.current = canFetchMore
 
   const tokenData = flatten(infiniteData || [])
+
+  useEffect(() => {
+    // queryCache.removeQueries(`market-${selectedMarketName}`)
+    // queryCache.removeQueries(`tokens-${selectedMarketName}`)
+    // console.log('1')
+    refetch()
+  }, [selectedCategoryId, orderBy, orderDirection, nameSearch])
+
+  useEffect(() => {
+    const fetch = async () => {
+      const market = await refetchMarket()
+      setMarket(market)
+    }
+    fetch()
+  }, [selectedMarketName])
+
+  useEffect(() => {
+    if (!!market) {
+      refetch()
+    }
+  }, [market])
 
   useEffect(() => {
     const handleScroll = () => {
