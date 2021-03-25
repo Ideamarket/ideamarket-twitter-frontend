@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useInfiniteQuery, useQuery, useQueryCache } from 'react-query'
+import { useInfiniteQuery, useQuery } from 'react-query'
 import { flatten } from 'lodash'
 
 import { useWindowSize, WEEK_SECONDS } from 'utils'
@@ -17,19 +17,21 @@ import TokenRowSkeleton from './OverviewTokenRowSkeleton'
 import { Categories } from 'store/models/category'
 import { Header } from './table/Header'
 
+type Props = {
+  selectedMarketName: string
+  selectedCategoryId: number
+  nameSearch: string
+  onOrderByChanged: (o: string, d: string) => void
+  onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
+}
+
 export default function Table({
   selectedMarketName,
   selectedCategoryId,
   nameSearch,
   onOrderByChanged,
   onTradeClicked,
-}: {
-  selectedMarketName: string
-  selectedCategoryId: number
-  nameSearch: string
-  onOrderByChanged: (o: string, d: string) => void
-  onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
-}) {
+}: Props) {
   const windowSize = useWindowSize()
   const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
   const LOADING_MARGIN = 200

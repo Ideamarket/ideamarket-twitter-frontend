@@ -3,10 +3,15 @@ import React, { useState } from 'react'
 import Plus from '../../assets/plus-white.svg'
 import Play from '../../assets/play.svg'
 
+type Props = {
+  setIsPromoVideoModalOpen: (open: boolean) => void
+  onListTokenClicked: () => void
+}
+
 export const HeaderButtons = ({
   setIsPromoVideoModalOpen,
   onListTokenClicked,
-}) => {
+}: Props) => {
   const [isHoveringWatchVideo, setIsHoveringWatchVideo] = useState(false)
 
   return (

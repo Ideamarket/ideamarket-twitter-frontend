@@ -1,9 +1,11 @@
 import React, { ReactNode } from 'react'
+import BN from 'bn.js'
 import classNames from 'classnames'
 
 import Tooltip from 'components/tooltip/Tooltip'
 import { investmentTokenToUnderlying } from 'store/compoundStore'
 import { bigNumberTenPow18, formatNumber, web3BNToFloatString } from 'utils'
+import { IdeaMarket } from 'store/ideaMarketsStore'
 
 type Header = {
   content: ReactNode | string
@@ -78,6 +80,15 @@ const headers: Header[] = [
     sortable: false,
   },
 ]
+
+type Props = {
+  currentHeader: string
+  orderDirection: string
+  headerClicked: (headerValue: string) => void
+  isLoading: boolean
+  market: IdeaMarket
+  compoundExchangeRate: BN
+}
 
 export const Header = ({
   currentHeader,

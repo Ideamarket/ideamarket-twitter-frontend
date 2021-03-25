@@ -14,13 +14,7 @@ import {
   bigNumberTenPow18,
   formatNumberWithCommasAsThousandsSerperator,
 } from 'utils'
-import {
-  Table,
-  TradeModal,
-  ListTokenModal,
-  PromoVideoModal,
-  Footer,
-} from 'components'
+import { Table, TradeModal, ListTokenModal, PromoVideoModal } from 'components'
 
 import Search from '../assets/search.svg'
 import { GlobalContext } from './_app'
