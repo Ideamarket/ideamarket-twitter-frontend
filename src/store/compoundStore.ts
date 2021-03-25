@@ -7,7 +7,7 @@ const DAI_ADDRESS = '0x6b175474e89094c44da98b954eedeac495271d0f'
 const CDAI_ADDRESS = addresses.cDai
 
 const HTTP_GRAPHQL_ENDPOINT =
-  'https://subgraph.backend.ideamarket.io:8080/subgraphs/name/graphprotocol/compound-v2'
+  'https://subgraph-compound.backend.ideamarket.io/subgraphs/name/graphprotocol/compound-v2'
 
 export async function querySupplyRate(queryKey: string): Promise<number> {
   const result = await request(
