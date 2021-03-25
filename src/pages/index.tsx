@@ -20,7 +20,7 @@ import Search from '../assets/search.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 import { Categories } from 'store/models/category'
-import { HeaderButtons } from 'components/tokens/HeaderButtons'
+import { HeaderButtons } from 'components/video/HeaderButtons'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'
 
 export default function Home() {
