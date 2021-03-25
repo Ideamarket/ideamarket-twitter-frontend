@@ -15,7 +15,7 @@ export default async function requestVerification(
 
   try {
     const response = await axios.post(
-      'https://verification.backend.ideamarket.io:8080/verificationRequest',
+      'https://verification.backend.ideamarket.io/verificationRequest',
       payload
     )
     return response.data.data.uuid

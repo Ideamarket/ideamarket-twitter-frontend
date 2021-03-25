@@ -28,7 +28,7 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
   }
 
   getTokenIconURL(tokenName: string): string {
-    return `https://unavatar.backend.ideamarket.io:8080/twitter/${tokenName.slice(
+    return `https://unavatar.backend.ideamarket.io/twitter/${tokenName.slice(
       1
     )}`
   }

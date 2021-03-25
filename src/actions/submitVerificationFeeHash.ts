@@ -11,7 +11,7 @@ export default async function submitVerificationFeeHash(
 
   try {
     const response = await axios.post(
-      'https://verification.backend.ideamarket.io:8080/feeTxConfirmed',
+      'https://verification.backend.ideamarket.io/feeTxConfirmed',
       payload
     )
 

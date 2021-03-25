@@ -9,7 +9,7 @@ export default async function submitVerification(
 
   try {
     const response = await axios.post(
-      'https://verification.backend.ideamarket.io:8080/verificationSubmitted',
+      'https://verification.backend.ideamarket.io/verificationSubmitted',
       payload
     )
 
