@@ -17,6 +17,17 @@ import {
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
+type Props = {
+  token: IdeaToken
+  market: IdeaMarket
+  showMarketSVG: boolean
+  compoundSupplyRate: number
+  chartData: IdeaTokenPricePoint[]
+  chartDuration: number
+  holders: number
+  onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
+}
+
 export default function TokenRow({
   token,
   market,
@@ -24,16 +35,9 @@ export default function TokenRow({
   compoundSupplyRate,
   chartData,
   chartDuration,
+  holders,
   onTradeClicked,
-}: {
-  token: IdeaToken
-  market: IdeaMarket
-  showMarketSVG: boolean
-  compoundSupplyRate: number
-  chartData: IdeaTokenPricePoint[]
-  chartDuration: number
-  onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
-}) {
+}: Props) {
   const fromTs = Math.floor(Date.now() / 1000) - chartDuration
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
@@ -170,7 +174,7 @@ export default function TokenRow({
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title="some title"
           >
-            1234
+            {holders}
           </p>
         </td>
         <td className="py-4 pl-6 whitespace-nowrap">

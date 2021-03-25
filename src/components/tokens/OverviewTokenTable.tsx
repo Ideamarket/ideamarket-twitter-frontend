@@ -232,6 +232,7 @@ export default function Table({
                       key={market.marketID + '-' + token.tokenID}
                       token={token}
                       market={market}
+                      holders={token.holders}
                       showMarketSVG={false}
                       compoundSupplyRate={compoundSupplyRate}
                       chartData={chartData ? chartData[token.address] : []}
