@@ -49,11 +49,6 @@ export default function TokenRowSkeleton() {
             <span className="invisible">Trade</span>
           </button>
         </td>
-        <td className="hidden px-5 py-4 whitespace-nowrap md:table-cell">
-          <button className="h-10 bg-gray-400 rounded-lg w-28">
-            <span className="invisible">Trade</span>
-          </button>
-        </td>
         <td className="px-3 py-4 whitespace-nowrap">
           <div className="w-5 h-5 bg-gray-400 rounded"></div>
         </td>

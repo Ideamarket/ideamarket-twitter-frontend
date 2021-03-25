@@ -39,13 +39,13 @@ const headers: Header[] = [
     sortable: true,
   },
   {
-    content: '24H Change',
-    value: 'change',
+    content: 'Holders',
+    value: 'holders',
     sortable: true,
   },
   {
-    content: '24H Volume',
-    value: 'volume',
+    content: '24H Change',
+    value: 'change',
     sortable: true,
   },
   {
@@ -73,11 +73,6 @@ const headers: Header[] = [
     ),
     value: 'income',
     sortable: true,
-  },
-  {
-    content: '7D Chart',
-    value: 'chart',
-    sortable: false,
   },
 ]
 

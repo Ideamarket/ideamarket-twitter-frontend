@@ -161,6 +161,18 @@ export default function TokenRow({
             )}
           </p>
         </td>
+
+        <td className="py-4 pl-6 whitespace-nowrap">
+          <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
+            Holders
+          </p>
+          <p
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+            title="some title"
+          >
+            1234
+          </p>
+        </td>
         <td className="py-4 pl-6 whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             24H Change
@@ -186,20 +198,6 @@ export default function TokenRow({
         </td>
         <td className="py-4 pl-6 whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
-            24H Volume
-          </p>
-          <p
-            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={'$' + token.dayVolume}
-          >
-            $
-            {formatNumberWithCommasAsThousandsSerperator(
-              parseInt(token.dayVolume)
-            )}
-          </p>
-        </td>
-        <td className="py-4 pl-6 whitespace-nowrap">
-          <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
             1YR Income
           </p>
           <p
@@ -210,9 +208,6 @@ export default function TokenRow({
           </p>
         </td>
 
-        <td className="col-span-3 row-span-1 row-start-4 py-1 pl-1 whitespace-nowrap col-start-0">
-          <PreviewPriceChart chartData={parsedChartData} />
-        </td>
         <td className="hidden px-6 py-4 whitespace-nowrap md:table-cell">
           <button
             onClick={(e) => {
