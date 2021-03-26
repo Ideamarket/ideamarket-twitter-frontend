@@ -92,7 +92,7 @@ export const Header = ({
   isLoading,
   market,
   compoundExchangeRate,
-}) => (
+}: Props) => (
   <>
     {headers.map((header) => (
       <th
