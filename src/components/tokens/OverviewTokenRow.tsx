@@ -1,6 +1,5 @@
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import { PreviewPriceChart, WatchingStar } from 'components'
 import {
@@ -11,6 +10,7 @@ import {
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   calculateCurrentPriceBN,
+  formatNumberWithCommasAsThousandsSerperator,
   formatNumber,
   web3BNToFloatString,
 } from 'utils'
@@ -99,17 +99,7 @@ export default function TokenRow({
               />
             </div>
             <div className="ml-4 text-base font-medium leading-5 text-gray-900">
-              <a
-                href={`${marketSpecifics.getTokenURL(token.name)}`}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:underline"
-                onClick={(e) => {
-                  e.stopPropagation()
-                }}
-              >
-                {token.name}
-              </a>
+              <span className="hover:underline">{token.name}</span>
             </div>
             <div className="flex items-center justify-center ml-auto md:hidden">
               <svg
@@ -147,7 +137,10 @@ export default function TokenRow({
             title={'$' + token.daiInToken}
           >
             {parseFloat(token.daiInToken) > 0.0 ? (
-              `$` + formatNumber(token.daiInToken)
+              `$` +
+              formatNumberWithCommasAsThousandsSerperator(
+                parseInt(token.daiInToken)
+              )
             ) : (
               <>&mdash;</>
             )}
@@ -159,10 +152,10 @@ export default function TokenRow({
           </p>
           <p
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={parseFloat(token.lockedPercentage).toFixed(2) + ' %'}
+            title={parseInt(token.lockedPercentage) + ' %'}
           >
             {parseFloat(token.lockedPercentage) * 100.0 > 0.0 ? (
-              formatNumber(parseFloat(token.lockedPercentage).toFixed(2)) + ' %'
+              parseInt(token.lockedPercentage) + ' %'
             ) : (
               <>&mdash;</>
             )}
@@ -181,13 +174,13 @@ export default function TokenRow({
             )}
             title={`${
               parseFloat(token.dayChange) >= 0.0
-                ? `+ ${token.dayChange}`
-                : `- ${token.dayChange.slice(1)}`
+                ? `+ ${parseInt(token.dayChange)}`
+                : `- ${parseInt(token.dayChange.slice(1))}`
             }%`}
           >
             {parseFloat(token.dayChange) >= 0.0
-              ? `+ ${token.dayChange}`
-              : `- ${token.dayChange.slice(1)}`}
+              ? `+ ${parseInt(token.dayChange)}`
+              : `- ${parseInt(token.dayChange.slice(1))}`}
             %
           </p>
         </td>
@@ -199,7 +192,10 @@ export default function TokenRow({
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + token.dayVolume}
           >
-            ${formatNumber(token.dayVolume)}
+            $
+            {formatNumberWithCommasAsThousandsSerperator(
+              parseInt(token.dayVolume)
+            )}
           </p>
         </td>
         <td className="py-4 pl-6 whitespace-nowrap">
@@ -210,7 +206,7 @@ export default function TokenRow({
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + yearIncome}
           >
-            ${formatNumber(yearIncome)}
+            ${formatNumberWithCommasAsThousandsSerperator(parseInt(yearIncome))}
           </p>
         </td>
 
