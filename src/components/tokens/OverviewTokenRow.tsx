@@ -151,7 +151,7 @@ export default function TokenRow({
           </p>
           <p
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title="some title"
+            title={`Holders: ${holders}`}
           >
             {holders}
           </p>
