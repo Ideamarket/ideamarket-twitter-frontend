@@ -8,7 +8,6 @@ import {
   IdeaMarket,
   queryMarket,
   queryTokens,
-  queryTokensChartData,
 } from 'store/ideaMarketsStore'
 import { querySupplyRate, queryExchangeRate } from 'store/compoundStore'
 import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
@@ -124,14 +123,6 @@ export default function Table({
 
   const tokenData = flatten(infiniteData || [])
 
-  const { data: chartData, isLoading: isChartDataLoading } = useQuery(
-    ['chartdata', tokenData, 100],
-    queryTokensChartData,
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
-
   useEffect(() => {
     const fetch = async () => {
       const market = await refetchMarket()
@@ -166,7 +157,6 @@ export default function Table({
   const isLoading =
     isMarketLoading ||
     isTokenDataLoading ||
-    isChartDataLoading ||
     isCompoundSupplyRateLoading ||
     isCompoundExchangeRateLoading
 
@@ -195,12 +185,15 @@ export default function Table({
       } else if (headerValue === 'change') {
         setOrderBy('dayChange')
         onOrderByChanged('dayChange', 'desc')
-      } else if (headerValue === 'volume') {
-        setOrderBy('dayVolume')
-        onOrderByChanged('dayVolume', 'desc')
+      } else if (headerValue === 'change') {
+        setOrderBy('dayChange')
+        onOrderByChanged('dayChange', 'desc')
       } else if (headerValue === 'locked') {
         setOrderBy('lockedPercentage')
         onOrderByChanged('lockedAmount', 'desc')
+      } else if (headerValue === 'holders') {
+        setOrderBy('holders')
+        onOrderByChanged('holders', 'desc')
       }
 
       setOrderDirection('desc')
@@ -235,7 +228,6 @@ export default function Table({
                       holders={token.holders}
                       showMarketSVG={false}
                       compoundSupplyRate={compoundSupplyRate}
-                      chartData={chartData ? chartData[token.address] : []}
                       chartDuration={WEEK_SECONDS}
                       onTradeClicked={onTradeClicked}
                     />

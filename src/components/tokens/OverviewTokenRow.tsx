@@ -1,12 +1,8 @@
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
-import { PreviewPriceChart, WatchingStar } from 'components'
-import {
-  IdeaMarket,
-  IdeaToken,
-  IdeaTokenPricePoint,
-} from 'store/ideaMarketsStore'
+import { WatchingStar } from 'components'
+import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   calculateCurrentPriceBN,
@@ -22,7 +18,6 @@ type Props = {
   market: IdeaMarket
   showMarketSVG: boolean
   compoundSupplyRate: number
-  chartData: IdeaTokenPricePoint[]
   chartDuration: number
   holders: number
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
@@ -33,7 +28,6 @@ export default function TokenRow({
   market,
   showMarketSVG,
   compoundSupplyRate,
-  chartData,
   chartDuration,
   holders,
   onTradeClicked,
@@ -56,21 +50,6 @@ export default function TokenRow({
     tenPow18,
     2
   )
-
-  let beginPrice: number
-  let endPrice: number
-  if (chartData.length === 0) {
-    beginPrice = token.latestPricePoint.price
-    endPrice = token.latestPricePoint.price
-  } else {
-    beginPrice = chartData[0].oldPrice
-    endPrice = chartData[chartData.length - 1].price
-  }
-
-  const parsedChartData = [[fromTs, beginPrice]].concat(
-    chartData.map((p) => [p.timestamp, p.price])
-  )
-  parsedChartData.push([Math.floor(Date.now() / 1000), endPrice])
 
   return (
     <>

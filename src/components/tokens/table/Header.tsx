@@ -126,37 +126,41 @@ export const Header = ({
       colSpan={2}
       className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50"
     >
-      {!isLoading && market && (
-        <div className="text-right">
-          {'$' +
-            formatNumber(
-              parseFloat(
-                web3BNToFloatString(
-                  investmentTokenToUnderlying(
-                    market.rawPlatformFeeInvested,
-                    compoundExchangeRate
-                  ).add(market.rawPlatformFeeRedeemed),
-                  bigNumberTenPow18,
-                  4
+      <div className="text-right">
+        {!isLoading && market ? (
+          <span>
+            {'$' +
+              formatNumber(
+                parseFloat(
+                  web3BNToFloatString(
+                    investmentTokenToUnderlying(
+                      market.rawPlatformFeeInvested,
+                      compoundExchangeRate
+                    ).add(market.rawPlatformFeeRedeemed),
+                    bigNumberTenPow18,
+                    4
+                  )
                 )
-              )
-            )}
-          <br />
-          <div className="flex flex-row items-center justify-end">
-            earned for {market.name}
-            <Tooltip className="ml-1">
-              <div className="w-32 md:w-64">
-                Platforms get a new income stream too. Half of the trading fees
-                for each market are paid to the platform it curates. To claim
-                funds on behalf of Twitter, email{' '}
-                <a className="underline" href="mailto:team@ideamarkets.org">
-                  team@ideamarkets.org
-                </a>
-              </div>
-            </Tooltip>
-          </div>
+              )}
+          </span>
+        ) : (
+          <span>~</span>
+        )}
+        <br />
+        <div className="flex flex-row items-center justify-end">
+          earned for {market?.name}
+          <Tooltip className="ml-1">
+            <div className="w-32 md:w-64">
+              Platforms get a new income stream too. Half of the trading fees
+              for each market are paid to the platform it curates. To claim
+              funds on behalf of Twitter, email{' '}
+              <a className="underline" href="mailto:team@ideamarkets.org">
+                team@ideamarkets.org
+              </a>
+            </div>
+          </Tooltip>
         </div>
-      )}
+      </div>
     </th>
   </>
 )
