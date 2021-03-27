@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { flatten } from 'lodash'
 
-import { useWindowSize, WEEK_SECONDS } from 'utils'
+import { WEEK_SECONDS } from 'utils'
 import {
   IdeaToken,
   IdeaMarket,
@@ -31,8 +31,7 @@ export default function Table({
   onOrderByChanged,
   onTradeClicked,
 }: Props) {
-  const windowSize = useWindowSize()
-  const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
+  const TOKENS_PER_PAGE = 10
   const LOADING_MARGIN = 200
 
   const [currentHeader, setCurrentHeader] = useState('rank')
