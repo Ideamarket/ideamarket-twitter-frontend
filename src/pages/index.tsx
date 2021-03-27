@@ -98,7 +98,7 @@ export default function Home() {
   }
 
   function onNameSearchChanged(nameSearch) {
-    setSelectedCategoryId(Categories.ALL.id)
+    setSelectedCategoryId(Categories.TOP.id)
     setNameSearch(nameSearch)
   }
 
@@ -116,7 +116,7 @@ export default function Home() {
     } else if (orderBy === 'listedAt' && direction === 'desc') {
       setSelectedCategoryId(Categories.NEW.id)
     } else {
-      setSelectedCategoryId(Categories.ALL.id)
+      setSelectedCategoryId(Categories.TOP.id)
     }
   }
 

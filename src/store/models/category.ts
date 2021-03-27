@@ -1,7 +1,7 @@
 export const Categories = {
-  ALL: {
+  TOP: {
     id: 1,
-    value: 'All',
+    value: 'Top',
   },
   HOT: {
     id: 2,
