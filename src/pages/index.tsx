@@ -156,12 +156,11 @@ export default function Home() {
             </div>
           </div>
           <h2 className="mt-8 text-3xl md:mt-10 md:text-6xl font-gilroy-bold">
-            Credibility without{' '}
-            <span className="text-brand-blue">corporations</span>
+            Maximize return on{' '}
+            <span className="text-brand-blue">attention</span>
           </h2>
           <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
-            Vote with your dollars, and give underrated voices the visibility
-            they deserve.
+            Profit by discovering and popularizing the world’s best knowledge.
           </p>
         </div>
         <div className="flex items-center justify-center mt-8 space-x-12">
@@ -194,9 +193,12 @@ export default function Home() {
           setIsPromoVideoModalOpen={setIsPromoVideoModalOpen}
           onListTokenClicked={onListTokenClicked}
         />
-        <div className="mt-10 text-lg text-center md:text-5xl font-gilroy-bold">
-          <span className="text-brand-blue">${cDaiBalanceInDai}</span>&nbsp;in
-          trust signaled
+        <div className="mt-10 text-center text-md md:text-3xl font-gilroy-bold">
+          <span className="text-2xl text-brand-blue md:text-5xl">
+            ${cDaiBalanceInDai}
+          </span>
+          <br />
+          in attention under management
         </div>
       </div>
 
