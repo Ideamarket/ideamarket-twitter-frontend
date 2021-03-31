@@ -49,7 +49,7 @@ class MyDocument extends Document {
           />
           <meta
             name="twitter:image"
-            content="https://ideamarket.io/twitter-large-card.jpg"
+            content="https://app.ideamarket.io/twitter-large-card.jpg"
           />
 
           <script
