@@ -18,10 +18,10 @@ import {
 import { Table, TradeModal, ListTokenModal, PromoVideoModal } from 'components'
 
 import Search from '../assets/search.svg'
+import Plus from '../assets/plus-white.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 import { Categories } from 'store/models/category'
-import { HeaderButtons } from 'components/video/HeaderButtons'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'
 
 export default function Home() {
@@ -75,25 +75,6 @@ export default function Home() {
     market: undefined,
   })
 
-  const categories = [
-    {
-      id: 1,
-      value: 'Top',
-    },
-    {
-      id: 2,
-      value: 'Hot',
-    },
-    {
-      id: 3,
-      value: 'New',
-    },
-    {
-      id: 4,
-      value: 'Starred',
-    },
-  ]
-
   function onMarketChanged(market) {
     setSelectedMarketName(market)
   }
@@ -145,18 +126,9 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden bg-brand-gray">
-      <div className="w-screen px-6 pt-12 pb-40 text-center text-white bg-cover md:pt-10 bg-top-mobile md:bg-top-desktop">
+      <div className="w-screen px-6 pt-10 pb-40 text-center text-white bg-cover bg-top-mobile md:bg-top-desktop">
         <div>
-          <div className="flex items-center justify-center space-x-12">
-            <div className="w-20 md:w-36">
-              <img src="/ethereum.png" alt="" />
-            </div>
-            <div className="w-20 md:w-36">
-              <p className="text-xs text-gray-600">audited by</p>
-              <img src="/qs.png" alt="" />
-            </div>
-          </div>
-          <h2 className="mt-8 text-3xl md:mt-10 md:text-6xl font-gilroy-bold">
+          <h2 className="text-3xl md:text-6xl font-gilroy-bold">
             Maximize return on{' '}
             <span className="text-brand-blue">attention</span>
           </h2>
@@ -164,42 +136,22 @@ export default function Home() {
             Profit by discovering and popularizing the world’s best knowledge.
           </p>
         </div>
-        <div className="flex items-center justify-center mt-8 space-x-12">
-          <div className="w-20 md:w-44">
-            <a
-              target="_blank"
-              href="https://www.nasdaq.com/articles/ideamarket-is-a-literal-marketplace-for-ideas-and-online-reputation-2021-02-19"
-            >
-              <img src="/nasdaq.png" alt="" />
-            </a>
+        <button
+          onClick={() => {
+            onListTokenClicked()
+          }}
+          className="py-2 mt-10 ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+        >
+          <div className="flex flex-row items-center justify-center">
+            <Plus width="30" height="30" />
+            <div className="ml-0.5 md:ml-2">Add Listing</div>
           </div>
-          <div className="w-20 md:w-44">
-            <a
-              target="_blank"
-              href="https://www.vice.com/en/article/pkd8nb/people-have-spent-over-dollar1-million-on-a-literal-marketplace-of-ideas"
-            >
-              <img src="/vice.png" alt="" />
-            </a>
-          </div>
-          <div className="w-20 md:w-44">
-            <a
-              target="_blank"
-              href="https://www.coindesk.com/ideamarket-online-ideas-online-reputation"
-            >
-              <img src="/coindesk.png" alt="" />
-            </a>
-          </div>
-        </div>
-        <HeaderButtons
-          setIsPromoVideoModalOpen={setIsPromoVideoModalOpen}
-          onListTokenClicked={onListTokenClicked}
-        />
-        <div className="mt-10 text-center text-md md:text-3xl font-gilroy-bold">
-          <span className="text-2xl text-brand-blue md:text-5xl">
+        </button>
+        <div className="mt-10 text-md md:text-3xl font-gilroy-bold flex flex-col md:flex-row justify-center items-center">
+          <div className="text-2xl text-brand-blue md:text-5xl">
             ${cDaiBalanceInDai}
-          </span>
-          <br />
-          in attention under management
+          </div>
+          <div className="md:ml-2">in attention under management</div>
         </div>
       </div>
 
