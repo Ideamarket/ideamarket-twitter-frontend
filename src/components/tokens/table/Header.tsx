@@ -14,9 +14,9 @@ type Header = {
 }
 const headers: Header[] = [
   {
-    content: '#',
-    value: 'rank',
-    sortable: true,
+    content: '',
+    value: 'market',
+    sortable: false,
   },
   {
     content: 'Name',

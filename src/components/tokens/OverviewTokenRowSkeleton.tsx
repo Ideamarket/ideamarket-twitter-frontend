@@ -4,7 +4,7 @@ export default function TokenRowSkeleton() {
   return (
     <>
       <tr className="grid grid-cols-mobile-row grid-flow-col md:table-row animate animate-pulse">
-        {/* Rank */}
+        {/* Market */}
         <td className="hidden py-4 pl-3 pr-1 md:table-cell">
           <div className="w-8 h-5 bg-gray-400 rounded"></div>
         </td>
