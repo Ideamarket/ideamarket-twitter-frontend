@@ -171,7 +171,7 @@ export default function TokenRow({
             }}
             className="md:table-cell w-24 h-10 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
           >
-            Buy
+            Trade
           </button>
         </td>
         {/* Buy Button mobile */}
