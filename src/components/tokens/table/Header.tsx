@@ -3,9 +3,6 @@ import BN from 'bn.js'
 import classNames from 'classnames'
 
 import Tooltip from 'components/tooltip/Tooltip'
-import { investmentTokenToUnderlying } from 'store/compoundStore'
-import { bigNumberTenPow18, formatNumber, web3BNToFloatString } from 'utils'
-import { IdeaMarket } from 'store/ideaMarketsStore'
 
 type Header = {
   content: ReactNode | string

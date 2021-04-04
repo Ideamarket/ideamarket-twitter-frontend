@@ -35,8 +35,8 @@ export default function Table({
   const LOADING_MARGIN = 200
 
   const [currentHeader, setCurrentHeader] = useState('rank')
-  const [orderBy, setOrderBy] = useState('rank')
-  const [orderDirection, setOrderDirection] = useState('asc')
+  const [orderBy, setOrderBy] = useState('supply')
+  const [orderDirection, setOrderDirection] = useState('desc')
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
   const canFetchMoreRef = useRef<boolean>()
   const marketsMap = markets.reduce(
