@@ -134,7 +134,6 @@ export async function queryMarkets(
   return result.ideaMarkets.map((market) => apiResponseToIdeaMarket(market))
 }
 
-//TODO: check references
 export async function queryMarket(
   queryKey: string,
   marketName: string

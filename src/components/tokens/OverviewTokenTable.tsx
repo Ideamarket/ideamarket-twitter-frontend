@@ -70,8 +70,7 @@ export default function Table({
     refetchOnWindowFocus: false,
   })
 
-  const { isFetching: isMarketLoading, refetch: refetchMarket } = useQuery(
-    //TODO: fix key
+  const { isFetching: isMarketLoading, refetch: refetchMarkets } = useQuery(
     [`market-${Array.from(selectedMarkets)}`, Array.from(selectedMarkets)],
     queryMarkets,
     {
@@ -88,7 +87,6 @@ export default function Table({
     canFetchMore,
   } = useInfiniteQuery(
     [
-      //TODO: fix key
       `tokens-${Array.from(selectedMarkets)}`,
       [
         markets,
@@ -130,14 +128,14 @@ export default function Table({
 
   useEffect(() => {
     const fetch = async () => {
-      const markets = await refetchMarket()
+      const markets = await refetchMarkets()
       setMarkets(markets)
     }
     fetch()
   }, [selectedMarkets])
 
   useEffect(() => {
-    if (markets.length > 0) {
+    if (markets.length !== 0) {
       refetch()
     }
   }, [markets, selectedCategoryId, orderBy, orderDirection, nameSearch])
