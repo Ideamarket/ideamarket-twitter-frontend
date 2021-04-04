@@ -14,6 +14,7 @@ import {
   WatchingStarButton,
   AddToMetamaskButton,
   LockedTokenRowsTable,
+  A,
 } from 'components'
 import {
   querySupplyRate,
@@ -72,7 +73,7 @@ function ChartDurationEntry({
   setChartDurationSeconds: (s: number) => void
 }) {
   return (
-    <a
+    <A
       onClick={() => {
         setSelectedChartDuration(durationString)
         setChartDurationSeconds(durationSeconds)
@@ -85,7 +86,7 @@ function ChartDurationEntry({
       )}
     >
       {durationString}
-    </a>
+    </A>
   )
 }
 
@@ -329,7 +330,7 @@ export default function TokenDetails({
             <div className="mt-1"></div>
             <nav className="flex flex-row justify-between">
               <div>
-                <a
+                <A
                   onClick={() => {
                     setSelectedChart(CHART.PRICE)
                   }}
@@ -341,9 +342,9 @@ export default function TokenDetails({
                   )}
                 >
                   Price
-                </a>
+                </A>
 
-                <a
+                <A
                   onClick={() => {
                     setSelectedChart(CHART.LOCKED)
                   }}
@@ -355,7 +356,7 @@ export default function TokenDetails({
                   )}
                 >
                   Locked
-                </a>
+                </A>
               </div>
               <div className="pt-0">
                 <ChartDurationEntry
@@ -425,7 +426,7 @@ export default function TokenDetails({
                           {addresses.ZERO === token.tokenOwner ? (
                             'None'
                           ) : (
-                            <a
+                            <A
                               href={`https://etherscan.io/address/${token.tokenOwner}`}
                               target="_blank"
                               rel="noreferrer"
@@ -438,7 +439,7 @@ export default function TokenDetails({
                                 0,
                                 8
                               )}...${token.tokenOwner.slice(-6)}`}
-                            </a>
+                            </A>
                           )}
                         </div>
                       </div>
@@ -558,7 +559,7 @@ export default function TokenDetails({
                       {txManager.name}
                     </div>
                     <div className="justify-self-center">
-                      <a
+                      <A
                         className={classNames(
                           'underline',
                           txManager.hash === '' ? 'hidden' : ''
@@ -573,7 +574,7 @@ export default function TokenDetails({
                       >
                         {txManager.hash.slice(0, 8)}...
                         {txManager.hash.slice(-6)}
-                      </a>
+                      </A>
                     </div>
                     <div className="justify-self-center">
                       <CircleSpinner color="#0857e0" bgcolor="#f6f6f6" />
