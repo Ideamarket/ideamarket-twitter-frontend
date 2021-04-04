@@ -59,7 +59,7 @@ export default function TokenRow({
         }}
       >
         {/* Market */}
-        <td className="hidden py-4 text-sm leading-5 text-center text-gray-500 md:table-cell whitespace-nowrap">
+        <td className="flex justify-center items-center py-4 text-sm leading-5 text-center text-gray-500 md:table-cell whitespace-nowrap">
           <div className="flex justify-center">
             {marketSpecifics.getMarketSVGBlack()}
           </div>
@@ -98,7 +98,7 @@ export default function TokenRow({
           </p>
         </td>
         {/* Day Change */}
-        <td className="flex md:table-cell items-center py-4 pl-4 md:pl-6 whitespace-nowrap">
+        <td className="hidden md:table-cell items-center py-4 pl-4 md:pl-6 whitespace-nowrap">
           <p
             className={classNames(
               'text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase',
@@ -171,7 +171,7 @@ export default function TokenRow({
             }}
             className="md:table-cell w-24 h-10 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
           >
-            Trade
+            Buy
           </button>
         </td>
         {/* Buy Button mobile */}
