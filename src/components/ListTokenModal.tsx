@@ -8,6 +8,7 @@ import ApproveButton from './trade/ApproveButton'
 import { useContractStore } from 'store/contractStore'
 import BN from 'bn.js'
 import CircleSpinner from './animations/CircleSpinner'
+import A from './A'
 
 export default function ListTokenModal({
   isOpen,
@@ -219,7 +220,7 @@ export default function ListTokenModal({
                 )}
               ></div>
             )}
-            <a
+            <A
               href={
                 !marketSpecifics
                   ? ''
@@ -227,7 +228,6 @@ export default function ListTokenModal({
                       marketSpecifics.convertUserInputToTokenName(tokenName)
                     )
               }
-              target="_blank"
             >
               <img
                 className={classNames(
@@ -244,7 +244,7 @@ export default function ListTokenModal({
                 }
                 alt=""
               />
-            </a>
+            </A>
           </div>
           <div className="flex items-center justify-center mt-5 text-sm">
             <input
@@ -390,7 +390,7 @@ export default function ListTokenModal({
               {txManager.name}
             </div>
             <div className="justify-self-center">
-              <a
+              <A
                 className={classNames(
                   'underline',
                   txManager.hash === '' ? 'hidden' : ''
@@ -398,10 +398,9 @@ export default function ListTokenModal({
                 href={`https://${
                   NETWORK === 'rinkeby' || NETWORK === 'test' ? 'rinkeby.' : ''
                 }etherscan.io/tx/${txManager.hash}`}
-                target="_blank"
               >
                 {txManager.hash.slice(0, 8)}...{txManager.hash.slice(-6)}
-              </a>
+              </A>
             </div>
             <div className="justify-self-center">
               <CircleSpinner color="#0857e0" />
@@ -416,15 +415,14 @@ export default function ListTokenModal({
             Success!
           </div>
           <div className="flex justify-center mt-10">
-            <a
-              target="_blank"
+            <A
               className="twitter-share-button"
               href={`https://twitter.com/intent/tweet?text=${tweetTemplate}&url=https://ideamarket.io`}
             >
               <button className="w-32 h-10 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
                 Tweet about it
               </button>
-            </a>
+            </A>
           </div>
           <div></div>
         </div>

@@ -15,7 +15,13 @@ import {
   formatNumberWithCommasAsThousandsSerperator,
   isShowtimeMarketVisible,
 } from 'utils'
-import { Table, TradeModal, ListTokenModal, PromoVideoModal } from 'components'
+import {
+  Table,
+  TradeModal,
+  ListTokenModal,
+  PromoVideoModal,
+  A,
+} from 'components'
 
 import Search from '../assets/search.svg'
 import Plus from '../assets/plus-white.svg'
@@ -218,7 +224,7 @@ export default function Home() {
                 <div className="font-sf-pro-text">
                   <nav className="flex -mb-px space-x-5">
                     {Object.values(Categories).map((cat) => (
-                      <a
+                      <A
                         onClick={() => onCategoryChanged(cat.id)}
                         key={cat.id}
                         className={classNames(
@@ -229,7 +235,7 @@ export default function Home() {
                         )}
                       >
                         <span>{cat.value}</span>
-                      </a>
+                      </A>
                     ))}
                   </nav>
                 </div>

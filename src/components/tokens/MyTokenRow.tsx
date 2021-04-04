@@ -4,6 +4,7 @@ import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
+import A from 'components/A'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -22,7 +23,7 @@ export default function MyTokenRow({
   return (
     <>
       <tr
-        className="grid grid-cols-3 cursor-pointer md:table-row hover:bg-brand-gray border-b border-brand-border-gray"
+        className="grid grid-cols-3 border-b cursor-pointer md:table-row hover:bg-brand-gray border-brand-border-gray"
         onClick={() => {
           router.push(
             `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
@@ -41,17 +42,15 @@ export default function MyTokenRow({
               />
             </div>
             <div className="ml-4 text-base font-semibold leading-5 text-gray-900">
-              <a
+              <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
-                target="_blank"
-                rel="noreferrer"
                 className="hover:underline"
                 onClick={(e) => {
                   e.stopPropagation()
                 }}
               >
                 {token.name}
-              </a>
+              </A>
             </div>
             <div className="flex items-center justify-center ml-auto md:hidden">
               <svg
@@ -77,7 +76,7 @@ export default function MyTokenRow({
             <div className="w-full h-full md:w-auto md:h-auto">
               {marketSpecifics.getMarketSVGBlack()}
             </div>
-            <div className="ml-1 md:ml-3 text-base font-semibold leading-4 text-brand-gray-4">
+            <div className="ml-1 text-base font-semibold leading-4 md:ml-3 text-brand-gray-4">
               {marketSpecifics.getMarketName()}
             </div>
           </div>
