@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import array from 'lodash/array'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import BigNumber from 'bignumber.js'
 import { GlobalContext } from 'pages/_app'
@@ -14,6 +14,7 @@ import {
   WatchingStarButton,
   AddToMetamaskButton,
   LockedTokenRowsTable,
+  A,
 } from 'components'
 import {
   querySupplyRate,
@@ -69,7 +70,7 @@ function ChartDurationEntry({
   setChartDurationSeconds: (s: number) => void
 }) {
   return (
-    <a
+    <A
       onClick={() => {
         setSelectedChartDuration(durationString)
         setChartDurationSeconds(durationSeconds)
@@ -82,7 +83,7 @@ function ChartDurationEntry({
       )}
     >
       {durationString}
-    </a>
+    </A>
   )
 }
 
@@ -303,7 +304,7 @@ export default function TokenDetails() {
           <div className="mt-1"></div>
           <nav className="flex flex-row justify-between">
             <div>
-              <a
+              <A
                 onClick={() => {
                   setSelectedChart(CHART.PRICE)
                 }}
@@ -315,9 +316,9 @@ export default function TokenDetails() {
                 )}
               >
                 Price
-              </a>
+              </A>
 
-              <a
+              <A
                 onClick={() => {
                   setSelectedChart(CHART.LOCKED)
                 }}
@@ -329,7 +330,7 @@ export default function TokenDetails() {
                 )}
               >
                 Locked
-              </a>
+              </A>
             </div>
             <div className="pt-0">
               <ChartDurationEntry
@@ -372,7 +373,7 @@ export default function TokenDetails() {
         </div>
       </div>
 
-      <div className="px-2 mt-12 pb-5 mx-auto text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
+      <div className="px-2 pb-5 mx-auto mt-12 text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
         <div className="flex flex-col md:flex-row">
           <div className="flex-1 p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
             <div className="flex flex-col justify-between lg:flex-row">
@@ -399,7 +400,7 @@ export default function TokenDetails() {
                         {addresses.ZERO === token.tokenOwner ? (
                           'None'
                         ) : (
-                          <a
+                          <A
                             href={`https://etherscan.io/address/${token.tokenOwner}`}
                             target="_blank"
                             rel="noreferrer"
@@ -412,7 +413,7 @@ export default function TokenDetails() {
                               0,
                               8
                             )}...${token.tokenOwner.slice(-6)}`}
-                          </a>
+                          </A>
                         )}
                       </div>
                     </div>
@@ -532,7 +533,7 @@ export default function TokenDetails() {
                     {txManager.name}
                   </div>
                   <div className="justify-self-center">
-                    <a
+                    <A
                       className={classNames(
                         'underline',
                         txManager.hash === '' ? 'hidden' : ''
@@ -547,7 +548,7 @@ export default function TokenDetails() {
                     >
                       {txManager.hash.slice(0, 8)}...
                       {txManager.hash.slice(-6)}
-                    </a>
+                    </A>
                   </div>
                   <div className="justify-self-center">
                     <CircleSpinner color="#0857e0" bgcolor="#f6f6f6" />

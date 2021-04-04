@@ -21,6 +21,7 @@ import {
   web3BNToFloatString,
 } from '../utils'
 import { Modal, CircleSpinner } from './'
+import A from './A'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -183,19 +184,18 @@ export default function VerifyModal({
         <div className="p-5 text-brand-gray-2">
           {page === PAGES.TOS && (
             <>
-              <p className="mt-5 text-xl text-center font-bold">
+              <p className="mt-5 text-xl font-bold text-center">
                 Terms of Service
               </p>
-              <div className="max-h-96 w-full overflow-y-auto mt-5">
+              <div className="w-full mt-5 overflow-y-auto max-h-96">
                 By using Ideamarket, you are agreeing to become bound by and
                 comply with the{' '}
-                <a
+                <A
                   href="https://docs.ideamarket.io/legal/terms-of-service"
                   className="underline"
-                  target="_blank"
                 >
                   Ideamarket Terms and Conditions
-                </a>
+                </A>
                 , as they may be updated from time to time in the sole
                 discretion of Idea Markets, Inc. Among other things, the Terms
                 and Conditions provide that, in order to use Ideamarket: <br />
@@ -233,13 +233,12 @@ export default function VerifyModal({
                 <br />
                 The above is only a partial summary of the Ideamarket Terms and
                 Conditions. You should read the{' '}
-                <a
+                <A
                   href="https://docs.ideamarket.io/legal/terms-of-service"
                   className="underline"
-                  target="_blank"
                 >
                   Terms and Conditions
-                </a>{' '}
+                </A>{' '}
                 in their entirety. In the event of any conflict or consistency
                 between this summary and the Terms and Conditions, the Terms and
                 Conditions will prevail.
@@ -435,18 +434,17 @@ export default function VerifyModal({
               </div>
               <div className="mt-2 text-center">
                 Please wait for transaction{' '}
-                <a
+                <A
                   className={classNames('underline')}
                   href={`https://${
                     NETWORK === 'rinkeby' || NETWORK === 'test'
                       ? 'rinkeby.'
                       : ''
                   }etherscan.io/tx/${txManager.hash}`}
-                  target="_blank"
                 >
                   {txManager.hash && txManager.hash.slice(0, 8)}...
                   {txManager.hash && txManager.hash.slice(-6)}
-                </a>{' '}
+                </A>{' '}
                 to confirm. Do not close or refresh the page.
               </div>
             </>
@@ -465,17 +463,16 @@ export default function VerifyModal({
                 accumulated interest.
               </p>
               <div className="p-5 mt-5 text-black bg-gray-200 border rounded border-brand-gray-2">
-                <a
+                <A
                   className="underline"
                   href={`https://${
                     NETWORK === 'test' || NETWORK === 'rinkeby'
                       ? 'rinkeby.'
                       : ''
                   }etherscan.io/tx/${tx}`}
-                  target="_blank"
                 >
                   Transaction: {tx.slice(0, 8)}...{tx.slice(-6)}
-                </a>
+                </A>
               </div>
               <div className="flex justify-center mt-10">
                 <button

@@ -6,6 +6,7 @@ import Tooltip from 'components/tooltip/Tooltip'
 import { investmentTokenToUnderlying } from 'store/compoundStore'
 import { bigNumberTenPow18, formatNumber, web3BNToFloatString } from 'utils'
 import { IdeaMarket } from 'store/ideaMarketsStore'
+import A from 'components/A'
 
 type Header = {
   content: ReactNode | string
@@ -54,13 +55,9 @@ const headers: Header[] = [
             <div className="w-32 md:w-64">
               Estimated annual passive income paid to the listing owner.
               Calculated by Deposits * Lending APY at{' '}
-              <a
-                href="https://compound.finance"
-                target="_blank"
-                className="underline"
-              >
+              <A href="https://compound.finance" className="underline">
                 compound.finance
-              </a>
+              </A>
             </div>
           </Tooltip>
         </div>
@@ -149,9 +146,9 @@ export const Header = ({
               Platforms get a new income stream too. Half of the trading fees
               for each market are paid to the platform it curates. To claim
               funds on behalf of Twitter, email{' '}
-              <a className="underline" href="mailto:team@ideamarkets.org">
+              <A className="underline" href="mailto:team@ideamarkets.org">
                 team@ideamarkets.org
-              </a>
+              </A>
             </div>
           </Tooltip>
         </div>

@@ -13,6 +13,7 @@ import DotGreen from '../../assets/dotgreen.svg'
 
 import * as wallets from 'wallets'
 import classNames from 'classnames'
+import A from 'components/A'
 
 export default function WalletInterface({
   onWalletConnected,
@@ -146,14 +147,14 @@ export default function WalletInterface({
         <p className="ml-2 text-brand-gray-2">
           {address !== '' ? 'Connected with: ' : 'Not connected'}
           {address !== '' && (
-            <a
+            <A
               className="underline"
               href={`https://etherscan.io/address/${address}`}
               target="_blank"
               rel="noreferrer"
             >
               {address.slice(0, 6)}...{address.slice(-4)}
-            </a>
+            </A>
           )}
         </p>
         <div className="flex justify-end flex-grow">
