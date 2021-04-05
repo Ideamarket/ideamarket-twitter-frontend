@@ -16,7 +16,6 @@ import {
   getQueryTokenNameTextSearch,
   getQueryTokens,
   getQuerySinglePricePoint,
-  getQueryTokensChartData,
 } from './queries'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))

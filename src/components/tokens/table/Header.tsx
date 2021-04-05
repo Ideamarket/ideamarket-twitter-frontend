@@ -3,6 +3,10 @@ import BN from 'bn.js'
 import classNames from 'classnames'
 
 import Tooltip from 'components/tooltip/Tooltip'
+import { investmentTokenToUnderlying } from 'store/compoundStore'
+import { bigNumberTenPow18, formatNumber, web3BNToFloatString } from 'utils'
+import { IdeaMarket } from 'store/ideaMarketsStore'
+import A from 'components/A'
 
 type Header = {
   content: ReactNode | string
@@ -51,13 +55,9 @@ const headers: Header[] = [
             <div className="w-32 md:w-64">
               Estimated annual passive income paid to the listing owner.
               Calculated by Deposits * Lending APY at{' '}
-              <a
-                href="https://compound.finance"
-                target="_blank"
-                className="underline"
-              >
+              <A href="https://compound.finance" className="underline">
                 compound.finance
-              </a>
+              </A>
             </div>
           </Tooltip>
         </div>

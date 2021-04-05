@@ -3,44 +3,45 @@ import BrandDiscord from '../assets/brand-discord.svg'
 import BrandTwitter from '../assets/brand-twitter.svg'
 import BrandGithub from '../assets/brand-github.svg'
 import BrandDefiPulse from '../assets/brand-defipulse.svg'
+import A from './A'
 
 export default function Footer() {
   return (
     <div className="mt-5 md:flex md:justify-between">
       <div className="flex justify-center space-x-5 font-sf-pro-text">
-        <Link href="https://docs.ideamarket.io">
-          <a className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
-            Need Help?
-          </a>
-        </Link>
-        <Link href="https://docs.ideamarket.io">
-          <a className="text-sm leading-none tracking-tightest-2 text-brand-gray-2">
-            Contact
-          </a>
-        </Link>
-        <Link href="">
-          <a
-            href="/TOS.pdf"
-            target="_blank"
-            className="text-sm leading-none tracking-tightest-2 text-brand-gray-2"
-          >
-            Legal &amp; Privacy
-          </a>
-        </Link>
+        <A
+          href="https://docs.ideamarket.io"
+          className="text-sm leading-none tracking-tightest-2 text-brand-gray-2"
+        >
+          Need Help?
+        </A>
+        <A
+          href="https://docs.ideamarket.io"
+          className="text-sm leading-none tracking-tightest-2 text-brand-gray-2"
+        >
+          Contact
+        </A>
+        <A
+          href="/TOS.pdf"
+          target="_blank"
+          className="text-sm leading-none tracking-tightest-2 text-brand-gray-2"
+        >
+          Legal &amp; Privacy
+        </A>
       </div>
       <div className="flex items-center justify-center mt-5 space-x-2 md:mt-0 md:justify-end">
-        <a href="https://twitter.com/ideamarkets_" target="_blank">
+        <A href="https://twitter.com/ideamarkets_">
           <BrandTwitter className="w-7 h-7" />
-        </a>
-        <a href="https://discord.com/invite/zaXZXGE4Ke" target="_blank">
+        </A>
+        <A href="https://discord.com/invite/zaXZXGE4Ke">
           <BrandDiscord className="w-7 h-7" />
-        </a>
-        <a href="https://github.com/Ideamarket" target="_blank">
+        </A>
+        <A href="https://github.com/Ideamarket">
           <BrandGithub className="w-7 h-7" />
-        </a>
-        <a href="https://defipulse.com/defi-list" target="_blank">
+        </A>
+        <A href="https://defipulse.com/defi-list">
           <BrandDefiPulse stroke="#303030" className="w-7 h-7" />
-        </a>
+        </A>
         <p className="pl-2 text-sm leading-none text-center tracking-tightest-2 text-brand-gray-2">
           &copy;2021 IdeaMarkets
         </p>

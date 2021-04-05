@@ -22,6 +22,7 @@ import ApproveButton from './ApproveButton'
 import AdvancedOptions from './AdvancedOptions'
 import Tooltip from '../tooltip/Tooltip'
 import CircleSpinner from '../animations/CircleSpinner'
+import A from 'components/A'
 
 export default function TradeInterface({
   ideaToken,
@@ -280,7 +281,7 @@ export default function TradeInterface({
     <>
       {showTypeSelection && (
         <nav className="flex">
-          <a
+          <A
             onClick={() => {
               if (!txManager.isPending) setTradeType('buy')
             }}
@@ -293,8 +294,8 @@ export default function TradeInterface({
             )}
           >
             Buy
-          </a>
-          <a
+          </A>
+          <A
             onClick={() => {
               if (!txManager.isPending) setTradeType('sell')
             }}
@@ -307,7 +308,7 @@ export default function TradeInterface({
             )}
           >
             Sell
-          </a>
+          </A>
         </nav>
       )}
       <div className="mx-auto" style={{ maxWidth: 550 }}>
@@ -486,13 +487,13 @@ export default function TradeInterface({
               <br />
               <br />
               For more information, see{' '}
-              <a
+              <A
                 href="https://docs.ideamarket.io/user-guide/hiw-buy-and-sell#locking-tokens"
                 target="_blank"
                 className="underline"
               >
                 locking tokens
-              </a>
+              </A>
               .
             </div>
           </Tooltip>
@@ -508,7 +509,7 @@ export default function TradeInterface({
         {showTradeButton && (
           <div className="max-w-sm mx-auto">
             <div className={classNames('flex mt-8 mx-5 text-xs')}>
-              <div className="flex-grow justify-start">
+              <div className="justify-start flex-grow">
                 <ApproveButton
                   tokenAddress={spendTokenAddress}
                   tokenSymbol={spendTokenSymbol}
@@ -526,7 +527,7 @@ export default function TradeInterface({
                   key={approveButtonKey}
                 />
               </div>
-              <div className="flex-grow justify-end">
+              <div className="justify-end flex-grow">
                 <button
                   className={classNames(
                     'ml-6 w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
@@ -597,7 +598,7 @@ export default function TradeInterface({
                 {txManager.name}
               </div>
               <div className="justify-self-center">
-                <a
+                <A
                   className={classNames(
                     'underline',
                     txManager.hash === '' ? 'hidden' : ''
@@ -610,7 +611,7 @@ export default function TradeInterface({
                   target="_blank"
                 >
                   {txManager.hash.slice(0, 8)}...{txManager.hash.slice(-6)}
-                </a>
+                </A>
               </div>
               <div className="justify-self-center">
                 <CircleSpinner color="#0857e0" bgcolor={bgcolor} />

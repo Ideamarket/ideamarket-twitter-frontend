@@ -6,6 +6,7 @@ import { GlobalContext } from 'pages/_app'
 import Close from '../assets/close.svg'
 import Hamburger from '../assets/hamburger.svg'
 import NProgress from 'nprogress'
+import A from './A'
 
 export default function Nav() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
@@ -79,7 +80,7 @@ export default function Nav() {
 
             <div className="absolute hidden w-full space-x-8 text-center md:inline">
               {menuItems.map((menuItem) => (
-                <a
+                <A
                   key={menuItem.value}
                   onClick={() => {
                     menuItem.onClick()
@@ -93,7 +94,7 @@ export default function Nav() {
                   )}
                 >
                   {menuItem.name}
-                </a>
+                </A>
               ))}
             </div>
             <div className="z-20 hidden md:ml-6 md:flex md:items-center">
@@ -131,7 +132,7 @@ export default function Nav() {
         >
           <div className="pt-2 pb-3 text-center">
             {menuItems.map((menuItem) => (
-              <a
+              <A
                 onClick={() => {
                   menuItem.onClick()
                   closeMenu()
@@ -145,7 +146,7 @@ export default function Nav() {
                 )}
               >
                 {menuItem.name}
-              </a>
+              </A>
             ))}
 
             <div className="flex justify-center mt-5">

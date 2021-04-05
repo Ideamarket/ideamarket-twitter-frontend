@@ -8,6 +8,7 @@ import {
   formatNumberInt,
   web3BNToFloatString,
 } from '../../utils'
+import A from 'components/A'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -89,17 +90,15 @@ export default function TokenCard({
           ) : (
             <div>
               <span className="align-middle">
-                <a
+                <A
                   href={`${marketSpecifics.getTokenURL(token.name)}`}
-                  target="_blank"
-                  rel="noreferrer"
                   className="hover:underline"
                   onClick={(e) => {
                     e.stopPropagation()
                   }}
                 >
                   {token.name}
-                </a>
+                </A>
               </span>
               <span className="ml-2.5 mr-1">
                 {marketSpecifics.getMarketSVGWhite()}
