@@ -34,7 +34,7 @@ import { NextSeo } from 'next-seo'
 
 export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(
-    Categories.HOT.id
+    Categories.TOP.id
   )
   const [selectedMarkets, setSelectedMarkets] = useState(new Set(['Twitter']))
   const [nameSearch, setNameSearch] = useState('')
