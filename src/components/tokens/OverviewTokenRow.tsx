@@ -58,9 +58,11 @@ export default function TokenRow({
           )
         }}
       >
-        {/* Rank */}
-        <td className="hidden py-4 pl-3 pr-1 text-sm leading-5 text-center text-gray-500 md:table-cell whitespace-nowrap">
-          {token.rank}
+        {/* Market */}
+        <td className="flex justify-center items-center py-4 text-sm leading-5 text-center text-gray-500 md:table-cell whitespace-nowrap">
+          <div className="flex justify-center">
+            {marketSpecifics.getMarketSVGBlack()}
+          </div>
         </td>
         {/* Icon and Name */}
         <td className="flex md:table-cell md:col-span-3 py-4 pl-2 md:pl-6 whitespace-nowrap">
@@ -96,7 +98,7 @@ export default function TokenRow({
           </p>
         </td>
         {/* Day Change */}
-        <td className="flex md:table-cell items-center py-4 pl-4 md:pl-6 whitespace-nowrap">
+        <td className="hidden md:table-cell items-center py-4 pl-4 md:pl-6 whitespace-nowrap">
           <p
             className={classNames(
               'text-base font-medium leading-4 tracking-tightest-2 text-very-dark-blue uppercase',
