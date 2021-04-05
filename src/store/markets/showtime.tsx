@@ -1,6 +1,7 @@
 import { IMarketSpecifics } from '.'
 import ShowtimeWhite from '../../assets/showtime-white.svg'
 import ShowtimeBlack from '../../assets/showtime-black.svg'
+import ShowtimeOutline from '../../assets/showtime-outline.svg'
 
 export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -19,6 +20,10 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
 
   getMarketSVGWhite(): JSX.Element {
     return <ShowtimeWhite />
+  }
+
+  getMarketOutlineSVG(): JSX.Element {
+    return <ShowtimeOutline />
   }
 
   // Tokens

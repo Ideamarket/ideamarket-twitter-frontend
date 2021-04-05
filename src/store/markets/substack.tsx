@@ -1,6 +1,7 @@
 import { IMarketSpecifics } from '.'
 import SubstackWhite from '../../assets/substack-white.svg'
 import SubstackBlack from '../../assets/substack-black.svg'
+import SubstackOutline from '../../assets/substack-outline.svg'
 
 export default class SubstackMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -19,6 +20,10 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
 
   getMarketSVGWhite(): JSX.Element {
     return <SubstackWhite />
+  }
+
+  getMarketOutlineSVG(): JSX.Element {
+    return <SubstackOutline />
   }
 
   // Tokens

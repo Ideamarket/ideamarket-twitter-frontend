@@ -1,6 +1,7 @@
 import { IMarketSpecifics } from '.'
 import TwitterWhite from '../../assets/twitter-white.svg'
 import TwitterBlack from '../../assets/twitter-black.svg'
+import TwitterOutline from '../../assets/twitter-outline.svg'
 
 export default class TwitterMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -19,6 +20,10 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
 
   getMarketSVGWhite(): JSX.Element {
     return <TwitterWhite />
+  }
+
+  getMarketOutlineSVG(): JSX.Element {
+    return <TwitterOutline />
   }
 
   // Tokens
