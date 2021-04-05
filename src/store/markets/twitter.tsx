@@ -10,6 +10,10 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
     return 'Twitter'
   }
 
+  isEnabled(): boolean {
+    return true
+  }
+
   getMarketNameURLRepresentation(): string {
     return 'twitter'
   }

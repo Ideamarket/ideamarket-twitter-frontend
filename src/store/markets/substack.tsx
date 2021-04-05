@@ -10,6 +10,10 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
     return 'Substack'
   }
 
+  isEnabled(): boolean {
+    return true
+  }
+
   getMarketNameURLRepresentation(): string {
     return 'substack'
   }

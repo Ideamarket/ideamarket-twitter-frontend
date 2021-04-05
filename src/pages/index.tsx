@@ -29,7 +29,7 @@ import { Categories } from 'store/models/category'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'
 import { EmailForm } from 'components'
 import { MarketList } from 'components/markets/MarketList'
-import { getMarketNames } from 'store/markets'
+import { getMarketSpecifics } from 'store/markets'
 import { NextSeo } from 'next-seo'
 
 export default function Home() {
@@ -169,7 +169,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row">
             <MarketList
               selectedMarkets={selectedMarkets}
-              markets={getMarketNames()}
+              markets={getMarketSpecifics()}
               onMarketChanged={onMarketChanged}
             />
             <EmailForm />

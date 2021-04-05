@@ -10,6 +10,10 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
     return 'Showtime'
   }
 
+  isEnabled(): boolean {
+    return false
+  }
+
   getMarketNameURLRepresentation(): string {
     return 'showtime'
   }

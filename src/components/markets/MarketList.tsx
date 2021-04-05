@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import useBreakpoint from 'use-breakpoint'
+import { IMarketSpecifics } from 'store/markets'
 import { BREAKPOINTS } from 'utils/constants'
 
 type MarketButtonProps = {
@@ -40,7 +41,7 @@ const MarketButton = ({
 
 type MarketListProps = {
   selectedMarkets: Set<string>
-  markets: string[]
+  markets: IMarketSpecifics[]
   onMarketChanged: (set: Set<string>) => void
 }
 
@@ -60,15 +61,15 @@ export const MarketList = ({
     switch (breakpoint) {
       case 'mobile':
       case 'sm':
-        return 0
+        return 1
       case 'md':
         return 1
       case 'lg':
-        return 3
+        return 2
       case 'xl':
-        return 5
+        return 3
       case '2xl':
-        return 6
+        return 4
       default:
         return 1
     }
@@ -89,21 +90,31 @@ export const MarketList = ({
   }
 
   return (
-    <div className="grid justify-center flex-1 grid-flow-col p-4 bg-white rounded-t-lg auto-cols-min gap-x-2 md:rounded-tr-none md:justify-start">
+    <div className="grid justify-center flex-1 grid-cols-2 md:grid-cols-none md:auto-cols-min md:grid-flow-col p-4 bg-white rounded-t-lg gap-x-2 gap-y-2 md:rounded-tr-none md:justify-start">
       <MarketButton
         key="all"
         marketName="All"
         onClick={toggleAll}
         isSelected={selectedMarkets.size === 0}
       />
-      {markets.map((market) => (
-        <MarketButton
-          key={market}
-          marketName={market}
-          onClick={toggleMarket}
-          isSelected={selectedMarkets.has(market)}
-        />
-      ))}
+      {markets
+        .filter((market) => market.isEnabled())
+        .map((market) => (
+          <MarketButton
+            key={market.getMarketName()}
+            marketName={market.getMarketName()}
+            onClick={toggleMarket}
+            isSelected={selectedMarkets.has(market.getMarketName())}
+          />
+        ))}
+      {markets
+        .filter((market) => !market.isEnabled())
+        .map((market) => (
+          <DisabledMarketButton
+            key={market.getMarketName()}
+            marketName={market.getMarketName()}
+          />
+        ))}
       {upcomingMarkets.slice(0, maxUpcomingMarkets()).map((market, index) => (
         <DisabledMarketButton key={market} marketName={market} />
       ))}

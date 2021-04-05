@@ -3,11 +3,11 @@ import _ from 'lodash'
 import TwitterMarketSpecifics from './twitter'
 import SubstackMarketSpecifics from './substack'
 import ShowtimeMarketSpecifics from './showtime'
-import { isShowtimeMarketVisible } from 'utils'
 
 export type IMarketSpecifics = {
   // Market
   getMarketName(): string
+  isEnabled(): boolean
   getMarketNameURLRepresentation(): string
   getMarketSVGBlack(): JSX.Element
   getMarketSVGWhite(): JSX.Element
@@ -41,16 +41,14 @@ const specifics: IMarketSpecifics[] = [
   new ShowtimeMarketSpecifics(),
 ]
 
+export function getMarketSpecifics() {
+  return specifics
+}
+
 export function getMarketSpecificsByMarketName(
   marketName: string
 ): IMarketSpecifics {
   return _.find(specifics, (s) => s.getMarketName() === marketName)
-}
-
-export function getMarketNames(): string[] {
-  return specifics
-    .map((market) => market.getMarketName())
-    .filter((name) => isShowtimeMarketVisible || name !== 'Showtime')
 }
 
 export function getMarketSpecificsByMarketNameInURLRepresentation(
