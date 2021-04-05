@@ -36,7 +36,7 @@ export default function Home() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(
     Categories.TOP.id
   )
-  const [selectedMarkets, setSelectedMarkets] = useState(new Set(['Twitter']))
+  const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
 
   const [isPromoVideoModalOpen, setIsPromoVideoModalOpen] = useState(false)
