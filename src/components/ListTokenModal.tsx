@@ -294,7 +294,7 @@ export default function ListTokenModal({
 
           <div className="max-w-sm mx-auto">
             <div className={classNames('flex mt-8 mx-5 text-xs')}>
-              <div className="justify-start flex-grow">
+              <div className="justify-center flex flex-grow">
                 <ApproveButton
                   tokenAddress={buyPayWithAddress}
                   tokenSymbol={buyPayWithSymbol}
@@ -315,10 +315,10 @@ export default function ListTokenModal({
                   key={approveButtonKey}
                 />
               </div>
-              <div className="justify-end flex-grow">
+              <div className="justify-center flex flex-grow">
                 <button
                   className={classNames(
-                    'ml-6 w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
+                    'ml-6 w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
                     selectedMarket === undefined ||
                       !isValidTokenName ||
                       txManager.isPending ||
