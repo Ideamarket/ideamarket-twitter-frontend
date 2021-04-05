@@ -1,10 +1,21 @@
 import classNames from 'classnames'
+import useBreakpoint from 'use-breakpoint'
+import { BREAKPOINTS } from 'utils/constants'
 
 type MarketButtonProps = {
   marketName: string
   isSelected: boolean
   onClick: (market: string) => void
 }
+
+const DisabledMarketButton = ({ marketName }: { marketName: string }) => (
+  <button
+    className="p-1 px-3 text-sm border rounded-md opacity-50 cursor-not-allowed text-brand-gray-4"
+    disabled={true}
+  >
+    {marketName}
+  </button>
+)
 
 const MarketButton = ({
   marketName,
@@ -33,11 +44,36 @@ type MarketListProps = {
   onMarketChanged: (set: Set<string>) => void
 }
 
+const upcomingMarkets = ['YouTube', 'Gumroad', 'Clubhouse', 'Roam', 'Websites']
+
 export const MarketList = ({
   selectedMarkets,
   markets,
   onMarketChanged,
 }: MarketListProps) => {
+  const { breakpoint, maxWidth, minWidth } = useBreakpoint(
+    BREAKPOINTS,
+    'mobile'
+  )
+
+  const maxUpcomingMarkets = () => {
+    switch (breakpoint) {
+      case 'mobile':
+      case 'sm':
+        return 0
+      case 'md':
+        return 1
+      case 'lg':
+        return 3
+      case 'xl':
+        return 5
+      case '2xl':
+        return 6
+      default:
+        return 1
+    }
+  }
+
   const toggleMarket = (marketName: string) => {
     const newSet = new Set(selectedMarkets)
     if (newSet.has(marketName)) {
@@ -68,6 +104,10 @@ export const MarketList = ({
           isSelected={selectedMarkets.has(market)}
         />
       ))}
+      {upcomingMarkets.slice(0, maxUpcomingMarkets()).map((market, index) => (
+        <DisabledMarketButton key={market} marketName={market} />
+      ))}
+      <DisabledMarketButton marketName="More(279)" />
     </div>
   )
 }
