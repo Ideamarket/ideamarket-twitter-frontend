@@ -23,11 +23,6 @@ export default function TokenRowSkeleton() {
         <td className="hidden md:table-cell py-4 pl-6 whitespace-nowrap">
           <p className="h-4 w-8 bg-gray-400 rounded"></p>
         </td>
-        {/* Day Change */}
-        <td className="hidden md:table-cell items-center py-4 pl-4 md:pl-6 whitespace-nowrap">
-          <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
-          <p className="h-4 mt-1 bg-gray-400 rounded"></p>
-        </td>
         {/* Deposits */}
         <td className="hidden md:table-cell py-4 pl-6 whitespace-nowrap">
           <p className="h-4 w-10 bg-gray-400 rounded"></p>
