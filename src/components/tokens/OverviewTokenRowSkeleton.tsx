@@ -5,7 +5,7 @@ export default function TokenRowSkeleton() {
     <>
       <tr className="grid grid-cols-mobile-row grid-flow-col md:table-row animate animate-pulse">
         {/* Market */}
-        <td className="hidden py-4 pl-3 pr-1 md:table-cell">
+        <td className="table-cell py-4 pl-3 pr-1">
           <div className="w-8 h-5 bg-gray-400 rounded"></div>
         </td>
         {/* Icon and Name */}
@@ -24,7 +24,7 @@ export default function TokenRowSkeleton() {
           <p className="h-4 w-8 bg-gray-400 rounded"></p>
         </td>
         {/* Day Change */}
-        <td className="flex md:table-cell items-center py-4 pl-4 md:pl-6 whitespace-nowrap">
+        <td className="hidden md:table-cell items-center py-4 pl-4 md:pl-6 whitespace-nowrap">
           <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
           <p className="h-4 mt-1 bg-gray-400 rounded"></p>
         </td>
