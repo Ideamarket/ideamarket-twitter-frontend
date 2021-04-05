@@ -1,3 +1,9 @@
+import type { NextApiRequest, NextApiResponse } from 'next'
+export default async function Handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {}
+/*
 import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
 import { FileType } from '../_lib/types'
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -69,3 +75,4 @@ export default async function Handler(
     console.error(error)
   }
 }
+*/
