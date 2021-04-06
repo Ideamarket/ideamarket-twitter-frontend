@@ -143,8 +143,7 @@ export default function Home() {
               <span className="text-brand-blue">attention</span>
             </h2>
             <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
-              Profit by discovering and popularizing the world’s best
-              everything.
+              Profit by discovering and popularizing the world’s best knowledge.
             </p>
           </div>
           <button
