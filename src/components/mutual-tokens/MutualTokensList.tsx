@@ -59,7 +59,9 @@ export default function MutualTokensList({
       </div>
 
       <div className="flex flex-col mt-10 space-y-4 md:flex-row md:justify-between md:space-y-0">
-        {isLoading && <p className="w-1/3 h-4 bg-gray-400 rounded"></p>}
+        {isLoading && (
+          <p className="w-1/3 h-4 bg-gray-400 rounded animate-pulse"></p>
+        )}
         {!isLoading && (
           <h3 className="text-lg font-medium leading-6 text-gray-900">
             {sortedMutualHolders().length > 0 && sortBy === 'totalHolders' && (
