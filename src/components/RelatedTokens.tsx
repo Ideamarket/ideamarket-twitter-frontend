@@ -278,13 +278,6 @@ export default function RelatedTokens({
   tokenName: string
   marketName: string
 }) {
-  useEffect(() => {
-    queryMutualHoldersOfToken({
-      marketName,
-      tokenName,
-    }).then((result) => console.log(result))
-  }, [marketName, tokenName])
-
   const [sortBy, setSortBy] = useState<SortBy>('totalHolders')
 
   const { data: mutualHoldersList, isLoading, isError } = useQuery<
