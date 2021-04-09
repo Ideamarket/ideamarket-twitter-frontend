@@ -34,6 +34,8 @@ export default function MutualTokensList({
   tokenName: string
   marketName: string
 }) {
+  const PAGE_SIZE = 8
+  const [pageNumber, setPageNumber] = useState(1)
   const [sortBy, setSortBy] = useState<MutualTokensListSortBy>('totalHolders')
 
   const { data: mutualHoldersList, isLoading, isError } = useQuery<
@@ -47,9 +49,9 @@ export default function MutualTokensList({
     if (isLoading || isError || !mutualHoldersList) {
       return []
     }
-    return mutualHoldersList.sort(
-      (a, b) => Number(b.stats[sortBy]) - Number(a.stats[sortBy])
-    )
+    return mutualHoldersList
+      .sort((a, b) => Number(b.stats[sortBy]) - Number(a.stats[sortBy]))
+      .slice(0, pageNumber * PAGE_SIZE)
   }
 
   if (isError) {
@@ -118,6 +120,18 @@ export default function MutualTokensList({
           <p className="text-gray-500">No mutual holders for this token.</p>
         )}
       </dl>
+
+      {pageNumber * PAGE_SIZE < mutualHoldersList.length && (
+        <div className="flex items-center justify-center my-10">
+          <button
+            type="button"
+            className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={() => setPageNumber(pageNumber + 1)}
+          >
+            Load more
+          </button>
+        </div>
+      )}
     </>
   )
 }
