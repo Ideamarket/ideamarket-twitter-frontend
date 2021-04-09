@@ -3,7 +3,6 @@ import array from 'lodash/array'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import BigNumber from 'bignumber.js'
 import { GlobalContext } from 'pages/_app'
 import {
   TimeXFloatYChartInLine,
@@ -15,6 +14,7 @@ import {
   AddToMetamaskButton,
   LockedTokenRowsTable,
   A,
+  MutualTokensList,
 } from 'components'
 import {
   querySupplyRate,
@@ -48,7 +48,6 @@ import { DateTime } from 'luxon'
 import { NextSeo } from 'next-seo'
 import { getURL } from 'utils/seo-constants'
 import { GetServerSideProps } from 'next'
-import RelatedTokens from 'components/RelatedTokens'
 
 function DetailsSkeleton() {
   return (
@@ -656,7 +655,7 @@ export default function TokenDetails({
           />
         )}
         <div className="px-2 mx-auto max-w-88 md:max-w-304">
-          <RelatedTokens tokenName={tokenName} marketName={marketName} />
+          <MutualTokensList tokenName={tokenName} marketName={marketName} />
         </div>
       </div>
     </>
