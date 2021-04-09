@@ -16,6 +16,8 @@ import {
   getQueryTokenNameTextSearch,
   getQueryTokens,
   getQuerySinglePricePoint,
+  getQueryTokenBalances,
+  getQueryBalancesOfHolders,
 } from './queries'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
@@ -61,6 +63,7 @@ export type IdeaTokenPricePoint = {
 export type IdeaToken = {
   address: string
   marketID: number
+  marketName: string
   tokenID: number
   name: string
   supply: string
@@ -286,6 +289,106 @@ export async function querySingleToken(
   return undefined
 }
 
+export async function getHoldersOfAToken({
+  marketName,
+  tokenName,
+}: {
+  marketName: string
+  tokenName: string
+}) {
+  if (!marketName || !tokenName) {
+    return null
+  }
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryTokenBalances(marketName, tokenName)
+  )
+  type Balance = {
+    id: string
+    amount: string
+    holder: string
+    token: {
+      name: string
+    }
+  }
+  const balances: Balance[] =
+    result?.ideaMarkets?.[0]?.tokens?.[0].balances ?? []
+  return balances.map((balance) => balance.holder)
+}
+
+export type MutualHoldersData = {
+  stats: {
+    latestTimestamp: number
+    totalAmount: number
+    totalHolders: number
+  }
+  token: IdeaToken
+}
+
+export async function queryMutualHoldersOfToken({
+  marketName,
+  tokenName,
+}: {
+  marketName: string
+  tokenName: string
+}) {
+  if (!marketName || !tokenName) {
+    return null
+  }
+  const holdersOfToken = await getHoldersOfAToken({ marketName, tokenName })
+
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQueryBalancesOfHolders(holdersOfToken)
+  )
+
+  type Balance = {
+    id: string
+    amount: string
+    token: IdeaToken
+  }
+
+  const balances: Balance[] = result.ideaTokenBalances
+    .filter((balance) => balance.token.market.name === marketName)
+    .filter((balance) => balance.token.name !== tokenName)
+    .map((balance) => {
+      return {
+        ...balance,
+        token: apiResponseToIdeaToken(balance.token, balance.token.market),
+      }
+    })
+
+  const allTokenNames: string[] = balances.map((balance) => balance.token.name)
+
+  const allTokenNamesWithoutDuplicates = allTokenNames.filter(
+    (token, index) => allTokenNames.indexOf(token) === index
+  )
+
+  const mutualHoldersData: MutualHoldersData[] = allTokenNamesWithoutDuplicates.map(
+    (tokenName) => {
+      const allBalancesWithCurrentToken = balances.filter(
+        (_balance) => _balance.token.name === tokenName
+      )
+      return {
+        stats: {
+          latestTimestamp: allBalancesWithCurrentToken
+            .map((_balance) => _balance.token.latestPricePoint.timestamp)
+            .reduce((a, b) => (a < b ? b : a), 0),
+          totalAmount: Number(
+            allBalancesWithCurrentToken
+              .map((balance) => Number(balance.amount) / 1e18)
+              .reduce((a, b) => a + b, 0)
+              .toFixed(2)
+          ),
+          totalHolders: allBalancesWithCurrentToken.length,
+        },
+        token: allBalancesWithCurrentToken[0].token,
+      }
+    }
+  )
+  return mutualHoldersData
+}
+
 export async function queryTokenChartData(
   queryKey,
   tokenAddress: string,
@@ -436,6 +539,7 @@ function apiResponseToIdeaToken(apiResponse, marketApiResponse?): IdeaToken {
   const ret = {
     address: apiResponse.id,
     marketID: market?.id,
+    marketName: market?.name,
     tokenID: apiResponse.tokenID,
     name: apiResponse.name,
     supply: apiResponse.supply

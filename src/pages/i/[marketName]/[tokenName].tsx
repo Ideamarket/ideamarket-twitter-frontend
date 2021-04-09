@@ -43,13 +43,12 @@ import {
   calculateIdeaTokenDaiValue,
   useTransactionManager,
 } from 'utils'
-import { withdrawTokenInterest, useBalance, useOutputAmount } from 'actions'
+import { withdrawTokenInterest, useBalance } from 'actions'
 import { DateTime } from 'luxon'
 import { NextSeo } from 'next-seo'
 import { getURL } from 'utils/seo-constants'
 import { GetServerSideProps } from 'next'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
+import RelatedTokens from 'components/RelatedTokens'
 
 function DetailsSkeleton() {
   return (
@@ -656,6 +655,14 @@ export default function TokenDetails({
             setIsOpen={setIsVerifyModalOpen}
           />
         )}
+        <div className="px-2 mx-auto max-w-88 md:max-w-304">
+          <RelatedTokens
+            tokenName={tokenName}
+            marketName={marketName}
+            rawMarketName={rawMarketName}
+            rawTokenName={rawTokenName}
+          />
+        </div>
       </div>
     </>
   )
