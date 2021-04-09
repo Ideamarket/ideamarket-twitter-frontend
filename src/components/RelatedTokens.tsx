@@ -187,13 +187,13 @@ function Token({
   return (
     <>
       <DetailsView isOpen={isOpen} setIsOpen={setIsOpen} token={token} />
-      <div className="overflow-hidden bg-white rounded-lg shadow">
+      <div className="overflow-hidden bg-white rounded-lg shadow ">
         <h2 className="sr-only" id="profile-overview-title">
           Profile Overview
         </h2>
         <div className="p-6 bg-white">
-          <div className="sm:flex sm:items-center sm:justify-between">
-            <div className="sm:flex sm:space-x-5">
+          <div className="lg:flex lg:items-center lg:justify-between">
+            <div className="lg:flex lg:space-x-5">
               <div className="flex-shrink-0">
                 <img
                   className="w-20 h-20 mx-auto rounded-full"
@@ -201,11 +201,11 @@ function Token({
                   alt={token.name}
                 />
               </div>
-              <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
+              <div className="mt-4 text-center lg:mt-0 lg:pt-1 lg:text-left">
                 <p className="text-sm font-medium text-gray-600">
                   Rank {token.rank}
                 </p>
-                <p className="text-xl font-bold text-gray-900 sm:text-xl">
+                <p className="text-xl font-bold text-gray-900 lg:text-xl">
                   {token.name}{' '}
                   <span>{marketSpecifics.getMarketSVGBlack()}</span>
                 </p>
@@ -214,7 +214,7 @@ function Token({
                 </p>
               </div>
             </div>
-            <div className="flex justify-center mt-5 sm:mt-0">
+            <div className="flex justify-center mt-5 lg:mt-0">
               <button
                 className="flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                 onClick={() => setIsOpen(true)}
@@ -224,10 +224,10 @@ function Token({
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 border-t border-gray-200 divide-y divide-gray-200 bg-gray-50 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
+        <div className="grid grid-cols-1 border-t border-gray-200 divide-y divide-gray-200 bg-gray-50 lg:grid-cols-3 lg:divide-y-0 lg:divide-x">
           <div
             className={classNames(
-              'px-6 py-5 text-sm font-medium text-center flex flex-col',
+              'px-6 py-5 text-sm font-medium text-center lg:flex lg:flex-col',
               sortBy === 'totalHolders' && 'bg-indigo-100'
             )}
           >
@@ -236,18 +236,18 @@ function Token({
           </div>
           <div
             className={classNames(
-              'px-6 py-5 text-sm font-medium text-center flex flex-col',
+              'px-6 py-5 text-sm font-medium text-center lg:flex lg:flex-col',
               sortBy === 'totalAmount' && 'bg-indigo-100'
             )}
           >
             <span className="text-gray-900">
               {formatNumberWithCommasAsThousandsSerperator(stats.totalAmount)}
-            </span>
+            </span>{' '}
             <span className="text-gray-600">tokens bought</span>
           </div>
           <div
             className={classNames(
-              'px-6 py-5 text-sm font-medium text-center flex md:flex-col',
+              'px-6 py-5 text-sm font-medium text-center lg:flex lg:flex-col',
               sortBy === 'latestTimestamp' && 'bg-indigo-100'
             )}
           >
@@ -303,7 +303,7 @@ export default function RelatedTokens({
     <>
       <div className="">
         <div>
-          <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:space-y-0">
+          <div className="flex flex-col space-y-4 md:flex-row md:justify-between md:space-y-0">
             <h3 className="text-lg font-medium leading-6 text-gray-900">
               {sortedMutualHolders().length > 0 && sortBy === 'totalHolders' && (
                 <>
@@ -370,7 +370,7 @@ export default function RelatedTokens({
             </div>
           </div>
 
-          <dl className="grid grid-cols-1 gap-10 mt-5 lg:grid-cols-2">
+          <dl className="grid grid-cols-1 gap-10 mt-5 md:grid-cols-2">
             {sortedMutualHolders().map((mutualHolderData) => (
               <Token
                 stats={mutualHolderData.stats}
