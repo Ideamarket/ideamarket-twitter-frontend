@@ -364,7 +364,7 @@ export async function queryMutualHoldersOfToken({
       HTTP_GRAPHQL_ENDPOINT,
       getQueryBalancesOfHolders({
         holders: holdersOfToken,
-        start: 100,
+        first: 100,
         skip: page * 100,
       })
     )

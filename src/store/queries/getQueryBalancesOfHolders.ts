@@ -7,18 +7,18 @@ function convertArrayOfStringsToGQLString(items: string[]) {
 
 export default function getQueryBalancesOfHolders({
   holders,
-  start,
+  first,
   skip,
 }: {
   holders: string[]
-  start: number
+  first: number
   skip: number
 }): string {
   return gql`
     {
       ideaTokenBalances(where: { holder_in: ${convertArrayOfStringsToGQLString(
         holders
-      )} }, start: ${start}, skip: ${skip}) {
+      )} }, first: ${first}, skip: ${skip}) {
         id
         amount
         token {
