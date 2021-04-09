@@ -138,10 +138,6 @@ export default function MutualTokenDetails({
                             {token.lockedPercentage}%
                           </dd>
                         </div>
-                        <div className="flex justify-between py-3 text-sm font-medium">
-                          <dt className="text-gray-500">24H change</dt>
-                          <dd className="text-gray-900">{token.dayChange}</dd>
-                        </div>
                       </dl>
                     </div>
                     <div className="flex">
