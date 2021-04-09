@@ -5,6 +5,7 @@ import {
   queryMutualHoldersOfToken,
 } from 'store/ideaMarketsStore'
 import { MutualToken, CircleSpinner } from 'components'
+import MutualTokenSkeleton from './MutualTokenSkeleton'
 
 export type MutualTokensListSortBy =
   | 'latestTimestamp'
@@ -36,14 +37,6 @@ export default function MutualTokensList({
     )
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center space-x-2">
-        <CircleSpinner color="#0857e0" />
-        <span>loading...</span>
-      </div>
-    )
-  }
   if (isError) {
     return <p>Something went wrong!!!</p>
   }
@@ -57,49 +50,52 @@ export default function MutualTokensList({
       </div>
 
       <div className="flex flex-col mt-10 space-y-4 md:flex-row md:justify-between md:space-y-0">
-        <h3 className="text-lg font-medium leading-6 text-gray-900">
-          {sortedMutualHolders().length > 0 && sortBy === 'totalHolders' && (
-            <>
-              Most holders of{' '}
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
-                {tokenName}
-              </span>{' '}
-              also bought{' '}
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
-                {sortedMutualHolders()[0].token.name}
-              </span>{' '}
-              tokens.
-            </>
-          )}
+        {isLoading && <p className="w-1/3 h-4 bg-gray-400 rounded"></p>}
+        {!isLoading && (
+          <h3 className="text-lg font-medium leading-6 text-gray-900">
+            {sortedMutualHolders().length > 0 && sortBy === 'totalHolders' && (
+              <>
+                Most holders of{' '}
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
+                  {tokenName}
+                </span>{' '}
+                also bought{' '}
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
+                  {sortedMutualHolders()[0].token.name}
+                </span>{' '}
+                tokens.
+              </>
+            )}
 
-          {sortedMutualHolders().length > 0 && sortBy === 'totalAmount' && (
-            <>
-              Holders of
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
-                {tokenName}
-              </span>{' '}
-              bought most amount of
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
-                {sortedMutualHolders()[0].token.name}
-              </span>{' '}
-              tokens.
-            </>
-          )}
+            {sortedMutualHolders().length > 0 && sortBy === 'totalAmount' && (
+              <>
+                Holders of
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
+                  {tokenName}
+                </span>{' '}
+                bought most amount of
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
+                  {sortedMutualHolders()[0].token.name}
+                </span>{' '}
+                tokens.
+              </>
+            )}
 
-          {sortedMutualHolders().length > 0 && sortBy === 'latestTimestamp' && (
-            <>
-              Holders of
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
-                {tokenName}
-              </span>{' '}
-              most recently bought
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
-                {sortedMutualHolders()[0].token.name}
-              </span>{' '}
-              tokens.
-            </>
-          )}
-        </h3>
+            {sortedMutualHolders().length > 0 && sortBy === 'latestTimestamp' && (
+              <>
+                Holders of
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
+                  {tokenName}
+                </span>{' '}
+                most recently bought
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
+                  {sortedMutualHolders()[0].token.name}
+                </span>{' '}
+                tokens.
+              </>
+            )}
+          </h3>
+        )}
 
         <div className="inline-block">
           <label
@@ -123,14 +119,29 @@ export default function MutualTokensList({
       </div>
 
       <dl className="grid grid-cols-1 gap-10 mt-5 md:grid-cols-2">
-        {sortedMutualHolders().map((mutualHolderData) => (
-          <MutualToken
-            stats={mutualHolderData.stats}
-            token={mutualHolderData.token}
-            key={mutualHolderData.token.address}
-            sortBy={sortBy}
-          />
-        ))}
+        {isLoading && (
+          <>
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+            <MutualTokenSkeleton />
+          </>
+        )}
+        {!isLoading &&
+          sortedMutualHolders().map((mutualHolderData) => (
+            <MutualToken
+              stats={mutualHolderData.stats}
+              token={mutualHolderData.token}
+              key={mutualHolderData.token.address}
+              sortBy={sortBy}
+            />
+          ))}
       </dl>
     </>
   )
