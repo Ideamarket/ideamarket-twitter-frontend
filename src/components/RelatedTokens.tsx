@@ -11,6 +11,10 @@ import {
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import WatchingStar from './WatchingStar'
 import A from './A'
+import {
+  formatNumber,
+  formatNumberWithCommasAsThousandsSerperator,
+} from 'utils'
 
 function DetailsView({
   isOpen,
@@ -89,19 +93,23 @@ function DetailsView({
                     <div>
                       <div className="block w-full overflow-hidden rounded-lg aspect-w-10 aspect-h-7">
                         <img
-                          src={`https://unavatar.backend.ideamarket.io/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
-                            token.name
-                          )}`}
+                          src={marketSpecifics.getTokenIconURL(token.name)}
                           alt=""
                           className="object-contain"
                         />
                       </div>
                       <div className="flex items-start justify-between mt-4">
                         <div>
-                          <h2 className="text-lg font-medium text-gray-900">
-                            <span className="sr-only">Details for </span>
-                            {token.name}
-                          </h2>
+                          <A
+                            href={`/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
+                              token.name
+                            )}`}
+                          >
+                            <h2 className="text-lg font-medium text-gray-900 hover:underline">
+                              <span className="sr-only">Details for </span>
+                              {token.name}
+                            </h2>
+                          </A>
                           <p className="text-sm font-medium text-gray-500">
                             Rank {token.rank}
                           </p>
@@ -120,12 +128,17 @@ function DetailsView({
                         <div className="flex justify-between py-3 text-sm font-medium">
                           <dt className="text-gray-500">Price</dt>
                           <dd className="text-gray-900">
-                            ${token.latestPricePoint.price.toFixed(2)}
+                            ${formatNumber(token.latestPricePoint.price)}
                           </dd>
                         </div>
                         <div className="flex justify-between py-3 text-sm font-medium">
                           <dt className="text-gray-500">Deposits</dt>
-                          <dd className="text-gray-900">${token.marketCap}</dd>
+                          <dd className="text-gray-900">
+                            $
+                            {formatNumberWithCommasAsThousandsSerperator(
+                              token.marketCap
+                            )}
+                          </dd>
                         </div>
                         <div className="flex justify-between py-3 text-sm font-medium">
                           <dt className="text-gray-500">Percentage locked</dt>
@@ -184,9 +197,7 @@ function Token({
               <div className="flex-shrink-0">
                 <img
                   className="w-20 h-20 mx-auto rounded-full"
-                  src={`https://unavatar.backend.ideamarket.io/${marketSpecifics.getMarketName()}/${marketSpecifics.getTokenNameURLRepresentation(
-                    token.name
-                  )}`}
+                  src={marketSpecifics.getTokenIconURL(token.name)}
                   alt={token.name}
                 />
               </div>
@@ -199,7 +210,7 @@ function Token({
                   <span>{marketSpecifics.getMarketSVGBlack()}</span>
                 </p>
                 <p className="text-sm font-medium text-gray-600">
-                  ${token.latestPricePoint.price.toFixed(2)}
+                  ${formatNumber(token.latestPricePoint.price)}
                 </p>
               </div>
             </div>
@@ -229,7 +240,9 @@ function Token({
               sortBy === 'totalAmount' && 'bg-indigo-100'
             )}
           >
-            <span className="text-gray-900">{stats.totalAmount}</span>{' '}
+            <span className="text-gray-900">
+              {formatNumberWithCommasAsThousandsSerperator(stats.totalAmount)}
+            </span>{' '}
             <span className="text-gray-600">tokens bought</span>
           </div>
           <div
@@ -309,7 +322,7 @@ export default function RelatedTokens({
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
                     {rawTokenName}
                   </span>{' '}
-                  also bought
+                  also bought{' '}
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
                     {sortedMutualHolders()[0].token.name}
                   </span>{' '}
