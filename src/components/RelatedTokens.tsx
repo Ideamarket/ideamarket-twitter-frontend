@@ -22,20 +22,17 @@ function DetailsView({
   token: IdeaToken
 }) {
   const marketSpecifics = getMarketSpecificsByMarketName(token.marketName)
-  if (!isOpen) {
-    return <></>
-  }
   return (
     <>
-      <section
+      <Transition
+        show={isOpen}
         className="fixed inset-0 z-20 overflow-hidden"
         role="dialog"
         aria-modal="true"
       >
         <div className="absolute inset-0 overflow-hidden">
-          <Transition
+          <Transition.Child
             className="absolute inset-0 transition-opacity bg-gray-500 bg-opacity-75"
-            show={isOpen}
             aria-hidden="true"
             enter="ease-in-out duration-500"
             enterFrom="opacity-0"
@@ -46,8 +43,7 @@ function DetailsView({
             onClick={() => setIsOpen(false)}
           />
           <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
-            <Transition
-              show={isOpen}
+            <Transition.Child
               className="relative w-96"
               enter="transform transition ease-in-out duration-500 sm:duration-700"
               enterFrom="translate-x-full"
@@ -56,8 +52,7 @@ function DetailsView({
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
-              <Transition
-                show={isOpen}
+              <Transition.Child
                 className="absolute top-0 left-0 flex pt-4 pr-2 -ml-8 sm:-ml-10 sm:pr-4"
                 enter="ease-in-out duration-500"
                 enterFrom="opacity-0"
@@ -87,7 +82,7 @@ function DetailsView({
                     />
                   </svg>
                 </button>
-              </Transition>
+              </Transition.Child>
               {isOpen && (
                 <div className="h-full p-8 overflow-y-auto bg-white">
                   <div className="pb-16 space-y-6">
@@ -157,10 +152,10 @@ function DetailsView({
                   </div>
                 </div>
               )}
-            </Transition>
+            </Transition.Child>
           </div>
         </div>
-      </section>
+      </Transition>
     </>
   )
 }
