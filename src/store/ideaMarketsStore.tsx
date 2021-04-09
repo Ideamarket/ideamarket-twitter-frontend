@@ -355,7 +355,6 @@ export async function queryMutualHoldersOfToken({
     return null
   }
   const holdersOfToken = await getHoldersOfAToken({ marketName, tokenName })
-  console.log({ holdersOfToken })
 
   const allIdeatokenBalances = []
   let page = 0
@@ -384,8 +383,6 @@ export async function queryMutualHoldersOfToken({
     token: IdeaToken
   }
 
-  console.log({ allIdeatokenBalances })
-
   const balances: Balance[] = allIdeatokenBalances
     .filter((balance) => balance.token.market.name === marketName)
     .filter((balance) => balance.token.name !== tokenName)
@@ -395,8 +392,6 @@ export async function queryMutualHoldersOfToken({
         token: apiResponseToIdeaToken(balance.token, balance.token.market),
       }
     })
-
-  console.log({ balances })
 
   const allTokenNames: string[] = balances.map((balance) => balance.token.name)
 
