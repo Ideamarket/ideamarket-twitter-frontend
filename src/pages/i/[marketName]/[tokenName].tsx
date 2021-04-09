@@ -656,12 +656,7 @@ export default function TokenDetails({
           />
         )}
         <div className="px-2 mx-auto max-w-88 md:max-w-304">
-          <RelatedTokens
-            tokenName={tokenName}
-            marketName={marketName}
-            rawMarketName={rawMarketName}
-            rawTokenName={rawTokenName}
-          />
+          <RelatedTokens tokenName={tokenName} marketName={marketName} />
         </div>
       </div>
     </>

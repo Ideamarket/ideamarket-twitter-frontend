@@ -299,10 +299,9 @@ export async function getHoldersOfAToken({
   if (!marketName || !tokenName) {
     return null
   }
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryTokenBalances(marketName, tokenName)
-  )
+
+  let page = 0
+
   type Balance = {
     id: string
     amount: string
@@ -311,8 +310,28 @@ export async function getHoldersOfAToken({
       name: string
     }
   }
-  const balances: Balance[] =
-    result?.ideaMarkets?.[0]?.tokens?.[0].balances ?? []
+  const balances: Balance[] = []
+
+  while (true) {
+    const result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryTokenBalances({
+        marketName,
+        tokenName,
+        first: 100,
+        skip: page * 100,
+      })
+    )
+
+    const balancesInThisPage: Balance[] =
+      result?.ideaMarkets?.[0]?.tokens?.[0].balances ?? []
+    balances.push(...balancesInThisPage)
+    if (balancesInThisPage.length < 100) {
+      break
+    }
+    page += 1
+  }
+
   return balances.map((balance) => balance.holder)
 }
 
@@ -336,11 +355,28 @@ export async function queryMutualHoldersOfToken({
     return null
   }
   const holdersOfToken = await getHoldersOfAToken({ marketName, tokenName })
+  console.log({ holdersOfToken })
 
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryBalancesOfHolders(holdersOfToken)
-  )
+  const allIdeatokenBalances = []
+  let page = 0
+
+  while (true) {
+    const result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryBalancesOfHolders({
+        holders: holdersOfToken,
+        start: 100,
+        skip: page * 100,
+      })
+    )
+
+    const ideaTokenBalancesInThisPage = result.ideaTokenBalances
+    allIdeatokenBalances.push(...ideaTokenBalancesInThisPage)
+    if (ideaTokenBalancesInThisPage.length < 100) {
+      break
+    }
+    page += 1
+  }
 
   type Balance = {
     id: string
@@ -348,7 +384,9 @@ export async function queryMutualHoldersOfToken({
     token: IdeaToken
   }
 
-  const balances: Balance[] = result.ideaTokenBalances
+  console.log({ allIdeatokenBalances })
+
+  const balances: Balance[] = allIdeatokenBalances
     .filter((balance) => balance.token.market.name === marketName)
     .filter((balance) => balance.token.name !== tokenName)
     .map((balance) => {
@@ -357,6 +395,8 @@ export async function queryMutualHoldersOfToken({
         token: apiResponseToIdeaToken(balance.token, balance.token.market),
       }
     })
+
+  console.log({ balances })
 
   const allTokenNames: string[] = balances.map((balance) => balance.token.name)
 

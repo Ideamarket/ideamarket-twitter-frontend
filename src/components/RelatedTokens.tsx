@@ -227,7 +227,7 @@ function Token({
         <div className="grid grid-cols-1 border-t border-gray-200 divide-y divide-gray-200 bg-gray-50 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
           <div
             className={classNames(
-              'px-6 py-5 text-sm font-medium text-center',
+              'px-6 py-5 text-sm font-medium text-center flex flex-col',
               sortBy === 'totalHolders' && 'bg-indigo-100'
             )}
           >
@@ -236,18 +236,18 @@ function Token({
           </div>
           <div
             className={classNames(
-              'px-6 py-5 text-sm font-medium text-center',
+              'px-6 py-5 text-sm font-medium text-center flex flex-col',
               sortBy === 'totalAmount' && 'bg-indigo-100'
             )}
           >
             <span className="text-gray-900">
               {formatNumberWithCommasAsThousandsSerperator(stats.totalAmount)}
-            </span>{' '}
+            </span>
             <span className="text-gray-600">tokens bought</span>
           </div>
           <div
             className={classNames(
-              'px-6 py-5 text-sm font-medium text-center',
+              'px-6 py-5 text-sm font-medium text-center flex md:flex-col',
               sortBy === 'latestTimestamp' && 'bg-indigo-100'
             )}
           >
@@ -270,11 +270,7 @@ type SortBy = 'latestTimestamp' | 'totalAmount' | 'totalHolders'
 export default function RelatedTokens({
   tokenName,
   marketName,
-  rawTokenName,
-  rawMarketName,
 }: {
-  rawTokenName: string
-  rawMarketName: string
   tokenName: string
   marketName: string
 }) {
@@ -313,7 +309,7 @@ export default function RelatedTokens({
                 <>
                   Most holders of{' '}
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
-                    {rawTokenName}
+                    {tokenName}
                   </span>{' '}
                   also bought{' '}
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
@@ -327,7 +323,7 @@ export default function RelatedTokens({
                 <>
                   Holders of
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
-                    {rawTokenName}
+                    {tokenName}
                   </span>{' '}
                   bought most amount of
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
@@ -342,7 +338,7 @@ export default function RelatedTokens({
                   <>
                     Holders of
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-red-100 text-red-800">
-                      {rawTokenName}
+                      {tokenName}
                     </span>{' '}
                     most recently bought
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-sm font-medium bg-purple-100 text-purple-800">
