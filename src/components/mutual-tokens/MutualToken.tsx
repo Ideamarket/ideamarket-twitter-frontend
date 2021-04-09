@@ -7,7 +7,7 @@ import {
   formatNumberWithCommasAsThousandsSerperator,
 } from 'utils'
 import ReactTimeAgo from 'react-time-ago'
-import { MutualTokenDetails, MutualTokensListSortBy } from '.'
+import { MutualTokenDetails, MutualTokensListSortBy, A } from 'components'
 
 export default function MutualToken({
   stats,
@@ -41,10 +41,16 @@ export default function MutualToken({
                 <p className="text-sm font-medium text-gray-600">
                   Rank {token.rank}
                 </p>
-                <p className="text-xl font-bold text-gray-900 lg:text-xl">
-                  {token.name}{' '}
-                  <span>{marketSpecifics.getMarketSVGBlack()}</span>
-                </p>
+                <A
+                  href={`/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
+                    token.name
+                  )}`}
+                >
+                  <p className="text-xl font-bold text-gray-900 lg:text-xl hover:underline">
+                    {token.name}{' '}
+                    <span>{marketSpecifics.getMarketSVGBlack()}</span>
+                  </p>
+                </A>
                 <p className="text-sm font-medium text-gray-600">
                   ${formatNumber(token.latestPricePoint.price)}
                 </p>
