@@ -5,11 +5,27 @@ import {
   queryMutualHoldersOfToken,
 } from 'store/ideaMarketsStore'
 import { MutualToken, MutualTokenSkeleton } from 'components'
+import Select from 'react-select'
 
 export type MutualTokensListSortBy =
   | 'latestTimestamp'
   | 'totalAmount'
   | 'totalHolders'
+
+const options = [
+  {
+    value: 'totalHolders',
+    label: 'Mutual Holders',
+  },
+  {
+    value: 'totalAmount',
+    label: 'Mutual Tokens',
+  },
+  {
+    value: 'latestTimestamp',
+    label: 'Most Recent',
+  },
+]
 
 export default function MutualTokensList({
   tokenName,
@@ -56,36 +72,39 @@ export default function MutualTokensList({
           Mutual Holders
         </h3>
         <div className="mt-3 sm:mt-0 sm:ml-4">
-          <div className="flex flex-col mt-10 space-y-4 md:flex-row md:justify-between md:space-y-0">
-            <div className="inline-block">
-              <label
-                htmlFor="location"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Sort By
-              </label>
-              <select
-                disabled={isLoading}
-                id="location"
-                name="location"
-                className="block w-full py-2 pl-3 pr-10 mt-1 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                onChange={(e) => setSortBy(e.target.value as any)}
-                value={sortBy}
-              >
-                <option value="totalHolders">Mutual Holders</option>
-                <option value="totalAmount">Mutual Tokens</option>
-                <option value="latestTimestamp">Most Recent</option>
-              </select>
-            </div>
-          </div>
+          <p>Sort By</p>
+          <Select
+            options={options}
+            isDisabled={isLoading}
+            isClearable={false}
+            defaultValue={options[0]}
+            isSearchable={false}
+            className="w-48 border-2 border-gray-200 rounded-md text-brand-gray-4 market-select"
+            onChange={(entry) => {
+              setSortBy((entry as any).value)
+            }}
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 2,
+              colors: {
+                ...theme.colors,
+                primary25: '#f6f6f6', // brand-gray
+                primary: '#0857e0', // brand-blue
+              },
+            })}
+            styles={{
+              valueContainer: (provided) => ({
+                ...provided,
+                minHeight: '50px',
+              }),
+            }}
+          />
         </div>
       </div>
 
       <dl className="grid grid-cols-1 gap-10 mt-5 md:grid-cols-2">
         {isLoading && (
           <>
-            <MutualTokenSkeleton />
-            <MutualTokenSkeleton />
             <MutualTokenSkeleton />
             <MutualTokenSkeleton />
             <MutualTokenSkeleton />
