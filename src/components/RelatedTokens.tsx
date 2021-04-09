@@ -199,7 +199,7 @@ function Token({
                   <span>{marketSpecifics.getMarketSVGBlack()}</span>
                 </p>
                 <p className="text-sm font-medium text-gray-600">
-                  ${token.latestPricePoint.price}
+                  ${token.latestPricePoint.price.toFixed(2)}
                 </p>
               </div>
             </div>
