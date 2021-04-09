@@ -85,7 +85,7 @@ export default function MutualToken({
             <span className="text-gray-900">
               {formatNumberWithCommasAsThousandsSerperator(stats.totalAmount)}
             </span>{' '}
-            <span className="text-gray-600">tokens bought</span>
+            <span className="text-gray-600">tokens held</span>
           </div>
           <div
             className={classNames(
@@ -93,7 +93,7 @@ export default function MutualToken({
               sortBy === 'latestTimestamp' && 'bg-indigo-100'
             )}
           >
-            <span className="text-gray-600">Bought </span>
+            <span className="text-gray-600">Last bought </span>
             <span className="text-gray-900">
               <ReactTimeAgo
                 date={new Date(stats.latestTimestamp * 1000)}
