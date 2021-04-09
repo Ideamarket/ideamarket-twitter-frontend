@@ -56,24 +56,14 @@ export default function MutualTokensList({
     return <p>Something went wrong!!!</p>
   }
 
-  if (
-    !isLoading &&
-    !isError &&
-    mutualHoldersList &&
-    mutualHoldersList.length === 0
-  ) {
-    return <></>
-  }
-
   return (
     <>
       <div className="pb-5 mb-12 border-b border-gray-200 sm:flex sm:items-end sm:justify-between">
-        <h3 className="text-2xl font-medium leading-6 text-brand-blue">
-          Mutual Holders
-        </h3>
+        <h3 className="text-2xl font-medium leading-6">Mutual Holders</h3>
         <div className="mt-3 sm:mt-0 sm:ml-4">
           <p>Sort By</p>
           <Select
+            name="Sort By"
             options={options}
             isDisabled={isLoading}
             isClearable={false}
@@ -124,6 +114,9 @@ export default function MutualTokensList({
               sortBy={sortBy}
             />
           ))}
+        {!isLoading && mutualHoldersList.length === 0 && (
+          <p className="text-gray-500">No mutual holders for this token.</p>
+        )}
       </dl>
     </>
   )
