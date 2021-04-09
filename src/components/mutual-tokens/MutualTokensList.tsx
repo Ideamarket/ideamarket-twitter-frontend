@@ -127,7 +127,7 @@ export default function MutualTokensList({
           <div className="flex items-center justify-center my-10">
             <button
               type="button"
-              className="inline-flex items-center px-6 py-3 text-base font-medium text-white border border-transparent rounded-md shadow-sm bg-very-dark-blue hover:bg-very-dark-blue-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="inline-flex items-center px-6 py-3 text-base font-medium bg-white border border-transparent rounded-md shadow-sm text-brand-blue hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               onClick={() => setPageNumber(pageNumber + 1)}
             >
               Load more

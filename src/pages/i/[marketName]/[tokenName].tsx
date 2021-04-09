@@ -654,7 +654,7 @@ export default function TokenDetails({
             setIsOpen={setIsVerifyModalOpen}
           />
         )}
-        <div className="px-2 mx-auto mt-10 transform max-w-88 md:max-w-304 -translate-y-30 md:-translate-y-28">
+        <div className="px-2 mx-auto transform max-w-88 md:max-w-304 -translate-y-30 md:-translate-y-28">
           <MutualTokensList tokenName={tokenName} marketName={marketName} />
         </div>
       </div>
