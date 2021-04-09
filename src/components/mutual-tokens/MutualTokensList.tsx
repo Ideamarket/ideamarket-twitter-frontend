@@ -41,6 +41,15 @@ export default function MutualTokensList({
     return <p>Something went wrong!!!</p>
   }
 
+  if (
+    !isLoading &&
+    !isError &&
+    mutualHoldersList &&
+    mutualHoldersList.length === 0
+  ) {
+    return <></>
+  }
+
   return (
     <>
       <div className="pb-5 border-b border-gray-200">
