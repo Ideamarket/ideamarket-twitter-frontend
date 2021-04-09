@@ -10,6 +10,7 @@ import {
 } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import WatchingStar from './WatchingStar'
+import A from './A'
 
 function DetailsView({
   isOpen,
@@ -20,7 +21,7 @@ function DetailsView({
   setIsOpen: (open: boolean) => void
   token: IdeaToken
 }) {
-  const market = getMarketSpecificsByMarketName(token.marketName)
+  const marketSpecifics = getMarketSpecificsByMarketName(token.marketName)
   if (!isOpen) {
     return <></>
   }
@@ -93,7 +94,7 @@ function DetailsView({
                     <div>
                       <div className="block w-full overflow-hidden rounded-lg aspect-w-10 aspect-h-7">
                         <img
-                          src={`https://unavatar.backend.ideamarket.io/${market.getMarketNameURLRepresentation()}/${market.getTokenNameURLRepresentation(
+                          src={`https://unavatar.backend.ideamarket.io/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
                             token.name
                           )}`}
                           alt=""
@@ -144,18 +145,14 @@ function DetailsView({
                       </dl>
                     </div>
                     <div className="flex">
-                      <button
-                        type="button"
-                        className="flex-1 px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-brand-blue hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      <A
+                        href={`/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
+                          token.name
+                        )}`}
+                        className="flex-1 px-4 py-2 text-sm font-medium text-center text-white border border-transparent rounded-md shadow-sm bg-brand-blue hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                       >
-                        Buy
-                      </button>
-                      <button
-                        type="button"
-                        className="flex-1 px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      >
-                        Sell
-                      </button>
+                        View Listing
+                      </A>
                     </div>
                   </div>
                 </div>
