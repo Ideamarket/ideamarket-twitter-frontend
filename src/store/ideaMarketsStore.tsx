@@ -384,6 +384,7 @@ export async function queryMutualHoldersOfToken({
   }
 
   const balances: Balance[] = allIdeatokenBalances
+    .filter((balance) => Number(balance.amount) > 0)
     .filter((balance) => balance.token.market.name === marketName)
     .filter((balance) => balance.token.name !== tokenName)
     .map((balance) => {
