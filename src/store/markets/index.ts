@@ -59,5 +59,3 @@ export function getMarketSpecificsByMarketNameInURLRepresentation(
     (s) => s.getMarketNameURLRepresentation() === marketNameInURLRepresentation
   )
 }
-
-export { default as useTokenIconURL } from './useTokenIconURL'

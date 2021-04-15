@@ -3,13 +3,14 @@ import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
 import { WatchingStar } from 'components'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   calculateCurrentPriceBN,
   formatNumberWithCommasAsThousandsSerperator,
   formatNumber,
   web3BNToFloatString,
 } from 'utils'
+import { useTokenIconURL } from 'actions'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 

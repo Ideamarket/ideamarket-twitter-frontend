@@ -1,13 +1,14 @@
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import { WatchingStar } from '../'
 import {
   calculateCurrentPriceBN,
   formatNumber,
   web3BNToFloatString,
 } from '../../utils'
+import { useTokenIconURL } from 'actions'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 

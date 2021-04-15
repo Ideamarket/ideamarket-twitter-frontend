@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   calculateCurrentPriceBN,
   bigNumberTenPow18,
@@ -12,6 +12,7 @@ import {
   calculateIdeaTokenDaiValue,
 } from 'utils'
 import A from 'components/A'
+import { useTokenIconURL } from 'actions'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 

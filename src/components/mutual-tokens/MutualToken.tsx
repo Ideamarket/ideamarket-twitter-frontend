@@ -1,13 +1,14 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   formatNumber,
   formatNumberWithCommasAsThousandsSerperator,
 } from 'utils'
 import ReactTimeAgo from 'react-time-ago'
 import { MutualTokenDetails, MutualTokensListSortBy, A } from 'components'
+import { useTokenIconURL } from 'actions'
 
 export default function MutualToken({
   stats,

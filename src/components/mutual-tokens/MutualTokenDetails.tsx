@@ -1,8 +1,9 @@
 import { Transition } from '@headlessui/react'
+import { useTokenIconURL } from 'actions'
 import A from 'components/A'
 import WatchingStar from 'components/WatchingStar'
 import { IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   formatNumber,
   formatNumberWithCommasAsThousandsSerperator,

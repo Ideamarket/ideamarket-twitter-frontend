@@ -1,7 +1,12 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import { listToken, listAndBuyToken, verifyTokenName } from 'actions'
-import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
+import {
+  listToken,
+  listAndBuyToken,
+  verifyTokenName,
+  useTokenIconURL,
+} from 'actions'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import { NETWORK, useTransactionManager } from 'utils'
 import { Modal, MarketSelect, TradeInterface } from './'
 import ApproveButton from './trade/ApproveButton'

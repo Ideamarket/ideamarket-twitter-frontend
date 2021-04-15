@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { IMarketSpecifics } from '.'
+import { IMarketSpecifics } from '../store/markets'
 
 export default function useTokenIconURL({
   marketSpecifics,
