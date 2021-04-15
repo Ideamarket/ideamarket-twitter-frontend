@@ -71,7 +71,7 @@ export default function ListTokenModal({
 
   const { tokenIconURL, isLoading: isTokenIconURLLoading } = useTokenIconURL({
     marketSpecifics,
-    tokenName,
+    tokenName: marketSpecifics?.convertUserInputToTokenName(tokenName),
   })
 
   const tweetTemplate = encodeURIComponent(
