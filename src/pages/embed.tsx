@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import React, { useContext, useState, useRef } from 'react'
 import copy from 'copy-to-clipboard'
 
@@ -11,13 +12,13 @@ export default function Home() {
   var dummy2 =
     '<a href="https://app.ideamarket.io/i/twitter/elonmusk" target="_blank">'
 
-  const str1 = `<div class="container"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Rashmi-278/publicCDN@main/embed.css"> `
-  var str2 =
+  const line1 = `<div class="container"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Rashmi-278/publicCDN@main/embed.css"> `
+  var line2 =
     ' <img src="https://og-image.ideamarket.io/api/${market}/${tagname}.png" alt="image" /> '
-  var str3 =
+  var line3 =
     '<a href="https://app.ideamarket.io/i/${market}/${tagname}" target="_blank">'
-  const str4 = '<button class="btn">Buy</button></a></div>'
-  var prefinal = str1 + '\n' + dummy1 + '\n' + dummy2 + str4
+  const line4 = '<button class="btn">Buy</button></a></div>'
+  var prefinal = line1 + '\n' + dummy1 + '\n' + dummy2 + line4
 
   const [value, setValue] = React.useState(prefinal)
   const copyCheckIcon = (
@@ -51,12 +52,12 @@ export default function Home() {
   const createEmbed = (event) => {
     event.preventDefault()
     console.log(tagname + market)
-    var str21 = str2.replace('${market}', market)
-    str21 = str21.replace('${tagname}', tagname)
-    var str31 = str3.replace('${market}', market)
-    str31 = str31.replace('${tagname}', tagname)
+    var newLine2 = line2.replace('${market}', market)
+    newLine2 = newLine2.replace('${tagname}', tagname)
+    var newLine3 = line3.replace('${market}', market)
+    newLine3 = newLine3.replace('${tagname}', tagname)
 
-    var final = str1 + '\n' + str21 + '\n' + str31 + str4
+    var final = line1 + '\n' + newLine2 + '\n' + newLine3 + line4
     setValue(final)
     setCopyDone(false)
     console.log(final)
