@@ -2,6 +2,7 @@ import { IMarketSpecifics } from '.'
 import TwitterWhite from '../../assets/twitter-white.svg'
 import TwitterBlack from '../../assets/twitter-black.svg'
 import TwitterOutline from '../../assets/twitter-outline.svg'
+import { queryLambdavatar } from 'actions'
 
 export default class TwitterMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -37,13 +38,10 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
   }
 
   getTokenIconURL(tokenName: string): Promise<string> {
-    return fetch(
-      `https://lambdavatar.backend.ideamarket.io/${this.getMarketNameURLRepresentation()}/${tokenName.slice(
-        1
-      )}`
-    )
-      .then((res) => res.json())
-      .then((result) => result.url)
+    return queryLambdavatar({
+      rawMarketName: this.getMarketNameURLRepresentation(),
+      rawTokenName: this.getTokenNameURLRepresentation(tokenName),
+    })
   }
 
   normalizeUserInputTokenName(userInput: string): string {

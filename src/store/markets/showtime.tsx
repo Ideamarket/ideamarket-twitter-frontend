@@ -2,6 +2,7 @@ import { IMarketSpecifics } from '.'
 import ShowtimeWhite from '../../assets/showtime-white.svg'
 import ShowtimeBlack from '../../assets/showtime-black.svg'
 import ShowtimeOutline from '../../assets/showtime-outline.svg'
+import { queryLambdavatar } from 'actions'
 
 export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -37,11 +38,10 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
   }
 
   getTokenIconURL(tokenName: string): Promise<string> {
-    return fetch(
-      `https://lambdavatar.backend.ideamarket.io/${this.getMarketNameURLRepresentation()}/${tokenName}`
-    )
-      .then((res) => res.json())
-      .then((result) => result.url)
+    return queryLambdavatar({
+      rawMarketName: this.getMarketNameURLRepresentation(),
+      rawTokenName: this.getTokenNameURLRepresentation(tokenName),
+    })
   }
 
   normalizeUserInputTokenName(userInput: string): string {
