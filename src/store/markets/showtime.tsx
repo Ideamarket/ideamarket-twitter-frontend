@@ -36,8 +36,12 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
     return `https://tryshowtime.com/${tokenName}`
   }
 
-  getTokenIconURL(tokenName: string): string {
-    return `https://unavatar.backend.ideamarket.io/showtime/${tokenName}`
+  getTokenIconURL(tokenName: string): Promise<string> {
+    return fetch(
+      `https://lambdavatar.backend.ideamarket.io/${this.getMarketNameURLRepresentation()}/${tokenName}`
+    )
+      .then((res) => res.json())
+      .then((result) => result.url)
   }
 
   normalizeUserInputTokenName(userInput: string): string {

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName } from 'store/markets'
+import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
 import classNames from 'classnames'
 import {
   calculateCurrentPriceBN,
@@ -56,6 +56,10 @@ export default function TokenCard({
   const marketSpecifics = isLoading
     ? undefined
     : getMarketSpecificsByMarketName(market.name)
+  const tokenIconURL = useTokenIconURL({
+    marketSpecifics,
+    tokenName: token.name,
+  })
   const tokenPrice = isLoading
     ? ''
     : web3BNToFloatString(
@@ -75,11 +79,7 @@ export default function TokenCard({
           {loading ? (
             <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
           ) : (
-            <img
-              className="rounded-full"
-              src={marketSpecifics.getTokenIconURL(token.name)}
-              alt=""
-            />
+            <img className="rounded-full" src={tokenIconURL} alt="" />
           )}
         </div>
         <div className="mt-1 text-2xl font-semibold text-brand-alto">

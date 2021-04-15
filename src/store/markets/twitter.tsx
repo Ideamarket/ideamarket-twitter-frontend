@@ -36,10 +36,14 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
     return `https://twitter.com/${tokenName.slice(1)}`
   }
 
-  getTokenIconURL(tokenName: string): string {
-    return `https://unavatar.backend.ideamarket.io/twitter/${tokenName.slice(
-      1
-    )}`
+  getTokenIconURL(tokenName: string): Promise<string> {
+    return fetch(
+      `https://lambdavatar.backend.ideamarket.io/${this.getMarketNameURLRepresentation()}/${tokenName.slice(
+        1
+      )}`
+    )
+      .then((res) => res.json())
+      .then((result) => result.url)
   }
 
   normalizeUserInputTokenName(userInput: string): string {

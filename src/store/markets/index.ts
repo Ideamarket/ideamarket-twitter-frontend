@@ -15,7 +15,7 @@ export type IMarketSpecifics = {
 
   // Tokens
   getTokenURL(tokenName: string): string
-  getTokenIconURL(tokenName: string): string
+  getTokenIconURL(tokenName: string): Promise<string>
   normalizeUserInputTokenName(userInput: string): string
   convertUserInputToTokenName(userInput: string): string
   getTokenNameURLRepresentation(tokenName: string): string
@@ -59,3 +59,5 @@ export function getMarketSpecificsByMarketNameInURLRepresentation(
     (s) => s.getMarketNameURLRepresentation() === marketNameInURLRepresentation
   )
 }
+
+export { default as useTokenIconURL } from './useTokenIconURL'

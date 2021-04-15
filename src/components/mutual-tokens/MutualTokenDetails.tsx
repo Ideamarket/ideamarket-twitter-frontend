@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react'
 import A from 'components/A'
 import WatchingStar from 'components/WatchingStar'
 import { IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName } from 'store/markets'
+import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
 import {
   formatNumber,
   formatNumberWithCommasAsThousandsSerperator,
@@ -18,6 +18,10 @@ export default function MutualTokenDetails({
   token: IdeaToken
 }) {
   const marketSpecifics = getMarketSpecificsByMarketName(token.marketName)
+  const tokenIconURL = useTokenIconURL({
+    marketSpecifics,
+    tokenName: token.name,
+  })
   return (
     <>
       <Transition
@@ -85,7 +89,7 @@ export default function MutualTokenDetails({
                     <div>
                       <div className="block w-full overflow-hidden rounded-lg aspect-w-10 aspect-h-7">
                         <img
-                          src={marketSpecifics.getTokenIconURL(token.name)}
+                          src={tokenIconURL}
                           alt=""
                           className="object-contain"
                         />

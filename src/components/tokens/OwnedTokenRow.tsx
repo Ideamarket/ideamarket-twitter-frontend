@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName } from 'store/markets'
+import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
 import {
   calculateCurrentPriceBN,
   bigNumberTenPow18,
@@ -28,6 +28,10 @@ export default function TokenRow({
 }) {
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
+  const tokenIconURL = useTokenIconURL({
+    marketSpecifics,
+    tokenName: token.name,
+  })
   const tokenPrice = web3BNToFloatString(
     calculateCurrentPriceBN(
       token.rawSupply,
@@ -61,7 +65,7 @@ export default function TokenRow({
             <div className="flex-shrink-0 w-7.5 h-7.5">
               <img
                 className="w-full h-full rounded-full"
-                src={marketSpecifics.getTokenIconURL(token.name)}
+                src={tokenIconURL}
                 alt=""
               />
             </div>

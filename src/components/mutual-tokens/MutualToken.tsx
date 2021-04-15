@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { IdeaToken } from 'store/ideaMarketsStore'
-import { getMarketSpecificsByMarketName } from 'store/markets'
+import { getMarketSpecificsByMarketName, useTokenIconURL } from 'store/markets'
 import {
   formatNumber,
   formatNumberWithCommasAsThousandsSerperator,
@@ -19,6 +19,10 @@ export default function MutualToken({
   sortBy: MutualTokensListSortBy
 }) {
   const marketSpecifics = getMarketSpecificsByMarketName(token.marketName)
+  const tokenIconURL = useTokenIconURL({
+    marketSpecifics,
+    tokenName: token.name,
+  })
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>
@@ -33,7 +37,7 @@ export default function MutualToken({
               <div className="flex-shrink-0">
                 <img
                   className="w-20 h-20 mx-auto rounded-full"
-                  src={marketSpecifics.getTokenIconURL(token.name)}
+                  src={tokenIconURL}
                   alt={token.name}
                 />
               </div>

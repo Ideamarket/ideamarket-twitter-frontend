@@ -36,8 +36,12 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
     return `https://${tokenName}.substack.com/`
   }
 
-  getTokenIconURL(tokenName: string): string {
-    return `https://unavatar.backend.ideamarket.io/substack/${tokenName}`
+  getTokenIconURL(tokenName: string): Promise<string> {
+    return fetch(
+      `https://lambdavatar.backend.ideamarket.io/${this.getMarketNameURLRepresentation()}/${tokenName}`
+    )
+      .then((res) => res.json())
+      .then((result) => result.url)
   }
 
   normalizeUserInputTokenName(userInput: string): string {
