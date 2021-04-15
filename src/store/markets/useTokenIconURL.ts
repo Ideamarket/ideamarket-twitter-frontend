@@ -1,5 +1,5 @@
-import { IMarketSpecifics } from '.'
 import { useEffect, useState } from 'react'
+import { IMarketSpecifics } from '.'
 
 export default function useTokenIconURL({
   marketSpecifics,
@@ -11,10 +11,16 @@ export default function useTokenIconURL({
   const [tokenIconURL, setTokenIconURL] = useState('')
 
   useEffect(() => {
+    let isCancelled = false
     if (tokenName && marketSpecifics) {
       marketSpecifics.getTokenIconURL(tokenName).then((url) => {
-        setTokenIconURL(url)
+        if (!isCancelled) {
+          setTokenIconURL(url)
+        }
       })
+    }
+    return () => {
+      isCancelled = true
     }
   }, [marketSpecifics, tokenName])
 
