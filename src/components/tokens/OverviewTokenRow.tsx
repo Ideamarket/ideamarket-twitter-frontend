@@ -31,7 +31,7 @@ export default function TokenRow({
 }: Props) {
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
-  const tokenIconURL = useTokenIconURL({
+  const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
     tokenName: token.name,
   })
@@ -81,11 +81,15 @@ export default function TokenRow({
                 showMarketSVG && 'ml-2'
               )}
             >
-              <img
-                className="w-full h-full rounded-full"
-                src={tokenIconURL}
-                alt=""
-              />
+              {isTokenIconLoading ? (
+                <div className="w-full h-full bg-gray-400 rounded-full animate-pulse"></div>
+              ) : (
+                <img
+                  className="w-full h-full rounded-full"
+                  src={tokenIconURL}
+                  alt=""
+                />
+              )}
             </div>
             <div className="ml-4 text-base font-medium leading-5 text-gray-900 truncate hover:underline">
               <span>{token.name}</span>

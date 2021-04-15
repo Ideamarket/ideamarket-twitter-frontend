@@ -9,14 +9,17 @@ export default function useTokenIconURL({
   tokenName: string
 }) {
   const [tokenIconURL, setTokenIconURL] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     let isCancelled = false
     if (tokenName && marketSpecifics) {
+      setIsLoading(true)
       marketSpecifics.getTokenIconURL(tokenName).then((url) => {
         if (!isCancelled) {
           setTokenIconURL(url)
         }
+        setIsLoading(false)
       })
     }
     return () => {
@@ -24,5 +27,5 @@ export default function useTokenIconURL({
     }
   }, [marketSpecifics, tokenName])
 
-  return tokenIconURL
+  return { tokenIconURL, isLoading }
 }

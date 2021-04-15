@@ -19,7 +19,7 @@ export default function MutualTokenDetails({
   token: IdeaToken
 }) {
   const marketSpecifics = getMarketSpecificsByMarketName(token.marketName)
-  const tokenIconURL = useTokenIconURL({
+  const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
     tokenName: token.name,
   })
@@ -89,11 +89,15 @@ export default function MutualTokenDetails({
                   <div className="pb-16 space-y-6">
                     <div>
                       <div className="block w-full overflow-hidden rounded-lg aspect-w-10 aspect-h-7">
-                        <img
-                          src={tokenIconURL}
-                          alt=""
-                          className="object-contain"
-                        />
+                        {isTokenIconLoading ? (
+                          <div className="w-full h-full bg-gray-400 rounded-lg animate-pulse"></div>
+                        ) : (
+                          <img
+                            src={tokenIconURL}
+                            alt=""
+                            className="object-contain"
+                          />
+                        )}
                       </div>
                       <div className="flex items-start justify-between mt-4">
                         <div>

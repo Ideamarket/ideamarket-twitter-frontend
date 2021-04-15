@@ -20,7 +20,7 @@ export default function MutualToken({
   sortBy: MutualTokensListSortBy
 }) {
   const marketSpecifics = getMarketSpecificsByMarketName(token.marketName)
-  const tokenIconURL = useTokenIconURL({
+  const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
     tokenName: token.name,
   })
@@ -36,11 +36,15 @@ export default function MutualToken({
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="lg:flex lg:space-x-5">
               <div className="flex-shrink-0">
-                <img
-                  className="w-20 h-20 mx-auto rounded-full"
-                  src={tokenIconURL}
-                  alt={token.name}
-                />
+                {isTokenIconLoading ? (
+                  <div className="w-20 h-20 mx-auto bg-gray-400 rounded-full animate-pulse"></div>
+                ) : (
+                  <img
+                    className="w-20 h-20 mx-auto rounded-full"
+                    src={tokenIconURL}
+                    alt={token.name}
+                  />
+                )}
               </div>
               <div className="mt-4 text-center lg:mt-0 lg:pt-1 lg:text-left">
                 <p className="text-sm font-medium text-gray-600">

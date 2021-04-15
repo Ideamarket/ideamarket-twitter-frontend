@@ -57,7 +57,7 @@ export default function TokenCard({
   const marketSpecifics = isLoading
     ? undefined
     : getMarketSpecificsByMarketName(market.name)
-  const tokenIconURL = useTokenIconURL({
+  const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
     tokenName: token.name,
   })
@@ -77,7 +77,7 @@ export default function TokenCard({
     <>
       <div className="flex flex-none mt-7">
         <div className="w-20 h-20 mr-5">
-          {loading ? (
+          {loading || isTokenIconLoading ? (
             <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
           ) : (
             <img className="rounded-full" src={tokenIconURL} alt="" />

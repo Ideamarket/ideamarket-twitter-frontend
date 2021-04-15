@@ -69,7 +69,10 @@ export default function ListTokenModal({
       ? marketSpecifics.getListTokenSuffix()
       : undefined
 
-  const tokenIconURL = useTokenIconURL({ marketSpecifics, tokenName })
+  const { tokenIconURL, isLoading: isTokenIconURLLoading } = useTokenIconURL({
+    marketSpecifics,
+    tokenName,
+  })
 
   const tweetTemplate = encodeURIComponent(
     `Just listed ${marketSpecifics?.convertUserInputToTokenName(
@@ -239,7 +242,10 @@ export default function ListTokenModal({
               <img
                 className={classNames(
                   'rounded-full max-w-12 max-h-12 ml-3 inline-block',
-                  (isTokenIconLoading || !isValidTokenName) && 'hidden'
+                  (isTokenIconLoading ||
+                    isTokenIconURLLoading ||
+                    !isValidTokenName) &&
+                    'hidden'
                 )}
                 onLoad={() => setIsTokenIconLoading(false)}
                 src={selectedMarket && marketSpecifics && tokenIconURL}
