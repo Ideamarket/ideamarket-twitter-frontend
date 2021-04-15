@@ -12,6 +12,7 @@ import {
   calculateIdeaTokenDaiValue,
 } from 'utils'
 import A from 'components/A'
+import { useTokenIconURL } from 'actions'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -28,6 +29,10 @@ export default function TokenRow({
 }) {
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
+  const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
+    marketSpecifics,
+    tokenName: token.name,
+  })
   const tokenPrice = web3BNToFloatString(
     calculateCurrentPriceBN(
       token.rawSupply,
@@ -59,11 +64,15 @@ export default function TokenRow({
         <td className="col-span-3 px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
             <div className="flex-shrink-0 w-7.5 h-7.5">
-              <img
-                className="w-full h-full rounded-full"
-                src={marketSpecifics.getTokenIconURL(token.name)}
-                alt=""
-              />
+              {isTokenIconLoading ? (
+                <div className="w-full h-full bg-gray-400 rounded-full animate-pulse"></div>
+              ) : (
+                <img
+                  className="w-full h-full rounded-full"
+                  src={tokenIconURL}
+                  alt=""
+                />
+              )}
             </div>
             <div className="ml-4 text-base font-semibold leading-5 text-gray-900">
               <A
