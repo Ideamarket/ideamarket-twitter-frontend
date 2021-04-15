@@ -36,6 +36,7 @@
     "chart.js": "^2.9.4",
     "chrome-aws-lambda": "8.0.2",
     "classnames": "2.2.6",
+    "copy-to-clipboard": "^3.3.1",
     "fortmatic": "^2.2.1",
     "graphql": "15.4.0",
     "graphql-request": "3.3.0",

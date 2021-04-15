@@ -1,19 +1,33 @@
 import classNames from 'classnames'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef} from 'react'
+import copy from 'copy-to-clipboard'
 
 export default function Home() {
 
 const [tagname , setTagname] = useState('elonmusk')
 const [market , setMarket] = useState('twitter')
 const imgHash  = useState(Date.now())
+const [copyDone , setCopyDone] = useState(false);
+var dummy1 = ' <img src="https://og-image.ideamarket.io/api/twitter/elonmusk.png" alt="image" /> '
+var dummy2 = '<a href="https://app.ideamarket.io/i/twitter/elonmusk" target="_blank">'
 
-const str1 = `<div class="container">`
+
+const str1 = `<div class="container"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Rashmi-278/publicCDN@main/embed.css"> `
 var str2 = ' <img src="https://og-image.ideamarket.io/api/${market}/${tagname}.png" alt="image" /> '
 var str3 = '<a href="https://app.ideamarket.io/i/${market}/${tagname}" target="_blank">'
 const str4 = '<button class="btn">Buy</button></a></div>'
-var prefinal = str1 + '\n' + str2 + '\n' + str3 + str4
+var prefinal = str1 + '\n' + dummy1 + '\n' + dummy2 + str4
 
 const [value, setValue] = React.useState(prefinal)
+const copyCheckIcon = (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-10" viewBox="0 0 20 20" fill="currentColor">
+<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+<path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+</svg>)
+
+const copyIcon = (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-10" viewBox="0 0 20 20" fill="currentColor">
+<path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+<path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+</svg>)
 
 
 const createEmbed = (event) => {
@@ -26,6 +40,7 @@ const createEmbed = (event) => {
     
     var final = str1 + '\n' + str21 + '\n' + str31 + str4
     setValue(final)
+    setCopyDone(false)
     console.log(final)
     }
   
@@ -46,7 +61,7 @@ const createEmbed = (event) => {
 
           
 
-          <div className="flex  mt-20  flex-col items-center justify-center mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
+          <div className="flex  mt-20  flex-col items-center justify-center  text-md md:text-3xl font-gilroy-bold md:flex-row">
                 <form className="w-full max-w-lg" action="POST" onSubmit={createEmbed} >
                     <div className="flex flex-wrap -mx-3 mb-6">
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -117,22 +132,20 @@ const createEmbed = (event) => {
               <h3 className="text-xl font-bold mb-8" >
                 Generated code
               </h3>
-           <button className="outline-none   focus:outline-none  border-gray-200 w-10 h-10 hover:text-green-500 active:bg-gray-50" >
-                    <i><svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-10" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-                    </svg></i>
-            </button>
-            </div>
-            <div className="border border-gray-200 overflow-hidden rounded-md">
-            
+       
+            <button className="outline-none   focus:outline-none  border-gray-200 w-10 h-10 hover:text-green-500 active:bg-gray-50" onClick={()=> {copy(value); setCopyDone(true); console.log("copied!");}} >
+                    
+            { copyDone ? copyCheckIcon : copyIcon }
 
-      
-            <div className="w-full h-32 overflow-y-auto">
-                  {value}
+                   
+            </button>
+             
+           
             </div>
+            <div className="overflow-hidden rounded-md">
             
-            </div>
+              <textarea className="w-full px-3 py-5 border border-gray-200 overflow-hidden rounded-md focus:outline-none resize-none"  value={value}  rows={4} ></textarea>
+           </div>
               
             <div
               className="flex justify-end items-center text-sm font-bold mt-8 gap-4"
