@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import '../styles/fonts/gilroy/style.css'
 import '../styles/fonts/sf-compact-display/style.css'
 import '../styles/nprogress.css'
-import '../styles/embed.css' ;
+import '../styles/embed.css'
 
 import CookieConsent from 'react-cookie-consent'
 import { createContext, useEffect, useState } from 'react'
