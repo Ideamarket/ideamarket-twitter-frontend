@@ -34,7 +34,7 @@ export default function Table({
   const TOKENS_PER_PAGE = 10
   const LOADING_MARGIN = 200
 
-  const [currentHeader, setCurrentHeader] = useState('rank')
+  const [currentHeader, setCurrentHeader] = useState('')
   const [orderBy, setOrderBy] = useState('supply')
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
