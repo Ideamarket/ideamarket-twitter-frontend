@@ -1,5 +1,6 @@
 import MainnetNetworkSpecifics from './mainnet'
 import RinkebyNetworkSpecifics from './rinkeby'
+import KovanNetworkSpecifics from './kovan'
 import TestNetworkSpecifics from './test'
 
 export type ExternalAddresses = {
@@ -22,6 +23,7 @@ export type INetworkSpecifics = {
 const specifics: INetworkSpecifics[] = [
   new MainnetNetworkSpecifics(),
   new RinkebyNetworkSpecifics(),
+  new KovanNetworkSpecifics(),
   new TestNetworkSpecifics(),
 ]
 

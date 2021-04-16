@@ -1,4 +1,3 @@
-import TokenListRinkeby from '../assets/token-list-rinkeby.json'
 import create from 'zustand'
 import produce from 'immer'
 import { NETWORK } from 'store/networks'
