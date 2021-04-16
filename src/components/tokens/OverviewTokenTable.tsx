@@ -35,8 +35,8 @@ export default function Table({
   const LOADING_MARGIN = 200
 
   const [currentHeader, setCurrentHeader] = useState('rank')
-  const [orderBy, setOrderBy] = useState('supply')
-  const [orderDirection, setOrderDirection] = useState('desc')
+  const [orderBy, setOrderBy] = useState('rank')
+  const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('asc')
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
   const canFetchMoreRef = useRef<boolean>()
   const marketsMap = markets.reduce(
@@ -197,6 +197,9 @@ export default function Table({
       } else if (headerValue === 'holders') {
         setOrderBy('holders')
         onOrderByChanged('holders', 'desc')
+      } else if (headerValue === 'rank') {
+        setOrderBy('rank')
+        onOrderByChanged('rank', 'desc')
       }
 
       setOrderDirection('desc')
@@ -219,7 +222,7 @@ export default function Table({
                     />
                   </tr>
                 </thead>
-                <tbody className="bg-white w-full divide-y divide-gray-200">
+                <tbody className="w-full bg-white divide-y divide-gray-200">
                   {(tokenData as IdeaToken[]).map((token) => (
                     <TokenRow
                       key={token.marketID + '-' + token.tokenID}
