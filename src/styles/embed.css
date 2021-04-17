@@ -9,21 +9,19 @@
     width: 100%;
     height: auto;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-
-
   }
   
-  .container .btn {
+   .btn {
     position: absolute;
-    top: 89%;
+    top: 92%;
     left: 50%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     background-color:#0B5BFB;
     color: white;
-    font-size: 14px;
+    font-size: 48px;
     font-weight: bold;
-    padding: 8px 18px;
+    padding: 18px 40px;
     border: none;
     cursor: pointer;
     border-radius: 5px;
