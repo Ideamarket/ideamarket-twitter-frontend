@@ -7,20 +7,11 @@ export default function Home() {
   const [market, setMarket] = useState('twitter')
   const imgHash = useState(Date.now())
   const [copyDone, setCopyDone] = useState(false)
-  var dummy1 =
-    ' <img src="https://og-image.ideamarket.io/api/twitter/elonmusk.png" alt="image" /> '
-  var dummy2 =
-    '<a href="https://app.ideamarket.io/i/twitter/elonmusk" target="_blank">'
 
-  const line1 = `<div class="container"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Rashmi-278/publicCDN@main/embed.css"> `
-  var line2 =
-    ' <img src="https://og-image.ideamarket.io/api/${market}/${tagname}.png" alt="image" /> '
-  var line3 =
-    '<a href="https://app.ideamarket.io/i/${market}/${tagname}" target="_blank">'
-  const line4 = '<button class="btn">Buy</button></a></div>'
-  var prefinal = line1 + '\n' + dummy1 + '\n' + dummy2 + line4
+  var preembed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagname}" width="420" height="260"></iframe> `
 
-  const [value, setValue] = React.useState(prefinal)
+  const [value, setValue] = React.useState(preembed)
+
   const copyCheckIcon = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -52,15 +43,11 @@ export default function Home() {
   const createEmbed = (event) => {
     event.preventDefault()
     console.log(tagname + market)
-    var newLine2 = line2.replace('${market}', market)
-    newLine2 = newLine2.replace('${tagname}', tagname)
-    var newLine3 = line3.replace('${market}', market)
-    newLine3 = newLine3.replace('${tagname}', tagname)
-
-    var final = line1 + '\n' + newLine2 + '\n' + newLine3 + line4
-    setValue(final)
+    var embed = preembed.replace('${market}', market)
+    embed = embed.replace('${tagname}', tagname)
+    setValue(embed)
     setCopyDone(false)
-    console.log(final)
+    console.log(embed)
   }
 
   return (
