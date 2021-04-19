@@ -17,7 +17,7 @@ export default function Nav() {
   )
   const menuItems = [
     {
-      name: 'About',
+      name: 'Whitepaper',
       value: 'about',
       onClick: () => window.open('https://docs.ideamarket.io', '_blank'),
       isSelected: false,
