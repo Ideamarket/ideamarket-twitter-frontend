@@ -7,6 +7,11 @@ module.exports = {
   },
   theme: {
     extend: {
+      inset: {
+        85: '85%',
+        92: '92%',
+        45: '45%',
+      },
       gridTemplateColumns: {
         'mobile-row': '1fr minmax(160px, 1fr) 1fr',
       },

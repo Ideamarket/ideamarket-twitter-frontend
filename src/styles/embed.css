@@ -19,9 +19,9 @@
     -ms-transform: translate(-50%, -50%);
     background-color:#0B5BFB;
     color: white;
-    font-size: 48px;
+    font-size: 30px;
     font-weight: bold;
-    padding: 18px 40px;
+    padding: 0.5rem 1.0rem;
     border: none;
     cursor: pointer;
     border-radius: 5px;
