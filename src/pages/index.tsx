@@ -18,6 +18,7 @@ import {
   ListTokenModal,
   PromoVideoModal,
   A,
+  DefaultLayout,
 } from 'components'
 import { NETWORK } from 'store/networks'
 
@@ -249,4 +250,8 @@ export default function Home() {
       </div>
     </>
   )
+}
+
+Home.layoutProps = {
+  Layout: DefaultLayout,
 }
