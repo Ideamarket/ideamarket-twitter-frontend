@@ -331,6 +331,75 @@ export async function getHoldersOfAToken({
   return balances.map((balance) => balance.holder)
 }
 
+export async function queryTokensHeld(
+  queryKey: string,
+  holder: string
+): Promise<IdeaTokenMarketPair[]> {
+  if (!holder) {
+    return
+  }
+
+  let page = 0
+
+  const res: IdeaTokenMarketPair[] = []
+  const allMarketNames: string[] = []
+
+  while (true) {
+    const result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryBalancesOfHolders({
+        holders: [holder],
+        first: 100,
+        skip: page * 100,
+      })
+    )
+
+    const filtered = result.ideaTokenBalances.filter((b) => b.amount !== '0')
+
+    for (let raw of filtered) {
+      const token = apiResponseToIdeaToken(raw.token)
+      res.push({
+        token: token,
+        balance: web3BNToFloatString(new BN(raw.amount), tenPow18, 2),
+        rawBalance: new BN(raw.amount),
+        market: null,
+      })
+
+      if (!allMarketNames.includes(token.marketName)) {
+        allMarketNames.push(token.marketName)
+      }
+    }
+
+    if (result.ideaTokenBalances.length < 100) {
+      break
+    }
+    page += 1
+  }
+
+  const allMarkets: IdeaMarket[] = await queryMarkets('', allMarketNames)
+
+  for (let i = 0; i < res.length; i++) {
+    const pair = res[i]
+    const marketName = pair.token.marketName
+    let market = null
+
+    for (let m of allMarkets) {
+      if (m.name === marketName) {
+        market = m
+        break
+      }
+    }
+
+    if (market === null) {
+      throw `queryTokensHeld: market not found: ${marketName}`
+    }
+
+    res[i].market = market
+  }
+
+  return res
+}
+
 export type MutualHoldersData = {
   stats: {
     latestTimestamp: number
