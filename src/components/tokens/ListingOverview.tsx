@@ -9,6 +9,7 @@ import {
   web3BNToFloatString,
 } from '../../utils'
 import A from 'components/A'
+import { useTokenIconURL } from 'actions'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -56,6 +57,10 @@ export default function TokenCard({
   const marketSpecifics = isLoading
     ? undefined
     : getMarketSpecificsByMarketName(market.name)
+  const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
+    marketSpecifics,
+    tokenName: token.name,
+  })
   const tokenPrice = isLoading
     ? ''
     : web3BNToFloatString(
@@ -72,14 +77,10 @@ export default function TokenCard({
     <>
       <div className="flex flex-none mt-7">
         <div className="w-20 h-20 mr-5">
-          {loading ? (
+          {loading || isTokenIconLoading ? (
             <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
           ) : (
-            <img
-              className="rounded-full"
-              src={marketSpecifics.getTokenIconURL(token.name)}
-              alt=""
-            />
+            <img className="rounded-full" src={tokenIconURL} alt="" />
           )}
         </div>
         <div className="mt-1 text-2xl font-semibold text-brand-alto">

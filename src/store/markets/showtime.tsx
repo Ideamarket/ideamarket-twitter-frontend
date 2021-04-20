@@ -2,6 +2,7 @@ import { IMarketSpecifics } from '.'
 import ShowtimeWhite from '../../assets/showtime-white.svg'
 import ShowtimeBlack from '../../assets/showtime-black.svg'
 import ShowtimeOutline from '../../assets/showtime-outline.svg'
+import { queryLambdavatar } from 'actions'
 
 export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -36,8 +37,11 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
     return `https://tryshowtime.com/${tokenName}`
   }
 
-  getTokenIconURL(tokenName: string): string {
-    return `https://unavatar.backend.ideamarket.io/showtime/${tokenName}`
+  getTokenIconURL(tokenName: string): Promise<string> {
+    return queryLambdavatar({
+      rawMarketName: this.getMarketNameURLRepresentation(),
+      rawTokenName: this.getTokenNameURLRepresentation(tokenName),
+    })
   }
 
   normalizeUserInputTokenName(userInput: string): string {

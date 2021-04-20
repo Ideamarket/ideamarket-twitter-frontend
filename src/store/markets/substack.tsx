@@ -2,6 +2,7 @@ import { IMarketSpecifics } from '.'
 import SubstackWhite from '../../assets/substack-white.svg'
 import SubstackBlack from '../../assets/substack-black.svg'
 import SubstackOutline from '../../assets/substack-outline.svg'
+import { queryLambdavatar } from 'actions'
 
 export default class SubstackMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -36,8 +37,11 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
     return `https://${tokenName}.substack.com/`
   }
 
-  getTokenIconURL(tokenName: string): string {
-    return `https://unavatar.backend.ideamarket.io/substack/${tokenName}`
+  getTokenIconURL(tokenName: string): Promise<string> {
+    return queryLambdavatar({
+      rawMarketName: this.getMarketNameURLRepresentation(),
+      rawTokenName: this.getTokenNameURLRepresentation(tokenName),
+    })
   }
 
   normalizeUserInputTokenName(userInput: string): string {

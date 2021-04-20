@@ -8,6 +8,7 @@ import {
 } from 'utils'
 import ReactTimeAgo from 'react-time-ago'
 import { MutualTokenDetails, MutualTokensListSortBy, A } from 'components'
+import { useTokenIconURL } from 'actions'
 
 export default function MutualToken({
   stats,
@@ -19,6 +20,10 @@ export default function MutualToken({
   sortBy: MutualTokensListSortBy
 }) {
   const marketSpecifics = getMarketSpecificsByMarketName(token.marketName)
+  const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
+    marketSpecifics,
+    tokenName: token.name,
+  })
   const [isOpen, setIsOpen] = useState(false)
   return (
     <>
@@ -31,11 +36,15 @@ export default function MutualToken({
           <div className="lg:flex lg:items-center lg:justify-between">
             <div className="lg:flex lg:space-x-5">
               <div className="flex-shrink-0">
-                <img
-                  className="w-20 h-20 mx-auto rounded-full"
-                  src={marketSpecifics.getTokenIconURL(token.name)}
-                  alt={token.name}
-                />
+                {isTokenIconLoading ? (
+                  <div className="w-20 h-20 mx-auto bg-gray-400 rounded-full animate-pulse"></div>
+                ) : (
+                  <img
+                    className="w-20 h-20 mx-auto rounded-full"
+                    src={tokenIconURL}
+                    alt={token.name}
+                  />
+                )}
               </div>
               <div className="mt-4 text-center lg:mt-0 lg:pt-1 lg:text-left">
                 <p className="text-sm font-medium text-gray-600">

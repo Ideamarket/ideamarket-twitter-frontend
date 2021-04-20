@@ -2,6 +2,7 @@ import { IMarketSpecifics } from '.'
 import TwitterWhite from '../../assets/twitter-white.svg'
 import TwitterBlack from '../../assets/twitter-black.svg'
 import TwitterOutline from '../../assets/twitter-outline.svg'
+import { queryLambdavatar } from 'actions'
 
 export default class TwitterMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -36,10 +37,11 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
     return `https://twitter.com/${tokenName.slice(1)}`
   }
 
-  getTokenIconURL(tokenName: string): string {
-    return `https://unavatar.backend.ideamarket.io/twitter/${tokenName.slice(
-      1
-    )}`
+  getTokenIconURL(tokenName: string): Promise<string> {
+    return queryLambdavatar({
+      rawMarketName: this.getMarketNameURLRepresentation(),
+      rawTokenName: this.getTokenNameURLRepresentation(tokenName),
+    })
   }
 
   normalizeUserInputTokenName(userInput: string): string {
