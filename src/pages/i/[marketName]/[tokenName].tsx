@@ -15,6 +15,7 @@ import {
   LockedTokenRowsTable,
   A,
   MutualTokensList,
+  DefaultLayout,
 } from 'components'
 import {
   querySupplyRate,
@@ -32,8 +33,6 @@ import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets
 import {
   web3BNToFloatString,
   bigNumberTenPow18,
-  addresses,
-  NETWORK,
   HOUR_SECONDS,
   DAY_SECONDS,
   WEEK_SECONDS,
@@ -42,7 +41,9 @@ import {
   formatNumber,
   calculateIdeaTokenDaiValue,
   useTransactionManager,
+  ZERO_ADDRESS,
 } from 'utils'
+import { NETWORK } from 'store/networks'
 import { withdrawTokenInterest, useBalance } from 'actions'
 import { DateTime } from 'luxon'
 import { NextSeo } from 'next-seo'
@@ -423,7 +424,7 @@ export default function TokenDetails({
                           Listing Owner
                         </div>
                         <div className="mt-2 text-base font-semibold text-brand-new-dark">
-                          {addresses.ZERO === token.tokenOwner ? (
+                          {ZERO_ADDRESS === token.tokenOwner ? (
                             'None'
                           ) : (
                             <A
@@ -473,7 +474,7 @@ export default function TokenDetails({
                     </div>
                   </div>
                 </>
-              ) : token.tokenOwner === addresses.ZERO ? (
+              ) : token.tokenOwner === ZERO_ADDRESS ? (
                 <>
                   <div className="font-medium text-brand-gray-2">
                     <div className="text-xs">
@@ -564,11 +565,7 @@ export default function TokenDetails({
                           'underline',
                           txManager.hash === '' ? 'hidden' : ''
                         )}
-                        href={`https://${
-                          NETWORK === 'rinkeby' || NETWORK === 'test'
-                            ? 'rinkeby.'
-                            : ''
-                        }etherscan.io/tx/${txManager.hash}`}
+                        href={NETWORK.getEtherscanTxUrl(txManager.hash)}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -669,4 +666,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       rawTokenName: context.query.tokenName,
     },
   }
+}
+
+TokenDetails.layoutProps = {
+  Layout: DefaultLayout,
 }

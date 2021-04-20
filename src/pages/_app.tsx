@@ -6,7 +6,7 @@ import '../styles/nprogress.css'
 import '../styles/embed.css'
 
 import CookieConsent from 'react-cookie-consent'
-import { createContext, useEffect, useState } from 'react'
+import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { initWalletStore } from 'store/walletStore'
@@ -45,6 +45,13 @@ export const GlobalContext = createContext({
 })
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const Layout =
+    (Component as typeof Component & {
+      layoutProps: {
+        Layout: (props: { children: ReactNode } & unknown) => JSX.Element
+      }
+    }).layoutProps?.Layout || Fragment
+
   useEffect(() => {
     initWalletStore()
     initIdeaMarketsStore()
@@ -116,23 +123,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           setIsEmailNewsletterModalOpen,
         }}
       >
-        <Toaster />
-        <div className="min-h-screen bg-brand-gray">
-          <NavBar />
-          <div className="py-16">
-            <Component {...pageProps} />
-          </div>
-        </div>
-        <CookieConsent
-          style={{ background: '#708090' }}
-          buttonStyle={{
-            background: '#0857e0',
-            color: 'white',
-            fontSize: '13px',
-          }}
-        >
-          This website uses cookies to enhance the user experience.
-        </CookieConsent>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
         <WalletModal />
         <WrongNetworkOverlay />
         <EmailNewsletterModal />
