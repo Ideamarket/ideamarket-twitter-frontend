@@ -15,6 +15,7 @@ import {
   LockedTokenRowsTable,
   A,
   MutualTokensList,
+  DefaultLayout,
 } from 'components'
 import {
   querySupplyRate,
@@ -665,4 +666,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       rawTokenName: context.query.tokenName,
     },
   }
+}
+
+TokenDetails.layoutProps = {
+  Layout: DefaultLayout,
 }

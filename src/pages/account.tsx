@@ -5,6 +5,7 @@ import {
   Footer,
   OwnedTokenTable,
   MyTokenTable,
+  DefaultLayout,
 } from '../components'
 import { useWalletStore } from '../store/walletStore'
 import { GlobalContext } from 'pages/_app'
@@ -145,4 +146,8 @@ export default function MyTokens() {
       </div>
     </>
   )
+}
+
+MyTokens.layoutProps = {
+  Layout: DefaultLayout,
 }
