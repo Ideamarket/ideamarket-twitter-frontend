@@ -10,7 +10,7 @@ module.exports = {
           },
         ],
         permanent: true,
-        destination: 'app.ideamarket.io/:path*',
+        destination: 'https://app.ideamarket.io/:path*',
       },
     ]
   },
