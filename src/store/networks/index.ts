@@ -2,6 +2,7 @@ import MainnetNetworkSpecifics from './mainnet'
 import RinkebyNetworkSpecifics from './rinkeby'
 import KovanNetworkSpecifics from './kovan'
 import TestNetworkSpecifics from './test'
+import KovanAVMNetworkSpecifics from './kovanAVM'
 
 export type ExternalAddresses = {
   dai: string
@@ -25,6 +26,7 @@ const specifics: INetworkSpecifics[] = [
   new RinkebyNetworkSpecifics(),
   new KovanNetworkSpecifics(),
   new TestNetworkSpecifics(),
+  new KovanAVMNetworkSpecifics(),
 ]
 
 export function getNetworkSpecificsByNetworkName(
