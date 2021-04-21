@@ -171,8 +171,8 @@ export function calculateIdeaTokenDaiValue(
   let updatedAmount = amount
   let updatedSupply = supply
 
-  if (supply.sub(amount) < hatchTokens) {
-    if (supply <= hatchTokens) {
+  if (supply.sub(amount).lt(hatchTokens)) {
+    if (supply.lte(hatchTokens)) {
       return baseCost.mul(amount).div(web3TenPow18)
     }
 
