@@ -10,11 +10,7 @@ module.exports = {
           },
         ],
         permanent: true,
-        destination: `https://${
-          process.env.VERCEL_ENV === 'preview'
-            ? process.env.VERCEL_URL
-            : 'app.ideamarket.io'
-        }/:path*`,
+        destination: 'https://app.ideamarket.io/:path*',
       },
     ]
   },
