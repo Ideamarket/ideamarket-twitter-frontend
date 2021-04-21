@@ -11,6 +11,7 @@ import {
   getQueryMyTokensMaybeMarket,
   getQueryOwnedTokensMaybeMarket,
   getQuerySingleToken,
+  getQuerySingleTokenByID,
   getQueryTokenChartData,
   getQueryTokenLockedChartData,
   getQueryTokenNameTextSearch,
@@ -276,6 +277,27 @@ export async function querySingleToken(
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
     getQuerySingleToken(marketName, tokenName)
+  )
+
+  if (result?.ideaMarkets?.[0]?.tokens?.[0]) {
+    return apiResponseToIdeaToken(result.ideaMarkets[0].tokens[0])
+  }
+
+  return undefined
+}
+
+export async function querySingleTokenByID(
+  queryKey: string,
+  marketID: string,
+  tokenID: string
+): Promise<IdeaToken> {
+  if (!marketID || !tokenID) {
+    return undefined
+  }
+
+  const result = await request(
+    HTTP_GRAPHQL_ENDPOINT,
+    getQuerySingleTokenByID(marketID, tokenID)
   )
 
   if (result?.ideaMarkets?.[0]?.tokens?.[0]) {
