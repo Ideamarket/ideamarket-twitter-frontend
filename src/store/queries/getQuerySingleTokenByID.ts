@@ -8,30 +8,10 @@ export default function getQuerySingleTokenByID(
     {
       ideaMarkets(where:{marketID:${marketID}}) {
         tokens(where:{tokenID:${tokenID}}) {
-            id
-            tokenID
             name
             market {
-              id
               name
             }
-            supply
-            holders
-            marketCap
-            tokenOwner
-            daiInToken
-            invested
-            listedAt
-            lockedAmount
-            rank
-            latestPricePoint {
-              timestamp
-              counter
-              oldPrice
-              price
-            }
-            dayVolume
-            dayChange
         }
       }
     }`

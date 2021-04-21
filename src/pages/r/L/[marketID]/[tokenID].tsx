@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 import { querySingleTokenByID } from 'store/ideaMarketsStore'
 
 export default function RedirectToTokenDetails() {
@@ -14,13 +15,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     tokenID.toString()
   )
 
-  const marketName = response.marketName.toLowerCase()
-  const tokenName = response.name.substr(1).toLowerCase()
+  const marketSpecifics = getMarketSpecificsByMarketName(response.marketName)
+  const marketName = marketSpecifics.getMarketNameURLRepresentation()
+  const tokenName = marketSpecifics.getTokenNameURLRepresentation(response.name)
 
   return {
     redirect: {
       destination: `/i/${marketName}/${tokenName}`,
-      permanent: false,
+      permanent: true,
     },
   }
 }
