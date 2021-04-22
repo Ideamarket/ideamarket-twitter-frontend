@@ -8,7 +8,7 @@ export default function RedirectToTokenDetails() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { marketID, tokenID } = context.params
-  
+
   const response = await querySingleTokenByID(
     `token-${marketID}-${tokenID}`,
     marketID.toString(),
