@@ -17,7 +17,7 @@ export default function TokenName() {
         href={`https://app.ideamarket.io/i/${market}/${tagName}`}
         target="_blank"
       >
-        <button className="absolute top-85 left-45 -translate-x-2/4 -translate-y-2/4 bg-blue-600 text-white font-bold text-lg px-2 py-1 rounded-sm">
+        <button className="absolute top-85 left-45 -translate-x-2/4 -translate-y-2/4 bg-green-500 text-gray-900 font-bold text-sm px-2 py-1 rounded-sm">
           Buy
         </button>
       </a>

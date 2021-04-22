@@ -1,16 +1,19 @@
 import classNames from 'classnames'
 import React, { useContext, useState, useRef } from 'react'
 import copy from 'copy-to-clipboard'
-
-export default function Home() {
+import { DefaultLayout } from '../components'
+export default function Embed() {
   const [tagname, setTagname] = useState('elonmusk')
   const [market, setMarket] = useState('twitter')
+  const [ewidth, setWidth] = useState('432')
+  const [eheight, setHeight] = useState('243')
+  const [embedsize, setSize] = useState('small')
   const imgHash = useState(Date.now())
   const [copyDone, setCopyDone] = useState(false)
 
-  var preembed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagname}" width="420" height="300"></iframe> `
+  var embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagname}" width=${ewidth} height=${eheight}></iframe> `
 
-  const [value, setValue] = React.useState(preembed)
+  // const [value, setValue] = React.useState(embed)
 
   const copyCheckIcon = (
     <svg
@@ -43,9 +46,16 @@ export default function Home() {
   const createEmbed = (event) => {
     event.preventDefault()
     console.log(tagname + market)
-    var embed = preembed.replace('${market}', market)
-    embed = embed.replace('${tagname}', tagname)
-    setValue(embed)
+    if (embedsize === 'medium') {
+      setWidth('544')
+      setHeight('306')
+    } else if (embedsize === 'large') {
+      setWidth('640')
+      setHeight('360')
+    } else {
+      setWidth('432')
+      setHeight('243')
+    }
     setCopyDone(false)
     console.log(embed)
   }
@@ -68,7 +78,7 @@ export default function Home() {
               action="POST"
               onSubmit={createEmbed}
             >
-              <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="flex  -mx-3 mb-6">
                 <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                   <label
                     className="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2"
@@ -86,7 +96,7 @@ export default function Home() {
                     onChange={({ target }) => setTagname(target.value)}
                   ></input>
                 </div>
-                <div className="w-full md:w-1/2 px-3">
+                <div className="w-full md:w-1/3 px-3">
                   <label
                     className="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2"
                     htmlFor="grid-last-name"
@@ -106,13 +116,33 @@ export default function Home() {
                     <option>substack</option>
                   </select>
                 </div>
+                <div className="w-full md:w-1/3 px-3">
+                  <label
+                    className="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2"
+                    htmlFor="grid-last-name"
+                  >
+                    Size
+                  </label>
+                  <select
+                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="market"
+                    name="market"
+                    value={embedsize}
+                    onChange={({ target }) => setSize(target.value)}
+                    placeholder="Select market"
+                  >
+                    <option value="small">small</option>
+                    <option value="medium">medium</option>
+                    <option value="large">large</option>
+                  </select>
+                </div>
               </div>
               <button
                 className="py-2 -mt-2 ml-5 text-lg font-bold text-white rounded-md w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
                 type="submit"
               >
                 <div className="flex flex-row items-center justify-center">
-                  <div className=" md:ml-2">Generate</div>
+                  <div>Generate</div>
                 </div>
               </button>
             </form>
@@ -144,7 +174,7 @@ export default function Home() {
                     <button
                       className="outline-none   focus:outline-none  border-gray-200 w-10 h-10 hover:text-green-500 active:bg-gray-50"
                       onClick={() => {
-                        copy(value)
+                        copy(embed)
                         setCopyDone(true)
                         console.log('copied!')
                       }}
@@ -155,7 +185,7 @@ export default function Home() {
                   <div className="overflow-hidden rounded-md">
                     <textarea
                       className="w-full px-3 py-5 border border-gray-200 overflow-hidden rounded-md focus:outline-none resize-none"
-                      value={value}
+                      value={embed}
                       rows={4}
                     ></textarea>
                   </div>
@@ -175,4 +205,7 @@ export default function Home() {
       </div>
     </>
   )
+}
+Embed.layoutProps = {
+  Layout: DefaultLayout,
 }
