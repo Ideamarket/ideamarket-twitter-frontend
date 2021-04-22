@@ -8,7 +8,7 @@ export default function Home() {
   const imgHash = useState(Date.now())
   const [copyDone, setCopyDone] = useState(false)
 
-  var preembed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagname}" width="420" height="260"></iframe> `
+  var preembed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagname}" width="420" height="300"></iframe> `
 
   const [value, setValue] = React.useState(preembed)
 

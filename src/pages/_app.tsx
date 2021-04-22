@@ -5,20 +5,19 @@ import '../styles/fonts/sf-compact-display/style.css'
 import '../styles/nprogress.css'
 import '../styles/embed.css'
 
-import CookieConsent from 'react-cookie-consent'
+// import CookieConsent from 'react-cookie-consent'
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import { initWalletStore } from 'store/walletStore'
-import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
-import { initTokenList } from 'store/tokenListStore'
+// import Head from 'next/head'
+// import { initWalletStore } from 'store/walletStore'
+// import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
+// import { initTokenList } from 'store/tokenListStore'
 import {
-  NavBar,
   WrongNetworkOverlay,
   WalletModal,
   EmailNewsletterModal,
 } from 'components'
-import { Toaster } from 'react-hot-toast'
+// import { Toaster } from 'react-hot-toast'
 import { DefaultSeo } from 'next-seo'
 import {
   DEFAULT_CANONICAL,
@@ -51,12 +50,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         Layout: (props: { children: ReactNode } & unknown) => JSX.Element
       }
     }).layoutProps?.Layout || Fragment
-
-  useEffect(() => {
-    initWalletStore()
-    initIdeaMarketsStore()
-    initTokenList()
-  }, [])
 
   useEffect(() => {
     TimeAgo.addDefaultLocale(en)
