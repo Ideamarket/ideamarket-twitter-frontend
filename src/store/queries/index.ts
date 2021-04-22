@@ -5,6 +5,7 @@ export { default as getQueryOwnedTokensMaybeMarket } from './getQueryOwnedTokens
 export { default as getQueryMyTokensMaybeMarket } from './getQueryMyTokensMaybeMarket'
 export { default as getQueryTokenNameTextSearch } from './getQueryTokenNameTextSearch'
 export { default as getQuerySingleToken } from './getQuerySingleToken'
+export { default as getQuerySingleTokenByID } from './getQuerySingleTokenByID'
 export { default as getQueryTokenChartData } from './getQueryTokenChartData'
 export { default as getQueryTokenLockedChartData } from './getQueryTokenLockedChartData'
 export { default as getQueryLockedAmounts } from './getQueryLockedAmounts'
