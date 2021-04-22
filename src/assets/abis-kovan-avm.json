@@ -98,6 +98,13 @@
       "type": "function"
     },
     {
+      "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "name": "_numTokensInMarket",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         { "internalType": "uint256", "name": "", "type": "uint256" },
         { "internalType": "uint256", "name": "", "type": "uint256" }
@@ -468,7 +475,7 @@
       "type": "function"
     }
   ],
-  "interestManager": [
+  "interestManagerAVM": [
     {
       "anonymous": false,
       "inputs": [
@@ -582,7 +589,7 @@
       "type": "function"
     }
   ],
-  "ideaTokenExchange": [
+  "ideaTokenExchangeAVM": [
     {
       "anonymous": false,
       "inputs": [
@@ -1502,7 +1509,7 @@
       "type": "function"
     }
   ],
-  "ideaTokenFactory": [
+  "ideaTokenFactoryAVM": [
     {
       "anonymous": false,
       "inputs": [

@@ -15,3 +15,4 @@ export { default as submitVerificationFeeHash } from './submitVerificationFeeHas
 export { default as useTokenAllowance } from './useTokenAllowance'
 export { default as useTokenIconURL } from './useTokenIconURL'
 export { default as queryLambdavatar } from './queryLambdavatar'
+export { default as migrateTokensToArbitrum } from './migrateTokensToArbitrum'

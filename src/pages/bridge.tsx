@@ -11,8 +11,9 @@ import {
   calculateIdeaTokenDaiValue,
   bigNumberTenPow18,
   isAddress,
+  useTransactionManager,
 } from 'utils'
-import { useTokenIconURL } from 'actions'
+import { useTokenIconURL, migrateTokensToArbitrum } from 'actions'
 import { L1TokenTable, Footer, DefaultLayout } from '../components'
 import Wand from '../assets/wand.svg'
 
@@ -39,6 +40,8 @@ export default function Bridge() {
 
   const migrateButtonDisabled = !isPairSelected || !isValidL2Recipient
 
+  const txManager = useTransactionManager()
+
   useEffect(() => {
     if (selectedPair) {
       const specifics = getMarketSpecificsByMarketName(selectedPair.market.name)
@@ -51,6 +54,21 @@ export default function Bridge() {
       setIsPairSelected(true)
     }
   }, [selectedPair])
+
+  async function migrateButtonClicked() {
+    try {
+      await txManager.executeTx(
+        'Migrate',
+        migrateTokensToArbitrum,
+        selectedPair.market.marketID,
+        selectedPair.token.tokenID,
+        l2Recipient
+      )
+    } catch (ex) {
+      console.log(ex)
+      return
+    }
+  }
 
   return (
     <>
@@ -182,7 +200,7 @@ export default function Bridge() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
-                          // todo
+                          migrateButtonClicked()
                         }}
                         className={classNames(
                           'flex items-center justify-center h-12 text-lg font-medium text-white rounded-lg w-44 tracking-tightest-2 font-sf-compact-medium',
