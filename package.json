@@ -14,7 +14,8 @@
     "prettier": "prettier --ignore-path .gitignore --write \"**/*.+(js|json|ts|tsx)\"",
     "format": "npm run prettier -- --write",
     "check-format": "npm run prettier -- --list-different",
-    "validate": "npm-run-all --parallel check-types check-format lint build"
+    "validate": "npm-run-all --parallel check-types check-format lint build",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ethersproject/contracts": "^5.0.8",
@@ -43,7 +44,7 @@
     "immer": "8.0.1",
     "lodash": "^4.17.20",
     "luxon": "1.25.0",
-    "next": "10.0.2",
+    "next": "^10.1.3",
     "next-seo": "4.23.0",
     "nprogress": "0.2.0",
     "numeral": "^2.0.6",
