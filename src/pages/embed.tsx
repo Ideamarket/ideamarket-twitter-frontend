@@ -1,17 +1,16 @@
-import classNames from 'classnames'
-import React, { useContext, useState, useRef } from 'react'
+import React, { useState } from 'react'
 import copy from 'copy-to-clipboard'
 import { DefaultLayout } from '../components'
 export default function Embed() {
-  const [tagname, setTagname] = useState('elonmusk')
+  const [tagName, setTagname] = useState('elonmusk')
   const [market, setMarket] = useState('twitter')
   const [ewidth, setWidth] = useState('432')
   const [eheight, setHeight] = useState('243')
   const [embedsize, setSize] = useState('small')
-  const imgHash = useState(Date.now())
+  // const imgHash = useState(Date.now())
   const [copyDone, setCopyDone] = useState(false)
 
-  var embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagname}" width=${ewidth} height=${eheight}></iframe> `
+  var embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
 
   // const [value, setValue] = React.useState(embed)
 
@@ -45,7 +44,7 @@ export default function Embed() {
 
   const createEmbed = (event) => {
     event.preventDefault()
-    console.log(tagname + market)
+    console.log(tagName + market)
     if (embedsize === 'medium') {
       setWidth('544')
       setHeight('306')
@@ -68,18 +67,18 @@ export default function Embed() {
             <h2 className="text-3xl md:text-6xl font-gilroy-bold">
               Tuning into what <span className="text-brand-blue">matters</span>
             </h2>
-            <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
+            <p className="mt-6 text-lg md:text-2xl font-sf-compact-medium">
               Allow people to voice their trust by embeding ideamarket social
             </p>
           </div>
-          <div className="flex  mt-20  flex-col items-center justify-center  text-md md:text-3xl font-gilroy-bold md:flex-row">
+          <div className="flex  mt-14 flex-col items-center justify-center  text-md md:text-3xl font-gilroy-bold md:flex-row">
             <form
               className="w-full max-w-lg"
               action="POST"
               onSubmit={createEmbed}
             >
-              <div className="flex  -mx-3 mb-6">
-                <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <div className="flex flex-wrap -mx-3 mb-6">
+                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                   <label
                     className="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2"
                     htmlFor="grid-first-name"
@@ -92,7 +91,7 @@ export default function Embed() {
                     name="tagname"
                     type="text"
                     placeholder="naval"
-                    value={tagname}
+                    value={tagName}
                     onChange={({ target }) => setTagname(target.value)}
                   ></input>
                 </div>
@@ -116,9 +115,9 @@ export default function Embed() {
                     <option>substack</option>
                   </select>
                 </div>
-                <div className="w-full md:w-1/3 px-3">
+                <div className="w-full md:w-1/3 px-3 ">
                   <label
-                    className="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2"
+                    className="block uppercase tracking-wide text-gray-400 text-xs font-bold  mb-2"
                     htmlFor="grid-last-name"
                   >
                     Size
@@ -147,60 +146,56 @@ export default function Embed() {
               </button>
             </form>
           </div>
-        </div>
 
-        <div className="flex justify-center items-center sm:mt-48 mb:mt-0">
-          <dialog
-            open
-            className="rounded-2xl overflow-hidden p-0 w-auto max-w-7xl md:mx-auto md:w-2/3 shadow-lg m-8"
-          >
-            <div className="flex flex-col lg:flex-row">
-              <div className="relative h-64 sm:h-80 w-full lg:h-auto lg:w-1/3 xl:w-2/5 flex-none">
-                <img
-                  src={`https://og-image.ideamarket.io/api/${market}/${tagname}.png?${imgHash}`}
-                  alt=""
-                  width="480"
-                  height="480"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-                <span className="absolute block inset-x-0 bottom-0 lg:hidden lg:inset-y-0 lg:right-auto bg-gradient-to-t lg:bg-gradient-to-r from-white to-transparent w-full h-10 lg:h-full lg:w-10"></span>
-                <div className="relative flex justify-end lg:justify-start flex-wrap text-white text-xl font-bold m-4"></div>
-              </div>
-              <div className="w-full">
-                <div className="p-8">
-                  <div className="flex justify-between items-start">
-                    <h3 className="text-xl font-bold mb-8">Generated code</h3>
+          <div className="mx-5 m-10 grid place-content-center">
+            <iframe
+              src={`http://localhost:3000/iframe/${market}/${tagName}`}
+              width={ewidth}
+              height={eheight}
+              title="preview"
+              className="shadow-lg border-2 border-indigo-100 rounded-sm"
+            ></iframe>
 
-                    <button
-                      className="outline-none   focus:outline-none  border-gray-200 w-10 h-10 hover:text-green-500 active:bg-gray-50"
-                      onClick={() => {
-                        copy(embed)
-                        setCopyDone(true)
-                        console.log('copied!')
-                      }}
-                    >
-                      {copyDone ? copyCheckIcon : copyIcon}
-                    </button>
-                  </div>
-                  <div className="overflow-hidden rounded-md">
-                    <textarea
-                      className="w-full px-3 py-5 border border-gray-200 overflow-hidden rounded-md focus:outline-none resize-none"
-                      value={embed}
-                      rows={4}
-                    ></textarea>
-                  </div>
+            <div className="flex justify-center items-center sm:mt-24 mb:mt-0">
+              <dialog
+                open
+                className="rounded-2xl overflow-hidden p-0 w-auto max-w-7xl md:mx-auto md:w-1/2 shadow-lg m-8"
+              >
+                <div className="flex flex-col lg:flex-row">
+                  <div className="w-full">
+                    <div className="p-6">
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-xl font-bold mb-6">
+                          Generated code
+                        </h3>
 
-                  <div className="flex justify-end items-center text-sm font-bold mt-8 gap-4">
-                    {/* <a
-                className="text-blue-700 border border-blue-300 hover:border-blue-700 px-4 py-1 rounded"
-                href="#"
-                
-              > Copy </a> */}
+                        <button
+                          className="outline-none   focus:outline-none  border-gray-200 w-10 h-10 hover:text-green-500 active:bg-gray-50"
+                          onClick={() => {
+                            copy(embed)
+                            setCopyDone(true)
+                            console.log('copied!')
+                          }}
+                        >
+                          {copyDone ? copyCheckIcon : copyIcon}
+                        </button>
+                      </div>
+                      <div className="overflow-hidden rounded-md">
+                        <textarea
+                          className="w-full px-3 py-1 border border-gray-200  rounded-md focus:outline-none resize-none"
+                          value={embed}
+                          rows={2}
+                          onChange={(e) => {
+                            e.preventDefault()
+                          }}
+                        ></textarea>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </dialog>
             </div>
-          </dialog>
+          </div>
         </div>
       </div>
     </>

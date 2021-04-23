@@ -12,6 +12,8 @@ module.exports = {
         85: '85%',
         92: '92%',
         45: '45%',
+        50: '50%',
+        48: '48%',
       },
       gridTemplateColumns: {
         'mobile-row': '1fr minmax(160px, 1fr) 1fr',
