@@ -141,19 +141,19 @@ export default function Embed() {
             </form>
           </div>
 
-          <div className="mx-5 m-10 grid place-content-center">
+          <div className="mx-5 m-20 grid place-content-center">
             <iframe
               src={`http://localhost:3000/iframe/${market}/${tagName}`}
               width={ewidth}
               height={eheight}
               title="preview"
-              className="shadow-lg border-2 border-indigo-100 rounded-sm"
+              className="shadow-lg border-2 border-indigo-100 rounded-sm "
             ></iframe>
 
             <div className="flex justify-center items-center sm:mt-24 mb:mt-0">
               <dialog
                 open
-                className="rounded-2xl overflow-hidden p-0 w-auto max-w-7xl md:mx-auto md:w-1/2 shadow-lg m-8"
+                className="rounded-2xl overflow-hidden p-0 w-auto max-w-7xl md:mx-auto md:w-1/2 shadow-lg m-8 mt-52"
               >
                 <div className="flex flex-col lg:flex-row">
                   <div className="w-full">
@@ -167,7 +167,6 @@ export default function Embed() {
                           className="outline-none   focus:outline-none  border-gray-200 w-10 h-10 hover:text-green-500 active:bg-gray-50"
                           onClick={() => {
                             setCopyDone(true)
-                            console.log('copied!')
                           }}
                         >
                           {copyDone ? copyCheckIcon : copyIcon}
