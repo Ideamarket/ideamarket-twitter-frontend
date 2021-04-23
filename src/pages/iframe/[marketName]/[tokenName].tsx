@@ -5,7 +5,6 @@ export default function TokenName() {
   const router = useRouter()
   const market = router.query['marketName']
   const tagName = router.query['tokenName']
-  console.log(router.query)
 
   return (
     <div className="absolute">
