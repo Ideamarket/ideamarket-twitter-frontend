@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import copy from 'copy-to-clipboard'
 import { DefaultLayout } from '../components'
 export default function Embed() {
   const [tagName, setTagname] = useState('elonmusk')
@@ -7,12 +6,9 @@ export default function Embed() {
   const [ewidth, setWidth] = useState('432')
   const [eheight, setHeight] = useState('243')
   const [embedsize, setSize] = useState('small')
-  // const imgHash = useState(Date.now())
   const [copyDone, setCopyDone] = useState(false)
 
   var embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
-
-  // const [value, setValue] = React.useState(embed)
 
   const copyCheckIcon = (
     <svg
@@ -44,7 +40,6 @@ export default function Embed() {
 
   const createEmbed = (event) => {
     event.preventDefault()
-    console.log(tagName + market)
     if (embedsize === 'medium') {
       setWidth('544')
       setHeight('306')
@@ -56,7 +51,6 @@ export default function Embed() {
       setHeight('243')
     }
     setCopyDone(false)
-    console.log(embed)
   }
 
   return (
@@ -172,7 +166,6 @@ export default function Embed() {
                         <button
                           className="outline-none   focus:outline-none  border-gray-200 w-10 h-10 hover:text-green-500 active:bg-gray-50"
                           onClick={() => {
-                            copy(embed)
                             setCopyDone(true)
                             console.log('copied!')
                           }}
