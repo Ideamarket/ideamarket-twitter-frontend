@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router'
-import React from 'react'
 
-export default function TokenName() {
+export default function IframeEmbed() {
   const router = useRouter()
-  const market = router.query['marketName']
-  const tagName = router.query['tokenName']
+  const market = router.query.marketName
+  const tagName = router.query.tokenName
 
   return (
     <div className="absolute">

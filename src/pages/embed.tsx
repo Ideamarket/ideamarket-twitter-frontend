@@ -1,5 +1,7 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { DefaultLayout } from '../components'
+// import copyCheckIcon from '../assets/copyCheck.svg'
+// import copyIcon from '../assets/copy-icon.svg'
 export default function Embed() {
   const [tagName, setTagname] = useState('elonmusk')
   const [market, setMarket] = useState('twitter')
@@ -8,7 +10,7 @@ export default function Embed() {
   const [embedsize, setSize] = useState('small')
   const [copyDone, setCopyDone] = useState(false)
 
-  var embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
+  const embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
 
   const copyCheckIcon = (
     <svg
