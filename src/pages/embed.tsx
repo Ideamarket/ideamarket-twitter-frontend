@@ -1,6 +1,26 @@
-import React, { useState } from 'react'
 import { DefaultLayout } from '../components'
+import Select from 'react-select'
+import CopyIcon from '../assets/copy-check.svg'
+import CopyCheck from '../assets/copy-icon.svg'
+import { useState, useEffect } from 'react'
+import { getMarketSpecificsByMarketName } from 'store/markets'
+import { useQuery } from 'react-query'
+import { queryMarkets } from 'store/ideaMarketsStore'
+import { Target } from 'puppeteer-core'
+
 export default function Embed() {
+  const [selectMarketValues, setSelectMarketValues] = useState([])
+
+  const { data: markets, isLoading: isMarketsLoading } = useQuery(
+    'all-markets',
+    queryMarkets
+  )
+
+  const sizeOptions = [
+    { value: 'small', label: 'Small' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'large', label: 'Large' },
+  ]
   const [tagName, setTagname] = useState('elonmusk')
   const [market, setMarket] = useState('twitter')
   const [ewidth, setWidth] = useState('432')
@@ -8,35 +28,28 @@ export default function Embed() {
   const [embedsize, setSize] = useState('small')
   const [copyDone, setCopyDone] = useState(false)
 
-  var embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
+  useEffect(() => {
+    if (markets) {
+      setSelectMarketValues(
+        markets
+          .filter(
+            (market) =>
+              getMarketSpecificsByMarketName(market.name) !== undefined &&
+              getMarketSpecificsByMarketName(market.name).isEnabled()
+          )
+          .map((market) => ({
+            value: market.marketID.toString(),
+            market: market,
+          }))
+      )
+    } else {
+      setSelectMarketValues([])
+    }
+  }, [markets])
 
-  const copyCheckIcon = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-10"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-    >
-      <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-      <path
-        fillRule="evenodd"
-        d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-        clipRule="evenodd"
-      />
-    </svg>
-  )
+  const selectMarketFormat = (entry) => <option> {entry.market.name} </option>
 
-  const copyIcon = (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-5 w-10"
-      viewBox="0 0 20 20"
-      fill="currentColor"
-    >
-      <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-      <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
-    </svg>
-  )
+  const embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
 
   const createEmbed = (event) => {
     event.preventDefault()
@@ -80,7 +93,7 @@ export default function Embed() {
                     Name
                   </label>
                   <input
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                    className="appearance-none block w-full text-lg bg-gray-200 text-gray-700 border rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white"
                     id="tagname"
                     name="tagname"
                     type="text"
@@ -96,18 +109,15 @@ export default function Embed() {
                   >
                     Market
                   </label>
-                  <select
-                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="market"
-                    name="market"
+
+                  <Select
                     value={market}
-                    onChange={({ target }) => setMarket(target.value)}
-                    placeholder="Select market"
-                  >
-                    <option>twitter</option>
-                    <option>youtube</option>
-                    <option>substack</option>
-                  </select>
+                    onChange={({ target }) => setMarket(target)}
+                    options={selectMarketValues}
+                    formatOptionLabel={selectMarketFormat}
+                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-lg  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    defaultInputValue="twitter"
+                  />
                 </div>
                 <div className="w-full md:w-1/3 px-3 ">
                   <label
@@ -116,18 +126,12 @@ export default function Embed() {
                   >
                     Size
                   </label>
-                  <select
-                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="market"
-                    name="market"
-                    value={embedsize}
-                    onChange={({ target }) => setSize(target.value)}
-                    placeholder="Select market"
-                  >
-                    <option value="small">small</option>
-                    <option value="medium">medium</option>
-                    <option value="large">large</option>
-                  </select>
+
+                  <Select
+                    options={sizeOptions}
+                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-lg  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    defaultInputValue="small"
+                  ></Select>
                 </div>
               </div>
               <button
@@ -164,12 +168,16 @@ export default function Embed() {
                         </h3>
 
                         <button
-                          className="outline-none   focus:outline-none  border-gray-200 w-10 h-10 hover:text-green-500 active:bg-gray-50"
+                          className="outline-none   focus:outline-none  border-gray-200 w-8 h-8 hover:text-green-500 active:bg-gray-50"
                           onClick={() => {
                             setCopyDone(true)
                           }}
                         >
-                          {copyDone ? copyCheckIcon : copyIcon}
+                          {copyDone ? (
+                            <CopyIcon className="w-6 h-6" />
+                          ) : (
+                            <CopyCheck className="w-6 h-6" />
+                          )}
                         </button>
                       </div>
                       <div className="overflow-hidden rounded-md">
