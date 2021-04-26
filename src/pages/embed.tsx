@@ -38,7 +38,7 @@ export default function Embed() {
               getMarketSpecificsByMarketName(market.name).isEnabled()
           )
           .map((market) => ({
-            value: market.marketID.toString(),
+            value: market.name.toString().toLocaleLowerCase(),
             market: market,
           }))
       )
@@ -111,11 +111,13 @@ export default function Embed() {
 
                   <Select
                     value={market}
-                    onChange={({ target }) => setMarket(target)}
                     options={selectMarketValues}
                     formatOptionLabel={selectMarketFormat}
                     className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-lg  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    defaultInputValue="twitter"
+                    defaultInputValue="Twitter"
+                    onChange={(entry) => {
+                      setMarket((entry as any).value)
+                    }}
                   />
                 </div>
                 <div className="w-full md:w-1/3 px-3 ">
@@ -130,6 +132,9 @@ export default function Embed() {
                     options={sizeOptions}
                     className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-lg  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     defaultInputValue="small"
+                    onChange={(entry) => {
+                      setSize((entry as any).value)
+                    }}
                   ></Select>
                 </div>
               </div>
