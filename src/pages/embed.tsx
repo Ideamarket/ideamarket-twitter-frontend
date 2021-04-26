@@ -110,7 +110,6 @@ export default function Embed() {
                   </label>
 
                   <Select
-                    value={market}
                     options={selectMarketValues}
                     formatOptionLabel={selectMarketFormat}
                     className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-lg  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
