@@ -46,10 +46,9 @@ export default function Embed() {
       setSelectMarketValues([])
     }
   }, [markets])
+  const embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
 
   const selectMarketFormat = (entry) => <option> {entry.market.name} </option>
-
-  const embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
 
   const createEmbed = (event) => {
     event.preventDefault()
