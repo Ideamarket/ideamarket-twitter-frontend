@@ -475,7 +475,7 @@
       "type": "function"
     }
   ],
-  "interestManagerAVM": [
+  "interestManager": [
     {
       "anonymous": false,
       "inputs": [
@@ -589,7 +589,7 @@
       "type": "function"
     }
   ],
-  "ideaTokenExchangeAVM": [
+  "ideaTokenExchange": [
     {
       "anonymous": false,
       "inputs": [
@@ -1509,7 +1509,7 @@
       "type": "function"
     }
   ],
-  "ideaTokenFactoryAVM": [
+  "ideaTokenFactory": [
     {
       "anonymous": false,
       "inputs": [

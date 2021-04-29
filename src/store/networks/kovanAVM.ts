@@ -1,7 +1,7 @@
 import { INetworkSpecifics, ExternalAddresses } from '.'
 import DeployedAddressesKovanAVM from '../../assets/deployed-kovan-avm.json'
 import DeployedABIsKovanAVM from '../../assets/abis-kovan-avm.json'
-import TokenListKovan from '../../assets/token-list-kovan.json'
+import TokenListKovanAVM from '../../assets/token-list-kovan-avm.json'
 
 export default class KovanAVMNetworkSpecifics implements INetworkSpecifics {
   getNetworkName(): string {
@@ -22,14 +22,14 @@ export default class KovanAVMNetworkSpecifics implements INetworkSpecifics {
 
   getExternalAddresses(): ExternalAddresses {
     return {
-      dai: '0x0000000000000000000000000000000000000001',
+      dai: '0x59d141841328f89bF38672419655175F53740010',
       cDai: '0x0000000000000000000000000000000000000001',
       weth: '0x0000000000000000000000000000000000000001',
     }
   }
 
   getTokenList(): any {
-    return TokenListKovan
+    return TokenListKovanAVM
   }
 
   getSubgraphURL(): string {
