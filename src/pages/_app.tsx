@@ -8,7 +8,7 @@ import CookieConsent from 'react-cookie-consent'
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import { initWalletStore } from 'store/walletStore'
+// import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
 import {
@@ -31,6 +31,9 @@ import {
 } from 'utils/seo-constants'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import { Web3ReactProvider } from '@web3-react/core'
+import Web3 from 'web3'
+import Web3ReactManager from 'components/wallet/Web3ReactManager'
 
 export const GlobalContext = createContext({
   isWalletModalOpen: false,
@@ -43,6 +46,10 @@ export const GlobalContext = createContext({
   setIsEmailNewsletterModalOpen: (val: boolean) => {},
 })
 
+function getLibrary(provider: any): Web3 {
+  return new Web3(provider)
+}
+
 function MyApp({ Component, pageProps }: AppProps) {
   const Layout =
     (Component as typeof Component & {
@@ -52,7 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     }).layoutProps?.Layout || Fragment
 
   useEffect(() => {
-    initWalletStore()
+    // initWalletStore()
     initIdeaMarketsStore()
     initTokenList()
   }, [])
@@ -122,12 +129,16 @@ function MyApp({ Component, pageProps }: AppProps) {
           setIsEmailNewsletterModalOpen,
         }}
       >
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-        <WalletModal />
-        <WrongNetworkOverlay />
-        <EmailNewsletterModal />
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <Web3ReactManager>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Web3ReactManager>
+          <WalletModal />
+          <WrongNetworkOverlay />
+          <EmailNewsletterModal />
+        </Web3ReactProvider>
       </GlobalContext.Provider>
     </>
   )

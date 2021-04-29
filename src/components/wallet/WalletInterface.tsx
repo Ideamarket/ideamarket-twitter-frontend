@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useWalletStore, setWeb3, unsetWeb3 } from 'store/walletStore'
 import { GlobalContext } from 'pages/_app'
 
@@ -14,6 +14,26 @@ import DotGreen from '../../assets/dotgreen.svg'
 import * as wallets from 'wallets'
 import classNames from 'classnames'
 import A from 'components/A'
+import { useWeb3React } from '@web3-react/core'
+import {
+  injected,
+  walletconnect,
+  walletlink,
+  fortmatic,
+  portis,
+  resetWalletConnector,
+  ConnectorNames,
+} from 'wallets/connectors/index'
+
+const connectorsByName: { [connectorName in ConnectorNames]: any } = {
+  [ConnectorNames.Injected]: injected,
+  [ConnectorNames.Metamask]: injected,
+  [ConnectorNames.WalletConnect]: walletconnect,
+  [ConnectorNames.WalletLink]: walletlink,
+  [ConnectorNames.Coinbase]: walletlink,
+  [ConnectorNames.Fortmatic]: fortmatic,
+  [ConnectorNames.Portis]: portis,
+}
 
 export default function WalletInterface({
   onWalletConnected,
@@ -25,38 +45,65 @@ export default function WalletInterface({
     onWalletConnectedCallback,
     setOnWalletConnectedCallback,
   } = useContext(GlobalContext)
-  const web3 = useWalletStore((state) => state.web3)
-  const address = useWalletStore((state) => state.address)
 
-  async function onWalletClicked(wallet) {
+  const context = useWeb3React()
+  const { active, account, library, connector, activate, deactivate } = context
+
+  // handle logic to recognize the connector currently being activated
+  const [activatingConnector, setActivatingConnector] = useState<any>()
+
+  useEffect(() => {
+    if (activatingConnector && activatingConnector === connector) {
+      // Wait until connector is set, THEN you can set web3
+      if (library) {
+        setWeb3(library, connectingWallet)
+
+        if (onWalletConnectedCallback) {
+          onWalletConnectedCallback()
+          setOnWalletConnectedCallback(undefined)
+        }
+
+        if (onWalletConnected) {
+          console.log('is this called?')
+          onWalletConnected()
+        }
+      } else {
+        // You need to reset WalletConnector before you want to reconnect it and show QRcode again: https://github.com/NoahZinsmeister/web3-react/issues/124
+        resetWalletConnector(activatingConnector)
+      }
+
+      setConnectingWallet(0)
+      setActivatingConnector(undefined)
+    }
+  }, [activatingConnector, connector])
+
+  async function onWalletClicked(wallet, name) {
+    const currentConnector = connectorsByName[name]
     setConnectingWallet(wallet)
+    setActivatingConnector(currentConnector)
 
-    let web3
     try {
-      web3 = await wallets.connect(wallet)
+      await activate(currentConnector)
     } catch (ex) {
       console.log(ex)
       return
-    } finally {
-      setConnectingWallet(0)
     }
 
-    await setWeb3(web3, wallet)
+    // if (onWalletConnectedCallback) {
+    //   onWalletConnectedCallback()
+    //   setOnWalletConnectedCallback(undefined)
+    // }
 
-    if (onWalletConnectedCallback) {
-      onWalletConnectedCallback()
-      setOnWalletConnectedCallback(undefined)
-    }
-
-    if (onWalletConnected) {
-      onWalletConnected()
-    }
+    // if (onWalletConnected) {
+    //   console.log('is this called?')
+    //   onWalletConnected()
+    // }
   }
 
   async function onDisconnectClicked() {
+    console.log('on disconnect called')
     try {
-      const wallet = parseInt(localStorage.getItem('WALLET_TYPE'))
-      await wallets.disconnect(wallet)
+      await deactivate()
     } catch (ex) {
       console.log(ex)
     }
@@ -79,7 +126,7 @@ export default function WalletInterface({
       <div className="flex pl-4 pr-4 mt-4">
         <button
           disabled={connectingWallet !== 0}
-          onClick={() => onWalletClicked(wallet)}
+          onClick={() => onWalletClicked(wallet, name)}
           className={classNames(
             connectingWallet === 0
               ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'
@@ -142,27 +189,27 @@ export default function WalletInterface({
       </div>
       <hr className="m-4" />
       <div className="flex flex-row items-center mx-4 mb-4 ">
-        {web3 === undefined && <DotRed className="w-3 h-3" />}
-        {web3 !== undefined && <DotGreen className="w-3 h-3" />}
+        {!active && <DotRed className="w-3 h-3" />}
+        {active && <DotGreen className="w-3 h-3" />}
         <p className="ml-2 text-brand-gray-2">
-          {address !== '' ? 'Connected with: ' : 'Not connected'}
-          {address !== '' && (
+          {active ? 'Connected with: ' : 'Not connected'}
+          {active && (
             <A
               className="underline"
-              href={`https://etherscan.io/address/${address}`}
+              href={`https://etherscan.io/address/${account}`}
               target="_blank"
               rel="noreferrer"
             >
-              {address.slice(0, 6)}...{address.slice(-4)}
+              {account.slice(0, 6)}...{account.slice(-4)}
             </A>
           )}
         </p>
         <div className="flex justify-end flex-grow">
           <button
-            disabled={web3 === undefined}
+            disabled={!active}
             onClick={onDisconnectClicked}
             className={classNames(
-              web3 !== undefined
+              active
                 ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'
                 : 'cursor-not-allowed',
               'p-2 text-xs text-center border-2 rounded-lg text-brand-gray-2 border-brand-gray-1 font-sf-compact-medium'
