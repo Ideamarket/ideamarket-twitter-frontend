@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { setWeb3 } from 'store/walletStore'
 
-import { injected } from './connectors/index'
+import { injected, connectorsById } from './connectors/index'
 
 export function useEagerConnect() {
   const { activate, active, library } = useWeb3React()
@@ -10,15 +10,24 @@ export function useEagerConnect() {
   const [tried, setTried] = useState(false)
 
   useEffect(() => {
-    injected.isAuthorized().then((isAuthorized: boolean) => {
-      if (isAuthorized) {
-        activate(injected, undefined, true).catch(() => {
-          setTried(true)
-        })
-      } else {
+    const walletStr = localStorage.getItem('WALLET_TYPE')
+    // If connected before, connect back. Otherwise, try injected connector
+    if (walletStr) {
+      const previousConnector = connectorsById[parseInt(walletStr)]
+      activate(previousConnector).catch(() => {
         setTried(true)
-      }
-    })
+      })
+    } else {
+      injected.isAuthorized().then((isAuthorized: boolean) => {
+        if (isAuthorized) {
+          activate(injected, undefined, true).catch(() => {
+            setTried(true)
+          })
+        } else {
+          setTried(true)
+        }
+      })
+    }
   }, []) // intentionally only running on mount (make sure it's only mounted once :))
 
   // if the connection worked, wait until we get confirmation of that to flip the flag

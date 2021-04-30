@@ -15,25 +15,7 @@ import * as wallets from 'wallets'
 import classNames from 'classnames'
 import A from 'components/A'
 import { useWeb3React } from '@web3-react/core'
-import {
-  injected,
-  walletconnect,
-  walletlink,
-  fortmatic,
-  portis,
-  resetWalletConnector,
-  ConnectorNames,
-} from 'wallets/connectors/index'
-
-const connectorsByName: { [connectorName in ConnectorNames]: any } = {
-  [ConnectorNames.Injected]: injected,
-  [ConnectorNames.Metamask]: injected,
-  [ConnectorNames.WalletConnect]: walletconnect,
-  [ConnectorNames.WalletLink]: walletlink,
-  [ConnectorNames.Coinbase]: walletlink,
-  [ConnectorNames.Fortmatic]: fortmatic,
-  [ConnectorNames.Portis]: portis,
-}
+import { resetWalletConnector, connectorsById } from 'wallets/connectors/index'
 
 export default function WalletInterface({
   onWalletConnected,
@@ -64,12 +46,19 @@ export default function WalletInterface({
         }
 
         if (onWalletConnected) {
-          console.log('is this called?')
           onWalletConnected()
         }
       } else {
-        // You need to reset WalletConnector before you want to reconnect it and show QRcode again: https://github.com/NoahZinsmeister/web3-react/issues/124
-        resetWalletConnector(activatingConnector)
+        // Connecting to wallet cancelled or failed
+        if (connectingWallet === wallets.WALLETS.WALLETCONNECT) {
+          // You need to reset WalletConnector before you can reconnect to it and show QRcode again: https://github.com/NoahZinsmeister/web3-react/issues/124
+          resetWalletConnector(activatingConnector)
+        }
+
+        // After connecting to a wallet fails, it disconnects any previous wallet, so we try to reconnect
+        const walletStr = localStorage.getItem('WALLET_TYPE')
+        const previousConnector = connectorsById[parseInt(walletStr)]
+        activate(previousConnector)
       }
 
       setConnectingWallet(0)
@@ -77,9 +66,9 @@ export default function WalletInterface({
     }
   }, [activatingConnector, connector])
 
-  async function onWalletClicked(wallet, name) {
-    const currentConnector = connectorsByName[name]
+  async function onWalletClicked(wallet) {
     setConnectingWallet(wallet)
+    const currentConnector = connectorsById[wallet]
     setActivatingConnector(currentConnector)
 
     try {
@@ -88,20 +77,9 @@ export default function WalletInterface({
       console.log(ex)
       return
     }
-
-    // if (onWalletConnectedCallback) {
-    //   onWalletConnectedCallback()
-    //   setOnWalletConnectedCallback(undefined)
-    // }
-
-    // if (onWalletConnected) {
-    //   console.log('is this called?')
-    //   onWalletConnected()
-    // }
   }
 
   async function onDisconnectClicked() {
-    console.log('on disconnect called')
     try {
       await deactivate()
     } catch (ex) {
@@ -126,7 +104,7 @@ export default function WalletInterface({
       <div className="flex pl-4 pr-4 mt-4">
         <button
           disabled={connectingWallet !== 0}
-          onClick={() => onWalletClicked(wallet, name)}
+          onClick={() => onWalletClicked(wallet)}
           className={classNames(
             connectingWallet === 0
               ? 'hover:border-transparent hover:bg-brand-blue hover:text-brand-gray cursor-pointer'

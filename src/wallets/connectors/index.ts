@@ -4,7 +4,7 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { FortmaticConnector } from '@web3-react/fortmatic-connector'
 import { PortisConnector } from '@web3-react/portis-connector'
-import { RINKEBY } from 'wallets/chains'
+import { MAINNET, RINKEBY } from 'wallets/chains'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { NETWORK } from 'store/networks'
 
@@ -43,9 +43,11 @@ export const resetWalletConnector = (connector: AbstractConnector) => {
   }
 }
 
+const isMainnet = NETWORK.getNetworkName() === 'mainnet'
+
 export const fortmatic = new FortmaticConnector({
-  apiKey: RINKEBY as any,
-  chainId: 4,
+  apiKey: isMainnet ? 'pk_live_B3A1A25FBF96DCB5' : 'pk_test_4F838B34CAE38BC8',
+  chainId: isMainnet ? MAINNET : RINKEBY,
 })
 
 export const portis = new PortisConnector({
@@ -53,12 +55,22 @@ export const portis = new PortisConnector({
   networks: [1, 100],
 })
 
-export enum ConnectorNames {
-  Injected = 'Injected',
-  Metamask = 'Metamask',
-  WalletConnect = 'WalletConnect',
-  WalletLink = 'WalletLink',
-  Coinbase = 'Coinbase',
-  Fortmatic = 'Fortmatic',
-  Portis = 'Portis',
+export enum ConnectorIds {
+  Injected = 1,
+  Metamask = 1,
+  WalletConnect = 2,
+  Fortmatic = 3,
+  WalletLink = 4,
+  Coinbase = 4,
+  Portis = 5,
+}
+
+export const connectorsById: { [connectorName in ConnectorIds]: any } = {
+  [ConnectorIds.Injected]: injected,
+  [ConnectorIds.Metamask]: injected,
+  [ConnectorIds.WalletConnect]: walletconnect,
+  [ConnectorIds.WalletLink]: walletlink,
+  [ConnectorIds.Coinbase]: walletlink,
+  [ConnectorIds.Fortmatic]: fortmatic,
+  [ConnectorIds.Portis]: portis,
 }
