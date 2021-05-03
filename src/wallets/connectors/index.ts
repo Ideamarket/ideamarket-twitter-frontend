@@ -1,4 +1,3 @@
-import { NetworkConnector } from './NetworkConnector'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
@@ -12,10 +11,6 @@ const POLLING_INTERVAL = 12000
 const RPC_URLS: { [chainId: number]: string } = {
   1: 'https://mainnet.infura.io/v3/3399077c10a24059be2a6c5b4fa77c03',
 }
-
-// export const network = new NetworkConnector({
-//   urls: { [NETWORK.getChainID()]: NETWORK_URL }
-// })
 
 export const injected = new InjectedConnector({
   supportedChainIds: [1, 3, 4, 5, 42],
