@@ -1,13 +1,10 @@
 import React from 'react'
-import { useWalletStore } from 'store/walletStore'
 
 import DotRed from '../../assets/dotred.svg'
 import DotGreen from '../../assets/dotgreen.svg'
 import { useWeb3React } from '@web3-react/core'
 
 export default function WalletStatus({ openModal }: { openModal: () => void }) {
-  const web3 = useWalletStore((state) => state.web3)
-  const address = useWalletStore((state) => state.address)
   const { active, account } = useWeb3React()
 
   return (

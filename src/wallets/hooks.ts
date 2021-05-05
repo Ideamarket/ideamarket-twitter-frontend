@@ -28,7 +28,7 @@ export function useEagerConnect() {
         }
       })
     }
-  }, []) // intentionally only running on mount (make sure it's only mounted once :))
+  }, [])
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {
@@ -48,21 +48,17 @@ export function useInactiveListener(suppress: boolean = false) {
     const { ethereum } = window as any
     if (ethereum && ethereum.on && !active && !error && !suppress) {
       const handleConnect = () => {
-        console.log("Handling 'connect' event")
         activate(injected)
       }
       const handleChainChanged = (chainId: string | number) => {
-        console.log("Handling 'chainChanged' event with payload", chainId)
         activate(injected)
       }
       const handleAccountsChanged = (accounts: string[]) => {
-        console.log("Handling 'accountsChanged' event with payload", accounts)
         if (accounts.length > 0) {
           activate(injected)
         }
       }
       const handleNetworkChanged = (networkId: string | number) => {
-        console.log("Handling 'networkChanged' event with payload", networkId)
         activate(injected)
       }
 

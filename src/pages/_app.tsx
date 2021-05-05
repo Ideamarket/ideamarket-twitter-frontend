@@ -8,7 +8,6 @@ import CookieConsent from 'react-cookie-consent'
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-// import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
 import {
@@ -59,7 +58,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     }).layoutProps?.Layout || Fragment
 
   useEffect(() => {
-    // initWalletStore()
     initIdeaMarketsStore()
     initTokenList()
   }, [])

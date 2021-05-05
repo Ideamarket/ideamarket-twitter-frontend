@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { useWalletStore, setWeb3, unsetWeb3 } from 'store/walletStore'
+import { setWeb3, unsetWeb3 } from 'store/walletStore'
 import { GlobalContext } from 'pages/_app'
 
 import CircleSpinner from '../animations/CircleSpinner'
@@ -11,11 +11,14 @@ import Portis from '../../assets/portis.svg'
 import DotRed from '../../assets/dotred.svg'
 import DotGreen from '../../assets/dotgreen.svg'
 
-import * as wallets from 'wallets'
 import classNames from 'classnames'
 import A from 'components/A'
 import { useWeb3React } from '@web3-react/core'
-import { resetWalletConnector, connectorsById } from 'wallets/connectors/index'
+import {
+  resetWalletConnector,
+  connectorsById,
+  ConnectorIds,
+} from 'wallets/connectors/index'
 
 export default function WalletInterface({
   onWalletConnected,
@@ -28,8 +31,14 @@ export default function WalletInterface({
     setOnWalletConnectedCallback,
   } = useContext(GlobalContext)
 
-  const context = useWeb3React()
-  const { active, account, library, connector, activate, deactivate } = context
+  const {
+    active,
+    account,
+    library,
+    connector,
+    activate,
+    deactivate,
+  } = useWeb3React()
 
   // handle logic to recognize the connector currently being activated
   const [activatingConnector, setActivatingConnector] = useState<any>()
@@ -50,7 +59,7 @@ export default function WalletInterface({
         }
       } else {
         // Connecting to wallet cancelled or failed
-        if (connectingWallet === wallets.WALLETS.WALLETCONNECT) {
+        if (connectingWallet === ConnectorIds.WalletConnect) {
           // You need to reset WalletConnector before you can reconnect to it and show QRcode again: https://github.com/NoahZinsmeister/web3-react/issues/124
           resetWalletConnector(activatingConnector)
         }
@@ -142,27 +151,27 @@ export default function WalletInterface({
         <WalletButton
           svg={<Metamask className="w-8 h-8" />}
           name="Metamask"
-          wallet={wallets.WALLETS.METAMASK}
+          wallet={ConnectorIds.Metamask}
         />
         <WalletButton
           svg={<WalletConnect className="w-8 h-8" />}
           name="WalletConnect"
-          wallet={wallets.WALLETS.WALLETCONNECT}
+          wallet={ConnectorIds.WalletConnect}
         />
         <WalletButton
           svg={<Coinbase className="w-7 h-7" />}
           name="Coinbase"
-          wallet={wallets.WALLETS.COINBASE}
+          wallet={ConnectorIds.Coinbase}
         />
         <WalletButton
           svg={<Fortmatic className="w-7 h-7" />}
           name="Fortmatic"
-          wallet={wallets.WALLETS.FORTMATIC}
+          wallet={ConnectorIds.Fortmatic}
         />
         <WalletButton
           svg={<Portis className="w-7 h-7" />}
           name="Portis"
-          wallet={wallets.WALLETS.PORTIS}
+          wallet={ConnectorIds.Portis}
         />
       </div>
       <hr className="m-4" />
