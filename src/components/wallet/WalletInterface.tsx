@@ -44,19 +44,23 @@ export default function WalletInterface({
   const [activatingConnector, setActivatingConnector] = useState<any>()
 
   useEffect(() => {
+    const setWeb3WithWait = async () => {
+      await setWeb3(library, connectingWallet)
+
+      if (onWalletConnectedCallback) {
+        onWalletConnectedCallback()
+        setOnWalletConnectedCallback(undefined)
+      }
+
+      if (onWalletConnected) {
+        onWalletConnected()
+      }
+    }
+
     if (activatingConnector && activatingConnector === connector) {
       // Wait until connector is set, THEN you can set web3
       if (library) {
-        setWeb3(library, connectingWallet)
-
-        if (onWalletConnectedCallback) {
-          onWalletConnectedCallback()
-          setOnWalletConnectedCallback(undefined)
-        }
-
-        if (onWalletConnected) {
-          onWalletConnected()
-        }
+        setWeb3WithWait()
       } else {
         // Connecting to wallet cancelled or failed
         if (connectingWallet === ConnectorIds.WalletConnect) {
