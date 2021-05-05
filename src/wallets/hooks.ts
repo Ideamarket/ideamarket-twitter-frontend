@@ -11,21 +11,11 @@ export function useEagerConnect() {
 
   useEffect(() => {
     const walletStr = localStorage.getItem('WALLET_TYPE')
-    // If connected before, connect back. Otherwise, try injected connector
+    // If connected before, connect back
     if (walletStr) {
       const previousConnector = connectorsById[parseInt(walletStr)]
       activate(previousConnector).catch(() => {
         setTried(true)
-      })
-    } else {
-      injected.isAuthorized().then((isAuthorized: boolean) => {
-        if (isAuthorized) {
-          activate(injected, undefined, true).catch(() => {
-            setTried(true)
-          })
-        } else {
-          setTried(true)
-        }
       })
     }
   }, [])
