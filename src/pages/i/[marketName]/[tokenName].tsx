@@ -402,7 +402,7 @@ export default function TokenDetails({
 
         <div className="px-2 pb-5 mx-auto mt-12 text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
           <div className="flex flex-col md:flex-row">
-            <div className="flex-1 p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+            <div className="h-full flex-1 p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
               <div className="flex flex-col justify-between lg:flex-row">
                 <div>
                   {isLoading ? (
@@ -584,30 +584,18 @@ export default function TokenDetails({
               {isLoading ? (
                 <div className="h-full p-18 md:p-0">loading</div>
               ) : web3 ? (
-                <div>
-                  <div className="text-base font-semibold text-brand-new-dark">
-                    My Wallet
-                  </div>
-                  <div className="mt-3 text-sm font-semibold text-brand-new-dark">
-                    Balance
-                  </div>
-
-                  <div className="flex mt-2 text-2xl font-semibold text-center text-brand-new-dark">
-                    <span className="flex-1 mr-5 text-left md:text-right">
-                      {!isBalanceLoading && formatNumber(balance)} tokens
-                    </span>
-                    <span className="flex-1 font-normal text-left text-brand-gray-2">
-                      {!isValueLoading && formatNumber(value)} USD
-                    </span>
-                  </div>
-                  <div className="mt-3 mb-2 text-sm font-semibold text-brand-new-dark">
-                    Locked
-                  </div>
-                  <LockedTokenRowsTable
-                    token={token}
-                    owner={connectedAddress}
-                  />
-                </div>
+                <TradeInterface
+                  ideaToken={token}
+                  market={market}
+                  onTradeSuccessful={() => {}}
+                  onValuesChanged={() => {}}
+                  resetOn={false}
+                  centerTypeSelection={false}
+                  showTypeSelection={true}
+                  showTradeButton={true}
+                  disabled={false}
+                  bgcolor="#ffffff"
+                />
               ) : (
                 <div className="flex items-center justify-center h-full p-18 md:p-0">
                   <button
@@ -622,26 +610,6 @@ export default function TokenDetails({
               )}
             </div>
           </div>
-          {web3 && (
-            <div className="flex-1 p-5 mb-5 bg-white border rounded-md border-brand-border-gray">
-              {isLoading ? (
-                <div className="h-full p-18 md:p-0">loading</div>
-              ) : (
-                <TradeInterface
-                  ideaToken={token}
-                  market={market}
-                  onTradeSuccessful={() => {}}
-                  onValuesChanged={() => {}}
-                  resetOn={false}
-                  centerTypeSelection={false}
-                  showTypeSelection={true}
-                  showTradeButton={true}
-                  disabled={false}
-                  bgcolor="#ffffff"
-                />
-              )}
-            </div>
-          )}
         </div>
         {!isLoading && (
           <VerifyModal
