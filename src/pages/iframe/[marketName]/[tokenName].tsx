@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useQuery } from 'react-query'
 import { querySingleToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
+import { formatNumber } from 'utils'
 
 function IframeEmbedSkeleton() {
   return (
@@ -77,7 +78,7 @@ export default function IframeEmbed() {
         </div>
         <div className="flex items-center h-full w-[131px] bg-black bg-opacity-10 rounded-md border border-black border-opacity-10">
           <div className="flex-1 flex justify-center items-center h-full text-sm font-medium text-[#373737] text-opacity-100">
-            ${token.latestPricePoint.price}
+            ${formatNumber(token.latestPricePoint.price)}
           </div>
           <div className="h-full flex-1 rounded-md overflow-hidden">
             <A
