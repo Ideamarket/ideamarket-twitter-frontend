@@ -402,183 +402,192 @@ export default function TokenDetails({
 
         <div className="px-2 pb-5 mx-auto mt-12 text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
           <div className="flex flex-col md:flex-row">
-            <div className="h-full flex-1 p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
-              <div className="flex flex-col justify-between lg:flex-row">
-                <div>
-                  {isLoading ? (
-                    <DetailsSkeleton />
-                  ) : (
-                    <>
-                      <div className="inline-block pr-6">
-                        <div className="text-sm font-semibold text-brand-new-dark">
-                          Listed on
-                        </div>
-                        <div className="mt-2 text-base font-semibold text-brand-new-dark">
-                          {DateTime.fromSeconds(
-                            Number(token.listedAt)
-                          ).toFormat('MMM dd yyyy')}
-                        </div>
-                      </div>
-                      <div className="inline-block">
-                        <div className="text-sm font-semibold text-brand-new-dark">
-                          Listing Owner
-                        </div>
-                        <div className="mt-2 text-base font-semibold text-brand-new-dark">
-                          {ZERO_ADDRESS === token.tokenOwner ? (
-                            'None'
-                          ) : (
-                            <A
-                              href={`https://etherscan.io/address/${token.tokenOwner}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="hover:underline"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                              }}
-                            >
-                              {`${token.tokenOwner.slice(
-                                0,
-                                8
-                              )}...${token.tokenOwner.slice(-6)}`}
-                            </A>
-                          )}
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-                <div>
-                  {isLoading ? (
-                    <DetailsSkeleton />
-                  ) : (
-                    <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0">
-                      <AddToMetamaskButton token={token} />
-                      <WatchingStarButton token={token} />
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="mt-5 mb-3 text-sm font-semibold md:mt-8 text-brand-gray-2">
-                Listing Owner Options
-              </div>
-              {isLoading ? (
-                <>
-                  <div className="w-full mx-auto bg-gray-400 rounded animate animate-pulse">
-                    <div className="invisible">
-                      A<br />A
-                    </div>
-                  </div>
-                  <div className="flex justify-center ">
-                    <div className="w-20 py-1 mt-1 text-sm font-medium bg-gray-400 border-2 border-gray-400 rounded animate animate-pulse tracking-tightest-2 font-sf-compact-medium">
-                      <span className="invisible">A</span>
-                    </div>
-                  </div>
-                </>
-              ) : token.tokenOwner === ZERO_ADDRESS ? (
-                <>
-                  <div className="font-medium text-brand-gray-2">
-                    <div className="text-xs">
-                      Verify ownership of this {market ? market.name : ''}{' '}
-                      account to withdraw accumulated interest.
-                    </div>
-                  </div>
-                  <div className="mt-3 mb-2 text-sm md:mb-5 text-brand-blue">
-                    {marketSpecifics.isVerificationEnabled() ? (
-                      <div
-                        className="font-semibold cursor-pointer hover:underline"
-                        onClick={() => {
-                          setIsVerifyModalOpen(true)
-                        }}
-                      >
-                        Verify Ownership
-                      </div>
+            <div className="flex-1 h-full flex flex-col">
+              <div className="p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+                <div className="flex flex-col justify-between lg:flex-row">
+                  <div>
+                    {isLoading ? (
+                      <DetailsSkeleton />
                     ) : (
-                      <div className="font-semibold">
-                        Verification not yet enabled
+                      <>
+                        <div className="inline-block pr-6">
+                          <div className="text-sm font-semibold text-brand-new-dark">
+                            Listed on
+                          </div>
+                          <div className="mt-2 text-base font-semibold text-brand-new-dark">
+                            {DateTime.fromSeconds(
+                              Number(token.listedAt)
+                            ).toFormat('MMM dd yyyy')}
+                          </div>
+                        </div>
+                        <div className="inline-block">
+                          <div className="text-sm font-semibold text-brand-new-dark">
+                            Listing Owner
+                          </div>
+                          <div className="mt-2 text-base font-semibold text-brand-new-dark">
+                            {ZERO_ADDRESS === token.tokenOwner ? (
+                              'None'
+                            ) : (
+                              <A
+                                href={`https://etherscan.io/address/${token.tokenOwner}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="hover:underline"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                }}
+                              >
+                                {`${token.tokenOwner.slice(
+                                  0,
+                                  8
+                                )}...${token.tokenOwner.slice(-6)}`}
+                              </A>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div>
+                    {isLoading ? (
+                      <DetailsSkeleton />
+                    ) : (
+                      <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0">
+                        <AddToMetamaskButton token={token} />
+                        <WatchingStarButton token={token} />
                       </div>
                     )}
                   </div>
-                </>
-              ) : (
-                <>
-                  <div className="font-medium text-brand-gray-2">
-                    <div className="text-xs">
-                      {!web3 ||
-                      connectedAddress.toLowerCase() !==
-                        token.tokenOwner.toLowerCase()
-                        ? `The owner of this listing is ${token.tokenOwner.slice(
-                            0,
-                            8
-                          )}...${token.tokenOwner.slice(
-                            -6
-                          )}. This address does not match the wallet you have connected. If you are the owner of this listing please connect the correct wallet to be able to withdraw interest.`
-                        : 'Your connected wallet owns this listing.'}
+                </div>
+                <div className="mt-5 mb-3 text-sm font-semibold md:mt-8 text-brand-gray-2">
+                  Listing Owner Options
+                </div>
+                {isLoading ? (
+                  <>
+                    <div className="w-full mx-auto bg-gray-400 rounded animate animate-pulse">
+                      <div className="invisible">
+                        A<br />A
+                      </div>
                     </div>
-                  </div>
-                  <div className="mt-2.5 text-sm text-brand-blue">
-                    Available interest:{' '}
-                    {web3BNToFloatString(
-                      investmentTokenToUnderlying(
-                        token.rawInvested,
-                        compoundExchangeRate
-                      ).sub(token.rawDaiInToken),
-                      bigNumberTenPow18,
-                      2
-                    )}{' '}
-                    DAI
-                  </div>
-                  <div className="flex mt-3 mb-2 text-sm md:mb-5 text-brand-blue">
-                    <button
-                      disabled={
-                        !web3 ||
-                        txManager.isPending ||
+                    <div className="flex justify-center ">
+                      <div className="w-20 py-1 mt-1 text-sm font-medium bg-gray-400 border-2 border-gray-400 rounded animate animate-pulse tracking-tightest-2 font-sf-compact-medium">
+                        <span className="invisible">A</span>
+                      </div>
+                    </div>
+                  </>
+                ) : token.tokenOwner === ZERO_ADDRESS ? (
+                  <>
+                    <div className="font-medium text-brand-gray-2">
+                      <div className="text-xs">
+                        Verify ownership of this {market ? market.name : ''}{' '}
+                        account to withdraw accumulated interest.
+                      </div>
+                    </div>
+                    <div className="mt-3 mb-2 text-sm md:mb-5 text-brand-blue">
+                      {marketSpecifics.isVerificationEnabled() ? (
+                        <div
+                          className="font-semibold cursor-pointer hover:underline"
+                          onClick={() => {
+                            setIsVerifyModalOpen(true)
+                          }}
+                        >
+                          Verify Ownership
+                        </div>
+                      ) : (
+                        <div className="font-semibold">
+                          Verification not yet enabled
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="font-medium text-brand-gray-2">
+                      <div className="text-xs">
+                        {!web3 ||
                         connectedAddress.toLowerCase() !==
                           token.tokenOwner.toLowerCase()
-                      }
-                      className={classNames(
-                        'font-semibold text-sm text-brand-blue',
-                        !web3 ||
+                          ? `The owner of this listing is ${token.tokenOwner.slice(
+                              0,
+                              8
+                            )}...${token.tokenOwner.slice(
+                              -6
+                            )}. This address does not match the wallet you have connected. If you are the owner of this listing please connect the correct wallet to be able to withdraw interest.`
+                          : 'Your connected wallet owns this listing.'}
+                      </div>
+                    </div>
+                    <div className="mt-2.5 text-sm text-brand-blue">
+                      Available interest:{' '}
+                      {web3BNToFloatString(
+                        investmentTokenToUnderlying(
+                          token.rawInvested,
+                          compoundExchangeRate
+                        ).sub(token.rawDaiInToken),
+                        bigNumberTenPow18,
+                        2
+                      )}{' '}
+                      DAI
+                    </div>
+                    <div className="flex mt-3 mb-2 text-sm md:mb-5 text-brand-blue">
+                      <button
+                        disabled={
+                          !web3 ||
+                          txManager.isPending ||
                           connectedAddress.toLowerCase() !==
                             token.tokenOwner.toLowerCase()
-                          ? 'hidden'
-                          : txManager.isPending
-                          ? 'cursor-default'
-                          : 'cursor-pointer hover:underline'
-                      )}
-                      onClick={onWithdrawClicked}
-                    >
-                      Withdraw
-                    </button>
-                  </div>
-                  <div
-                    className={classNames(
-                      'grid grid-cols-3 mt-2 text-sm text-brand-gray-2',
-                      txManager.isPending ? '' : 'invisible'
-                    )}
-                  >
-                    <div className="font-bold justify-self-center">
-                      {txManager.name}
-                    </div>
-                    <div className="justify-self-center">
-                      <A
+                        }
                         className={classNames(
-                          'underline',
-                          txManager.hash === '' ? 'hidden' : ''
+                          'font-semibold text-sm text-brand-blue',
+                          !web3 ||
+                            connectedAddress.toLowerCase() !==
+                              token.tokenOwner.toLowerCase()
+                            ? 'hidden'
+                            : txManager.isPending
+                            ? 'cursor-default'
+                            : 'cursor-pointer hover:underline'
                         )}
-                        href={NETWORK.getEtherscanTxUrl(txManager.hash)}
-                        target="_blank"
-                        rel="noreferrer"
+                        onClick={onWithdrawClicked}
                       >
-                        {txManager.hash.slice(0, 8)}...
-                        {txManager.hash.slice(-6)}
-                      </A>
+                        Withdraw
+                      </button>
                     </div>
-                    <div className="justify-self-center">
-                      <CircleSpinner color="#0857e0" bgcolor="#f6f6f6" />
+                    <div
+                      className={classNames(
+                        'grid grid-cols-3 mt-2 text-sm text-brand-gray-2',
+                        txManager.isPending ? '' : 'invisible'
+                      )}
+                    >
+                      <div className="font-bold justify-self-center">
+                        {txManager.name}
+                      </div>
+                      <div className="justify-self-center">
+                        <A
+                          className={classNames(
+                            'underline',
+                            txManager.hash === '' ? 'hidden' : ''
+                          )}
+                          href={NETWORK.getEtherscanTxUrl(txManager.hash)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {txManager.hash.slice(0, 8)}...
+                          {txManager.hash.slice(-6)}
+                        </A>
+                      </div>
+                      <div className="justify-self-center">
+                        <CircleSpinner color="#0857e0" bgcolor="#f6f6f6" />
+                      </div>
                     </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
+              </div>
+              <div className="p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+                <iframe
+                  src={`/iframe/${rawMarketName}/${rawTokenName}`}
+                  title="Iframe Embed"
+                  className="w-full h-full"
+                />
+              </div>
             </div>
             <div className="flex-1 p-5 mb-5 bg-white border rounded-md border-brand-border-gray">
               {isLoading ? (

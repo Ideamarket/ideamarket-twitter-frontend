@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { useQuery } from 'react-query'
 import { queryMarkets } from 'store/ideaMarketsStore'
-import { Target } from 'puppeteer-core'
 
 export default function Embed() {
   const [selectMarketValues, setSelectMarketValues] = useState([])
@@ -23,8 +22,8 @@ export default function Embed() {
   ]
   const [tagName, setTagname] = useState('elonmusk')
   const [market, setMarket] = useState('twitter')
-  const [ewidth, setWidth] = useState('432')
-  const [eheight, setHeight] = useState('243')
+  const [ewidth, setWidth] = useState('312')
+  const [eheight, setHeight] = useState('55')
   const [embedsize, setSize] = useState('small')
   const [copyDone, setCopyDone] = useState(false)
 
@@ -46,7 +45,7 @@ export default function Embed() {
       setSelectMarketValues([])
     }
   }, [markets])
-  const embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width=${ewidth} height=${eheight}></iframe> `
+  const embed = `<iframe src="https://app.ideamarket.io/iframe/${market}/${tagName}" width="${ewidth}" height="${eheight}"></iframe> `
 
   const selectMarketFormat = (entry) => <option> {entry.market.name} </option>
 
@@ -154,7 +153,6 @@ export default function Embed() {
               width={ewidth}
               height={eheight}
               title="preview"
-              className="shadow-lg border-2 border-indigo-100 rounded-sm "
             ></iframe>
 
             <div className="flex justify-center items-center sm:mt-24 mb:mt-0">
@@ -171,7 +169,7 @@ export default function Embed() {
                         </h3>
 
                         <button
-                          className="outline-none   focus:outline-none  border-gray-200 w-8 h-8 hover:text-green-500 active:bg-gray-50"
+                          className="outline-none focus:outline-none border-gray-200 w-8 h-8 hover:text-green-500 active:bg-gray-50"
                           onClick={() => {
                             setCopyDone(true)
                           }}
