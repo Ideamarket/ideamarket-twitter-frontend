@@ -105,7 +105,7 @@ export default function TokenDetails({
 
   const router = useRouter()
 
-  const embedCode = `<iframe src="https://app.ideamarket.io/${rawMarketName}/${rawTokenName}" width="312" height="55" />`
+  const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" width="312" height="55" />`
   const [isCopyDone, setIsCopyDone] = useState(false)
 
   const { setIsWalletModalOpen } = useContext(GlobalContext)
