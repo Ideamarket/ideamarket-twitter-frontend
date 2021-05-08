@@ -12,7 +12,6 @@ import {
   CircleSpinner,
   WatchingStarButton,
   AddToMetamaskButton,
-  LockedTokenRowsTable,
   A,
   MutualTokensList,
   DefaultLayout,
@@ -38,7 +37,6 @@ import {
   WEEK_SECONDS,
   MONTH_SECONDS,
   YEAR_SECONDS,
-  formatNumber,
   calculateIdeaTokenDaiValue,
   useTransactionManager,
   ZERO_ADDRESS,
@@ -49,6 +47,10 @@ import { DateTime } from 'luxon'
 import { NextSeo } from 'next-seo'
 import { getURL } from 'utils/seo-constants'
 import { GetServerSideProps } from 'next'
+import CopyIcon from '../../../assets/copy-icon.svg'
+import CopyCheck from '../../../assets/copy-check.svg'
+import copy from 'copy-to-clipboard'
+import toast from 'react-hot-toast'
 
 function DetailsSkeleton() {
   return (
@@ -102,6 +104,9 @@ export default function TokenDetails({
   }
 
   const router = useRouter()
+
+  const embedCode = `<iframe src="https://app.ideamarket.io/${rawMarketName}/${rawTokenName}" width="312" height="55" />`
+  const [isCopyDone, setIsCopyDone] = useState(false)
 
   const { setIsWalletModalOpen } = useContext(GlobalContext)
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false)
@@ -581,12 +586,30 @@ export default function TokenDetails({
                   </>
                 )}
               </div>
-              <div className="p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+              <div className="relative p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+                <div className="text-sm font-semibold text-brand-new-dark">
+                  Copy embed
+                </div>
                 <iframe
                   src={`/iframe/${rawMarketName}/${rawTokenName}`}
                   title="Iframe Embed"
                   className="w-full h-full"
                 />
+                {isCopyDone ? (
+                  <CopyCheck className="text-black w-6 absolute top-2 right-2 cursor-pointer" />
+                ) : (
+                  <CopyIcon
+                    className="text-black text-opacity-50 w-6 absolute top-2 right-2 cursor-pointer"
+                    onClick={() => {
+                      copy(embedCode)
+                      toast.success('Copied the embed code')
+                      setIsCopyDone(true)
+                      setTimeout(() => {
+                        setIsCopyDone(false)
+                      }, 2000)
+                    }}
+                  />
+                )}
               </div>
             </div>
             <div className="flex-1 p-5 mb-5 bg-white border rounded-md border-brand-border-gray">
