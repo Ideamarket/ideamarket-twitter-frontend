@@ -3,13 +3,11 @@ import { ReactNode, useEffect } from 'react'
 import CookieConsent from 'react-cookie-consent'
 import { Toaster } from 'react-hot-toast'
 
-import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
 
 export default function DefaultLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
-    initWalletStore()
     initIdeaMarketsStore()
     initTokenList()
   }, [])

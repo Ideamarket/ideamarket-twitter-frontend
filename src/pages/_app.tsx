@@ -6,7 +6,6 @@ import '../styles/nprogress.css'
 
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
-
 import {
   WrongNetworkOverlay,
   WalletModal,
@@ -25,6 +24,9 @@ import {
 } from 'utils/seo-constants'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import { Web3ReactProvider } from '@web3-react/core'
+import Web3 from 'web3'
+import Web3ReactManager from 'components/wallet/Web3ReactManager'
 
 export const GlobalContext = createContext({
   isWalletModalOpen: false,
@@ -36,6 +38,10 @@ export const GlobalContext = createContext({
   isEmailNewsletterModalOpen: false,
   setIsEmailNewsletterModalOpen: (val: boolean) => {},
 })
+
+function getLibrary(provider: any): Web3 {
+  return new Web3(provider)
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   const Layout =
@@ -110,12 +116,16 @@ function MyApp({ Component, pageProps }: AppProps) {
           setIsEmailNewsletterModalOpen,
         }}
       >
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-        <WalletModal />
-        <WrongNetworkOverlay />
-        <EmailNewsletterModal />
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <Web3ReactManager>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Web3ReactManager>
+          <WalletModal />
+          <WrongNetworkOverlay />
+          <EmailNewsletterModal />
+        </Web3ReactProvider>
       </GlobalContext.Provider>
     </>
   )
