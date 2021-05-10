@@ -51,6 +51,7 @@ import CopyIcon from '../../../assets/copy-icon.svg'
 import CopyCheck from '../../../assets/copy-check.svg'
 import copy from 'copy-to-clipboard'
 import toast from 'react-hot-toast'
+import { LinkIcon } from '@heroicons/react/outline'
 
 function DetailsSkeleton() {
   return (
@@ -106,7 +107,9 @@ export default function TokenDetails({
   const router = useRouter()
 
   const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" width="312" height="55" />`
-  const [isCopyDone, setIsCopyDone] = useState(false)
+  const [isEmbedCopyDone, setIsEmbedCopyDone] = useState(false)
+  const [isLinkCopyDone, setIsLinkCopyDone] = useState(false)
+  const [permanentLink, setPermanentLink] = useState('')
 
   const { setIsWalletModalOpen } = useContext(GlobalContext)
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false)
@@ -241,6 +244,16 @@ export default function TokenDetails({
 
     setLockedChartData(finalChartData)
   }, [chartDurationSeconds, rawLockedChartData])
+
+  useEffect(() => {
+    if (token) {
+      setPermanentLink(
+        `https://attn.to/r/L/${parseInt(`${token.marketID}`, 16)}/${
+          token.tokenID
+        }`
+      )
+    }
+  }, [token])
 
   const isLoading =
     isTokenLoading ||
@@ -406,8 +419,8 @@ export default function TokenDetails({
         </div>
 
         <div className="px-2 pb-5 mx-auto mt-12 text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
-          <div className="flex flex-col md:flex-row">
-            <div className="flex-1 h-full flex flex-col">
+          <div className="flex flex-col md:grid md:grid-cols-2">
+            <div className="flex flex-col">
               <div className="p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
                 <div className="flex flex-col justify-between lg:flex-row">
                   <div>
@@ -586,7 +599,64 @@ export default function TokenDetails({
                   </>
                 )}
               </div>
-              <div className="relative p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+
+              <div className="flex-1 relative p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+                <div className="text-sm font-semibold text-brand-new-dark">
+                  Share this listing
+                </div>
+
+                <div className="flex items-center h-full justify-center">
+                  <div className="w-full md:w-3/4 py-4">
+                    <label
+                      htmlFor="perm_link"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Permanent link
+                    </label>
+                    <div className="mt-1 flex rounded-md shadow-sm">
+                      <div className="relative flex items-stretch flex-grow focus-within:z-10">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <LinkIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <input
+                          type="text"
+                          name="text"
+                          id="perm_link"
+                          className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-10 sm:text-sm border-gray-300 text-brand-new-dark"
+                          defaultValue={permanentLink}
+                          disabled={true}
+                        />
+                      </div>
+                      <button className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        {isLinkCopyDone ? (
+                          <CopyCheck className="text-black w-5 h-5" />
+                        ) : (
+                          <CopyIcon
+                            className="text-black text-opacity-50 w-5 h-5"
+                            onClick={() => {
+                              copy(permanentLink)
+                              toast.success(
+                                'Copied the listing permanent link.'
+                              )
+                              setIsLinkCopyDone(true)
+                              setTimeout(() => {
+                                setIsLinkCopyDone(false)
+                              }, 2000)
+                            }}
+                          />
+                        )}
+
+                        <span className="sr-only">Copy</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1 relative p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
                 <div className="text-sm font-semibold text-brand-new-dark">
                   Copy embed
                 </div>
@@ -595,7 +665,7 @@ export default function TokenDetails({
                   title="Iframe Embed"
                   className="w-full h-full"
                 />
-                {isCopyDone ? (
+                {isEmbedCopyDone ? (
                   <CopyCheck className="text-black w-6 absolute top-2 right-2 cursor-pointer" />
                 ) : (
                   <CopyIcon
@@ -603,16 +673,16 @@ export default function TokenDetails({
                     onClick={() => {
                       copy(embedCode)
                       toast.success('Copied the embed code')
-                      setIsCopyDone(true)
+                      setIsEmbedCopyDone(true)
                       setTimeout(() => {
-                        setIsCopyDone(false)
+                        setIsEmbedCopyDone(false)
                       }, 2000)
                     }}
                   />
                 )}
               </div>
             </div>
-            <div className="flex-1 p-5 mb-5 bg-white border rounded-md border-brand-border-gray">
+            <div className="p-5 mb-5 bg-white border rounded-md border-brand-border-gray">
               {isLoading ? (
                 <div className="h-full p-18 md:p-0">loading</div>
               ) : web3 ? (
