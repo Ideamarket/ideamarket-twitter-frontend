@@ -28,13 +28,27 @@ export const walletlink = new WalletLinkConnector({
   appName: 'Ideamarket',
 })
 
-export const resetWalletConnector = (connector: AbstractConnector) => {
+export function resetWalletConnector(connector: AbstractConnector) {
   if (
     connector &&
     connector instanceof WalletConnectConnector &&
     connector.walletConnectProvider?.wc?.uri
   ) {
     connector.walletConnectProvider = undefined
+  }
+}
+
+export async function disconnectWalletConnector(connector: AbstractConnector) {
+  if (
+    connector &&
+    connector instanceof WalletConnectConnector &&
+    connector.walletConnectProvider?.wc?.uri
+  ) {
+    try {
+      await connector.walletConnectProvider.disconnect()
+    } catch (ex) {
+      console.log(ex)
+    }
   }
 }
 

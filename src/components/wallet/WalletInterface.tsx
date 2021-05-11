@@ -16,6 +16,7 @@ import A from 'components/A'
 import { useWeb3React } from '@web3-react/core'
 import {
   resetWalletConnector,
+  disconnectWalletConnector,
   connectorsById,
   ConnectorIds,
 } from 'wallets/connectors/index'
@@ -67,7 +68,6 @@ export default function WalletInterface({
           // You need to reset WalletConnector before you can reconnect to it and show QRcode again: https://github.com/NoahZinsmeister/web3-react/issues/124
           resetWalletConnector(activatingConnector)
         }
-
         // After connecting to a wallet fails, it disconnects any previous wallet, so we try to reconnect
         const walletStr = localStorage.getItem('WALLET_TYPE')
         const previousConnector = connectorsById[parseInt(walletStr)]
@@ -93,6 +93,8 @@ export default function WalletInterface({
   }
 
   async function onDisconnectClicked() {
+    await disconnectWalletConnector(connector)
+
     try {
       await deactivate()
     } catch (ex) {
