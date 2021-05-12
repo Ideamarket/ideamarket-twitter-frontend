@@ -1,3 +1,4 @@
+import { ArrowCircleUpIcon } from '@heroicons/react/solid'
 import { useTokenIconURL } from 'actions'
 import { A } from 'components'
 import { useRouter } from 'next/router'
@@ -8,20 +9,27 @@ import { formatNumber } from 'utils'
 
 function IframeEmbedSkeleton() {
   return (
-    <div className="flex justify-center items-center h-full animate-pulse">
-      <div className="flex justify-around items-center w-80 h-14 border bg-white rounded-lg border-black border-opacity-10 p-2">
-        <div className="h-10 w-10 p-2.5 bg-black rounded-md border bg-opacity-10 flex justify-center items-center"></div>
-        <div className="flex items-center">
-          <div className="w-6 h-6 rounded-full overflow-hidden">
-            <div className="w-full h-full bg-black bg-opacity-10 animate-pulse" />
-          </div>
-          <p className="ml-1 h-4 bg-black bg-opacity-10 w-16 rounded-md"></p>
+    <div className="flex flex-col justify-center space-y-4 items-center h-full">
+      <div className="flex items-center w-[663px] bg-white rounded-2xl p-5 animate-pulse shadow-embed">
+        <div className="p-3">
+          <div className="block w-9 h-9 rounded-full bg-gray-400" />
         </div>
-        <div className="flex items-center h-full w-[131px] bg-black bg-opacity-10 rounded-md border border-black border-opacity-10">
+        <div className="flex items-center ml-2">
+          <div className="w-12 h-12 rounded-full overflow-hidden">
+            <div className="w-full h-full bg-gray-400 animate-pulse" />
+          </div>
+          <p className="bg-gray-400 h-6 w-24 rounded-md ml-4"></p>
+        </div>
+
+        <div className="ml-auto flex items-center h-full w-[200px] bg-brand-gray-white rounded-md border border-brand-border-gray-2">
           <div className="flex-1 flex justify-center items-center h-full"></div>
           <div className="h-full flex-1 rounded-md overflow-hidden">
-            <A className="bg-[#1534d9] w-full h-full flex justify-center items-center"></A>
+            <div className="bg-brand-new-blue w-full h-full px-4"></div>
           </div>
+        </div>
+
+        <div className="ml-4">
+          <p className="w-16 bg-gray-400 h-4 rounded"></p>
         </div>
       </div>
     </div>
@@ -57,13 +65,17 @@ export default function IframeEmbed() {
   }
 
   return (
-    <div className="flex justify-center items-center h-full">
-      <div className="flex justify-around items-center w-80 h-14 border bg-white rounded-lg border-black border-opacity-10 p-2">
-        <div className="h-10 w-10 p-2.5 bg-black rounded-md border bg-opacity-10  flex justify-center items-center">
-          {marketSpecifics.getMarketOutlineSVG()}
+    <div className="flex flex-col justify-center space-y-4 items-center h-full">
+      <div className="flex items-center w-[663px] bg-white rounded-2xl p-5 shadow-embed">
+        <div className="p-3">
+          <img
+            className="block w-auto h-9"
+            src="/logo.png"
+            alt="Ideamarket Logo"
+          />
         </div>
-        <div className="flex">
-          <div className="w-6 h-6 rounded-full overflow-hidden">
+        <div className="flex items-center ml-2">
+          <div className="w-12 h-12 rounded-full overflow-hidden">
             {isLoading ? (
               <div className="w-full h-full bg-gray-400 animate-pulse" />
             ) : (
@@ -74,20 +86,30 @@ export default function IframeEmbed() {
               />
             )}
           </div>
-          <p className="text-[#323232] font-bold ml-1">{rawTokenName}</p>
+          <p className="text-brand-new-dark font-medium text-2xl ml-4">
+            {tokenName}
+          </p>
         </div>
-        <div className="flex items-center h-full w-[131px] bg-black bg-opacity-10 rounded-md border border-black border-opacity-10">
-          <div className="flex-1 flex justify-center items-center h-full text-sm font-medium text-[#373737] text-opacity-100">
+
+        <div className="ml-auto flex items-center h-full w-[200px] bg-brand-gray-white rounded-md border border-brand-border-gray-2">
+          <div className="flex-1 flex justify-center items-center h-full text-2xl font-medium text-brand-new-dark">
             ${formatNumber(token.latestPricePoint.price)}
           </div>
           <div className="h-full flex-1 rounded-md overflow-hidden">
             <A
-              className="text-sm font-bold text-white bg-[#1534d9] w-full h-full flex justify-center items-center"
+              className="text-2xl font-medium text-white bg-brand-new-blue w-full h-full flex justify-center items-center px-4"
               href={`https://app.ideamarket.io/i/${rawMarketName}/${rawTokenName}`}
             >
+              <ArrowCircleUpIcon className="w-7 h-7 mr-1 text-[#a5bbfb]" />
               Buy
             </A>
           </div>
+        </div>
+
+        <div className="ml-4">
+          <p className="underline cursor-pointer text-brand-gray-white-2 font-medium text-xs">
+            What's this?
+          </p>
         </div>
       </div>
     </div>
