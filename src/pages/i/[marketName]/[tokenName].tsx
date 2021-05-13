@@ -106,7 +106,7 @@ export default function TokenDetails({
 
   const router = useRouter()
 
-  const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" width="312" height="55" />`
+  const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" width="700" height="250" />`
   const [isEmbedCopyDone, setIsEmbedCopyDone] = useState(false)
   const [isLinkCopyDone, setIsLinkCopyDone] = useState(false)
   const [permanentLink, setPermanentLink] = useState('')
@@ -660,11 +660,15 @@ export default function TokenDetails({
                 <div className="text-sm font-semibold text-brand-new-dark">
                   Copy embed
                 </div>
-                <iframe
-                  src={`/iframe/${rawMarketName}/${rawTokenName}`}
-                  title="Iframe Embed"
-                  className="w-full h-full"
-                />
+                <div className="overflow-hidden mt-16">
+                  <iframe
+                    src={`/iframe/${rawMarketName}/${rawTokenName}`}
+                    title="Iframe Embed"
+                    id="frame"
+                    className="w-[700px] transform scale-[0.42] md:scale-[0.5] lg:scale-[0.6] xl:scale-[0.75] origin-top-left"
+                  />
+                </div>
+
                 {isEmbedCopyDone ? (
                   <CopyCheck className="text-black w-6 absolute top-2 right-2 cursor-pointer" />
                 ) : (
