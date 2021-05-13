@@ -15,16 +15,10 @@ export default function Embed() {
     queryMarkets
   )
 
-  const sizeOptions = [
-    { value: 'small', label: 'Small' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'large', label: 'Large' },
-  ]
   const [tagName, setTagname] = useState('elonmusk')
   const [market, setMarket] = useState('twitter')
-  const [ewidth, setWidth] = useState('312')
-  const [eheight, setHeight] = useState('55')
-  const [embedsize, setSize] = useState('small')
+  const [ewidth, setWidth] = useState('700')
+  const [eheight, setHeight] = useState('250')
   const [copyDone, setCopyDone] = useState(false)
 
   useEffect(() => {
@@ -51,16 +45,6 @@ export default function Embed() {
 
   const createEmbed = (event) => {
     event.preventDefault()
-    if (embedsize === 'medium') {
-      setWidth('544')
-      setHeight('306')
-    } else if (embedsize === 'large') {
-      setWidth('640')
-      setHeight('360')
-    } else {
-      setWidth('432')
-      setHeight('243')
-    }
     setCopyDone(false)
   }
 
@@ -82,7 +66,7 @@ export default function Embed() {
               action="POST"
               onSubmit={createEmbed}
             >
-              <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="flex flex-wrap justify-center -mx-3 mb-6">
                 <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                   <label
                     className="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2"
@@ -117,23 +101,6 @@ export default function Embed() {
                       setMarket((entry as any).value)
                     }}
                   />
-                </div>
-                <div className="w-full md:w-1/3 px-3 ">
-                  <label
-                    className="block uppercase tracking-wide text-gray-400 text-xs font-bold  mb-2"
-                    htmlFor="grid-last-name"
-                  >
-                    Size
-                  </label>
-
-                  <Select
-                    options={sizeOptions}
-                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 text-lg  rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    defaultInputValue="small"
-                    onChange={(entry) => {
-                      setSize((entry as any).value)
-                    }}
-                  ></Select>
                 </div>
               </div>
               <button
