@@ -24,11 +24,6 @@ const headers: Header[] = [
     sortable: true,
   },
   {
-    title: 'Locked Until',
-    value: 'lockedUntil',
-    sortable: true,
-  },
-  {
     title: 'Price',
     value: 'price',
     sortable: true,
@@ -41,6 +36,11 @@ const headers: Header[] = [
   {
     title: 'Value',
     value: 'value',
+    sortable: true,
+  },
+  {
+    title: 'Locked Until',
+    value: 'lockedUntil',
     sortable: true,
   },
 ]
@@ -176,16 +176,17 @@ export default function LockedTokenTable({
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden border-b border-gray-200 sm:rounded-t-lg">
+            <div className="overflow-hidden">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="table-header-group">
+                <thead className="hidden md:table-header-group">
                   <tr>
                     {headers.map((header) => (
                       <th
                         className={classNames(
-                          'px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50',
+                          'px-5 py-4 text-sm font-semibold leading-4 tracking-wider text-left text-brand-gray-4',
                           header.sortable && 'cursor-pointer'
                         )}
+                        style={{ backgroundColor: '#f9fbfd' }}
                         key={header.value}
                         onClick={() => {
                           if (header.sortable) {
@@ -236,7 +237,7 @@ export default function LockedTokenTable({
                       ).map((a, b) => (
                         <tr
                           key={`${'filler-' + b.toString()}`}
-                          className="h-12 table-row"
+                          className="hidden h-16 md:table-row"
                         ></tr>
                       ))}
                     </>
@@ -247,7 +248,7 @@ export default function LockedTokenTable({
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-stretch justify-between px-10 md:justify-center md:flex md:border-b md:space-x-10 py-4">
+      <div className="flex flex-row items-stretch justify-between px-10 py-5 md:justify-center md:flex md:space-x-10">
         <button
           onClick={() => {
             if (currentPage > 0) setCurrentPage(currentPage - 1)

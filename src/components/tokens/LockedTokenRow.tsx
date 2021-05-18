@@ -120,17 +120,6 @@ export default function LockedTokenRow({
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
-            Locked Until
-          </p>
-          <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={moment(lockedUntil * 1000).format('LLL')}
-          >
-            {moment(lockedUntil * 1000).format('LLL')}
-          </p>
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
             Price
           </p>
           <p
@@ -160,6 +149,17 @@ export default function LockedTokenRow({
             title={'$' + balanceValue}
           >
             ${balanceValue}
+          </p>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
+            Locked Until
+          </p>
+          <p
+            className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue"
+            title={moment(lockedUntil * 1000).format('LLL')}
+          >
+            {moment(lockedUntil * 1000).format('LLL')}
           </p>
         </td>
       </tr>
