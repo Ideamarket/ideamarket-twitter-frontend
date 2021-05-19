@@ -52,6 +52,7 @@ import copy from 'copy-to-clipboard'
 import toast from 'react-hot-toast'
 import { LinkIcon } from '@heroicons/react/outline'
 import ClipIcon from '../../../assets/clip.svg'
+import CopyIcon from '../../../assets/copy-icon.svg'
 
 function DetailsSkeleton() {
   return (
@@ -647,13 +648,14 @@ export default function TokenDetails({
                   </div>
 
                   <div className="mt-4 h-24 relative">
-                    <div className="flex justify-between items-center">
+                    {/* <div className="flex justify-between items-center"> */}
+                    <div className="flex items-center space-x-1">
                       <p className="block text-sm font-medium text-gray-700">
                         Embed
                       </p>
                       <button
-                        className="px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-300 flex items-center justify-center rounded-lg"
                         onClick={() => {
+                          console.log('here')
                           copy(embedCode)
                           toast.success('Copied the embed code')
                           setIsEmbedCopyDone(true)
@@ -663,14 +665,25 @@ export default function TokenDetails({
                         }}
                       >
                         {isEmbedCopyDone ? (
-                          <CopyCheck className="text-[#0857E0] w-[22px] h-[22px]" />
+                          <CopyCheck className="w-4 h-4 text-gray-400" />
                         ) : (
-                          <ClipIcon className="w-5 h-5" />
+                          <CopyIcon className="w-4 h-4 text-gray-400" />
                         )}
                       </button>
                     </div>
 
-                    <div className="overflow-x-auto">
+                    <div
+                      className="overflow-x-auto cursor-pointer -ml-2"
+                      onClick={() => {
+                        console.log('here')
+                        copy(embedCode)
+                        toast.success('Copied the embed code')
+                        setIsEmbedCopyDone(true)
+                        setTimeout(() => {
+                          setIsEmbedCopyDone(false)
+                        }, 2000)
+                      }}
+                    >
                       <iframe
                         src={`/iframe/${rawMarketName}/${rawTokenName}`}
                         title="Iframe Embed"
