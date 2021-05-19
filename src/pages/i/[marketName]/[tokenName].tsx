@@ -47,11 +47,11 @@ import { DateTime } from 'luxon'
 import { NextSeo } from 'next-seo'
 import { getURL } from 'utils/seo-constants'
 import { GetServerSideProps } from 'next'
-import CopyIcon from '../../../assets/copy-icon.svg'
 import CopyCheck from '../../../assets/copy-check.svg'
 import copy from 'copy-to-clipboard'
 import toast from 'react-hot-toast'
 import { LinkIcon } from '@heroicons/react/outline'
+import ClipIcon from '../../../assets/clip.svg'
 
 function DetailsSkeleton() {
   return (
@@ -106,7 +106,7 @@ export default function TokenDetails({
 
   const router = useRouter()
 
-  const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" width="700" height="250" />`
+  const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" title="Iframe Embed" style="width: 700px; transform: scale(0.5); transformOrigin: top left;"`
   const [isEmbedCopyDone, setIsEmbedCopyDone] = useState(false)
   const [isLinkCopyDone, setIsLinkCopyDone] = useState(false)
   const [permanentLink, setPermanentLink] = useState('')
@@ -421,7 +421,7 @@ export default function TokenDetails({
         <div className="px-2 pb-5 mx-auto mt-12 text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
           <div className="flex flex-col md:grid md:grid-cols-2">
             <div className="flex flex-col">
-              <div className="p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
+              <div className="p-5 mb-5 h-full bg-white border rounded-md md:mr-5 border-brand-border-gray">
                 <div className="flex flex-col justify-between lg:flex-row">
                   <div>
                     {isLoading ? (
@@ -598,15 +598,9 @@ export default function TokenDetails({
                     </div>
                   </>
                 )}
-              </div>
 
-              <div className="flex-1 relative p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
-                <div className="text-sm font-semibold text-brand-new-dark">
-                  Share this listing
-                </div>
-
-                <div className="flex items-center h-full justify-center">
-                  <div className="w-full md:w-3/4 py-4">
+                <div>
+                  <div className="w-full py-4">
                     <label
                       htmlFor="perm_link"
                       className="block text-sm font-medium text-gray-700"
@@ -630,60 +624,66 @@ export default function TokenDetails({
                           disabled={true}
                         />
                       </div>
-                      <button className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                      <button
+                        className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                        onClick={() => {
+                          copy(permanentLink)
+                          toast.success('Copied the listing permanent link.')
+                          setIsLinkCopyDone(true)
+                          setTimeout(() => {
+                            setIsLinkCopyDone(false)
+                          }, 2000)
+                        }}
+                      >
                         {isLinkCopyDone ? (
-                          <CopyCheck className="text-black w-5 h-5" />
+                          <CopyCheck className="text-[#0857E0] w-[22px] h-[22px]" />
                         ) : (
-                          <CopyIcon
-                            className="text-black text-opacity-50 w-5 h-5"
-                            onClick={() => {
-                              copy(permanentLink)
-                              toast.success(
-                                'Copied the listing permanent link.'
-                              )
-                              setIsLinkCopyDone(true)
-                              setTimeout(() => {
-                                setIsLinkCopyDone(false)
-                              }, 2000)
-                            }}
-                          />
+                          <ClipIcon className="w-5 h-5" />
                         )}
 
                         <span className="sr-only">Copy</span>
                       </button>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div className="flex-1 relative p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
-                <div className="text-sm font-semibold text-brand-new-dark">
-                  Copy embed
-                </div>
-                <div className="overflow-hidden mt-16">
-                  <iframe
-                    src={`/iframe/${rawMarketName}/${rawTokenName}`}
-                    title="Iframe Embed"
-                    id="frame"
-                    className="w-[700px] transform scale-[0.42] md:scale-[0.5] lg:scale-[0.6] xl:scale-[0.75] origin-top-left"
-                  />
-                </div>
+                  <div className="mt-4 h-24 relative">
+                    <div className="flex justify-between items-center">
+                      <p className="block text-sm font-medium text-gray-700">
+                        Embed
+                      </p>
+                      <button
+                        className="px-4 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-300 flex items-center justify-center rounded-lg"
+                        onClick={() => {
+                          copy(embedCode)
+                          toast.success('Copied the embed code')
+                          setIsEmbedCopyDone(true)
+                          setTimeout(() => {
+                            setIsEmbedCopyDone(false)
+                          }, 2000)
+                        }}
+                      >
+                        {isEmbedCopyDone ? (
+                          <CopyCheck className="text-[#0857E0] w-[22px] h-[22px]" />
+                        ) : (
+                          <ClipIcon className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
 
-                {isEmbedCopyDone ? (
-                  <CopyCheck className="text-black w-6 absolute top-2 right-2 cursor-pointer" />
-                ) : (
-                  <CopyIcon
-                    className="text-black text-opacity-50 w-6 absolute top-2 right-2 cursor-pointer"
-                    onClick={() => {
-                      copy(embedCode)
-                      toast.success('Copied the embed code')
-                      setIsEmbedCopyDone(true)
-                      setTimeout(() => {
-                        setIsEmbedCopyDone(false)
-                      }, 2000)
-                    }}
-                  />
-                )}
+                    <div className="overflow-x-auto">
+                      <iframe
+                        src={`/iframe/${rawMarketName}/${rawTokenName}`}
+                        title="Iframe Embed"
+                        id="frame"
+                        style={{
+                          width: '700px',
+                          transform: 'scale(0.5)',
+                          transformOrigin: 'top left',
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="p-5 mb-5 bg-white border rounded-md border-brand-border-gray">
