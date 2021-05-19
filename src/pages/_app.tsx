@@ -43,6 +43,8 @@ export const GlobalContext = createContext({
   setIsListTokenModalOpen: (val: boolean) => {},
   isEmailNewsletterModalOpen: false,
   setIsEmailNewsletterModalOpen: (val: boolean) => {},
+  isEmailHeaderActive: false,
+  setIsEmailHeaderActive: (val: boolean) => {},
 })
 
 function getLibrary(provider: any): Web3 {
@@ -57,9 +59,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     }).layoutProps?.Layout || Fragment
 
+  const [isEmailHeaderActive, setIsEmailHeaderActive] = useState(false)
   useEffect(() => {
     initIdeaMarketsStore()
     initTokenList()
+
+    const isEmailBarClosed = localStorage.getItem('IS_EMAIL_BAR_CLOSED')
+      ? localStorage.getItem('IS_EMAIL_BAR_CLOSED') === 'true'
+      : false
+    setIsEmailHeaderActive(!isEmailBarClosed)
   }, [])
 
   useEffect(() => {
@@ -125,6 +133,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           setIsListTokenModalOpen,
           isEmailNewsletterModalOpen,
           setIsEmailNewsletterModalOpen,
+          isEmailHeaderActive,
+          setIsEmailHeaderActive,
         }}
       >
         <Web3ReactProvider getLibrary={getLibrary}>
