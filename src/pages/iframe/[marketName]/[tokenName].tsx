@@ -107,9 +107,12 @@ export default function IframeEmbed() {
         </div>
 
         <div className="ml-4">
-          <p className="underline cursor-pointer text-brand-gray-white-2 font-medium text-xs">
+          <A
+            className="underline cursor-pointer text-brand-gray-white-2 font-medium text-xs"
+            href="https://ideamarket.io"
+          >
             What's this?
-          </p>
+          </A>
         </div>
       </div>
     </div>
