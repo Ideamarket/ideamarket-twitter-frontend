@@ -1,24 +1,18 @@
 import classNames from 'classnames'
-import useBreakpoint from 'use-breakpoint'
 import { useRef, useState, useContext } from 'react'
 import toast from 'react-hot-toast'
-import { BREAKPOINTS } from 'utils/constants'
 import { GlobalContext } from 'pages/_app'
 
 export default function EmailForm() {
   const [email, setEmail] = useState('')
   const [isError, setIsError] = useState(false)
   const toastId = useRef('')
-  const { breakpoint, maxWidth, minWidth } = useBreakpoint(
-    BREAKPOINTS,
-    'mobile'
-  )
   const { setIsEmailHeaderActive } = useContext(GlobalContext)
 
   return (
     <>
       <form
-        className="ml-auto px-2 space-y-2 md:rounded-tr-lg"
+        className="px-2 md:rounded-tr-lg"
         onSubmit={async (e) => {
           e.preventDefault()
           if (email.trim() === '') {
@@ -57,68 +51,33 @@ export default function EmailForm() {
           })
         }}
       >
-        {breakpoint === 'mobile' ? (
-          <div className="md:hidden">
-            <div>
-              <input
-                type="email"
-                name="email"
-                id="mobile-email"
-                className={classNames(
-                  'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
-                  isError
-                    ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
-                    : 'border-gray-300 focus:ring-brand-blue focus:border-brand-blue'
-                )}
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="flex items-center justify-between mt-2">
-              <label
-                htmlFor="email"
-                className="flex-shrink-0 block text-sm font-medium text-gray-700"
-              >
-                Stay in the loop
-              </label>
-
-              <button
-                type="submit"
-                className="bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue focus:border-brand-blue"
-              >
-                Submit
-              </button>
-            </div>
+        {/* Moble START */}
+        <div className="md:hidden">
+          <div>
+            <input
+              type="email"
+              name="email"
+              id="mobile-email"
+              className={classNames(
+                'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
+                isError
+                  ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
+                  : 'border-gray-300 focus:ring-brand-blue focus:border-brand-blue'
+              )}
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
-        ) : (
-          <div className="flex items-center space-x-2">
+
+          <div className="flex items-center justify-between mt-2">
             <label
               htmlFor="email"
               className="flex-shrink-0 block text-sm font-medium text-gray-700"
             >
               Stay in the loop
             </label>
-
-            <div>
-              <input
-                type="email"
-                name="email"
-                id="header-email"
-                className={classNames(
-                  'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
-                  isError
-                    ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
-                    : 'border-gray-300 focus:ring-brand-blue focus:border-brand-blue'
-                )}
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
 
             <button
               type="submit"
@@ -127,7 +86,44 @@ export default function EmailForm() {
               Submit
             </button>
           </div>
-        )}
+        </div>
+        {/* Mobile END */}
+
+        {/* Desktop START */}
+        <div className="hidden md:flex items-center space-x-2">
+          <label
+            htmlFor="email"
+            className="flex-shrink-0 block text-sm font-medium text-gray-700"
+          >
+            Stay in the loop
+          </label>
+
+          <div>
+            <input
+              type="email"
+              name="email"
+              id="header-email"
+              className={classNames(
+                'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
+                isError
+                  ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
+                  : 'border-gray-300 focus:ring-brand-blue focus:border-brand-blue'
+              )}
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue focus:border-brand-blue"
+          >
+            Submit
+          </button>
+        </div>
+        {/* Desktop END */}
       </form>
     </>
   )
