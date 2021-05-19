@@ -10,13 +10,32 @@ export function useEagerConnect() {
   const [tried, setTried] = useState(false)
 
   useEffect(() => {
-    const walletStr = localStorage.getItem('WALLET_TYPE')
-    // If connected before, connect back
-    if (walletStr) {
-      const previousConnector = connectorsById[parseInt(walletStr)]
-      activate(previousConnector).catch(() => {
-        setTried(true)
-      })
+    let isCancelled = false
+
+    async function run() {
+      const walletStr = localStorage.getItem('WALLET_TYPE')
+      // If connected before, connect back
+      if (walletStr) {
+        const previousConnector = connectorsById[parseInt(walletStr)]
+        if (
+          previousConnector.isAuthorized &&
+          (await previousConnector.isAuthorized())
+        ) {
+          if (isCancelled) {
+            return
+          }
+
+          activate(previousConnector).catch(() => {
+            setTried(true)
+          })
+        }
+      }
+    }
+
+    run()
+
+    return () => {
+      isCancelled = true
     }
   }, [])
 
