@@ -57,9 +57,20 @@ import CopyIcon from '../../../assets/copy-icon.svg'
 
 function DetailsSkeleton() {
   return (
-    <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
-      <span className="invisible">A</span>
-    </div>
+    <>
+      <div className="inline-block pr-6 animate-pulse">
+        <div className="text-sm font-semibold text-brand-new-dark">
+          Listed on
+        </div>
+        <div className="mt-2 bg-gray-400 rounded w-24 h-6"></div>
+      </div>
+      <div className="inline-block">
+        <div className="text-sm font-semibold text-brand-new-dark">
+          Listing Owner
+        </div>
+        <div className="mt-2 bg-gray-400 rounded w-24 h-6"></div>
+      </div>
+    </>
   )
 }
 
@@ -471,7 +482,10 @@ export default function TokenDetails({
                   </div>
                   <div>
                     {isLoading ? (
-                      <DetailsSkeleton />
+                      <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0 animate-pulse">
+                        <div className="w-28 h-12 bg-gray-400 rounded"></div>
+                        <div className="w-28 h-12 bg-gray-400 rounded"></div>
+                      </div>
                     ) : (
                       <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0">
                         <AddToMetamaskButton token={token} />
