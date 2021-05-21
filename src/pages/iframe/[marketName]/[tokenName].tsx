@@ -7,7 +7,7 @@ import { querySingleToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
 import { formatNumber } from 'utils'
 
-function IframeEmbedSkeleton() {
+export function IframeEmbedSkeleton() {
   return (
     <div className="flex flex-col justify-center space-y-4 items-center h-full">
       <div className="flex items-center w-[663px] bg-white rounded-2xl p-5 animate-pulse shadow-embed">

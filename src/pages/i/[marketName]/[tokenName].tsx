@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { GlobalContext } from 'pages/_app'
+import { IframeEmbedSkeleton } from 'pages/iframe/[marketName]/[tokenName]'
 import {
   TimeXFloatYChartInLine,
   TradeInterface,
@@ -111,6 +112,7 @@ export default function TokenDetails({
   const [isEmbedCopyDone, setIsEmbedCopyDone] = useState(false)
   const [isLinkCopyDone, setIsLinkCopyDone] = useState(false)
   const [permanentLink, setPermanentLink] = useState('')
+  const [showEmbedSkeleton, setShowEmbedSkeleton] = useState(true)
 
   const { setIsWalletModalOpen } = useContext(GlobalContext)
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false)
@@ -684,6 +686,18 @@ export default function TokenDetails({
                         }, 2000)
                       }}
                     >
+                      {showEmbedSkeleton && (
+                        <div
+                          style={{
+                            width: '700px',
+                            transform: 'scale(0.5)',
+                            transformOrigin: 'top left',
+                          }}
+                          className="mt-3"
+                        >
+                          <IframeEmbedSkeleton />
+                        </div>
+                      )}
                       <iframe
                         src={`/iframe/${rawMarketName}/${rawTokenName}`}
                         title="Iframe Embed"
@@ -692,6 +706,9 @@ export default function TokenDetails({
                           width: '700px',
                           transform: 'scale(0.5)',
                           transformOrigin: 'top left',
+                        }}
+                        onLoad={() => {
+                          setShowEmbedSkeleton(false)
                         }}
                       />
                     </div>
