@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { Router, useRouter } from 'next/dist/client/router'
 import { useContext, useState, useEffect } from 'react'
-import { WalletStatus } from 'components'
+import { WalletStatus, EmailHeader } from 'components'
 import { GlobalContext } from 'pages/_app'
 import Close from '../assets/close.svg'
 import Hamburger from '../assets/hamburger.svg'
@@ -12,9 +12,11 @@ export default function Nav() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const router = useRouter()
   const closeMenu = () => setIsMobileNavOpen(false)
-  const { setIsWalletModalOpen, setIsEmailNewsletterModalOpen } = useContext(
-    GlobalContext
-  )
+  const {
+    setIsWalletModalOpen,
+    setIsEmailNewsletterModalOpen,
+    isEmailHeaderActive,
+  } = useContext(GlobalContext)
   const menuItems = [
     {
       name: 'Whitepaper',
@@ -29,15 +31,25 @@ export default function Nav() {
       isSelected: router.pathname === '/account',
     },
     {
-      name: 'Newsletter',
-      value: 'newsletter',
-      onClick: () => setIsEmailNewsletterModalOpen(true),
+      name: 'Extension',
+      value: 'extension',
+      onClick: () =>
+        window.open(
+          'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
+          '_blank'
+        ),
       isSelected: false,
     },
     {
       name: 'Community',
       value: 'community',
       onClick: () => window.open('https://discord.gg/zaXZXGE4Ke', '_blank'),
+      isSelected: false,
+    },
+    {
+      name: 'Grants',
+      value: 'grants',
+      onClick: () => window.open('http://grants.ideamarket.io/', '_blank'),
       isSelected: false,
     },
   ]
@@ -61,6 +73,12 @@ export default function Nav() {
   return (
     <>
       <nav className="fixed top-0 z-20 w-full shadow bg-top-desktop">
+        {isEmailHeaderActive && router.pathname === '/' ? (
+          <EmailHeader />
+        ) : (
+          <></>
+        )}
+
         <div className="px-2 mx-auto transform max-w-88 md:max-w-304">
           <div className="relative flex items-center justify-between h-16">
             <div

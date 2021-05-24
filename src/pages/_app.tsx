@@ -8,7 +8,6 @@ import CookieConsent from 'react-cookie-consent'
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import { initWalletStore } from 'store/walletStore'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
 import {
@@ -31,6 +30,9 @@ import {
 } from 'utils/seo-constants'
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en'
+import { Web3ReactProvider } from '@web3-react/core'
+import Web3 from 'web3'
+import Web3ReactManager from 'components/wallet/Web3ReactManager'
 
 export const GlobalContext = createContext({
   isWalletModalOpen: false,
@@ -41,7 +43,13 @@ export const GlobalContext = createContext({
   setIsListTokenModalOpen: (val: boolean) => {},
   isEmailNewsletterModalOpen: false,
   setIsEmailNewsletterModalOpen: (val: boolean) => {},
+  isEmailHeaderActive: false,
+  setIsEmailHeaderActive: (val: boolean) => {},
 })
+
+function getLibrary(provider: any): Web3 {
+  return new Web3(provider)
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   const Layout =
@@ -51,10 +59,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     }).layoutProps?.Layout || Fragment
 
+  const [isEmailHeaderActive, setIsEmailHeaderActive] = useState(false)
   useEffect(() => {
-    initWalletStore()
     initIdeaMarketsStore()
     initTokenList()
+
+    const isEmailBarClosed = localStorage.getItem('IS_EMAIL_BAR_CLOSED')
+      ? localStorage.getItem('IS_EMAIL_BAR_CLOSED') === 'true'
+      : false
+    setIsEmailHeaderActive(!isEmailBarClosed)
   }, [])
 
   useEffect(() => {
@@ -120,14 +133,20 @@ function MyApp({ Component, pageProps }: AppProps) {
           setIsListTokenModalOpen,
           isEmailNewsletterModalOpen,
           setIsEmailNewsletterModalOpen,
+          isEmailHeaderActive,
+          setIsEmailHeaderActive,
         }}
       >
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-        <WalletModal />
-        <WrongNetworkOverlay />
-        <EmailNewsletterModal />
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <Web3ReactManager>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Web3ReactManager>
+          <WalletModal />
+          <WrongNetworkOverlay />
+          <EmailNewsletterModal />
+        </Web3ReactProvider>
       </GlobalContext.Provider>
     </>
   )
