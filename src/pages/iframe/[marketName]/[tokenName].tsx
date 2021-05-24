@@ -61,7 +61,7 @@ export default function IframeEmbed() {
   )
 
   if (!router.isReady || isTokenLoading || !token) {
-    return <IframeEmbedSkeleton />
+    return null
   }
 
   return (
