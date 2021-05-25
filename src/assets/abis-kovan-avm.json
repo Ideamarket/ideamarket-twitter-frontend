@@ -1,5 +1,5 @@
 {
-  "bridgeAVM": [
+  "bridge": [
     {
       "anonymous": false,
       "inputs": [
@@ -745,50 +745,6 @@
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "dai",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "invested",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "platformFeeInvested",
-          "type": "uint256"
-        }
-      ],
-      "name": "PlatformVarsSet",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "tradingFeeInvested",
-          "type": "uint256"
-        }
-      ],
-      "name": "StaticVarsSet",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
           "internalType": "address",
           "name": "ideaToken",
           "type": "address"
@@ -807,43 +763,6 @@
         }
       ],
       "name": "TokenInterestRedeemed",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "tokenID",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "supply",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "dai",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "invested",
-          "type": "uint256"
-        }
-      ],
-      "name": "TokenVarsSet",
       "type": "event"
     },
     {
@@ -1195,35 +1114,6 @@
     },
     {
       "inputs": [
-        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
-        { "internalType": "uint256", "name": "dai", "type": "uint256" },
-        { "internalType": "uint256", "name": "invested", "type": "uint256" },
-        {
-          "internalType": "uint256",
-          "name": "platformFeeInvested",
-          "type": "uint256"
-        }
-      ],
-      "name": "setPlatformVars",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "tradingFeeInvested",
-          "type": "uint256"
-        }
-      ],
-      "name": "setStaticVars",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
         { "internalType": "address", "name": "ideaToken", "type": "address" },
         { "internalType": "bool", "name": "set", "type": "bool" }
       ],
@@ -1238,19 +1128,6 @@
         { "internalType": "address", "name": "owner", "type": "address" }
       ],
       "name": "setTokenOwner",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
-        { "internalType": "uint256", "name": "tokenID", "type": "uint256" },
-        { "internalType": "uint256", "name": "supply", "type": "uint256" },
-        { "internalType": "uint256", "name": "dai", "type": "uint256" },
-        { "internalType": "uint256", "name": "invested", "type": "uint256" }
-      ],
-      "name": "setTokenVarsAndMint",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

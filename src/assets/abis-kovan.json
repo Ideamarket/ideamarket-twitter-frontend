@@ -372,7 +372,7 @@
       "type": "function"
     }
   ],
-  "ideaTokenExchange": [
+  "ideaTokenExchangeOld": [
     {
       "anonymous": false,
       "inputs": [
@@ -528,25 +528,6 @@
       "inputs": [
         {
           "indexed": false,
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        }
-      ],
-      "name": "PlatformVarsTransferred",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [],
-      "name": "StaticVarsTransferred",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
           "internalType": "address",
           "name": "ideaToken",
           "type": "address"
@@ -569,68 +550,6 @@
     },
     {
       "anonymous": false,
-      "inputs": [],
-      "name": "TokenTransferEnabled",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "tokenID",
-          "type": "uint256"
-        }
-      ],
-      "name": "TokenVarsTransferred",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "tokenID",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "recipient",
-          "type": "address"
-        }
-      ],
-      "name": "TokensTransferred",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
       "inputs": [
         {
           "indexed": false,
@@ -643,97 +562,16 @@
       "type": "event"
     },
     {
-      "inputs": [],
-      "name": "_l1Inbox",
-      "outputs": [
-        {
-          "internalType": "contract IInbox",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "_l2Bridge",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "_maxL2GasPrice",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "_tokenTransferEnabled",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "_transferManager",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "ideaToken",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
         {
           "internalType": "uint256",
           "name": "fallbackAmount",
           "type": "uint256"
         },
-        {
-          "internalType": "uint256",
-          "name": "cost",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "recipient",
-          "type": "address"
-        }
+        { "internalType": "uint256", "name": "cost", "type": "uint256" },
+        { "internalType": "address", "name": "recipient", "type": "address" }
       ],
       "name": "buyTokens",
       "outputs": [],
@@ -742,25 +580,11 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "ideaToken",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" }
       ],
       "name": "getCostForBuyingTokens",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
@@ -768,21 +592,9 @@
       "inputs": [
         {
           "components": [
-            {
-              "internalType": "bool",
-              "name": "exists",
-              "type": "bool"
-            },
-            {
-              "internalType": "uint256",
-              "name": "id",
-              "type": "uint256"
-            },
-            {
-              "internalType": "string",
-              "name": "name",
-              "type": "string"
-            },
+            { "internalType": "bool", "name": "exists", "type": "bool" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "name", "type": "string" },
             {
               "internalType": "contract IIdeaTokenNameVerifier",
               "name": "nameVerifier",
@@ -828,36 +640,16 @@
           "name": "marketDetails",
           "type": "tuple"
         },
-        {
-          "internalType": "uint256",
-          "name": "supply",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bool",
-          "name": "feesDisabled",
-          "type": "bool"
-        }
+        { "internalType": "uint256", "name": "supply", "type": "uint256" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "bool", "name": "feesDisabled", "type": "bool" }
       ],
       "name": "getCostsForBuyingTokens",
       "outputs": [
         {
           "components": [
-            {
-              "internalType": "uint256",
-              "name": "total",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "raw",
-              "type": "uint256"
-            },
+            { "internalType": "uint256", "name": "total", "type": "uint256" },
+            { "internalType": "uint256", "name": "raw", "type": "uint256" },
             {
               "internalType": "uint256",
               "name": "tradingFee",
@@ -879,95 +671,45 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "token",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "token", "type": "address" }
       ],
       "name": "getInterestPayable",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [],
       "name": "getOwner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
+      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" }
       ],
       "name": "getPlatformFeePayable",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" }
       ],
       "name": "getPlatformInterestPayable",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "ideaToken",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" }
       ],
       "name": "getPriceForSellingTokens",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
@@ -975,21 +717,9 @@
       "inputs": [
         {
           "components": [
-            {
-              "internalType": "bool",
-              "name": "exists",
-              "type": "bool"
-            },
-            {
-              "internalType": "uint256",
-              "name": "id",
-              "type": "uint256"
-            },
-            {
-              "internalType": "string",
-              "name": "name",
-              "type": "string"
-            },
+            { "internalType": "bool", "name": "exists", "type": "bool" },
+            { "internalType": "uint256", "name": "id", "type": "uint256" },
+            { "internalType": "string", "name": "name", "type": "string" },
             {
               "internalType": "contract IIdeaTokenNameVerifier",
               "name": "nameVerifier",
@@ -1035,36 +765,16 @@
           "name": "marketDetails",
           "type": "tuple"
         },
-        {
-          "internalType": "uint256",
-          "name": "supply",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bool",
-          "name": "feesDisabled",
-          "type": "bool"
-        }
+        { "internalType": "uint256", "name": "supply", "type": "uint256" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "bool", "name": "feesDisabled", "type": "bool" }
       ],
       "name": "getPricesForSellingTokens",
       "outputs": [
         {
           "components": [
-            {
-              "internalType": "uint256",
-              "name": "total",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "raw",
-              "type": "uint256"
-            },
+            { "internalType": "uint256", "name": "total", "type": "uint256" },
+            { "internalType": "uint256", "name": "raw", "type": "uint256" },
             {
               "internalType": "uint256",
               "name": "tradingFee",
@@ -1087,28 +797,14 @@
     {
       "inputs": [],
       "name": "getTradingFeePayable",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "authorizer",
-          "type": "address"
-        },
+        { "internalType": "address", "name": "owner", "type": "address" },
+        { "internalType": "address", "name": "authorizer", "type": "address" },
         {
           "internalType": "address",
           "name": "tradingFeeRecipient",
@@ -1119,11 +815,7 @@
           "name": "interestManager",
           "type": "address"
         },
-        {
-          "internalType": "address",
-          "name": "dai",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "dai", "type": "address" }
       ],
       "name": "initialize",
       "outputs": [],
@@ -1132,73 +824,19 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "transferManager",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "l2Bridge",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "l1Inbox",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "maxL2GasPrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "initializeStateTransfer",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "ideaToken",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "ideaToken", "type": "address" }
       ],
       "name": "isTokenFeeDisabled",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "ideaToken",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "minPrice",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "recipient",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "uint256", "name": "amount", "type": "uint256" },
+        { "internalType": "uint256", "name": "minPrice", "type": "uint256" },
+        { "internalType": "address", "name": "recipient", "type": "address" }
       ],
       "name": "sellTokens",
       "outputs": [],
@@ -1207,11 +845,7 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "authorizer",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "authorizer", "type": "address" }
       ],
       "name": "setAuthorizer",
       "outputs": [],
@@ -1220,11 +854,7 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "factory",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "factory", "type": "address" }
       ],
       "name": "setIdeaTokenFactoryAddress",
       "outputs": [],
@@ -1233,24 +863,7 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "maxL2GasPrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "setMaxL2GasPrice",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "newOwner", "type": "address" }
       ],
       "name": "setOwner",
       "outputs": [],
@@ -1259,16 +872,8 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        }
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        { "internalType": "address", "name": "owner", "type": "address" }
       ],
       "name": "setPlatformOwner",
       "outputs": [],
@@ -1277,16 +882,8 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "ideaToken",
-          "type": "address"
-        },
-        {
-          "internalType": "bool",
-          "name": "set",
-          "type": "bool"
-        }
+        { "internalType": "address", "name": "ideaToken", "type": "address" },
+        { "internalType": "bool", "name": "set", "type": "bool" }
       ],
       "name": "setTokenFeeKillswitch",
       "outputs": [],
@@ -1295,16 +892,8 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "token",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "owner",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "token", "type": "address" },
+        { "internalType": "address", "name": "owner", "type": "address" }
       ],
       "name": "setTokenOwner",
       "outputs": [],
@@ -1312,125 +901,8 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "setTokenTransferEnabled",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "tokenID",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "l2Recipient",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "l2GasPriceBid",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferIdeaTokens",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "l2GasPriceBid",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferPlatformVars",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "l2GasPriceBid",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferStaticVars",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "tokenIDs",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "uint256",
-          "name": "l2GasPriceBid",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferTokenVars",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" }
       ],
       "name": "withdrawPlatformFee",
       "outputs": [],
@@ -1439,11 +911,7 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "marketID",
-          "type": "uint256"
-        }
+        { "internalType": "uint256", "name": "marketID", "type": "uint256" }
       ],
       "name": "withdrawPlatformInterest",
       "outputs": [],
@@ -1452,11 +920,7 @@
     },
     {
       "inputs": [
-        {
-          "internalType": "address",
-          "name": "token",
-          "type": "address"
-        }
+        { "internalType": "address", "name": "token", "type": "address" }
       ],
       "name": "withdrawTokenInterest",
       "outputs": [],
@@ -3213,7 +2677,7 @@
       "type": "function"
     }
   ],
-  "ideaTokenExchangeStateTransferLogic": [
+  "ideaTokenExchange": [
     {
       "anonymous": false,
       "inputs": [
@@ -3501,13 +2965,6 @@
     },
     {
       "inputs": [],
-      "name": "_maxL2GasPrice",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
       "name": "_tokenTransferEnabled",
       "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
       "stateMutability": "view",
@@ -3789,12 +3246,7 @@
           "type": "address"
         },
         { "internalType": "address", "name": "l2Bridge", "type": "address" },
-        { "internalType": "address", "name": "l1Inbox", "type": "address" },
-        {
-          "internalType": "uint256",
-          "name": "maxL2GasPrice",
-          "type": "uint256"
-        }
+        { "internalType": "address", "name": "l1Inbox", "type": "address" }
       ],
       "name": "initializeStateTransfer",
       "outputs": [],
@@ -3836,19 +3288,6 @@
         { "internalType": "address", "name": "factory", "type": "address" }
       ],
       "name": "setIdeaTokenFactoryAddress",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "maxL2GasPrice",
-          "type": "uint256"
-        }
-      ],
-      "name": "setMaxL2GasPrice",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -3904,6 +3343,12 @@
         { "internalType": "uint256", "name": "marketID", "type": "uint256" },
         { "internalType": "uint256", "name": "tokenID", "type": "uint256" },
         { "internalType": "address", "name": "l2Recipient", "type": "address" },
+        { "internalType": "uint256", "name": "gasLimit", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "maxSubmissionCost",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "l2GasPriceBid",
@@ -3912,12 +3357,18 @@
       ],
       "name": "transferIdeaTokens",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
       "inputs": [
         { "internalType": "uint256", "name": "marketID", "type": "uint256" },
+        { "internalType": "uint256", "name": "gasLimit", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "maxSubmissionCost",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "l2GasPriceBid",
@@ -3926,11 +3377,17 @@
       ],
       "name": "transferPlatformVars",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
       "inputs": [
+        { "internalType": "uint256", "name": "gasLimit", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "maxSubmissionCost",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "l2GasPriceBid",
@@ -3939,7 +3396,7 @@
       ],
       "name": "transferStaticVars",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
@@ -3950,6 +3407,12 @@
           "name": "tokenIDs",
           "type": "uint256[]"
         },
+        { "internalType": "uint256", "name": "gasLimit", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "maxSubmissionCost",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "l2GasPriceBid",
@@ -3958,7 +3421,7 @@
       ],
       "name": "transferTokenVars",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
@@ -4059,6 +3522,12 @@
     },
     {
       "inputs": [
+        { "internalType": "uint256", "name": "gasLimit", "type": "uint256" },
+        {
+          "internalType": "uint256",
+          "name": "maxSubmissionCost",
+          "type": "uint256"
+        },
         {
           "internalType": "uint256",
           "name": "l2GasPriceBid",
@@ -4067,7 +3536,7 @@
       ],
       "name": "executeStateTransfer",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {

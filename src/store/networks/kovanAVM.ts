@@ -9,7 +9,7 @@ export default class KovanAVMNetworkSpecifics implements INetworkSpecifics {
   }
 
   getChainID(): number {
-    return 212984383488152
+    return 144545313136048
   }
 
   getDeployedAddresses(): any {

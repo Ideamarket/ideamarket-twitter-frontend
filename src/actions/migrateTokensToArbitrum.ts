@@ -8,14 +8,21 @@ export default function migrateTokensToArbitrum(
 ) {
   const exchangeContract = useContractStore.getState().exchangeContract
 
-  const maxSubmissionCost = new BN('100000') // 100K
-  const l2GasLimit = new BN('1000000') // 1MM
+  const maxSubmissionCost = new BN('1000000000000000') // 0.001 ETH
+  const l2GasLimit = new BN('2000000') // 2MM
   const l2GasPriceBid = new BN('1000000000') // 1 gwei
 
   const value = maxSubmissionCost.add(l2GasLimit.mul(l2GasPriceBid))
 
   return exchangeContract.methods
-    .transferIdeaTokens(marketID, tokenID, l2Recipient, l2GasPriceBid)
+    .transferIdeaTokens(
+      marketID,
+      tokenID,
+      l2Recipient,
+      l2GasLimit,
+      maxSubmissionCost,
+      l2GasPriceBid
+    )
     .send({
       value: value,
     })
