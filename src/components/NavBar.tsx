@@ -31,16 +31,6 @@ export default function Nav() {
       isSelected: router.pathname === '/account',
     },
     {
-      name: 'Extension',
-      value: 'extension',
-      onClick: () =>
-        window.open(
-          'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
-          '_blank'
-        ),
-      isSelected: false,
-    },
-    {
       name: 'Community',
       value: 'community',
       onClick: () => window.open('https://discord.gg/zaXZXGE4Ke', '_blank'),
