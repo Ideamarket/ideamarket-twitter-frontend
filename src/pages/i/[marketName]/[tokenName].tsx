@@ -62,13 +62,13 @@ function DetailsSkeleton() {
         <div className="text-sm font-semibold text-brand-new-dark">
           Listed on
         </div>
-        <div className="mt-2 bg-gray-400 rounded w-24 h-6"></div>
+        <div className="w-24 h-6 mt-2 bg-gray-400 rounded"></div>
       </div>
       <div className="inline-block">
         <div className="text-sm font-semibold text-brand-new-dark">
           Listing Owner
         </div>
-        <div className="mt-2 bg-gray-400 rounded w-24 h-6"></div>
+        <div className="w-24 h-6 mt-2 bg-gray-400 rounded"></div>
       </div>
     </>
   )
@@ -119,7 +119,7 @@ export default function TokenDetails({
 
   const router = useRouter()
 
-  const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" title="Iframe Embed" style="width: 700px; transform: scale(0.5); transformOrigin: top left;"`
+  const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" title="Ideamarket Embed" style="width: 400px; height: 75px;"`
   const [isEmbedCopyDone, setIsEmbedCopyDone] = useState(false)
   const [isLinkCopyDone, setIsLinkCopyDone] = useState(false)
   const [permanentLink, setPermanentLink] = useState('')
@@ -148,22 +148,6 @@ export default function TokenDetails({
     querySingleToken
   )
 
-  const [isBalanceLoading, balanceBN, balance] = useBalance(token?.address, 18)
-
-  const isValueLoading = false
-  const valueBN = calculateIdeaTokenDaiValue(token, market, balanceBN)
-  const value = web3BNToFloatString(valueBN, bigNumberTenPow18, 18)
-
-  /*
-  const [isValueLoading, valueBN, value] = useOutputAmount(
-    token,
-    market,
-    addresses.dai,
-    balance,
-    18,
-    'sell'
-  )
-*/
   const [selectedChart, setSelectedChart] = useState(CHART.PRICE)
   const [selectedChartDuration, setSelectedChartDuration] = useState('1W')
 
@@ -435,7 +419,7 @@ export default function TokenDetails({
         <div className="px-2 pb-5 mx-auto mt-12 text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
           <div className="flex flex-col md:grid md:grid-cols-2">
             <div className="flex flex-col">
-              <div className="p-5 mb-5 h-full bg-white border rounded-md md:mr-5 border-brand-border-gray">
+              <div className="h-full p-5 mb-5 bg-white border rounded-md md:mr-5 border-brand-border-gray">
                 <div className="flex flex-col justify-between lg:flex-row">
                   <div>
                     {isLoading ? (
@@ -483,8 +467,8 @@ export default function TokenDetails({
                   <div>
                     {isLoading ? (
                       <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0 animate-pulse">
-                        <div className="w-28 h-12 bg-gray-400 rounded"></div>
-                        <div className="w-28 h-12 bg-gray-400 rounded"></div>
+                        <div className="h-12 bg-gray-400 rounded w-28"></div>
+                        <div className="h-12 bg-gray-400 rounded w-28"></div>
                       </div>
                     ) : (
                       <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0">
@@ -624,11 +608,11 @@ export default function TokenDetails({
                     >
                       Permanent link
                     </label>
-                    <div className="mt-1 flex rounded-md shadow-sm">
+                    <div className="flex mt-1 rounded-md shadow-sm">
                       <div className="relative flex items-stretch flex-grow focus-within:z-10">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                           <LinkIcon
-                            className="h-5 w-5 text-gray-400"
+                            className="w-5 h-5 text-gray-400"
                             aria-hidden="true"
                           />
                         </div>
@@ -636,13 +620,13 @@ export default function TokenDetails({
                           type="text"
                           name="text"
                           id="perm_link"
-                          className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-10 sm:text-sm border-gray-300 text-brand-new-dark"
+                          className="block w-full pl-10 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm text-brand-new-dark"
                           defaultValue={permanentLink}
                           disabled={true}
                         />
                       </div>
                       <button
-                        className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-r-md bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
                         onClick={() => {
                           copy(permanentLink)
                           toast.success('Copied the listing permanent link.')
@@ -663,15 +647,14 @@ export default function TokenDetails({
                     </div>
                   </div>
 
-                  <div className="mt-4 h-24 relative">
-                    {/* <div className="flex justify-between items-center"> */}
+                  <div className="relative h-24 mt-4">
+                    {/* <div className="flex items-center justify-between"> */}
                     <div className="flex items-center space-x-1">
                       <p className="block text-sm font-medium text-gray-700">
                         Embed
                       </p>
                       <button
                         onClick={() => {
-                          console.log('here')
                           copy(embedCode)
                           toast.success('Copied the embed code')
                           setIsEmbedCopyDone(true)
@@ -689,9 +672,8 @@ export default function TokenDetails({
                     </div>
 
                     <div
-                      className="overflow-x-auto cursor-pointer -ml-2"
+                      className="-ml-2 overflow-x-auto"
                       onClick={() => {
-                        console.log('here')
                         copy(embedCode)
                         toast.success('Copied the embed code')
                         setIsEmbedCopyDone(true)
@@ -714,12 +696,11 @@ export default function TokenDetails({
                       )}
                       <iframe
                         src={`/iframe/${rawMarketName}/${rawTokenName}`}
-                        title="Iframe Embed"
+                        title="Ideamarket Embed"
                         id="frame"
                         style={{
-                          width: '700px',
-                          transform: 'scale(0.5)',
-                          transformOrigin: 'top left',
+                          width: '400px',
+                          height: '75px',
                         }}
                         onLoad={() => {
                           setShowEmbedSkeleton(false)

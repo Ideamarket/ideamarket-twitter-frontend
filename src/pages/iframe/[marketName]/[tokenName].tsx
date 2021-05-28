@@ -9,27 +9,27 @@ import { formatNumber } from 'utils'
 
 export function IframeEmbedSkeleton() {
   return (
-    <div className="flex flex-col justify-center space-y-4 items-center h-full">
+    <div className="flex flex-col items-center justify-center h-full space-y-4">
       <div className="flex items-center w-[663px] bg-white rounded-2xl p-5 animate-pulse shadow-embed">
         <div className="p-3">
-          <div className="block w-9 h-9 rounded-full bg-gray-400" />
+          <div className="block bg-gray-400 rounded-full w-9 h-9" />
         </div>
         <div className="flex items-center ml-2">
-          <div className="w-12 h-12 rounded-full overflow-hidden">
+          <div className="w-12 h-12 overflow-hidden rounded-full">
             <div className="w-full h-full bg-gray-400 animate-pulse" />
           </div>
-          <p className="bg-gray-400 h-6 w-24 rounded-md ml-4"></p>
+          <p className="w-24 h-6 ml-4 bg-gray-400 rounded-md"></p>
         </div>
 
         <div className="ml-auto flex items-center h-full w-[200px] bg-brand-gray-white rounded-md border border-brand-border-gray-2">
-          <div className="flex-1 flex justify-center items-center h-full"></div>
-          <div className="h-full flex-1 rounded-md overflow-hidden">
-            <div className="bg-brand-new-blue w-full h-full px-4"></div>
+          <div className="flex items-center justify-center flex-1 h-full"></div>
+          <div className="flex-1 h-full overflow-hidden rounded-md">
+            <div className="w-full h-full px-4 bg-brand-new-blue"></div>
           </div>
         </div>
 
         <div className="ml-4">
-          <p className="w-16 bg-gray-400 h-4 rounded"></p>
+          <p className="w-16 h-4 bg-gray-400 rounded"></p>
         </div>
       </div>
     </div>
@@ -65,51 +65,53 @@ export default function IframeEmbed() {
   }
 
   return (
-    <div className="flex flex-col justify-center space-y-4 items-center h-full">
-      <div className="flex items-center w-[663px] bg-white rounded-2xl p-5 shadow-embed">
-        <div className="p-3">
+    <div className="w-full h-full p-2">
+      <div className="flex items-center w-full h-full p-2 shadow-embed rounded-2xl">
+        <div className="flex-grow-0">
           <img
-            className="block w-auto h-9"
-            src="/logo.png"
+            className="block w-8 h-auto"
+            src="/logo-32x32.png"
             alt="Ideamarket Logo"
           />
         </div>
-        <div className="flex items-center ml-2">
-          <div className="w-12 h-12 rounded-full overflow-hidden">
-            {isLoading ? (
-              <div className="w-full h-full bg-gray-400 animate-pulse" />
-            ) : (
-              <img
-                src={tokenIconURL}
-                alt={rawTokenName}
-                className="object-cover w-full h-full"
-              />
-            )}
-          </div>
-          <p className="text-brand-new-dark font-medium text-2xl ml-4">
-            {tokenName}
-          </p>
+
+        <div className="flex-grow-0 ml-2">
+          {isLoading ? (
+            <div className="w-8 h-8 bg-gray-400 animate-pulse" />
+          ) : (
+            <img
+              src={tokenIconURL}
+              alt={rawTokenName}
+              className="w-8 h-auto rounded-full"
+            />
+          )}
         </div>
 
-        <div className="ml-auto flex items-center h-full w-[200px] bg-brand-gray-white rounded-md border border-brand-border-gray-2">
-          <div className="flex-1 flex justify-center items-center h-full text-2xl font-medium text-brand-new-dark">
-            ${formatNumber(token.latestPricePoint.price)}
-          </div>
-          <div className="h-full flex-1 rounded-md overflow-hidden">
-            <A
-              className="text-2xl font-medium text-white bg-brand-new-blue w-full h-full flex justify-center items-center px-4"
-              href={`https://app.ideamarket.io/i/${rawMarketName}/${rawTokenName}`}
-            >
-              <ArrowCircleUpIcon className="w-7 h-7 mr-1 text-[#a5bbfb]" />
-              Buy
-            </A>
-          </div>
+        <div className="flex-grow-0 ml-2 font-medium text-brand-new-dark">
+          {tokenName}
         </div>
 
-        <div className="ml-4">
+        <div className="flex-grow">{/* free space */}</div>
+
+        <div className="flex-grow-0 font-medium text-brand-new-dark bg-brand-gray-white w-[68px] h-full rounded-md flex items-center justify-center">
+          ${formatNumber(token.latestPricePoint.price)}
+        </div>
+
+        <div className="-ml-2 flex-grow-0 flex items-center justify-center w-[68px] h-full font-medium text-white bg-brand-new-blue rounded-md">
           <A
-            className="underline cursor-pointer text-brand-gray-white-2 font-medium text-xs"
+            className="flex items-center justify-center"
+            href={`https://app.ideamarket.io/i/${rawMarketName}/${rawTokenName}`}
+          >
+            <ArrowCircleUpIcon className="w-5 h-5 mr-1 text-[#a5bbfb]" />
+            Buy
+          </A>
+        </div>
+
+        <div className="flex-grow-0 ml-2">
+          <A
+            className="font-medium underline cursor-pointer text-brand-gray-white-2"
             href="https://ideamarket.io"
+            style={{ fontSize: '10px' }}
           >
             What's this?
           </A>
