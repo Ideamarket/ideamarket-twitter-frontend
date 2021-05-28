@@ -147,17 +147,30 @@ export default function Home() {
               Profit by discovering the world’s best information.
             </p>
           </div>
-          <button
-            onClick={() => {
-              onListTokenClicked()
-            }}
-            className="py-2 mt-10 ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
-          >
-            <div className="flex flex-row items-center justify-center">
-              <Plus width="30" height="30" />
-              <div className="ml-0.5 md:ml-2">Add Listing</div>
-            </div>
-          </button>
+          <div className="md:flex md:justify-center">
+            <button
+              onClick={() => {
+                onListTokenClicked()
+              }}
+              className="py-2 mt-10 md:ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+            >
+              <div className="flex flex-row items-center justify-center">
+                <Plus width="30" height="30" />
+                <div className="ml-0.5 md:ml-2">Add Listing</div>
+              </div>
+            </button>
+            <button
+              className="py-2 mt-2 md:mt-10 md:ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium border-white border hover:bg-white hover:text-brand-blue"
+              onClick={() =>
+                window.open(
+                  'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
+                  '_blank'
+                )
+              }
+            >
+              Browser Extension
+            </button>
+          </div>
           <div className="flex flex-col items-center justify-center mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
             <div className="text-2xl text-brand-blue md:text-5xl">
               ${cDaiBalanceInDai}
