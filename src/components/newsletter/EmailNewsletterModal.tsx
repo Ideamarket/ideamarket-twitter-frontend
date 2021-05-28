@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { GlobalContext } from '../../pages/_app'
+import { GlobalContext } from 'pages/_app'
 import { Modal } from '..'
 
 export default function EmailNewsletterModal() {
@@ -23,6 +23,7 @@ export default function EmailNewsletterModal() {
         </div>
         <div className="flex justify-center">
           <iframe
+            title="embed"
             src="https://ideamarkets.substack.com/embed"
             width="350"
             height="320"

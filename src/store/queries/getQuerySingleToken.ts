@@ -10,6 +10,9 @@ export default function getQuerySingleToken(
         tokens(where:{name:${'"' + tokenName + '"'}}) {
             id
             tokenID
+            market {
+              id
+            }
             name
             supply
             holders

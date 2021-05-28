@@ -24,7 +24,7 @@ import { NETWORK } from 'store/networks'
 
 import Search from '../assets/search.svg'
 import Plus from '../assets/plus-white.svg'
-import { GlobalContext } from './_app'
+import { GlobalContext } from 'pages/_app'
 import { useWalletStore } from 'store/walletStore'
 import { Categories } from 'store/models/category'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'

@@ -4,19 +4,13 @@ import '../styles/fonts/gilroy/style.css'
 import '../styles/fonts/sf-compact-display/style.css'
 import '../styles/nprogress.css'
 
-import CookieConsent from 'react-cookie-consent'
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
-import { initTokenList } from 'store/tokenListStore'
 import {
-  NavBar,
   WrongNetworkOverlay,
   WalletModal,
   EmailNewsletterModal,
 } from 'components'
-import { Toaster } from 'react-hot-toast'
 import { DefaultSeo } from 'next-seo'
 import {
   DEFAULT_CANONICAL,
@@ -61,9 +55,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   const [isEmailHeaderActive, setIsEmailHeaderActive] = useState(false)
   useEffect(() => {
-    initIdeaMarketsStore()
-    initTokenList()
-
     const isEmailBarClosed = localStorage.getItem('IS_EMAIL_BAR_CLOSED')
       ? localStorage.getItem('IS_EMAIL_BAR_CLOSED') === 'true'
       : false
