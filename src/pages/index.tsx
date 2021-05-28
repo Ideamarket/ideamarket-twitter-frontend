@@ -152,7 +152,7 @@ export default function Home() {
               onClick={() => {
                 onListTokenClicked()
               }}
-              className="py-2 mt-10 md:ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+              className="py-2 mt-10 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
             >
               <div className="flex flex-row items-center justify-center">
                 <Plus width="30" height="30" />
@@ -160,7 +160,7 @@ export default function Home() {
               </div>
             </button>
             <button
-              className="py-2 mt-2 md:mt-10 md:ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium border-white border hover:bg-white hover:text-brand-blue"
+              className="py-2 mt-3 md:mt-10 md:ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium border-white border hover:bg-white hover:text-brand-blue"
               onClick={() =>
                 window.open(
                   'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
