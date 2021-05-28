@@ -228,7 +228,7 @@ export default function Home() {
       ...headerData.filter((h) => h.value !== headerValue),
       headerObject,
     ]
-    newHeaderData.sort((h1, h2) => h1.id - h2.id) // Sort since above line puts out of order
+    newHeaderData.sort((h1, h2) => h1.id - h2.id) // Sort since above statement puts out of order
     localStorage.setItem('STORED_HEADERS', JSON.stringify(newHeaderData))
     setHeaderData(newHeaderData)
   }

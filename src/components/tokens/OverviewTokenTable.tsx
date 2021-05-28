@@ -241,7 +241,7 @@ export default function Table({
                   ))}
                   {isLoading
                     ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                        <TokenRowSkeleton key={token} />
+                        <TokenRowSkeleton key={token} getHeader={getHeader} />
                       ))
                     : null}
                 </tbody>
