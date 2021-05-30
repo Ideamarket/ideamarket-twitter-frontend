@@ -276,6 +276,14 @@ export default function TradeInterface({
     onTradeSuccessful()
   }
 
+  const isTradeButtonDisabled =
+    txManager.isPending ||
+    !isValid ||
+    exceedsBalance ||
+    isMissingAllowance ||
+    !parseFloat(ideaTokenAmount) ||
+    parseFloat(ideaTokenAmount) <= 0.0
+
   return (
     <>
       {showTypeSelection && (
@@ -530,21 +538,11 @@ export default function TradeInterface({
                 <button
                   className={classNames(
                     'ml-6 w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
-                    txManager.isPending ||
-                      !isValid ||
-                      exceedsBalance ||
-                      isMissingAllowance ||
-                      !parseFloat(ideaTokenAmount) ||
-                      parseFloat(ideaTokenAmount) <= 0.0
+                    isTradeButtonDisabled
                       ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
                       : 'border-brand-blue text-white bg-brand-blue font-medium'
                   )}
-                  disabled={
-                    txManager.isPending ||
-                    exceedsBalance ||
-                    !parseFloat(ideaTokenAmount) ||
-                    parseFloat(ideaTokenAmount) <= 0.0
-                  }
+                  disabled={isTradeButtonDisabled}
                   onClick={onTradeClicked}
                 >
                   {tradeType === 'buy' ? 'Buy' : 'Sell'}
