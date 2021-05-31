@@ -63,12 +63,10 @@ export default function Table({
     }
   )
 
-  const {
-    data: compoundSupplyRate,
-    isFetching: isCompoundSupplyRateLoading,
-  } = useQuery('compound-supply-rate', querySupplyRate, {
-    refetchOnWindowFocus: false,
-  })
+  const { data: compoundSupplyRate, isFetching: isCompoundSupplyRateLoading } =
+    useQuery('compound-supply-rate', querySupplyRate, {
+      refetchOnWindowFocus: false,
+    })
 
   const { isFetching: isMarketLoading, refetch: refetchMarkets } = useQuery(
     [`market-${Array.from(selectedMarkets)}`, Array.from(selectedMarkets)],
@@ -211,7 +209,7 @@ export default function Table({
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden border-b border-gray-200 sm:rounded-t-lg">
+            <div className="border-b border-gray-200 sm:rounded-t-lg">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="hidden md:table-header-group">
                   <tr>
