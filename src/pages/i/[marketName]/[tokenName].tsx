@@ -672,7 +672,7 @@ export default function TokenDetails({
                     </div>
 
                     <div
-                      className="-ml-2 overflow-x-auto"
+                      className="-ml-2 overflow-x-auto cursor-pointer"
                       onClick={() => {
                         copy(embedCode)
                         toast.success('Copied the embed code')
@@ -701,6 +701,7 @@ export default function TokenDetails({
                         style={{
                           width: '400px',
                           height: '75px',
+                          pointerEvents: 'none',
                         }}
                         onLoad={() => {
                           setShowEmbedSkeleton(false)
