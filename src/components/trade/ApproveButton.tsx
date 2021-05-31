@@ -5,6 +5,8 @@ import _ from 'lodash'
 
 import { useTokenAllowance, approveToken } from '../../actions'
 import { TransactionManager, web3UintMax } from '../../utils'
+import Tooltip from 'components/tooltip/Tooltip'
+
 export default function ApproveButton({
   tokenAddress,
   tokenSymbol,
@@ -67,17 +69,28 @@ export default function ApproveButton({
   }
 
   return (
-    <button
+    <div
       className={classNames(
-        'w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2',
+        'py-4 px-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium text-center',
         disable
-          ? 'bg-brand-gray border-brand-gray text-brand-gray-2 cursor-default'
-          : 'border-brand-blue bg-brand-blue text-white font-medium'
+          ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
+          : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
       )}
-      disabled={disable}
-      onClick={approve}
+      onClick={() => {
+        !disable && approve()
+      }}
     >
-      Unlock {tokenSymbol?.toUpperCase()}
-    </button>
+      <span>Allow Ideamarket to spend your {tokenSymbol?.toUpperCase()}</span>
+      <Tooltip className="ml-2 inline-block">
+        <div className="w-32 md:w-64">
+          Lock tokens to show your long-term confidence in a listing. You will
+          be unable to sell or withdraw locked tokens for the time period
+          specified.
+          <br />
+          <br />
+          For more information, see .
+        </div>
+      </Tooltip>
+    </div>
   )
 }

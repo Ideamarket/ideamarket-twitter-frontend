@@ -29,7 +29,7 @@ export default function Modal({
   return (
     <div className={className}>
       <div className="fixed inset-0 z-20 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center">
+        <div className="flex items-center justify-center min-h-screen px-4 text-center">
           <Transition
             show={isOpen}
             enter="ease-out duration-300"
@@ -52,7 +52,8 @@ export default function Modal({
             leave="ease-in duration-200"
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            className="inline-block overflow-hidden text-left transition-all transform rounded-lg shadow-xl w-76"
+            className="inline-block overflow-hidden text-left transition-all transform rounded-lg shadow-xl"
+            style={{ width: '30rem' }}
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-headline"

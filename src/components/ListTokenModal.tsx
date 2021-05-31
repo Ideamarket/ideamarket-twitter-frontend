@@ -285,6 +285,10 @@ export default function ListTokenModal({
             <hr className="my-1" />
             <TradeInterface
               market={selectedMarket}
+              newIdeaToken={{
+                symbol: tokenName,
+                logoURL: selectedMarket && marketSpecifics && tokenIconURL,
+              }}
               ideaToken={undefined}
               onTradeSuccessful={() => {}}
               onValuesChanged={onTradeInterfaceValuesChanged}
@@ -301,8 +305,8 @@ export default function ListTokenModal({
           </div>
 
           <div className="max-w-sm mx-auto">
-            <div className={classNames('flex mt-8 mx-5 text-xs')}>
-              <div className="flex justify-center flex-grow">
+            <div className="">
+              <div className="">
                 <ApproveButton
                   tokenAddress={buyPayWithAddress}
                   tokenSymbol={buyPayWithSymbol}
@@ -323,16 +327,16 @@ export default function ListTokenModal({
                   key={approveButtonKey}
                 />
               </div>
-              <div className="flex justify-center flex-grow">
+              <div className="mt-4 ">
                 <button
                   className={classNames(
-                    'ml-6 w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
+                    'py-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium',
                     selectedMarket === undefined ||
                       !isValidTokenName ||
                       txManager.isPending ||
                       (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
                       ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
-                      : 'border-brand-blue text-white bg-brand-blue font-medium'
+                      : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
                   )}
                   disabled={
                     selectedMarket === undefined ||
@@ -344,47 +348,6 @@ export default function ListTokenModal({
                 >
                   {isWantBuyChecked ? 'List & Buy' : 'List'}
                 </button>
-              </div>
-            </div>
-
-            <div
-              className={classNames(
-                'flex w-1/2 mt-2.5 mx-auto justify-center items-center text-xs'
-              )}
-            >
-              <div
-                className={classNames(
-                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
-                  selectedMarket === undefined ||
-                    !isValidTokenName ||
-                    (isWantBuyChecked && !isBuyValid)
-                    ? 'bg-brand-gray text-brand-gray-2'
-                    : 'bg-brand-blue text-white'
-                )}
-              >
-                1
-              </div>
-              <div
-                className={classNames(
-                  'flex-grow h-0.5',
-                  selectedMarket === undefined ||
-                    !isValidTokenName ||
-                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
-                    ? 'bg-brand-gray'
-                    : 'bg-brand-blue'
-                )}
-              ></div>
-              <div
-                className={classNames(
-                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
-                  selectedMarket === undefined ||
-                    !isValidTokenName ||
-                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
-                    ? 'bg-brand-gray text-brand-gray-2'
-                    : 'bg-brand-blue text-white'
-                )}
-              >
-                2
               </div>
             </div>
           </div>
