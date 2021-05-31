@@ -147,7 +147,7 @@ export default function Home() {
               Profit by discovering the world’s best information.
             </p>
           </div>
-          <div className="md:flex md:justify-center">
+          <div className="sm:flex sm:justify-center">
             <button
               onClick={() => {
                 onListTokenClicked()
