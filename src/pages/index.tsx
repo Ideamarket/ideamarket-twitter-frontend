@@ -122,7 +122,7 @@ export default function Home() {
     },
   ]
 
-  const [headerData, setHeaderData] = useState(defaultHeaders)
+  const [headerData, setHeaderData] = useState(null)
 
   useEffect(() => {
     const storedHeaders = JSON.parse(localStorage.getItem('STORED_HEADERS'))
@@ -343,15 +343,17 @@ export default function Home() {
                 <b>Columns</b>
               </button>
             </div>
-            <Table
-              nameSearch={nameSearch}
-              selectedMarkets={selectedMarkets}
-              selectedCategoryId={selectedCategoryId}
-              headerData={headerData}
-              getHeader={getHeader}
-              onOrderByChanged={onOrderByChanged}
-              onTradeClicked={onTradeClicked}
-            />
+            {headerData && (
+              <Table
+                nameSearch={nameSearch}
+                selectedMarkets={selectedMarkets}
+                selectedCategoryId={selectedCategoryId}
+                headerData={headerData}
+                getHeader={getHeader}
+                onOrderByChanged={onOrderByChanged}
+                onTradeClicked={onTradeClicked}
+              />
+            )}
           </div>
         </div>
 
