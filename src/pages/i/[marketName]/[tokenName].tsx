@@ -16,6 +16,7 @@ import {
   A,
   MutualTokensList,
   DefaultLayout,
+  WalletModal,
 } from 'components'
 import {
   querySupplyRate,
@@ -54,6 +55,7 @@ import toast from 'react-hot-toast'
 import { LinkIcon } from '@heroicons/react/outline'
 import ClipIcon from '../../../assets/clip.svg'
 import CopyIcon from '../../../assets/copy-icon.svg'
+import ModalService from 'components/modals/ModalService'
 
 function DetailsSkeleton() {
   return (
@@ -125,8 +127,6 @@ export default function TokenDetails({
   const [permanentLink, setPermanentLink] = useState('')
   const [showEmbedSkeleton, setShowEmbedSkeleton] = useState(true)
 
-  const { setIsWalletModalOpen } = useContext(GlobalContext)
-  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false)
   const web3 = useWalletStore((state) => state.web3)
   const connectedAddress = useWalletStore((state) => state.address)
 
@@ -507,7 +507,7 @@ export default function TokenDetails({
                         <div
                           className="font-semibold cursor-pointer hover:underline"
                           onClick={() => {
-                            setIsVerifyModalOpen(true)
+                            ModalService.open(VerifyModal, { market, token })
                           }}
                         >
                           Verify Ownership
@@ -732,7 +732,7 @@ export default function TokenDetails({
                 <div className="flex items-center justify-center h-full p-18 md:p-0">
                   <button
                     onClick={() => {
-                      setIsWalletModalOpen(true)
+                      ModalService.open(WalletModal)
                     }}
                     className="p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
                   >
@@ -743,14 +743,6 @@ export default function TokenDetails({
             </div>
           </div>
         </div>
-        {!isLoading && (
-          <VerifyModal
-            token={token}
-            market={market}
-            isOpen={isVerifyModalOpen}
-            setIsOpen={setIsVerifyModalOpen}
-          />
-        )}
         <div className="px-2 mx-auto max-w-88 md:max-w-304 -mt-30 md:-mt-28">
           <MutualTokensList tokenName={tokenName} marketName={marketName} />
         </div>

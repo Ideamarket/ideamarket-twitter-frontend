@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import BN from 'bn.js'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import {
   MarketSelect,
@@ -9,9 +9,9 @@ import {
   MyTokenTable,
   LockedTokenTable,
   DefaultLayout,
+  WalletModal,
 } from '../components'
 import { useWalletStore } from '../store/walletStore'
-import { GlobalContext } from 'pages/_app'
 import {
   formatNumber,
   web3BNToFloatString,
@@ -23,10 +23,10 @@ import {
   queryOwnedTokensMaybeMarket,
   queryLockedTokens,
 } from 'store/ideaMarketsStore'
+import ModalService from 'components/modals/ModalService'
 
 export default function MyTokens() {
   const web3 = useWalletStore((state) => state.web3)
-  const { setIsWalletModalOpen } = useContext(GlobalContext)
 
   const [ownedTokensTablePage, setOwnedTokensTablePage] = useState(0)
   const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] = useState(
@@ -180,7 +180,7 @@ export default function MyTokens() {
                   <div className="flex items-center justify-center">
                     <button
                       onClick={() => {
-                        setIsWalletModalOpen(true)
+                        ModalService.open(WalletModal)
                       }}
                       className="my-40 p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
                     >

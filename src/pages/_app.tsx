@@ -6,11 +6,6 @@ import '../styles/nprogress.css'
 
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
-import {
-  WrongNetworkOverlay,
-  WalletModal,
-  EmailNewsletterModal,
-} from 'components'
 import { DefaultSeo } from 'next-seo'
 import {
   DEFAULT_CANONICAL,
@@ -27,16 +22,12 @@ import en from 'javascript-time-ago/locale/en'
 import { Web3ReactProvider } from '@web3-react/core'
 import Web3 from 'web3'
 import Web3ReactManager from 'components/wallet/Web3ReactManager'
+import ModalRoot from 'components/modals/ModalRoot'
+import { WrongNetworkOverlay } from 'components'
 
 export const GlobalContext = createContext({
-  isWalletModalOpen: false,
-  setIsWalletModalOpen: (val: boolean) => {},
   onWalletConnectedCallback: () => {},
   setOnWalletConnectedCallback: (f: () => void) => {},
-  isListTokenModalOpen: false,
-  setIsListTokenModalOpen: (val: boolean) => {},
-  isEmailNewsletterModalOpen: false,
-  setIsEmailNewsletterModalOpen: (val: boolean) => {},
   isEmailHeaderActive: false,
   setIsEmailHeaderActive: (val: boolean) => {},
 })
@@ -65,22 +56,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     TimeAgo.addDefaultLocale(en)
   }, [])
 
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
   const [
     onWalletConnectedCallback,
     setOnWalletConnectedCallback,
   ] = useState(() => () => {})
-
-  const [isListTokenModalOpen, setIsListTokenModalOpen] = useState(false)
-
-  const [isEmailNewsletterModalOpen, _setIsEmailNewsletterModalOpen] = useState(
-    false
-  )
-
-  const setIsEmailNewsletterModalOpen = (b: boolean) => {
-    localStorage.setItem('EMAIL_NEWSLETTER_WAS_SEEN', 'true')
-    _setIsEmailNewsletterModalOpen(b)
-  }
 
   return (
     <>
@@ -116,14 +95,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
       <GlobalContext.Provider
         value={{
-          isWalletModalOpen,
-          setIsWalletModalOpen,
           onWalletConnectedCallback,
           setOnWalletConnectedCallback,
-          isListTokenModalOpen,
-          setIsListTokenModalOpen,
-          isEmailNewsletterModalOpen,
-          setIsEmailNewsletterModalOpen,
           isEmailHeaderActive,
           setIsEmailHeaderActive,
         }}
@@ -134,9 +107,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </Layout>
           </Web3ReactManager>
-          <WalletModal />
           <WrongNetworkOverlay />
-          <EmailNewsletterModal />
+          <ModalRoot />
         </Web3ReactProvider>
       </GlobalContext.Provider>
     </>

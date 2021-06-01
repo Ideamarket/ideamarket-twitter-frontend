@@ -20,6 +20,8 @@ type Props = {
   selectedMarkets: Set<string>
   selectedCategoryId: number
   nameSearch: string
+  headerData: Array<any>
+  getHeader: (headerValue: string) => object
   onOrderByChanged: (o: string, d: string) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }
@@ -28,6 +30,8 @@ export default function Table({
   selectedMarkets,
   selectedCategoryId,
   nameSearch,
+  headerData,
+  getHeader,
   onOrderByChanged,
   onTradeClicked,
 }: Props) {
@@ -216,6 +220,7 @@ export default function Table({
                     <Header
                       currentHeader={currentHeader}
                       orderDirection={orderDirection}
+                      headerData={headerData}
                       headerClicked={headerClicked}
                     />
                   </tr>
@@ -228,12 +233,13 @@ export default function Table({
                       market={marketsMap[token.marketID]}
                       showMarketSVG={false}
                       compoundSupplyRate={compoundSupplyRate}
+                      getHeader={getHeader}
                       onTradeClicked={onTradeClicked}
                     />
                   ))}
                   {isLoading
                     ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                        <TokenRowSkeleton key={token} />
+                        <TokenRowSkeleton key={token} getHeader={getHeader} />
                       ))
                     : null}
                 </tbody>
