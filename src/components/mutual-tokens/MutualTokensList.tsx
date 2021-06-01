@@ -38,9 +38,11 @@ export default function MutualTokensList({
   const [pageNumber, setPageNumber] = useState(1)
   const [sortBy, setSortBy] = useState<MutualTokensListSortBy>('totalHolders')
 
-  const { data: mutualHoldersList, isLoading, isError } = useQuery<
-    MutualHoldersData[]
-  >(
+  const {
+    data: mutualHoldersList,
+    isLoading,
+    isError,
+  } = useQuery<MutualHoldersData[]>(
     [`token-mutualHolders-${marketName}-${tokenName}`, marketName, tokenName],
     () => queryMutualHoldersOfToken({ marketName, tokenName })
   )

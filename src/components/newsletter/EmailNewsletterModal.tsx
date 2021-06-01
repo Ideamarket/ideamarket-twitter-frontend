@@ -3,10 +3,8 @@ import { GlobalContext } from 'pages/_app'
 import { Modal } from '..'
 
 export default function EmailNewsletterModal() {
-  const {
-    isEmailNewsletterModalOpen,
-    setIsEmailNewsletterModalOpen,
-  } = useContext(GlobalContext)
+  const { isEmailNewsletterModalOpen, setIsEmailNewsletterModalOpen } =
+    useContext(GlobalContext)
 
   return (
     <Modal

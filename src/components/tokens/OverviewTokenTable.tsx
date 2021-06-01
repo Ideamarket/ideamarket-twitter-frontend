@@ -63,12 +63,10 @@ export default function Table({
     }
   )
 
-  const {
-    data: compoundSupplyRate,
-    isFetching: isCompoundSupplyRateLoading,
-  } = useQuery('compound-supply-rate', querySupplyRate, {
-    refetchOnWindowFocus: false,
-  })
+  const { data: compoundSupplyRate, isFetching: isCompoundSupplyRateLoading } =
+    useQuery('compound-supply-rate', querySupplyRate, {
+      refetchOnWindowFocus: false,
+    })
 
   const { isFetching: isMarketLoading, refetch: refetchMarkets } = useQuery(
     [`market-${Array.from(selectedMarkets)}`, Array.from(selectedMarkets)],

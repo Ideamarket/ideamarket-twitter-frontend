@@ -47,9 +47,8 @@ export default function VerifyModal({
   const [ownerAddress, setOwnerAddress] = useState('')
   const isValidOwnerAddress = isAddress(ownerAddress)
 
-  const { setIsWalletModalOpen, setOnWalletConnectedCallback } = useContext(
-    GlobalContext
-  )
+  const { setIsWalletModalOpen, setOnWalletConnectedCallback } =
+    useContext(GlobalContext)
 
   const [uuid, setUUID] = useState('')
   const sha = new SHA3(256).update(uuid).digest('hex').toString().substr(0, 12)
@@ -58,10 +57,13 @@ export default function VerifyModal({
   const [feeTo, setFeeTo] = useState('')
   const txManager = useTransactionManager()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
-  const marketVerificationExplanation = marketSpecifics.getVerificationExplanation()
-  const shaPromptExplanation = marketSpecifics.getVerificationSHAPromptExplanation()
+  const marketVerificationExplanation =
+    marketSpecifics.getVerificationExplanation()
+  const shaPromptExplanation =
+    marketSpecifics.getVerificationSHAPromptExplanation()
   const shaPrompt = marketSpecifics.getVerificationSHAPrompt(sha)
-  const confirmCheckboxText = marketSpecifics.getVerificationConfirmCheckboxLabel()
+  const confirmCheckboxText =
+    marketSpecifics.getVerificationConfirmCheckboxLabel()
 
   const [tosCheckboxChecked, setTOSCheckboxChecked] = useState(false)
   const [confirmCheckboxChecked, setConfirmCheckboxChecked] = useState(false)

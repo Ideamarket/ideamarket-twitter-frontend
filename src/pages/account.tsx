@@ -29,21 +29,18 @@ export default function MyTokens() {
   const { setIsWalletModalOpen } = useContext(GlobalContext)
 
   const [ownedTokensTablePage, setOwnedTokensTablePage] = useState(0)
-  const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] = useState(
-    undefined
-  )
+  const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] =
+    useState(undefined)
   const [ownedTokenTotalValue, setOwnedTokensTotalValue] = useState('0.00')
   const [lockedTokenTotalValue, setLockedTokensTotalValue] = useState('0.00')
 
   const [myTokensTablePage, setMyTokensTablePage] = useState(0)
-  const [selectedMarketMyTokens, setSelectedMarketMyTokens] = useState(
-    undefined
-  )
+  const [selectedMarketMyTokens, setSelectedMarketMyTokens] =
+    useState(undefined)
 
   const [lockedTokensTablePage, setLockedTokensTablePage] = useState(0)
-  const [selectedMarketLockedTokens, setSelectedMarketLockedTokens] = useState(
-    undefined
-  )
+  const [selectedMarketLockedTokens, setSelectedMarketLockedTokens] =
+    useState(undefined)
 
   const address = useWalletStore((state) => state.address)
 
@@ -52,13 +49,11 @@ export default function MyTokens() {
     queryOwnedTokensMaybeMarket
   )
 
-  const {
-    data: rawLockedPairs,
-    isLoading: isLockedPairsDataLoading,
-  } = useQuery(
-    ['locked-tokens', selectedMarketLockedTokens, address],
-    queryLockedTokens
-  )
+  const { data: rawLockedPairs, isLoading: isLockedPairsDataLoading } =
+    useQuery(
+      ['locked-tokens', selectedMarketLockedTokens, address],
+      queryLockedTokens
+    )
 
   const [table, setTable] = useState('holdings')
 

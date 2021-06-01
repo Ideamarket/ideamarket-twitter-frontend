@@ -41,14 +41,12 @@ export default function IframeEmbed() {
   const rawMarketName = router.query.marketName as string
   const rawTokenName = router.query.tokenName as string
 
-  const marketSpecifics = getMarketSpecificsByMarketNameInURLRepresentation(
-    rawMarketName
-  )
+  const marketSpecifics =
+    getMarketSpecificsByMarketNameInURLRepresentation(rawMarketName)
 
   const marketName = marketSpecifics?.getMarketName()
-  const tokenName = marketSpecifics?.getTokenNameFromURLRepresentation(
-    rawTokenName
-  )
+  const tokenName =
+    marketSpecifics?.getTokenNameFromURLRepresentation(rawTokenName)
 
   const { tokenIconURL, isLoading } = useTokenIconURL({
     marketSpecifics,
