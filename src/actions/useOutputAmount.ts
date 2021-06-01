@@ -98,13 +98,18 @@ export default function useOutputAmount(
     }
 
     async function calculateSellPrice() {
-      if (!useWalletStore.getState().web3 || !ideaToken || !tokenAddress) {
-        return new BN('0')
-      }
-
       const amountBN = new BN(
         new BigNumber(amount).multipliedBy(tenPow18).toFixed()
       )
+
+      if (
+        !useWalletStore.getState().web3 ||
+        !ideaToken ||
+        !tokenAddress ||
+        amountBN.eq(new BN('0'))
+      ) {
+        return new BN('0')
+      }
 
       const exchangeContract = useContractStore.getState().exchangeContract
       let daiOutputAmount

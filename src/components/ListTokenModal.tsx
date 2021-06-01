@@ -47,9 +47,8 @@ export default function ListTokenModal({
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
 
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
-    false
-  )
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
+    useState(false)
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
   const [approveButtonKey, setApproveButtonKey] = useState(0)
@@ -286,8 +285,15 @@ export default function ListTokenModal({
             <TradeInterface
               market={selectedMarket}
               newIdeaToken={{
-                symbol: tokenName,
-                logoURL: selectedMarket && marketSpecifics && tokenIconURL,
+                symbol:
+                  tokenName !== '' && marketSpecifics
+                    ? marketSpecifics.convertUserInputToTokenName(tokenName)
+                    : '',
+                logoURL:
+                  selectedMarket &&
+                  marketSpecifics &&
+                  !isTokenIconLoading &&
+                  tokenIconURL,
               }}
               ideaToken={undefined}
               onTradeSuccessful={() => {}}
@@ -304,7 +310,7 @@ export default function ListTokenModal({
             )}
           </div>
 
-          <div className="max-w-sm mx-auto">
+          <div className="max-w-sm mx-auto mt-2">
             <div className="">
               <div className="">
                 <ApproveButton

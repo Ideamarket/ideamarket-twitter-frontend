@@ -75,9 +75,8 @@ export default function TradeInterface({
   const [tradeType, setTradeType] = useState('buy')
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
-    false
-  )
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
+    useState(false)
 
   const tokenList = useTokenListStore((state) => state.tokens)
   const selectTokensValues = tokenList.map((token) => ({
@@ -86,11 +85,8 @@ export default function TradeInterface({
   }))
 
   const [selectedToken, setSelectedToken] = useState(undefined)
-  const [
-    isIdeaTokenBalanceLoading,
-    ideaTokenBalanceBN,
-    ideaTokenBalance,
-  ] = useBalance(ideaToken?.address, 18)
+  const [isIdeaTokenBalanceLoading, ideaTokenBalanceBN, ideaTokenBalance] =
+    useBalance(ideaToken?.address, 18)
 
   const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
     selectedToken?.address,
@@ -275,6 +271,7 @@ export default function TradeInterface({
       return
     }
 
+    setIdeaTokenAmount('0')
     setApproveButtonKey(approveButtonKey + 1)
     onTradeSuccessful()
   }
@@ -329,17 +326,17 @@ export default function TradeInterface({
   return (
     <div>
       <div
-        className="p-4 rounded-xl bg-white mx-auto"
+        className="p-4 mx-auto bg-white rounded-xl"
         style={{ maxWidth: 550 }}
       >
         <div className="flex justify-between">
           <div />
           <Tooltip
-            className="w-4 h-4 cursor-pointer text-brand-gray-4 ml-2 mb-4"
+            className="w-4 h-4 mb-4 ml-2 cursor-pointer text-brand-gray-4"
             placement="down"
             IconComponent={Settings}
           >
-            <div className="w-32 w-64 mb-2">
+            <div className="w-64 mb-2">
               <AdvancedOptions
                 disabled={disabled}
                 setIsUnlockOnceChecked={setIsUnlockOnceChecked}
@@ -350,7 +347,7 @@ export default function TradeInterface({
               />
             </div>
 
-            <div className="flex-1 mb-3 text-brand-gray-2 text-base">
+            <div className="flex-1 mb-3 text-base text-brand-gray-2">
               <Select
                 className="border-2 border-gray-200 rounded-md text-brand-gray-2 trade-select"
                 isClearable={false}
@@ -473,14 +470,14 @@ export default function TradeInterface({
                 {tradeType === 'buy' ? 'Buy' : 'Sell'}
               </button>
             </div>
-            <div className="text-center text-gray-500 text-xs mt-2">
+            <div className="mt-2 text-xs text-center text-gray-500">
               Confirm transaction in wallet to complete.
             </div>
 
             <div
               className={classNames(
                 'grid grid-cols-3 my-5 text-sm text-brand-new-dark font-semibold',
-                txManager.isPending ? '' : 'hidden'
+                txManager.isPending ? '' : 'invisible'
               )}
             >
               <div className="font-bold justify-self-center">

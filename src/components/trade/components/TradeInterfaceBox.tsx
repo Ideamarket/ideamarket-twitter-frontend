@@ -63,19 +63,18 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   const handleBuySellClick = () => {
     if (!txManager.isPending && tradeType === 'sell') setTradeType('buy')
     if (!txManager.isPending && tradeType === 'buy') setTradeType('sell')
-
-    setIdeaTokenAmount('0')
+    if (!txManager.isPending) setIdeaTokenAmount('0')
   }
 
   return (
-    <div className="mb-1 bg-gray-50 border border-gray-100 rounded-md px-5 py-4 relative text-brand-new-dark">
+    <div className="relative px-5 py-4 mb-1 border border-gray-100 rounded-md bg-gray-50 text-brand-new-dark">
       <div
         style={{
           top: '-16px',
           left: '50%',
           transform: 'translate(-50%, 0)',
         }}
-        className="text-xs font-medium bg-white rounded-md shadow-md flex item-center py-1 px-4 absolute font-bold"
+        className="absolute flex px-4 py-1 text-xs font-bold bg-white rounded-md shadow-md item-center"
       >
         {label}
       </div>
@@ -87,7 +86,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
             left: 'calc(50% + 70px)',
             transform: 'translate(-50%, 0)',
           }}
-          className="text-xs font-medium bg-white rounded-md shadow-md flex item-center py-1 px-4 absolute font-bold cursor-pointer"
+          className="absolute flex px-4 py-1 text-xs font-bold bg-white rounded-md shadow-md cursor-pointer item-center"
           onClick={handleBuySellClick}
         >
           ↓
@@ -95,15 +94,17 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
       )}
       <div className="flex justify-between mb-2">
         {selectedIdeaToken ? (
-          <div className="flex flex-row items-center w-full border-gray-200 rounded-md text-brand-gray-4 trade-select text-xs font-medium">
-            <div className="bg-white flex items-center px-2 py-1  rounded-2xl shadow-md">
+          <div className="flex flex-row items-center w-full text-xs font-medium border-gray-200 rounded-md text-brand-gray-4 trade-select">
+            <div className="flex items-center px-2 py-1 bg-white shadow-md rounded-2xl">
               <div className="flex items-center">
-                {selectedIdeaToken?.logoURL && (
+                {selectedIdeaToken?.logoURL ? (
                   <img
                     className="w-7.5 rounded-full"
                     src={selectedIdeaToken?.logoURL}
                     alt="token"
                   />
+                ) : (
+                  <div className="w-7.5 h-7.5 rounded-full bg-gray-400 animate animate-pulse" />
                 )}
               </div>
               {selectedIdeaToken?.symbol && (
@@ -115,7 +116,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           </div>
         ) : (
           <Select
-            className="border-2 border-gray-200 rounded-xl text-brand-gray-4 trade-select text-xs font-medium bg-white rounded-2xl shadow-md cursor-pointer"
+            className="text-xs font-medium bg-white border-2 border-gray-200 shadow-md cursor-pointer text-brand-gray-4 trade-select rounded-2xl"
             isClearable={false}
             isSearchable={false}
             isDisabled={txManager.isPending || disabled}
@@ -136,7 +137,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           />
         )}
         <input
-          className="border-none outline-none text-brand-gray-2 bg-gray-50 text-3xl text-right w-full max-w-sm"
+          className="w-full max-w-sm text-3xl text-right border-none outline-none text-brand-gray-2 bg-gray-50"
           min="0"
           placeholder="0"
           disabled={!selectedIdeaToken || txManager.isPending}
@@ -151,7 +152,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           Balance: {isTokenBalanceLoading ? '...' : tokenBalance}
           {!txManager.isPending && label === 'Spend' && (
             <span
-              className="text-brand-blue cursor-pointer"
+              className="cursor-pointer text-brand-blue"
               onClick={maxButtonClicked}
             >
               {' '}

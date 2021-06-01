@@ -74,14 +74,14 @@ export default function ApproveButton({
         'py-4 px-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium text-center',
         disable
           ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
-          : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
+          : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800 cursor-pointer'
       )}
       onClick={() => {
         !disable && approve()
       }}
     >
       <span>Allow Ideamarket to spend your {tokenSymbol?.toUpperCase()}</span>
-      <Tooltip className="ml-2 inline-block">
+      <Tooltip className="inline-block ml-2">
         <div className="w-32 md:w-64">
           Lock tokens to show your long-term confidence in a listing. You will
           be unable to sell or withdraw locked tokens for the time period
