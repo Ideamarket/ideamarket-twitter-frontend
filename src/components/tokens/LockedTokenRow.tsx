@@ -80,7 +80,7 @@ export default function LockedTokenRow({
                 />
               )}
             </div>
-            <div className="w-full flex justify-between ml-4 text-base font-semibold leading-5 text-gray-900">
+            <div className="flex justify-between w-full ml-4 text-base font-semibold leading-5 text-gray-900">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -91,7 +91,7 @@ export default function LockedTokenRow({
                 {token.name}
               </A>
               {isL1 && (
-                <div className="inline-block ml-2 px-1 py-0.5 bg-white border-2 border-gray-400 rounded text-gray-400">
+                <div className="ml-2 text-xs py-0.5 px-2.5 text-gray-400 border border-gray-400 rounded">
                   L1
                 </div>
               )}

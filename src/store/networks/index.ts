@@ -39,6 +39,16 @@ export function getNetworkSpecificsByNetworkName(
   }
 }
 
+// TODO: Complete
+export function getL1Network(l2Network: INetworkSpecifics) {
+  switch (l2Network.getNetworkName()) {
+    case 'kovan':
+      return getNetworkSpecificsByNetworkName('kovan')
+    default:
+      throw 'getL1Network: missing'
+  }
+}
+
 if (!process.env.NEXT_PUBLIC_NETWORK) {
   console.log('WARNING: NEXT_PUBLIC_NETWORK not found. Defaulting to rinkeby')
 }
@@ -48,6 +58,7 @@ const networkName = process.env.NEXT_PUBLIC_NETWORK
   : 'rinkeby'
 
 export const NETWORK = getNetworkSpecificsByNetworkName(networkName)
+export const L1_NETWORK = getL1Network(NETWORK)
 
 if (!NETWORK) {
   throw 'no network config: ' + networkName

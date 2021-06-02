@@ -206,9 +206,9 @@ export default function MyTokenTable({
                     ))
                   ) : (
                     <>
-                      {pairs.map((pair) => (
+                      {pairs.map((pair, i) => (
                         <MyTokenRow
-                          key={pair.token.tokenID}
+                          key={i}
                           token={pair.token}
                           market={pair.market}
                           compoundSupplyRate={compoundSupplyRate}
