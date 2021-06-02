@@ -1,7 +1,6 @@
 import classNames from 'classnames'
 import { NextSeo } from 'next-seo'
-import { useEffect, useState, useContext } from 'react'
-import { GlobalContext } from 'pages/_app'
+import { useEffect, useState } from 'react'
 import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
 import { IMarketSpecifics, getMarketSpecificsByMarketName } from 'store/markets'
@@ -14,13 +13,13 @@ import {
   useTransactionManager,
 } from 'utils'
 import { useTokenIconURL, migrateTokensToArbitrum } from 'actions'
-import { L1TokenTable, Footer, DefaultLayout } from '../components'
+import { L1TokenTable, Footer, DefaultLayout, WalletModal } from 'components'
+import ModalService from 'components/modals/ModalService'
 import Wand from '../assets/wand.svg'
 
 export default function Bridge() {
   const connectedAddress = useWalletStore((state) => state.address)
   const isWalletConnected = connectedAddress !== ''
-  const { setIsWalletModalOpen } = useContext(GlobalContext)
 
   const [l2Recipient, setL2Recipient] = useState<string>('')
   const isValidL2Recipient = isAddress(l2Recipient)
@@ -34,9 +33,8 @@ export default function Bridge() {
     marketSpecifics: null,
     tokenName: null,
   })
-  const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL(
-    tokenIconURLParams
-  )
+  const { tokenIconURL, isLoading: isTokenIconLoading } =
+    useTokenIconURL(tokenIconURLParams)
 
   const migrateButtonDisabled = !isPairSelected || !isValidL2Recipient
 
@@ -93,7 +91,7 @@ export default function Bridge() {
                 <div className="flex items-center justify-center w-full h-full">
                   <button
                     onClick={() => {
-                      setIsWalletModalOpen(true)
+                      ModalService.open(WalletModal)
                     }}
                     className="p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
                   >

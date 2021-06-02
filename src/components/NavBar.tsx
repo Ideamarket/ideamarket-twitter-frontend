@@ -7,16 +7,15 @@ import Close from '../assets/close.svg'
 import Hamburger from '../assets/hamburger.svg'
 import NProgress from 'nprogress'
 import A from './A'
+import ModalService from 'components/modals/ModalService'
+import { EmailNewsletterModal } from 'components'
+import WalletModal from './wallet/WalletModal'
 
 export default function Nav() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const router = useRouter()
   const closeMenu = () => setIsMobileNavOpen(false)
-  const {
-    setIsWalletModalOpen,
-    setIsEmailNewsletterModalOpen,
-    isEmailHeaderActive,
-  } = useContext(GlobalContext)
+  const { isEmailHeaderActive } = useContext(GlobalContext)
   const menuItems = [
     {
       name: 'Whitepaper',
@@ -29,16 +28,6 @@ export default function Nav() {
       value: 'wallet',
       onClick: () => router.push('/account'),
       isSelected: router.pathname === '/account',
-    },
-    {
-      name: 'Extension',
-      value: 'extension',
-      onClick: () =>
-        window.open(
-          'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
-          '_blank'
-        ),
-      isSelected: false,
     },
     {
       name: 'Community',
@@ -116,7 +105,7 @@ export default function Nav() {
               ))}
             </div>
             <div className="z-20 hidden md:ml-6 md:flex md:items-center">
-              <WalletStatus openModal={() => setIsWalletModalOpen(true)} />
+              <WalletStatus openModal={() => ModalService.open(WalletModal)} />
             </div>
             <div className="flex items-center -mr-2 md:hidden">
               <button
@@ -168,7 +157,7 @@ export default function Nav() {
             ))}
 
             <div className="flex justify-center mt-5">
-              <WalletStatus openModal={() => setIsWalletModalOpen(true)} />
+              <WalletStatus openModal={() => ModalService.open(WalletModal)} />
             </div>
           </div>
         </div>

@@ -2,13 +2,7 @@ import { useState, useEffect } from 'react'
 import { useWindowSize } from '../../utils'
 import { Modal } from '..'
 
-export default function PromoVideoModal({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean
-  setIsOpen: (b: boolean) => void
-}) {
+export default function PromoVideoModal({ close }: { close: () => void }) {
   const windowSize = useWindowSize()
   const [playerSize, setPlayerSize] = useState({ width: '0px', height: '0px' })
 
@@ -39,12 +33,7 @@ export default function PromoVideoModal({
   }, [windowSize])
 
   return (
-    <Modal
-      isOpen={isOpen}
-      close={() => {
-        setIsOpen(false)
-      }}
-    >
+    <Modal close={() => close()}>
       <div style={playerSize}>
         <iframe
           width="100%"

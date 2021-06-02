@@ -1,6 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  mode: 'jit',
   darkMode: false,
   purge: {
     content: ['./src/**/*.{js,ts,jsx,tsx}'],
@@ -11,6 +12,8 @@ module.exports = {
         'mobile-row': '1fr minmax(160px, 1fr) 1fr',
       },
       colors: {
+        'brand-gray-white': '#E5E4E5',
+        'brand-gray-white-2': '#868686',
         'brand-blue': '#0857e0',
         'brand-gray': '#f6f6f6',
         'brand-gray-2': '#708090',
@@ -26,6 +29,7 @@ module.exports = {
         'brand-new-blue': '#074ef0',
         'brand-new-dark': '#1a1d3f',
         'brand-border-gray': '#dce2e9',
+        'brand-border-gray-2': '#CECECE',
         'brand-purple': '#08245A',
         'brand-light-blue': defaultTheme.colors.indigo['100'],
       },
@@ -60,6 +64,7 @@ module.exports = {
       },
       boxShadow: {
         home: '0 1px 5px 0 rgba(0, 0, 0, 0.05)',
+        embed: '0px 0px 8px rgba(0, 0, 0, 0.25)',
       },
       minHeight: {
         6: '1.5rem',

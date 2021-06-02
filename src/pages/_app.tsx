@@ -4,19 +4,8 @@ import '../styles/fonts/gilroy/style.css'
 import '../styles/fonts/sf-compact-display/style.css'
 import '../styles/nprogress.css'
 
-import CookieConsent from 'react-cookie-consent'
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
-import { initTokenList } from 'store/tokenListStore'
-import {
-  NavBar,
-  WrongNetworkOverlay,
-  WalletModal,
-  EmailNewsletterModal,
-} from 'components'
-import { Toaster } from 'react-hot-toast'
 import { DefaultSeo } from 'next-seo'
 import {
   DEFAULT_CANONICAL,
@@ -33,16 +22,12 @@ import en from 'javascript-time-ago/locale/en'
 import { Web3ReactProvider } from '@web3-react/core'
 import Web3 from 'web3'
 import Web3ReactManager from 'components/wallet/Web3ReactManager'
+import ModalRoot from 'components/modals/ModalRoot'
+import { WrongNetworkOverlay } from 'components'
 
 export const GlobalContext = createContext({
-  isWalletModalOpen: false,
-  setIsWalletModalOpen: (val: boolean) => {},
   onWalletConnectedCallback: () => {},
   setOnWalletConnectedCallback: (f: () => void) => {},
-  isListTokenModalOpen: false,
-  setIsListTokenModalOpen: (val: boolean) => {},
-  isEmailNewsletterModalOpen: false,
-  setIsEmailNewsletterModalOpen: (val: boolean) => {},
   isEmailHeaderActive: false,
   setIsEmailHeaderActive: (val: boolean) => {},
 })
@@ -53,17 +38,16 @@ function getLibrary(provider: any): Web3 {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const Layout =
-    (Component as typeof Component & {
-      layoutProps: {
-        Layout: (props: { children: ReactNode } & unknown) => JSX.Element
+    (
+      Component as typeof Component & {
+        layoutProps: {
+          Layout: (props: { children: ReactNode } & unknown) => JSX.Element
+        }
       }
-    }).layoutProps?.Layout || Fragment
+    ).layoutProps?.Layout || Fragment
 
   const [isEmailHeaderActive, setIsEmailHeaderActive] = useState(false)
   useEffect(() => {
-    initIdeaMarketsStore()
-    initTokenList()
-
     const isEmailBarClosed = localStorage.getItem('IS_EMAIL_BAR_CLOSED')
       ? localStorage.getItem('IS_EMAIL_BAR_CLOSED') === 'true'
       : false
@@ -74,22 +58,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     TimeAgo.addDefaultLocale(en)
   }, [])
 
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
-  const [
-    onWalletConnectedCallback,
-    setOnWalletConnectedCallback,
-  ] = useState(() => () => {})
-
-  const [isListTokenModalOpen, setIsListTokenModalOpen] = useState(false)
-
-  const [isEmailNewsletterModalOpen, _setIsEmailNewsletterModalOpen] = useState(
-    false
+  const [onWalletConnectedCallback, setOnWalletConnectedCallback] = useState(
+    () => () => {}
   )
-
-  const setIsEmailNewsletterModalOpen = (b: boolean) => {
-    localStorage.setItem('EMAIL_NEWSLETTER_WAS_SEEN', 'true')
-    _setIsEmailNewsletterModalOpen(b)
-  }
 
   return (
     <>
@@ -125,14 +96,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
       <GlobalContext.Provider
         value={{
-          isWalletModalOpen,
-          setIsWalletModalOpen,
           onWalletConnectedCallback,
           setOnWalletConnectedCallback,
-          isListTokenModalOpen,
-          setIsListTokenModalOpen,
-          isEmailNewsletterModalOpen,
-          setIsEmailNewsletterModalOpen,
           isEmailHeaderActive,
           setIsEmailHeaderActive,
         }}
@@ -143,9 +108,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </Layout>
           </Web3ReactManager>
-          <WalletModal />
           <WrongNetworkOverlay />
-          <EmailNewsletterModal />
+          <ModalRoot />
         </Web3ReactProvider>
       </GlobalContext.Provider>
     </>

@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import {
@@ -17,13 +17,17 @@ import {
   TradeModal,
   ListTokenModal,
   PromoVideoModal,
+  ColumnsModal,
   A,
   DefaultLayout,
+  WalletModal,
 } from 'components'
+import ModalService from 'components/modals/ModalService'
 import { NETWORK } from 'store/networks'
 
 import Search from '../assets/search.svg'
 import Plus from '../assets/plus-white.svg'
+import Columns from '../assets/columns.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 import { Categories } from 'store/models/category'
@@ -34,13 +38,103 @@ import { getMarketSpecifics } from 'store/markets'
 import { NextSeo } from 'next-seo'
 
 export default function Home() {
+  const defaultHeaders = [
+    {
+      id: 1,
+      name: 'Rank',
+      content: 'Rank',
+      value: 'rank',
+      sortable: true,
+      isOptional: false,
+      isActive: true,
+    },
+    {
+      id: 2,
+      name: 'Market',
+      content: '',
+      value: 'market',
+      sortable: false,
+      isOptional: false,
+      isActive: true,
+    },
+    {
+      id: 3,
+      name: 'Name',
+      content: 'Name',
+      value: 'name',
+      sortable: true,
+      isOptional: false,
+      isActive: true,
+    },
+    {
+      id: 4,
+      name: 'Price',
+      content: 'Price',
+      value: 'price',
+      sortable: true,
+      isOptional: false,
+      isActive: true,
+    },
+    {
+      id: 5,
+      name: 'Deposits',
+      content: 'Deposits',
+      value: 'deposits',
+      sortable: true,
+      isOptional: true,
+      isActive: true,
+    },
+    {
+      id: 6,
+      name: '% Locked',
+      content: '% Locked',
+      value: 'locked',
+      sortable: true,
+      isOptional: true,
+      isActive: true,
+    },
+    {
+      id: 7,
+      name: '1YR Income',
+      content: '1YR Income',
+      value: 'income',
+      sortable: true,
+      isOptional: true,
+      isActive: true,
+    },
+    {
+      id: 8,
+      name: 'Trade',
+      content: 'Trade',
+      value: 'trade',
+      sortable: false,
+      isOptional: false,
+      isActive: true,
+    },
+    {
+      id: 9,
+      name: 'Watch',
+      content: 'Watch',
+      value: 'watch',
+      sortable: false,
+      isOptional: false,
+      isActive: true,
+    },
+  ]
+
+  const [headerData, setHeaderData] = useState(null)
+
+  useEffect(() => {
+    const storedHeaders = JSON.parse(localStorage.getItem('STORED_HEADERS'))
+    const initialHeaders = storedHeaders ?? defaultHeaders
+    setHeaderData(initialHeaders)
+  }, [])
+
   const [selectedCategoryId, setSelectedCategoryId] = useState(
     Categories.TOP.id
   )
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
-
-  const [isPromoVideoModalOpen, setIsPromoVideoModalOpen] = useState(false)
 
   const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
 
@@ -72,17 +166,7 @@ export default function Home() {
     )
   )
 
-  const {
-    setIsWalletModalOpen,
-    setOnWalletConnectedCallback,
-    isListTokenModalOpen,
-    setIsListTokenModalOpen,
-  } = useContext(GlobalContext)
-  const [tradeModalData, setTradeModalData] = useState({
-    show: false,
-    token: undefined,
-    market: undefined,
-  })
+  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
   function onMarketChanged(market) {
     setSelectedMarkets(market)
@@ -114,23 +198,39 @@ export default function Home() {
   function onTradeClicked(token: IdeaToken, market: IdeaMarket) {
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        setTradeModalData({ show: true, token: token, market: market })
+        ModalService.open(TradeModal, { ideaToken: token, market })
       })
-      setIsWalletModalOpen(true)
+      ModalService.open(WalletModal)
     } else {
-      setTradeModalData({ show: true, token: token, market: market })
+      ModalService.open(TradeModal, { ideaToken: token, market })
     }
   }
 
   function onListTokenClicked() {
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        setIsListTokenModalOpen(true)
+        ModalService.open(ListTokenModal)
       })
-      setIsWalletModalOpen(true)
+      ModalService.open(WalletModal)
     } else {
-      setIsListTokenModalOpen(true)
+      ModalService.open(ListTokenModal)
     }
+  }
+
+  function getHeader(headerValue) {
+    return headerData.find((h) => h.value === headerValue)
+  }
+
+  function toggleHeader(headerValue) {
+    const headerObject = getHeader(headerValue)
+    headerObject.isActive = !headerObject.isActive
+    const newHeaderData = [
+      ...headerData.filter((h) => h.value !== headerValue),
+      headerObject,
+    ]
+    newHeaderData.sort((h1, h2) => h1.id - h2.id) // Sort since above statement puts out of order
+    localStorage.setItem('STORED_HEADERS', JSON.stringify(newHeaderData))
+    setHeaderData(newHeaderData)
   }
 
   return (
@@ -147,17 +247,30 @@ export default function Home() {
               Profit by discovering the world’s best information.
             </p>
           </div>
-          <button
-            onClick={() => {
-              onListTokenClicked()
-            }}
-            className="py-2 mt-10 ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
-          >
-            <div className="flex flex-row items-center justify-center">
-              <Plus width="30" height="30" />
-              <div className="ml-0.5 md:ml-2">Add Listing</div>
-            </div>
-          </button>
+          <div className="flex flex-col md:flex-row justify-center items-center">
+            <button
+              onClick={() => {
+                onListTokenClicked()
+              }}
+              className="py-2 mt-10 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium bg-brand-blue hover:bg-blue-800"
+            >
+              <div className="flex flex-row items-center justify-center">
+                <Plus width="30" height="30" />
+                <div className="ml-0.5 md:ml-2">Add Listing</div>
+              </div>
+            </button>
+            <button
+              className="py-2 mt-3 md:mt-10 md:ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium border-white border hover:bg-white hover:text-brand-blue"
+              onClick={() =>
+                window.open(
+                  'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
+                  '_blank'
+                )
+              }
+            >
+              Browser Extension
+            </button>
+          </div>
           <div className="flex flex-col items-center justify-center mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
             <div className="text-2xl text-brand-blue md:text-5xl">
               ${cDaiBalanceInDai}
@@ -219,34 +332,32 @@ export default function Home() {
                   />
                 </div>
               </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  ModalService.open(ColumnsModal, { headerData, toggleHeader })
+                }}
+                className="hidden md:flex items-center mx-6"
+              >
+                <Columns className="h-full mr-1" />
+                <b>Columns</b>
+              </button>
             </div>
-            <Table
-              nameSearch={nameSearch}
-              selectedMarkets={selectedMarkets}
-              selectedCategoryId={selectedCategoryId}
-              onOrderByChanged={onOrderByChanged}
-              onTradeClicked={onTradeClicked}
-            />
+            {headerData && (
+              <Table
+                nameSearch={nameSearch}
+                selectedMarkets={selectedMarkets}
+                selectedCategoryId={selectedCategoryId}
+                headerData={headerData}
+                getHeader={getHeader}
+                onOrderByChanged={onOrderByChanged}
+                onTradeClicked={onTradeClicked}
+              />
+            )}
           </div>
         </div>
 
         <ScrollToTop />
-        <TradeModal
-          isOpen={tradeModalData.show}
-          setIsOpen={() =>
-            setTradeModalData({ ...tradeModalData, show: false })
-          }
-          ideaToken={tradeModalData.token}
-          market={tradeModalData.market}
-        />
-        <ListTokenModal
-          isOpen={isListTokenModalOpen}
-          setIsOpen={setIsListTokenModalOpen}
-        />
-        <PromoVideoModal
-          isOpen={isPromoVideoModalOpen}
-          setIsOpen={setIsPromoVideoModalOpen}
-        />
       </div>
     </>
   )

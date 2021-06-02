@@ -1,43 +1,37 @@
 import { useContext } from 'react'
 import { GlobalContext } from 'pages/_app'
 
-import Modal from '../Modal'
+import Modal from '../modals/Modal'
 import dynamic from 'next/dynamic'
 
 const NoSSRWalletInterface = dynamic(() => import('./WalletInterface'), {
   ssr: false,
 })
 
-export default function WalletModal() {
-  const {
-    isWalletModalOpen,
-    setIsWalletModalOpen,
-    onWalletConnectedCallback,
-    setOnWalletConnectedCallback,
-  } = useContext(GlobalContext)
+export default function WalletModal({ close }: { close: () => void }) {
+  const { onWalletConnectedCallback, setOnWalletConnectedCallback } =
+    useContext(GlobalContext)
 
-  function close(success) {
+  function closeModal(success) {
+    close()
+
     if (onWalletConnectedCallback) {
       if (success) {
         onWalletConnectedCallback()
       }
       setOnWalletConnectedCallback(undefined)
     }
-
-    setIsWalletModalOpen(false)
   }
 
   return (
-    <Modal isOpen={isWalletModalOpen} close={() => close(false)}>
+    <Modal close={() => closeModal(false)}>
       <div className="p-4 bg-top-mobile">
         <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
           {' '}
           Payment Method
         </p>
       </div>
-      <NoSSRWalletInterface
-        onWalletConnected={() => setIsWalletModalOpen(false)}
-      />
+      <NoSSRWalletInterface onWalletConnected={() => closeModal(true)} />
     </Modal>
   )
 }

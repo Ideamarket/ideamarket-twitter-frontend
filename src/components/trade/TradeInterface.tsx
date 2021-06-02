@@ -60,9 +60,8 @@ export default function TradeInterface({
   const [tradeType, setTradeType] = useState('buy')
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
-    false
-  )
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
+    useState(false)
 
   const tokenList = useTokenListStore((state) => state.tokens)
   const selectTokensValues = tokenList.map((token) => ({
@@ -71,11 +70,8 @@ export default function TradeInterface({
   }))
 
   const [selectedToken, setSelectedToken] = useState(undefined)
-  const [
-    isIdeaTokenBalanceLoading,
-    ideaTokenBalanceBN,
-    ideaTokenBalance,
-  ] = useBalance(ideaToken?.address, 18)
+  const [isIdeaTokenBalanceLoading, ideaTokenBalanceBN, ideaTokenBalance] =
+    useBalance(ideaToken?.address, 18)
 
   const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
     selectedToken?.address,
@@ -275,6 +271,14 @@ export default function TradeInterface({
     setApproveButtonKey(approveButtonKey + 1)
     onTradeSuccessful()
   }
+
+  const isTradeButtonDisabled =
+    txManager.isPending ||
+    !isValid ||
+    exceedsBalance ||
+    isMissingAllowance ||
+    !parseFloat(ideaTokenAmount) ||
+    parseFloat(ideaTokenAmount) <= 0.0
 
   return (
     <>
@@ -530,21 +534,11 @@ export default function TradeInterface({
                 <button
                   className={classNames(
                     'ml-6 w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
-                    txManager.isPending ||
-                      !isValid ||
-                      exceedsBalance ||
-                      isMissingAllowance ||
-                      !parseFloat(ideaTokenAmount) ||
-                      parseFloat(ideaTokenAmount) <= 0.0
+                    isTradeButtonDisabled
                       ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
                       : 'border-brand-blue text-white bg-brand-blue font-medium'
                   )}
-                  disabled={
-                    txManager.isPending ||
-                    exceedsBalance ||
-                    !parseFloat(ideaTokenAmount) ||
-                    parseFloat(ideaTokenAmount) <= 0.0
-                  }
+                  disabled={isTradeButtonDisabled}
                   onClick={onTradeClicked}
                 >
                   {tradeType === 'buy' ? 'Buy' : 'Sell'}

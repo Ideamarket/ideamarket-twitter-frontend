@@ -2,13 +2,20 @@ import { useContext } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import { GlobalContext } from 'pages/_app'
 import { NavBar } from 'components'
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 import CookieConsent from 'react-cookie-consent'
 import { Toaster } from 'react-hot-toast'
+
+import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
+import { initTokenList } from 'store/tokenListStore'
 
 export default function DefaultLayout({ children }: { children: ReactNode }) {
   const { isEmailHeaderActive } = useContext(GlobalContext)
   const router = useRouter()
+  useEffect(() => {
+    initIdeaMarketsStore()
+    initTokenList()
+  }, [])
 
   return (
     <>
