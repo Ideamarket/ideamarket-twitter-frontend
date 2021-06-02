@@ -14,9 +14,7 @@ export default function WrongNetworkOverlay() {
   const web3ChainID = useWalletStore((state) => state.chainID)
   const isWrongNetwork = NETWORK.getChainID() !== web3ChainID
 
-  const { isWalletModalOpen } = useContext(GlobalContext)
-
-  const show = web3 !== undefined && isWrongNetwork && !isWalletModalOpen
+  const show = web3 !== undefined && isWrongNetwork
 
   useEffect(() => {
     if (show) {

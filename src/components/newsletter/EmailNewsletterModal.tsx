@@ -1,18 +1,8 @@
-import { useContext } from 'react'
-import { GlobalContext } from 'pages/_app'
 import { Modal } from '..'
 
-export default function EmailNewsletterModal() {
-  const { isEmailNewsletterModalOpen, setIsEmailNewsletterModalOpen } =
-    useContext(GlobalContext)
-
+export default function EmailNewsletterModal({ close }: { close: () => void }) {
   return (
-    <Modal
-      isOpen={isEmailNewsletterModalOpen}
-      close={() => {
-        setIsEmailNewsletterModalOpen(false)
-      }}
-    >
+    <Modal close={() => close()}>
       <div className="mb-5 w-100 max-w-100">
         <div className="p-4 bg-top-mobile">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">

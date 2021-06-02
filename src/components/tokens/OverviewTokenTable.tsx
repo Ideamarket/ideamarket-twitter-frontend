@@ -20,6 +20,8 @@ type Props = {
   selectedMarkets: Set<string>
   selectedCategoryId: number
   nameSearch: string
+  headerData: Array<any>
+  getHeader: (headerValue: string) => object
   onOrderByChanged: (o: string, d: string) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }
@@ -28,6 +30,8 @@ export default function Table({
   selectedMarkets,
   selectedCategoryId,
   nameSearch,
+  headerData,
+  getHeader,
   onOrderByChanged,
   onTradeClicked,
 }: Props) {
@@ -63,10 +67,12 @@ export default function Table({
     }
   )
 
-  const { data: compoundSupplyRate, isFetching: isCompoundSupplyRateLoading } =
-    useQuery('compound-supply-rate', querySupplyRate, {
-      refetchOnWindowFocus: false,
-    })
+  const {
+    data: compoundSupplyRate,
+    isFetching: isCompoundSupplyRateLoading,
+  } = useQuery('compound-supply-rate', querySupplyRate, {
+    refetchOnWindowFocus: false,
+  })
 
   const { isFetching: isMarketLoading, refetch: refetchMarkets } = useQuery(
     [`market-${Array.from(selectedMarkets)}`, Array.from(selectedMarkets)],
@@ -209,13 +215,14 @@ export default function Table({
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden border-b border-gray-200 sm:rounded-t-lg">
+            <div className="border-b border-gray-200 sm:rounded-t-lg">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="hidden md:table-header-group">
                   <tr>
                     <Header
                       currentHeader={currentHeader}
                       orderDirection={orderDirection}
+                      headerData={headerData}
                       headerClicked={headerClicked}
                     />
                   </tr>
@@ -228,12 +235,13 @@ export default function Table({
                       market={marketsMap[token.marketID]}
                       showMarketSVG={false}
                       compoundSupplyRate={compoundSupplyRate}
+                      getHeader={getHeader}
                       onTradeClicked={onTradeClicked}
                     />
                   ))}
                   {isLoading
                     ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                        <TokenRowSkeleton key={token} />
+                        <TokenRowSkeleton key={token} getHeader={getHeader} />
                       ))
                     : null}
                 </tbody>

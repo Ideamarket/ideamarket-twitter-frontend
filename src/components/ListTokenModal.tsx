@@ -16,13 +16,7 @@ import BN from 'bn.js'
 import CircleSpinner from './animations/CircleSpinner'
 import A from './A'
 
-export default function ListTokenModal({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean
-  setIsOpen: (b: boolean) => void
-}) {
+export default function ListTokenModal({ close }: { close: () => void }) {
   const PAGES = {
     LIST: 0,
     SUCCESS: 1,
@@ -47,8 +41,9 @@ export default function ListTokenModal({
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
 
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
-    useState(false)
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
+    false
+  )
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
   const [approveButtonKey, setApproveButtonKey] = useState(0)
@@ -164,14 +159,10 @@ export default function ListTokenModal({
     setIsWantBuyChecked(false)
     setBuyLock(false)
     setPage(PAGES.LIST)
-  }, [isOpen])
-
-  if (!isOpen) {
-    return <></>
-  }
+  }, [])
 
   return (
-    <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
+    <Modal close={() => close()}>
       <div className="p-4 bg-top-mobile md:min-w-100">
         <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
           Add Listing

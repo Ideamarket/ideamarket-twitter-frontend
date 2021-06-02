@@ -17,17 +17,17 @@ import { isAddress, useTransactionManager, web3BNToFloatString } from '../utils'
 import { NETWORK } from 'store/networks'
 import { Modal, CircleSpinner } from './'
 import A from './A'
+import ModalService from './modals/ModalService'
+import WalletModal from './wallet/WalletModal'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function VerifyModal({
-  isOpen,
-  setIsOpen,
+  close,
   market,
   token,
 }: {
-  isOpen: boolean
-  setIsOpen: (b: boolean) => void
+  close: () => void
   market: IdeaMarket
   token: IdeaToken
 }) {
@@ -47,8 +47,7 @@ export default function VerifyModal({
   const [ownerAddress, setOwnerAddress] = useState('')
   const isValidOwnerAddress = isAddress(ownerAddress)
 
-  const { setIsWalletModalOpen, setOnWalletConnectedCallback } =
-    useContext(GlobalContext)
+  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
   const [uuid, setUUID] = useState('')
   const sha = new SHA3(256).update(uuid).digest('hex').toString().substr(0, 12)
@@ -57,13 +56,10 @@ export default function VerifyModal({
   const [feeTo, setFeeTo] = useState('')
   const txManager = useTransactionManager()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
-  const marketVerificationExplanation =
-    marketSpecifics.getVerificationExplanation()
-  const shaPromptExplanation =
-    marketSpecifics.getVerificationSHAPromptExplanation()
+  const marketVerificationExplanation = marketSpecifics.getVerificationExplanation()
+  const shaPromptExplanation = marketSpecifics.getVerificationSHAPromptExplanation()
   const shaPrompt = marketSpecifics.getVerificationSHAPrompt(sha)
-  const confirmCheckboxText =
-    marketSpecifics.getVerificationConfirmCheckboxLabel()
+  const confirmCheckboxText = marketSpecifics.getVerificationConfirmCheckboxLabel()
 
   const [tosCheckboxChecked, setTOSCheckboxChecked] = useState(false)
   const [confirmCheckboxChecked, setConfirmCheckboxChecked] = useState(false)
@@ -75,7 +71,7 @@ export default function VerifyModal({
       const addr = useWalletStore.getState().address
       setOwnerAddress(addr)
     })
-    setIsWalletModalOpen(true)
+    ModalService.open(WalletModal)
   }
 
   async function initiateVerification() {
@@ -154,24 +150,18 @@ export default function VerifyModal({
   }
 
   useEffect(() => {
-    if (!isOpen) {
-      setPage(PAGES.TOS)
-      setOwnerAddress('')
-      setUUID('')
-      setTOSCheckboxChecked(false)
-      setConfirmCheckboxChecked(false)
-      setTx('')
-      setIsLoading(false)
-      setErrorMessage('')
-    }
-  }, [isOpen])
-
-  if (!isOpen) {
-    return <></>
-  }
+    setPage(PAGES.TOS)
+    setOwnerAddress('')
+    setUUID('')
+    setTOSCheckboxChecked(false)
+    setConfirmCheckboxChecked(false)
+    setTx('')
+    setIsLoading(false)
+    setErrorMessage('')
+  }, [])
 
   return (
-    <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
+    <Modal close={() => close()}>
       <div className="md:min-w-150 md:max-w-150">
         <div className="p-4 bg-top-mobile ">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
@@ -466,9 +456,7 @@ export default function VerifyModal({
               <div className="flex justify-center mt-10">
                 <button
                   className="w-32 h-10 text-base bg-white border-2 rounded-lg hover:bg-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium text-brand-blue border-brand-blue"
-                  onClick={() => {
-                    setIsOpen(false)
-                  }}
+                  onClick={() => close()}
                 >
                   Close
                 </button>
@@ -484,9 +472,7 @@ export default function VerifyModal({
               <div className="flex justify-center mt-10">
                 <button
                   className="w-32 h-10 text-base bg-white border-2 rounded-lg hover:bg-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium text-brand-blue border-brand-blue"
-                  onClick={() => {
-                    setIsOpen(false)
-                  }}
+                  onClick={() => close()}
                 >
                   Close
                 </button>

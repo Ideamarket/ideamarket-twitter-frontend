@@ -1,6 +1,10 @@
 import classNames from 'classnames'
 
-export default function TokenRowSkeleton() {
+export default function TokenRowSkeleton({
+  getHeader,
+}: {
+  getHeader: (headerValue: string) => any
+}) {
   return (
     <>
       <tr className="grid grid-flow-col grid-cols-mobile-row md:table-row animate animate-pulse">
@@ -28,19 +32,31 @@ export default function TokenRowSkeleton() {
           <p className="w-8 h-4 bg-gray-400 rounded"></p>
         </td>
         {/* Deposits */}
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-          <p className="w-10 h-4 bg-gray-400 rounded"></p>
-        </td>
+        {getHeader('deposits').isActive ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="w-10 h-4 bg-gray-400 rounded"></p>
+          </td>
+        ) : (
+          <></>
+        )}
         {/* %Locked */}
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-          <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
-          <p className="h-4 mt-1 bg-gray-400 rounded"></p>
-        </td>
+        {getHeader('locked').isActive ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
+            <p className="h-4 mt-1 bg-gray-400 rounded"></p>
+          </td>
+        ) : (
+          <></>
+        )}
         {/* Year Income */}
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-          <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
-          <p className="h-4 mt-1 bg-gray-400 rounded"></p>
-        </td>
+        {getHeader('income').isActive ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
+            <p className="h-4 mt-1 bg-gray-400 rounded"></p>
+          </td>
+        ) : (
+          <></>
+        )}
         {/* Buy Button */}
         <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
           <button className="w-24 h-10 bg-gray-400 rounded-lg">

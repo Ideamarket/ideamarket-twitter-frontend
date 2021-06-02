@@ -2,38 +2,23 @@ import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
 import { Modal, TradeInterface } from 'components'
 
 export default function TradeModal({
-  isOpen,
-  setIsOpen,
+  close,
   ideaToken,
   market,
 }: {
-  isOpen: boolean
-  setIsOpen: (b: boolean) => void
+  close: () => void
   ideaToken: IdeaToken
   market: IdeaMarket
 }) {
-  function onTradeSuccessful() {
-    setIsOpen(false)
-  }
-
-  if (!isOpen) {
-    return <></>
-  }
-
   return (
-    <Modal isOpen={isOpen} close={() => setIsOpen(false)}>
-      {/* <div className="p-4 bg-top-mobile">
-        <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
-          Trade: {ideaToken.name}
-        </p>
-      </div> */}
+    <Modal close={() => close()}>
       <div className="pt-2">
         <TradeInterface
           ideaToken={ideaToken}
           market={market}
-          onTradeSuccessful={onTradeSuccessful}
+          onTradeSuccessful={close}
           onValuesChanged={() => {}}
-          resetOn={isOpen}
+          resetOn={true}
           centerTypeSelection={true}
           showTypeSelection={true}
           showTradeButton={true}

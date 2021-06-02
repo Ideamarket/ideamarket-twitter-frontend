@@ -19,6 +19,7 @@ type Props = {
   market: IdeaMarket
   showMarketSVG: boolean
   compoundSupplyRate: number
+  getHeader: (headerValue: string) => any
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }
 
@@ -27,6 +28,7 @@ export default function TokenRow({
   market,
   showMarketSVG,
   compoundSupplyRate,
+  getHeader,
   onTradeClicked,
 }: Props) {
   const router = useRouter()
@@ -113,49 +115,66 @@ export default function TokenRow({
           </p>
         </td>
         {/* Deposits */}
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-          <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
-            Deposits
-          </p>
-          <p
-            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={'$' + token.daiInToken}
-          >
-            {parseFloat(token.daiInToken) > 0.0 ? (
-              `$` +
-              formatNumberWithCommasAsThousandsSerperator(
-                parseInt(token.daiInToken)
-              )
-            ) : (
-              <>&mdash;</>
-            )}
-          </p>
-        </td>
+        {getHeader('deposits').isActive ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
+              Deposits
+            </p>
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+              title={'$' + token.daiInToken}
+            >
+              {parseFloat(token.daiInToken) > 0.0 ? (
+                `$` +
+                formatNumberWithCommasAsThousandsSerperator(
+                  parseInt(token.daiInToken)
+                )
+              ) : (
+                <>&mdash;</>
+              )}
+            </p>
+          </td>
+        ) : (
+          <></>
+        )}
         {/* %Locked */}
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-          <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
-            % Locked
-          </p>
-          <p
-            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={parseInt(token.lockedPercentage) + ' %'}
-          >
-            {parseFloat(token.lockedPercentage) * 100.0 > 0.0 ? (
-              parseInt(token.lockedPercentage) + ' %'
-            ) : (
-              <>&mdash;</>
-            )}
-          </p>
-        </td>
+        {getHeader('locked').isActive ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
+              % Locked
+            </p>
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+              title={parseInt(token.lockedPercentage) + ' %'}
+            >
+              {parseFloat(token.lockedPercentage) * 100.0 > 0.0 ? (
+                parseInt(token.lockedPercentage) + ' %'
+              ) : (
+                <>&mdash;</>
+              )}
+            </p>
+          </td>
+        ) : (
+          <></>
+        )}
+
         {/* Year Income */}
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-          <p
-            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={'$' + yearIncome}
-          >
-            ${formatNumberWithCommasAsThousandsSerperator(parseInt(yearIncome))}
-          </p>
-        </td>
+        {getHeader('income').isActive ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+              title={'$' + yearIncome}
+            >
+              $
+              {formatNumberWithCommasAsThousandsSerperator(
+                parseInt(yearIncome)
+              )}
+            </p>
+          </td>
+        ) : (
+          <></>
+        )}
+
         {/* Buy Button */}
         <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
           <button

@@ -1,37 +1,33 @@
 import { Transition } from '@headlessui/react'
 import { ReactNode, useEffect } from 'react'
-import Close from '../assets/close.svg'
+import Close from '../../assets/close.svg'
 
 export default function Modal({
   className = '',
   children,
-  isOpen,
   close,
 }: {
   className?: string
   children?: ReactNode
-  isOpen: boolean
   close: () => void
 }) {
   // Disable Scroll
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    }
+    document.body.style.overflow = 'hidden'
+
     return () => {
       document.body.style.overflow = 'auto'
     }
-  }, [isOpen])
+  }, [])
 
-  if (!isOpen) {
-    return <></>
-  }
   return (
     <div className={className}>
-      <div className="fixed inset-0 z-20 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen px-4 text-center">
+      {/* <div className="fixed inset-0 z-20 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen px-4 text-center"> */}
+      <div className="fixed inset-0 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center">
           <Transition
-            show={isOpen}
+            show={true}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"
@@ -45,7 +41,7 @@ export default function Modal({
           <span className="inline-block h-screen align-middle"></span>
           &#8203;
           <Transition
-            show={isOpen}
+            show={true}
             enter="ease-out duration-300"
             enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             enterTo="opacity-100 translate-y-0 sm:scale-100"
