@@ -30,8 +30,8 @@ export async function getUniswapPath(
 ): Promise<UniswapPairDetails> {
   // TODO: CACHE!
 
-  const uniswapFactoryContract =
-    useContractStore.getState().uniswapFactoryContract
+  const uniswapFactoryContract = useContractStore.getState()
+    .uniswapFactoryContract
   const directPairAddress = await uniswapFactoryContract.methods
     .getPair(inputTokenAddress, outputTokenAddress)
     .call()

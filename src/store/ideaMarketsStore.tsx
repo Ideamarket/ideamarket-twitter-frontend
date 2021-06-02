@@ -427,8 +427,8 @@ export async function queryMutualHoldersOfToken({
     (token, index) => allTokenNames.indexOf(token) === index
   )
 
-  const mutualHoldersData: MutualHoldersData[] =
-    allTokenNamesWithoutDuplicates.map((tokenName) => {
+  const mutualHoldersData: MutualHoldersData[] = allTokenNamesWithoutDuplicates.map(
+    (tokenName) => {
       const allBalancesWithCurrentToken = balances.filter(
         (_balance) => _balance.token.name === tokenName
       )
@@ -447,7 +447,8 @@ export async function queryMutualHoldersOfToken({
         },
         token: allBalancesWithCurrentToken[0].token,
       }
-    })
+    }
+  )
   return mutualHoldersData
 }
 

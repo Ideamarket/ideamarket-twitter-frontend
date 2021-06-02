@@ -100,6 +100,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
                 {selectedIdeaToken?.logoURL ? (
                   <img
                     className="w-7.5 rounded-full"
+                    style={{ minWidth: 24, minHeight: 24 }}
                     src={selectedIdeaToken?.logoURL}
                     alt="token"
                   />

@@ -27,11 +27,19 @@ export default function WalletInterface({
   onWalletConnected?: () => void
 }) {
   const [connectingWallet, setConnectingWallet] = useState(0)
-  const { onWalletConnectedCallback, setOnWalletConnectedCallback } =
-    useContext(GlobalContext)
+  const {
+    onWalletConnectedCallback,
+    setOnWalletConnectedCallback,
+  } = useContext(GlobalContext)
 
-  const { active, account, library, connector, activate, deactivate } =
-    useWeb3React()
+  const {
+    active,
+    account,
+    library,
+    connector,
+    activate,
+    deactivate,
+  } = useWeb3React()
 
   // handle logic to recognize the connector currently being activated
   const [activatingConnector, setActivatingConnector] = useState<any>()

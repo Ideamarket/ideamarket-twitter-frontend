@@ -22,8 +22,6 @@ export default function Modal({
 
   return (
     <div className={className}>
-      {/* <div className="fixed inset-0 z-20 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen px-4 text-center"> */}
       <div className="fixed inset-0 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center">
           <Transition
