@@ -76,9 +76,8 @@ export default function TradeInterface({
   const [tradeType, setTradeType] = useState('buy')
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
-    false
-  )
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
+    useState(false)
 
   const tokenList = useTokenListStore((state) => state.tokens)
   const selectTokensValues = tokenList.map((token) => ({
@@ -87,11 +86,8 @@ export default function TradeInterface({
   }))
 
   const [selectedToken, setSelectedToken] = useState(undefined)
-  const [
-    isIdeaTokenBalanceLoading,
-    ideaTokenBalanceBN,
-    ideaTokenBalance,
-  ] = useBalance(ideaToken?.address, 18)
+  const [isIdeaTokenBalanceLoading, ideaTokenBalanceBN, ideaTokenBalance] =
+    useBalance(ideaToken?.address, 18)
 
   const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
     selectedToken?.address,
@@ -238,11 +234,20 @@ export default function TradeInterface({
 
     setIsValid(isValid)
 
+    // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
+    const ideaTokenAmountBNLocal = floatToWeb3BN(masterIdeaTokenAmount, 18)
+    const selectedTokenAmountBNLocal = floatToWeb3BN(
+      masterSelectedTokenAmount,
+      18
+    )
+
+    console.log('masterIdeaTokenAmount', masterIdeaTokenAmount)
+
     onValuesChanged(
-      ideaTokenAmountBN,
+      ideaTokenAmountBNLocal,
       selectedToken?.address,
       selectedToken?.symbol,
-      calculatedTokenAmountBN,
+      selectedTokenAmountBNLocal,
       slippage,
       isLockChecked,
       isUnlockOnceChecked,
@@ -260,6 +265,8 @@ export default function TradeInterface({
     slippage,
     isUnlockOnceChecked,
     isUnlockPermanentChecked,
+    isCalculatedIdeaTokenAmountLoading,
+    isCalculatedTokenAmountLoading,
   ])
 
   async function maxButtonClicked() {

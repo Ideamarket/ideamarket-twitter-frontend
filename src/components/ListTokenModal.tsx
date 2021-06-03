@@ -41,9 +41,8 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
 
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
-    false
-  )
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
+    useState(false)
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
   const [approveButtonKey, setApproveButtonKey] = useState(0)
@@ -100,6 +99,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     isUnlockPermanentChecked: boolean,
     isValid: boolean
   ) {
+    console.log('output amount==', ideaTokenAmount.toString())
     setBuyInputAmountBN(tokenAmount)
     setBuyPayWithAddress(tokenAddress)
     setBuyPayWithSymbol(tokenSymbol)
@@ -114,6 +114,13 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     const finalTokenName = getMarketSpecificsByMarketName(
       selectedMarket.name
     ).convertUserInputToTokenName(tokenName)
+
+    // console.log('finalTokenName', finalTokenName)
+    // console.log('selectedMarket', selectedMarket)
+    // console.log('buyPayWithAddress', buyPayWithAddress)
+    // console.log('buyOutputAmountBN', buyOutputAmountBN.toString())
+    // console.log('buyInputAmountBN', buyInputAmountBN.toString())
+    // console.log('buySlippage', buySlippage)
 
     if (isWantBuyChecked) {
       try {
