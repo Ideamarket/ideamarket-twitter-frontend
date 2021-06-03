@@ -36,6 +36,7 @@ import { EmailForm } from 'components'
 import { MarketList } from 'components/markets/MarketList'
 import { getMarketSpecifics } from 'store/markets'
 import { NextSeo } from 'next-seo'
+import { OverviewFilters, Filters } from 'components/OverviewFilters'
 
 export default function Home() {
   const defaultHeaders = [
@@ -129,10 +130,8 @@ export default function Home() {
     const initialHeaders = storedHeaders ?? defaultHeaders
     setHeaderData(initialHeaders)
   }, [])
-
-  const [selectedCategoryId, setSelectedCategoryId] = useState(
-    Categories.TOP.id
-  )
+  
+  const [selectedFilterId, setSelectedFilterId] = useState(Filters.TOP.id)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
 
@@ -173,25 +172,25 @@ export default function Home() {
   }
 
   function onNameSearchChanged(nameSearch) {
-    setSelectedCategoryId(Categories.TOP.id)
+    setSelectedFilterId(Categories.TOP.id)
     setNameSearch(nameSearch)
   }
 
   function onCategoryChanged(categoryID: number) {
-    setSelectedCategoryId(categoryID)
+    setSelectedFilterId(categoryID)
   }
 
   function onOrderByChanged(orderBy: string, direction: string) {
-    if (selectedCategoryId === Categories.STARRED.id) {
+    if (selectedFilterId === Categories.STARRED.id) {
       return
     }
 
     if (orderBy === 'dayChange' && direction === 'desc') {
-      setSelectedCategoryId(Categories.HOT.id)
+      setSelectedFilterId(Categories.HOT.id)
     } else if (orderBy === 'listedAt' && direction === 'desc') {
-      setSelectedCategoryId(Categories.NEW.id)
+      setSelectedFilterId(Categories.NEW.id)
     } else {
-      setSelectedCategoryId(Categories.TOP.id)
+      setSelectedFilterId(Categories.TOP.id)
     }
   }
 
@@ -280,32 +279,36 @@ export default function Home() {
         </div>
 
         <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-28 font-sf-compact-medium">
-          <div className="flex flex-col md:flex-row">
-            <MarketList
-              selectedMarkets={selectedMarkets}
-              markets={getMarketSpecifics()}
-              onMarketChanged={onMarketChanged}
-            />
-            <EmailForm />
-          </div>
+          {/* <MarketList
+            selectedMarkets={selectedMarkets}
+            markets={getMarketSpecifics()}
+            onMarketChanged={onMarketChanged}
+          /> */}
+          <OverviewFilters
+            selectedFilterId={selectedFilterId}
+            selectedMarkets={selectedMarkets}
+            markets={getMarketSpecifics()}
+            onMarketChanged={onMarketChanged}
+            setSelectedFilterId={setSelectedFilterId}
+          />
 
           <div className="bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">
             <div className="flex flex-col border-b md:flex-row border-brand-gray-3">
               <div className="px-4 md:px-10">
                 <div className="font-sf-pro-text">
                   <nav className="flex -mb-px space-x-5">
-                    {Object.values(Categories).map((cat) => (
+                    {Object.values(Filters).map((filter) => (
                       <A
-                        onClick={() => onCategoryChanged(cat.id)}
-                        key={cat.id}
+                        onClick={() => onCategoryChanged(filter.id)}
+                        key={filter.id}
                         className={classNames(
                           'px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
-                          cat.id === selectedCategoryId
+                          filter.id === selectedFilterId
                             ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
                             : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
                         )}
                       >
-                        <span>{cat.value}</span>
+                        <span>{filter.value}</span>
                       </A>
                     ))}
                   </nav>
@@ -347,7 +350,7 @@ export default function Home() {
               <Table
                 nameSearch={nameSearch}
                 selectedMarkets={selectedMarkets}
-                selectedCategoryId={selectedCategoryId}
+                selectedFilterId={selectedFilterId}
                 headerData={headerData}
                 getHeader={getHeader}
                 onOrderByChanged={onOrderByChanged}

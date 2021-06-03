@@ -18,7 +18,7 @@ import { Header } from './table/Header'
 
 type Props = {
   selectedMarkets: Set<string>
-  selectedCategoryId: number
+  selectedFilterId: number
   nameSearch: string
   headerData: Array<any>
   getHeader: (headerValue: string) => object
@@ -28,7 +28,7 @@ type Props = {
 
 export default function Table({
   selectedMarkets,
-  selectedCategoryId,
+  selectedFilterId,
   nameSearch,
   headerData,
   getHeader,
@@ -53,7 +53,7 @@ export default function Table({
   )
 
   const filterTokens =
-    selectedCategoryId === Categories.STARRED.id ? watchingTokens : undefined
+    selectedFilterId === Categories.STARRED.id ? watchingTokens : undefined
 
   const {
     data: compoundExchangeRate,
@@ -94,13 +94,13 @@ export default function Table({
         markets,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
-        selectedCategoryId === Categories.HOT.id
+        selectedFilterId === Categories.HOT.id
           ? 'dayChange'
-          : selectedCategoryId === Categories.NEW.id
+          : selectedFilterId === Categories.NEW.id
           ? 'listedAt'
           : orderBy,
-        selectedCategoryId === Categories.HOT.id ||
-        selectedCategoryId === Categories.NEW.id
+        selectedFilterId === Categories.HOT.id ||
+        selectedFilterId === Categories.NEW.id
           ? 'desc'
           : orderDirection,
         nameSearch,
@@ -140,7 +140,7 @@ export default function Table({
     if (markets.length !== 0) {
       refetch()
     }
-  }, [markets, selectedCategoryId, orderBy, orderDirection, nameSearch])
+  }, [markets, selectedFilterId, orderBy, orderDirection, nameSearch])
 
   useEffect(() => {
     const handleScroll = () => {
