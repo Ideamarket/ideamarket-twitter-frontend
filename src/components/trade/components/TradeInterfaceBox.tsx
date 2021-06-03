@@ -30,6 +30,7 @@ const selectTheme = (theme) => ({
 type TradeInterfaceBoxProps = {
   label: string
   setIdeaTokenAmount: (value: string) => void
+  setSelectedTokenAmount: (value: string) => void
   ideaTokenAmount: string
   isTokenBalanceLoading: boolean
   tokenBalance: string
@@ -42,11 +43,13 @@ type TradeInterfaceBoxProps = {
   tradeType: string
   selectedIdeaToken: TokenListEntry | null
   txManager: TransactionManager
+  isIdeaToken: boolean
 }
 
 const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   label,
   setIdeaTokenAmount,
+  setSelectedTokenAmount,
   ideaTokenAmount = '',
   isTokenBalanceLoading,
   tokenBalance,
@@ -59,6 +62,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   tradeType,
   selectedIdeaToken,
   txManager,
+  isIdeaToken,
 }) => {
   const handleBuySellClick = () => {
     if (!txManager.isPending && tradeType === 'sell') setTradeType('buy')
@@ -141,10 +145,16 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           className="w-full max-w-sm text-3xl text-right border-none outline-none text-brand-gray-2 bg-gray-50"
           min="0"
           placeholder="0"
-          disabled={!selectedIdeaToken || txManager.isPending}
+          disabled={txManager.isPending}
           value={ideaTokenAmount}
           onChange={(event) => {
-            setIdeaTokenAmount(event.target.value)
+            if (isIdeaToken) {
+              setSelectedTokenAmount('0')
+              setIdeaTokenAmount(event.target.value)
+            } else {
+              setIdeaTokenAmount('0')
+              setSelectedTokenAmount(event.target.value)
+            }
           }}
         />
       </div>

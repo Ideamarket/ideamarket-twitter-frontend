@@ -1,24 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { TokenAmount, Trade, TradeType } from '@uniswap/sdk'
-import { web3BNToFloatString } from '../utils'
+import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
 import { useContractStore } from 'store/contractStore'
-import { ZERO_ADDRESS, getUniswapPath } from '../utils'
+import {
+  calculateIdeaTokenDaiValue,
+  calculateMaxIdeaTokensBuyable,
+  ZERO_ADDRESS,
+  getUniswapPath,
+  web3BNToFloatString,
+  formatNumber,
+} from 'utils'
 import { NETWORK } from 'store/networks'
-import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
-export default function useOutputAmount(
+export default function useReversePrice(
   ideaToken: IdeaToken,
   market: IdeaMarket,
   tokenAddress: string,
   amount: string,
   decimals: number,
-  tradeType: string
+  tradeType: string,
+  tokenBalanceBN: any
 ) {
   const [isLoading, setIsLoading] = useState(true)
   const [outputBN, setOutputBN] = useState(undefined)
@@ -31,7 +38,8 @@ export default function useOutputAmount(
       if (
         !useWalletStore.getState().web3 ||
         !tokenAddress ||
-        (!ideaToken && !market)
+        (!ideaToken && !market) ||
+        !tokenBalanceBN
       ) {
         return new BN('0')
       }
@@ -42,35 +50,39 @@ export default function useOutputAmount(
 
       const exchangeContract = useContractStore.getState().exchangeContract
 
-      let requiredDaiAmount
-      if (!ideaToken) {
-        // No ideaToken yet because it is being listed
-        const factoryContract = useContractStore.getState().factoryContract
-        const marketDetails = await factoryContract.methods
-          .getMarketDetailsByID(market.marketID)
-          .call()
-        requiredDaiAmount = new BN(
-          (
-            await exchangeContract.methods
-              .getCostsForBuyingTokens(
-                marketDetails,
-                new BN('0'),
-                amountBN,
-                false
-              )
-              .call()
-          ).total
-        )
-      } else {
-        requiredDaiAmount = new BN(
-          await exchangeContract.methods
-            .getCostForBuyingTokens(ideaToken.address, amountBN)
-            .call()
-        )
-      }
+      const requiredIdeaTokenAmount = calculateMaxIdeaTokensBuyable(
+        amountBN,
+        ideaToken?.rawSupply || new BN('0'),
+        market
+      )
+      // if (!ideaToken) {
+      //   // No ideaToken yet because it is being listed
+      //   const factoryContract = useContractStore.getState().factoryContract
+      //   const marketDetails = await factoryContract.methods
+      //     .getMarketDetailsByID(market.marketID)
+      //     .call()
+      //   requiredIdeaTokenAmount = new BN(
+      //     (
+      //       await exchangeContract.methods
+      //         .getCostsForBuyingTokens(
+      //           marketDetails,
+      //           new BN('0'),
+      //           amountBN,
+      //           false
+      //         )
+      //         .call()
+      //     ).total
+      //   )
+      // } else {
+      //   requiredIdeaTokenAmount = new BN(
+      //     await exchangeContract.methods
+      //       .getCostForBuyingTokens(ideaToken.address, amountBN)
+      //       .call()
+      //   )
+      // }
 
       if (tokenAddress === NETWORK.getExternalAddresses().dai) {
-        return requiredDaiAmount
+        return requiredIdeaTokenAmount
       }
 
       const inputTokenAddress =
@@ -86,7 +98,7 @@ export default function useOutputAmount(
 
       const trade = new Trade(
         path.route,
-        new TokenAmount(path.outToken, requiredDaiAmount.toString()),
+        new TokenAmount(path.outToken, requiredIdeaTokenAmount.toString()),
         TradeType.EXACT_OUTPUT
       )
       const requiredInputBN = new BN(
@@ -113,19 +125,24 @@ export default function useOutputAmount(
       }
 
       const exchangeContract = useContractStore.getState().exchangeContract
-      let daiOutputAmount
+      let ideaTokenOutputAmount
       try {
-        daiOutputAmount = new BN(
-          await exchangeContract.methods
-            .getPriceForSellingTokens(ideaToken.address, amountBN)
-            .call()
+        // ideaTokenOutputAmount = new BN(
+        //   await exchangeContract.methods
+        //     .getPriceForSellingTokens(ideaToken.address, amountBN)
+        //     .call()
+        // )
+        ideaTokenOutputAmount = calculateMaxIdeaTokensBuyable(
+          amountBN,
+          ideaToken?.rawSupply || new BN('0'),
+          market
         )
       } catch (ex) {
         return new BN('0')
       }
 
       if (tokenAddress === NETWORK.getExternalAddresses().dai) {
-        return daiOutputAmount
+        return ideaTokenOutputAmount
       }
 
       const inputTokenAddress = NETWORK.getExternalAddresses().dai
@@ -141,7 +158,7 @@ export default function useOutputAmount(
 
       const trade = new Trade(
         path.route,
-        new TokenAmount(path.inToken, daiOutputAmount.toString()),
+        new TokenAmount(path.inToken, ideaTokenOutputAmount.toString()),
         TradeType.EXACT_INPUT
       )
       const outputBN = new BN(
@@ -180,7 +197,7 @@ export default function useOutputAmount(
     return () => {
       isCancelled = true
     }
-  }, [ideaToken, tokenAddress, amount, tradeType])
+  }, [ideaToken, tokenAddress, amount, tradeType, tokenBalanceBN])
 
   return [isLoading, outputBN, output]
 }
