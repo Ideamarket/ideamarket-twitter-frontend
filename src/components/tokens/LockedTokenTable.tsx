@@ -43,6 +43,11 @@ const headers: Header[] = [
     value: 'lockedUntil',
     sortable: true,
   },
+  {
+    title: '',
+    value: 'metamaskButton',
+    sortable: false,
+  },
 ]
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))

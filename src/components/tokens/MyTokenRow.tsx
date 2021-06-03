@@ -6,6 +6,7 @@ import { getMarketSpecificsByMarketName } from 'store/markets'
 import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
+import AddToMetamaskButton from 'components/wallet/AddToMetamaskButton'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -133,6 +134,12 @@ export default function MyTokenRow({
           <p className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue">
             ${(parseFloat(token.daiInToken) * compoundSupplyRate).toFixed(2)}
           </p>
+        </td>
+        {/* Add to Metamask button */}
+        <td className="pr-4 md:px-6 py-4 text-sm leading-5 text-center text-gray-500 md:table-cell">
+          <div className="flex items-center w-full h-full">
+            <AddToMetamaskButton token={token} />
+          </div>
         </td>
       </tr>
     </>

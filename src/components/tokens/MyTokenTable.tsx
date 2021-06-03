@@ -44,6 +44,11 @@ const headers: Header[] = [
     value: 'income',
     sortable: true,
   },
+  {
+    title: '',
+    value: 'metamaskButton',
+    sortable: false,
+  },
 ]
 
 export default function MyTokenTable({
@@ -70,10 +75,8 @@ export default function MyTokenTable({
     queryMyTokensMaybeMarket
   )
 
-  const {
-    data: compoundSupplyRate,
-    isLoading: isCompoundSupplyRateLoading,
-  } = useQuery('compound-supply-rate', querySupplyRate)
+  const { data: compoundSupplyRate, isLoading: isCompoundSupplyRateLoading } =
+    useQuery('compound-supply-rate', querySupplyRate)
 
   const [pairs, setPairs]: [IdeaTokenMarketPair[], any] = useState([])
 

@@ -130,13 +130,11 @@ export default function TokenDetails({
   const web3 = useWalletStore((state) => state.web3)
   const connectedAddress = useWalletStore((state) => state.address)
 
-  const marketSpecifics = getMarketSpecificsByMarketNameInURLRepresentation(
-    rawMarketName
-  )
+  const marketSpecifics =
+    getMarketSpecificsByMarketNameInURLRepresentation(rawMarketName)
   const marketName = marketSpecifics?.getMarketName()
-  const tokenName = marketSpecifics?.getTokenNameFromURLRepresentation(
-    rawTokenName
-  )
+  const tokenName =
+    marketSpecifics?.getTokenNameFromURLRepresentation(rawTokenName)
 
   const { data: market, isLoading: isMarketLoading } = useQuery(
     [`market-${marketName}`, marketName],
@@ -153,34 +151,32 @@ export default function TokenDetails({
 
   const [chartDurationSeconds, setChartDurationSeconds] = useState(WEEK_SECONDS)
 
-  const {
-    data: rawPriceChartData,
-    isLoading: isRawPriceChartDataLoading,
-  } = useQuery(
-    [
-      `${token?.address}-chartdata`,
-      token?.address,
-      chartDurationSeconds,
-      token?.latestPricePoint,
-      500,
-    ],
-    queryTokenChartData
-  )
+  const { data: rawPriceChartData, isLoading: isRawPriceChartDataLoading } =
+    useQuery(
+      [
+        `${token?.address}-chartdata`,
+        token?.address,
+        chartDurationSeconds,
+        token?.latestPricePoint,
+        500,
+      ],
+      queryTokenChartData
+    )
 
-  const {
-    data: rawLockedChartData,
-    isLoading: isRawLockedChartDataLoading,
-  } = useQuery(
-    [`lockedChartData-${token?.address}`, token?.address, chartDurationSeconds],
-    queryTokenLockedChartData
-  )
+  const { data: rawLockedChartData, isLoading: isRawLockedChartDataLoading } =
+    useQuery(
+      [
+        `lockedChartData-${token?.address}`,
+        token?.address,
+        chartDurationSeconds,
+      ],
+      queryTokenLockedChartData
+    )
   const [priceChartData, setPriceChartData] = useState([])
   const [lockedChartData, setLockedChartData] = useState([])
 
-  const {
-    data: compoundSupplyRate,
-    isLoading: isCompoundSupplyRateLoading,
-  } = useQuery('compound-supply-rate', querySupplyRate)
+  const { data: compoundSupplyRate, isLoading: isCompoundSupplyRateLoading } =
+    useQuery('compound-supply-rate', querySupplyRate)
 
   const {
     data: compoundExchangeRate,
@@ -472,7 +468,6 @@ export default function TokenDetails({
                       </div>
                     ) : (
                       <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0">
-                        <AddToMetamaskButton token={token} />
                         <WatchingStarButton token={token} />
                       </div>
                     )}
