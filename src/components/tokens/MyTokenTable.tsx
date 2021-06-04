@@ -44,11 +44,6 @@ const headers: Header[] = [
     value: 'income',
     sortable: true,
   },
-  {
-    title: '',
-    value: 'metamaskButton',
-    sortable: false,
-  },
 ]
 
 export default function MyTokenTable({

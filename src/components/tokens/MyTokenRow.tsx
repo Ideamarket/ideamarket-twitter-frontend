@@ -135,12 +135,6 @@ export default function MyTokenRow({
             ${(parseFloat(token.daiInToken) * compoundSupplyRate).toFixed(2)}
           </p>
         </td>
-        {/* Add to Metamask button */}
-        <td className="pr-4 md:px-6 py-4 text-sm leading-5 text-center text-gray-500 md:table-cell">
-          <div className="flex items-center w-full h-full">
-            <AddToMetamaskButton token={token} />
-          </div>
-        </td>
       </tr>
     </>
   )
