@@ -2,6 +2,7 @@ import Select from 'react-select'
 import { TransactionManager } from 'utils'
 import SelectTokensFormat from './SelectTokenFormat'
 import { TokenListEntry } from '../../../store/tokenListStore'
+import { useEffect, useState } from 'react'
 
 const selectStyles = {
   container: (provided) => ({
@@ -31,7 +32,7 @@ type TradeInterfaceBoxProps = {
   label: string
   setIdeaTokenAmount: (value: string) => void
   setSelectedTokenAmount: (value: string) => void
-  ideaTokenAmount: string
+  ideaTokenAmount: string | number | any
   isTokenBalanceLoading: boolean
   tokenBalance: string
   maxButtonClicked: () => void
@@ -69,6 +70,18 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
     if (!txManager.isPending && tradeType === 'buy') setTradeType('sell')
     if (!txManager.isPending) setIdeaTokenAmount('0')
   }
+
+  const [inputValue, setInputValue] = useState('')
+
+  useEffect(() => {
+    if (inputValue !== ideaTokenAmount) {
+      if (parseFloat(ideaTokenAmount) <= 0) {
+        setInputValue('') // If one input is 0, make other one 0 too
+      } else {
+        setInputValue(ideaTokenAmount.toString())
+      }
+    }
+  }, [ideaTokenAmount])
 
   return (
     <div className="relative px-5 py-4 mb-1 border border-gray-100 rounded-md bg-gray-50 text-brand-new-dark">
@@ -142,12 +155,14 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           />
         )}
         <input
-          className="w-full max-w-sm text-3xl text-right border-none outline-none text-brand-gray-2 bg-gray-50"
+          className="w-full max-w-sm text-3xl text-right border-none outline-none text-brand-gray-2 bg-gray-50 placeholder-gray-500 placeholder-opacity-50"
           min="0"
-          placeholder="0"
+          placeholder="0.0"
           disabled={txManager.isPending}
-          value={ideaTokenAmount}
+          value={inputValue}
           onChange={(event) => {
+            setInputValue(event.target.value)
+
             if (isIdeaToken) {
               setSelectedTokenAmount('0')
               setIdeaTokenAmount(event.target.value)

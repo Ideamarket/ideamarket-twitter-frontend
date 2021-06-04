@@ -169,7 +169,7 @@ export default function TradeInterface({
   const spendTokenSymbol = tradeType === 'buy' ? selectedToken?.symbol : 'IDT'
 
   const requiredAllowance =
-    tradeType === 'buy' ? masterSelectedTokenAmountBN : masterIdeaTokenAmountBN
+    tradeType === 'buy' ? masterSelectedTokenAmount : masterIdeaTokenAmount
 
   const exceedsBalanceBuy =
     isTokenBalanceLoading || !masterSelectedTokenAmountBN
@@ -212,11 +212,13 @@ export default function TradeInterface({
   useEffect(() => {
     let isValid =
       selectedToken !== undefined &&
-      masterSelectedTokenAmount !== '' &&
-      masterIdeaTokenAmount !== '' &&
       masterIdeaTokenAmountBN !== undefined &&
-      masterIdeaTokenAmountBN.gt(new BN('0')) &&
       masterSelectedTokenAmountBN !== undefined &&
+      !isNaN(masterIdeaTokenAmount) &&
+      !isNaN(masterSelectedTokenAmount) &&
+      !/\s/g.test(masterSelectedTokenAmount) && // No whitespace allowed in inputs
+      !/\s/g.test(masterIdeaTokenAmount) &&
+      masterIdeaTokenAmountBN.gt(new BN('0')) &&
       masterSelectedTokenAmountBN.gt(new BN('0'))
 
     if (isValid) {
@@ -240,8 +242,6 @@ export default function TradeInterface({
       masterSelectedTokenAmount,
       18
     )
-
-    console.log('masterIdeaTokenAmount', masterIdeaTokenAmount)
 
     onValuesChanged(
       ideaTokenAmountBNLocal,
@@ -512,7 +512,7 @@ export default function TradeInterface({
               tokenAddress={spendTokenAddress}
               tokenSymbol={spendTokenSymbol}
               spenderAddress={spender}
-              requiredAllowance={requiredAllowance}
+              requiredAllowance={floatToWeb3BN(requiredAllowance, 18)}
               unlockPermanent={isUnlockPermanentChecked}
               txManager={txManager}
               setIsMissingAllowance={setIsMissingAllowance}

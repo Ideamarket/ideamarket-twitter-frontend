@@ -2,22 +2,17 @@ import { useEffect, useState } from 'react'
 import { TokenAmount, Trade, TradeType } from '@uniswap/sdk'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
-import { useContractStore } from 'store/contractStore'
 import {
-  calculateIdeaTokenDaiValue,
   calculateIdeaTokensInputForDaiOutput,
   calculateMaxIdeaTokensBuyable,
   ZERO_ADDRESS,
   getUniswapPath,
   web3BNToFloatString,
-  formatNumber,
 } from 'utils'
 import { NETWORK } from 'store/networks'
 
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function useReversePrice(
   ideaToken: IdeaToken,
@@ -78,7 +73,6 @@ export default function useReversePrice(
         )
       }
 
-      console.log(daiAmountBN.toString())
       const requiredIdeaTokenAmount = calculateMaxIdeaTokensBuyable(
         daiAmountBN,
         ideaToken?.rawSupply || new BN('0'),
