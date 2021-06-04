@@ -85,7 +85,9 @@ export default function TradeInterface({
     token: token,
   }))
 
-  const [selectedToken, setSelectedToken] = useState(undefined)
+  const [selectedToken, setSelectedToken] = useState(
+    useTokenListStore.getState().tokens[0]
+  )
   const [isIdeaTokenBalanceLoading, ideaTokenBalanceBN, ideaTokenBalance] =
     useBalance(ideaToken?.address, 18)
 
@@ -360,6 +362,7 @@ export default function TradeInterface({
     disabled,
     market,
     maxButtonClicked,
+    selectedToken,
     setSelectedToken,
     selectTokensValues,
     setTradeType,

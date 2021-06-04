@@ -38,7 +38,8 @@ type TradeInterfaceBoxProps = {
   maxButtonClicked: () => void
   selectTokensValues: any
   showBuySellSwitch?: boolean
-  setSelectedToken: (value: string) => void
+  selectedToken: any
+  setSelectedToken: (value: any) => void
   setTradeType: (value: string) => void
   disabled: boolean
   tradeType: string
@@ -57,6 +58,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   maxButtonClicked,
   selectTokensValues,
   showBuySellSwitch,
+  selectedToken,
   setSelectedToken,
   setTradeType,
   disabled,
@@ -145,10 +147,9 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
             formatOptionLabel={SelectTokensFormat}
             defaultValue={
               selectedIdeaToken
-                ? {
-                    token: selectedIdeaToken,
-                  }
-                : selectTokensValues[0]
+                ? { token: selectedIdeaToken }
+                : { token: selectedToken, value: selectedToken.address } ||
+                  selectTokensValues[0]
             }
             theme={selectTheme}
             styles={selectStyles}
