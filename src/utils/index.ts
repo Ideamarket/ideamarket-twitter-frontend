@@ -238,7 +238,9 @@ export function calculateMaxIdeaTokensBuyable(
     if (costForRemainingHatch.gte(dai)) {
       // We cannot buy the full remaining hatch
       const hatchBuyable = dai.div(applyFee(baseCost))
-      return hatchBuyable.multipliedBy(tenPow18)
+      const result = hatchBuyable.multipliedBy(tenPow18)
+      // Handle rounding error
+      return result.multipliedBy(new BigNumber('0.9999'))
     }
 
     // We can buy the full remaining hatch
@@ -268,5 +270,7 @@ export function calculateMaxIdeaTokensBuyable(
   const root = applyFee(b2f.plus(b2rsf).plus(d2r).plus(fr2s2)).sqrt()
   const numerator = root.minus(bf).minus(frs)
   const denominator = fr
-  return buyable.plus(numerator.div(denominator).multipliedBy(tenPow18))
+  const result = buyable.plus(numerator.div(denominator).multipliedBy(tenPow18))
+  // Handle rounding error
+  return result.multipliedBy(new BigNumber('0.9999'))
 }
