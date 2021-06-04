@@ -5,6 +5,7 @@ import { useWalletStore } from 'store/walletStore'
 import { useContractStore } from 'store/contractStore'
 import {
   calculateIdeaTokenDaiValue,
+  calculateIdeaTokensInputForDaiOutput,
   calculateMaxIdeaTokensBuyable,
   ZERO_ADDRESS,
   getUniswapPath,
@@ -39,80 +40,61 @@ export default function useReversePrice(
         !useWalletStore.getState().web3 ||
         !tokenAddress ||
         (!ideaToken && !market) ||
-        !tokenBalanceBN
+        !tokenBalanceBN ||
+        parseFloat(amount) <= 0.0
       ) {
         return new BN('0')
       }
 
       const amountBN = new BN(
-        new BigNumber(amount).multipliedBy(tenPow18).toFixed()
-      )
-
-      const exchangeContract = useContractStore.getState().exchangeContract
-
-      const requiredIdeaTokenAmount = calculateMaxIdeaTokensBuyable(
-        amountBN,
-        ideaToken?.rawSupply || new BN('0'),
-        market
-      )
-      // if (!ideaToken) {
-      //   // No ideaToken yet because it is being listed
-      //   const factoryContract = useContractStore.getState().factoryContract
-      //   const marketDetails = await factoryContract.methods
-      //     .getMarketDetailsByID(market.marketID)
-      //     .call()
-      //   requiredIdeaTokenAmount = new BN(
-      //     (
-      //       await exchangeContract.methods
-      //         .getCostsForBuyingTokens(
-      //           marketDetails,
-      //           new BN('0'),
-      //           amountBN,
-      //           false
-      //         )
-      //         .call()
-      //     ).total
-      //   )
-      // } else {
-      //   requiredIdeaTokenAmount = new BN(
-      //     await exchangeContract.methods
-      //       .getCostForBuyingTokens(ideaToken.address, amountBN)
-      //       .call()
-      //   )
-      // }
-
-      if (tokenAddress === NETWORK.getExternalAddresses().dai) {
-        return requiredIdeaTokenAmount
-      }
-
-      const inputTokenAddress =
-        tokenAddress === ZERO_ADDRESS
-          ? NETWORK.getExternalAddresses().weth
-          : tokenAddress
-      const outputTokenAddress = NETWORK.getExternalAddresses().dai
-      const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
-
-      if (!path) {
-        throw 'No Uniswap path exists'
-      }
-
-      const trade = new Trade(
-        path.route,
-        new TokenAmount(path.outToken, requiredIdeaTokenAmount.toString()),
-        TradeType.EXACT_OUTPUT
-      )
-      const requiredInputBN = new BN(
-        new BigNumber(trade.inputAmount.toExact())
+        new BigNumber(amount)
           .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
           .toFixed()
       )
 
-      return requiredInputBN
+      let daiAmountBN = amountBN
+      if (tokenAddress !== NETWORK.getExternalAddresses().dai) {
+        const inputTokenAddress =
+          tokenAddress === ZERO_ADDRESS
+            ? NETWORK.getExternalAddresses().weth
+            : tokenAddress
+        const outputTokenAddress = NETWORK.getExternalAddresses().dai
+        const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
+
+        if (!path) {
+          throw 'No Uniswap path exists'
+        }
+
+        const trade = new Trade(
+          path.route,
+          new TokenAmount(path.inToken, amountBN.toString()),
+          TradeType.EXACT_INPUT
+        )
+
+        daiAmountBN = new BN(
+          new BigNumber(trade.outputAmount.toExact())
+            .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
+            .toFixed()
+        )
+      }
+
+      console.log(daiAmountBN.toString())
+      const requiredIdeaTokenAmount = calculateMaxIdeaTokensBuyable(
+        daiAmountBN,
+        ideaToken?.rawSupply || new BN('0'),
+        market
+      )
+
+      return requiredIdeaTokenAmount
     }
 
     async function calculateSellPrice() {
       const amountBN = new BN(
-        new BigNumber(amount).multipliedBy(tenPow18).toFixed()
+        new BigNumber(amount)
+          .multipliedBy(
+            new BigNumber('10').exponentiatedBy(decimals.toString())
+          )
+          .toFixed()
       )
 
       if (
@@ -124,47 +106,40 @@ export default function useReversePrice(
         return new BN('0')
       }
 
-      const exchangeContract = useContractStore.getState().exchangeContract
-      let ideaTokenOutputAmount
-      try {
-        // ideaTokenOutputAmount = new BN(
-        //   await exchangeContract.methods
-        //     .getPriceForSellingTokens(ideaToken.address, amountBN)
-        //     .call()
-        // )
-        ideaTokenOutputAmount = calculateMaxIdeaTokensBuyable(
-          amountBN,
-          ideaToken?.rawSupply || new BN('0'),
-          market
+      let requiredDaiAmountBN = amountBN
+      if (tokenAddress !== NETWORK.getExternalAddresses().dai) {
+        // The user wants to receive a different currency than Dai
+        // -> perform an Uniswap trade
+
+        const inputTokenAddress = NETWORK.getExternalAddresses().dai
+        const outputTokenAddress =
+          tokenAddress === ZERO_ADDRESS
+            ? NETWORK.getExternalAddresses().weth
+            : tokenAddress
+
+        const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
+
+        if (!path) {
+          throw 'No Uniswap path exists'
+        }
+
+        const trade = new Trade(
+          path.route,
+          new TokenAmount(path.outToken, amountBN.toString()),
+          TradeType.EXACT_OUTPUT
         )
-      } catch (ex) {
-        return new BN('0')
+
+        requiredDaiAmountBN = new BN(
+          new BigNumber(trade.inputAmount.toExact())
+            .multipliedBy(new BigNumber('10').exponentiatedBy('18')) // dai -> 18 decimals
+            .toFixed()
+        )
       }
 
-      if (tokenAddress === NETWORK.getExternalAddresses().dai) {
-        return ideaTokenOutputAmount
-      }
-
-      const inputTokenAddress = NETWORK.getExternalAddresses().dai
-      const outputTokenAddress =
-        tokenAddress === ZERO_ADDRESS
-          ? NETWORK.getExternalAddresses().weth
-          : tokenAddress
-      const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
-
-      if (!path) {
-        throw 'No Uniswap path exists'
-      }
-
-      const trade = new Trade(
-        path.route,
-        new TokenAmount(path.inToken, ideaTokenOutputAmount.toString()),
-        TradeType.EXACT_INPUT
-      )
-      const outputBN = new BN(
-        new BigNumber(trade.outputAmount.toExact())
-          .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-          .toFixed()
+      const outputBN = calculateIdeaTokensInputForDaiOutput(
+        requiredDaiAmountBN,
+        ideaToken?.rawSupply || new BN('0'),
+        market
       )
 
       return outputBN
