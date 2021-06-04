@@ -25,6 +25,15 @@ export const Filters = {
   },
 }
 
+const DropdownFilters = {
+  PLATFORMS: {
+    id: 1,
+  },
+  COLUMNS: {
+    id: 2,
+  },
+}
+
 type FiltersButtonProps = {
   filter: any
   isSelected: boolean
