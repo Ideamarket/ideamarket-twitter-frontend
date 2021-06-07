@@ -25,11 +25,12 @@ export const YEAR_SECONDS = 31536000
 export function web3BNToFloatString(
   bn: BN,
   divideBy: BigNumber,
-  decimals: number
+  decimals: number,
+  roundingMode = BigNumber.ROUND_DOWN
 ): string {
   const converted = new BigNumber(bn.toString())
   const divided = converted.div(divideBy)
-  return divided.toFixed(decimals)
+  return divided.toFixed(decimals, roundingMode)
 }
 
 export function bnToFloatString(

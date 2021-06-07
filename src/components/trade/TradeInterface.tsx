@@ -281,28 +281,15 @@ export default function TradeInterface({
           BigNumber.ROUND_DOWN
         )
       )
-    } else {
-      let balanceAsDai
-      if (selectedToken.symbol === 'Dai') {
-        balanceAsDai = tokenBalanceBN
-      } else {
-        balanceAsDai = await getUniswapDaiOutputSwap(
-          selectedToken.address,
-          tokenBalanceBN
-        )
-      }
-      const buyableBN = calculateMaxIdeaTokensBuyable(
-        balanceAsDai,
-        ideaToken?.rawSupply || new BN('0'),
-        market
-      )
-      setIdeaTokenAmount(
+      console.log(
         formatBigNumber(
-          buyableBN.div(new BigNumber('10').pow(new BigNumber('18'))),
+          balanceBN.div(new BigNumber('10').pow(new BigNumber('18'))),
           18,
           BigNumber.ROUND_DOWN
         )
       )
+    } else {
+      setSelectedTokenAmount(tokenBalance)
     }
   }
 

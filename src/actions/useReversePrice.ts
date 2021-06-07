@@ -60,17 +60,21 @@ export default function useReversePrice(
           throw 'No Uniswap path exists'
         }
 
-        const trade = new Trade(
-          path.route,
-          new TokenAmount(path.inToken, amountBN.toString()),
-          TradeType.EXACT_INPUT
-        )
+        try {
+          const trade = new Trade(
+            path.route,
+            new TokenAmount(path.inToken, amountBN.toString()),
+            TradeType.EXACT_INPUT
+          )
 
-        daiAmountBN = new BN(
-          new BigNumber(trade.outputAmount.toExact())
-            .multipliedBy(new BigNumber('10').exponentiatedBy('18'))
-            .toFixed(0, BigNumber.ROUND_DOWN)
-        )
+          daiAmountBN = new BN(
+            new BigNumber(trade.outputAmount.toExact())
+              .multipliedBy(new BigNumber('10').exponentiatedBy('18'))
+              .toFixed(0, BigNumber.ROUND_DOWN)
+          )
+        } catch (ex) {
+          return new BN('0')
+        }
       }
 
       const requiredIdeaTokenAmount = new BN(
@@ -119,17 +123,21 @@ export default function useReversePrice(
           throw 'No Uniswap path exists'
         }
 
-        const trade = new Trade(
-          path.route,
-          new TokenAmount(path.outToken, amountBN.toString()),
-          TradeType.EXACT_OUTPUT
-        )
+        try {
+          const trade = new Trade(
+            path.route,
+            new TokenAmount(path.outToken, amountBN.toString()),
+            TradeType.EXACT_OUTPUT
+          )
 
-        requiredDaiAmountBN = new BN(
-          new BigNumber(trade.inputAmount.toExact())
-            .multipliedBy(new BigNumber('10').exponentiatedBy('18'))
-            .toFixed(0, BigNumber.ROUND_UP)
-        )
+          requiredDaiAmountBN = new BN(
+            new BigNumber(trade.inputAmount.toExact())
+              .multipliedBy(new BigNumber('10').exponentiatedBy('18'))
+              .toFixed(0, BigNumber.ROUND_UP)
+          )
+        } catch (ex) {
+          return new BN('0')
+        }
       }
 
       const outputBN = new BN(

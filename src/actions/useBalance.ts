@@ -53,7 +53,7 @@ export default function useBalance(address: string, decimals: number) {
       if (!isCancelled) {
         const pow = new BigNumber('10').pow(new BigNumber(decimals))
         setBalanceBN(bn)
-        setBalance(web3BNToFloatString(bn, pow, 4))
+        setBalance(web3BNToFloatString(bn, pow, 4, BigNumber.ROUND_DOWN))
         setIsLoading(false)
       }
     }
