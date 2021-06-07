@@ -409,7 +409,7 @@ export default function TradeInterface({
           >
             <div className="w-64 mb-2">
               <AdvancedOptions
-                disabled={disabled}
+                disabled={txManager.isPending || disabled}
                 setIsUnlockOnceChecked={setIsUnlockOnceChecked}
                 isUnlockOnceChecked={isUnlockOnceChecked}
                 isUnlockPermanentChecked={isUnlockPermanentChecked}
