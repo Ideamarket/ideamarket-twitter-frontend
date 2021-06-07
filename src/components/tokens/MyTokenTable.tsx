@@ -70,10 +70,8 @@ export default function MyTokenTable({
     queryMyTokensMaybeMarket
   )
 
-  const {
-    data: compoundSupplyRate,
-    isLoading: isCompoundSupplyRateLoading,
-  } = useQuery('compound-supply-rate', querySupplyRate)
+  const { data: compoundSupplyRate, isLoading: isCompoundSupplyRateLoading } =
+    useQuery('compound-supply-rate', querySupplyRate)
 
   const [pairs, setPairs]: [IdeaTokenMarketPair[], any] = useState([])
 

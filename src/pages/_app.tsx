@@ -38,11 +38,13 @@ function getLibrary(provider: any): Web3 {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const Layout =
-    (Component as typeof Component & {
-      layoutProps: {
-        Layout: (props: { children: ReactNode } & unknown) => JSX.Element
+    (
+      Component as typeof Component & {
+        layoutProps: {
+          Layout: (props: { children: ReactNode } & unknown) => JSX.Element
+        }
       }
-    }).layoutProps?.Layout || Fragment
+    ).layoutProps?.Layout || Fragment
 
   const [isEmailHeaderActive, setIsEmailHeaderActive] = useState(false)
   useEffect(() => {
@@ -56,10 +58,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     TimeAgo.addDefaultLocale(en)
   }, [])
 
-  const [
-    onWalletConnectedCallback,
-    setOnWalletConnectedCallback,
-  ] = useState(() => () => {})
+  const [onWalletConnectedCallback, setOnWalletConnectedCallback] = useState(
+    () => () => {}
+  )
 
   return (
     <>

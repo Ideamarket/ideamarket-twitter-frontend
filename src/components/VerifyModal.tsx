@@ -56,10 +56,13 @@ export default function VerifyModal({
   const [feeTo, setFeeTo] = useState('')
   const txManager = useTransactionManager()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
-  const marketVerificationExplanation = marketSpecifics.getVerificationExplanation()
-  const shaPromptExplanation = marketSpecifics.getVerificationSHAPromptExplanation()
+  const marketVerificationExplanation =
+    marketSpecifics.getVerificationExplanation()
+  const shaPromptExplanation =
+    marketSpecifics.getVerificationSHAPromptExplanation()
   const shaPrompt = marketSpecifics.getVerificationSHAPrompt(sha)
-  const confirmCheckboxText = marketSpecifics.getVerificationConfirmCheckboxLabel()
+  const confirmCheckboxText =
+    marketSpecifics.getVerificationConfirmCheckboxLabel()
 
   const [tosCheckboxChecked, setTOSCheckboxChecked] = useState(false)
   const [confirmCheckboxChecked, setConfirmCheckboxChecked] = useState(false)
