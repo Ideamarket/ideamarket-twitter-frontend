@@ -85,6 +85,22 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
     }
   }, [ideaTokenAmount])
 
+  function onInputChanged(event) {
+    const oldValue = inputValue
+    const newValue = event.target.value
+    const setValue = /^\d*\.?\d*$/.test(newValue) ? newValue : oldValue
+
+    setInputValue(setValue)
+
+    if (isIdeaToken) {
+      setSelectedTokenAmount('0')
+      setIdeaTokenAmount(setValue)
+    } else {
+      setIdeaTokenAmount('0')
+      setSelectedTokenAmount(setValue)
+    }
+  }
+
   return (
     <div className="relative px-5 py-4 mb-1 border border-gray-100 rounded-md bg-gray-50 text-brand-new-dark">
       <div
@@ -161,17 +177,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           placeholder="0.0"
           disabled={txManager.isPending}
           value={inputValue}
-          onChange={(event) => {
-            setInputValue(event.target.value)
-
-            if (isIdeaToken) {
-              setSelectedTokenAmount('0')
-              setIdeaTokenAmount(event.target.value)
-            } else {
-              setIdeaTokenAmount('0')
-              setSelectedTokenAmount(event.target.value)
-            }
-          }}
+          onChange={onInputChanged}
         />
       </div>
       <div className="flex justify-between text-sm">
