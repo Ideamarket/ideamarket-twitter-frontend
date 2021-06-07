@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react'
 const selectStyles = {
   container: (provided) => ({
     ...provided,
-    width: 150,
+    minWidth: '140px',
+    width: '140px',
     border: 'none',
   }),
 
@@ -152,7 +153,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           </div>
         ) : (
           <Select
-            className="text-xs font-medium bg-white border-2 border-gray-200 shadow-md cursor-pointer text-brand-gray-4 trade-select rounded-2xl"
+            className="w-32 text-xs font-medium bg-white border-2 border-gray-200 shadow-md cursor-pointer text-brand-gray-4 trade-select rounded-2xl"
             isClearable={false}
             isSearchable={false}
             isDisabled={txManager.isPending || disabled}
