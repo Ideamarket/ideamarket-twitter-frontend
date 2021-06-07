@@ -12,7 +12,7 @@ import {
 } from 'utils'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import A from 'components/A'
+import { A, AddToMetamaskButton } from 'components'
 import { useTokenIconURL } from 'actions'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -151,7 +151,7 @@ export default function LockedTokenRow({
             ${balanceValue}
           </p>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
+        <td className="px-6 py-4">
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
             Locked Until
           </p>
@@ -161,6 +161,12 @@ export default function LockedTokenRow({
           >
             {moment(lockedUntil * 1000).format('LLL')}
           </p>
+        </td>
+        {/* Add to Metamask button */}
+        <td className="pr-4 md:px-4 py-4">
+          <div className="flex items-center w-full h-full">
+            <AddToMetamaskButton token={token} />
+          </div>
         </td>
       </tr>
     </>

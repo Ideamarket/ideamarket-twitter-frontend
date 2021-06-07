@@ -28,6 +28,14 @@ export default function LockedTokenRowSkeleton({ page }: { page: string }) {
             <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
             <p className="h-4 mt-1 bg-gray-400 rounded"></p>
           </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
+            <p className="h-4 mt-1 bg-gray-400 rounded"></p>
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap">
+            <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
+            <p className="w-10 h-4 mt-1 bg-gray-400 rounded"></p>
+          </td>
         </tr>
       ) : (
         <div className="table-row cursor-pointer bg-brand-gray animate animate-pulse">

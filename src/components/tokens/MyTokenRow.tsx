@@ -6,6 +6,7 @@ import { getMarketSpecificsByMarketName } from 'store/markets'
 import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
+import AddToMetamaskButton from 'components/wallet/AddToMetamaskButton'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
