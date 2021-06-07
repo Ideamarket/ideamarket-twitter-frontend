@@ -44,7 +44,7 @@ export default function useReversePrice(
       const amountBN = new BN(
         new BigNumber(amount)
           .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-          .toFixed()
+          .toFixed(0, BigNumber.ROUND_DOWN)
       )
 
       let daiAmountBN = amountBN
@@ -68,15 +68,17 @@ export default function useReversePrice(
 
         daiAmountBN = new BN(
           new BigNumber(trade.outputAmount.toExact())
-            .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-            .toFixed()
+            .multipliedBy(new BigNumber('10').exponentiatedBy('18'))
+            .toFixed(0, BigNumber.ROUND_DOWN)
         )
       }
 
-      const requiredIdeaTokenAmount = calculateMaxIdeaTokensBuyable(
-        daiAmountBN,
-        ideaToken?.rawSupply || new BN('0'),
-        market
+      const requiredIdeaTokenAmount = new BN(
+        calculateMaxIdeaTokensBuyable(
+          daiAmountBN,
+          ideaToken?.rawSupply || new BN('0'),
+          market
+        ).toFixed(0, BigNumber.ROUND_DOWN)
       )
 
       return requiredIdeaTokenAmount
@@ -88,7 +90,7 @@ export default function useReversePrice(
           .multipliedBy(
             new BigNumber('10').exponentiatedBy(decimals.toString())
           )
-          .toFixed()
+          .toFixed(0, BigNumber.ROUND_UP)
       )
 
       if (
@@ -125,15 +127,17 @@ export default function useReversePrice(
 
         requiredDaiAmountBN = new BN(
           new BigNumber(trade.inputAmount.toExact())
-            .multipliedBy(new BigNumber('10').exponentiatedBy('18')) // dai -> 18 decimals
-            .toFixed()
+            .multipliedBy(new BigNumber('10').exponentiatedBy('18'))
+            .toFixed(0, BigNumber.ROUND_UP)
         )
       }
 
-      const outputBN = calculateIdeaTokensInputForDaiOutput(
-        requiredDaiAmountBN,
-        ideaToken?.rawSupply || new BN('0'),
-        market
+      const outputBN = new BN(
+        calculateIdeaTokensInputForDaiOutput(
+          requiredDaiAmountBN,
+          ideaToken?.rawSupply || new BN('0'),
+          market
+        ).toFixed(0, BigNumber.ROUND_UP)
       )
 
       return outputBN
@@ -149,7 +153,7 @@ export default function useReversePrice(
 
       const bn = await fn
       if (!isCancelled) {
-        const pow = new BigNumber('10').pow(new BigNumber(decimals))
+        const pow = new BigNumber('10').pow(new BigNumber('18'))
         setOutputBN(bn)
         setOutput(web3BNToFloatString(bn, pow, 4))
         setIsLoading(false)

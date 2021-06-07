@@ -139,18 +139,22 @@ export default function useOutputAmount(
         throw 'No Uniswap path exists'
       }
 
-      const trade = new Trade(
-        path.route,
-        new TokenAmount(path.inToken, daiOutputAmount.toString()),
-        TradeType.EXACT_INPUT
-      )
-      const outputBN = new BN(
-        new BigNumber(trade.outputAmount.toExact())
-          .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-          .toFixed()
-      )
+      try {
+        const trade = new Trade(
+          path.route,
+          new TokenAmount(path.inToken, daiOutputAmount.toString()),
+          TradeType.EXACT_INPUT
+        )
+        const outputBN = new BN(
+          new BigNumber(trade.outputAmount.toExact())
+            .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
+            .toFixed()
+        )
 
-      return outputBN
+        return outputBN
+      } catch (ex) {
+        return new BN('0')
+      }
     }
 
     async function run(fn) {
