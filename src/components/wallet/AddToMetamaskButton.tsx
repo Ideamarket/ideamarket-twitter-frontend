@@ -35,27 +35,12 @@ export default function AddToMetamaskButton({ token }: { token: IdeaToken }) {
   return (
     <>
       <button
-        className={classNames(
-          'md:hidden px-1 h-12 text-base font-medium text-center border-2 rounded-lg md:w-44 tracking-tightest-2 font-sf-compact-medium',
-          disabled
-            ? 'text-brand-gray-2 border-brand-gray-2 cursor-default'
-            : 'text-brand-gray-2 border-brand-gray-2 hover:text-white border-brand-blue hover:bg-brand-blue'
-        )}
+        className="text-brand-gray-2 underline"
         onClick={onClick}
         disabled={disabled}
       >
-        <div className="flex items-center text-sm">
-          <Metamask className="w-6 h-6" />
-          Add to Metamask
-        </div>
-      </button>
-
-      <span
-        className="hidden md:block text-brand-gray-2 underline"
-        onClick={onClick}
-      >
         Add to Metamask
-      </span>
+      </button>
     </>
   )
 }
