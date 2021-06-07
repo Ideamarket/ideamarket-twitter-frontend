@@ -2,6 +2,7 @@ import Select from 'react-select'
 import { TransactionManager } from 'utils'
 import SelectTokensFormat from './SelectTokenFormat'
 import { TokenListEntry } from '../../../store/tokenListStore'
+import { useEffect, useState } from 'react'
 
 const selectStyles = {
   container: (provided) => ({
@@ -30,41 +31,59 @@ const selectTheme = (theme) => ({
 type TradeInterfaceBoxProps = {
   label: string
   setIdeaTokenAmount: (value: string) => void
-  ideaTokenAmount: string
+  setSelectedTokenAmount: (value: string) => void
+  ideaTokenAmount: string | number | any
   isTokenBalanceLoading: boolean
   tokenBalance: string
   maxButtonClicked: () => void
   selectTokensValues: any
   showBuySellSwitch?: boolean
-  setSelectedToken: (value: string) => void
+  selectedToken: any
+  setSelectedToken: (value: any) => void
   setTradeType: (value: string) => void
   disabled: boolean
   tradeType: string
   selectedIdeaToken: TokenListEntry | null
   txManager: TransactionManager
+  isIdeaToken: boolean
 }
 
 const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   label,
   setIdeaTokenAmount,
+  setSelectedTokenAmount,
   ideaTokenAmount = '',
   isTokenBalanceLoading,
   tokenBalance,
   maxButtonClicked,
   selectTokensValues,
   showBuySellSwitch,
+  selectedToken,
   setSelectedToken,
   setTradeType,
   disabled,
   tradeType,
   selectedIdeaToken,
   txManager,
+  isIdeaToken,
 }) => {
   const handleBuySellClick = () => {
     if (!txManager.isPending && tradeType === 'sell') setTradeType('buy')
     if (!txManager.isPending && tradeType === 'buy') setTradeType('sell')
     if (!txManager.isPending) setIdeaTokenAmount('0')
   }
+
+  const [inputValue, setInputValue] = useState('')
+
+  useEffect(() => {
+    if (inputValue !== ideaTokenAmount) {
+      if (parseFloat(ideaTokenAmount) <= 0) {
+        setInputValue('') // If one input is 0, make other one 0 too
+      } else {
+        setInputValue(ideaTokenAmount.toString())
+      }
+    }
+  }, [ideaTokenAmount])
 
   return (
     <div className="relative px-5 py-4 mb-1 border border-gray-100 rounded-md bg-gray-50 text-brand-new-dark">
@@ -128,23 +147,30 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
             formatOptionLabel={SelectTokensFormat}
             defaultValue={
               selectedIdeaToken
-                ? {
-                    token: selectedIdeaToken,
-                  }
-                : selectTokensValues[0]
+                ? { token: selectedIdeaToken }
+                : { token: selectedToken, value: selectedToken.address } ||
+                  selectTokensValues[0]
             }
             theme={selectTheme}
             styles={selectStyles}
           />
         )}
         <input
-          className="w-full max-w-sm text-3xl text-right border-none outline-none text-brand-gray-2 bg-gray-50"
+          className="w-full max-w-sm text-3xl text-right border-none outline-none text-brand-gray-2 bg-gray-50 placeholder-gray-500 placeholder-opacity-50"
           min="0"
-          placeholder="0"
-          disabled={!selectedIdeaToken || txManager.isPending}
-          value={ideaTokenAmount}
+          placeholder="0.0"
+          disabled={txManager.isPending}
+          value={inputValue}
           onChange={(event) => {
-            setIdeaTokenAmount(event.target.value)
+            setInputValue(event.target.value)
+
+            if (isIdeaToken) {
+              setSelectedTokenAmount('0')
+              setIdeaTokenAmount(event.target.value)
+            } else {
+              setIdeaTokenAmount('0')
+              setSelectedTokenAmount(event.target.value)
+            }
           }}
         />
       </div>

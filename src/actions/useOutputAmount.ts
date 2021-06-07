@@ -44,6 +44,7 @@ export default function useOutputAmount(
 
       let requiredDaiAmount
       if (!ideaToken) {
+        // No ideaToken yet because it is being listed
         const factoryContract = useContractStore.getState().factoryContract
         const marketDetails = await factoryContract.methods
           .getMarketDetailsByID(market.marketID)

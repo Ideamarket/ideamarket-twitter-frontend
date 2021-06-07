@@ -44,7 +44,11 @@ export default function TokenRow({
     2
   )
 
-  const balanceValueBN = calculateIdeaTokenDaiValue(token, market, balanceBN)
+  const balanceValueBN = calculateIdeaTokenDaiValue(
+    token?.rawSupply,
+    market,
+    balanceBN
+  )
   const balanceValue = formatNumber(
     web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 18)
   )

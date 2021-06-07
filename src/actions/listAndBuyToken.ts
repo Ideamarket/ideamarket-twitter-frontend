@@ -28,6 +28,12 @@ export default function listAndBuyToken(
   let contractCall
   let contractCallOptions = {}
 
+  console.log('tokenName', tokenName)
+  console.log('market', market)
+  console.log('amount', amount.toString())
+  console.log('lockDuration', lockDuration)
+  console.log('userAddress', userAddress)
+
   if (inputTokenAddress === NETWORK.getExternalAddresses().dai) {
     contractCall = multiAction.methods.addAndBuy(
       tokenName,

@@ -36,9 +36,7 @@ export default function ApproveButton({
 
   const isMissingAllowance = hasAllowanceFor[tokenAddress]?.[spenderAddress]
     ? hasAllowanceFor[tokenAddress][spenderAddress].lt(requiredAllowance)
-    : allowance
-    ? allowance.lt(requiredAllowance)
-    : false
+    : allowance !== undefined && allowance.lt(requiredAllowance)
 
   useEffect(() => {
     setIsMissingAllowance(isMissingAllowance)

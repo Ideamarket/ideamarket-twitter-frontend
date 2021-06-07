@@ -29,6 +29,7 @@ import { getMarketSpecificsByMarketName } from 'store/markets'
 import { TradeInterfaceBox } from './components'
 import CircleSpinner from 'components/animations/CircleSpinner'
 import Settings from '../../assets/settings.svg'
+import useReversePrice from 'actions/useReversePrice'
 
 type NewIdeaToken = {
   symbol: string
@@ -43,7 +44,7 @@ type TradeInterfaceProps = {
     ideaTokenAmount: BN,
     tokenAddress: string,
     tokenSymbol: string,
-    tokenAmount: BN,
+    calculatedTokenAmount: BN,
     slippage: number,
     lock: boolean,
     isUnlockOnceChecked: boolean,
@@ -75,9 +76,8 @@ export default function TradeInterface({
   const [tradeType, setTradeType] = useState('buy')
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
-    false
-  )
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
+    useState(false)
 
   const tokenList = useTokenListStore((state) => state.tokens)
   const selectTokensValues = tokenList.map((token) => ({
@@ -85,20 +85,26 @@ export default function TradeInterface({
     token: token,
   }))
 
-  const [selectedToken, setSelectedToken] = useState(undefined)
-  const [
-    isIdeaTokenBalanceLoading,
-    ideaTokenBalanceBN,
-    ideaTokenBalance,
-  ] = useBalance(ideaToken?.address, 18)
+  const [selectedToken, setSelectedToken] = useState(
+    useTokenListStore.getState().tokens[0]
+  )
+  const [isIdeaTokenBalanceLoading, ideaTokenBalanceBN, ideaTokenBalance] =
+    useBalance(ideaToken?.address, 18)
 
   const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
     selectedToken?.address,
     selectedToken?.decimals
   )
 
+  // ideaTokenAmount = Number typed in by user on ideaToken input
   const [ideaTokenAmount, setIdeaTokenAmount] = useState('0')
-  const [isTokenAmountLoading, tokenAmountBN, tokenAmount] = useOutputAmount(
+  const ideaTokenAmountBN = floatToWeb3BN(ideaTokenAmount, 18)
+  // Calculates the selectedToken amount after the ideaToken is typed in
+  const [
+    isCalculatedTokenAmountLoading,
+    calculatedTokenAmountBN,
+    calculatedTokenAmount,
+  ] = useOutputAmount(
     ideaToken,
     market,
     selectedToken?.address,
@@ -106,6 +112,41 @@ export default function TradeInterface({
     selectedToken?.decimals,
     tradeType
   )
+  // selectedTokenAmount = Number typed in by user on selectedToken input
+  const [selectedTokenAmount, setSelectedTokenAmount] = useState('0')
+  const selectedTokenAmountBN = floatToWeb3BN(selectedTokenAmount, 18)
+  // Calculates the ideaToken amount after the selectedToken is typed in
+  const [
+    isCalculatedIdeaTokenAmountLoading,
+    calculatedIdeaTokenAmountBN,
+    calculatedIdeaTokenAmount,
+  ] = useReversePrice(
+    ideaToken,
+    market,
+    selectedToken?.address,
+    selectedTokenAmount,
+    selectedToken?.decimals,
+    tradeType,
+    tokenBalanceBN
+  )
+
+  // Determines which token input was typed in last
+  const isSelectedTokenActive = selectedTokenAmount !== '0'
+
+  // These master variables store the value to be used for the ideaToken and selectedToken
+  // If user typed a number, use that input. Otherwise, use the calculated value
+  const masterIdeaTokenAmount = isSelectedTokenActive
+    ? calculatedIdeaTokenAmount
+    : ideaTokenAmount
+  const masterSelectedTokenAmount = isSelectedTokenActive
+    ? selectedTokenAmount
+    : calculatedTokenAmount
+  const masterIdeaTokenAmountBN = isSelectedTokenActive
+    ? calculatedIdeaTokenAmountBN
+    : ideaTokenAmountBN
+  const masterSelectedTokenAmountBN = isSelectedTokenActive
+    ? selectedTokenAmountBN
+    : calculatedTokenAmountBN
 
   const exchangeContractAddress = useContractStore(
     (state) => state.exchangeContract
@@ -130,16 +171,19 @@ export default function TradeInterface({
   const spendTokenSymbol = tradeType === 'buy' ? selectedToken?.symbol : 'IDT'
 
   const requiredAllowance =
-    tradeType === 'buy' ? tokenAmountBN : floatToWeb3BN(ideaTokenAmount, 18)
+    tradeType === 'buy' ? masterSelectedTokenAmount : masterIdeaTokenAmount
+
+  const exceedsBalanceBuy =
+    isTokenBalanceLoading || !masterSelectedTokenAmountBN
+      ? false
+      : tokenBalanceBN.lt(masterSelectedTokenAmountBN)
+
+  const exceedsBalanceSell = isIdeaTokenBalanceLoading
+    ? false
+    : ideaTokenBalanceBN.lt(masterIdeaTokenAmountBN)
 
   const exceedsBalance =
-    tradeType === 'buy'
-      ? isTokenBalanceLoading || !tokenAmountBN
-        ? false
-        : tokenBalanceBN.lt(tokenAmountBN)
-      : isIdeaTokenBalanceLoading
-      ? false
-      : ideaTokenBalanceBN.lt(floatToWeb3BN(ideaTokenAmount, 18))
+    tradeType === 'buy' ? exceedsBalanceBuy : exceedsBalanceSell
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
   const [approveButtonKey, setApproveButtonKey] = useState(0)
@@ -170,19 +214,23 @@ export default function TradeInterface({
   useEffect(() => {
     let isValid =
       selectedToken !== undefined &&
-      ideaTokenAmount !== '' &&
-      tokenAmount !== '' &&
-      tokenAmountBN !== undefined &&
-      tokenAmountBN.gt(new BN('0')) &&
-      floatToWeb3BN(ideaTokenAmount, 18).gt(new BN('0'))
+      masterIdeaTokenAmountBN !== undefined &&
+      masterSelectedTokenAmountBN !== undefined &&
+      !isNaN(masterIdeaTokenAmount) &&
+      !isNaN(masterSelectedTokenAmount) &&
+      !/\s/g.test(masterSelectedTokenAmount) && // No whitespace allowed in inputs
+      !/\s/g.test(masterIdeaTokenAmount) &&
+      masterIdeaTokenAmountBN.gt(new BN('0')) &&
+      masterSelectedTokenAmountBN.gt(new BN('0'))
 
     if (isValid) {
+      // Make sure user has high enough balance. If not, disable buttons
       if (tradeType === 'buy') {
-        if (tokenAmountBN.gt(tokenBalanceBN)) {
+        if (masterSelectedTokenAmountBN.gt(tokenBalanceBN)) {
           isValid = false
         }
       } else {
-        if (floatToWeb3BN(ideaTokenAmount, 18).gt(ideaTokenBalanceBN)) {
+        if (masterIdeaTokenAmountBN.gt(ideaTokenBalanceBN)) {
           isValid = false
         }
       }
@@ -190,11 +238,18 @@ export default function TradeInterface({
 
     setIsValid(isValid)
 
+    // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
+    const ideaTokenAmountBNLocal = floatToWeb3BN(masterIdeaTokenAmount, 18)
+    const selectedTokenAmountBNLocal = floatToWeb3BN(
+      masterSelectedTokenAmount,
+      18
+    )
+
     onValuesChanged(
-      floatToWeb3BN(ideaTokenAmount, 18),
+      ideaTokenAmountBNLocal,
       selectedToken?.address,
       selectedToken?.symbol,
-      tokenAmountBN,
+      selectedTokenAmountBNLocal,
       slippage,
       isLockChecked,
       isUnlockOnceChecked,
@@ -204,12 +259,16 @@ export default function TradeInterface({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     ideaTokenAmount,
+    selectedTokenAmount,
     selectedToken,
-    tokenAmountBN,
+    calculatedIdeaTokenAmountBN,
+    calculatedTokenAmountBN,
     isLockChecked,
     slippage,
     isUnlockOnceChecked,
     isUnlockPermanentChecked,
+    isCalculatedIdeaTokenAmountLoading,
+    isCalculatedTokenAmountLoading,
   ])
 
   async function maxButtonClicked() {
@@ -250,21 +309,27 @@ export default function TradeInterface({
   async function onTradeClicked() {
     const name = tradeType === 'buy' ? 'Buy' : 'Sell'
     const func = tradeType === 'buy' ? buyToken : sellToken
+    // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
+    const ideaTokenAmountBNLocal = floatToWeb3BN(masterIdeaTokenAmount, 18)
+    const selectedTokenAmountBNLocal = floatToWeb3BN(
+      masterSelectedTokenAmount,
+      18
+    )
     const args =
       tradeType === 'buy'
         ? [
             ideaToken.address,
             selectedToken.address,
-            floatToWeb3BN(ideaTokenAmount, 18),
-            tokenAmountBN,
+            ideaTokenAmountBNLocal,
+            selectedTokenAmountBNLocal,
             slippage,
             isLockChecked ? 31556952 : 0,
           ]
         : [
             ideaToken.address,
             selectedToken.address,
-            floatToWeb3BN(ideaTokenAmount, 18),
-            tokenAmountBN,
+            ideaTokenAmountBNLocal,
+            selectedTokenAmountBNLocal,
             slippage,
           ]
 
@@ -281,12 +346,7 @@ export default function TradeInterface({
   }
 
   const isTradeButtonDisabled =
-    txManager.isPending ||
-    !isValid ||
-    exceedsBalance ||
-    isMissingAllowance ||
-    !parseFloat(ideaTokenAmount) ||
-    parseFloat(ideaTokenAmount) <= 0.0
+    txManager.isPending || !isValid || exceedsBalance || isMissingAllowance
 
   const marketSpecifics = getMarketSpecificsByMarketName(market?.name)
   const { tokenIconURL } = useTokenIconURL({
@@ -296,12 +356,13 @@ export default function TradeInterface({
 
   const commonProps = {
     setIdeaTokenAmount,
+    setSelectedTokenAmount,
     tradeType,
     exceedsBalance,
-    tokenAmount,
     disabled,
     market,
     maxButtonClicked,
+    selectedToken,
     setSelectedToken,
     selectTokensValues,
     setTradeType,
@@ -309,7 +370,10 @@ export default function TradeInterface({
   }
 
   const selectedTokenProps = {
-    ideaTokenAmount: isTokenAmountLoading ? '...' : tokenAmount,
+    ideaTokenAmount: isCalculatedTokenAmountLoading
+      ? '...'
+      : masterSelectedTokenAmount,
+    isIdeaToken: false, // Selected token is never an ideaToken. It is ETH/DAI/etc (if this changes, can call this isSelectedToken instead)
     tokenBalance,
     isTokenBalanceLoading,
     selectedIdeaToken: null,
@@ -321,7 +385,10 @@ export default function TradeInterface({
   }
 
   const ideaTokenProps = {
-    ideaTokenAmount,
+    ideaTokenAmount: isCalculatedIdeaTokenAmountLoading
+      ? '...'
+      : masterIdeaTokenAmount,
+    isIdeaToken: true,
     tokenBalance: ideaTokenBalance,
     isTokenBalanceLoading: isIdeaTokenBalanceLoading,
     selectedIdeaToken: newIdeaToken || selectedIdeaToken,
@@ -448,7 +515,7 @@ export default function TradeInterface({
               tokenAddress={spendTokenAddress}
               tokenSymbol={spendTokenSymbol}
               spenderAddress={spender}
-              requiredAllowance={requiredAllowance}
+              requiredAllowance={floatToWeb3BN(requiredAllowance, 18)}
               unlockPermanent={isUnlockPermanentChecked}
               txManager={txManager}
               setIsMissingAllowance={setIsMissingAllowance}

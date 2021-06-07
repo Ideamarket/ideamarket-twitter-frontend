@@ -41,9 +41,8 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
 
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(
-    false
-  )
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
+    useState(false)
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
   const [approveButtonKey, setApproveButtonKey] = useState(0)
