@@ -272,6 +272,8 @@ export default function TradeInterface({
   ])
 
   async function maxButtonClicked() {
+    setSelectedTokenAmount('0')
+
     if (tradeType === 'sell') {
       const balanceBN = new BigNumber(ideaTokenBalanceBN.toString())
       setIdeaTokenAmount(
