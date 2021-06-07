@@ -81,12 +81,9 @@ export default function ApproveButton({
       <span>Allow Ideamarket to spend your {tokenSymbol?.toUpperCase()}</span>
       <Tooltip className="inline-block ml-2">
         <div className="w-32 md:w-64">
-          Lock tokens to show your long-term confidence in a listing. You will
-          be unable to sell or withdraw locked tokens for the time period
-          specified.
-          <br />
-          <br />
-          For more information, see .
+          The Ideamarket smart contract needs your approval to interact with
+          your {tokenSymbol?.toUpperCase()} balance. After you granted
+          permission, the second button will be enabled.
         </div>
       </Tooltip>
     </div>
