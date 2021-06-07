@@ -25,11 +25,12 @@ export const YEAR_SECONDS = 31536000
 export function web3BNToFloatString(
   bn: BN,
   divideBy: BigNumber,
-  decimals: number
+  decimals: number,
+  roundingMode = BigNumber.ROUND_DOWN
 ): string {
   const converted = new BigNumber(bn.toString())
   const divided = converted.div(divideBy)
-  return divided.toFixed(decimals)
+  return divided.toFixed(decimals, roundingMode)
 }
 
 export function bnToFloatString(
@@ -149,11 +150,11 @@ export function formatNumberWithCommasAsThousandsSerperator(
 }
 
 export function calculateIdeaTokenDaiValue(
-  token: IdeaToken,
+  supplyBN: BN,
   market: IdeaMarket,
   amount: BN
 ): BN {
-  if (!token || !market || !amount) {
+  if (!supplyBN || !market || !amount) {
     return new BN('0')
   }
 
@@ -162,26 +163,25 @@ export function calculateIdeaTokenDaiValue(
   const baseCost = market.rawBaseCost
   const priceRise = market.rawPriceRise
   const hatchTokens = market.rawHatchTokens
-  const supply = token.rawSupply
 
   const tradingFeeRate = market.rawTradingFeeRate
   const platformFeeRate = market.rawPlatformFeeRate
 
   let hatchPrice = new BN('0')
   let updatedAmount = amount
-  let updatedSupply = supply
+  let updatedSupply = supplyBN
 
-  if (supply.sub(amount).lt(hatchTokens)) {
-    if (supply.lte(hatchTokens)) {
+  if (supplyBN.sub(amount).lt(hatchTokens)) {
+    if (supplyBN.lte(hatchTokens)) {
       return baseCost.mul(amount).div(web3TenPow18)
     }
 
-    const tokensInHatch = hatchTokens.sub(supply.sub(amount))
+    const tokensInHatch = hatchTokens.sub(supplyBN.sub(amount))
     hatchPrice = baseCost.mul(tokensInHatch).div(web3TenPow18)
     updatedAmount = amount.sub(tokensInHatch)
-    updatedSupply = supply.sub(hatchTokens)
+    updatedSupply = supplyBN.sub(hatchTokens)
   } else {
-    updatedSupply = supply.sub(hatchTokens)
+    updatedSupply = supplyBN.sub(hatchTokens)
   }
 
   const priceAtSupply = baseCost.add(
@@ -238,7 +238,9 @@ export function calculateMaxIdeaTokensBuyable(
     if (costForRemainingHatch.gte(dai)) {
       // We cannot buy the full remaining hatch
       const hatchBuyable = dai.div(applyFee(baseCost))
-      return hatchBuyable.multipliedBy(tenPow18)
+      const result = hatchBuyable.multipliedBy(tenPow18)
+      // Handle rounding error
+      return result.multipliedBy(new BigNumber('0.9999'))
     }
 
     // We can buy the full remaining hatch
@@ -268,5 +270,88 @@ export function calculateMaxIdeaTokensBuyable(
   const root = applyFee(b2f.plus(b2rsf).plus(d2r).plus(fr2s2)).sqrt()
   const numerator = root.minus(bf).minus(frs)
   const denominator = fr
-  return buyable.plus(numerator.div(denominator).multipliedBy(tenPow18))
+  const result = buyable.plus(numerator.div(denominator).multipliedBy(tenPow18))
+  // Handle rounding error
+  return result.multipliedBy(new BigNumber('0.9999'))
+}
+
+export function calculateIdeaTokensInputForDaiOutput(
+  daiBN: BN,
+  supplyBN: BN,
+  market: IdeaMarket
+): BigNumber {
+  const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
+
+  const dai = new BigNumber(daiBN.toString()).div(tenPow18)
+  const supply = new BigNumber(supplyBN.toString()).div(tenPow18)
+
+  const hatchTokens = new BigNumber(market.rawHatchTokens.toString()).div(
+    tenPow18
+  )
+  const baseCost = new BigNumber(market.rawBaseCost.toString()).div(tenPow18)
+  const priceRise = new BigNumber(market.rawPriceRise.toString()).div(tenPow18)
+  const totalFee = new BigNumber(
+    market.rawTradingFeeRate.add(market.rawPlatformFeeRate).toString()
+  )
+  const feeScale = new BigNumber('10000')
+
+  if (supplyBN.lte(market.rawHatchTokens)) {
+    // We are inside the hatch range
+    const result = dai
+      .multipliedBy(feeScale)
+      .dividedBy(
+        baseCost.multipliedBy(feeScale).minus(baseCost.multipliedBy(totalFee))
+      )
+      .multipliedBy(tenPow18)
+      .multipliedBy(new BigNumber('1.001'))
+
+    return result
+  }
+
+  // We are outside the hatch range
+  const distance = supplyBN.sub(market.rawHatchTokens)
+  const daiForDistance = calculateIdeaTokenDaiValue(supplyBN, market, distance)
+  if (daiForDistance.gte(daiBN)) {
+    // We do not need to sell into the hatch range
+    const oneDivRFT = new BigNumber('1').dividedBy(
+      priceRise.multipliedBy(feeScale.minus(totalFee))
+    )
+    const ft = feeScale.minus(totalFee)
+    const brsh = baseCost.plus(
+      priceRise.multipliedBy(supply.minus(hatchTokens))
+    )
+    const twoDFR = new BigNumber('2')
+      .multipliedBy(dai)
+      .multipliedBy(feeScale)
+      .multipliedBy(priceRise)
+    const bf = baseCost.multipliedBy(feeScale)
+    const bt = baseCost.multipliedBy(totalFee)
+    const fhr = feeScale.multipliedBy(hatchTokens).multipliedBy(priceRise)
+    const frs = feeScale.multipliedBy(priceRise).multipliedBy(supply)
+    const hrt = hatchTokens.multipliedBy(priceRise).multipliedBy(totalFee)
+    const rst = priceRise.multipliedBy(supply).multipliedBy(totalFee)
+
+    const squared = brsh.multipliedBy(brsh)
+    const root = ft.multipliedBy(ft.multipliedBy(squared).minus(twoDFR)).sqrt()
+    const afterRoot = bf.minus(bt).minus(fhr).plus(frs).plus(hrt).minus(rst)
+
+    return oneDivRFT
+      .multipliedBy(afterRoot.minus(root))
+      .multipliedBy(tenPow18)
+      .multipliedBy(new BigNumber('1.001'))
+  }
+
+  // We need to sell into the hatch range
+  const updatedDaiAmount = dai.minus(new BigNumber(daiForDistance.toString()))
+
+  const result = updatedDaiAmount
+    .multipliedBy(feeScale)
+    .dividedBy(
+      baseCost.multipliedBy(feeScale).minus(baseCost.multipliedBy(totalFee))
+    )
+    .multipliedBy(tenPow18)
+    .plus(new BigNumber(distance.toString()))
+    .multipliedBy(new BigNumber('1.001'))
+
+  return result
 }

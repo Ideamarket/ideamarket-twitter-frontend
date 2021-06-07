@@ -9,10 +9,8 @@ const NoSSRWalletInterface = dynamic(() => import('./WalletInterface'), {
 })
 
 export default function WalletModal({ close }: { close: () => void }) {
-  const {
-    onWalletConnectedCallback,
-    setOnWalletConnectedCallback,
-  } = useContext(GlobalContext)
+  const { onWalletConnectedCallback, setOnWalletConnectedCallback } =
+    useContext(GlobalContext)
 
   function closeModal(success) {
     close()

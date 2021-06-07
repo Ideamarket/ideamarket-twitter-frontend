@@ -5,6 +5,8 @@ import _ from 'lodash'
 
 import { useTokenAllowance, approveToken } from '../../actions'
 import { TransactionManager, web3UintMax } from '../../utils'
+import Tooltip from 'components/tooltip/Tooltip'
+
 export default function ApproveButton({
   tokenAddress,
   tokenSymbol,
@@ -34,9 +36,7 @@ export default function ApproveButton({
 
   const isMissingAllowance = hasAllowanceFor[tokenAddress]?.[spenderAddress]
     ? hasAllowanceFor[tokenAddress][spenderAddress].lt(requiredAllowance)
-    : allowance
-    ? allowance.lt(requiredAllowance)
-    : false
+    : allowance !== undefined && allowance.lt(requiredAllowance)
 
   useEffect(() => {
     setIsMissingAllowance(isMissingAllowance)
@@ -67,17 +67,25 @@ export default function ApproveButton({
   }
 
   return (
-    <button
+    <div
       className={classNames(
-        'w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2',
+        'py-4 px-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium text-center',
         disable
-          ? 'bg-brand-gray border-brand-gray text-brand-gray-2 cursor-default'
-          : 'border-brand-blue bg-brand-blue text-white font-medium'
+          ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
+          : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800 cursor-pointer'
       )}
-      disabled={disable}
-      onClick={approve}
+      onClick={() => {
+        !disable && approve()
+      }}
     >
-      Unlock {tokenSymbol?.toUpperCase()}
-    </button>
+      <span>Allow Ideamarket to spend your {tokenSymbol?.toUpperCase()}</span>
+      <Tooltip className="inline-block ml-2">
+        <div className="w-32 md:w-64">
+          The Ideamarket smart contract needs your approval to interact with
+          your {tokenSymbol?.toUpperCase()} balance. After you granted
+          permission, the second button will be enabled.
+        </div>
+      </Tooltip>
+    </div>
   )
 }

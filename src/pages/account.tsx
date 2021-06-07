@@ -29,21 +29,18 @@ export default function MyTokens() {
   const web3 = useWalletStore((state) => state.web3)
 
   const [ownedTokensTablePage, setOwnedTokensTablePage] = useState(0)
-  const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] = useState(
-    undefined
-  )
+  const [selectedMarketOwnedTokens, setSelectedMarketOwnedTokens] =
+    useState(undefined)
   const [ownedTokenTotalValue, setOwnedTokensTotalValue] = useState('0.00')
   const [lockedTokenTotalValue, setLockedTokensTotalValue] = useState('0.00')
 
   const [myTokensTablePage, setMyTokensTablePage] = useState(0)
-  const [selectedMarketMyTokens, setSelectedMarketMyTokens] = useState(
-    undefined
-  )
+  const [selectedMarketMyTokens, setSelectedMarketMyTokens] =
+    useState(undefined)
 
   const [lockedTokensTablePage, setLockedTokensTablePage] = useState(0)
-  const [selectedMarketLockedTokens, setSelectedMarketLockedTokens] = useState(
-    undefined
-  )
+  const [selectedMarketLockedTokens, setSelectedMarketLockedTokens] =
+    useState(undefined)
 
   const address = useWalletStore((state) => state.address)
 
@@ -52,13 +49,11 @@ export default function MyTokens() {
     queryOwnedTokensMaybeMarket
   )
 
-  const {
-    data: rawLockedPairs,
-    isLoading: isLockedPairsDataLoading,
-  } = useQuery(
-    ['locked-tokens', selectedMarketLockedTokens, address],
-    queryLockedTokens
-  )
+  const { data: rawLockedPairs, isLoading: isLockedPairsDataLoading } =
+    useQuery(
+      ['locked-tokens', selectedMarketLockedTokens, address],
+      queryLockedTokens
+    )
 
   const [table, setTable] = useState('holdings')
 
@@ -67,7 +62,11 @@ export default function MyTokens() {
     let ownedTotal = new BN('0')
     for (const pair of rawOwnedPairs ?? []) {
       ownedTotal = ownedTotal.add(
-        calculateIdeaTokenDaiValue(pair.token, pair.market, pair.rawBalance)
+        calculateIdeaTokenDaiValue(
+          pair.token?.rawSupply,
+          pair.market,
+          pair.rawBalance
+        )
       )
     }
 
@@ -75,7 +74,11 @@ export default function MyTokens() {
     let lockedTotal = new BN('0')
     for (const pair of rawLockedPairs ?? []) {
       lockedTotal = lockedTotal.add(
-        calculateIdeaTokenDaiValue(pair.token, pair.market, pair.rawBalance)
+        calculateIdeaTokenDaiValue(
+          pair.token?.rawSupply,
+          pair.market,
+          pair.rawBalance
+        )
       )
     }
 
