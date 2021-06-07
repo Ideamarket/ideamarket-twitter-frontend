@@ -108,7 +108,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           className="absolute flex px-4 py-1 text-xs font-bold bg-white rounded-md shadow-md cursor-pointer item-center"
           onClick={handleBuySellClick}
         >
-          ↓
+          ⮃
         </div>
       )}
       <div className="flex justify-between mb-2">
@@ -156,7 +156,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           />
         )}
         <input
-          className="w-full max-w-sm text-3xl text-right border-none outline-none text-brand-gray-2 bg-gray-50 placeholder-gray-500 placeholder-opacity-50"
+          className="w-full max-w-sm text-3xl text-right placeholder-gray-500 placeholder-opacity-50 border-none outline-none text-brand-gray-2 bg-gray-50"
           min="0"
           placeholder="0.0"
           disabled={txManager.isPending}
