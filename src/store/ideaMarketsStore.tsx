@@ -137,7 +137,7 @@ export async function queryMarkets(
 ): Promise<IdeaMarket[]> {
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
-    getQueryMarkets(marketNames)
+    getQueryMarkets(marketNames.filter((n) => n !== 'All'))
   )
   return result.ideaMarkets.map((market) => apiResponseToIdeaMarket(market))
 }

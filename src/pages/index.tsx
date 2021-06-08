@@ -1,4 +1,3 @@
-import classNames from 'classnames'
 import React, { useContext, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
@@ -16,8 +15,6 @@ import {
   Table,
   TradeModal,
   ListTokenModal,
-  PromoVideoModal,
-  ColumnsModal,
   A,
   DefaultLayout,
   WalletModal,
@@ -25,21 +22,21 @@ import {
 import ModalService from 'components/modals/ModalService'
 import { NETWORK } from 'store/networks'
 
-import Search from '../assets/search.svg'
 import Plus from '../assets/plus-white.svg'
-import Columns from '../assets/columns.svg'
 import { GlobalContext } from './_app'
 import { useWalletStore } from 'store/walletStore'
 import { Categories } from 'store/models/category'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'
-import { EmailForm } from 'components'
-import { MarketList } from 'components/markets/MarketList'
 import { getMarketSpecifics } from 'store/markets'
 import { NextSeo } from 'next-seo'
-import { OverviewFilters, Filters } from 'components/OverviewFilters'
+import {
+  OverviewFilters,
+  Filters,
+  DropdownFilters,
+} from 'components/tokens/OverviewFilters'
 
 export default function Home() {
-  const defaultHeaders = [
+  const defaultColumns = [
     {
       id: 1,
       name: 'Rank',
@@ -47,7 +44,6 @@ export default function Home() {
       value: 'rank',
       sortable: true,
       isOptional: false,
-      isActive: true,
     },
     {
       id: 2,
@@ -56,7 +52,6 @@ export default function Home() {
       value: 'market',
       sortable: false,
       isOptional: false,
-      isActive: true,
     },
     {
       id: 3,
@@ -65,7 +60,6 @@ export default function Home() {
       value: 'name',
       sortable: true,
       isOptional: false,
-      isActive: true,
     },
     {
       id: 4,
@@ -74,7 +68,6 @@ export default function Home() {
       value: 'price',
       sortable: true,
       isOptional: false,
-      isActive: true,
     },
     {
       id: 5,
@@ -83,7 +76,6 @@ export default function Home() {
       value: 'deposits',
       sortable: true,
       isOptional: true,
-      isActive: true,
     },
     {
       id: 6,
@@ -92,7 +84,6 @@ export default function Home() {
       value: 'locked',
       sortable: true,
       isOptional: true,
-      isActive: true,
     },
     {
       id: 7,
@@ -101,7 +92,6 @@ export default function Home() {
       value: 'income',
       sortable: true,
       isOptional: true,
-      isActive: true,
     },
     {
       id: 8,
@@ -110,7 +100,6 @@ export default function Home() {
       value: 'trade',
       sortable: false,
       isOptional: false,
-      isActive: true,
     },
     {
       id: 9,
@@ -119,23 +108,34 @@ export default function Home() {
       value: 'watch',
       sortable: false,
       isOptional: false,
-      isActive: true,
     },
   ]
 
-  const [headerData, setHeaderData] = useState(null)
-
-  useEffect(() => {
-    const storedHeaders = JSON.parse(localStorage.getItem('STORED_HEADERS'))
-    const initialHeaders = storedHeaders ?? defaultHeaders
-    setHeaderData(initialHeaders)
-  }, [])
-  
   const [selectedFilterId, setSelectedFilterId] = useState(Filters.TOP.id)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
+  const [selectedColumns, setSelectedColumns] = useState(new Set([]))
+
   const [nameSearch, setNameSearch] = useState('')
 
   const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
+
+  const visibleColumns = defaultColumns.filter(
+    (h) => !h.isOptional || selectedColumns.has(h.name)
+  )
+
+  useEffect(() => {
+    const storedMarkets = JSON.parse(localStorage.getItem('STORED_MARKETS'))
+    const initialMarkets = storedMarkets
+      ? [...storedMarkets]
+      : DropdownFilters.PLATFORMS.values
+    setSelectedMarkets(new Set(initialMarkets))
+
+    const storedColumns = JSON.parse(localStorage.getItem('STORED_COLUMNS'))
+    const initialColumns = storedColumns
+      ? [...storedColumns]
+      : DropdownFilters.COLUMNS.values
+    setSelectedColumns(new Set(initialColumns))
+  }, [])
 
   const {
     data: compoundExchangeRate,
@@ -166,10 +166,6 @@ export default function Home() {
   )
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
-
-  function onMarketChanged(market) {
-    setSelectedMarkets(market)
-  }
 
   function onNameSearchChanged(nameSearch) {
     setSelectedFilterId(Categories.TOP.id)
@@ -216,20 +212,14 @@ export default function Home() {
     }
   }
 
-  function getHeader(headerValue) {
-    return headerData.find((h) => h.value === headerValue)
+  function onMarketChanged(markets) {
+    localStorage.setItem('STORED_MARKETS', JSON.stringify([...markets]))
+    setSelectedMarkets(markets)
   }
 
-  function toggleHeader(headerValue) {
-    const headerObject = getHeader(headerValue)
-    headerObject.isActive = !headerObject.isActive
-    const newHeaderData = [
-      ...headerData.filter((h) => h.value !== headerValue),
-      headerObject,
-    ]
-    newHeaderData.sort((h1, h2) => h1.id - h2.id) // Sort since above statement puts out of order
-    localStorage.setItem('STORED_HEADERS', JSON.stringify(newHeaderData))
-    setHeaderData(newHeaderData)
+  function onColumnChanged(columns) {
+    localStorage.setItem('STORED_COLUMNS', JSON.stringify([...columns]))
+    setSelectedColumns(columns)
   }
 
   return (
@@ -279,80 +269,25 @@ export default function Home() {
         </div>
 
         <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-28 font-sf-compact-medium">
-          {/* <MarketList
-            selectedMarkets={selectedMarkets}
-            markets={getMarketSpecifics()}
-            onMarketChanged={onMarketChanged}
-          /> */}
           <OverviewFilters
             selectedFilterId={selectedFilterId}
             selectedMarkets={selectedMarkets}
+            selectedColumns={selectedColumns}
             markets={getMarketSpecifics()}
             onMarketChanged={onMarketChanged}
             setSelectedFilterId={setSelectedFilterId}
+            onColumnChanged={onColumnChanged}
+            onNameSearchChanged={onNameSearchChanged}
           />
 
           <div className="bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">
-            <div className="flex flex-col border-b md:flex-row border-brand-gray-3">
-              <div className="px-4 md:px-10">
-                <div className="font-sf-pro-text">
-                  <nav className="flex -mb-px space-x-5">
-                    {Object.values(Filters).map((filter) => (
-                      <A
-                        onClick={() => onCategoryChanged(filter.id)}
-                        key={filter.id}
-                        className={classNames(
-                          'px-1 py-4 text-base leading-none tracking-tightest whitespace-nowrap border-b-2 focus:outline-none cursor-pointer',
-                          filter.id === selectedFilterId
-                            ? 'font-semibold text-very-dark-blue border-very-dark-blue focus:text-very-dark-blue-3 focus:border-very-dark-blue-2'
-                            : 'font-medium text-brand-gray-2 border-transparent hover:text-gray-700 hover:border-gray-300 focus:text-gray-700 focus:border-gray-300'
-                        )}
-                      >
-                        <span>{filter.value}</span>
-                      </A>
-                    ))}
-                  </nav>
-                </div>
-              </div>
-              <div className="w-full mt-2 ml-auto md:mt-0 md:w-2/5 md:block">
-                <label htmlFor="search-input" className="sr-only">
-                  Search
-                </label>
-                <div className="relative h-full rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <Search className="w-8 h-8 text-gray-400" />
-                  </div>
-                  <input
-                    type="text"
-                    id="search-input"
-                    className="block w-full h-full pl-12 border-0 border-gray-300 rounded-none md:border-l focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Search"
-                    onChange={(event) => {
-                      onNameSearchChanged(
-                        event.target.value.length >= 2 ? event.target.value : ''
-                      )
-                    }}
-                  />
-                </div>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  ModalService.open(ColumnsModal, { headerData, toggleHeader })
-                }}
-                className="hidden md:flex items-center mx-6"
-              >
-                <Columns className="h-full mr-1" />
-                <b>Columns</b>
-              </button>
-            </div>
-            {headerData && (
+            {visibleColumns && (
               <Table
                 nameSearch={nameSearch}
                 selectedMarkets={selectedMarkets}
                 selectedFilterId={selectedFilterId}
-                headerData={headerData}
-                getHeader={getHeader}
+                columnData={visibleColumns}
+                getColumn={(column) => selectedColumns.has(column)}
                 onOrderByChanged={onOrderByChanged}
                 onTradeClicked={onTradeClicked}
               />
