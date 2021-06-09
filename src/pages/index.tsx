@@ -281,7 +281,8 @@ export default function Home() {
           />
 
           <div className="bg-white border border-brand-gray-3 rounded-b-xlg shadow-home">
-            {visibleColumns && (
+            {/* selectedMarkets is empty on load. If none selected, it will have 1 element called 'None' */}
+            {visibleColumns && selectedMarkets.size > 0 && (
               <Table
                 nameSearch={nameSearch}
                 selectedMarkets={selectedMarkets}
