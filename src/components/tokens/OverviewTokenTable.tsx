@@ -226,26 +226,27 @@ export default function Table({
                   </tr>
                 </thead>
                 <tbody className="w-full bg-white divide-y divide-gray-200">
+                  {(tokenData as IdeaToken[]).map((token) => {
+                    // Only load the rows if a market is found
+                    if (marketsMap[token.marketID]) {
+                      return (
+                        <TokenRow
+                          key={token.marketID + '-' + token.tokenID}
+                          token={token}
+                          market={marketsMap[token.marketID]}
+                          showMarketSVG={false}
+                          compoundSupplyRate={compoundSupplyRate}
+                          getColumn={getColumn}
+                          onTradeClicked={onTradeClicked}
+                        />
+                      )
+                    }
+                  })}
                   {isLoading
                     ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                         <TokenRowSkeleton key={token} getColumn={getColumn} />
                       ))
-                    : (tokenData as IdeaToken[]).map((token) => {
-                        // Only load the rows if a market is found
-                        if (marketsMap[token.marketID]) {
-                          return (
-                            <TokenRow
-                              key={token.marketID + '-' + token.tokenID}
-                              token={token}
-                              market={marketsMap[token.marketID]}
-                              showMarketSVG={false}
-                              compoundSupplyRate={compoundSupplyRate}
-                              getColumn={getColumn}
-                              onTradeClicked={onTradeClicked}
-                            />
-                          )
-                        }
-                      })}
+                    : null}
                 </tbody>
               </table>
             </div>
