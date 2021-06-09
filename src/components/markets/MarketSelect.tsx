@@ -77,6 +77,7 @@ export default function MarketSelect({
           minHeight: '50px',
         }),
       }}
+      instanceId="wallet-market-select"
     />
   )
 }

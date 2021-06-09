@@ -8,6 +8,7 @@ import {
   calculateCurrentPriceBN,
   bigNumberTenPow18,
   formatNumber,
+  formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
   calculateIdeaTokenDaiValue,
 } from 'utils'
@@ -49,8 +50,9 @@ export default function TokenRow({
     market,
     balanceBN
   )
-  const balanceValue = formatNumber(
-    web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 18)
+  const balanceValue = formatNumberWithCommasAsThousandsSerperator(
+    web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 18),
+    2
   )
 
   return (
@@ -126,7 +128,7 @@ export default function TokenRow({
             className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + tokenPrice}
           >
-            ${formatNumber(tokenPrice)}
+            ${formatNumberWithCommasAsThousandsSerperator(tokenPrice, 2)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -160,7 +162,7 @@ export default function TokenRow({
             className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={balance}
           >
-            {formatNumber(balance)}
+            {formatNumberWithCommasAsThousandsSerperator(balance, 2)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

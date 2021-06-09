@@ -3,7 +3,11 @@ import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
+import {
+  calculateCurrentPriceBN,
+  web3BNToFloatString,
+  formatNumberWithCommasAsThousandsSerperator,
+} from 'utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
 import AddToMetamaskButton from 'components/wallet/AddToMetamaskButton'
@@ -132,7 +136,11 @@ export default function MyTokenRow({
             1YR Income
           </p>
           <p className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue">
-            ${(parseFloat(token.daiInToken) * compoundSupplyRate).toFixed(2)}
+            $
+            {formatNumberWithCommasAsThousandsSerperator(
+              parseFloat(token.daiInToken) * compoundSupplyRate,
+              2
+            )}
           </p>
         </td>
       </tr>
