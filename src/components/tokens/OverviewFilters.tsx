@@ -77,8 +77,10 @@ const DropdownButton = ({
 
   return (
     <div
-      className={`${className} relative flex items-center p-1 border rounded-md pl-3 pr-1 text-sm text-brand-black cursor-pointer`}
-      style={{ zIndex: 10 }}
+      className={classNames(
+        className,
+        `relative flex items-center p-1 border rounded-md pl-3 pr-1 text-sm text-brand-black cursor-pointer z-10`
+      )}
       onClick={() => {
         setIsDropdownOpen(true)
       }}
