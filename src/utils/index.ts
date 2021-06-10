@@ -148,9 +148,18 @@ export function formatNumberInt(number: string | number): string {
 }
 
 export function formatNumberWithCommasAsThousandsSerperator(
-  number: string | number
+  number: string | number,
+  decimals?: number
 ): string {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  let zeros = decimals ? '' : '00'
+  if (decimals) {
+    for (let i = 0; i < decimals; i++) {
+      zeros += '0'
+    }
+  }
+  return numeral(
+    number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  ).format(`0,0.${zeros}`)
 }
 
 export function calculateIdeaTokenDaiValue(

@@ -7,6 +7,7 @@ import {
   calculateCurrentPriceBN,
   bigNumberTenPow18,
   formatNumber,
+  formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
   calculateIdeaTokenDaiValue,
 } from 'utils'
@@ -53,7 +54,7 @@ export default function LockedTokenRow({
     market,
     balanceBN
   )
-  const balanceValue = formatNumber(
+  const balanceValue = formatNumberWithCommasAsThousandsSerperator(
     web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 18)
   )
 
@@ -130,7 +131,7 @@ export default function LockedTokenRow({
             className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + tokenPrice}
           >
-            ${formatNumber(tokenPrice)}
+            ${formatNumberWithCommasAsThousandsSerperator(tokenPrice)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -141,7 +142,7 @@ export default function LockedTokenRow({
             className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={balance}
           >
-            {formatNumber(balance)}
+            {formatNumberWithCommasAsThousandsSerperator(balance)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

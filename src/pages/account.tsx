@@ -13,7 +13,7 @@ import {
 } from '../components'
 import { useWalletStore } from '../store/walletStore'
 import {
-  formatNumber,
+  formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
   calculateIdeaTokenDaiValue,
   bigNumberTenPow18,
@@ -113,7 +113,10 @@ export default function MyTokens() {
                   title={'$' + +ownedTokenTotalValue + +lockedTokenTotalValue}
                 >
                   $
-                  {formatNumber(+ownedTokenTotalValue + +lockedTokenTotalValue)}
+                  {formatNumberWithCommasAsThousandsSerperator(
+                    +ownedTokenTotalValue + +lockedTokenTotalValue,
+                    2
+                  )}
                 </div>
               </div>
             </div>
