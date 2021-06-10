@@ -55,7 +55,7 @@ export default function LockedTokenRow({
     balanceBN
   )
   const balanceValue = formatNumberWithCommasAsThousandsSerperator(
-    web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 18)
+    web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 2)
   )
 
   return (
@@ -131,7 +131,10 @@ export default function LockedTokenRow({
             className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={'$' + tokenPrice}
           >
-            ${formatNumberWithCommasAsThousandsSerperator(tokenPrice)}
+            $
+            {formatNumberWithCommasAsThousandsSerperator(
+              parseFloat(tokenPrice).toFixed(2)
+            )}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -142,7 +145,9 @@ export default function LockedTokenRow({
             className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
             title={balance}
           >
-            {formatNumberWithCommasAsThousandsSerperator(balance)}
+            {formatNumberWithCommasAsThousandsSerperator(
+              parseFloat(balance).toFixed(2)
+            )}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

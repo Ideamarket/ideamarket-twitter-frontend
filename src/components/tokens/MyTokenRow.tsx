@@ -138,8 +138,7 @@ export default function MyTokenRow({
           <p className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue">
             $
             {formatNumberWithCommasAsThousandsSerperator(
-              parseFloat(token.daiInToken) * compoundSupplyRate,
-              2
+              (parseFloat(token.daiInToken) * compoundSupplyRate).toFixed(2)
             )}
           </p>
         </td>
