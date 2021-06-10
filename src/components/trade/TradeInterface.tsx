@@ -10,13 +10,7 @@ import {
   sellToken,
   useTokenIconURL,
 } from 'actions'
-import {
-  floatToWeb3BN,
-  calculateMaxIdeaTokensBuyable,
-  formatBigNumber,
-  getUniswapDaiOutputSwap,
-  useTransactionManager,
-} from 'utils'
+import { floatToWeb3BN, formatBigNumber, useTransactionManager } from 'utils'
 import { useContractStore } from 'store/contractStore'
 import { NETWORK } from 'store/networks'
 import BigNumber from 'bignumber.js'
@@ -98,7 +92,11 @@ export default function TradeInterface({
 
   // ideaTokenAmount = Number typed in by user on ideaToken input
   const [ideaTokenAmount, setIdeaTokenAmount] = useState('0')
-  const ideaTokenAmountBN = floatToWeb3BN(ideaTokenAmount, 18)
+  const ideaTokenAmountBN = floatToWeb3BN(
+    ideaTokenAmount,
+    18,
+    BigNumber.ROUND_DOWN
+  )
   // Calculates the selectedToken amount after the ideaToken is typed in
   const [
     isCalculatedTokenAmountLoading,
@@ -114,7 +112,11 @@ export default function TradeInterface({
   )
   // selectedTokenAmount = Number typed in by user on selectedToken input
   const [selectedTokenAmount, setSelectedTokenAmount] = useState('0')
-  const selectedTokenAmountBN = floatToWeb3BN(selectedTokenAmount, 18)
+  const selectedTokenAmountBN = floatToWeb3BN(
+    selectedTokenAmount,
+    selectedToken.decimals,
+    BigNumber.ROUND_DOWN
+  )
   // Calculates the ideaToken amount after the selectedToken is typed in
   const [
     isCalculatedIdeaTokenAmountLoading,
@@ -239,10 +241,15 @@ export default function TradeInterface({
     setIsValid(isValid)
 
     // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
-    const ideaTokenAmountBNLocal = floatToWeb3BN(masterIdeaTokenAmount, 18)
+    const ideaTokenAmountBNLocal = floatToWeb3BN(
+      masterIdeaTokenAmount,
+      18,
+      BigNumber.ROUND_DOWN
+    )
     const selectedTokenAmountBNLocal = floatToWeb3BN(
       masterSelectedTokenAmount,
-      18
+      selectedToken.decimals,
+      BigNumber.ROUND_DOWN
     )
 
     onValuesChanged(
@@ -283,13 +290,6 @@ export default function TradeInterface({
           BigNumber.ROUND_DOWN
         )
       )
-      console.log(
-        formatBigNumber(
-          balanceBN.div(new BigNumber('10').pow(new BigNumber('18'))),
-          18,
-          BigNumber.ROUND_DOWN
-        )
-      )
     } else {
       setSelectedTokenAmount(tokenBalance)
     }
@@ -299,10 +299,15 @@ export default function TradeInterface({
     const name = tradeType === 'buy' ? 'Buy' : 'Sell'
     const func = tradeType === 'buy' ? buyToken : sellToken
     // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
-    const ideaTokenAmountBNLocal = floatToWeb3BN(masterIdeaTokenAmount, 18)
+    const ideaTokenAmountBNLocal = floatToWeb3BN(
+      masterIdeaTokenAmount,
+      18,
+      BigNumber.ROUND_DOWN
+    )
     const selectedTokenAmountBNLocal = floatToWeb3BN(
       masterSelectedTokenAmount,
-      18
+      selectedToken.decimals,
+      BigNumber.ROUND_DOWN
     )
     const args =
       tradeType === 'buy'
@@ -504,7 +509,11 @@ export default function TradeInterface({
               tokenAddress={spendTokenAddress}
               tokenSymbol={spendTokenSymbol}
               spenderAddress={spender}
-              requiredAllowance={floatToWeb3BN(requiredAllowance, 18)}
+              requiredAllowance={floatToWeb3BN(
+                requiredAllowance,
+                18,
+                BigNumber.ROUND_UP
+              )}
               unlockPermanent={isUnlockPermanentChecked}
               txManager={txManager}
               setIsMissingAllowance={setIsMissingAllowance}

@@ -58,10 +58,14 @@ export function calculateCurrentPriceBN(
   )
 }
 
-export function floatToWeb3BN(float: string, decimals: number) {
+export function floatToWeb3BN(
+  float: string,
+  decimals: number,
+  round: BigNumber.RoundingMode
+) {
   const pow = new BigNumber('10').exponentiatedBy(decimals)
   const big = new BigNumber(float).multipliedBy(pow)
-  return new BN(big.toFixed())
+  return new BN(big.toFixed(0, round))
 }
 
 export function floatToBN(float: string, decimals: number) {
