@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import BN from 'bn.js'
 import _ from 'lodash'
 
+import Settings from '../../assets/settings.svg'
 import { useTokenAllowance, approveToken } from '../../actions'
 import { TransactionManager, web3UintMax } from '../../utils'
 import Tooltip from 'components/tooltip/Tooltip'
@@ -82,8 +83,10 @@ export default function ApproveButton({
       <Tooltip className="inline-block ml-2">
         <div className="w-32 md:w-64">
           The Ideamarket smart contract needs your approval to interact with
-          your {tokenSymbol?.toUpperCase()} balance. After you granted
-          permission, the second button will be enabled.
+          your {tokenSymbol?.toUpperCase()} balance. After you grant permission,
+          the Buy/Sell button will be enabled. Select 'unlock permanent' in
+          Settings (⚙️) to permanently enable {tokenSymbol?.toUpperCase()}{' '}
+          spending from this wallet.
         </div>
       </Tooltip>
     </div>
