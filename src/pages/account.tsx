@@ -114,8 +114,7 @@ export default function MyTokens() {
                 >
                   $
                   {formatNumberWithCommasAsThousandsSerperator(
-                    +ownedTokenTotalValue + +lockedTokenTotalValue,
-                    2
+                    (+ownedTokenTotalValue + +lockedTokenTotalValue).toFixed(2)
                   )}
                 </div>
               </div>
