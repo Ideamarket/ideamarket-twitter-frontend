@@ -1,9 +1,9 @@
 import classNames from 'classnames'
 
 export default function TokenRowSkeleton({
-  getHeader,
+  getColumn,
 }: {
-  getHeader: (headerValue: string) => any
+  getColumn: (column: string) => any
 }) {
   return (
     <>
@@ -32,7 +32,7 @@ export default function TokenRowSkeleton({
           <p className="w-8 h-4 bg-gray-400 rounded"></p>
         </td>
         {/* Deposits */}
-        {getHeader('deposits').isActive ? (
+        {getColumn('Deposits') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="w-10 h-4 bg-gray-400 rounded"></p>
           </td>
@@ -40,7 +40,7 @@ export default function TokenRowSkeleton({
           <></>
         )}
         {/* %Locked */}
-        {getHeader('locked').isActive ? (
+        {getColumn('% Locked') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
             <p className="h-4 mt-1 bg-gray-400 rounded"></p>
@@ -49,7 +49,7 @@ export default function TokenRowSkeleton({
           <></>
         )}
         {/* Year Income */}
-        {getHeader('income').isActive ? (
+        {getColumn('1YR Income') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
             <p className="h-4 mt-1 bg-gray-400 rounded"></p>

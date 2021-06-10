@@ -14,31 +14,31 @@ import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './OverviewTokenRow'
 import TokenRowSkeleton from './OverviewTokenRowSkeleton'
 import { Categories } from 'store/models/category'
-import { Header } from './table/Header'
+import { OverviewColumns } from './table/OverviewColumns'
 
 type Props = {
   selectedMarkets: Set<string>
-  selectedCategoryId: number
+  selectedFilterId: number
   nameSearch: string
-  headerData: Array<any>
-  getHeader: (headerValue: string) => object
+  columnData: Array<any>
+  getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }
 
 export default function Table({
   selectedMarkets,
-  selectedCategoryId,
+  selectedFilterId,
   nameSearch,
-  headerData,
-  getHeader,
+  columnData,
+  getColumn,
   onOrderByChanged,
   onTradeClicked,
 }: Props) {
   const TOKENS_PER_PAGE = 10
   const LOADING_MARGIN = 200
 
-  const [currentHeader, setCurrentHeader] = useState('')
+  const [currentColumn, setCurrentColumn] = useState('')
   const [orderBy, setOrderBy] = useState('supply')
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
@@ -53,7 +53,7 @@ export default function Table({
   )
 
   const filterTokens =
-    selectedCategoryId === Categories.STARRED.id ? watchingTokens : undefined
+    selectedFilterId === Categories.STARRED.id ? watchingTokens : undefined
 
   const {
     data: compoundExchangeRate,
@@ -94,13 +94,13 @@ export default function Table({
         markets,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
-        selectedCategoryId === Categories.HOT.id
+        selectedFilterId === Categories.HOT.id
           ? 'dayChange'
-          : selectedCategoryId === Categories.NEW.id
+          : selectedFilterId === Categories.NEW.id
           ? 'listedAt'
           : orderBy,
-        selectedCategoryId === Categories.HOT.id ||
-        selectedCategoryId === Categories.NEW.id
+        selectedFilterId === Categories.HOT.id ||
+        selectedFilterId === Categories.NEW.id
           ? 'desc'
           : orderDirection,
         nameSearch,
@@ -140,7 +140,7 @@ export default function Table({
     if (markets.length !== 0) {
       refetch()
     }
-  }, [markets, selectedCategoryId, orderBy, orderDirection, nameSearch])
+  }, [markets, selectedFilterId, orderBy, orderDirection, nameSearch])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -165,8 +165,8 @@ export default function Table({
     isCompoundSupplyRateLoading ||
     isCompoundExchangeRateLoading
 
-  function headerClicked(headerValue: string) {
-    if (currentHeader === headerValue) {
+  function columnClicked(column: string) {
+    if (currentColumn === column) {
       if (orderDirection === 'asc') {
         setOrderDirection('desc')
         onOrderByChanged(orderBy, 'desc')
@@ -175,31 +175,31 @@ export default function Table({
         onOrderByChanged(orderBy, 'asc')
       }
     } else {
-      setCurrentHeader(headerValue)
+      setCurrentColumn(column)
 
-      if (headerValue === 'name') {
+      if (column === 'name') {
         setOrderBy('name')
         onOrderByChanged('name', 'desc')
       } else if (
-        headerValue === 'price' ||
-        headerValue === 'deposits' ||
-        headerValue === 'income'
+        column === 'price' ||
+        column === 'deposits' ||
+        column === 'income'
       ) {
         setOrderBy('supply')
         onOrderByChanged('supply', 'desc')
-      } else if (headerValue === 'change') {
+      } else if (column === 'change') {
         setOrderBy('dayChange')
         onOrderByChanged('dayChange', 'desc')
-      } else if (headerValue === 'change') {
+      } else if (column === 'change') {
         setOrderBy('dayChange')
         onOrderByChanged('dayChange', 'desc')
-      } else if (headerValue === 'locked') {
+      } else if (column === 'locked') {
         setOrderBy('lockedPercentage')
         onOrderByChanged('lockedAmount', 'desc')
-      } else if (headerValue === 'holders') {
+      } else if (column === 'holders') {
         setOrderBy('holders')
         onOrderByChanged('holders', 'desc')
-      } else if (headerValue === 'rank') {
+      } else if (column === 'rank') {
         setOrderBy('rank')
         onOrderByChanged('rank', 'desc')
       }
@@ -217,29 +217,34 @@ export default function Table({
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="hidden md:table-header-group">
                   <tr>
-                    <Header
-                      currentHeader={currentHeader}
+                    <OverviewColumns
+                      currentColumn={currentColumn}
                       orderDirection={orderDirection}
-                      headerData={headerData}
-                      headerClicked={headerClicked}
+                      columnData={columnData}
+                      columnClicked={columnClicked}
                     />
                   </tr>
                 </thead>
                 <tbody className="w-full bg-white divide-y divide-gray-200">
-                  {(tokenData as IdeaToken[]).map((token) => (
-                    <TokenRow
-                      key={token.marketID + '-' + token.tokenID}
-                      token={token}
-                      market={marketsMap[token.marketID]}
-                      showMarketSVG={false}
-                      compoundSupplyRate={compoundSupplyRate}
-                      getHeader={getHeader}
-                      onTradeClicked={onTradeClicked}
-                    />
-                  ))}
+                  {(tokenData as IdeaToken[]).map((token) => {
+                    // Only load the rows if a market is found
+                    if (marketsMap[token.marketID]) {
+                      return (
+                        <TokenRow
+                          key={token.marketID + '-' + token.tokenID}
+                          token={token}
+                          market={marketsMap[token.marketID]}
+                          showMarketSVG={false}
+                          compoundSupplyRate={compoundSupplyRate}
+                          getColumn={getColumn}
+                          onTradeClicked={onTradeClicked}
+                        />
+                      )
+                    }
+                  })}
                   {isLoading
                     ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                        <TokenRowSkeleton key={token} getHeader={getHeader} />
+                        <TokenRowSkeleton key={token} getColumn={getColumn} />
                       ))
                     : null}
                 </tbody>

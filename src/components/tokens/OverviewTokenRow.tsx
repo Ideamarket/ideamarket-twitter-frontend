@@ -19,7 +19,7 @@ type Props = {
   market: IdeaMarket
   showMarketSVG: boolean
   compoundSupplyRate: number
-  getHeader: (headerValue: string) => any
+  getColumn: (column: string) => any
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }
 
@@ -28,7 +28,7 @@ export default function TokenRow({
   market,
   showMarketSVG,
   compoundSupplyRate,
-  getHeader,
+  getColumn,
   onTradeClicked,
 }: Props) {
   const router = useRouter()
@@ -115,7 +115,7 @@ export default function TokenRow({
           </p>
         </td>
         {/* Deposits */}
-        {getHeader('deposits').isActive ? (
+        {getColumn('Deposits') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
               Deposits
@@ -138,7 +138,7 @@ export default function TokenRow({
           <></>
         )}
         {/* %Locked */}
-        {getHeader('locked').isActive ? (
+        {getColumn('% Locked') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
               % Locked
@@ -159,7 +159,7 @@ export default function TokenRow({
         )}
 
         {/* Year Income */}
-        {getHeader('income').isActive ? (
+        {getColumn('1YR Income') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p
               className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"

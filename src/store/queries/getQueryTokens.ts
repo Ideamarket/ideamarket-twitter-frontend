@@ -10,7 +10,7 @@ export default function getQueryTokens(
   filterTokens: string[]
 ): string {
   const hexMarketIds = marketIds.map((id) => '0x' + id.toString(16))
-  const inMarkets = hexMarketIds.map((id) => `"${id}"`).join(',')
+  let inMarkets = hexMarketIds.map((id) => `"${id}"`).join(',')
   let filterTokensQuery = ''
   if (filterTokens) {
     filterTokensQuery = ',where:{id_in:['
@@ -21,11 +21,16 @@ export default function getQueryTokens(
       filterTokensQuery += `"${value}"`
     })
     filterTokensQuery += ']}'
+
+    // Filtering by markets while also filtering by starred causes the starred filter to not work
+    inMarkets = null
   }
+
+  const marketsQuery = inMarkets ? `where:{market_in:[${inMarkets}]},` : ''
 
   return gql`
     {
-      ideaTokens(where:{market_in:[${inMarkets}]}, skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}${filterTokensQuery}) {
+      ideaTokens(${marketsQuery} skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}${filterTokensQuery}) {
           id
           tokenID
           name
