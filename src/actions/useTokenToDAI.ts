@@ -56,7 +56,11 @@ export default function useTokenToDAI(
 
       const bn = await fn
       if (!isCancelled) {
+<<<<<<< HEAD
         const pow = new BigNumber('10').pow(new BigNumber('18'))
+=======
+        const pow = new BigNumber('10').pow(new BigNumber(decimals))
+>>>>>>> d65fdee... feat: trade interface DAI, price, and slippage calculation
         setOutputBN(bn)
         setOutput(web3BNToFloatString(bn, pow, 4))
         setIsLoading(false)
