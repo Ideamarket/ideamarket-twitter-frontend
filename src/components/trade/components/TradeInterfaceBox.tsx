@@ -21,6 +21,8 @@ type TradeInterfaceBoxProps = {
   selectedIdeaToken: TokenListEntry | null
   txManager: TransactionManager
   isIdeaToken: boolean
+  tokenValue: string
+  slippage: number
 }
 
 const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
@@ -41,6 +43,8 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   selectedIdeaToken,
   txManager,
   isIdeaToken,
+  tokenValue,
+  slippage,
 }) => {
   const handleBuySellClick = () => {
     if (!txManager.isPending && tradeType === 'sell') setTradeType('buy')
@@ -75,6 +79,13 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
       setSelectedTokenAmount(setValue)
     }
   }
+
+  const slippageLabel =
+    slippage &&
+    ((tradeType === 'buy' && isIdeaToken) ||
+      (tradeType === 'sell' && !isIdeaToken))
+      ? ` (-${parseFloat(slippage.toFixed(6))}%)`
+      : ''
 
   return (
     <div className="relative px-5 py-4 mb-1 border border-gray-100 rounded-md bg-gray-50 dark:bg-gray-600 text-brand-new-dark">
@@ -156,6 +167,10 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
             </span>
           )}
         </div>
+        <span>
+          ~${tokenValue}
+          <span className="text-gray-300">{slippageLabel}</span>
+        </span>
       </div>
     </div>
   )
