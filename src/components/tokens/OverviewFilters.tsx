@@ -86,6 +86,15 @@ const DropdownButton = ({
       }}
     >
       <span className="mr-1">{name}</span>
+      {name === 'Platforms' && (
+        <span className="w-7 text-center text-xs text-gray-400">
+          {
+            [...selectedOptions].filter((o) => o !== 'All' && o !== 'None')
+              .length
+          }{' '}
+          / {filters.length - 1}
+        </span>
+      )}
       <ChevronDownIcon className="h-5" />
       {isDropdownOpen && (
         <div
