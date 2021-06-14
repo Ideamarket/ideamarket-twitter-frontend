@@ -442,6 +442,16 @@ export default function TradeInterface({
     tokenValue: ideaTokenValue,
   }
 
+  const labelSymbol =
+    tradeType === 'buy'
+      ? spendTokenSymbol.toUpperCase()
+      : selectedToken?.symbol.toUpperCase()
+  const tokenPriceLabel = `1 ${ideaToken.name} = ${web3BNToFloatString(
+    ideaTokenPriceBN || new BN('0'),
+    tenPow18,
+    4
+  )} ${labelSymbol}`
+
   return (
     <div>
       <div
@@ -555,6 +565,8 @@ export default function TradeInterface({
               </div>
             </Tooltip>
           </div>
+
+          <b>{tokenPriceLabel}</b>
         </div>
 
         {showTradeButton && (

@@ -129,7 +129,11 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
     slippage &&
     ((tradeType === 'buy' && isIdeaToken) ||
       (tradeType === 'sell' && !isIdeaToken))
+<<<<<<< HEAD
       ? ` (-${parseFloat(slippage.toFixed(3))}%)`
+=======
+      ? ` (-${parseFloat(slippage.toFixed(6))}%)`
+>>>>>>> d65fdee... feat: trade interface DAI, price, and slippage calculation
       : ''
 
   return (
