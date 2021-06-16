@@ -164,8 +164,12 @@ export default function TradeInterface({
 
   const ideaTokenValue = web3BNToFloatString(
     calculateIdeaTokenDaiValue(
+<<<<<<< HEAD
       ideaToken?.rawSupply.add(masterIdeaTokenAmountBN) ||
         masterIdeaTokenAmountBN,
+=======
+      ideaToken?.rawSupply.add(new BN(masterIdeaTokenAmount)),
+>>>>>>> ffbdca6... fix: using correct supply for IDT value calculation
       market,
       masterIdeaTokenAmountBN
     ),
@@ -566,8 +570,6 @@ export default function TradeInterface({
               </div>
             </Tooltip>
           </div>
-
-          <b>{tokenPriceLabel}</b>
         </div>
 
         {showTradeButton && (
