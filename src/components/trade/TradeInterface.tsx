@@ -173,7 +173,7 @@ export default function TradeInterface({
 
   const ideaTokenValue = web3BNToFloatString(
     calculateIdeaTokenDaiValue(
-      ideaToken?.rawSupply,
+      ideaToken?.rawSupply.add(new BN(masterIdeaTokenAmount)),
       market,
       masterIdeaTokenAmountBN
     ),
