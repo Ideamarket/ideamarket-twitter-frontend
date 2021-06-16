@@ -576,8 +576,6 @@ export default function TradeInterface({
               </div>
             </Tooltip>
           </div>
-
-          <b>{tokenPriceLabel}</b>
         </div>
 
         {showTradeButton && (
