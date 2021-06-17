@@ -8,7 +8,7 @@ const SelectTokensFormat = ({ token }) => (
         alt="logo"
       />
     </div>
-    <div className="ml-2.5">
+    <div className="ml-2.5 dark:text-gray-300">
       <div>{token.symbol}</div>
     </div>
   </div>

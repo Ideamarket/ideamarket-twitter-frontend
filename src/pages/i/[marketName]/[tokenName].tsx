@@ -690,6 +690,7 @@ export default function TokenDetails({
                         </div>
                       )}
                       <iframe
+                        className={showEmbedSkeleton ? 'invisible' : 'visible'}
                         src={`/iframe/${rawMarketName}/${rawTokenName}`}
                         title="Ideamarket Embed"
                         id="frame"

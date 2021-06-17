@@ -3,6 +3,7 @@ import { TransactionManager } from 'utils'
 import SelectTokensFormat from './SelectTokenFormat'
 import { TokenListEntry } from '../../../store/tokenListStore'
 import { useEffect, useState } from 'react'
+import { useTheme } from 'next-themes'
 
 const selectStyles = {
   container: (provided) => ({
@@ -17,6 +18,11 @@ const selectStyles = {
     display: 'flex',
   }),
   indicatorSeparator: () => ({}),
+  menu: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.selectProps.isDarkMode ? '#374151' : 'white',
+    color: state.selectProps.isDarkMode ? 'white' : 'black',
+  }),
 }
 
 const selectTheme = (theme) => ({
@@ -24,7 +30,7 @@ const selectTheme = (theme) => ({
   borderRadius: 2,
   colors: {
     ...theme.colors,
-    primary25: '#d8d8d8', // brand-gray
+    primary25: '#9ca3af', // text-gray-400
     primary: '#0857e0', // brand-blue
   },
 })
@@ -68,6 +74,8 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   txManager,
   isIdeaToken,
 }) => {
+  const { theme } = useTheme()
+
   const handleBuySellClick = () => {
     if (!txManager.isPending && tradeType === 'sell') setTradeType('buy')
     if (!txManager.isPending && tradeType === 'buy') setTradeType('sell')
@@ -130,8 +138,8 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
       )}
       <div className="flex justify-between mb-2">
         {selectedIdeaToken ? (
-          <div className="flex flex-row items-center w-full text-xs font-medium border-gray-200 rounded-md text-brand-gray-4 trade-select">
-            <div className="flex items-center px-2 py-1 bg-white shadow-md rounded-2xl">
+          <div className="flex flex-row items-center w-full text-xs font-medium border-gray-200 rounded-md text-brand-gray-4 dark:text-gray-300 trade-select">
+            <div className="flex items-center px-2 py-1 bg-white dark:bg-gray-700 shadow-md rounded-2xl">
               <div className="flex items-center">
                 {selectedIdeaToken?.logoURL ? (
                   <img
@@ -153,7 +161,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           </div>
         ) : (
           <Select
-            className="w-32 text-xs font-medium bg-white border-2 border-gray-200 shadow-md cursor-pointer text-brand-gray-4 trade-select rounded-2xl"
+            className="w-32 text-xs font-medium bg-white dark:bg-gray-700 border-2 border-gray-200 shadow-md cursor-pointer text-brand-gray-4 trade-select rounded-2xl"
             isClearable={false}
             isSearchable={false}
             isDisabled={txManager.isPending || disabled}
@@ -170,10 +178,11 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
             }
             theme={selectTheme}
             styles={selectStyles}
+            isDarkMode={theme === 'dark'}
           />
         )}
         <input
-          className="w-full max-w-sm text-3xl text-right placeholder-gray-500 dark:placeholder-white placeholder-opacity-50 border-none outline-none text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600"
+          className="w-full max-w-sm text-3xl text-right placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 border-none outline-none text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600"
           min="0"
           placeholder="0.0"
           disabled={txManager.isPending}
