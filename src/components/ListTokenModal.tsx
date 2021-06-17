@@ -71,7 +71,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   const tweetTemplate = encodeURIComponent(
     `Just listed ${marketSpecifics?.convertUserInputToTokenName(
       tokenName
-    )} on @IdeaMarkets_`
+    )} on @ideamarket_io`
   )
 
   async function tokenNameInputChanged(val) {

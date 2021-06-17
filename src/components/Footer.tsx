@@ -30,7 +30,7 @@ export default function Footer() {
         </A>
       </div>
       <div className="flex items-center justify-center mt-5 space-x-2 md:mt-0 md:justify-end">
-        <A href="https://twitter.com/ideamarkets_">
+        <A href="https://twitter.com/ideamarket_io">
           <BrandTwitter className="w-7 h-7" />
         </A>
         <A href="https://discord.com/invite/zaXZXGE4Ke">
