@@ -99,7 +99,7 @@ const DropdownButton = ({
       {isDropdownOpen && (
         <div
           ref={container}
-          className="absolute max-h-36 w-32 md:w-64 mt-1 p-4 shadow-xl border rounded-lg flex flex-col flex-wrap bg-white cursor-default z-40"
+          className="absolute max-h-36 w-32 md:w-64 mt-1 p-4 shadow-xl border rounded-lg flex flex-col flex-wrap bg-white dark:bg-gray-800 cursor-default z-40"
           style={{ top: '100%', left: 0 }}
         >
           {filters.map((filter) => (
@@ -120,7 +120,7 @@ const DropdownButton = ({
                 className={classNames(
                   'ml-2 cursor-pointer font-medium',
                   selectedOptions.has(filter) || selectedOptions.has('All')
-                    ? 'text-brand-blue'
+                    ? 'text-brand-blue dark:text-blue-400'
                     : 'text-brand-black'
                 )}
               >
@@ -161,7 +161,8 @@ const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
       className={classNames(
         'flex items-center p-1 border rounded-md px-3 text-sm',
         {
-          'text-brand-blue bg-gray-100': isSelected,
+          'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
+            isSelected,
         },
         { 'text-brand-black': !isSelected }
       )}
@@ -275,7 +276,7 @@ export const OverviewFilters = ({
   }
 
   return (
-    <div className="grid md:flex justify-center grid-cols-2 md:grid-cols-none p-4 bg-white rounded-t-lg gap-x-2 gap-y-2 md:justify-start">
+    <div className="grid md:flex justify-center grid-cols-2 md:grid-cols-none p-4 bg-white dark:bg-gray-700 rounded-t-lg gap-x-2 gap-y-2 md:justify-start">
       {Object.values(Filters).map((filter) => (
         <FiltersButton
           key={filter.id}

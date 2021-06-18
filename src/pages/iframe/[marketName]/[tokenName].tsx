@@ -85,7 +85,7 @@ export default function IframeEmbed() {
           )}
         </div>
 
-        <div className="flex-grow-0 ml-2 font-medium text-brand-new-dark">
+        <div className="flex-grow-0 ml-2 font-medium text-brand-new-dark dark:text-gray-300">
           {tokenName}
         </div>
 

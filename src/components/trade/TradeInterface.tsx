@@ -391,7 +391,7 @@ export default function TradeInterface({
   return (
     <div>
       <div
-        className="p-4 mx-auto bg-white rounded-xl"
+        className="p-4 mx-auto bg-white dark:bg-gray-700 rounded-xl"
         style={{ maxWidth: 550 }}
       >
         <div className="flex justify-between">
@@ -476,7 +476,9 @@ export default function TradeInterface({
                 htmlFor="lockCheckbox"
                 className={classNames(
                   'ml-2 cursor-pointer',
-                  isLockChecked ? 'text-brand-blue' : 'text-gray-500'
+                  isLockChecked
+                    ? 'text-brand-blue dark:text-blue-400'
+                    : 'text-gray-500 dark:text-white'
                 )}
               >
                 Lock for 1 year
@@ -530,7 +532,7 @@ export default function TradeInterface({
                 className={classNames(
                   'py-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium',
                   isTradeButtonDisabled
-                    ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
+                    ? 'text-brand-gray-2 dark:text-gray-300 bg-brand-gray dark:bg-gray-500 cursor-default border-brand-gray'
                     : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
                 )}
                 disabled={isTradeButtonDisabled}
