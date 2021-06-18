@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .map((m) => m.charAt(0).toUpperCase() + m.slice(1))
     .filter((m) => DropdownFilters.PLATFORMS.values.includes(m))
 
-  if (marketsList.length === 0) {
+  if (markets.length > 0 && marketsList.length === 0) {
     // Redirect to regular home page if no valid markets
     return {
       redirect: {
