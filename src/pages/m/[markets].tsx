@@ -1,26 +1,13 @@
 import React from 'react'
-import { useRouter } from 'next/router'
 import { DefaultLayout, Home as HomeComponent } from 'components'
-import { DropdownFilters } from 'components/tokens/OverviewFilters'
+import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
 import { GetServerSideProps } from 'next'
 
-export default function MarketsHome() {
-  const router = useRouter()
-  const { markets } = router.query
-
-  if (!router.isReady) {
-    return null
-  }
-
-  const marketsList = (markets as string)
-    .split('+')
-    .map((m) => m.charAt(0).toUpperCase() + m.slice(1))
-    .filter((m) => DropdownFilters.PLATFORMS.values.includes(m))
-
-  if (marketsList.length === DropdownFilters.PLATFORMS.values.length - 1) {
-    marketsList.push('All')
-  }
-
+export default function MarketsHome({
+  marketsList,
+}: {
+  marketsList: string[]
+}) {
   return <HomeComponent urlMarkets={marketsList} />
 }
 
@@ -29,10 +16,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const marketsList = (markets as string)
     .split('+')
-    .map((m) => m.charAt(0).toUpperCase() + m.slice(1))
-    .filter((m) => DropdownFilters.PLATFORMS.values.includes(m))
+    .map((m) => getMarketSpecificsByMarketNameInURLRepresentation(m))
+    .filter((m) => m !== undefined)
+    .map((m) => m.getMarketName())
 
-  if (markets.length > 0 && marketsList.length === 0) {
+  if (marketsList.length === 0) {
     // Redirect to regular home page if no valid markets
     return {
       redirect: {
@@ -42,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  return { props: {} }
+  return { props: { marketsList } }
 }
 
 MarketsHome.layoutProps = {
