@@ -14,11 +14,15 @@ export default function MarketsHome({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { markets } = context.params
 
+  console.log('context', context)
+  console.log('params', context.params)
   const marketsList = (markets as string)
     .split('+')
     .map((m) => getMarketSpecificsByMarketNameInURLRepresentation(m))
     .filter((m) => m !== undefined)
     .map((m) => m.getMarketName())
+
+  console.log('marketsList', marketsList)
 
   if (marketsList.length === 0) {
     // Redirect to regular home page if no valid markets
