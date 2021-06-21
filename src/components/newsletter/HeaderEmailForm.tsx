@@ -62,7 +62,7 @@ export default function EmailForm() {
                 'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
                 isError
                   ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
-                  : 'border-gray-300 focus:ring-brand-blue focus:border-brand-blue'
+                  : 'border-gray-300 text-gray-700 focus:ring-brand-blue focus:border-brand-blue'
               )}
               placeholder="you@example.com"
               value={email}
@@ -74,7 +74,7 @@ export default function EmailForm() {
           <div className="flex items-center justify-between mt-2">
             <label
               htmlFor="email"
-              className="flex-shrink-0 block text-sm font-medium text-gray-700"
+              className="flex-shrink-0 block text-sm font-medium text-gray-400"
             >
               Stay in the loop
             </label>
@@ -93,7 +93,7 @@ export default function EmailForm() {
         <div className="hidden md:flex items-center space-x-2">
           <label
             htmlFor="email"
-            className="flex-shrink-0 block text-sm font-medium text-gray-700"
+            className="flex-shrink-0 block text-sm font-medium text-gray-400"
           >
             Stay in the loop
           </label>
@@ -107,7 +107,7 @@ export default function EmailForm() {
                 'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
                 isError
                   ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
-                  : 'border-gray-300 focus:ring-brand-blue focus:border-brand-blue'
+                  : 'border-gray-300 text-gray-700 focus:ring-brand-blue focus:border-brand-blue'
               )}
               placeholder="you@example.com"
               value={email}
