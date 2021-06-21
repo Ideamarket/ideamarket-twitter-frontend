@@ -38,11 +38,7 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
   }
 
   getMarketSVGTheme(): JSX.Element {
-    if (IsDarkTheme) {
-      return <ShowtimeWhite />
-    } else {
-      return <ShowtimeBlack />
-    }
+    return <ShowtimeWhite />
   }
 
   // Tokens

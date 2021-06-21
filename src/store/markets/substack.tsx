@@ -38,11 +38,7 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
   }
 
   getMarketSVGTheme(): JSX.Element {
-    if (IsDarkTheme) {
-      return <SubstackWhite />
-    } else {
-      return <SubstackBlack />
-    }
+    return <SubstackWhite />
   }
 
   // Tokens
