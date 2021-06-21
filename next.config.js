@@ -23,11 +23,6 @@ module.exports = {
         permanent: true,
         destination: 'https://app.ideamarket.io',
       },
-      {
-        source: '/m',
-        permanent: true,
-        destination: '/',
-      },
     ]
   },
 }
