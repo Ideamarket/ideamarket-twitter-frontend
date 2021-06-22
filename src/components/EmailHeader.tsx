@@ -13,7 +13,7 @@ export default function EmailHeader() {
 
   return (
     <>
-      <div className="w-full flex justify-center items-center bg-yellow-400 px-2 py-2 transform">
+      <div className="w-full flex justify-center items-center bg-gray-900 px-2 py-2 transform">
         <HeaderEmailForm />
         <button
           type="button"
