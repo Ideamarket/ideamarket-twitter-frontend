@@ -11,9 +11,9 @@ export default function buyToken(
   amount: BN,
   cost: BN,
   slippage: number,
-  lockDuration: number
+  lockDuration: number,
+  recipientAddress: string
 ) {
-  const userAddress = useWalletStore.getState().address
   const exchange = useContractStore.getState().exchangeContract
   const multiAction = useContractStore.getState().multiActionContract
 
@@ -35,7 +35,7 @@ export default function buyToken(
         fallbackAmount,
         cost,
         lockDuration,
-        userAddress
+        recipientAddress
       )
     } else {
       contractCall = exchange.methods.buyTokens(
@@ -43,7 +43,7 @@ export default function buyToken(
         amount,
         fallbackAmount,
         cost,
-        userAddress
+        recipientAddress
       )
 
       contractCall.estimateGas(contractCallOptions)
@@ -56,7 +56,7 @@ export default function buyToken(
       fallbackAmount,
       cost,
       lockDuration,
-      userAddress
+      recipientAddress
     )
 
     if (inputTokenAddress === ZERO_ADDRESS) {
