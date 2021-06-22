@@ -69,6 +69,10 @@ export default function MarketSelect({
           ...base,
           background: theme === 'dark' ? '#6B7280' : 'white',
         }),
+        singleValue: () => ({
+          // Changes color of select box text before dropdown appears
+          color: theme === 'dark' ? '#D1D5DB' : 'black',
+        }),
       }}
       instanceId="market-select"
     />
