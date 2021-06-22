@@ -16,6 +16,7 @@ import {
   formatBigNumber,
   useTransactionManager,
   web3BNToFloatString,
+  ZERO_ADDRESS,
 } from 'utils'
 import { useContractStore } from 'store/contractStore'
 import { NETWORK } from 'store/networks'
@@ -31,6 +32,7 @@ import CircleSpinner from 'components/animations/CircleSpinner'
 import Settings from '../../assets/settings.svg'
 import useReversePrice from 'actions/useReversePrice'
 import useTokenToDAI from 'actions/useTokenToDAI'
+import { useWeb3React } from '@web3-react/core'
 
 type NewIdeaToken = {
   symbol: string
@@ -50,7 +52,8 @@ type TradeInterfaceProps = {
     lock: boolean,
     isUnlockOnceChecked: boolean,
     isUnlockPermanentChecked: boolean,
-    isValid: boolean
+    isValid: boolean,
+    recipientAddress: string
   ) => void
   resetOn: boolean
   centerTypeSelection: boolean
@@ -76,8 +79,13 @@ export default function TradeInterface({
   unlockText,
   newIdeaToken,
 }: TradeInterfaceProps) {
+  const { active, account } = useWeb3React()
   const [tradeType, setTradeType] = useState('buy')
+  const [recipientAddress, setRecipientAddress] = useState(
+    active ? account : ''
+  )
   const [isLockChecked, setIsLockChecked] = useState(false)
+  const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
     useState(false)
@@ -310,7 +318,8 @@ export default function TradeInterface({
       isLockChecked,
       isUnlockOnceChecked,
       isUnlockPermanentChecked,
-      isValid
+      isValid,
+      recipientAddress
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -325,6 +334,7 @@ export default function TradeInterface({
     isUnlockPermanentChecked,
     isCalculatedIdeaTokenAmountLoading,
     isCalculatedTokenAmountLoading,
+    recipientAddress,
   ])
 
   async function maxButtonClicked() {
@@ -367,6 +377,7 @@ export default function TradeInterface({
             selectedTokenAmountBNLocal,
             maxSlippage,
             isLockChecked ? 31556952 : 0,
+            recipientAddress,
           ]
         : [
             ideaToken.address,
@@ -374,6 +385,7 @@ export default function TradeInterface({
             ideaTokenAmountBNLocal,
             selectedTokenAmountBNLocal,
             maxSlippage,
+            recipientAddress,
           ]
 
     try {
@@ -519,7 +531,11 @@ export default function TradeInterface({
             : { ...selectedTokenProps })}
         />
 
-        <div className="flex items-center justify-start my-2 text-sm">
+        <div
+          className={classNames(
+            'flex items-center justify-between my-2 text-sm'
+          )}
+        >
           <div
             className={classNames(
               tradeType === 'sell' && 'invisible',
@@ -566,7 +582,68 @@ export default function TradeInterface({
               </div>
             </Tooltip>
           </div>
+
+          <div className="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="border-2 border-gray-200 rounded-sm cursor-pointer"
+              id="giftCheckbox"
+              disabled={txManager.isPending || disabled}
+              checked={isGiftChecked}
+              onChange={(e) => {
+                setIsGiftChecked(e.target.checked)
+              }}
+            />
+            <label
+              htmlFor="giftCheckbox"
+              className={classNames(
+                'ml-2 cursor-pointer',
+                isGiftChecked
+                  ? 'text-brand-blue dark:text-blue-400'
+                  : 'text-gray-500 dark:text-white'
+              )}
+            >
+              Gift this {tradeType}
+            </label>
+            <Tooltip className="ml-2">
+              <div className="w-32 md:w-64">
+                Send this purchase to someone else's wallet, such as the listing
+                owner or a friend.
+              </div>
+            </Tooltip>
+          </div>
         </div>
+
+        {isGiftChecked && (
+          <div className="flex flex-col md:flex-row justify-between items-center mb-2">
+            <input
+              type="text"
+              id="recipient-input"
+              className={classNames(
+                'h-full border border-gray-200 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm my-2 dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
+                !ideaToken ||
+                  (ideaToken && ideaToken.tokenOwner === ZERO_ADDRESS)
+                  ? 'w-full'
+                  : 'w-full md:w-96'
+              )}
+              placeholder="ETH address"
+              value={recipientAddress || ''}
+              onChange={(e) => {
+                setRecipientAddress(e.target.value)
+              }}
+            />
+            {ideaToken &&
+              ideaToken.tokenOwner &&
+              ideaToken.tokenOwner !== ZERO_ADDRESS && (
+                <button
+                  className="mb-2 md:mb-0 text-blue-400 cursor-pointer"
+                  onClick={() => setRecipientAddress(ideaToken.tokenOwner)}
+                >
+                  (Listing owner)
+                </button>
+              )}
+          </div>
+        )}
 
         {showTradeButton && (
           <>

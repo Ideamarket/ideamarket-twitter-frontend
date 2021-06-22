@@ -13,9 +13,9 @@ export default function listAndBuyToken(
   amount: BN,
   cost: BN,
   slippage: number,
-  lockDuration: number
+  lockDuration: number,
+  recipientAddress: string
 ) {
-  const userAddress = useWalletStore.getState().address
   const multiAction = useContractStore.getState().multiActionContract
 
   const slippageAmount = new BN(
@@ -28,19 +28,13 @@ export default function listAndBuyToken(
   let contractCall
   let contractCallOptions = {}
 
-  console.log('tokenName', tokenName)
-  console.log('market', market)
-  console.log('amount', amount.toString())
-  console.log('lockDuration', lockDuration)
-  console.log('userAddress', userAddress)
-
   if (inputTokenAddress === NETWORK.getExternalAddresses().dai) {
     contractCall = multiAction.methods.addAndBuy(
       tokenName,
       market.marketID,
       amount,
       lockDuration,
-      userAddress
+      recipientAddress
     )
   } else {
     contractCall = multiAction.methods.convertAddAndBuy(
@@ -51,7 +45,7 @@ export default function listAndBuyToken(
       fallbackAmount,
       cost,
       lockDuration,
-      userAddress
+      recipientAddress
     )
 
     if (inputTokenAddress === ZERO_ADDRESS) {

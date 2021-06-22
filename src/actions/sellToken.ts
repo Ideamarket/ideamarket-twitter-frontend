@@ -9,9 +9,9 @@ export default function sellToken(
   outputTokenAddress: string,
   amount: BN,
   price: BN,
-  slippage: number
+  slippage: number,
+  recipientAddress: string
 ) {
-  const userAddress = useWalletStore.getState().address
   const exchange = useContractStore.getState().exchangeContract
   const multiAction = useContractStore.getState().multiActionContract
 
@@ -28,7 +28,7 @@ export default function sellToken(
       ideaTokenAddress,
       amount,
       minPrice,
-      userAddress
+      recipientAddress
     )
   } else {
     contractCall = multiAction.methods.sellAndConvert(
@@ -36,7 +36,7 @@ export default function sellToken(
       ideaTokenAddress,
       amount,
       minPrice,
-      userAddress
+      recipientAddress
     )
   }
 

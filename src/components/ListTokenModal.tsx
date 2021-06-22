@@ -40,6 +40,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   const [buySlippage, setBuySlippage] = useState(undefined)
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
+  const [recipientAddress, setRecipientAddress] = useState('')
 
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
     useState(false)
@@ -97,7 +98,8 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     lock: boolean,
     isUnlockOnceChecked: boolean,
     isUnlockPermanentChecked: boolean,
-    isValid: boolean
+    isValid: boolean,
+    recipientAddress: string
   ) {
     setBuyInputAmountBN(tokenAmount)
     setBuyPayWithAddress(tokenAddress)
@@ -107,6 +109,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     setBuyLock(lock)
     setIsUnlockPermanentChecked(isUnlockPermanentChecked)
     setIsBuyValid(isValid)
+    setRecipientAddress(recipientAddress)
   }
 
   async function listClicked() {
@@ -125,7 +128,8 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           buyOutputAmountBN,
           buyInputAmountBN,
           buySlippage,
-          buyLock ? 31556952 : 0
+          buyLock ? 31556952 : 0,
+          recipientAddress
         )
       } catch (ex) {
         console.log(ex)
