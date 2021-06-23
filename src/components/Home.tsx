@@ -19,7 +19,6 @@ import { GlobalContext } from '../pages/_app'
 import { useWalletStore } from 'store/walletStore'
 import { Categories } from 'store/models/category'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'
-import { getMarketSpecifics } from 'store/markets'
 import { NextSeo } from 'next-seo'
 import {
   OverviewFilters,
@@ -246,7 +245,6 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
             selectedFilterId={selectedFilterId}
             selectedMarkets={selectedMarkets}
             selectedColumns={selectedColumns}
-            markets={getMarketSpecifics()}
             onMarketChanged={onMarketChanged}
             setSelectedFilterId={setSelectedFilterId}
             onColumnChanged={onColumnChanged}

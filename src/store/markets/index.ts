@@ -1,8 +1,10 @@
 import _ from 'lodash'
+import create from 'zustand'
 
 import TwitterMarketSpecifics from './twitter'
 import SubstackMarketSpecifics from './substack'
 import ShowtimeMarketSpecifics from './showtime'
+import { queryMarkets } from 'store/ideaMarketsStore'
 
 export type IMarketSpecifics = {
   // Market
@@ -59,4 +61,31 @@ export function getMarketSpecificsByMarketNameInURLRepresentation(
     specifics,
     (s) => s.getMarketNameURLRepresentation() === marketNameInURLRepresentation
   )
+}
+
+type State = {
+  markets: any
+}
+
+export const marketStore = create<State>((set) => ({
+  markets: [],
+}))
+
+export async function initMarketStore() {
+  const markets = await queryMarkets('all-markets')
+
+  if (markets) {
+    marketStore.setState({
+      markets: markets
+        .filter(
+          (market) =>
+            getMarketSpecificsByMarketName(market.name) !== undefined &&
+            getMarketSpecificsByMarketName(market.name).isEnabled()
+        )
+        .map((market) => ({
+          value: market.marketID.toString(),
+          market: market,
+        })),
+    })
+  }
 }

@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { IMarketSpecifics } from 'store/markets'
+import { marketStore } from 'store/markets'
 import ArrowUp from '../../assets/arrow-up.svg'
 import Fire from '../../assets/fire.svg'
 import Sparkles from '../../assets/sparkles.svg'
@@ -32,7 +32,7 @@ export const DropdownFilters = {
   PLATFORMS: {
     id: 1,
     name: 'Platforms',
-    values: ['All', 'Twitter', 'Substack', 'Showtime'],
+    values: ['All'], // Don't hardcode the markets. They are set in OverviewFilters component below
   },
   COLUMNS: {
     id: 2,
@@ -180,7 +180,6 @@ type OverviewFiltersProps = {
   selectedFilterId: number
   selectedMarkets: Set<string>
   selectedColumns: Set<string>
-  markets: IMarketSpecifics[]
   onMarketChanged: (set: Set<string>) => void
   setSelectedFilterId: (filterId: number) => void
   onColumnChanged: (set: Set<string>) => void
@@ -191,7 +190,6 @@ export const OverviewFilters = ({
   selectedFilterId,
   selectedMarkets,
   selectedColumns,
-  markets,
   onMarketChanged,
   setSelectedFilterId,
   onColumnChanged,
@@ -274,6 +272,12 @@ export const OverviewFilters = ({
   function onFilterChanged(filterId: number) {
     setSelectedFilterId(filterId)
   }
+
+  const markets = marketStore.getState().markets.map((m) => m?.market?.name)
+
+  useEffect(() => {
+    DropdownFilters.PLATFORMS.values = ['All', ...markets]
+  }, [markets])
 
   return (
     <div className="grid md:flex justify-center grid-cols-2 md:grid-cols-none p-4 bg-white dark:bg-gray-700 rounded-t-lg gap-x-2 gap-y-2 md:justify-start">
