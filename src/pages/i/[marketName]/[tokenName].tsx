@@ -1,9 +1,8 @@
 import classNames from 'classnames'
 import array from 'lodash/array'
 import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { GlobalContext } from 'pages/_app'
 import { IframeEmbedSkeleton } from 'pages/iframe/[marketName]/[tokenName]'
 import {
   TimeXFloatYChartInLine,
@@ -12,7 +11,6 @@ import {
   VerifyModal,
   CircleSpinner,
   WatchingStarButton,
-  AddToMetamaskButton,
   A,
   MutualTokensList,
   DefaultLayout,
@@ -39,12 +37,11 @@ import {
   WEEK_SECONDS,
   MONTH_SECONDS,
   YEAR_SECONDS,
-  calculateIdeaTokenDaiValue,
   useTransactionManager,
   ZERO_ADDRESS,
 } from 'utils'
 import { NETWORK } from 'store/networks'
-import { withdrawTokenInterest, useBalance } from 'actions'
+import { withdrawTokenInterest } from 'actions'
 import { DateTime } from 'luxon'
 import { NextSeo } from 'next-seo'
 import { getURL } from 'utils/seo-constants'

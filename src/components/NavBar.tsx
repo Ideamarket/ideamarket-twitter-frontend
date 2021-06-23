@@ -13,7 +13,7 @@ import ModalService from 'components/modals/ModalService'
 import WalletModal from './wallet/WalletModal'
 
 export default function Nav() {
-  const { theme, setTheme } = useTheme()
+  const { theme, resolvedTheme, setTheme } = useTheme()
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const router = useRouter()
   const closeMenu = () => setIsMobileNavOpen(false)
@@ -112,7 +112,7 @@ export default function Nav() {
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 className="h-10 w-10 flex justify-center items-center focus:outline-none text-blue-50"
               >
-                {theme === 'dark' ? (
+                {resolvedTheme === 'dark' ? (
                   <SunIcon className="h-5 w-5 text-blue-50" />
                 ) : (
                   <MoonIcon className="h-5 w-5 text-blue-50" />

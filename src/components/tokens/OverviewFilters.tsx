@@ -79,7 +79,7 @@ const DropdownButton = ({
     <div
       className={classNames(
         className,
-        `relative flex items-center p-1 border rounded-md pl-3 pr-1 text-sm text-brand-black cursor-pointer z-10`
+        `relative flex items-center p-1 border rounded-md pl-3 pr-1 text-sm text-brand-black dark:text-gray-50 cursor-pointer z-10`
       )}
       onClick={() => {
         setIsDropdownOpen(true)
@@ -164,7 +164,7 @@ const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
           'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
             isSelected,
         },
-        { 'text-brand-black': !isSelected }
+        { 'text-brand-black dark:text-gray-50': !isSelected }
       )}
       onClick={() => {
         onClick(filter.id)
