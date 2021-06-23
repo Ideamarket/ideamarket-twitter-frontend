@@ -67,15 +67,15 @@ type State = {
   markets: any
 }
 
-export const marketStore = create<State>((set) => ({
+export const useMarketStore = create<State>((set) => ({
   markets: [],
 }))
 
-export async function initMarketStore() {
+export async function initUseMarketStore() {
   const markets = await queryMarkets('all-markets')
 
   if (markets) {
-    marketStore.setState({
+    useMarketStore.setState({
       markets: markets
         .filter(
           (market) =>

@@ -25,7 +25,7 @@ import Web3 from 'web3'
 import Web3ReactManager from 'components/wallet/Web3ReactManager'
 import ModalRoot from 'components/modals/ModalRoot'
 import { WrongNetworkOverlay } from 'components'
-import { initMarketStore } from 'store/markets'
+import { initUseMarketStore } from 'store/markets'
 
 export const GlobalContext = createContext({
   onWalletConnectedCallback: () => {},
@@ -64,7 +64,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     () => () => {}
   )
 
-  initMarketStore()
+  initUseMarketStore()
 
   return (
     <>

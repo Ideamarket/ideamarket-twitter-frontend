@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { marketStore } from 'store/markets'
+import { useMarketStore } from 'store/markets'
 import ArrowUp from '../../assets/arrow-up.svg'
 import Fire from '../../assets/fire.svg'
 import Sparkles from '../../assets/sparkles.svg'
@@ -273,9 +273,12 @@ export const OverviewFilters = ({
     setSelectedFilterId(filterId)
   }
 
-  const markets = marketStore.getState().markets.map((m) => m?.market?.name)
+  const markets = useMarketStore((state) =>
+    state.markets.map((m) => m?.market?.name)
+  )
 
   useEffect(() => {
+    // toggleMarket method is dependent on DropdownFilters.PLATFORMS.values
     DropdownFilters.PLATFORMS.values = ['All', ...markets]
   }, [markets])
 

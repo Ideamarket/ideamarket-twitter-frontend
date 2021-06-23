@@ -25,6 +25,7 @@ import {
   Filters,
   DropdownFilters,
 } from 'components/tokens/OverviewFilters'
+import { useMarketStore } from 'store/markets'
 
 export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   const defaultColumns = [
@@ -101,6 +102,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isOptional: false,
     },
   ]
+
   const [selectedFilterId, setSelectedFilterId] = useState(Filters.TOP.id)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
@@ -109,6 +111,9 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   const visibleColumns = defaultColumns.filter(
     (h) => !h.isOptional || selectedColumns.has(h.name)
   )
+  const markets = useMarketStore((state) => state.markets)
+  const marketNames = markets.map((m) => m?.market?.name)
+
   useEffect(() => {
     const storedMarkets = JSON.parse(localStorage.getItem('STORED_MARKETS'))
 
@@ -116,14 +121,15 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       ? urlMarkets
       : storedMarkets
       ? [...storedMarkets]
-      : DropdownFilters.PLATFORMS.values
+      : ['All', ...marketNames]
     setSelectedMarkets(new Set(initialMarkets))
     const storedColumns = JSON.parse(localStorage.getItem('STORED_COLUMNS'))
     const initialColumns = storedColumns
       ? [...storedColumns]
       : DropdownFilters.COLUMNS.values
     setSelectedColumns(new Set(initialColumns))
-  }, [])
+  }, [markets])
+
   const {
     data: compoundExchangeRate,
     isLoading: isCompoundExchangeRateLoading,

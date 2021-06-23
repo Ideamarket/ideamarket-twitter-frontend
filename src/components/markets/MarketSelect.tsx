@@ -1,4 +1,4 @@
-import { getMarketSpecificsByMarketName, marketStore } from 'store/markets'
+import { getMarketSpecificsByMarketName, useMarketStore } from 'store/markets'
 import DropDown from 'components/DropDown'
 import { useTheme } from 'next-themes'
 
@@ -13,7 +13,7 @@ export default function MarketSelect({
 }) {
   const { theme } = useTheme()
 
-  const markets = marketStore.getState().markets
+  const markets = useMarketStore.getState().markets
 
   const selectMarketFormat = (entry) => (
     <div className="flex items-center dark:text-gray-300 text-gray-500 ">
