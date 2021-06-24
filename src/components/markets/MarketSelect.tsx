@@ -13,7 +13,7 @@ export default function MarketSelect({
 }) {
   const { theme } = useTheme()
 
-  const markets = useMarketStore.getState().markets
+  const markets = useMarketStore((state) => state.markets)
 
   const selectMarketFormat = (entry) => (
     <div className="flex items-center dark:text-gray-300 text-gray-500 ">
