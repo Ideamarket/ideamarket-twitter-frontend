@@ -14,6 +14,7 @@ import {
   calculateIdeaTokenDaiValue,
   floatToWeb3BN,
   formatBigNumber,
+  isAddress,
   useTransactionManager,
   web3BNToFloatString,
   ZERO_ADDRESS,
@@ -399,7 +400,11 @@ export default function TradeInterface({
   }
 
   const isTradeButtonDisabled =
-    txManager.isPending || !isValid || exceedsBalance || isMissingAllowance
+    txManager.isPending ||
+    !isValid ||
+    exceedsBalance ||
+    isMissingAllowance ||
+    (isGiftChecked && !isAddress(recipientAddress))
 
   const marketSpecifics = getMarketSpecificsByMarketName(market?.name)
   const { tokenIconURL } = useTokenIconURL({
@@ -609,11 +614,14 @@ export default function TradeInterface({
               type="text"
               id="recipient-input"
               className={classNames(
-                'h-full border border-gray-200 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm my-2 dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
+                'h-full border rounded-md sm:text-sm my-2 dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
                 !ideaToken ||
                   (ideaToken && ideaToken.tokenOwner === ZERO_ADDRESS)
                   ? 'w-full'
-                  : 'w-full md:w-96'
+                  : 'w-full md:w-96',
+                isAddress(recipientAddress)
+                  ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
+                  : 'border-brand-red focus:border-brand-red focus:ring-red-500'
               )}
               placeholder="ETH address"
               value={recipientAddress || ''}
@@ -625,10 +633,10 @@ export default function TradeInterface({
               ideaToken.tokenOwner &&
               ideaToken.tokenOwner !== ZERO_ADDRESS && (
                 <button
-                  className="mb-2 md:mb-0 text-blue-400 cursor-pointer"
+                  className="p-1 mb-2 md:mb-0 cursor-pointer text-base font-medium bg-white dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 hover:bg-brand-blue"
                   onClick={() => setRecipientAddress(ideaToken.tokenOwner)}
                 >
-                  (Listing owner)
+                  Listing owner
                 </button>
               )}
           </div>
@@ -652,7 +660,8 @@ export default function TradeInterface({
                 !isValid ||
                 exceedsBalance ||
                 !isMissingAllowance ||
-                txManager.isPending
+                txManager.isPending ||
+                (isGiftChecked && !isAddress(recipientAddress))
               }
               key={approveButtonKey}
             />
