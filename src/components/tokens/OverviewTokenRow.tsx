@@ -9,8 +9,10 @@ import {
   formatNumberWithCommasAsThousandsSerperator,
   formatNumber,
   web3BNToFloatString,
+  ZERO_ADDRESS,
 } from 'utils'
 import { useTokenIconURL } from 'actions'
+import { BadgeCheckIcon } from '@heroicons/react/solid'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -79,7 +81,7 @@ export default function TokenRow({
         </td>
         {/* Icon and Name */}
         <td className="flex py-4 pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap">
-          <div className="flex items-center w-full">
+          <div className="flex items-center w-full text-gray-900 dark:text-gray-200">
             {showMarketSVG && marketSpecifics.getMarketOutlineSVG()}
             <div
               className={classNames(
@@ -97,8 +99,22 @@ export default function TokenRow({
                 />
               )}
             </div>
-            <div className="ml-4 text-base font-medium leading-5 text-gray-900 dark:text-gray-200 truncate hover:underline">
+            <div className="ml-4 text-base font-medium leading-5 truncate hover:underline">
               <span>{token.name}</span>
+            </div>
+            {/* Desktop Verified Badge */}
+            {token.tokenOwner !== ZERO_ADDRESS && (
+              <div className="hidden md:inline w-5 h-5 ml-auto">
+                <BadgeCheckIcon />
+              </div>
+            )}
+          </div>
+        </td>
+        {/* Mobile Verified Badge */}
+        <td className="md:hidden flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
+          <div className="flex items-center justify-end h-full">
+            <div className="w-5 h-5">
+              {token.tokenOwner !== ZERO_ADDRESS && <BadgeCheckIcon />}
             </div>
           </div>
         </td>
@@ -188,7 +204,7 @@ export default function TokenRow({
           </button>
         </td>
         {/* Buy Button mobile */}
-        <td className="py-4 pl-4 md:hidden whitespace-nowrap">
+        <td className="py-4 px-3 md:hidden whitespace-nowrap">
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -199,8 +215,8 @@ export default function TokenRow({
             ${formatNumber(tokenPrice)}
           </button>
         </td>
-        {/* Star */}
-        <td className="px-3 py-4 text-sm leading-5 text-gray-500 dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap">
+        {/* Star desktop */}
+        <td className="hidden md:table-cell px-3 py-4 text-sm leading-5 text-gray-500 dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap">
           <div className="flex items-center justify-center h-full">
             <WatchingStar token={token} />
           </div>
