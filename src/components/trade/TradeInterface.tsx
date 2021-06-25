@@ -30,7 +30,7 @@ import A from 'components/A'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { TradeInterfaceBox } from './components'
 import CircleSpinner from 'components/animations/CircleSpinner'
-import Settings from '../../assets/settings.svg'
+import { CogIcon } from '@heroicons/react/outline'
 import useReversePrice from 'actions/useReversePrice'
 import useTokenToDAI from 'actions/useTokenToDAI'
 import { useWeb3React } from '@web3-react/core'
@@ -475,7 +475,7 @@ export default function TradeInterface({
           <Tooltip
             className="w-4 h-4 mb-4 ml-2 cursor-pointer text-brand-gray-4"
             placement="down"
-            IconComponent={Settings}
+            IconComponent={CogIcon}
           >
             <div className="w-64 mb-2">
               <AdvancedOptions
