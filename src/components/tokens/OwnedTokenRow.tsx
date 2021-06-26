@@ -11,9 +11,11 @@ import {
   formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
   calculateIdeaTokenDaiValue,
+  ZERO_ADDRESS,
 } from 'utils'
 import { A, AddToMetamaskButton } from 'components'
 import { useTokenIconURL } from 'actions'
+import { BadgeCheckIcon } from '@heroicons/react/solid'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -67,7 +69,7 @@ export default function TokenRow({
         }}
       >
         <td className="col-span-3 px-6 py-4 whitespace-nowrap">
-          <div className="flex items-center">
+          <div className="flex items-center text-gray-900 dark:text-gray-200">
             <div className="flex-shrink-0 w-7.5 h-7.5">
               {isTokenIconLoading ? (
                 <div className="w-full h-full bg-gray-400 dark:bg-gray-600 rounded-full animate-pulse"></div>
@@ -79,7 +81,7 @@ export default function TokenRow({
                 />
               )}
             </div>
-            <div className="ml-4 text-base font-semibold leading-5 text-gray-900 dark:text-gray-300">
+            <div className="ml-4 text-base font-semibold leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -90,6 +92,12 @@ export default function TokenRow({
                 {token.name}
               </A>
             </div>
+            {/* Verified Badge */}
+            {token.tokenOwner !== ZERO_ADDRESS && (
+              <div className="w-5 h-5 ml-1.5">
+                <BadgeCheckIcon />
+              </div>
+            )}
             <div className="flex items-center justify-center ml-auto md:hidden">
               <svg
                 className="w-7.5 text-brand-blue dark:text-blue-500"
