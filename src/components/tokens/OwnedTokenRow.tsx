@@ -94,7 +94,7 @@ export default function TokenRow({
             </div>
             {/* Verified Badge */}
             {token.tokenOwner !== ZERO_ADDRESS && (
-              <div className="w-5 h-5 ml-4 md:ml-auto">
+              <div className="w-5 h-5 ml-1.5">
                 <BadgeCheckIcon />
               </div>
             )}
