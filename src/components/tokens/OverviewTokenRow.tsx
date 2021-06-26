@@ -104,7 +104,7 @@ export default function TokenRow({
             </div>
             {/* Desktop Verified Badge */}
             {token.tokenOwner !== ZERO_ADDRESS && (
-              <div className="hidden md:inline w-5 h-5 ml-auto">
+              <div className="hidden md:inline w-5 h-5 ml-1.5">
                 <BadgeCheckIcon />
               </div>
             )}
