@@ -80,7 +80,7 @@ export default class TwitchMarketSpecifics implements IMarketSpecifics {
   // List Token
 
   getListTokenPrefix(): string {
-    return ''
+    return 'twitch.tv/'
   }
 
   getListTokenSuffix(): string {
