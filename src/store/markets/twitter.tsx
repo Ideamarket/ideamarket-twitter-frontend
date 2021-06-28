@@ -2,7 +2,6 @@ import { IMarketSpecifics } from '.'
 import TwitterWhite from '../../assets/twitter-white.svg'
 import TwitterBlack from '../../assets/twitter-black.svg'
 import TwitterOutline from '../../assets/twitter-outline.svg'
-import TwitterSolidBlack from '../../assets/twitter-solid-black.svg'
 import { queryLambdavatar } from 'actions'
 import { useTheme } from 'next-themes'
 
@@ -42,7 +41,7 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
     if (ThemeValue() === 'dark') {
       return <TwitterWhite />
     } else if (ThemeValue() === 'light') {
-      return <TwitterSolidBlack />
+      return <TwitterOutline />
     } else {
       return null
     }
