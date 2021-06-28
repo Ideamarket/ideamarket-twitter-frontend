@@ -449,10 +449,7 @@ export default function VerifyModal({
                 accumulated interest.
               </p>
               <div className="p-5 mt-5 text-black bg-gray-200 border rounded border-brand-gray-2">
-                <A
-                  className="underline"
-                  href={NETWORK.getEtherscanTxUrl(txManager.hash)}
-                >
+                <A className="underline" href={NETWORK.getEtherscanTxUrl(tx)}>
                   Transaction: {tx.slice(0, 8)}...{tx.slice(-6)}
                 </A>
               </div>
