@@ -4,6 +4,7 @@ import create from 'zustand'
 import TwitterMarketSpecifics from './twitter'
 import SubstackMarketSpecifics from './substack'
 import ShowtimeMarketSpecifics from './showtime'
+import TwitchMarketSpecifics from './twitch'
 import { queryMarkets } from 'store/ideaMarketsStore'
 
 export type IMarketSpecifics = {
@@ -42,6 +43,7 @@ const specifics: IMarketSpecifics[] = [
   new TwitterMarketSpecifics(),
   new SubstackMarketSpecifics(),
   new ShowtimeMarketSpecifics(),
+  new TwitchMarketSpecifics(),
 ]
 
 export function getMarketSpecifics() {
