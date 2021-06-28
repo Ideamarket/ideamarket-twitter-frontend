@@ -57,7 +57,7 @@ export default function MutualToken({
                 >
                   <p className="text-xl font-bold text-gray-900 dark:text-gray-200 lg:text-xl hover:underline">
                     {token.name}{' '}
-                    <span>{marketSpecifics.getMarketSVGTheme()}</span>
+                    <span>{marketSpecifics.getMarketSVGBlackSolid()}</span>
                   </p>
                 </A>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-300">

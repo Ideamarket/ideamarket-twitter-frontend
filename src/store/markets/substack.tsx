@@ -29,6 +29,10 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
     return <SubstackBlack />
   }
 
+  getMarketSVGBlackSolid(): JSX.Element {
+    return <SubstackBlack />
+  }
+
   getMarketSVGWhite(): JSX.Element {
     return <SubstackWhite />
   }

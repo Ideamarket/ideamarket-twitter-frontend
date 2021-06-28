@@ -29,6 +29,10 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
     return <ShowtimeBlack />
   }
 
+  getMarketSVGBlackSolid(): JSX.Element {
+    return <ShowtimeBlack />
+  }
+
   getMarketSVGWhite(): JSX.Element {
     return <ShowtimeWhite />
   }

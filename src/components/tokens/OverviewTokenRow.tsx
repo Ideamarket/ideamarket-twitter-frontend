@@ -12,7 +12,7 @@ import {
   ZERO_ADDRESS,
 } from 'utils'
 import { useTokenIconURL } from 'actions'
-import { BadgeCheckIcon } from '@heroicons/react/solid'
+import { BadgeCheckIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -130,6 +130,19 @@ export default function TokenRow({
             ${formatNumber(tokenPrice)}
           </p>
         </td>
+        {/* Buy Button */}
+        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onTradeClicked(token, market)
+            }}
+            className="w-24 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+          >
+            <ArrowSmUpIcon className="absolute ml-4 w-6 h-6" />
+            <span className="ml-3">Buy</span>
+          </button>
+        </td>
         {/* Deposits */}
         {getColumn('Deposits') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
@@ -191,18 +204,6 @@ export default function TokenRow({
           <></>
         )}
 
-        {/* Buy Button */}
-        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onTradeClicked(token, market)
-            }}
-            className="w-24 h-10 text-base font-medium bg-white dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
-          >
-            Buy
-          </button>
-        </td>
         {/* Buy Button mobile */}
         <td className="py-4 px-3 md:hidden whitespace-nowrap">
           <button
