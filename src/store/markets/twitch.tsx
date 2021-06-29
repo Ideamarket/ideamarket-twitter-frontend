@@ -28,7 +28,7 @@ export default class TwitchMarketSpecifics implements IMarketSpecifics {
   }
 
   getMarketSVGBlackSolid(): JSX.Element {
-    return <TwitchDark />
+    return <TwitchWhite />
   }
 
   getMarketSVGWhite(): JSX.Element {
