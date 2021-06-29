@@ -1,6 +1,5 @@
 import { IMarketSpecifics } from '.'
-import Twitch from '../../assets/twitch.svg'
-import TwitchDark from '../../assets/twitch-dark.svg'
+import TwitchWhite from '../../assets/twitch-white.svg'
 import { queryLambdavatar } from 'actions'
 import { useTheme } from 'next-themes'
 
@@ -25,7 +24,7 @@ export default class TwitchMarketSpecifics implements IMarketSpecifics {
   }
 
   getMarketSVGBlack(): JSX.Element {
-    return <TwitchDark />
+    return <TwitchWhite />
   }
 
   getMarketSVGBlackSolid(): JSX.Element {
@@ -33,21 +32,15 @@ export default class TwitchMarketSpecifics implements IMarketSpecifics {
   }
 
   getMarketSVGWhite(): JSX.Element {
-    return <Twitch />
+    return <TwitchWhite />
   }
 
   getMarketOutlineSVG(): JSX.Element {
-    return <TwitchDark />
+    return <TwitchWhite />
   }
 
   getMarketSVGTheme(): JSX.Element {
-    if (ThemeValue() === 'dark') {
-      return <TwitchDark />
-    } else if (ThemeValue() === 'light') {
-      return <Twitch />
-    } else {
-      return null
-    }
+    return <TwitchWhite />
   }
 
   // Tokens
