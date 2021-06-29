@@ -21,7 +21,7 @@ export default function EmailHeader() {
           aria-label="Close"
           onClick={close}
         >
-          <Close className="h-full" />
+          <Close className="h-full" stroke="grey" />
         </button>
       </div>
     </>

@@ -7,9 +7,11 @@ import {
   formatNumber,
   formatNumberInt,
   web3BNToFloatString,
+  ZERO_ADDRESS,
 } from '../../utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
+import { BadgeCheckIcon } from '@heroicons/react/solid'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -89,7 +91,7 @@ export default function TokenCard({
               <span className="invisible">A</span>
             </div>
           ) : (
-            <div>
+            <div className="flex">
               <span className="align-middle">
                 <A
                   href={`${marketSpecifics.getTokenURL(token.name)}`}
@@ -101,9 +103,14 @@ export default function TokenCard({
                   {token.name}
                 </A>
               </span>
-              <span className="ml-2.5 mr-1">
-                {marketSpecifics.getMarketSVGTheme()}
+              <span className="hidden md:block ml-2.5 mr-1">
+                {marketSpecifics.getMarketSVGWhite()}
               </span>
+              {token.tokenOwner !== ZERO_ADDRESS && (
+                <span className="hidden md:block inline w-6 h-6 ml-1.5">
+                  <BadgeCheckIcon className="w-6 h-6" />
+                </span>
+              )}
             </div>
           )}
           {loading ? (
@@ -111,8 +118,16 @@ export default function TokenCard({
               <span className="invisible">A</span>
             </div>
           ) : (
-            <div className="mt-1 text-sm">
+            <div className="mt-1 text-sm flex">
               Rank {token.rank ? token.rank : '-'}
+              <span className="block md:hidden ml-2.5 mr-1">
+                {marketSpecifics.getMarketSVGWhite()}
+              </span>
+              {token.tokenOwner !== ZERO_ADDRESS && (
+                <span className="block md:hidden inline w-6 h-6 ml-1.5">
+                  <BadgeCheckIcon className="w-6 h-6" />
+                </span>
+              )}
             </div>
           )}
         </div>
