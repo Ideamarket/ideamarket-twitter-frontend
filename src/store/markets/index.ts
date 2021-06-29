@@ -13,9 +13,7 @@ export type IMarketSpecifics = {
   isEnabled(): boolean
   getMarketNameURLRepresentation(): string
   getMarketSVGBlack(): JSX.Element
-  getMarketSVGBlackSolid(): JSX.Element
   getMarketSVGWhite(): JSX.Element
-  getMarketOutlineSVG(): JSX.Element
   getMarketSVGTheme(): JSX.Element
 
   // Tokens

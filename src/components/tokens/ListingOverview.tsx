@@ -103,7 +103,7 @@ export default function TokenCard({
                   {token.name}
                 </A>
               </span>
-              <span className="hidden md:block ml-2.5 mr-1">
+              <span className="hidden md:block ml-2.5 mr-1 w-5 h-5">
                 {marketSpecifics.getMarketSVGWhite()}
               </span>
               {token.tokenOwner !== ZERO_ADDRESS && (
@@ -120,7 +120,7 @@ export default function TokenCard({
           ) : (
             <div className="mt-1 text-sm flex">
               Rank {token.rank ? token.rank : '-'}
-              <span className="block md:hidden ml-2.5 mr-1">
+              <span className="block md:hidden ml-2.5 mr-1 w-5 h-5">
                 {marketSpecifics.getMarketSVGWhite()}
               </span>
               {token.tokenOwner !== ZERO_ADDRESS && (

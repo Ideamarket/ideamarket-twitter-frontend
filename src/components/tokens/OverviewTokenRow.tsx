@@ -82,7 +82,7 @@ export default function TokenRow({
         {/* Icon and Name */}
         <td className="flex py-4 pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap">
           <div className="flex items-center w-full text-gray-900 dark:text-gray-200">
-            {showMarketSVG && marketSpecifics.getMarketOutlineSVG()}
+            {showMarketSVG && marketSpecifics.getMarketSVGTheme()}
             <div
               className={classNames(
                 'flex-shrink-0 w-7.5 h-7.5',
