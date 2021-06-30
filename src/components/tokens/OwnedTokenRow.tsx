@@ -118,13 +118,11 @@ export default function TokenRow({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Market
           </p>
-          <div className="flex items-center">
-            <div className="w-full h-full md:w-auto md:h-auto">
-              {marketSpecifics.getMarketSVGTheme()}
-            </div>
-            <div className="ml-1 text-base font-semibold leading-4 md:ml-3 text-brand-gray-4 dark:text-gray-300">
-              {marketSpecifics.getMarketName()}
-            </div>
+          <div className="inline-block w-4 h-4">
+            {marketSpecifics.getMarketSVGTheme()}
+          </div>
+          <div className="inline-block align-top ml-2 text-base font-semibold leading-4 md:ml-3 text-brand-gray-4 dark:text-gray-300">
+            {marketSpecifics.getMarketName()}
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

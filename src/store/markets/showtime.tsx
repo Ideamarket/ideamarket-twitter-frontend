@@ -1,13 +1,12 @@
 import { IMarketSpecifics } from '.'
-import ShowtimeWhite from '../../assets/showtime-white.svg'
-import ShowtimeBlack from '../../assets/showtime-black.svg'
-import ShowtimeOutline from '../../assets/showtime-outline.svg'
+import ShowtimeOutlineWhite from '../../assets/showtime-outline-white.svg'
+import ShowtimeOutlineBlack from '../../assets/showtime-outline-black.svg'
 import { queryLambdavatar } from 'actions'
 import { useTheme } from 'next-themes'
 
-function IsDarkTheme() {
-  const { theme } = useTheme()
-  return theme === 'dark' ? true : false
+function ThemeValue() {
+  const { resolvedTheme } = useTheme()
+  return resolvedTheme
 }
 
 export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
@@ -26,19 +25,21 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
   }
 
   getMarketSVGBlack(): JSX.Element {
-    return <ShowtimeBlack />
+    return <ShowtimeOutlineBlack />
   }
 
   getMarketSVGWhite(): JSX.Element {
-    return <ShowtimeWhite />
-  }
-
-  getMarketOutlineSVG(): JSX.Element {
-    return <ShowtimeOutline />
+    return <ShowtimeOutlineWhite />
   }
 
   getMarketSVGTheme(): JSX.Element {
-    return <ShowtimeWhite />
+    if (ThemeValue() === 'dark') {
+      return <ShowtimeOutlineWhite />
+    } else if (ThemeValue() === 'light') {
+      return <ShowtimeOutlineBlack />
+    } else {
+      return null
+    }
   }
 
   // Tokens

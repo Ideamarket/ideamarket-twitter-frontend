@@ -63,6 +63,14 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     },
     {
       id: 5,
+      name: 'Trade',
+      content: '',
+      value: 'trade',
+      sortable: false,
+      isOptional: false,
+    },
+    {
+      id: 6,
       name: 'Deposits',
       content: 'Deposits',
       value: 'deposits',
@@ -70,7 +78,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isOptional: true,
     },
     {
-      id: 6,
+      id: 7,
       name: '% Locked',
       content: '% Locked',
       value: 'locked',
@@ -78,20 +86,12 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isOptional: true,
     },
     {
-      id: 7,
+      id: 8,
       name: '1YR Income',
       content: '1YR Income',
       value: 'income',
       sortable: true,
       isOptional: true,
-    },
-    {
-      id: 8,
-      name: 'Trade',
-      content: 'Trade',
-      value: 'trade',
-      sortable: false,
-      isOptional: false,
     },
     {
       id: 9,
