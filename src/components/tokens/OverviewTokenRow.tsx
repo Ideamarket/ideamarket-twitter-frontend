@@ -10,9 +10,15 @@ import {
   formatNumber,
   web3BNToFloatString,
   ZERO_ADDRESS,
+  bigNumberTenPow18,
 } from 'utils'
 import { useTokenIconURL } from 'actions'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
+import {
+  investmentTokenToUnderlying,
+  queryExchangeRate,
+} from 'store/compoundStore'
+import { useQuery } from 'react-query'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -52,6 +58,19 @@ export default function TokenRow({
       market.rawHatchTokens
     ),
     tenPow18,
+    2
+  )
+
+  const {
+    data: compoundExchangeRate,
+    isLoading: isCompoundExchangeRateLoading,
+  } = useQuery('compound-exchange-rate', queryExchangeRate)
+
+  const claimableIncome = web3BNToFloatString(
+    investmentTokenToUnderlying(token.rawInvested, compoundExchangeRate).sub(
+      token.rawDaiInToken
+    ),
+    bigNumberTenPow18,
     2
   )
 
@@ -215,6 +234,24 @@ export default function TokenRow({
             ${formatNumber(tokenPrice)}
           </button>
         </td>
+
+        {/* Claimable Income */}
+        {getColumn('Claimable Income') ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+              title={'$' + claimableIncome}
+            >
+              $
+              {formatNumberWithCommasAsThousandsSerperator(
+                parseInt(claimableIncome)
+              )}
+            </p>
+          </td>
+        ) : (
+          <></>
+        )}
+
         {/* Star desktop */}
         <td className="hidden md:table-cell px-3 py-4 text-sm leading-5 text-gray-500 dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap">
           <div className="flex items-center justify-center h-full">

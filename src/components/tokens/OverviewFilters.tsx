@@ -37,7 +37,7 @@ export const DropdownFilters = {
   COLUMNS: {
     id: 2,
     name: 'Columns',
-    values: ['All', 'Deposits', '% Locked', '1YR Income'],
+    values: ['All', 'Deposits', '% Locked', '1YR Income', 'Claimable Income'],
   },
 }
 

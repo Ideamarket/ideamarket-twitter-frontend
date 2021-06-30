@@ -36,6 +36,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       value: 'rank',
       sortable: true,
       isOptional: false,
+      isSelectedAtStart: true,
     },
     {
       id: 2,
@@ -44,6 +45,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       value: 'market',
       sortable: false,
       isOptional: false,
+      isSelectedAtStart: true,
     },
     {
       id: 3,
@@ -52,6 +54,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       value: 'name',
       sortable: true,
       isOptional: false,
+      isSelectedAtStart: true,
     },
     {
       id: 4,
@@ -60,6 +63,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       value: 'price',
       sortable: true,
       isOptional: false,
+      isSelectedAtStart: true,
     },
     {
       id: 5,
@@ -68,6 +72,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       value: 'deposits',
       sortable: true,
       isOptional: true,
+      isSelectedAtStart: true,
     },
     {
       id: 6,
@@ -76,6 +81,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       value: 'locked',
       sortable: true,
       isOptional: true,
+      isSelectedAtStart: true,
     },
     {
       id: 7,
@@ -84,6 +90,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       value: 'income',
       sortable: true,
       isOptional: true,
+      isSelectedAtStart: true,
     },
     {
       id: 8,
@@ -92,14 +99,25 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       value: 'trade',
       sortable: false,
       isOptional: false,
+      isSelectedAtStart: true,
     },
     {
       id: 9,
+      name: 'Claimable Income',
+      content: 'Claimable Income',
+      value: 'claimable',
+      sortable: true,
+      isOptional: true,
+      isSelectedAtStart: false,
+    },
+    {
+      id: 10,
       name: 'Watch',
       content: 'Watch',
       value: 'watch',
       sortable: false,
       isOptional: false,
+      isSelectedAtStart: true,
     },
   ]
 
@@ -111,6 +129,12 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   const visibleColumns = defaultColumns.filter(
     (h) => !h.isOptional || selectedColumns.has(h.name)
   )
+  const startingOptionalColumns = defaultColumns
+    .filter(
+      (c) =>
+        c.isSelectedAtStart && DropdownFilters.COLUMNS.values.includes(c.name)
+    )
+    .map((c) => c.name)
   const markets = useMarketStore((state) => state.markets)
   const marketNames = markets.map((m) => m?.market?.name)
 
@@ -126,7 +150,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     const storedColumns = JSON.parse(localStorage.getItem('STORED_COLUMNS'))
     const initialColumns = storedColumns
       ? [...storedColumns]
-      : DropdownFilters.COLUMNS.values
+      : startingOptionalColumns
     setSelectedColumns(new Set(initialColumns))
   }, [markets])
 
