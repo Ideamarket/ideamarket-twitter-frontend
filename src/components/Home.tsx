@@ -106,7 +106,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       name: 'Claimable Income',
       content: 'Claimable Income',
       value: 'claimable',
-      sortable: true,
+      sortable: false,
       isOptional: true,
       isSelectedAtStart: false,
     },
