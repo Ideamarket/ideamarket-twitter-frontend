@@ -131,7 +131,7 @@ export default function TokenRow({
           </p>
         </td>
         {/* Buy Button */}
-        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
+        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap text-center">
           <button
             onClick={(e) => {
               e.stopPropagation()

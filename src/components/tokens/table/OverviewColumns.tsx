@@ -41,9 +41,10 @@ export const OverviewColumns = ({
     {columnData.map((column) => (
       <th
         className={classNames(
-          'pl-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
+          'py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
           column.sortable && 'cursor-pointer',
-          column.value !== 'rank' && 'pr-6'
+          column.value !== 'rank' && column.value !== 'income' && 'pr-6',
+          column.value === 'income' ? '' : 'pl-6'
         )}
         key={column.value}
         onClick={() => {
