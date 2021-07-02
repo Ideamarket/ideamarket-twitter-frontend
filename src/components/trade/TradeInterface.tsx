@@ -82,12 +82,14 @@ export default function TradeInterface({
   const [selectedToken, setSelectedToken] = useState(
     useTokenListStore.getState().tokens[0]
   )
+  const [tradeToggle, setTradeToggle] = useState(false) // Need toggle to reload balances after trade
   const [isIdeaTokenBalanceLoading, ideaTokenBalanceBN, ideaTokenBalance] =
-    useBalance(ideaToken?.address, 18)
+    useBalance(ideaToken?.address, 18, tradeToggle)
 
   const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
     selectedToken?.address,
-    selectedToken?.decimals
+    selectedToken?.decimals,
+    tradeToggle
   )
 
   // ideaTokenAmount = Number typed in by user on ideaToken input
@@ -337,6 +339,7 @@ export default function TradeInterface({
     setIdeaTokenAmount('0')
     setApproveButtonKey(approveButtonKey + 1)
     onTradeSuccessful()
+    setTradeToggle(!tradeToggle)
   }
 
   const isTradeButtonDisabled =
