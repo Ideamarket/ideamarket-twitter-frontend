@@ -24,6 +24,7 @@ type Props = {
   getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
+  tradeOrListSuccessToggle: boolean
 }
 
 export default function Table({
@@ -34,6 +35,7 @@ export default function Table({
   getColumn,
   onOrderByChanged,
   onTradeClicked,
+  tradeOrListSuccessToggle,
 }: Props) {
   const TOKENS_PER_PAGE = 10
   const LOADING_MARGIN = 200
@@ -140,7 +142,14 @@ export default function Table({
     if (markets.length !== 0) {
       refetch()
     }
-  }, [markets, selectedFilterId, orderBy, orderDirection, nameSearch])
+  }, [
+    markets,
+    selectedFilterId,
+    orderBy,
+    orderDirection,
+    nameSearch,
+    tradeOrListSuccessToggle,
+  ])
 
   useEffect(() => {
     const handleScroll = () => {

@@ -103,6 +103,9 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     },
   ]
 
+  // After trade or list success, the token data needs to be refetched. This toggle does that.
+  const [tradeOrListSuccessToggle, setTradeOrListSuccessToggle] =
+    useState(false)
   const [selectedFilterId, setSelectedFilterId] = useState(Filters.TOP.id)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
@@ -174,23 +177,25 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     }
   }
   function onTradeClicked(token: IdeaToken, market: IdeaMarket) {
+    const onClose = () => setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(TradeModal, { ideaToken: token, market })
+        ModalService.open(TradeModal, { ideaToken: token, market }, onClose)
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(TradeModal, { ideaToken: token, market })
+      ModalService.open(TradeModal, { ideaToken: token, market }, onClose)
     }
   }
   function onListTokenClicked() {
+    const onClose = () => setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(ListTokenModal)
+        ModalService.open(ListTokenModal, {}, onClose)
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(ListTokenModal)
+      ModalService.open(ListTokenModal, {}, onClose)
     }
   }
   function onMarketChanged(markets) {
@@ -267,6 +272,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
                 getColumn={(column) => selectedColumns.has(column)}
                 onOrderByChanged={onOrderByChanged}
                 onTradeClicked={onTradeClicked}
+                tradeOrListSuccessToggle={tradeOrListSuccessToggle}
               />
             )}
           </div>

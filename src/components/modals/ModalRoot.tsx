@@ -5,12 +5,13 @@ export default function ModalRoot() {
   const [modal, setModal] = useState({} as any)
 
   useEffect(() => {
-    ModalService.on('open', ({ component, props }) => {
+    ModalService.on('open', ({ component, props, onClose }) => {
       setModal({
         component,
         props,
         close: () => {
           setModal({} as any)
+          onClose()
         },
       })
     })
