@@ -69,9 +69,9 @@ export default function TokenRow({
         }}
       >
         {/* Market desktop */}
-        <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
-          <div className="inline-block w-4 h-4">
-            {marketSpecifics.getMarketSVGTheme()}
+        <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 hidden md:table-cell whitespace-nowrap">
+          <div className="flex items-center justify-end w-full h-full">
+            <div className="w-5 h-5">{marketSpecifics.getMarketSVGTheme()}</div>
           </div>
         </td>
         <td className="col-span-3 px-6 py-4 whitespace-nowrap">

@@ -192,7 +192,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
       </div>
       <div className="flex justify-between text-sm">
         <div className="text-gray-500 dark:text-white">
-          Balance: {isTokenBalanceLoading ? '...' : tokenBalance}
+          You have: {isTokenBalanceLoading ? '...' : tokenBalance}
           {!txManager.isPending && label === 'Spend' && (
             <span
               className="cursor-pointer text-brand-blue dark:text-blue-400"
