@@ -39,6 +39,7 @@ export default function getQueryTokenNameTextSearch(
           market {
             id: marketID
           }
+          rank
           tokenOwner
           daiInToken
           invested
