@@ -71,6 +71,12 @@ export default function LockedTokenRow({
           )
         }}
       >
+        {/* Market desktop */}
+        <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
+          <div className="inline-block w-4 h-4">
+            {marketSpecifics.getMarketSVGTheme()}
+          </div>
+        </td>
         <td className="col-span-3 px-6 py-4 whitespace-nowrap">
           <div className="flex items-center text-gray-900 dark:text-gray-200">
             <div className="flex-shrink-0 w-7.5 h-7.5">
@@ -117,15 +123,13 @@ export default function LockedTokenRow({
             </div>
           </div>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
+        {/* Market mobile */}
+        <td className="px-6 py-4 whitespace-nowrap md:hidden">
+          <p className="text-sm font-semibold tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Market
           </p>
           <div className="inline-block w-4 h-4">
             {marketSpecifics.getMarketSVGTheme()}
-          </div>
-          <div className="inline-block align-top ml-2 text-base font-semibold leading-4 md:ml-3 text-brand-gray-4 dark:text-gray-300">
-            {marketSpecifics.getMarketName()}
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
