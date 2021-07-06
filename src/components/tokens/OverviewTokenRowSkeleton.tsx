@@ -31,12 +31,6 @@ export default function TokenRowSkeleton({
         <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p className="w-8 h-4 bg-gray-400 rounded"></p>
         </td>
-        {/* Buy Button */}
-        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
-          <button className="w-24 h-10 bg-gray-400 rounded-lg">
-            <span className="invisible">Trade</span>
-          </button>
-        </td>
         {/* Deposits */}
         {getColumn('Deposits') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
@@ -63,6 +57,12 @@ export default function TokenRowSkeleton({
         ) : (
           <></>
         )}
+        {/* Buy Button */}
+        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
+          <button className="w-24 h-10 bg-gray-400 rounded-lg">
+            <span className="invisible">Trade</span>
+          </button>
+        </td>
         {/* Buy Button mobile */}
         <td className="py-4 pl-4 md:hidden whitespace-nowrap">
           <button className="px-2 py-1 bg-gray-400 rounded-lg">

@@ -130,19 +130,7 @@ export default function TokenRow({
             ${formatNumber(tokenPrice)}
           </p>
         </td>
-        {/* Buy Button */}
-        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap text-center">
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onTradeClicked(token, market)
-            }}
-            className="w-24 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
-          >
-            <ArrowSmUpIcon className="absolute ml-4 w-6 h-6" />
-            <span className="ml-3">Buy</span>
-          </button>
-        </td>
+
         {/* Deposits */}
         {getColumn('Deposits') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
@@ -166,6 +154,7 @@ export default function TokenRow({
         ) : (
           <></>
         )}
+
         {/* %Locked */}
         {getColumn('% Locked') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
@@ -189,7 +178,7 @@ export default function TokenRow({
 
         {/* Year Income */}
         {getColumn('1YR Income') ? (
-          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+          <td className="hidden py-4 md:table-cell whitespace-nowrap">
             <p
               className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
               title={'$' + yearIncome}
@@ -204,6 +193,19 @@ export default function TokenRow({
           <></>
         )}
 
+        {/* Buy Button */}
+        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap text-center">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              onTradeClicked(token, market)
+            }}
+            className="w-24 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+          >
+            <ArrowSmUpIcon className="absolute ml-4 w-6 h-6" />
+            <span className="ml-3">Buy</span>
+          </button>
+        </td>
         {/* Buy Button mobile */}
         <td className="py-4 px-3 md:hidden whitespace-nowrap">
           <button
@@ -216,6 +218,7 @@ export default function TokenRow({
             ${formatNumber(tokenPrice)}
           </button>
         </td>
+
         {/* Star desktop */}
         <td className="hidden md:table-cell px-3 py-4 text-sm leading-5 text-gray-500 dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap">
           <div className="flex items-center justify-center h-full">
