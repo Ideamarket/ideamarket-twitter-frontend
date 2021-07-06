@@ -69,7 +69,7 @@ export default function TokenSelect({
   selectedIdeaToken,
   selectedToken,
 }: TokenSelectProps) {
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const [isAllTokensLoaded, setAllTokensLoaded] = useState(false)
 
   return (
@@ -94,7 +94,7 @@ export default function TokenSelect({
       components={{ MenuList }}
       isAllTokensLoaded={isAllTokensLoaded}
       setAllTokensLoaded={setAllTokensLoaded}
-      isDarkMode={theme === 'dark'}
+      isDarkMode={resolvedTheme === 'dark'}
     />
   )
 }
