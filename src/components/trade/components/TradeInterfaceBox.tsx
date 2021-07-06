@@ -1,39 +1,7 @@
-import Select from 'react-select'
 import { TransactionManager } from 'utils'
-import SelectTokensFormat from './SelectTokenFormat'
 import { TokenListEntry } from '../../../store/tokenListStore'
 import { useEffect, useState } from 'react'
-import { useTheme } from 'next-themes'
-
-const selectStyles = {
-  container: (provided) => ({
-    ...provided,
-    minWidth: '140px',
-    width: '140px',
-    border: 'none',
-  }),
-
-  control: () => ({
-    borderRadius: 100,
-    display: 'flex',
-  }),
-  indicatorSeparator: () => ({}),
-  menu: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.selectProps.isDarkMode ? '#374151' : 'white',
-    color: state.selectProps.isDarkMode ? 'white' : 'black',
-  }),
-}
-
-const selectTheme = (theme) => ({
-  ...theme,
-  borderRadius: 2,
-  colors: {
-    ...theme.colors,
-    primary25: '#9ca3af', // text-gray-400
-    primary: '#0857e0', // brand-blue
-  },
-})
+import TokenSelect from './TokenSelect'
 
 type TradeInterfaceBoxProps = {
   label: string
@@ -74,8 +42,6 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   txManager,
   isIdeaToken,
 }) => {
-  const { theme } = useTheme()
-
   const handleBuySellClick = () => {
     if (!txManager.isPending && tradeType === 'sell') setTradeType('buy')
     if (!txManager.isPending && tradeType === 'buy') setTradeType('sell')
@@ -160,25 +126,12 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
             </div>
           </div>
         ) : (
-          <Select
-            className="w-32 text-xs font-medium bg-white dark:bg-gray-700 border-2 border-gray-200 shadow-md cursor-pointer text-brand-gray-4 trade-select rounded-2xl"
-            isClearable={false}
-            isSearchable={false}
-            isDisabled={txManager.isPending || disabled}
-            onChange={(value) => {
-              setSelectedToken(value.token)
-            }}
-            options={selectTokensValues}
-            formatOptionLabel={SelectTokensFormat}
-            defaultValue={
-              selectedIdeaToken
-                ? { token: selectedIdeaToken }
-                : { token: selectedToken, value: selectedToken.address } ||
-                  selectTokensValues[0]
-            }
-            theme={selectTheme}
-            styles={selectStyles}
-            isDarkMode={theme === 'dark'}
+          <TokenSelect
+            disabled={txManager.isPending || disabled}
+            setSelectedToken={setSelectedToken}
+            selectTokensValues={selectTokensValues}
+            selectedIdeaToken={selectedIdeaToken}
+            selectedToken={selectedToken}
           />
         )}
         <input
