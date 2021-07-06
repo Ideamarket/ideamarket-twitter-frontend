@@ -41,7 +41,7 @@ const MenuList = (props) => {
         props.children
       ) : (
         <div>
-          {props.children.slice(0, 3)}
+          {props.children.slice(0, 5)}
           <div
             onClick={() => props.selectProps.setAllTokensLoaded(true)}
             className="flex justify-center items-center h-8"
