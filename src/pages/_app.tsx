@@ -106,7 +106,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           setIsEmailHeaderActive,
         }}
       >
-        <ThemeProvider attribute="class">
+        <ThemeProvider attribute="class" defaultTheme="light">
           <Web3ReactProvider getLibrary={getLibrary}>
             <Web3ReactManager>
               <Layout>
