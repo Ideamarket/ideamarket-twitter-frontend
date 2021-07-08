@@ -176,6 +176,32 @@ export default function TokenRow({
           <></>
         )}
 
+        {/* 24H Change */}
+        {getColumn('24H Change') ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p
+              className={classNames(
+                'text-base font-medium leading-4 tracking-tightest-2 uppercase',
+                parseFloat(token.dayChange) >= 0.0
+                  ? 'text-brand-green'
+                  : 'text-brand-red'
+              )}
+              title={`${
+                parseFloat(token.dayChange) >= 0.0
+                  ? `+ ${parseInt(token.dayChange)}`
+                  : `- ${parseInt(token.dayChange.slice(1))}`
+              }%`}
+            >
+              {parseFloat(token.dayChange) >= 0.0
+                ? `+ ${parseInt(token.dayChange)}`
+                : `- ${parseInt(token.dayChange.slice(1))}`}
+              %
+            </p>
+          </td>
+        ) : (
+          <></>
+        )}
+
         {/* Year Income */}
         {getColumn('1YR Income') ? (
           <td className="hidden py-4 md:table-cell whitespace-nowrap">
