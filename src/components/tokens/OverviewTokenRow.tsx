@@ -100,7 +100,12 @@ export default function TokenRow({
               )}
             </div>
             <div className="ml-4 text-base font-medium leading-5 truncate hover:underline">
-              <span>{token.name}</span>
+              <span>
+                {token.name.substr(
+                  0,
+                  token.name.length > 25 ? 25 : token.name.length
+                ) + (token.name.length > 25 ? '...' : '')}
+              </span>
             </div>
             {/* Desktop Verified Badge */}
             {token.tokenOwner !== ZERO_ADDRESS && (
