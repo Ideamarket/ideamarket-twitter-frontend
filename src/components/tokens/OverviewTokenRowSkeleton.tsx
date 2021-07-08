@@ -48,6 +48,14 @@ export default function TokenRowSkeleton({
         ) : (
           <></>
         )}
+        {/* 24H Change */}
+        {getColumn('24H Change') ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="h-4 mt-1 bg-gray-400 rounded"></p>
+          </td>
+        ) : (
+          <></>
+        )}
         {/* Year Income */}
         {getColumn('1YR Income') ? (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
