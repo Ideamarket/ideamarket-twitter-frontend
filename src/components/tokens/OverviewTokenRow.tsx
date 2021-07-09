@@ -123,6 +123,7 @@ export default function TokenRow({
             </div>
           </div>
         </td>
+
         {/* Price */}
         <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
@@ -136,53 +137,8 @@ export default function TokenRow({
           </p>
         </td>
 
-        {/* Deposits */}
-        {getColumn('Deposits') ? (
-          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
-              Deposits
-            </p>
-            <p
-              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
-              title={'$' + token.daiInToken}
-            >
-              {parseFloat(token.daiInToken) > 0.0 ? (
-                `$` +
-                formatNumberWithCommasAsThousandsSerperator(
-                  parseInt(token.daiInToken)
-                )
-              ) : (
-                <>&mdash;</>
-              )}
-            </p>
-          </td>
-        ) : (
-          <></>
-        )}
-
-        {/* %Locked */}
-        {getColumn('% Locked') ? (
-          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
-              % Locked
-            </p>
-            <p
-              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
-              title={parseInt(token.lockedPercentage) + ' %'}
-            >
-              {parseFloat(token.lockedPercentage) * 100.0 > 0.0 ? (
-                parseInt(token.lockedPercentage) + ' %'
-              ) : (
-                <>&mdash;</>
-              )}
-            </p>
-          </td>
-        ) : (
-          <></>
-        )}
-
         {/* 24H Change */}
-        {getColumn('24H Change') ? (
+        {getColumn('24H Change') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p
               className={classNames(
@@ -203,13 +159,52 @@ export default function TokenRow({
               %
             </p>
           </td>
-        ) : (
-          <></>
+        )}
+
+        {/* Deposits */}
+        {getColumn('Deposits') && (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
+              Deposits
+            </p>
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+              title={'$' + token.daiInToken}
+            >
+              {parseFloat(token.daiInToken) > 0.0 ? (
+                `$` +
+                formatNumberWithCommasAsThousandsSerperator(
+                  parseInt(token.daiInToken)
+                )
+              ) : (
+                <>&mdash;</>
+              )}
+            </p>
+          </td>
+        )}
+
+        {/* %Locked */}
+        {getColumn('% Locked') && (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
+              % Locked
+            </p>
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+              title={parseInt(token.lockedPercentage) + ' %'}
+            >
+              {parseFloat(token.lockedPercentage) * 100.0 > 0.0 ? (
+                parseInt(token.lockedPercentage) + ' %'
+              ) : (
+                <>&mdash;</>
+              )}
+            </p>
+          </td>
         )}
 
         {/* Year Income */}
-        {getColumn('1YR Income') ? (
-          <td className="hidden py-4 md:table-cell whitespace-nowrap">
+        {getColumn('1YR Income') && (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p
               className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
               title={'$' + yearIncome}
@@ -220,12 +215,10 @@ export default function TokenRow({
               )}
             </p>
           </td>
-        ) : (
-          <></>
         )}
 
         {/* Buy Button */}
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap text-center">
+        <td className="hidden py-4 md:table-cell whitespace-nowrap text-center">
           <button
             onClick={(e) => {
               e.stopPropagation()
