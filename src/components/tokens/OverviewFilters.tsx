@@ -155,7 +155,7 @@ const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
       case 3:
         return <Sparkles />
       case 4:
-        return <BadgeCheckIcon className="w-5 h-5 text-black dark:text-white" />
+        return <BadgeCheckIcon className="w-5 h-5" />
       case 5:
         return <Star />
       default:
