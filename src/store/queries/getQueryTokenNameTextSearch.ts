@@ -1,4 +1,5 @@
 import { gql } from 'graphql-request'
+import { ZERO_ADDRESS } from 'utils'
 
 export default function getQueryTokenNameTextSearch(
   marketIds: number[],
@@ -8,7 +9,8 @@ export default function getQueryTokenNameTextSearch(
   orderBy: string,
   orderDirection: string,
   search: string,
-  filterTokens: string[]
+  filterTokens: string[],
+  isVerifiedFilter: boolean
 ): string {
   const hexMarketIds = marketIds.map((id) => '0x' + id.toString(16))
   const inMarkets = hexMarketIds.map((id) => `"${id}"`).join(',')
@@ -25,9 +27,13 @@ export default function getQueryTokenNameTextSearch(
     filterTokensQuery += ']'
   }
 
+  const verifiedQuery = isVerifiedFilter
+    ? `where:{tokenOwner_not: "${ZERO_ADDRESS}"},`
+    : ''
+
   return gql`
     {
-      tokenNameSearch(skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}, where:{market_in:[${inMarkets}]${filterTokensQuery}}, text:${
+      tokenNameSearch(${verifiedQuery} skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}, where:{market_in:[${inMarkets}]${filterTokensQuery}}, text:${
     '"' + search + ':*"'
   }) {
           id

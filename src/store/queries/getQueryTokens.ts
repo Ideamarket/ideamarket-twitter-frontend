@@ -1,4 +1,5 @@
 import { gql } from 'graphql-request'
+import { ZERO_ADDRESS } from 'utils'
 
 export default function getQueryTokens(
   marketIds: number[],
@@ -7,7 +8,8 @@ export default function getQueryTokens(
   fromTs: number,
   orderBy: string,
   orderDirection: string,
-  filterTokens: string[]
+  filterTokens: string[],
+  isVerifiedFilter: boolean
 ): string {
   const hexMarketIds = marketIds.map((id) => '0x' + id.toString(16))
   let inMarkets = hexMarketIds.map((id) => `"${id}"`).join(',')
@@ -26,11 +28,16 @@ export default function getQueryTokens(
     inMarkets = null
   }
 
-  const marketsQuery = inMarkets ? `where:{market_in:[${inMarkets}]},` : ''
+  const verifiedQuery = isVerifiedFilter
+    ? `,tokenOwner_not: "${ZERO_ADDRESS}"`
+    : ''
+  const marketsQuery = inMarkets
+    ? `where:{market_in:[${inMarkets}]${verifiedQuery}},`
+    : ''
 
   return gql`
     {
-      ideaTokens(${marketsQuery} skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}${filterTokensQuery}) {
+      ideaTokens(${marketsQuery}${verifiedQuery} skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}${filterTokensQuery}) {
           id
           tokenID
           name
