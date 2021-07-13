@@ -13,11 +13,11 @@ export default function getQueryTokenNameTextSearch(
   isVerifiedFilter: boolean
 ): string {
   const hexMarketIds = marketIds.map((id) => '0x' + id.toString(16))
-  const inMarkets = hexMarketIds.map((id) => `"${id}"`).join(',')
+  let inMarkets = hexMarketIds.map((id) => `"${id}"`).join(',')
 
   let filterTokensQuery = ''
   if (filterTokens) {
-    filterTokensQuery = ',id_in:['
+    filterTokensQuery = 'id_in:['
     filterTokens.forEach((value, index) => {
       if (index > 0) {
         filterTokensQuery += ','
@@ -27,13 +27,21 @@ export default function getQueryTokenNameTextSearch(
     filterTokensQuery += ']'
   }
 
+  const marketsQuery = inMarkets ? `market_in:[${inMarkets}],` : ''
   const verifiedQuery = isVerifiedFilter
-    ? `where:{tokenOwner_not: "${ZERO_ADDRESS}"},`
+    ? `tokenOwner_not: "${ZERO_ADDRESS}",`
     : ''
+
+  const queries =
+    marketsQuery.length > 0 ||
+    verifiedQuery.length > 0 ||
+    filterTokensQuery.length > 0
+      ? `where:{${marketsQuery}${verifiedQuery}${filterTokensQuery}},`
+      : ''
 
   return gql`
     {
-      tokenNameSearch(${verifiedQuery} skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}, where:{market_in:[${inMarkets}]${filterTokensQuery}}, text:${
+      tokenNameSearch(${queries} skip:${skip}, first:${num}, orderBy:${orderBy}, orderDirection:${orderDirection}, text:${
     '"' + search + ':*"'
   }) {
           id
