@@ -23,6 +23,8 @@ type TradeInterfaceBoxProps = {
   isIdeaToken: boolean
   tokenValue: string
   slippage: number
+  exceedsBalance: any
+  isInputAmountGTSupply: boolean
 }
 
 const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
@@ -45,6 +47,8 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   isIdeaToken,
   tokenValue,
   slippage,
+  exceedsBalance,
+  isInputAmountGTSupply,
 }) => {
   const handleBuySellClick = () => {
     if (!txManager.isPending && tradeType === 'sell') setTradeType('buy')
@@ -183,6 +187,9 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
           <span className="text-gray-300">{slippageLabel}</span>
         </span>
       </div>
+      {(exceedsBalance || isInputAmountGTSupply) && label === 'Receive' && (
+        <div className="text-brand-red">Insufficient balance</div>
+      )}
     </div>
   )
 }

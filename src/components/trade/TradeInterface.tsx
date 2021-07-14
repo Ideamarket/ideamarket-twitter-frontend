@@ -429,6 +429,7 @@ export default function TradeInterface({
     setTradeType,
     txManager,
     slippage,
+    isInputAmountGTSupply: masterIdeaTokenAmount < 0,
   }
 
   const selectedTokenProps = {
@@ -562,9 +563,9 @@ export default function TradeInterface({
             </label>
             <Tooltip className="ml-2">
               <div className="w-32 md:w-64">
-                Lock tokens to show your long-term confidence in a listing.
-                You will be unable to sell or withdraw locked tokens for the
-                time period specified.
+                Lock tokens to show your long-term confidence in a listing. You
+                will be unable to sell or withdraw locked tokens for the time
+                period specified.
                 <br />
                 <br />
                 For more information, see{' '}
@@ -617,7 +618,7 @@ export default function TradeInterface({
               type="text"
               id="recipient-input"
               className={classNames(
-                'h-full border rounded-md sm:text-sm my-2 dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
+                'h-full border rounded-md sm:text-sm my-2 text-black dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
                 !ideaToken ||
                   (ideaToken && ideaToken.tokenOwner === ZERO_ADDRESS)
                   ? 'w-full'
@@ -683,15 +684,9 @@ export default function TradeInterface({
               </button>
             </div>
 
-            {exceedsBalance ? (
-              <div className="mt-2 text-xs text-center text-brand-red">
-                Insufficient {spendTokenSymbol.toUpperCase()} balance.
-              </div>
-            ) : (
-              <div className="mt-2 text-xs text-center text-gray-500">
-                Confirm transaction in wallet to complete.
-              </div>
-            )}
+            <div className="mt-2 text-xs text-center text-gray-500">
+              Confirm transaction in wallet to complete.
+            </div>
 
             <div
               className={classNames(
