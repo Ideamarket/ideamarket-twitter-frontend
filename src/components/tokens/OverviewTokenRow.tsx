@@ -236,6 +236,23 @@ export default function TokenRow({
           </td>
         )}
 
+        {/* Claimable Income */}
+        {getColumn('Claimable Income') ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+              title={'$' + claimableIncome}
+            >
+              $
+              {formatNumberWithCommasAsThousandsSerperator(
+                parseInt(claimableIncome)
+              )}
+            </p>
+          </td>
+        ) : (
+          <></>
+        )}
+
         {/* Buy Button */}
         <td className="hidden py-4 md:table-cell whitespace-nowrap text-center">
           <button
@@ -261,23 +278,6 @@ export default function TokenRow({
             ${formatNumber(tokenPrice)}
           </button>
         </td>
-
-        {/* Claimable Income */}
-        {getColumn('Claimable Income') ? (
-          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-            <p
-              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
-              title={'$' + claimableIncome}
-            >
-              $
-              {formatNumberWithCommasAsThousandsSerperator(
-                parseInt(claimableIncome)
-              )}
-            </p>
-          </td>
-        ) : (
-          <></>
-        )}
 
         {/* Star desktop */}
         <td className="hidden md:table-cell px-3 py-4 text-sm leading-5 text-gray-500 dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap">

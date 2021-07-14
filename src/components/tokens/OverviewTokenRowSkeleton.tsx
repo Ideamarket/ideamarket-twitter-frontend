@@ -57,6 +57,13 @@ export default function TokenRowSkeleton({
             <p className="h-4 mt-1 bg-gray-400 rounded"></p>
           </td>
         )}
+        {/* Claimable Income */}
+        {getColumn('Claimable Income') && (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
+            <p className="h-4 mt-1 bg-gray-400 rounded"></p>
+          </td>
+        )}
         {/* Buy Button */}
         <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
           <button className="w-24 h-10 bg-gray-400 rounded-lg">
@@ -69,17 +76,6 @@ export default function TokenRowSkeleton({
             <span className="invisible">$0.00</span>
           </button>
         </td>
-
-        {/* Claimable Income */}
-        {getColumn('Claimable Income') ? (
-          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-            <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
-            <p className="h-4 mt-1 bg-gray-400 rounded"></p>
-          </td>
-        ) : (
-          <></>
-        )}
-
         {/* Star */}
         <td className="px-3 py-4 md:pl-3 md:pr-6 whitespace-nowrap">
           <div className="flex items-center justify-center h-full">
