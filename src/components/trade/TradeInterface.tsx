@@ -193,17 +193,17 @@ export default function TradeInterface({
     selectedToken?.decimals
   )
 
-  function percentDifference(a, b) {
-    return 100 * Math.abs((a - b) / ((a + b) / 2))
+  function percentDecrease(a, b) {
+    return 100 * ((a - b) / Math.abs(a))
   }
 
   const slippage =
     tradeType === 'buy'
-      ? percentDifference(
+      ? percentDecrease(
           parseFloat(selectedTokenDAIValue),
           parseFloat(ideaTokenValue)
         )
-      : percentDifference(
+      : percentDecrease(
           parseFloat(ideaTokenValue),
           parseFloat(selectedTokenDAIValue)
         )
