@@ -138,7 +138,11 @@ export default function TokenDetails({
     queryMarket
   )
 
-  const { data: token, isLoading: isTokenLoading } = useQuery(
+  const {
+    data: token,
+    isLoading: isTokenLoading,
+    refetch,
+  } = useQuery(
     [`token-${marketName}-${tokenName}`, marketName, tokenName],
     querySingleToken
   )
@@ -712,7 +716,7 @@ export default function TokenDetails({
                 <TradeInterface
                   ideaToken={token}
                   market={market}
-                  onTradeSuccessful={() => {}}
+                  onTradeSuccessful={refetch}
                   onValuesChanged={() => {}}
                   resetOn={false}
                   centerTypeSelection={false}

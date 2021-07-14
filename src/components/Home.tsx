@@ -17,7 +17,6 @@ import { NETWORK } from 'store/networks'
 import Plus from '../assets/plus-white.svg'
 import { GlobalContext } from '../pages/_app'
 import { useWalletStore } from 'store/walletStore'
-import { Categories } from 'store/models/category'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'
 import { NextSeo } from 'next-seo'
 import {
@@ -67,6 +66,15 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     },
     {
       id: 5,
+      name: '24H Change',
+      content: '24H Change',
+      value: 'change',
+      sortable: true,
+      isOptional: true,
+      isSelectedAtStart: false,
+    },
+    {
+      id: 6,
       name: 'Deposits',
       content: 'Deposits',
       value: 'deposits',
@@ -75,7 +83,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isSelectedAtStart: true,
     },
     {
-      id: 6,
+      id: 7,
       name: '% Locked',
       content: '% Locked',
       value: 'locked',
@@ -84,7 +92,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isSelectedAtStart: true,
     },
     {
-      id: 7,
+      id: 8,
       name: '1YR Income',
       content: '1YR Income',
       value: 'income',
@@ -93,16 +101,16 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isSelectedAtStart: true,
     },
     {
-      id: 8,
+      id: 9,
       name: 'Trade',
-      content: 'Trade',
+      content: '',
       value: 'trade',
       sortable: false,
       isOptional: false,
       isSelectedAtStart: true,
     },
     {
-      id: 9,
+      id: 10,
       name: 'Claimable Income',
       content: 'Claimable Income',
       value: 'claimable',
@@ -111,7 +119,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isSelectedAtStart: false,
     },
     {
-      id: 10,
+      id: 11,
       name: 'Watch',
       content: 'Watch',
       value: 'watch',
@@ -121,6 +129,9 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     },
   ]
 
+  // After trade or list success, the token data needs to be refetched. This toggle does that.
+  const [tradeOrListSuccessToggle, setTradeOrListSuccessToggle] =
+    useState(false)
   const [selectedFilterId, setSelectedFilterId] = useState(Filters.TOP.id)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
@@ -135,6 +146,12 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
         c.isSelectedAtStart && DropdownFilters.COLUMNS.values.includes(c.name)
     )
     .map((c) => c.name)
+  if (
+    startingOptionalColumns.length ===
+    DropdownFilters.COLUMNS.values.length - 1
+  ) {
+    startingOptionalColumns.push('All')
+  }
   const markets = useMarketStore((state) => state.markets)
   const marketNames = markets.map((m) => m?.market?.name)
 
@@ -182,39 +199,44 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   )
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
   function onNameSearchChanged(nameSearch) {
-    setSelectedFilterId(Categories.TOP.id)
+    setSelectedFilterId(Filters.TOP.id)
     setNameSearch(nameSearch)
   }
   function onOrderByChanged(orderBy: string, direction: string) {
-    if (selectedFilterId === Categories.STARRED.id) {
+    if (
+      selectedFilterId === Filters.STARRED.id ||
+      selectedFilterId === Filters.VERIFIED.id
+    ) {
       return
     }
     if (orderBy === 'dayChange' && direction === 'desc') {
-      setSelectedFilterId(Categories.HOT.id)
+      setSelectedFilterId(Filters.HOT.id)
     } else if (orderBy === 'listedAt' && direction === 'desc') {
-      setSelectedFilterId(Categories.NEW.id)
+      setSelectedFilterId(Filters.NEW.id)
     } else {
-      setSelectedFilterId(Categories.TOP.id)
+      setSelectedFilterId(Filters.TOP.id)
     }
   }
   function onTradeClicked(token: IdeaToken, market: IdeaMarket) {
+    const onClose = () => setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(TradeModal, { ideaToken: token, market })
+        ModalService.open(TradeModal, { ideaToken: token, market }, onClose)
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(TradeModal, { ideaToken: token, market })
+      ModalService.open(TradeModal, { ideaToken: token, market }, onClose)
     }
   }
   function onListTokenClicked() {
+    const onClose = () => setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(ListTokenModal)
+        ModalService.open(ListTokenModal, {}, onClose)
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(ListTokenModal)
+      ModalService.open(ListTokenModal, {}, onClose)
     }
   }
   function onMarketChanged(markets) {
@@ -291,6 +313,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
                 getColumn={(column) => selectedColumns.has(column)}
                 onOrderByChanged={onOrderByChanged}
                 onTradeClicked={onTradeClicked}
+                tradeOrListSuccessToggle={tradeOrListSuccessToggle}
               />
             )}
           </div>

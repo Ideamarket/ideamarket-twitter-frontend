@@ -6,6 +6,7 @@ import {
   calculateCurrentPriceBN,
   formatNumber,
   formatNumberInt,
+  formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
   ZERO_ADDRESS,
 } from '../../utils'
@@ -103,7 +104,7 @@ export default function TokenCard({
                   {token.name}
                 </A>
               </span>
-              <span className="hidden md:block ml-2.5 mr-1">
+              <span className="hidden md:block ml-2.5 mr-1 w-5 h-5">
                 {marketSpecifics.getMarketSVGWhite()}
               </span>
               {token.tokenOwner !== ZERO_ADDRESS && (
@@ -120,7 +121,7 @@ export default function TokenCard({
           ) : (
             <div className="mt-1 text-sm flex">
               Rank {token.rank ? token.rank : '-'}
-              <span className="block md:hidden ml-2.5 mr-1">
+              <span className="block md:hidden ml-2.5 mr-1 w-5 h-5">
                 {marketSpecifics.getMarketSVGWhite()}
               </span>
               {token.tokenOwner !== ZERO_ADDRESS && (
@@ -151,7 +152,9 @@ export default function TokenCard({
             ) : parseFloat(token.daiInToken) <= 0.0 ? (
               <>&mdash;</>
             ) : (
-              <>{`$${formatNumber(token.daiInToken)}`}</>
+              <>{`$${formatNumberWithCommasAsThousandsSerperator(
+                parseInt(token.daiInToken)
+              )}`}</>
             )}
           </DetailsOverChartEntry>
 
@@ -164,7 +167,9 @@ export default function TokenCard({
             ) : parseFloat(token.supply) <= 0.0 ? (
               <>&mdash;</>
             ) : (
-              <>{`${formatNumber(token.supply)}`}</>
+              <>{`${formatNumberWithCommasAsThousandsSerperator(
+                parseInt(token.supply)
+              )}`}</>
             )}
           </DetailsOverChartEntry>
 

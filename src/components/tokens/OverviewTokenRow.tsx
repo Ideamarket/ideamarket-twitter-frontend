@@ -13,12 +13,12 @@ import {
   bigNumberTenPow18,
 } from 'utils'
 import { useTokenIconURL } from 'actions'
-import { BadgeCheckIcon } from '@heroicons/react/solid'
 import {
   investmentTokenToUnderlying,
   queryExchangeRate,
 } from 'store/compoundStore'
 import { useQuery } from 'react-query'
+import { BadgeCheckIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -93,7 +93,7 @@ export default function TokenRow({
         {/* Market */}
         <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
           <div className="flex items-center justify-end w-full h-full">
-            <div className="w-5 h-5 mr-2 md:mr-0">
+            <div className="w-5 h-auto mr-2 md:mr-0">
               {marketSpecifics.getMarketSVGTheme()}
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function TokenRow({
         {/* Icon and Name */}
         <td className="flex py-4 pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap">
           <div className="flex items-center w-full text-gray-900 dark:text-gray-200">
-            {showMarketSVG && marketSpecifics.getMarketOutlineSVG()}
+            {showMarketSVG && marketSpecifics.getMarketSVGTheme()}
             <div
               className={classNames(
                 'flex-shrink-0 w-7.5 h-7.5',
@@ -119,24 +119,30 @@ export default function TokenRow({
               )}
             </div>
             <div className="ml-4 text-base font-medium leading-5 truncate hover:underline">
-              <span>{token.name}</span>
+              <span>
+                {token.name.substr(
+                  0,
+                  token.name.length > 25 ? 25 : token.name.length
+                ) + (token.name.length > 25 ? '...' : '')}
+              </span>
             </div>
             {/* Desktop Verified Badge */}
             {token.tokenOwner !== ZERO_ADDRESS && (
-              <div className="hidden md:inline w-5 h-5 ml-1.5">
+              <div className="hidden md:inline w-5 h-5 ml-1.5 text-black dark:text-white">
                 <BadgeCheckIcon />
               </div>
             )}
           </div>
         </td>
         {/* Mobile Verified Badge */}
-        <td className="md:hidden flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
+        <td className="md:hidden flex items-center justify-center py-4 text-sm leading-5 text-center text-black dark:text-white md:table-cell whitespace-nowrap">
           <div className="flex items-center justify-end h-full">
             <div className="w-5 h-5">
               {token.tokenOwner !== ZERO_ADDRESS && <BadgeCheckIcon />}
             </div>
           </div>
         </td>
+
         {/* Price */}
         <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
@@ -149,8 +155,33 @@ export default function TokenRow({
             ${formatNumber(tokenPrice)}
           </p>
         </td>
+
+        {/* 24H Change */}
+        {getColumn('24H Change') && (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p
+              className={classNames(
+                'text-base font-medium leading-4 tracking-tightest-2 uppercase',
+                parseFloat(token.dayChange) >= 0.0
+                  ? 'text-brand-green'
+                  : 'text-brand-red'
+              )}
+              title={`${
+                parseFloat(token.dayChange) >= 0.0
+                  ? `+ ${parseInt(token.dayChange)}`
+                  : `- ${parseInt(token.dayChange.slice(1))}`
+              }%`}
+            >
+              {parseFloat(token.dayChange) >= 0.0
+                ? `+ ${parseInt(token.dayChange)}`
+                : `- ${parseInt(token.dayChange.slice(1))}`}
+              %
+            </p>
+          </td>
+        )}
+
         {/* Deposits */}
-        {getColumn('Deposits') ? (
+        {getColumn('Deposits') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
               Deposits
@@ -169,11 +200,10 @@ export default function TokenRow({
               )}
             </p>
           </td>
-        ) : (
-          <></>
         )}
+
         {/* %Locked */}
-        {getColumn('% Locked') ? (
+        {getColumn('% Locked') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
               % Locked
@@ -189,12 +219,10 @@ export default function TokenRow({
               )}
             </p>
           </td>
-        ) : (
-          <></>
         )}
 
         {/* Year Income */}
-        {getColumn('1YR Income') ? (
+        {getColumn('1YR Income') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p
               className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
@@ -206,20 +234,19 @@ export default function TokenRow({
               )}
             </p>
           </td>
-        ) : (
-          <></>
         )}
 
         {/* Buy Button */}
-        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
+        <td className="hidden py-4 md:table-cell whitespace-nowrap text-center">
           <button
             onClick={(e) => {
               e.stopPropagation()
               onTradeClicked(token, market)
             }}
-            className="w-24 h-10 text-base font-medium bg-white dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+            className="w-24 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
-            Buy
+            <ArrowSmUpIcon className="absolute ml-4 w-6 h-6" />
+            <span className="ml-3">Buy</span>
           </button>
         </td>
         {/* Buy Button mobile */}

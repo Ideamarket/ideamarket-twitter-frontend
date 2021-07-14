@@ -49,6 +49,14 @@ export const OverviewColumns = ({
             Income
           </>
         )
+      case 'change':
+        return (
+          <>
+            24H
+            <br />
+            Change
+          </>
+        )
       default:
         return column.content
     }
