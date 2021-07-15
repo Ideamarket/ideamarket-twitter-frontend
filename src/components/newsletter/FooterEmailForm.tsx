@@ -74,16 +74,16 @@ export default function EmailForm() {
           <div className="flex items-center justify-between mt-2">
             <label
               htmlFor="email"
-              className="flex-shrink-0 block text-sm font-medium text-gray-400"
+              className="flex-shrink-0 block text-sm font-medium text-gray-400 mr-2"
             >
-              Stay in the loop
+              Arbitrum L2 launch soon
             </label>
 
             <button
               type="submit"
               className="bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue focus:border-brand-blue"
             >
-              Submit
+              Notify me
             </button>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function EmailForm() {
             htmlFor="email"
             className="flex-shrink-0 block text-sm font-medium text-gray-400"
           >
-            Stay in the loop
+            Arbitrum L2 launch soon
           </label>
 
           <div>
@@ -120,7 +120,7 @@ export default function EmailForm() {
             type="submit"
             className="bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue focus:border-brand-blue"
           >
-            Submit
+            Notify me
           </button>
         </div>
         {/* Desktop END */}
