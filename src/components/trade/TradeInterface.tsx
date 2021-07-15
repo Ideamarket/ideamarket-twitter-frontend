@@ -463,6 +463,11 @@ export default function TradeInterface({
     tokenValue: ideaTokenValue,
   }
 
+  const labelSymbol =
+    tradeType === 'buy'
+      ? spendTokenSymbol.toUpperCase()
+      : selectedToken?.symbol.toUpperCase()
+
   return (
     <div>
       <div
