@@ -67,7 +67,7 @@ export default function TokenRowSkeleton({
         {getColumn('Claimable Income') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
-            <p className="h-4 mt-1 bg-gray-400 rounded"></p>
+            <p className="w-10 h-4 mt-1 bg-gray-400 rounded"></p>
           </td>
         )}
         {/* Buy Button */}
