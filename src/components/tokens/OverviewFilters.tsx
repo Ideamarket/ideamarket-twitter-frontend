@@ -42,7 +42,14 @@ export const DropdownFilters = {
   COLUMNS: {
     id: 2,
     name: 'Columns',
-    values: ['All', 'Deposits', '% Locked', '1YR Income', '24H Change'],
+    values: [
+      'All',
+      'Deposits',
+      '% Locked',
+      '1YR Income',
+      '24H Change',
+      'Claimable Income',
+    ],
   },
 }
 

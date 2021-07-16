@@ -41,6 +41,14 @@ export const OverviewColumns = ({
     switch (column.value) {
       case 'income':
         return <IncomeColumn />
+      case 'claimable':
+        return (
+          <>
+            Claimable
+            <br />
+            Income
+          </>
+        )
       case 'change':
         return (
           <>

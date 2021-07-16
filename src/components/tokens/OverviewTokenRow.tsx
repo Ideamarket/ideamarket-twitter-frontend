@@ -10,8 +10,14 @@ import {
   formatNumber,
   web3BNToFloatString,
   ZERO_ADDRESS,
+  bigNumberTenPow18,
 } from 'utils'
 import { useTokenIconURL } from 'actions'
+import {
+  investmentTokenToUnderlying,
+  queryExchangeRate,
+} from 'store/compoundStore'
+import { useQuery } from 'react-query'
 import { BadgeCheckIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -52,6 +58,19 @@ export default function TokenRow({
       market.rawHatchTokens
     ),
     tenPow18,
+    2
+  )
+
+  const {
+    data: compoundExchangeRate,
+    isLoading: isCompoundExchangeRateLoading,
+  } = useQuery('compound-exchange-rate', queryExchangeRate)
+
+  const claimableIncome = web3BNToFloatString(
+    investmentTokenToUnderlying(token.rawInvested, compoundExchangeRate).sub(
+      token.rawDaiInToken
+    ),
+    bigNumberTenPow18,
     2
   )
 
@@ -215,6 +234,23 @@ export default function TokenRow({
               )}
             </p>
           </td>
+        )}
+
+        {/* Claimable Income */}
+        {getColumn('Claimable Income') ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+              title={'$' + claimableIncome}
+            >
+              $
+              {formatNumberWithCommasAsThousandsSerperator(
+                parseInt(claimableIncome)
+              )}
+            </p>
+          </td>
+        ) : (
+          <></>
         )}
 
         {/* Buy Button */}

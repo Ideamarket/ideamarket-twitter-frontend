@@ -102,6 +102,15 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     },
     {
       id: 9,
+      name: 'Claimable Income',
+      content: 'Claimable Income',
+      value: 'claimable',
+      sortable: false,
+      isOptional: true,
+      isSelectedAtStart: false,
+    },
+    {
+      id: 10,
       name: 'Trade',
       content: '',
       value: 'trade',
@@ -110,7 +119,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isSelectedAtStart: true,
     },
     {
-      id: 10,
+      id: 11,
       name: 'Watch',
       content: 'Watch',
       value: 'watch',
