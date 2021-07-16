@@ -82,9 +82,7 @@ export default function TradeInterface({
 }: TradeInterfaceProps) {
   const { active, account } = useWeb3React()
   const [tradeType, setTradeType] = useState('buy')
-  const [recipientAddress, setRecipientAddress] = useState(
-    active ? account : ''
-  )
+  const [recipientAddress, setRecipientAddress] = useState('')
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
@@ -378,7 +376,7 @@ export default function TradeInterface({
             selectedTokenAmountBNLocal,
             maxSlippage,
             isLockChecked ? 31556952 : 0,
-            recipientAddress,
+            isGiftChecked ? recipientAddress : account,
           ]
         : [
             ideaToken.address,
@@ -386,7 +384,7 @@ export default function TradeInterface({
             ideaTokenAmountBNLocal,
             selectedTokenAmountBNLocal,
             maxSlippage,
-            recipientAddress,
+            isGiftChecked ? recipientAddress : account,
           ]
 
     try {
@@ -632,8 +630,8 @@ export default function TradeInterface({
                   ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                   : 'border-brand-red focus:border-brand-red focus:ring-red-500'
               )}
-              placeholder="ETH address"
-              value={recipientAddress || ''}
+              placeholder="Recipient address"
+              value={recipientAddress}
               onChange={(e) => {
                 setRecipientAddress(e.target.value)
               }}
