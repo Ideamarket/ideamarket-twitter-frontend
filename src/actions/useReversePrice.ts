@@ -153,7 +153,7 @@ export default function useReversePrice(
 
     async function run(fn) {
       if (!amount || amount === '') {
-        setOutputBN(new BigNumber('0'))
+        setOutputBN(new BN('0'))
         setOutput('0.0000')
         setIsLoading(false)
         return
@@ -163,7 +163,7 @@ export default function useReversePrice(
       if (!isCancelled) {
         const pow = new BigNumber('10').pow(new BigNumber('18'))
         setOutputBN(bn)
-        setOutput(web3BNToFloatString(bn, pow, 4))
+        setOutput(web3BNToFloatString(bn, pow, 8))
         setIsLoading(false)
       }
     }

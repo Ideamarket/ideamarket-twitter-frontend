@@ -175,6 +175,21 @@ export async function getUniswapDaiOutputSwap(
   return outputBN
 }
 
+/**
+ *  @param address The address to get the exchange rate of when paired with DAI
+ *
+ * @return string that represents the exchange rate of a pair of tokens
+ */
+export async function getExchangeRate(address: string) {
+  const inputTokenAddress =
+    address === ZERO_ADDRESS ? NETWORK.getExternalAddresses().weth : address
+  const outputTokenAddress = NETWORK.getExternalAddresses().dai
+  const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
+
+  // Uniswap references the exchange rate by the variable midPrice
+  return path.route.midPrice.toFixed(18)
+}
+
 async function getPair(
   pairContract,
   tokenA: Token,

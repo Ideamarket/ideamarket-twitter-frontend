@@ -21,6 +21,10 @@ type TradeInterfaceBoxProps = {
   selectedIdeaToken: TokenListEntry | null
   txManager: TransactionManager
   isIdeaToken: boolean
+  tokenValue: string
+  slippage: number
+  exceedsBalance: any
+  isInputAmountGTSupply: boolean
 }
 
 const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
@@ -41,6 +45,10 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   selectedIdeaToken,
   txManager,
   isIdeaToken,
+  tokenValue,
+  slippage,
+  exceedsBalance,
+  isInputAmountGTSupply,
 }) => {
   const handleBuySellClick = () => {
     if (!txManager.isPending && tradeType === 'sell') setTradeType('buy')
@@ -52,10 +60,21 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
 
   useEffect(() => {
     if (inputValue !== ideaTokenAmount) {
-      if (parseFloat(ideaTokenAmount) <= 0) {
+      if (isNaN(ideaTokenAmount) || parseFloat(ideaTokenAmount) <= 0) {
         setInputValue('') // If one input is 0, make other one 0 too
       } else {
-        setInputValue(ideaTokenAmount.toString())
+        // Determines how many decimals to show
+        const output8Decimals = parseFloat(
+          parseFloat(ideaTokenAmount).toFixed(8)
+        )
+        const output4Decimals = parseFloat(
+          parseFloat(ideaTokenAmount).toFixed(4)
+        )
+        setInputValue(
+          output8Decimals >= 1
+            ? output4Decimals.toString()
+            : output8Decimals.toString()
+        )
       }
     }
   }, [ideaTokenAmount])
@@ -75,6 +94,13 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
       setSelectedTokenAmount(setValue)
     }
   }
+
+  const slippageLabel =
+    slippage &&
+    ((tradeType === 'buy' && isIdeaToken) ||
+      (tradeType === 'sell' && !isIdeaToken))
+      ? ` (-${parseFloat(slippage.toFixed(3))}%)`
+      : ''
 
   return (
     <div className="relative px-5 py-4 mb-1 border border-gray-100 rounded-md bg-gray-50 dark:bg-gray-600 text-brand-new-dark">
@@ -145,7 +171,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
       </div>
       <div className="flex justify-between text-sm">
         <div className="text-gray-500 dark:text-white">
-          You have: {isTokenBalanceLoading ? '...' : tokenBalance}
+          You have: {isTokenBalanceLoading ? '...' : parseFloat(tokenBalance)}
           {!txManager.isPending && label === 'Spend' && (
             <span
               className="cursor-pointer text-brand-blue dark:text-blue-400"
@@ -156,7 +182,14 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
             </span>
           )}
         </div>
+        <span>
+          ~${tokenValue}
+          <span className="text-gray-300">{slippageLabel}</span>
+        </span>
       </div>
+      {(exceedsBalance || isInputAmountGTSupply) && label === 'Receive' && (
+        <div className="text-brand-red">Insufficient balance</div>
+      )}
     </div>
   )
 }

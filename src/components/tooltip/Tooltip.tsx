@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useState, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import classNames from 'classnames'
-import Info from '../../assets/info.svg'
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
 
 const NoSSRTooltipContent = dynamic(() => import('./TooltipContent'), {
@@ -11,7 +10,7 @@ const NoSSRTooltipContent = dynamic(() => import('./TooltipContent'), {
 export default function Tooltip({
   children,
   className,
-  IconComponent = Info,
+  IconComponent = QuestionMarkCircleIcon,
   placement,
 }: {
   children?: ReactNode
@@ -82,8 +81,8 @@ export default function Tooltip({
         {children}
       </NoSSRTooltipContent>
       <div className="w-4 h-4" ref={ref}>
-        <QuestionMarkCircleIcon
-          className="w-4 h-4 cursor-pointer text-brand-gray-4 dark:text-gray-200"
+        <IconComponent
+          className="w-4 h-4 cursor-pointer text-brand-gray-4 dark:text-white"
           onClick={handleShowToolTip}
         />
       </div>
