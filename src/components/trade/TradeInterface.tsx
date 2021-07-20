@@ -34,6 +34,7 @@ import { CogIcon } from '@heroicons/react/outline'
 import useReversePrice from 'actions/useReversePrice'
 import useTokenToDAI from 'actions/useTokenToDAI'
 import { useWeb3React } from '@web3-react/core'
+import { useENSAddress } from './hooks/useENSAddress'
 
 type NewIdeaToken = {
   symbol: string
@@ -83,6 +84,7 @@ export default function TradeInterface({
   const { active, account } = useWeb3React()
   const [tradeType, setTradeType] = useState('buy')
   const [recipientAddress, setRecipientAddress] = useState('')
+  const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
@@ -367,6 +369,9 @@ export default function TradeInterface({
       selectedToken.decimals,
       BigNumber.ROUND_DOWN
     )
+
+    const giftAddress = isENSAddressValid ? hexAddress : recipientAddress
+
     const args =
       tradeType === 'buy'
         ? [
@@ -376,7 +381,7 @@ export default function TradeInterface({
             selectedTokenAmountBNLocal,
             maxSlippage,
             isLockChecked ? 31556952 : 0,
-            isGiftChecked ? recipientAddress : account,
+            isGiftChecked ? giftAddress : account,
           ]
         : [
             ideaToken.address,
@@ -384,7 +389,7 @@ export default function TradeInterface({
             ideaTokenAmountBNLocal,
             selectedTokenAmountBNLocal,
             maxSlippage,
-            isGiftChecked ? recipientAddress : account,
+            isGiftChecked ? giftAddress : account,
           ]
 
     try {
@@ -400,12 +405,22 @@ export default function TradeInterface({
     setTradeToggle(!tradeToggle)
   }
 
+  // Did user type a valid ENS address or hex-address?
+  const isValidAddress = !isENSAddressValid ? isAddress(recipientAddress) : true
+
+  const isApproveButtonDisabled =
+    !isValid ||
+    exceedsBalance ||
+    !isMissingAllowance ||
+    txManager.isPending ||
+    (isGiftChecked && !isValidAddress)
+
   const isTradeButtonDisabled =
     txManager.isPending ||
     !isValid ||
     exceedsBalance ||
     isMissingAllowance ||
-    (isGiftChecked && !isAddress(recipientAddress))
+    (isGiftChecked && !isValidAddress)
 
   const marketSpecifics = getMarketSpecificsByMarketName(market?.name)
   const { tokenIconURL } = useTokenIconURL({
@@ -626,7 +641,7 @@ export default function TradeInterface({
                   (ideaToken && ideaToken.tokenOwner === ZERO_ADDRESS)
                   ? 'w-full'
                   : 'w-full md:w-96',
-                isAddress(recipientAddress)
+                isAddress(recipientAddress) || isENSAddressValid
                   ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                   : 'border-brand-red focus:border-brand-red focus:ring-red-500'
               )}
@@ -663,13 +678,7 @@ export default function TradeInterface({
               unlockPermanent={isUnlockPermanentChecked}
               txManager={txManager}
               setIsMissingAllowance={setIsMissingAllowance}
-              disable={
-                !isValid ||
-                exceedsBalance ||
-                !isMissingAllowance ||
-                txManager.isPending ||
-                (isGiftChecked && !isAddress(recipientAddress))
-              }
+              disable={isApproveButtonDisabled}
               key={approveButtonKey}
             />
             <div className="mt-4 ">
