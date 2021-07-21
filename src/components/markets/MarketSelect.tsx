@@ -17,7 +17,7 @@ export default function MarketSelect({
 
   const selectMarketFormat = (entry) => (
     <div className="flex items-center dark:text-gray-300 text-gray-500 ">
-      <div>
+      <div className="w-4">
         {entry?.market?.name
           ? theme === 'dark'
             ? getMarketSpecificsByMarketName(
