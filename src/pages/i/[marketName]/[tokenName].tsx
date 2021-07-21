@@ -10,11 +10,11 @@ import {
   ListingOverview,
   VerifyModal,
   CircleSpinner,
-  WatchingStarButton,
   A,
   MutualTokensList,
   DefaultLayout,
   WalletModal,
+  WatchingStar,
 } from 'components'
 import {
   querySupplyRate,
@@ -185,6 +185,17 @@ export default function TokenDetails({
   } = useQuery('compound-exchange-rate', queryExchangeRate)
 
   const txManager = useTransactionManager()
+
+  const claimableInterest = token
+    ? web3BNToFloatString(
+        investmentTokenToUnderlying(
+          token.rawInvested,
+          compoundExchangeRate
+        ).sub(token.rawDaiInToken),
+        bigNumberTenPow18,
+        2
+      )
+    : '0.00'
 
   useEffect(() => {
     const now = Math.floor(Date.now() / 1000)
@@ -414,16 +425,22 @@ export default function TokenDetails({
           </div>
         </div>
 
-        <div className="px-2 pb-5 mx-auto mt-12 text-white transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
+        <div className="px-2 pb-5 mx-auto mt-12 transform md:mt-10 -translate-y-30 md:-translate-y-28 max-w-88 md:max-w-304">
           <div className="flex flex-col md:grid md:grid-cols-2">
             <div className="flex flex-col">
               <div className="h-full p-5 mb-5 bg-white dark:bg-gray-700 dark:border-gray-500 border rounded-md md:mr-5 border-brand-border-gray">
-                <div className="flex flex-col justify-between lg:flex-row">
+                <div className="flex flex-row justify-between">
                   <div>
                     {isLoading ? (
                       <DetailsSkeleton />
                     ) : (
-                      <>
+                      <div
+                        className={classNames(
+                          token.tokenOwner === ZERO_ADDRESS
+                            ? 'hidden'
+                            : 'inline-block'
+                        )}
+                      >
                         <div className="inline-block pr-6">
                           <div className="text-sm font-semibold text-brand-new-dark dark:text-gray-400">
                             Listed on
@@ -459,24 +476,19 @@ export default function TokenDetails({
                             )}
                           </div>
                         </div>
-                      </>
-                    )}
-                  </div>
-                  <div>
-                    {isLoading ? (
-                      <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0 animate-pulse">
-                        <div className="h-12 bg-gray-400 rounded w-28"></div>
-                        <div className="h-12 bg-gray-400 rounded w-28"></div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0">
-                        <WatchingStarButton token={token} />
                       </div>
                     )}
                   </div>
-                </div>
-                <div className="mt-5 mb-3 text-sm font-semibold md:mt-8 text-brand-gray-2 dark:text-gray-400">
-                  Listing Owner Options
+                  {isLoading ? (
+                    <div className="flex flex-row mt-5 space-x-2 lg:flex-col lg:mt-0 lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0 animate-pulse">
+                      <div className="h-12 bg-gray-400 rounded w-28"></div>
+                      <div className="h-12 bg-gray-400 rounded w-28"></div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-row justify-end space-x-2 lg:flex-col lg:space-x-0 lg:space-y-2 xl:flex-row xl:space-x-2 xl:space-y-0">
+                      <WatchingStar token={token} />
+                    </div>
+                  )}
                 </div>
                 {isLoading ? (
                   <>
@@ -492,32 +504,29 @@ export default function TokenDetails({
                     </div>
                   </>
                 ) : token.tokenOwner === ZERO_ADDRESS ? (
-                  <>
-                    <div className="font-medium text-brand-gray-2 dark:text-gray-400">
-                      <div className="text-xs">
-                        Verify ownership of this {market ? market.name : ''}{' '}
-                        account to withdraw accumulated interest.
-                      </div>
-                    </div>
-                    <div className="mt-3 mb-2 text-sm md:mb-5 text-brand-blue dark:text-blue-500">
+                  <div className="flex flex-col items-center text-xl">
+                    <span>Claimable interest</span>
+                    <span className="font-semibold">${claimableInterest}</span>
+                    <div className="mt-5 mb-2 text-sm md:mb-5 text-brand-blue dark:text-blue-500">
                       {marketSpecifics.isVerificationEnabled() ? (
-                        <div
-                          className="font-semibold cursor-pointer hover:underline"
+                        <button
+                          className="flex items-center justify-center h-12 w-64 text-center font-semibold bg-white border-2 dark:bg-gray-500 dark:text-gray-300 rounded-lg hover:bg-brand-blue hover:text-white border-brand-blue text-brand-blue"
                           onClick={() => {
                             ModalService.open(VerifyModal, { market, token })
                           }}
                         >
                           Verify Ownership
-                        </div>
+                        </button>
                       ) : (
-                        <div className="font-semibold">
-                          Verification not yet enabled
-                        </div>
+                        <div>Verification not yet enabled</div>
                       )}
                     </div>
-                  </>
+                  </div>
                 ) : (
                   <>
+                    <div className="mt-5 mb-3 text-sm font-semibold md:mt-8 text-brand-gray-2 dark:text-gray-400">
+                      Listing Owner Options
+                    </div>
                     <div className="font-medium text-brand-gray-2">
                       <div className="text-xs">
                         {!web3 ||
@@ -533,16 +542,7 @@ export default function TokenDetails({
                       </div>
                     </div>
                     <div className="mt-2.5 text-sm text-brand-blue dark:text-gray-200">
-                      Available interest:{' '}
-                      {web3BNToFloatString(
-                        investmentTokenToUnderlying(
-                          token.rawInvested,
-                          compoundExchangeRate
-                        ).sub(token.rawDaiInToken),
-                        bigNumberTenPow18,
-                        2
-                      )}{' '}
-                      DAI
+                      Available interest: {claimableInterest} DAI
                     </div>
                     <div className="flex mt-3 mb-2 text-sm md:mb-5 text-brand-blue">
                       <button
@@ -603,7 +603,7 @@ export default function TokenDetails({
                       htmlFor="perm_link"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Permanent link
+                      Permalink
                     </label>
                     <div className="flex mt-1 rounded-md shadow-sm">
                       <div className="relative flex items-stretch flex-grow focus-within:z-10">
@@ -726,14 +726,14 @@ export default function TokenDetails({
                   disabled={false}
                 />
               ) : (
-                <div className="flex items-center justify-center h-full p-18 md:p-0">
+                <div className="flex justify-center p-18 md:p-0 md:mt-24">
                   <button
                     onClick={() => {
                       ModalService.open(WalletModal)
                     }}
-                    className="p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
+                    className="w-44 p-2.5 text-xl text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
                   >
-                    Connect Wallet to View
+                    Buy / Sell
                   </button>
                 </div>
               )}

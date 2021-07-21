@@ -24,7 +24,7 @@ export default function WatchingStar({ token }: { token: IdeaToken }) {
   } else {
     return (
       <Star
-        className="w-5 cursor-pointer fill-current text-brand-gray-4 dark:text-gray-300"
+        className="w-5 cursor-pointer fill-current text-brand-blue dark:text-gray-300"
         onClick={onClick}
       />
     )
