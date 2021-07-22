@@ -5,8 +5,15 @@ import {
   setIsWatching,
   useIdeaMarketsStore,
 } from 'store/ideaMarketsStore'
+import classNames from 'classnames'
 
-export default function WatchingStar({ token }: { token: IdeaToken }) {
+export default function WatchingStar({
+  token,
+  className = '',
+}: {
+  token: IdeaToken
+  className?: any
+}) {
   const watching = useIdeaMarketsStore((state) => state.watching[token.address])
 
   function onClick(e) {
@@ -17,14 +24,20 @@ export default function WatchingStar({ token }: { token: IdeaToken }) {
   if (watching) {
     return (
       <StarOn
-        className="w-5 cursor-pointer fill-current text-brand-gray-4 dark:text-gray-300"
+        className={classNames(
+          className,
+          'w-5 cursor-pointer fill-current text-brand-gray-4 dark:text-gray-300'
+        )}
         onClick={onClick}
       />
     )
   } else {
     return (
       <Star
-        className="w-5 cursor-pointer fill-current text-brand-blue dark:text-gray-300"
+        className={classNames(
+          className,
+          'w-5 cursor-pointer fill-current text-brand-blue dark:text-gray-300'
+        )}
         onClick={onClick}
       />
     )
