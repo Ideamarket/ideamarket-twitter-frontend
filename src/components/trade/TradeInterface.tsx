@@ -55,7 +55,10 @@ type TradeInterfaceProps = {
     isUnlockOnceChecked: boolean,
     isUnlockPermanentChecked: boolean,
     isValid: boolean,
-    recipientAddress: string
+    recipientAddress: string,
+    isENSAddressValid: boolean | string,
+    hexAddress: boolean | string,
+    isGiftChecked: boolean
   ) => void
   resetOn: boolean
   centerTypeSelection: boolean
@@ -320,7 +323,10 @@ export default function TradeInterface({
       isUnlockOnceChecked,
       isUnlockPermanentChecked,
       isValid,
-      recipientAddress
+      recipientAddress,
+      isENSAddressValid,
+      hexAddress,
+      isGiftChecked
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -336,6 +342,9 @@ export default function TradeInterface({
     isCalculatedIdeaTokenAmountLoading,
     isCalculatedTokenAmountLoading,
     recipientAddress,
+    isENSAddressValid,
+    hexAddress,
+    isGiftChecked,
   ])
 
   async function maxButtonClicked() {

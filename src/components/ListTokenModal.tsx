@@ -7,7 +7,7 @@ import {
   useTokenIconURL,
 } from 'actions'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import { useTransactionManager } from 'utils'
+import { isAddress, useTransactionManager } from 'utils'
 import { NETWORK } from 'store/networks'
 import { Modal, MarketSelect, TradeInterface } from './'
 import ApproveButton from './trade/ApproveButton'
@@ -15,6 +15,7 @@ import { useContractStore } from 'store/contractStore'
 import BN from 'bn.js'
 import CircleSpinner from './animations/CircleSpinner'
 import A from './A'
+import { useWeb3React } from '@web3-react/core'
 
 export default function ListTokenModal({ close }: { close: () => void }) {
   const PAGES = {
@@ -23,6 +24,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     ERROR: 2,
   }
 
+  const { active, account } = useWeb3React()
   const [page, setPage] = useState(PAGES.LIST)
   const [selectedMarket, setSelectedMarket] = useState(undefined)
 
@@ -41,6 +43,9 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
   const [recipientAddress, setRecipientAddress] = useState('')
+  const [isENSAddressValid, setIsENSAddressValid] = useState(false)
+  const [hexAddress, setHexAddress] = useState('')
+  const [isGiftChecked, setIsGiftChecked] = useState(false)
 
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
     useState(false)
@@ -75,6 +80,24 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     )} on @ideamarket_io`
   )
 
+  // Did user type a valid ENS address or hex-address?
+  const isValidAddress = !isENSAddressValid ? isAddress(recipientAddress) : true
+
+  const isApproveButtonDisabled =
+    selectedMarket === undefined ||
+    !isMissingAllowance ||
+    !isValidTokenName ||
+    txManager.isPending ||
+    (isWantBuyChecked && !isBuyValid) ||
+    (isGiftChecked && !isValidAddress)
+
+  const isTradeButtonDisabled =
+    selectedMarket === undefined ||
+    !isValidTokenName ||
+    txManager.isPending ||
+    (isWantBuyChecked && (isMissingAllowance || !isBuyValid)) ||
+    (isGiftChecked && !isValidAddress)
+
   async function tokenNameInputChanged(val) {
     setIsTokenIconLoading(true)
 
@@ -99,7 +122,10 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     isUnlockOnceChecked: boolean,
     isUnlockPermanentChecked: boolean,
     isValid: boolean,
-    recipientAddress: string
+    recipientAddress: string,
+    isENSAddressValid: boolean,
+    hexAddress: string,
+    isGiftChecked: boolean
   ) {
     setBuyInputAmountBN(tokenAmount)
     setBuyPayWithAddress(tokenAddress)
@@ -110,6 +136,9 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     setIsUnlockPermanentChecked(isUnlockPermanentChecked)
     setIsBuyValid(isValid)
     setRecipientAddress(recipientAddress)
+    setIsENSAddressValid(isENSAddressValid)
+    setHexAddress(hexAddress)
+    setIsGiftChecked(isGiftChecked)
   }
 
   async function listClicked() {
@@ -118,6 +147,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     ).convertUserInputToTokenName(tokenName)
 
     if (isWantBuyChecked) {
+      const giftAddress = isENSAddressValid ? hexAddress : recipientAddress
       try {
         await txManager.executeTx(
           'List and buy',
@@ -129,7 +159,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           buyInputAmountBN,
           buySlippage,
           buyLock ? 31556952 : 0,
-          recipientAddress
+          isGiftChecked ? giftAddress : account
         )
       } catch (ex) {
         console.log(ex)
@@ -321,13 +351,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
                   unlockPermanent={isUnlockPermanentChecked}
                   txManager={txManager}
                   setIsMissingAllowance={setIsMissingAllowance}
-                  disable={
-                    selectedMarket === undefined ||
-                    !isMissingAllowance ||
-                    !isValidTokenName ||
-                    txManager.isPending ||
-                    (isWantBuyChecked && !isBuyValid)
-                  }
+                  disable={isApproveButtonDisabled}
                   key={approveButtonKey}
                 />
               </div>
@@ -342,12 +366,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
                       ? 'text-brand-gray-2 bg-brand-gray dark:bg-gray-500 dark:border-gray-500 dark:text-gray-300 cursor-default border-brand-gray'
                       : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
                   )}
-                  disabled={
-                    selectedMarket === undefined ||
-                    !isValidTokenName ||
-                    txManager.isPending ||
-                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
-                  }
+                  disabled={isTradeButtonDisabled}
                   onClick={listClicked}
                 >
                   {isWantBuyChecked ? 'List & Buy' : 'List'}
