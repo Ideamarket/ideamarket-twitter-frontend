@@ -19,7 +19,7 @@ export default function UnverifiedListing({
               ModalService.open(VerifyModal, { market, token })
             }}
           >
-            Verify Ownership
+            Claim your new income stream
           </button>
         ) : (
           <div>Verification not yet enabled</div>

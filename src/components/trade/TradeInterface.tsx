@@ -556,14 +556,10 @@ export default function TradeInterface({
             : { ...selectedTokenProps })}
         />
 
-        <div
-          className={classNames(
-            'flex items-center justify-between my-2 text-sm'
-          )}
-        >
+        <div className={classNames('flex flex-col my-2 text-sm')}>
           <div
             className={classNames(
-              tradeType === 'sell' && 'invisible',
+              tradeType === 'sell' && 'hidden',
               'flex items-center cursor-pointer'
             )}
           >
@@ -628,7 +624,7 @@ export default function TradeInterface({
                   : 'text-gray-500 dark:text-white'
               )}
             >
-              Gift this {tradeType}
+              Gift
             </label>
             <Tooltip className="ml-2">
               <div className="w-32 md:w-64">
@@ -645,7 +641,7 @@ export default function TradeInterface({
               type="text"
               id="recipient-input"
               className={classNames(
-                'h-full border rounded-md sm:text-sm my-2 text-black dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
+                'h-full border rounded-md sm:text-sm my-1 text-black dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
                 !ideaToken ||
                   (ideaToken && ideaToken.tokenOwner === ZERO_ADDRESS)
                   ? 'w-full'
@@ -664,7 +660,7 @@ export default function TradeInterface({
               ideaToken.tokenOwner &&
               ideaToken.tokenOwner !== ZERO_ADDRESS && (
                 <button
-                  className="p-1 mb-2 md:mb-0 cursor-pointer text-base font-medium bg-white dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 hover:bg-brand-blue"
+                  className="p-1 mt-1 md:mt-0 cursor-pointer text-base font-medium bg-white dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 hover:bg-brand-blue"
                   onClick={() => setRecipientAddress(ideaToken.tokenOwner)}
                 >
                   Listing owner
