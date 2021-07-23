@@ -118,15 +118,6 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       isOptional: false,
       isSelectedAtStart: true,
     },
-    {
-      id: 11,
-      name: 'Watch',
-      content: 'Watch',
-      value: 'watch',
-      sortable: false,
-      isOptional: false,
-      isSelectedAtStart: true,
-    },
   ]
 
   // After trade or list success, the token data needs to be refetched. This toggle does that.
