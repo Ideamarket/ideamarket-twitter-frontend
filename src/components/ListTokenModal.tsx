@@ -359,10 +359,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
                 <button
                   className={classNames(
                     'py-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium',
-                    selectedMarket === undefined ||
-                      !isValidTokenName ||
-                      txManager.isPending ||
-                      (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
+                    isTradeButtonDisabled
                       ? 'text-brand-gray-2 bg-brand-gray dark:bg-gray-500 dark:border-gray-500 dark:text-gray-300 cursor-default border-brand-gray'
                       : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
                   )}
