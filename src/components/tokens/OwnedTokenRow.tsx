@@ -197,7 +197,7 @@ export default function TokenRow({
           </p>
         </td>
         {/* Lock Button */}
-        <td className="hidden md:table-cell py-4 whitespace-nowrap">
+        <td className="px-4 md:px-0 py-4 whitespace-nowrap">
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -209,7 +209,7 @@ export default function TokenRow({
           </button>
         </td>
         {/* Add to Metamask button */}
-        <td className="pr-4 md:px-4 py-4">
+        <td className="px-4 py-4">
           <div className="flex items-center w-full h-full">
             <AddToMetamaskButton token={token} />
           </div>
