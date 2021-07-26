@@ -343,7 +343,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
               <div className="">
                 <ApproveButton
                   tokenAddress={buyPayWithAddress}
-                  tokenSymbol={buyPayWithSymbol}
+                  tokenName={buyPayWithSymbol}
                   spenderAddress={multiActionContractAddress}
                   requiredAllowance={
                     isWantBuyChecked ? buyInputAmountBN : new BN('0')

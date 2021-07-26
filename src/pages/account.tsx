@@ -44,16 +44,23 @@ export default function MyTokens() {
 
   const address = useWalletStore((state) => state.address)
 
-  const { data: rawOwnedPairs, isLoading: isOwnedPairsDataLoading } = useQuery(
+  const {
+    data: rawOwnedPairs,
+    isLoading: isOwnedPairsDataLoading,
+    refetch: refetchOwned,
+  } = useQuery(
     ['owned-tokens', selectedMarketOwnedTokens, address],
     queryOwnedTokensMaybeMarket
   )
 
-  const { data: rawLockedPairs, isLoading: isLockedPairsDataLoading } =
-    useQuery(
-      ['locked-tokens', selectedMarketLockedTokens, address],
-      queryLockedTokens
-    )
+  const {
+    data: rawLockedPairs,
+    isLoading: isLockedPairsDataLoading,
+    refetch: refetchLocked,
+  } = useQuery(
+    ['locked-tokens', selectedMarketLockedTokens, address],
+    queryLockedTokens
+  )
 
   const [table, setTable] = useState('holdings')
 
@@ -93,6 +100,11 @@ export default function MyTokens() {
         : '0.00'
     )
   }, [rawOwnedPairs, rawLockedPairs])
+
+  function refetch() {
+    refetchOwned()
+    refetchLocked()
+  }
 
   return (
     <>
@@ -199,6 +211,7 @@ export default function MyTokens() {
                     isPairsDataLoading={isOwnedPairsDataLoading}
                     currentPage={ownedTokensTablePage}
                     setCurrentPage={setOwnedTokensTablePage}
+                    refetch={refetch}
                   />
                 )}
                 {table === 'listings' && web3 !== undefined && (

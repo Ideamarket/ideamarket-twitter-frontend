@@ -12,6 +12,7 @@ type State = {
   exchangeContract: any
   multiActionContract: any
   uniswapFactoryContract: any
+  ideaTokenVaultContract: any
 }
 
 export const useContractStore = create<State>((set) => ({
@@ -20,6 +21,7 @@ export const useContractStore = create<State>((set) => ({
   exchangeContract: undefined,
   multiActionContract: undefined,
   uniswapFactoryContract: undefined,
+  ideaTokenVaultContract: undefined,
 }))
 
 export function clearContracts() {
@@ -29,6 +31,7 @@ export function clearContracts() {
     exchangeContract: undefined,
     multiActionContract: undefined,
     uniswapFactoryContract: undefined,
+    ideaTokenVaultContract: undefined,
   })
 }
 
@@ -68,12 +71,19 @@ export function initContractsFromWeb3(web3: Web3) {
     { from: web3.eth.defaultAccount }
   )
 
+  const ideaTokenVaultContract = new web3.eth.Contract(
+    abis.ideaTokenVault as any,
+    deployedAddresses.ideaTokenVault,
+    { from: web3.eth.defaultAccount }
+  )
+
   useContractStore.setState({
     daiContract: daiContract,
     factoryContract: factoryContract,
     exchangeContract: exchangeContract,
     multiActionContract: multiActionContract,
     uniswapFactoryContract: uniswapFactoryContract,
+    ideaTokenVaultContract: ideaTokenVaultContract,
   })
 }
 
