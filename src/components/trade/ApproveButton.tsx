@@ -87,7 +87,7 @@ export default function ApproveButton({
         <div className="w-32 md:w-64">
           The Ideamarket smart contract needs your approval to interact with
           your {tokenName} balance. After you grant permission, the{' '}
-          {isLock ? 'Lock' : 'Buy/Sell'} button will be enabled. Select 'unlock
+          {isLock ? 'Lock' : 'Buy/Sell'} button will be enabled. Select 'allow
           permanent' in Settings (⚙️) to permanently enable {tokenName}{' '}
           {isLock ? 'locking' : 'spending'} from this wallet.
         </div>

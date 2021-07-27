@@ -38,7 +38,7 @@ export default function AdvancedOptions({
               : 'text-brand-gray-2 dark:text-gray-400'
           )}
         >
-          Unlock once {unlockText}
+          Allow once {unlockText}
         </label>
       </div>
 
@@ -63,7 +63,7 @@ export default function AdvancedOptions({
               : 'text-brand-gray-2 dark:text-gray-400'
           )}
         >
-          Unlock permanent {unlockText}
+          Allow permanent {unlockText}
         </label>
       </div>
     </>
