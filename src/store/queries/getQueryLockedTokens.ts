@@ -22,6 +22,7 @@ export default function getQueryLockedTokens({
           id
           name
           supply
+          tokenOwner
           market {
             marketID
             name
