@@ -25,7 +25,7 @@ export default function LockModal({
   refetch: any
 }) {
   const txManager = useTransactionManager()
-  const [amountToLock, setAmountToLock] = useState('0')
+  const [amountToLock, setAmountToLock] = useState('')
   const { account } = useWeb3React()
 
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
@@ -40,13 +40,23 @@ export default function LockModal({
   const isApproveButtonDisabled =
     txManager.isPending ||
     amountToLock === '0' ||
+    amountToLock === '' ||
     !/^\d*\.?\d*$/.test(amountToLock) ||
     !isMissingAllowance
   const isLockButtonDisabled =
     txManager.isPending ||
     amountToLock === '0' ||
+    amountToLock === '' ||
     !/^\d*\.?\d*$/.test(amountToLock) ||
     isMissingAllowance
+
+  function onInputChanged(event) {
+    const oldValue = amountToLock
+    const newValue = event.target.value
+    const setValue = /^\d*\.?\d*$/.test(newValue) ? newValue : oldValue
+
+    setAmountToLock(setValue)
+  }
 
   async function onLockClicked() {
     const amount = floatToWeb3BN(amountToLock, 18, BigNumber.ROUND_DOWN)
@@ -90,11 +100,11 @@ export default function LockModal({
           <p>Amount of {token.name} upvotes to lock for 1 year</p>
           <input
             className={classNames(
-              'pl-2 w-40 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white'
+              'pl-2 w-40 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600'
             )}
-            onChange={(e) => {
-              setAmountToLock(e.target.value)
-            }}
+            min="0"
+            placeholder="0.0"
+            onChange={onInputChanged}
             value={amountToLock}
           />
           <ApproveButton
@@ -127,7 +137,7 @@ export default function LockModal({
 
           <div
             className={classNames(
-              'grid grid-cols-3 my-5 text-sm text-brand-new-dark font-semibold',
+              'w-full grid grid-cols-3 my-5 text-sm text-brand-new-dark font-semibold',
               txManager.isPending ? '' : 'invisible'
             )}
           >
