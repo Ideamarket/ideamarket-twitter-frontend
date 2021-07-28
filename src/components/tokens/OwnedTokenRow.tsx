@@ -16,6 +16,8 @@ import {
 import { A, AddToMetamaskButton } from 'components'
 import { useTokenIconURL } from 'actions'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
+import ModalService from 'components/modals/ModalService'
+import LockModal from 'components/trade/LockModal'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -24,11 +26,13 @@ export default function TokenRow({
   market,
   balance,
   balanceBN,
+  refetch,
 }: {
   token: IdeaToken
   market: IdeaMarket
   balance: string
   balanceBN: BN
+  refetch: () => void
 }) {
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
@@ -192,8 +196,20 @@ export default function TokenRow({
             %
           </p>
         </td>
+        {/* Lock Button */}
+        <td className="px-4 md:px-0 py-4 whitespace-nowrap">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              ModalService.open(LockModal, { token, refetch })
+            }}
+            className="w-20 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+          >
+            <span>Lock</span>
+          </button>
+        </td>
         {/* Add to Metamask button */}
-        <td className="pr-4 md:px-4 py-4">
+        <td className="px-4 py-4">
           <div className="flex items-center w-full h-full">
             <AddToMetamaskButton token={token} />
           </div>

@@ -231,7 +231,8 @@ export default function TradeInterface({
   const spendTokenAddress =
     tradeType === 'buy' ? selectedToken?.address : ideaToken.address
 
-  const spendTokenSymbol = tradeType === 'buy' ? selectedToken?.symbol : 'IDT'
+  const spendTokenSymbol =
+    tradeType === 'buy' ? selectedToken?.symbol : ideaToken.name
 
   const requiredAllowance =
     tradeType === 'buy' ? masterSelectedTokenAmount : masterIdeaTokenAmount
@@ -316,7 +317,7 @@ export default function TradeInterface({
     onValuesChanged(
       ideaTokenAmountBNLocal,
       selectedToken?.address,
-      selectedToken?.symbol,
+      spendTokenSymbol,
       selectedTokenAmountBNLocal,
       maxSlippage,
       isLockChecked,
@@ -345,6 +346,7 @@ export default function TradeInterface({
     isENSAddressValid,
     hexAddress,
     isGiftChecked,
+    spendTokenSymbol,
   ])
 
   async function maxButtonClicked() {
@@ -673,7 +675,7 @@ export default function TradeInterface({
           <>
             <ApproveButton
               tokenAddress={spendTokenAddress}
-              tokenSymbol={spendTokenSymbol}
+              tokenName={spendTokenSymbol}
               spenderAddress={spender}
               requiredAllowance={floatToWeb3BN(
                 requiredAllowance,

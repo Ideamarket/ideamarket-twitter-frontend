@@ -33,7 +33,7 @@ export default function PromoVideoModal({ close }: { close: () => void }) {
   }, [windowSize])
 
   return (
-    <Modal close={() => close()}>
+    <Modal close={close}>
       <div style={playerSize}>
         <iframe
           width="100%"

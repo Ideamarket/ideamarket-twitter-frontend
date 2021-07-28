@@ -45,6 +45,11 @@ const headers: Header[] = [
   },
   {
     title: '',
+    value: 'lockButton',
+    sortable: false,
+  },
+  {
+    title: '',
     value: 'metamaskButton',
     sortable: false,
   },
@@ -57,11 +62,13 @@ export default function OwnedTokenTable({
   isPairsDataLoading,
   currentPage,
   setCurrentPage,
+  refetch,
 }: {
   rawPairs: IdeaTokenMarketPair[]
   isPairsDataLoading: boolean
   currentPage: number
   setCurrentPage: (p: number) => void
+  refetch: () => void
 }) {
   const TOKENS_PER_PAGE = 6
 
@@ -233,6 +240,7 @@ export default function OwnedTokenTable({
                           market={pair.market}
                           balance={pair.balance}
                           balanceBN={pair.rawBalance}
+                          refetch={refetch}
                         />
                       ))}
 

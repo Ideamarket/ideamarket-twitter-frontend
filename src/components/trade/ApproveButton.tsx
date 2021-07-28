@@ -3,29 +3,30 @@ import classNames from 'classnames'
 import BN from 'bn.js'
 import _ from 'lodash'
 
-import Settings from '../../assets/settings.svg'
 import { useTokenAllowance, approveToken } from '../../actions'
 import { TransactionManager, web3UintMax } from '../../utils'
 import Tooltip from 'components/tooltip/Tooltip'
 
 export default function ApproveButton({
   tokenAddress,
-  tokenSymbol,
+  tokenName,
   spenderAddress,
   requiredAllowance,
   unlockPermanent,
   txManager,
   disable,
   setIsMissingAllowance,
+  isLock = false,
 }: {
   tokenAddress: string
-  tokenSymbol: string
+  tokenName: string
   spenderAddress: string
   requiredAllowance: BN
   unlockPermanent: boolean
   disable?: boolean
   txManager: TransactionManager
   setIsMissingAllowance: (b: boolean) => void
+  isLock?: boolean
 }) {
   const [isAllowanceLoading, allowance] = useTokenAllowance(
     tokenAddress,
@@ -79,14 +80,16 @@ export default function ApproveButton({
         !disable && approve()
       }}
     >
-      <span>Allow Ideamarket to spend your {tokenSymbol?.toUpperCase()}</span>
+      <span>
+        Allow Ideamarket to {isLock ? 'lock' : 'spend'} your {tokenName}
+      </span>
       <Tooltip className="inline-block ml-2">
         <div className="w-32 md:w-64">
           The Ideamarket smart contract needs your approval to interact with
-          your {tokenSymbol?.toUpperCase()} balance. After you grant permission,
-          the Buy/Sell button will be enabled. Select 'unlock permanent' in
-          Settings (⚙️) to permanently enable {tokenSymbol?.toUpperCase()}{' '}
-          spending from this wallet.
+          your {tokenName} balance. After you grant permission, the{' '}
+          {isLock ? 'Lock' : 'Buy/Sell'} button will be enabled. Select 'allow
+          permanent' in Settings (⚙️) to permanently enable {tokenName}{' '}
+          {isLock ? 'locking' : 'spending'} from this wallet.
         </div>
       </Tooltip>
     </div>
