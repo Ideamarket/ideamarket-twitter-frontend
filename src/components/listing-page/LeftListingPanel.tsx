@@ -16,7 +16,7 @@ type LeftListingPanelProps = {
   token: IdeaToken
   compoundExchangeRate: BN
   marketSpecifics: IMarketSpecifics
-  refetch: any
+  refetch: () => void
   rawMarketName: string
   rawTokenName: string
 }

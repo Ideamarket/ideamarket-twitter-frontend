@@ -164,7 +164,7 @@ export default function VerifyModal({
   }, [])
 
   return (
-    <Modal close={() => close()}>
+    <Modal close={close}>
       <div className="md:min-w-150 md:max-w-150">
         <div className="p-4 bg-top-mobile ">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">

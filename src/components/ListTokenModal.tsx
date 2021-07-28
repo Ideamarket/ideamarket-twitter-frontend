@@ -195,7 +195,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   }, [])
 
   return (
-    <Modal close={() => close()}>
+    <Modal close={close}>
       <div className="p-4 bg-top-mobile md:min-w-100">
         <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
           Add Listing

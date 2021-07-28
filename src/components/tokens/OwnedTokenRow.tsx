@@ -32,7 +32,7 @@ export default function TokenRow({
   market: IdeaMarket
   balance: string
   balanceBN: BN
-  refetch: any
+  refetch: () => void
 }) {
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)

@@ -11,7 +11,7 @@ export default function TradeModal({
   market: IdeaMarket
 }) {
   return (
-    <Modal close={() => close()}>
+    <Modal close={close}>
       <div className="pt-2">
         <TradeInterface
           ideaToken={ideaToken}

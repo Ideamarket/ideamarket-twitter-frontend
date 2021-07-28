@@ -68,7 +68,7 @@ export default function OwnedTokenTable({
   isPairsDataLoading: boolean
   currentPage: number
   setCurrentPage: (p: number) => void
-  refetch: any
+  refetch: () => void
 }) {
   const TOKENS_PER_PAGE = 6
 

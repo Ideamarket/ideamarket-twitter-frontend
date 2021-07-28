@@ -22,7 +22,7 @@ export default function LockModal({
 }: {
   close: () => void
   token: IdeaToken
-  refetch: any
+  refetch: () => void
 }) {
   const txManager = useTransactionManager()
   const [amountToLock, setAmountToLock] = useState('')
@@ -37,18 +37,14 @@ export default function LockModal({
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
 
-  const isApproveButtonDisabled =
+  const isInvalid =
     txManager.isPending ||
     amountToLock === '0' ||
     amountToLock === '' ||
-    !/^\d*\.?\d*$/.test(amountToLock) ||
-    !isMissingAllowance
-  const isLockButtonDisabled =
-    txManager.isPending ||
-    amountToLock === '0' ||
-    amountToLock === '' ||
-    !/^\d*\.?\d*$/.test(amountToLock) ||
-    isMissingAllowance
+    !/^\d*\.?\d*$/.test(amountToLock)
+
+  const isApproveButtonDisabled = isInvalid || !isMissingAllowance
+  const isLockButtonDisabled = isInvalid || isMissingAllowance
 
   function onInputChanged(event) {
     const oldValue = amountToLock
@@ -75,10 +71,9 @@ export default function LockModal({
   }
 
   return (
-    <Modal close={() => close()}>
+    <Modal close={close}>
       <div className="md:min-w-150 md:max-w-150">
-        <div className="flex justify-between">
-          <div />
+        <div className="flex justify-end">
           <Tooltip
             className="w-4 h-4 m-4 cursor-pointer text-brand-gray-4"
             placement="down"
