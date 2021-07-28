@@ -5,7 +5,7 @@ import {
   DefaultLayout,
   WalletModal,
 } from 'components'
-import { querySupplyRate, queryExchangeRate } from 'store/compoundStore'
+import { queryExchangeRate } from 'store/compoundStore'
 import { useWalletStore } from 'store/walletStore'
 import { querySingleToken, queryMarket } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
@@ -45,19 +45,13 @@ export default function TokenDetails({
     querySingleToken
   )
 
-  const { data: compoundSupplyRate, isLoading: isCompoundSupplyRateLoading } =
-    useQuery('compound-supply-rate', querySupplyRate)
-
   const {
     data: compoundExchangeRate,
     isLoading: isCompoundExchangeRateLoading,
   } = useQuery('compound-exchange-rate', queryExchangeRate)
 
   const isLoading =
-    isTokenLoading ||
-    isMarketLoading ||
-    isCompoundSupplyRateLoading ||
-    isCompoundExchangeRateLoading
+    isTokenLoading || isMarketLoading || isCompoundExchangeRateLoading
 
   const SEO = () => (
     <NextSeo

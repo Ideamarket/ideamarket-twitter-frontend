@@ -34,7 +34,7 @@ export default class TransactionManager {
         onHash && onHash(hash)
       })
     } catch (ex) {
-      throw `Transaction execution failed: ${ex}`
+      throw Error(`Transaction execution failed: ${ex}`)
     } finally {
       this.setIsPending(false)
       this.setName('')

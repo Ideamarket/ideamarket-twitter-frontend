@@ -30,7 +30,7 @@ export default async function submitVerification(
     if (ex.response?.data?.message) {
       throw ex.response.data.message
     } else {
-      throw 'Error while contacting verification service.'
+      throw Error('Error while contacting verification service.')
     }
   }
 }

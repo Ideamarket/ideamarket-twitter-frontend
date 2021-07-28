@@ -29,7 +29,7 @@ export default function useTokenAllowance(
     return () => {
       isCancelled = true
     }
-  }, updateOn.concat(web3))
+  }, [updateOn, web3, spenderAddress, tokenAddress])
 
-  return [isLoading, allowance]
+  return [allowance, isLoading]
 }

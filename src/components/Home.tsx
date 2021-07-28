@@ -160,18 +160,17 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       ? [...storedColumns]
       : startingOptionalColumns
     setSelectedColumns(new Set(initialColumns))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markets])
 
-  const {
-    data: compoundExchangeRate,
-    isLoading: isCompoundExchangeRateLoading,
-  } = useQuery('compound-exchange-rate', queryExchangeRate, {
-    refetchOnWindowFocus: false,
-  })
-  const {
-    data: interestManagerCDaiBalance,
-    isLoading: isInterestManagerCDaiBalance,
-  } = useQuery(
+  const { data: compoundExchangeRate } = useQuery(
+    'compound-exchange-rate',
+    queryExchangeRate,
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
+  const { data: interestManagerCDaiBalance } = useQuery(
     ['interest-manager-cdai-balance', interestManagerAddress],
     queryCDaiBalance,
     {

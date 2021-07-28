@@ -8,7 +8,6 @@ import {
 } from 'store/ideaMarketsStore'
 import { querySupplyRate } from 'store/compoundStore'
 import { useWalletStore } from 'store/walletStore'
-import { useWindowSize } from 'utils'
 import MyTokenRow from './MyTokenRow'
 import MyTokenRowSkeleton from './MyTokenRowSkeleton'
 
@@ -55,8 +54,6 @@ export default function MyTokenTable({
   currentPage: number
   setCurrentPage: (p: number) => void
 }) {
-  const windowSize = useWindowSize()
-  // const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
   const TOKENS_PER_PAGE = 6
 
   const address = useWalletStore((state) => state.address)

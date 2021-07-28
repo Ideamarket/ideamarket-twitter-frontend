@@ -1,14 +1,6 @@
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
-import {
-  ChainId,
-  Token,
-  TokenAmount,
-  Pair,
-  Route,
-  TradeType,
-  Trade,
-} from '@uniswap/sdk'
+import { Token, TokenAmount, Pair, Route, TradeType, Trade } from '@uniswap/sdk'
 import {
   getERC20Contract,
   getUniswapPairContract,
@@ -157,7 +149,7 @@ export async function getUniswapDaiOutputSwap(
   const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
 
   if (!path) {
-    throw 'No Uniswap path exists'
+    throw Error('No Uniswap path exists')
   }
 
   const trade = new Trade(

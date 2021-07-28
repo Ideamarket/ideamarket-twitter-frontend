@@ -1,4 +1,3 @@
-import { useWalletStore } from 'store/walletStore'
 import { useContractStore } from 'store/contractStore'
 import { ZERO_ADDRESS } from '../utils'
 import { NETWORK } from 'store/networks'

@@ -69,6 +69,7 @@ export default function WalletInterface({
       setConnectingWallet(0)
       setActivatingConnector(undefined)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activatingConnector, connector])
 
   async function onWalletClicked(wallet) {

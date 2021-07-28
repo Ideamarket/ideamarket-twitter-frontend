@@ -61,10 +61,10 @@ export default function TokenRow({
     2
   )
 
-  const {
-    data: compoundExchangeRate,
-    isLoading: isCompoundExchangeRateLoading,
-  } = useQuery('compound-exchange-rate', queryExchangeRate)
+  const { data: compoundExchangeRate } = useQuery(
+    'compound-exchange-rate',
+    queryExchangeRate
+  )
 
   const claimableIncome = web3BNToFloatString(
     investmentTokenToUnderlying(token.rawInvested, compoundExchangeRate).sub(

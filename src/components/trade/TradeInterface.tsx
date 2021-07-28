@@ -84,7 +84,7 @@ export default function TradeInterface({
   unlockText,
   newIdeaToken,
 }: TradeInterfaceProps) {
-  const { active, account } = useWeb3React()
+  const { account } = useWeb3React()
   const [tradeType, setTradeType] = useState('buy')
   const [recipientAddress, setRecipientAddress] = useState('')
   const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
@@ -342,6 +342,7 @@ export default function TradeInterface({
     isUnlockPermanentChecked,
     isCalculatedIdeaTokenAmountLoading,
     isCalculatedTokenAmountLoading,
+    isSelectedTokenDAIValueLoading,
     recipientAddress,
     isENSAddressValid,
     hexAddress,

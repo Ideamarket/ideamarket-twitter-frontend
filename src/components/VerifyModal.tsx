@@ -161,7 +161,7 @@ export default function VerifyModal({
     setTx('')
     setIsLoading(false)
     setErrorMessage('')
-  }, [])
+  }, [PAGES.TOS])
 
   return (
     <Modal close={close}>

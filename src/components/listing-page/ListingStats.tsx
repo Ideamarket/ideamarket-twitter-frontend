@@ -78,7 +78,7 @@ export default function ListingStats({ isLoading, market, token }) {
     )
     finalChartData.push([now, endPrice])
     setPriceChartData(finalChartData)
-  }, [chartDurationSeconds, rawPriceChartData])
+  }, [chartDurationSeconds, rawPriceChartData, token.latestPricePoint.price])
 
   useEffect(() => {
     if (!rawLockedChartData) {
@@ -106,7 +106,7 @@ export default function ListingStats({ isLoading, market, token }) {
     finalChartData.push([chartToTs, remainingLocked])
 
     setLockedChartData(finalChartData)
-  }, [chartDurationSeconds, rawLockedChartData])
+  }, [chartDurationSeconds, rawLockedChartData, token.lockedAmount])
 
   return (
     <div className="px-4 md:px-6 pt-12 md:pt-10 pb-5 text-white bg-top-mobile md:bg-top-desktop h-156.5 md:max-h-96 md:mb-10">

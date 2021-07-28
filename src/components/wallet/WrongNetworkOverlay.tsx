@@ -1,5 +1,4 @@
-import React, { useEffect, useContext } from 'react'
-import { GlobalContext } from 'pages/_app'
+import React, { useEffect } from 'react'
 import { useWalletStore } from 'store/walletStore'
 import { NETWORK } from 'store/networks'
 

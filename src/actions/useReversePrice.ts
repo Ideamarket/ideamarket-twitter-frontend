@@ -57,7 +57,7 @@ export default function useReversePrice(
         const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
 
         if (!path) {
-          throw 'No Uniswap path exists'
+          throw Error('No Uniswap path exists')
         }
 
         try {
@@ -120,7 +120,7 @@ export default function useReversePrice(
         const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
 
         if (!path) {
-          throw 'No Uniswap path exists'
+          throw Error('No Uniswap path exists')
         }
 
         try {
@@ -178,7 +178,15 @@ export default function useReversePrice(
     return () => {
       isCancelled = true
     }
-  }, [ideaToken, tokenAddress, amount, tradeType, tokenBalanceBN])
+  }, [
+    ideaToken,
+    tokenAddress,
+    amount,
+    tradeType,
+    tokenBalanceBN,
+    decimals,
+    market,
+  ])
 
   return [isLoading, outputBN, output]
 }

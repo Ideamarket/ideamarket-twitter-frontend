@@ -77,6 +77,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
         )
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ideaTokenAmount])
 
   function onInputChanged(event) {

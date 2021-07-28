@@ -52,10 +52,7 @@ export const MarketList = ({
   markets,
   onMarketChanged,
 }: MarketListProps) => {
-  const { breakpoint, maxWidth, minWidth } = useBreakpoint(
-    BREAKPOINTS,
-    'mobile'
-  )
+  const { breakpoint } = useBreakpoint(BREAKPOINTS, 'mobile')
 
   const maxUpcomingMarkets = () => {
     switch (breakpoint) {

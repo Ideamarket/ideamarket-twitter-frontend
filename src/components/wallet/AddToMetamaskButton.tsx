@@ -1,5 +1,3 @@
-import classNames from 'classnames'
-import Metamask from '../../assets/metamask.svg'
 import { IdeaToken } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
 

@@ -1,4 +1,3 @@
-import Search from '../../assets/search.svg'
 import { SearchIcon } from '@heroicons/react/solid'
 
 type Props = {

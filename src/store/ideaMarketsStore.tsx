@@ -160,7 +160,7 @@ export async function queryOwnedTokensMaybeMarket(
   market: IdeaMarket,
   owner: string
 ): Promise<IdeaTokenMarketPair[]> {
-  if (owner == undefined) {
+  if (owner === undefined) {
     return []
   }
 
