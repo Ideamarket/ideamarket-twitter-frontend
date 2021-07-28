@@ -82,7 +82,7 @@ export default function Tooltip({
       </NoSSRTooltipContent>
       <div className="w-4 h-4" ref={ref}>
         <IconComponent
-          className="w-4 h-4 cursor-pointer text-brand-gray-4 dark:text-white"
+          className="w-4 h-4 cursor-pointer"
           onClick={handleShowToolTip}
         />
       </div>

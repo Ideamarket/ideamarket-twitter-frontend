@@ -75,7 +75,7 @@ export default function LockModal({
       <div className="md:min-w-150 md:max-w-150">
         <div className="flex justify-end">
           <Tooltip
-            className="w-4 h-4 m-4 cursor-pointer text-brand-gray-4"
+            className="w-4 h-4 m-4 cursor-pointer text-brand-gray-2 dark:text-gray-300"
             placement="down"
             IconComponent={CogIcon}
           >

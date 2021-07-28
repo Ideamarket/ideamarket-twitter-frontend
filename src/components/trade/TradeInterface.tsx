@@ -487,11 +487,6 @@ export default function TradeInterface({
     tokenValue: ideaTokenValue,
   }
 
-  const labelSymbol =
-    tradeType === 'buy'
-      ? spendTokenSymbol.toUpperCase()
-      : selectedToken?.symbol.toUpperCase()
-
   return (
     <div>
       <div
@@ -501,7 +496,7 @@ export default function TradeInterface({
         <div className="flex justify-between">
           <div />
           <Tooltip
-            className="w-4 h-4 mb-4 ml-2 cursor-pointer text-brand-gray-4"
+            className="w-4 h-4 mb-4 ml-2 cursor-pointer text-brand-gray-2 dark:text-white"
             placement="down"
             IconComponent={CogIcon}
           >
