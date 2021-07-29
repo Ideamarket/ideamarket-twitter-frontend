@@ -28,11 +28,10 @@ export default function ApproveButton({
   setIsMissingAllowance: (b: boolean) => void
   isLock?: boolean
 }) {
-  const [isAllowanceLoading, allowance] = useTokenAllowance(
+  const [allowance] = useTokenAllowance(tokenAddress, spenderAddress, [
     tokenAddress,
     spenderAddress,
-    [tokenAddress, spenderAddress]
-  )
+  ])
 
   const [hasAllowanceFor, setHasAllowanceFor] = useState({})
 
@@ -42,7 +41,7 @@ export default function ApproveButton({
 
   useEffect(() => {
     setIsMissingAllowance(isMissingAllowance)
-  }, [isMissingAllowance])
+  }, [isMissingAllowance, setIsMissingAllowance])
 
   async function approve() {
     const allowanceAmount = unlockPermanent ? web3UintMax : requiredAllowance

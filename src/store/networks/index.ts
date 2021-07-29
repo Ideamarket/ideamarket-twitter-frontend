@@ -50,5 +50,5 @@ const networkName = process.env.NEXT_PUBLIC_NETWORK
 export const NETWORK = getNetworkSpecificsByNetworkName(networkName)
 
 if (!NETWORK) {
-  throw 'no network config: ' + networkName
+  throw Error('no network config: ' + networkName)
 }

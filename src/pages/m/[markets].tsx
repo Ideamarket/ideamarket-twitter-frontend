@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .map((m) => m.getMarketName())
 
   marketsList = marketsList.filter((m, pos) => {
-    return marketsList.indexOf(m) == pos
+    return marketsList.indexOf(m) === pos
   })
 
   if (marketsList.length === 0) {

@@ -68,7 +68,7 @@ export default function useBalance(
     return () => {
       isCancelled = true
     }
-  }, [address, web3, tradeToggle])
+  }, [address, web3, tradeToggle, decimals])
 
   return [isLoading, balanceBN, balance]
 }

@@ -9,7 +9,7 @@ import {
   queryTokens,
   queryMarkets,
 } from 'store/ideaMarketsStore'
-import { querySupplyRate, queryExchangeRate } from 'store/compoundStore'
+import { querySupplyRate } from 'store/compoundStore'
 import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './OverviewTokenRow'
 import TokenRowSkeleton from './OverviewTokenRowSkeleton'
@@ -56,18 +56,6 @@ export default function Table({
 
   const filterTokens =
     selectedFilterId === Filters.STARRED.id ? watchingTokens : undefined
-
-  const {
-    data: compoundExchangeRate,
-    isFetching: isCompoundExchangeRateLoading,
-  } = useQuery(
-    'compound-exchange-rate',
-    queryExchangeRate,
-
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
 
   const { data: compoundSupplyRate, isFetching: isCompoundSupplyRateLoading } =
     useQuery('compound-supply-rate', querySupplyRate, {
@@ -137,7 +125,7 @@ export default function Table({
       setMarkets(markets)
     }
     fetch()
-  }, [selectedMarkets])
+  }, [refetchMarkets, selectedMarkets])
 
   useEffect(() => {
     if (markets.length !== 0) {
@@ -150,6 +138,7 @@ export default function Table({
     orderDirection,
     nameSearch,
     tradeOrListSuccessToggle,
+    refetch,
   ])
 
   useEffect(() => {
@@ -167,13 +156,10 @@ export default function Table({
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [fetchMore])
 
   const isLoading =
-    isMarketLoading ||
-    isTokenDataLoading ||
-    isCompoundSupplyRateLoading ||
-    isCompoundExchangeRateLoading
+    isMarketLoading || isTokenDataLoading || isCompoundSupplyRateLoading
 
   function columnClicked(column: string) {
     if (currentColumn === column) {
@@ -252,6 +238,8 @@ export default function Table({
                         />
                       )
                     }
+
+                    return null
                   })}
                   {isLoading
                     ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (

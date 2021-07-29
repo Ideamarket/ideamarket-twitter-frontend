@@ -52,12 +52,13 @@ export const OverviewColumns = ({
   columnClicked,
   markets,
 }: Props) => {
-  const {
-    data: compoundExchangeRate,
-    isLoading: isCompoundExchangeRateLoading,
-  } = useQuery('compound-exchange-rate', queryExchangeRate, {
-    refetchOnWindowFocus: false,
-  })
+  const { data: compoundExchangeRate } = useQuery(
+    'compound-exchange-rate',
+    queryExchangeRate,
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
 
   let allPlatformsEarnedBN = new BN('0')
   const platformEarnedPairs = [] // { name, earned } -- name = platform name, earned = amount platform earned

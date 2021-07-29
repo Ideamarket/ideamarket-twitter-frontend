@@ -1,4 +1,3 @@
-import { useWalletStore } from 'store/walletStore'
 import { useContractStore } from 'store/contractStore'
 import { NETWORK } from 'store/networks'
 import BigNumber from 'bignumber.js'

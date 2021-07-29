@@ -79,7 +79,7 @@ export default function useTokenToDAI(
     return () => {
       isCancelled = true
     }
-  }, [token, token.address, amount])
+  }, [token, token.address, amount, decimals])
 
   return [isLoading, outputBN, output]
 }

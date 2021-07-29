@@ -24,7 +24,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     ERROR: 2,
   }
 
-  const { active, account } = useWeb3React()
+  const { account } = useWeb3React()
   const [page, setPage] = useState(PAGES.LIST)
   const [selectedMarket, setSelectedMarket] = useState(undefined)
 
@@ -51,7 +51,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     useState(false)
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
-  const [approveButtonKey, setApproveButtonKey] = useState(0)
 
   const multiActionContractAddress = useContractStore(
     (state) => state.multiActionContract
@@ -192,7 +191,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     setIsWantBuyChecked(false)
     setBuyLock(false)
     setPage(PAGES.LIST)
-  }, [])
+  }, [PAGES.LIST])
 
   return (
     <Modal close={close}>
@@ -352,7 +351,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
                   txManager={txManager}
                   setIsMissingAllowance={setIsMissingAllowance}
                   disable={isApproveButtonDisabled}
-                  key={approveButtonKey}
                 />
               </div>
               <div className="mt-4 ">

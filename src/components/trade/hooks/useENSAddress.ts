@@ -20,5 +20,5 @@ export function useENSAddress(recipientAddress: string) {
   }, [recipientAddress, ens])
 
   // First return value says if is valid ENS address or not
-  return [parseInt(hexAddress, 16) !== 0, hexAddress]
+  return [parseInt(hexAddress, 16) !== 0, hexAddress, isLoading]
 }

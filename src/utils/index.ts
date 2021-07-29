@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import Web3 from 'web3'
 import { useState, useEffect } from 'react'
 import numeral from 'numeral'
-import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
+import { IdeaMarket } from 'store/ideaMarketsStore'
 
 export { default as TransactionManager } from './TransactionManager'
 export { default as useTransactionManager } from './useTransactionManager'

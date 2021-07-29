@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import BrandDiscord from '../assets/brand-discord.svg'
 import BrandTwitter from '../assets/brand-twitter.svg'
 import BrandGithub from '../assets/brand-github.svg'

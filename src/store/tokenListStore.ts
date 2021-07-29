@@ -26,13 +26,13 @@ export async function initTokenList() {
   const jsonTokens = NETWORK.getTokenList()
   let tokens: TokenListEntry[] = jsonTokens.map(
     (token) =>
-      <TokenListEntry>{
+      ({
         name: token.name,
         symbol: token.symbol,
         decimals: token.decimals,
         address: token.address,
         logoURL: token.logoURI,
-      }
+      } as TokenListEntry)
   )
 
   // Remove duplicates
