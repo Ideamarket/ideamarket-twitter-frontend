@@ -1,0 +1,16 @@
+{
+  "ci": {
+    "upload": {
+      "target": "temporary-public-storage"
+    },
+    "collect": {
+      "startServerCommand": "yarn start",
+      "url": [
+        "http://localhost:3000/",
+        "http://localhost:3000/account",
+        "http://localhost:3000/i/twitter/elonmusk"
+      ],
+      "numberOfRuns": 3
+    }
+  }
+}
