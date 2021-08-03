@@ -7,6 +7,7 @@ import {
 } from 'utils'
 import { MutualTokensListSortBy, A } from 'components'
 import { useTokenIconURL } from 'actions'
+import useThemeMode from 'components/useThemeMode'
 
 export default function MutualToken({
   stats,
@@ -22,6 +23,7 @@ export default function MutualToken({
     marketSpecifics,
     tokenName: token.name,
   })
+  const { resolvedTheme } = useThemeMode()
   return (
     <>
       <div className="overflow-hidden bg-white dark:bg-gray-700 rounded-lg shadow ">
@@ -54,7 +56,7 @@ export default function MutualToken({
                   <p className="flex justify-center text-xl font-bold text-gray-900 dark:text-gray-200 lg:text-xl hover:underline">
                     {token.name}{' '}
                     <span className="ml-1 w-5 h-5">
-                      {marketSpecifics.getMarketSVGTheme()}
+                      {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
                     </span>
                   </p>
                 </A>
