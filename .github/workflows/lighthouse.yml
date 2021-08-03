@@ -9,8 +9,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: npm install && npm install -g @lhci/cli@0.8.x
-      - run: echo “NEXT_PUBLIC_NETWORK=mainnet” > .env.local
+      - run: yarn install --frozen-lockfile && yarn global add @lhci/cli
+      - run: echo "NEXT_PUBLIC_NETWORK=mainnet" > .env.local
       - run: yarn build
       - run: lhci autorun --config=.github/lighthouse/lighthouserc-desktop.json
       - run: lhci autorun --config=.github/lighthouse/lighthouserc-mobile.json
