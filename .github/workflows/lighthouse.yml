@@ -1,8 +1,8 @@
-name: CI
+name: Lighthouse
 on: [push]
 jobs:
   lighthouse-ci:
-    name: Lighthouse ci
+    name: Lighthouse CI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,6 +13,8 @@ jobs:
       - run: echo "NEXT_PUBLIC_NETWORK=mainnet" > .env.local
       - run: yarn build
       - run: lhci autorun --config=.github/lighthouse/lighthouserc-desktop.json
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
       - run: lhci autorun --config=.github/lighthouse/lighthouserc-mobile.json
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
