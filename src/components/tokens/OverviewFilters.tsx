@@ -297,7 +297,7 @@ export const OverviewFilters = ({
   }, [markets])
 
   return (
-    <div className="grid md:flex justify-center grid-cols-2 md:grid-cols-none p-4 bg-white dark:bg-gray-700 rounded-t-lg gap-x-2 gap-y-2 md:justify-start">
+    <div className="grid md:flex justify-center grid-cols-2 md:grid-cols-none p-4 bg-white dark:bg-gray-700 rounded-t-lg gap-x-2 gap-y-2 md:justify-start  overflow-x-scroll lg:overflow-x-visible">
       {Object.values(Filters).map((filter) => (
         <FiltersButton
           key={filter.id}

@@ -240,8 +240,8 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   return (
     <>
       <NextSeo title="Home" />
-      <div className="overflow-x-hidden bg-brand-gray dark:bg-gray-900">
-        <div className="w-screen px-6 pt-10 pb-40 text-center text-white dark:text-gray-200 bg-cover bg-top-mobile md:bg-top-desktop">
+      <div className="overflow-x-hidden lg:overflow-x-visible bg-brand-gray dark:bg-gray-900">
+        <div className="px-6 pt-10 pb-40 text-center text-white dark:text-gray-200 bg-cover bg-top-mobile md:bg-top-desktop">
           <div>
             <h2 className="text-3xl md:text-6xl font-gilroy-bold">
               The credibility layer{' '}

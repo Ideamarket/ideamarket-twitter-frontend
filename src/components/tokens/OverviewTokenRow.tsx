@@ -264,8 +264,10 @@ export default function TokenRow({
             }}
             className="w-24 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
-            <ArrowSmUpIcon className="absolute ml-4 w-6 h-6" />
-            <span className="ml-3">Buy</span>
+            <div className="flex">
+              <ArrowSmUpIcon className="ml-4 w-6 h-6" />
+              <span>Buy</span>
+            </div>
           </button>
         </td>
         {/* Buy Button mobile */}
