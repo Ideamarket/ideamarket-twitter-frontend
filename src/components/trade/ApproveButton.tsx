@@ -5,42 +5,43 @@ import _ from 'lodash'
 
 import { useTokenAllowance, approveToken } from '../../actions'
 import { TransactionManager, web3UintMax } from '../../utils'
+import Tooltip from 'components/tooltip/Tooltip'
+
 export default function ApproveButton({
   tokenAddress,
-  tokenSymbol,
+  tokenName,
   spenderAddress,
   requiredAllowance,
   unlockPermanent,
   txManager,
   disable,
   setIsMissingAllowance,
+  isLock = false,
 }: {
   tokenAddress: string
-  tokenSymbol: string
+  tokenName: string
   spenderAddress: string
   requiredAllowance: BN
   unlockPermanent: boolean
   disable?: boolean
   txManager: TransactionManager
   setIsMissingAllowance: (b: boolean) => void
+  isLock?: boolean
 }) {
-  const [isAllowanceLoading, allowance] = useTokenAllowance(
+  const [allowance] = useTokenAllowance(tokenAddress, spenderAddress, [
     tokenAddress,
     spenderAddress,
-    [tokenAddress, spenderAddress]
-  )
+  ])
 
   const [hasAllowanceFor, setHasAllowanceFor] = useState({})
 
   const isMissingAllowance = hasAllowanceFor[tokenAddress]?.[spenderAddress]
     ? hasAllowanceFor[tokenAddress][spenderAddress].lt(requiredAllowance)
-    : allowance
-    ? allowance.lt(requiredAllowance)
-    : false
+    : allowance !== undefined && allowance.lt(requiredAllowance)
 
   useEffect(() => {
     setIsMissingAllowance(isMissingAllowance)
-  }, [isMissingAllowance])
+  }, [isMissingAllowance, setIsMissingAllowance])
 
   async function approve() {
     const allowanceAmount = unlockPermanent ? web3UintMax : requiredAllowance
@@ -67,17 +68,29 @@ export default function ApproveButton({
   }
 
   return (
-    <button
+    <div
       className={classNames(
-        'w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2',
+        'flex justify-center items-center py-4 px-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium text-center dark:border-gray-500',
         disable
-          ? 'bg-brand-gray border-brand-gray text-brand-gray-2 cursor-default'
-          : 'border-brand-blue bg-brand-blue text-white font-medium'
+          ? 'text-brand-gray-2 dark:text-gray-300 bg-brand-gray dark:bg-gray-500 cursor-default border-brand-gray'
+          : 'border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800 cursor-pointer'
       )}
-      disabled={disable}
-      onClick={approve}
+      onClick={() => {
+        !disable && approve()
+      }}
     >
-      Unlock {tokenSymbol?.toUpperCase()}
-    </button>
+      <span>
+        Allow Ideamarket to {isLock ? 'lock' : 'spend'} your {tokenName}
+      </span>
+      <Tooltip className="inline-block ml-2">
+        <div className="w-32 md:w-64">
+          The Ideamarket smart contract needs your approval to interact with
+          your {tokenName} balance. After you grant permission, the{' '}
+          {isLock ? 'Lock' : 'Buy/Sell'} button will be enabled. Select 'allow
+          permanent' in Settings (⚙️) to permanently enable {tokenName}{' '}
+          {isLock ? 'locking' : 'spending'} from this wallet.
+        </div>
+      </Tooltip>
+    </div>
   )
 }

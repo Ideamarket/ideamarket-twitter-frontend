@@ -1,5 +1,3 @@
-import classNames from 'classnames'
-import Metamask from '../../assets/metamask.svg'
 import { IdeaToken } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
 
@@ -33,18 +31,14 @@ export default function AddToMetamaskButton({ token }: { token: IdeaToken }) {
   }
 
   return (
-    <button
-      className={classNames(
-        'flex items-center justify-center h-12 text-base font-medium text-center border-2 rounded-lg w-30 tracking-tightest-2 font-sf-compact-medium',
-        disabled
-          ? 'text-brand-gray-2 border-brand-gray-2 cursor-default'
-          : 'text-brand-blue hover:text-white border-brand-blue hover:bg-brand-blue'
-      )}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      <Metamask className="w-6 h-6" />
-      Metamask
-    </button>
+    <>
+      <button
+        className="text-brand-gray-2 dark:text-gray-300 underline"
+        onClick={onClick}
+        disabled={disabled}
+      >
+        Add to Metamask
+      </button>
+    </>
   )
 }

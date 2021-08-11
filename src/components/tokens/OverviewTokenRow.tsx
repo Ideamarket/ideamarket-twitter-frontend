@@ -9,8 +9,18 @@ import {
   formatNumberWithCommasAsThousandsSerperator,
   formatNumber,
   web3BNToFloatString,
+  ZERO_ADDRESS,
+  bigNumberTenPow18,
 } from 'utils'
 import { useTokenIconURL } from 'actions'
+import {
+  investmentTokenToUnderlying,
+  queryExchangeRate,
+} from 'store/compoundStore'
+import { useQuery } from 'react-query'
+import { BadgeCheckIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
+import useThemeMode from 'components/useThemeMode'
+import Image from 'next/image'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -19,7 +29,7 @@ type Props = {
   market: IdeaMarket
   showMarketSVG: boolean
   compoundSupplyRate: number
-  getHeader: (headerValue: string) => any
+  getColumn: (column: string) => any
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
 }
 
@@ -28,7 +38,7 @@ export default function TokenRow({
   market,
   showMarketSVG,
   compoundSupplyRate,
-  getHeader,
+  getColumn,
   onTradeClicked,
 }: Props) {
   const router = useRouter()
@@ -37,6 +47,7 @@ export default function TokenRow({
     marketSpecifics,
     tokenName: token.name,
   })
+  const { resolvedTheme } = useThemeMode()
 
   const yearIncome = (
     parseFloat(token.daiInToken) * compoundSupplyRate
@@ -53,10 +64,23 @@ export default function TokenRow({
     2
   )
 
+  const { data: compoundExchangeRate } = useQuery(
+    'compound-exchange-rate',
+    queryExchangeRate
+  )
+
+  const claimableIncome = web3BNToFloatString(
+    investmentTokenToUnderlying(token.rawInvested, compoundExchangeRate).sub(
+      token.rawDaiInToken
+    ),
+    bigNumberTenPow18,
+    2
+  )
+
   return (
     <>
       <tr
-        className="grid grid-flow-col cursor-pointer grid-cols-mobile-row md:table-row hover:bg-brand-gray"
+        className="grid grid-flow-col cursor-pointer grid-cols-mobile-row md:table-row hover:bg-brand-gray dark:hover:bg-gray-600"
         onClick={() => {
           router.push(
             `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
@@ -66,21 +90,21 @@ export default function TokenRow({
         }}
       >
         {/* Rank */}
-        <td className="hidden py-4 pl-3 pr-1 text-sm leading-5 text-center text-gray-500 md:table-cell whitespace-nowrap">
+        <td className="hidden py-4 pl-3 pr-1 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
           {token.rank}
         </td>
         {/* Market */}
-        <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 md:table-cell whitespace-nowrap">
+        <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
           <div className="flex items-center justify-end w-full h-full">
-            <div className="w-5 h-5 mr-2 md:mr-0">
-              {marketSpecifics.getMarketOutlineSVG()}
+            <div className="w-5 h-auto mr-2 md:mr-0">
+              {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
             </div>
           </div>
         </td>
         {/* Icon and Name */}
         <td className="flex py-4 pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap">
-          <div className="flex items-center w-full">
-            {showMarketSVG && marketSpecifics.getMarketOutlineSVG()}
+          <div className="flex items-center w-full text-gray-900 dark:text-gray-200">
+            {showMarketSVG && marketSpecifics.getMarketSVGTheme(resolvedTheme)}
             <div
               className={classNames(
                 'flex-shrink-0 w-7.5 h-7.5',
@@ -90,38 +114,87 @@ export default function TokenRow({
               {isTokenIconLoading ? (
                 <div className="w-full h-full bg-gray-400 rounded-full animate-pulse"></div>
               ) : (
-                <img
-                  className="w-full h-full rounded-full"
-                  src={tokenIconURL}
-                  alt=""
-                />
+                <div className="w-full h-full rounded-full relative">
+                  <Image
+                    src={tokenIconURL || '/gray.svg'}
+                    alt="token"
+                    layout="fill"
+                    objectFit="contain"
+                    className="rounded-full"
+                  />
+                </div>
               )}
             </div>
-            <div className="ml-4 text-base font-medium leading-5 text-gray-900 truncate hover:underline">
-              <span>{token.name}</span>
+            <div className="ml-4 text-base font-medium leading-5 truncate hover:underline">
+              <span>
+                {token.name.substr(
+                  0,
+                  token.name.length > 25 ? 25 : token.name.length
+                ) + (token.name.length > 25 ? '...' : '')}
+              </span>
+            </div>
+            {/* Desktop Verified Badge */}
+            {token.tokenOwner !== ZERO_ADDRESS && (
+              <div className="hidden md:inline w-5 h-5 ml-1.5 text-black dark:text-white">
+                <BadgeCheckIcon />
+              </div>
+            )}
+          </div>
+        </td>
+        {/* Mobile Verified Badge */}
+        <td className="md:hidden flex items-center justify-center py-4 text-sm leading-5 text-center text-black dark:text-white md:table-cell whitespace-nowrap">
+          <div className="flex items-center justify-end h-full">
+            <div className="w-5 h-5">
+              {token.tokenOwner !== ZERO_ADDRESS && <BadgeCheckIcon />}
             </div>
           </div>
         </td>
+
         {/* Price */}
         <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-          <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
+          <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
             Price
           </p>
           <p
-            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + tokenPrice}
           >
             ${formatNumber(tokenPrice)}
           </p>
         </td>
-        {/* Deposits */}
-        {getHeader('deposits').isActive ? (
+
+        {/* 24H Change */}
+        {getColumn('24H Change') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
+            <p
+              className={classNames(
+                'text-base font-medium leading-4 tracking-tightest-2 uppercase',
+                parseFloat(token.dayChange) >= 0.0
+                  ? 'text-brand-green'
+                  : 'text-brand-red'
+              )}
+              title={`${
+                parseFloat(token.dayChange) >= 0.0
+                  ? `+ ${parseInt(token.dayChange)}`
+                  : `- ${parseInt(token.dayChange.slice(1))}`
+              }%`}
+            >
+              {parseFloat(token.dayChange) >= 0.0
+                ? `+ ${parseInt(token.dayChange)}`
+                : `- ${parseInt(token.dayChange.slice(1))}`}
+              %
+            </p>
+          </td>
+        )}
+
+        {/* Deposits */}
+        {getColumn('Deposits') && (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
               Deposits
             </p>
             <p
-              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
               title={'$' + token.daiInToken}
             >
               {parseFloat(token.daiInToken) > 0.0 ? (
@@ -134,17 +207,16 @@ export default function TokenRow({
               )}
             </p>
           </td>
-        ) : (
-          <></>
         )}
+
         {/* %Locked */}
-        {getHeader('locked').isActive ? (
+        {getColumn('% Locked') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
-            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4">
+            <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
               % Locked
             </p>
             <p
-              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
               title={parseInt(token.lockedPercentage) + ' %'}
             >
               {parseFloat(token.lockedPercentage) * 100.0 > 0.0 ? (
@@ -154,15 +226,13 @@ export default function TokenRow({
               )}
             </p>
           </td>
-        ) : (
-          <></>
         )}
 
         {/* Year Income */}
-        {getHeader('income').isActive ? (
+        {getColumn('1YR Income') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p
-              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
               title={'$' + yearIncome}
             >
               $
@@ -171,36 +241,55 @@ export default function TokenRow({
               )}
             </p>
           </td>
+        )}
+
+        {/* Claimable Income */}
+        {getColumn('Claimable Income') ? (
+          <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+            <p
+              className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+              title={'$' + claimableIncome}
+            >
+              $
+              {formatNumberWithCommasAsThousandsSerperator(
+                parseInt(claimableIncome)
+              )}
+            </p>
+          </td>
         ) : (
           <></>
         )}
 
         {/* Buy Button */}
-        <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
+        <td className="hidden py-4 md:table-cell whitespace-nowrap text-center">
           <button
             onClick={(e) => {
               e.stopPropagation()
               onTradeClicked(token, market)
             }}
-            className="w-24 h-10 text-base font-medium bg-white border-2 rounded-lg md:table-cell border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+            className="w-24 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
-            Buy
+            <div className="flex">
+              <ArrowSmUpIcon className="ml-4 w-6 h-6" />
+              <span>Buy</span>
+            </div>
           </button>
         </td>
         {/* Buy Button mobile */}
-        <td className="py-4 pl-4 md:hidden whitespace-nowrap">
+        <td className="py-4 px-3 md:hidden whitespace-nowrap">
           <button
             onClick={(e) => {
               e.stopPropagation()
               onTradeClicked(token, market)
             }}
-            className="w-16 px-2 py-1 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+            className="w-16 px-2 py-1 text-base font-medium bg-white dark:bg-gray-600 border-2 rounded-lg border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
           >
             ${formatNumber(tokenPrice)}
           </button>
         </td>
-        {/* Star */}
-        <td className="px-3 py-4 text-sm leading-5 text-gray-500 md:pl-3 md:pr-6 whitespace-nowrap">
+
+        {/* Star desktop */}
+        <td className="hidden md:table-cell px-3 py-4 text-sm leading-5 text-gray-500 dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap">
           <div className="flex items-center justify-center h-full">
             <WatchingStar token={token} />
           </div>

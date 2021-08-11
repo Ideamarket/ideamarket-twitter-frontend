@@ -7,7 +7,7 @@ import {
   useTokenIconURL,
 } from 'actions'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import { useTransactionManager } from 'utils'
+import { isAddress, useTransactionManager } from 'utils'
 import { NETWORK } from 'store/networks'
 import { Modal, MarketSelect, TradeInterface } from './'
 import ApproveButton from './trade/ApproveButton'
@@ -15,6 +15,7 @@ import { useContractStore } from 'store/contractStore'
 import BN from 'bn.js'
 import CircleSpinner from './animations/CircleSpinner'
 import A from './A'
+import { useWeb3React } from '@web3-react/core'
 
 export default function ListTokenModal({ close }: { close: () => void }) {
   const PAGES = {
@@ -23,6 +24,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     ERROR: 2,
   }
 
+  const { account } = useWeb3React()
   const [page, setPage] = useState(PAGES.LIST)
   const [selectedMarket, setSelectedMarket] = useState(undefined)
 
@@ -40,12 +42,15 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   const [buySlippage, setBuySlippage] = useState(undefined)
   const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
+  const [recipientAddress, setRecipientAddress] = useState('')
+  const [isENSAddressValid, setIsENSAddressValid] = useState(false)
+  const [hexAddress, setHexAddress] = useState('')
+  const [isGiftChecked, setIsGiftChecked] = useState(false)
 
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
     useState(false)
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
-  const [approveButtonKey, setApproveButtonKey] = useState(0)
 
   const multiActionContractAddress = useContractStore(
     (state) => state.multiActionContract
@@ -71,8 +76,26 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   const tweetTemplate = encodeURIComponent(
     `Just listed ${marketSpecifics?.convertUserInputToTokenName(
       tokenName
-    )} on @IdeaMarkets_`
+    )} on @ideamarket_io`
   )
+
+  // Did user type a valid ENS address or hex-address?
+  const isValidAddress = !isENSAddressValid ? isAddress(recipientAddress) : true
+
+  const isApproveButtonDisabled =
+    selectedMarket === undefined ||
+    !isMissingAllowance ||
+    !isValidTokenName ||
+    txManager.isPending ||
+    (isWantBuyChecked && !isBuyValid) ||
+    (isGiftChecked && !isValidAddress)
+
+  const isTradeButtonDisabled =
+    selectedMarket === undefined ||
+    !isValidTokenName ||
+    txManager.isPending ||
+    (isWantBuyChecked && (isMissingAllowance || !isBuyValid)) ||
+    (isGiftChecked && !isValidAddress)
 
   async function tokenNameInputChanged(val) {
     setIsTokenIconLoading(true)
@@ -97,7 +120,11 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     lock: boolean,
     isUnlockOnceChecked: boolean,
     isUnlockPermanentChecked: boolean,
-    isValid: boolean
+    isValid: boolean,
+    recipientAddress: string,
+    isENSAddressValid: boolean,
+    hexAddress: string,
+    isGiftChecked: boolean
   ) {
     setBuyInputAmountBN(tokenAmount)
     setBuyPayWithAddress(tokenAddress)
@@ -107,6 +134,10 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     setBuyLock(lock)
     setIsUnlockPermanentChecked(isUnlockPermanentChecked)
     setIsBuyValid(isValid)
+    setRecipientAddress(recipientAddress)
+    setIsENSAddressValid(isENSAddressValid)
+    setHexAddress(hexAddress)
+    setIsGiftChecked(isGiftChecked)
   }
 
   async function listClicked() {
@@ -115,6 +146,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     ).convertUserInputToTokenName(tokenName)
 
     if (isWantBuyChecked) {
+      const giftAddress = isENSAddressValid ? hexAddress : recipientAddress
       try {
         await txManager.executeTx(
           'List and buy',
@@ -125,7 +157,8 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           buyOutputAmountBN,
           buyInputAmountBN,
           buySlippage,
-          buyLock ? 31556952 : 0
+          buyLock ? 31556952 : 0,
+          isGiftChecked ? giftAddress : account
         )
       } catch (ex) {
         console.log(ex)
@@ -158,10 +191,10 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     setIsWantBuyChecked(false)
     setBuyLock(false)
     setPage(PAGES.LIST)
-  }, [])
+  }, [PAGES.LIST])
 
   return (
-    <Modal close={() => close()}>
+    <Modal close={close}>
       <div className="p-4 bg-top-mobile md:min-w-100">
         <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
           Add Listing
@@ -169,7 +202,9 @@ export default function ListTokenModal({ close }: { close: () => void }) {
       </div>
       {page === PAGES.LIST && (
         <>
-          <p className="mx-5 mt-5 text-sm text-brand-gray-2">Market</p>
+          <p className="mx-5 mt-5 text-sm text-brand-gray-2 dark:text-gray-300">
+            Market
+          </p>
           <div className="mx-5">
             <MarketSelect
               disabled={txManager.isPending}
@@ -178,7 +213,9 @@ export default function ListTokenModal({ close }: { close: () => void }) {
               }}
             />
           </div>
-          <p className="mx-5 mt-5 text-sm text-brand-gray-2">Token Name</p>
+          <p className="mx-5 mt-5 text-sm text-brand-gray-2 dark:text-gray-300">
+            Token Name
+          </p>
           <div className="flex items-center mx-5">
             <div className="text-base text-brand-gray-2 text-semibold">
               {tokenNamePrefix || ''}
@@ -193,7 +230,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
                 type="text"
                 disabled={txManager.isPending || !selectedMarket}
                 className={classNames(
-                  'w-12 md:w-full flex-grow py-2 pl-1 pr-4 leading-tight bg-gray-200 border-2 rounded appearance-none focus:bg-white focus:outline-none',
+                  'w-12 md:w-full flex-grow py-2 pl-1 pr-4 leading-tight bg-gray-200 dark:bg-gray-600 border-2 dark:border-gray-500 rounded appearance-none focus:bg-white focus:outline-none',
                   !isValidTokenName && tokenName.length > 0
                     ? 'border-brand-red focus:border-brand-red'
                     : 'border-gray-200 focus:border-brand-blue'
@@ -206,7 +243,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
             </div>
             <div
               className={classNames(
-                'text-base text-brand-gray-2 text-semibold',
+                'text-base text-brand-gray-2 dark:text-gray-300 text-semibold',
                 tokenNameSuffix && 'ml-0.5'
               )}
             >
@@ -229,6 +266,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
                     )
               }
             >
+              {/* TODO: replace <img/> with <Image /> OnLoadingComlete when Next v11.0.2 will be released */}
               <img
                 className={classNames(
                   'rounded-full max-w-12 max-h-12 ml-3 inline-block',
@@ -263,8 +301,8 @@ export default function ListTokenModal({ close }: { close: () => void }) {
               className={classNames(
                 'ml-2',
                 isWantBuyChecked
-                  ? 'text-brand-blue font-medium'
-                  : 'text-brand-gray-2'
+                  ? 'text-brand-blue font-medium dark:text-blue-400'
+                  : 'text-brand-gray-2 dark:text-gray-300'
               )}
             >
               I want to immediately buy this token
@@ -274,6 +312,17 @@ export default function ListTokenModal({ close }: { close: () => void }) {
             <hr className="my-1" />
             <TradeInterface
               market={selectedMarket}
+              newIdeaToken={{
+                symbol:
+                  tokenName !== '' && marketSpecifics
+                    ? marketSpecifics.convertUserInputToTokenName(tokenName)
+                    : '',
+                logoURL:
+                  selectedMarket &&
+                  marketSpecifics &&
+                  !isTokenIconLoading &&
+                  tokenIconURL,
+              }}
               ideaToken={undefined}
               onTradeSuccessful={() => {}}
               onValuesChanged={onTradeInterfaceValuesChanged}
@@ -289,12 +338,12 @@ export default function ListTokenModal({ close }: { close: () => void }) {
             )}
           </div>
 
-          <div className="max-w-sm mx-auto">
-            <div className={classNames('flex mt-8 mx-5 text-xs')}>
-              <div className="flex justify-center flex-grow">
+          <div className="max-w-sm mx-auto mt-2">
+            <div className="">
+              <div className="">
                 <ApproveButton
                   tokenAddress={buyPayWithAddress}
-                  tokenSymbol={buyPayWithSymbol}
+                  tokenName={buyPayWithSymbol}
                   spenderAddress={multiActionContractAddress}
                   requiredAllowance={
                     isWantBuyChecked ? buyInputAmountBN : new BN('0')
@@ -302,78 +351,22 @@ export default function ListTokenModal({ close }: { close: () => void }) {
                   unlockPermanent={isUnlockPermanentChecked}
                   txManager={txManager}
                   setIsMissingAllowance={setIsMissingAllowance}
-                  disable={
-                    selectedMarket === undefined ||
-                    !isMissingAllowance ||
-                    !isValidTokenName ||
-                    txManager.isPending ||
-                    (isWantBuyChecked && !isBuyValid)
-                  }
-                  key={approveButtonKey}
+                  disable={isApproveButtonDisabled}
                 />
               </div>
-              <div className="flex justify-center flex-grow">
+              <div className="mt-4 ">
                 <button
                   className={classNames(
-                    'ml-6 w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
-                    selectedMarket === undefined ||
-                      !isValidTokenName ||
-                      txManager.isPending ||
-                      (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
-                      ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
-                      : 'border-brand-blue text-white bg-brand-blue font-medium'
+                    'py-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium',
+                    isTradeButtonDisabled
+                      ? 'text-brand-gray-2 bg-brand-gray dark:bg-gray-500 dark:border-gray-500 dark:text-gray-300 cursor-default border-brand-gray'
+                      : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
                   )}
-                  disabled={
-                    selectedMarket === undefined ||
-                    !isValidTokenName ||
-                    txManager.isPending ||
-                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
-                  }
+                  disabled={isTradeButtonDisabled}
                   onClick={listClicked}
                 >
                   {isWantBuyChecked ? 'List & Buy' : 'List'}
                 </button>
-              </div>
-            </div>
-
-            <div
-              className={classNames(
-                'flex w-1/2 mt-2.5 mx-auto justify-center items-center text-xs'
-              )}
-            >
-              <div
-                className={classNames(
-                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
-                  selectedMarket === undefined ||
-                    !isValidTokenName ||
-                    (isWantBuyChecked && !isBuyValid)
-                    ? 'bg-brand-gray text-brand-gray-2'
-                    : 'bg-brand-blue text-white'
-                )}
-              >
-                1
-              </div>
-              <div
-                className={classNames(
-                  'flex-grow h-0.5',
-                  selectedMarket === undefined ||
-                    !isValidTokenName ||
-                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
-                    ? 'bg-brand-gray'
-                    : 'bg-brand-blue'
-                )}
-              ></div>
-              <div
-                className={classNames(
-                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
-                  selectedMarket === undefined ||
-                    !isValidTokenName ||
-                    (isWantBuyChecked && (isMissingAllowance || !isBuyValid))
-                    ? 'bg-brand-gray text-brand-gray-2'
-                    : 'bg-brand-blue text-white'
-                )}
-              >
-                2
               </div>
             </div>
           </div>
@@ -414,7 +407,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
               className="twitter-share-button"
               href={`https://twitter.com/intent/tweet?text=${tweetTemplate}&url=https://ideamarket.io`}
             >
-              <button className="w-32 h-10 text-base font-medium bg-white border-2 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
+              <button className="w-32 h-10 text-base font-medium bg-white dark:text-gray-50 inborder-2 dark:bg-gray-500 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
                 Tweet about it
               </button>
             </A>
@@ -424,10 +417,10 @@ export default function ListTokenModal({ close }: { close: () => void }) {
       )}
       {page === PAGES.ERROR && (
         <div className="px-2.5 py-5">
-          <div className="flex justify-center mt-2 text-3xl text-brand-red">
+          <div className="flex justify-center mt-2 text-3xl text-brand-red dark:text-red-500">
             Something went wrong
           </div>
-          <div className="mt-5 text-base break-all text-brand-gray-2">
+          <div className="mt-5 text-base break-all text-brand-gray-2 dark:text-gray-300">
             The transaction failed to execute.
           </div>
         </div>

@@ -37,7 +37,7 @@ export function useEagerConnect() {
     return () => {
       isCancelled = true
     }
-  }, [])
+  }, [activate])
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {
@@ -45,7 +45,7 @@ export function useEagerConnect() {
       setWeb3(library, undefined)
       setTried(true)
     }
-  }, [tried, active])
+  }, [tried, active, library])
 
   return tried
 }

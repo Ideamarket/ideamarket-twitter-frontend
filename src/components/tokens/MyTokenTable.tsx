@@ -8,7 +8,6 @@ import {
 } from 'store/ideaMarketsStore'
 import { querySupplyRate } from 'store/compoundStore'
 import { useWalletStore } from 'store/walletStore'
-import { useWindowSize } from 'utils'
 import MyTokenRow from './MyTokenRow'
 import MyTokenRowSkeleton from './MyTokenRowSkeleton'
 
@@ -20,13 +19,13 @@ type Header = {
 
 const headers: Header[] = [
   {
-    title: 'Name',
-    value: 'name',
+    title: '',
+    value: 'market',
     sortable: true,
   },
   {
-    title: 'Market',
-    value: 'market',
+    title: 'Name',
+    value: 'name',
     sortable: true,
   },
   {
@@ -55,8 +54,6 @@ export default function MyTokenTable({
   currentPage: number
   setCurrentPage: (p: number) => void
 }) {
-  const windowSize = useWindowSize()
-  // const TOKENS_PER_PAGE = windowSize.width < 768 ? 4 : 10
   const TOKENS_PER_PAGE = 6
 
   const address = useWalletStore((state) => state.address)
@@ -70,10 +67,8 @@ export default function MyTokenTable({
     queryMyTokensMaybeMarket
   )
 
-  const {
-    data: compoundSupplyRate,
-    isLoading: isCompoundSupplyRateLoading,
-  } = useQuery('compound-supply-rate', querySupplyRate)
+  const { data: compoundSupplyRate, isLoading: isCompoundSupplyRateLoading } =
+    useQuery('compound-supply-rate', querySupplyRate)
 
   const [pairs, setPairs]: [IdeaTokenMarketPair[], any] = useState([])
 
@@ -164,16 +159,15 @@ export default function MyTokenTable({
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div className="overflow-hidden">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
                 <thead className="hidden md:table-header-group">
                   <tr>
                     {headers.map((header) => (
                       <th
                         className={classNames(
-                          'px-5 py-4 text-sm font-semibold leading-4 tracking-wider text-left text-brand-gray-4 bg-gray-50',
+                          'px-5 py-4 text-sm font-semibold leading-4 tracking-wider text-left text-brand-gray-4 bg-gray-100 dark:bg-gray-600 dark:text-gray-300',
                           header.sortable && 'cursor-pointer'
                         )}
-                        style={{ backgroundColor: '#f9fbfd' }}
                         key={header.value}
                         onClick={() => {
                           if (header.sortable) {
@@ -199,7 +193,7 @@ export default function MyTokenTable({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white dark:bg-gray-700 divide-y dark:divide-gray-500 divide-gray-200">
                   {isLoading ? (
                     Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                       <MyTokenRowSkeleton key={token} />
@@ -235,13 +229,13 @@ export default function MyTokenTable({
           </div>
         </div>
       </div>
-      <div className="flex flex-row items-stretch justify-between px-10 py-5 md:justify-center md:flex md:border-b md:space-x-10">
+      <div className="flex flex-row items-stretch justify-between px-10 py-5 md:justify-center md:flex md:border-b dark:border-gray-500 md:space-x-10">
         <button
           onClick={() => {
             if (currentPage > 0) setCurrentPage(currentPage - 1)
           }}
           className={classNames(
-            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
+            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 dark:text-gray-300 tracking-tightest',
             currentPage <= 0
               ? 'cursor-not-allowed opacity-50'
               : 'hover:bg-brand-gray'
@@ -256,7 +250,7 @@ export default function MyTokenTable({
               setCurrentPage(currentPage + 1)
           }}
           className={classNames(
-            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
+            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text dark:text-gray-300 text-brand-gray-4 tracking-tightest',
             pairs?.length !== TOKENS_PER_PAGE
               ? 'cursor-not-allowed opacity-50'
               : 'hover:bg-brand-gray'

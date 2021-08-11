@@ -89,7 +89,7 @@ export default function L1TokenTable({
                           value={formatNumber(
                             web3BNToFloatString(
                               calculateIdeaTokenDaiValue(
-                                pair.token,
+                                pair.token.rawSupply,
                                 pair.market,
                                 pair.rawBalance
                               ),

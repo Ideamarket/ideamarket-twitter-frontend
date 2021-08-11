@@ -9,36 +9,38 @@ import {
   queryTokens,
   queryMarkets,
 } from 'store/ideaMarketsStore'
-import { querySupplyRate, queryExchangeRate } from 'store/compoundStore'
+import { querySupplyRate } from 'store/compoundStore'
 import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './OverviewTokenRow'
 import TokenRowSkeleton from './OverviewTokenRowSkeleton'
-import { Categories } from 'store/models/category'
-import { Header } from './table/Header'
+import { Filters } from 'components/tokens/OverviewFilters'
+import { OverviewColumns } from './table/OverviewColumns'
 
 type Props = {
   selectedMarkets: Set<string>
-  selectedCategoryId: number
+  selectedFilterId: number
   nameSearch: string
-  headerData: Array<any>
-  getHeader: (headerValue: string) => object
+  columnData: Array<any>
+  getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
+  tradeOrListSuccessToggle: boolean
 }
 
 export default function Table({
   selectedMarkets,
-  selectedCategoryId,
+  selectedFilterId,
   nameSearch,
-  headerData,
-  getHeader,
+  columnData,
+  getColumn,
   onOrderByChanged,
   onTradeClicked,
+  tradeOrListSuccessToggle,
 }: Props) {
   const TOKENS_PER_PAGE = 10
   const LOADING_MARGIN = 200
 
-  const [currentHeader, setCurrentHeader] = useState('')
+  const [currentColumn, setCurrentColumn] = useState('')
   const [orderBy, setOrderBy] = useState('supply')
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
@@ -53,19 +55,7 @@ export default function Table({
   )
 
   const filterTokens =
-    selectedCategoryId === Categories.STARRED.id ? watchingTokens : undefined
-
-  const {
-    data: compoundExchangeRate,
-    isFetching: isCompoundExchangeRateLoading,
-  } = useQuery(
-    'compound-exchange-rate',
-    queryExchangeRate,
-
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
+    selectedFilterId === Filters.STARRED.id ? watchingTokens : undefined
 
   const { data: compoundSupplyRate, isFetching: isCompoundSupplyRateLoading } =
     useQuery('compound-supply-rate', querySupplyRate, {
@@ -94,17 +84,18 @@ export default function Table({
         markets,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
-        selectedCategoryId === Categories.HOT.id
+        selectedFilterId === Filters.HOT.id
           ? 'dayChange'
-          : selectedCategoryId === Categories.NEW.id
+          : selectedFilterId === Filters.NEW.id
           ? 'listedAt'
           : orderBy,
-        selectedCategoryId === Categories.HOT.id ||
-        selectedCategoryId === Categories.NEW.id
+        selectedFilterId === Filters.HOT.id ||
+        selectedFilterId === Filters.NEW.id
           ? 'desc'
           : orderDirection,
         nameSearch,
         filterTokens,
+        selectedFilterId === Filters.VERIFIED.id,
       ],
     ],
     queryTokens,
@@ -134,13 +125,21 @@ export default function Table({
       setMarkets(markets)
     }
     fetch()
-  }, [selectedMarkets])
+  }, [refetchMarkets, selectedMarkets])
 
   useEffect(() => {
     if (markets.length !== 0) {
       refetch()
     }
-  }, [markets, selectedCategoryId, orderBy, orderDirection, nameSearch])
+  }, [
+    markets,
+    selectedFilterId,
+    orderBy,
+    orderDirection,
+    nameSearch,
+    tradeOrListSuccessToggle,
+    refetch,
+  ])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -157,16 +156,13 @@ export default function Table({
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [fetchMore])
 
   const isLoading =
-    isMarketLoading ||
-    isTokenDataLoading ||
-    isCompoundSupplyRateLoading ||
-    isCompoundExchangeRateLoading
+    isMarketLoading || isTokenDataLoading || isCompoundSupplyRateLoading
 
-  function headerClicked(headerValue: string) {
-    if (currentHeader === headerValue) {
+  function columnClicked(column: string) {
+    if (currentColumn === column) {
       if (orderDirection === 'asc') {
         setOrderDirection('desc')
         onOrderByChanged(orderBy, 'desc')
@@ -175,31 +171,31 @@ export default function Table({
         onOrderByChanged(orderBy, 'asc')
       }
     } else {
-      setCurrentHeader(headerValue)
+      setCurrentColumn(column)
 
-      if (headerValue === 'name') {
+      if (column === 'name') {
         setOrderBy('name')
         onOrderByChanged('name', 'desc')
       } else if (
-        headerValue === 'price' ||
-        headerValue === 'deposits' ||
-        headerValue === 'income'
+        column === 'price' ||
+        column === 'deposits' ||
+        column === 'income'
       ) {
         setOrderBy('supply')
         onOrderByChanged('supply', 'desc')
-      } else if (headerValue === 'change') {
+      } else if (column === 'change') {
         setOrderBy('dayChange')
         onOrderByChanged('dayChange', 'desc')
-      } else if (headerValue === 'change') {
+      } else if (column === 'change') {
         setOrderBy('dayChange')
         onOrderByChanged('dayChange', 'desc')
-      } else if (headerValue === 'locked') {
+      } else if (column === 'locked') {
         setOrderBy('lockedPercentage')
         onOrderByChanged('lockedAmount', 'desc')
-      } else if (headerValue === 'holders') {
+      } else if (column === 'holders') {
         setOrderBy('holders')
         onOrderByChanged('holders', 'desc')
-      } else if (headerValue === 'rank') {
+      } else if (column === 'rank') {
         setOrderBy('rank')
         onOrderByChanged('rank', 'desc')
       }
@@ -211,35 +207,43 @@ export default function Table({
   return (
     <>
       <div className="flex flex-col">
-        <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="border-b border-gray-200 sm:rounded-t-lg">
-              <table className="min-w-full divide-y divide-gray-200">
+        <div className="-my-2 overflow-x-auto lg:overflow-x-visible">
+          <div className="inline-block w-full py-2 align-middle">
+            <div className="border-b border-gray-200 dark:border-gray-500 sm:rounded-t-lg overflow-x-scroll lg:overflow-x-visible">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
                 <thead className="hidden md:table-header-group">
-                  <tr>
-                    <Header
-                      currentHeader={currentHeader}
+                  <tr className="lg:sticky md:top-44 sticky-safari z-10">
+                    <OverviewColumns
+                      currentColumn={currentColumn}
                       orderDirection={orderDirection}
-                      headerData={headerData}
-                      headerClicked={headerClicked}
+                      columnData={columnData}
+                      columnClicked={columnClicked}
+                      markets={markets}
                     />
                   </tr>
                 </thead>
-                <tbody className="w-full bg-white divide-y divide-gray-200">
-                  {(tokenData as IdeaToken[]).map((token) => (
-                    <TokenRow
-                      key={token.marketID + '-' + token.tokenID}
-                      token={token}
-                      market={marketsMap[token.marketID]}
-                      showMarketSVG={false}
-                      compoundSupplyRate={compoundSupplyRate}
-                      getHeader={getHeader}
-                      onTradeClicked={onTradeClicked}
-                    />
-                  ))}
+                <tbody className="w-full bg-white dark:bg-gray-700 divide-y divide-gray-200 dark:divide-gray-500">
+                  {(tokenData as IdeaToken[]).map((token) => {
+                    // Only load the rows if a market is found
+                    if (marketsMap[token.marketID]) {
+                      return (
+                        <TokenRow
+                          key={token.marketID + '-' + token.tokenID}
+                          token={token}
+                          market={marketsMap[token.marketID]}
+                          showMarketSVG={false}
+                          compoundSupplyRate={compoundSupplyRate}
+                          getColumn={getColumn}
+                          onTradeClicked={onTradeClicked}
+                        />
+                      )
+                    }
+
+                    return null
+                  })}
                   {isLoading
                     ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                        <TokenRowSkeleton key={token} getHeader={getHeader} />
+                        <TokenRowSkeleton key={token} getColumn={getColumn} />
                       ))
                     : null}
                 </tbody>

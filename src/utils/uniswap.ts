@@ -1,14 +1,6 @@
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
-import {
-  ChainId,
-  Token,
-  TokenAmount,
-  Pair,
-  Route,
-  TradeType,
-  Trade,
-} from '@uniswap/sdk'
+import { Token, TokenAmount, Pair, Route, TradeType, Trade } from '@uniswap/sdk'
 import {
   getERC20Contract,
   getUniswapPairContract,
@@ -30,8 +22,8 @@ export async function getUniswapPath(
 ): Promise<UniswapPairDetails> {
   // TODO: CACHE!
 
-  const uniswapFactoryContract = useContractStore.getState()
-    .uniswapFactoryContract
+  const uniswapFactoryContract =
+    useContractStore.getState().uniswapFactoryContract
   const directPairAddress = await uniswapFactoryContract.methods
     .getPair(inputTokenAddress, outputTokenAddress)
     .call()
@@ -157,7 +149,7 @@ export async function getUniswapDaiOutputSwap(
   const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
 
   if (!path) {
-    throw 'No Uniswap path exists'
+    throw Error('No Uniswap path exists')
   }
 
   const trade = new Trade(
@@ -173,6 +165,21 @@ export async function getUniswapDaiOutputSwap(
   )
 
   return outputBN
+}
+
+/**
+ *  @param address The address to get the exchange rate of when paired with DAI
+ *
+ * @return string that represents the exchange rate of a pair of tokens
+ */
+export async function getExchangeRate(address: string) {
+  const inputTokenAddress =
+    address === ZERO_ADDRESS ? NETWORK.getExternalAddresses().weth : address
+  const outputTokenAddress = NETWORK.getExternalAddresses().dai
+  const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
+
+  // Uniswap references the exchange rate by the variable midPrice
+  return path.route.midPrice.toFixed(18)
 }
 
 async function getPair(

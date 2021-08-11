@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import classNames from 'classnames'
-import Info from '../../assets/info.svg'
+import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
 
 const NoSSRTooltipContent = dynamic(() => import('./TooltipContent'), {
   ssr: false,
@@ -10,9 +10,13 @@ const NoSSRTooltipContent = dynamic(() => import('./TooltipContent'), {
 export default function Tooltip({
   children,
   className,
+  IconComponent = QuestionMarkCircleIcon,
+  placement,
 }: {
   children?: ReactNode
   className?: string
+  IconComponent?: React.FC<{ className: string; onClick: () => void }>
+  placement?: string
 }) {
   const ref = useRef(null)
   const contentRef = useRef(null)
@@ -45,11 +49,21 @@ export default function Tooltip({
     if (tooltipLeft < 0) {
       tooltipLeft = tooltipLeft - tooltipLeft + 25
     }
-    setToolTipProperties({
-      ...toolTipProperties,
-      tooltipBottom: h - rect.y - rect.height,
-      tooltipLeft: tooltipLeft,
-    })
+
+    if (placement === 'down' && h < 600) {
+      setToolTipProperties({
+        ...toolTipProperties,
+        tooltipBottom: h - rect.y - rect.height - 160,
+        tooltipLeft: tooltipLeft,
+      })
+    } else {
+      setToolTipProperties({
+        ...toolTipProperties,
+        tooltipBottom: h - rect.y - rect.height,
+        tooltipLeft: tooltipLeft,
+      })
+    }
+
     setShowToolTip(true)
   }
   return (
@@ -67,8 +81,8 @@ export default function Tooltip({
         {children}
       </NoSSRTooltipContent>
       <div className="w-4 h-4" ref={ref}>
-        <Info
-          className="w-4 h-4 cursor-pointer text-brand-gray-4"
+        <IconComponent
+          className="w-4 h-4 cursor-pointer"
           onClick={handleShowToolTip}
         />
       </div>

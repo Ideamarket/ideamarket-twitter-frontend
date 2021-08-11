@@ -14,23 +14,18 @@ type Header = {
 
 const headers: Header[] = [
   {
+    title: '',
+    value: 'market',
+    sortable: true,
+  },
+  {
     title: 'Name',
     value: 'name',
     sortable: true,
   },
   {
-    title: 'Market',
-    value: 'market',
-    sortable: true,
-  },
-  {
     title: 'Price',
     value: 'price',
-    sortable: true,
-  },
-  {
-    title: '24H Change',
-    value: 'change',
     sortable: true,
   },
   {
@@ -43,6 +38,21 @@ const headers: Header[] = [
     value: 'value',
     sortable: true,
   },
+  {
+    title: '24H Change',
+    value: 'change',
+    sortable: true,
+  },
+  {
+    title: '',
+    value: 'lockButton',
+    sortable: false,
+  },
+  {
+    title: '',
+    value: 'metamaskButton',
+    sortable: false,
+  },
 ]
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
@@ -52,11 +62,13 @@ export default function OwnedTokenTable({
   isPairsDataLoading,
   currentPage,
   setCurrentPage,
+  refetch,
 }: {
   rawPairs: IdeaTokenMarketPair[]
   isPairsDataLoading: boolean
   currentPage: number
   setCurrentPage: (p: number) => void
+  refetch: () => void
 }) {
   const TOKENS_PER_PAGE = 6
 
@@ -179,17 +191,16 @@ export default function OwnedTokenTable({
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <div className="overflow-hidden">
-              <table className="min-w-full divide-y divide-gray-200">
+            <div className="overflow-hidden dark:border-gray-500">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
                 <thead className="hidden md:table-header-group">
                   <tr>
                     {headers.map((header) => (
                       <th
                         className={classNames(
-                          'px-5 py-4 text-sm font-semibold leading-4 tracking-wider text-left text-brand-gray-4',
+                          'px-5 py-4 text-sm font-semibold leading-4 tracking-wider text-left text-brand-gray-4 dark:text-gray-200 bg-gray-100 dark:bg-gray-600',
                           header.sortable && 'cursor-pointer'
                         )}
-                        style={{ backgroundColor: '#f9fbfd' }}
                         key={header.value}
                         onClick={() => {
                           if (header.sortable) {
@@ -215,7 +226,7 @@ export default function OwnedTokenTable({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-700 dark:divide-gray-500">
                   {isPairsDataLoading ? (
                     Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                       <OwnedTokenRowSkeleton key={token} />
@@ -230,6 +241,7 @@ export default function OwnedTokenTable({
                           balance={pair.balance}
                           balanceBN={pair.rawBalance}
                           isL1={pair.token.isL1}
+                          refetch={refetch}
                         />
                       ))}
 
@@ -259,7 +271,7 @@ export default function OwnedTokenTable({
             if (currentPage > 0) setCurrentPage(currentPage - 1)
           }}
           className={classNames(
-            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
+            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 dark:text-gray-300 tracking-tightest',
             currentPage <= 0
               ? 'cursor-not-allowed opacity-50'
               : 'hover:bg-brand-gray'
@@ -274,7 +286,7 @@ export default function OwnedTokenTable({
               setCurrentPage(currentPage + 1)
           }}
           className={classNames(
-            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 tracking-tightest',
+            'px-4 py-2 text-sm font-medium leading-none cursor-pointer focus:outline-none font-sf-pro-text text-brand-gray-4 dark:text-gray-300 tracking-tightest',
             pairs?.length !== TOKENS_PER_PAGE
               ? 'cursor-not-allowed opacity-50'
               : 'hover:bg-brand-gray'

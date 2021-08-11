@@ -8,11 +8,18 @@ import {
   calculateCurrentPriceBN,
   bigNumberTenPow18,
   formatNumber,
+  formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
   calculateIdeaTokenDaiValue,
+  ZERO_ADDRESS,
 } from 'utils'
-import A from 'components/A'
+import { A, AddToMetamaskButton } from 'components'
 import { useTokenIconURL } from 'actions'
+import { BadgeCheckIcon } from '@heroicons/react/solid'
+import ModalService from 'components/modals/ModalService'
+import LockModal from 'components/trade/LockModal'
+import useThemeMode from 'components/useThemeMode'
+import Image from 'next/image'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -22,12 +29,14 @@ export default function TokenRow({
   balance,
   balanceBN,
   isL1,
+  refetch,
 }: {
   token: IdeaToken
   market: IdeaMarket
   balance: string
   balanceBN: BN
   isL1: boolean
+  refetch: () => void
 }) {
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
@@ -45,16 +54,21 @@ export default function TokenRow({
     tenPow18,
     2
   )
+  const { resolvedTheme } = useThemeMode()
 
-  const balanceValueBN = calculateIdeaTokenDaiValue(token, market, balanceBN)
-  const balanceValue = formatNumber(
-    web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 18)
+  const balanceValueBN = calculateIdeaTokenDaiValue(
+    token?.rawSupply,
+    market,
+    balanceBN
+  )
+  const balanceValue = formatNumberWithCommasAsThousandsSerperator(
+    web3BNToFloatString(balanceValueBN, bigNumberTenPow18, 2)
   )
 
   return (
     <>
       <tr
-        className="grid grid-cols-3 border-b cursor-pointer md:table-row hover:bg-brand-gray border-brand-border-gray"
+        className="grid grid-cols-3 border-b cursor-pointer md:table-row hover:bg-brand-gray border-brand-border-gray dark:hover:bg-gray-600 dark:border-gray-500"
         onClick={() => {
           router.push(
             `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
@@ -63,20 +77,32 @@ export default function TokenRow({
           )
         }}
       >
+        {/* Market desktop */}
+        <td className="flex items-center justify-center hidden py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
+          <div className="flex items-center justify-end w-full h-full">
+            <div className="w-5 h-auto">
+              {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
+            </div>
+          </div>
+        </td>
         <td className="col-span-3 px-6 py-4 whitespace-nowrap">
-          <div className="flex items-center">
+          <div className="flex items-center text-gray-900 dark:text-gray-200">
             <div className="flex-shrink-0 w-7.5 h-7.5">
               {isTokenIconLoading ? (
-                <div className="w-full h-full bg-gray-400 rounded-full animate-pulse"></div>
+                <div className="w-full h-full bg-gray-400 rounded-full dark:bg-gray-600 animate-pulse"></div>
               ) : (
-                <img
-                  className="w-full h-full rounded-full"
-                  src={tokenIconURL}
-                  alt=""
-                />
+                <div className="relative w-full h-full rounded-full">
+                  <Image
+                    src={tokenIconURL || '/gray.svg'}
+                    alt="token"
+                    layout="fill"
+                    objectFit="contain"
+                    className="rounded-full"
+                  />
+                </div>
               )}
             </div>
-            <div className="flex justify-between w-full ml-4 text-base font-semibold leading-5 text-gray-900">
+            <div className="ml-4 text-base font-semibold leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -92,9 +118,15 @@ export default function TokenRow({
                 </div>
               )}
             </div>
+            {/* Verified Badge */}
+            {token.tokenOwner !== ZERO_ADDRESS && (
+              <div className="w-5 h-5 ml-1.5">
+                <BadgeCheckIcon />
+              </div>
+            )}
             <div className="flex items-center justify-center ml-auto md:hidden">
               <svg
-                className="w-7.5 text-brand-blue"
+                className="w-7.5 text-brand-blue dark:text-blue-500"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -108,40 +140,63 @@ export default function TokenRow({
             </div>
           </div>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
+        {/* Market mobile */}
+        <td className="px-6 py-4 whitespace-nowrap md:hidden">
+          <p className="text-sm font-semibold tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Market
           </p>
-          <div className="flex items-center">
-            <div className="w-full h-full md:w-auto md:h-auto">
-              {marketSpecifics.getMarketSVGBlack()}
-            </div>
-            <div className="ml-1 text-base font-semibold leading-4 md:ml-3 text-brand-gray-4">
-              {marketSpecifics.getMarketName()}
-            </div>
+          <div className="inline-block w-4 h-4">
+            {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
+          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Price
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
+            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + tokenPrice}
           >
-            ${formatNumber(tokenPrice)}
+            $
+            {formatNumberWithCommasAsThousandsSerperator(
+              parseFloat(tokenPrice).toFixed(2)
+            )}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
+          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
+            Balance
+          </p>
+          <p
+            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            title={balance}
+          >
+            {formatNumberWithCommasAsThousandsSerperator(
+              parseFloat(balance).toFixed(2)
+            )}
+          </p>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
+            Value
+          </p>
+          <p
+            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            title={'$' + balanceValue}
+          >
+            ${balanceValue}
+          </p>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             24H Change
           </p>
           <p
             className={classNames(
-              'text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue uppercase',
+              'text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300 uppercase',
               parseFloat(token.dayChange) >= 0.0
-                ? 'text-brand-green'
-                : 'text-brand-red'
+                ? 'text-brand-green dark:text-green-400'
+                : 'text-brand-red dark:text-red-400'
             )}
             title={
               parseFloat(token.dayChange) >= 0.0
@@ -155,27 +210,23 @@ export default function TokenRow({
             %
           </p>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
-            Balance
-          </p>
-          <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={balance}
+        {/* Lock Button */}
+        <td className="px-4 py-4 md:px-0 whitespace-nowrap">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              ModalService.open(LockModal, { token, refetch })
+            }}
+            className="w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
-            {formatNumber(balance)}
-          </p>
+            <span>Lock</span>
+          </button>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4">
-            Value
-          </p>
-          <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={'$' + balanceValue}
-          >
-            ${balanceValue}
-          </p>
+        {/* Add to Metamask button */}
+        <td className="px-4 py-4">
+          <div className="flex items-center w-full h-full">
+            <AddToMetamaskButton token={token} />
+          </div>
         </td>
       </tr>
     </>

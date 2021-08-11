@@ -139,7 +139,7 @@ export async function queryMarkets(
 ): Promise<IdeaMarket[]> {
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
-    getQueryMarkets(marketNames)
+    getQueryMarkets(marketNames.filter((n) => n !== 'All'))
   )
   return result.ideaMarkets.map((market) => apiResponseToIdeaMarket(market))
 }
@@ -162,7 +162,7 @@ export async function queryOwnedTokensMaybeMarket(
   market: IdeaMarket,
   owner: string
 ): Promise<IdeaTokenMarketPair[]> {
-  if (owner == undefined) {
+  if (owner === undefined) {
     return []
   }
 
@@ -233,7 +233,8 @@ type Params = [
   orderBy: string,
   orderDirection: string,
   search: string,
-  filterTokens: string[]
+  filterTokens: string[],
+  isVerifiedFilter: boolean
 ]
 
 export async function queryTokens(
@@ -253,6 +254,7 @@ export async function queryTokens(
     orderDirection,
     search,
     filterTokens,
+    isVerifiedFilter,
   ] = params
 
   const fromTs = Math.floor(Date.now() / 1000) - duration
@@ -271,7 +273,8 @@ export async function queryTokens(
           orderBy,
           orderDirection,
           search,
-          filterTokens
+          filterTokens,
+          isVerifiedFilter
         )
       )
     ).tokenNameSearch
@@ -286,7 +289,8 @@ export async function queryTokens(
           fromTs,
           orderBy,
           orderDirection,
-          filterTokens
+          filterTokens,
+          isVerifiedFilter
         )
       )
     ).ideaTokens
@@ -443,7 +447,7 @@ export async function queryTokensHeld(
     }
 
     if (market === null) {
-      throw `queryTokensHeld: market not found: ${marketName}`
+      throw Error(`queryTokensHeld: market not found: ${marketName}`)
     }
 
     res[i].market = market
@@ -517,8 +521,8 @@ export async function queryMutualHoldersOfToken({
     (token, index) => allTokenNames.indexOf(token) === index
   )
 
-  const mutualHoldersData: MutualHoldersData[] = allTokenNamesWithoutDuplicates.map(
-    (tokenName) => {
+  const mutualHoldersData: MutualHoldersData[] =
+    allTokenNamesWithoutDuplicates.map((tokenName) => {
       const allBalancesWithCurrentToken = balances.filter(
         (_balance) => _balance.token.name === tokenName
       )
@@ -537,8 +541,7 @@ export async function queryMutualHoldersOfToken({
         },
         token: allBalancesWithCurrentToken[0].token,
       }
-    }
-  )
+    })
   return mutualHoldersData
 }
 

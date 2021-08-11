@@ -1,9 +1,7 @@
 // babel.config.js
 module.exports = function (api) {
-  const isServer = api.caller((caller) => (caller ? caller.isServer : false))
-  const isCallerDevelopment = api.caller((caller) =>
-    caller ? caller.isDev : false
-  )
+  // Cache the returned value forever and don't call this function again.
+  api.cache(true)
 
   const presets = [
     [

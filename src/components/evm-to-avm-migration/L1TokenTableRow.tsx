@@ -1,8 +1,5 @@
 import classNames from 'classnames'
-import { useRouter } from 'next/dist/client/router'
 import {
-  IdeaMarket,
-  IdeaToken,
   IdeaTokenMarketPair,
 } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
@@ -38,7 +35,7 @@ export default function L1TokenTableRow({
         <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 md:table-cell whitespace-nowrap">
           <div className="flex items-center justify-end w-full h-full">
             <div className="w-5 h-5 mr-2 md:mr-0">
-              {marketSpecifics.getMarketOutlineSVG()}
+              {marketSpecifics.getMarketSVGBlack()}
             </div>
           </div>
         </td>

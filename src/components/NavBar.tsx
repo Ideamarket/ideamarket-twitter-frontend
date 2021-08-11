@@ -1,21 +1,23 @@
 import classNames from 'classnames'
 import { Router, useRouter } from 'next/dist/client/router'
-import { useContext, useState, useEffect } from 'react'
-import { WalletStatus, EmailHeader } from 'components'
-import { GlobalContext } from 'pages/_app'
+import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { WalletStatus } from 'components'
 import Close from '../assets/close.svg'
 import Hamburger from '../assets/hamburger.svg'
 import NProgress from 'nprogress'
 import A from './A'
+import { SunIcon, MoonIcon } from '@heroicons/react/solid'
 import ModalService from 'components/modals/ModalService'
-import { EmailNewsletterModal } from 'components'
 import WalletModal from './wallet/WalletModal'
+import useThemeMode from './useThemeMode'
 
 export default function Nav() {
+  const { theme, resolvedTheme, setTheme } = useThemeMode()
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
   const router = useRouter()
   const closeMenu = () => setIsMobileNavOpen(false)
-  const { isEmailHeaderActive } = useContext(GlobalContext)
+
   const menuItems = [
     {
       name: 'Whitepaper',
@@ -62,24 +64,20 @@ export default function Nav() {
   return (
     <>
       <nav className="fixed top-0 z-20 w-full shadow bg-top-desktop">
-        {isEmailHeaderActive && router.pathname === '/' ? (
-          <EmailHeader />
-        ) : (
-          <></>
-        )}
-
         <div className="px-2 mx-auto transform max-w-88 md:max-w-304">
           <div className="relative flex items-center justify-between h-16">
             <div
-              className="z-20 flex items-center flex-shrink-0 cursor-pointer"
+              className="z-20 flex items-center flex-shrink-0 cursor-pointer "
               onClick={() => router.push('/')}
             >
-              <img
-                className="block w-auto h-8"
-                src="/logo.png"
-                alt="Workflow logo"
-              />
-
+              <div className="relative w-10 h-8">
+                <Image
+                  src="/logo.png"
+                  alt="Workflow logo"
+                  layout="fill"
+                  objectFit="contain"
+                />
+              </div>
               <span className="w-auto h-full text-2xl leading-none text-white md:text-3xl font-gilroy-bold">
                 Ideamarket
               </span>
@@ -105,6 +103,17 @@ export default function Nav() {
               ))}
             </div>
             <div className="z-20 hidden md:ml-6 md:flex md:items-center">
+              <button
+                id="switchTheme"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="h-10 w-10 flex justify-center items-center focus:outline-none text-blue-50"
+              >
+                {resolvedTheme === 'dark' ? (
+                  <SunIcon className="h-5 w-5 text-blue-50" />
+                ) : (
+                  <MoonIcon className="h-5 w-5 text-blue-50" />
+                )}
+              </button>
               <WalletStatus openModal={() => ModalService.open(WalletModal)} />
             </div>
             <div className="flex items-center -mr-2 md:hidden">
@@ -158,6 +167,19 @@ export default function Nav() {
 
             <div className="flex justify-center mt-5">
               <WalletStatus openModal={() => ModalService.open(WalletModal)} />
+            </div>
+            <div className="flex justify-center mt-5">
+              <button
+                id="switchTheme"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="h-10 w-10 flex justify-center items-center focus:outline-none  text-blue-50"
+              >
+                {theme === 'dark' ? (
+                  <SunIcon className="h-5 w-5 text-blue-50" />
+                ) : (
+                  <MoonIcon className="h-5 w-5 text-blue-50" />
+                )}
+              </button>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 export { default as buyToken } from './buyToken'
 export { default as sellToken } from './sellToken'
+export { default as lockToken } from './lockToken'
 export { default as getTokenAllowance } from './getTokenAllowance'
 export { default as listToken } from './listToken'
 export { default as useBalance } from './useBalance'

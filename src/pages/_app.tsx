@@ -3,6 +3,7 @@ import '../styles/globals.css'
 import '../styles/fonts/gilroy/style.css'
 import '../styles/fonts/sf-compact-display/style.css'
 import '../styles/nprogress.css'
+import { ThemeProvider } from 'next-themes'
 
 import { createContext, Fragment, ReactNode, useEffect, useState } from 'react'
 import type { AppProps } from 'next/app'
@@ -24,12 +25,13 @@ import Web3 from 'web3'
 import Web3ReactManager from 'components/wallet/Web3ReactManager'
 import ModalRoot from 'components/modals/ModalRoot'
 import { WrongNetworkOverlay } from 'components'
+import { initUseMarketStore } from 'store/markets'
 
 export const GlobalContext = createContext({
   onWalletConnectedCallback: () => {},
   setOnWalletConnectedCallback: (f: () => void) => {},
-  isEmailHeaderActive: false,
-  setIsEmailHeaderActive: (val: boolean) => {},
+  isEmailFooterActive: false,
+  setIsEmailFooterActive: (val: boolean) => {},
 })
 
 function getLibrary(provider: any): Web3 {
@@ -46,12 +48,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     ).layoutProps?.Layout || Fragment
 
-  const [isEmailHeaderActive, setIsEmailHeaderActive] = useState(false)
+  const [isEmailFooterActive, setIsEmailFooterActive] = useState(false)
   useEffect(() => {
     const isEmailBarClosed = localStorage.getItem('IS_EMAIL_BAR_CLOSED')
       ? localStorage.getItem('IS_EMAIL_BAR_CLOSED') === 'true'
       : false
-    setIsEmailHeaderActive(!isEmailBarClosed)
+    setIsEmailFooterActive(!isEmailBarClosed)
   }, [])
 
   useEffect(() => {
@@ -61,6 +63,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [onWalletConnectedCallback, setOnWalletConnectedCallback] = useState(
     () => () => {}
   )
+
+  initUseMarketStore()
 
   return (
     <>
@@ -98,19 +102,21 @@ function MyApp({ Component, pageProps }: AppProps) {
         value={{
           onWalletConnectedCallback,
           setOnWalletConnectedCallback,
-          isEmailHeaderActive,
-          setIsEmailHeaderActive,
+          isEmailFooterActive,
+          setIsEmailFooterActive,
         }}
       >
-        <Web3ReactProvider getLibrary={getLibrary}>
-          <Web3ReactManager>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </Web3ReactManager>
-          <WrongNetworkOverlay />
-          <ModalRoot />
-        </Web3ReactProvider>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <Web3ReactManager>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </Web3ReactManager>
+            <WrongNetworkOverlay />
+            <ModalRoot />
+          </Web3ReactProvider>
+        </ThemeProvider>
       </GlobalContext.Provider>
     </>
   )

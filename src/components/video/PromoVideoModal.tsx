@@ -33,9 +33,10 @@ export default function PromoVideoModal({ close }: { close: () => void }) {
   }, [windowSize])
 
   return (
-    <Modal close={() => close()}>
+    <Modal close={close}>
       <div style={playerSize}>
         <iframe
+          title="promo-iframe"
           width="100%"
           height="100%"
           src="https://www.youtube.com/embed/vmzUtpaeQ-I"

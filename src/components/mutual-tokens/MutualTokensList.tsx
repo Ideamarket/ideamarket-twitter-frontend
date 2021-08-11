@@ -5,12 +5,9 @@ import {
   queryMutualHoldersOfToken,
 } from 'store/ideaMarketsStore'
 import { MutualToken, MutualTokenSkeleton } from 'components'
-import Select from 'react-select'
+import DropDown from 'components/DropDown'
 
-export type MutualTokensListSortBy =
-  | 'latestTimestamp'
-  | 'totalAmount'
-  | 'totalHolders'
+export type MutualTokensListSortBy = 'totalAmount' | 'totalHolders'
 
 const options = [
   {
@@ -20,10 +17,6 @@ const options = [
   {
     value: 'totalAmount',
     label: 'Mutual Tokens',
-  },
-  {
-    value: 'latestTimestamp',
-    label: 'Most Recent',
   },
 ]
 
@@ -38,9 +31,11 @@ export default function MutualTokensList({
   const [pageNumber, setPageNumber] = useState(1)
   const [sortBy, setSortBy] = useState<MutualTokensListSortBy>('totalHolders')
 
-  const { data: mutualHoldersList, isLoading, isError } = useQuery<
-    MutualHoldersData[]
-  >(
+  const {
+    data: mutualHoldersList,
+    isLoading,
+    isError,
+  } = useQuery<MutualHoldersData[]>(
     [`token-mutualHolders-${marketName}-${tokenName}`, marketName, tokenName],
     () => queryMutualHoldersOfToken({ marketName, tokenName })
   )
@@ -61,35 +56,21 @@ export default function MutualTokensList({
   return (
     <>
       <div className="pb-5 mb-12 border-b border-gray-200 sm:flex sm:items-end sm:justify-between">
-        <h3 className="text-2xl font-medium leading-6">Mutual Holders</h3>
+        <h3 className="text-2xl font-medium leading-6">Holders also bought</h3>
         <div className="mt-3 sm:mt-0 sm:ml-4">
           <p>Sort By</p>
-          <Select
+          <DropDown
             name="Sort By"
             options={options}
             isDisabled={isLoading}
             isClearable={false}
             defaultValue={options[0]}
             isSearchable={false}
-            className="w-48 border-2 border-gray-200 rounded-md text-brand-gray-4 market-select"
+            className="w-48 border-2 border-gray-200 dark:border-gray-500 dark:placeholder-gray-300 rounded-md text-brand-gray-4 dark:text-gray-200 market-select trade-select"
             onChange={(entry) => {
               setSortBy((entry as any).value)
             }}
-            theme={(theme) => ({
-              ...theme,
-              borderRadius: 2,
-              colors: {
-                ...theme.colors,
-                primary25: '#f6f6f6', // brand-gray
-                primary: '#0857e0', // brand-blue
-              },
-            })}
-            styles={{
-              valueContainer: (provided) => ({
-                ...provided,
-                minHeight: '50px',
-              }),
-            }}
+            formatOptionLabel={null}
           />
         </div>
       </div>

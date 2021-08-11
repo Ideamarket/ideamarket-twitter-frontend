@@ -1,40 +1,47 @@
-import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import classNames from 'classnames'
+import Select from 'react-select'
 import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
 import { useTokenListStore } from 'store/tokenListStore'
-import { useBalance, useOutputAmount, buyToken, sellToken } from 'actions'
 import {
+  useBalance,
+  useOutputAmount,
+  buyToken,
+  sellToken,
+  useTokenIconURL,
+} from 'actions'
+import {
+  calculateIdeaTokenDaiValue,
   floatToWeb3BN,
-  calculateMaxIdeaTokensBuyable,
   formatBigNumber,
-  getUniswapDaiOutputSwap,
+  isAddress,
   useTransactionManager,
+  web3BNToFloatString,
+  ZERO_ADDRESS,
 } from 'utils'
 import { useContractStore } from 'store/contractStore'
 import { NETWORK } from 'store/networks'
-import Select from 'react-select'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import ApproveButton from './ApproveButton'
 import AdvancedOptions from './AdvancedOptions'
 import Tooltip from '../tooltip/Tooltip'
-import CircleSpinner from '../animations/CircleSpinner'
 import A from 'components/A'
+import { getMarketSpecificsByMarketName } from 'store/markets'
+import { TradeInterfaceBox } from './components'
+import CircleSpinner from 'components/animations/CircleSpinner'
+import { CogIcon } from '@heroicons/react/outline'
+import useReversePrice from 'actions/useReversePrice'
+import useTokenToDAI from 'actions/useTokenToDAI'
+import { useWeb3React } from '@web3-react/core'
+import { useENSAddress } from './hooks/useENSAddress'
 
-export default function TradeInterface({
-  ideaToken,
-  market,
-  onTradeSuccessful,
-  onValuesChanged,
-  resetOn,
-  centerTypeSelection,
-  showTypeSelection,
-  showTradeButton,
-  disabled,
-  bgcolor,
-  unlockText,
-}: {
+type NewIdeaToken = {
+  symbol: string
+  logoURL: string
+}
+
+type TradeInterfaceProps = {
   ideaToken: IdeaToken
   market: IdeaMarket
   onTradeSuccessful: () => void
@@ -42,12 +49,16 @@ export default function TradeInterface({
     ideaTokenAmount: BN,
     tokenAddress: string,
     tokenSymbol: string,
-    tokenAmount: BN,
-    slippage: number,
+    calculatedTokenAmount: BN,
+    maxSlippage: number,
     lock: boolean,
     isUnlockOnceChecked: boolean,
     isUnlockPermanentChecked: boolean,
-    isValid: boolean
+    isValid: boolean,
+    recipientAddress: string,
+    isENSAddressValid: boolean | string,
+    hexAddress: boolean | string,
+    isGiftChecked: boolean
   ) => void
   resetOn: boolean
   centerTypeSelection: boolean
@@ -56,9 +67,29 @@ export default function TradeInterface({
   disabled: boolean
   bgcolor?: string
   unlockText?: string
-}) {
+  newIdeaToken?: NewIdeaToken | null
+}
+
+const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
+
+export default function TradeInterface({
+  ideaToken,
+  market,
+  onTradeSuccessful,
+  onValuesChanged,
+  resetOn,
+  showTradeButton,
+  disabled,
+  bgcolor,
+  unlockText,
+  newIdeaToken,
+}: TradeInterfaceProps) {
+  const { account } = useWeb3React()
   const [tradeType, setTradeType] = useState('buy')
+  const [recipientAddress, setRecipientAddress] = useState('')
+  const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
   const [isLockChecked, setIsLockChecked] = useState(false)
+  const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
     useState(false)
@@ -69,17 +100,32 @@ export default function TradeInterface({
     token: token,
   }))
 
-  const [selectedToken, setSelectedToken] = useState(undefined)
+  const [selectedToken, setSelectedToken] = useState(
+    useTokenListStore.getState().tokens[0]
+  )
+  const [tradeToggle, setTradeToggle] = useState(false) // Need toggle to reload balances after trade
   const [isIdeaTokenBalanceLoading, ideaTokenBalanceBN, ideaTokenBalance] =
-    useBalance(ideaToken?.address, 18)
+    useBalance(ideaToken?.address, 18, tradeToggle)
 
   const [isTokenBalanceLoading, tokenBalanceBN, tokenBalance] = useBalance(
     selectedToken?.address,
-    selectedToken?.decimals
+    selectedToken?.decimals,
+    tradeToggle
   )
 
+  // ideaTokenAmount = Number typed in by user on ideaToken input
   const [ideaTokenAmount, setIdeaTokenAmount] = useState('0')
-  const [isTokenAmountLoading, tokenAmountBN, tokenAmount] = useOutputAmount(
+  const ideaTokenAmountBN = floatToWeb3BN(
+    ideaTokenAmount,
+    18,
+    BigNumber.ROUND_DOWN
+  )
+  // Calculates the selectedToken amount after the ideaToken is typed in
+  const [
+    isCalculatedTokenAmountLoading,
+    calculatedTokenAmountBN,
+    calculatedTokenAmount,
+  ] = useOutputAmount(
     ideaToken,
     market,
     selectedToken?.address,
@@ -87,6 +133,83 @@ export default function TradeInterface({
     selectedToken?.decimals,
     tradeType
   )
+
+  // selectedTokenAmount = Number typed in by user on selectedToken input
+  const [selectedTokenAmount, setSelectedTokenAmount] = useState('0')
+  const selectedTokenAmountBN = floatToWeb3BN(
+    selectedTokenAmount,
+    selectedToken.decimals,
+    BigNumber.ROUND_DOWN
+  )
+  // Calculates the ideaToken amount after the selectedToken is typed in
+  const [
+    isCalculatedIdeaTokenAmountLoading,
+    calculatedIdeaTokenAmountBN,
+    calculatedIdeaTokenAmount,
+  ] = useReversePrice(
+    ideaToken,
+    market,
+    selectedToken?.address,
+    selectedTokenAmount,
+    selectedToken?.decimals,
+    tradeType,
+    tokenBalanceBN
+  )
+
+  // Determines which token input was typed in last
+  const isSelectedTokenActive = selectedTokenAmount !== '0'
+
+  // These master variables store the value to be used for the ideaToken and selectedToken
+  // If user typed a number, use that input. Otherwise, use the calculated value
+  const masterIdeaTokenAmount = isSelectedTokenActive
+    ? calculatedIdeaTokenAmount
+    : ideaTokenAmount
+  const masterSelectedTokenAmount = isSelectedTokenActive
+    ? selectedTokenAmount
+    : calculatedTokenAmount
+  const masterIdeaTokenAmountBN = isSelectedTokenActive
+    ? calculatedIdeaTokenAmountBN
+    : ideaTokenAmountBN
+  const masterSelectedTokenAmountBN = isSelectedTokenActive
+    ? selectedTokenAmountBN
+    : calculatedTokenAmountBN
+
+  const ideaTokenValue = web3BNToFloatString(
+    calculateIdeaTokenDaiValue(
+      ideaToken?.rawSupply.add(masterIdeaTokenAmountBN) ||
+        masterIdeaTokenAmountBN,
+      market,
+      masterIdeaTokenAmountBN
+    ),
+    tenPow18,
+    2
+  )
+
+  // Calculates the DAI/USD value for the selectedToken
+  const [
+    isSelectedTokenDAIValueLoading,
+    selectedTokenDAIValueBN,
+    selectedTokenDAIValue,
+  ] = useTokenToDAI(
+    selectedToken,
+    masterSelectedTokenAmount,
+    selectedToken?.decimals
+  )
+
+  function percentDecrease(a, b) {
+    return 100 * ((a - b) / Math.abs(a))
+  }
+
+  const slippage =
+    tradeType === 'buy'
+      ? percentDecrease(
+          parseFloat(selectedTokenDAIValue),
+          parseFloat(ideaTokenValue)
+        )
+      : percentDecrease(
+          parseFloat(ideaTokenValue),
+          parseFloat(selectedTokenDAIValue)
+        )
 
   const exchangeContractAddress = useContractStore(
     (state) => state.exchangeContract
@@ -108,26 +231,30 @@ export default function TradeInterface({
   const spendTokenAddress =
     tradeType === 'buy' ? selectedToken?.address : ideaToken.address
 
-  const spendTokenSymbol = tradeType === 'buy' ? selectedToken?.symbol : 'IDT'
+  const spendTokenSymbol =
+    tradeType === 'buy' ? selectedToken?.symbol : ideaToken.name
 
   const requiredAllowance =
-    tradeType === 'buy' ? tokenAmountBN : floatToWeb3BN(ideaTokenAmount, 18)
+    tradeType === 'buy' ? masterSelectedTokenAmount : masterIdeaTokenAmount
+
+  const exceedsBalanceBuy =
+    isTokenBalanceLoading || !masterSelectedTokenAmountBN
+      ? false
+      : tokenBalanceBN.lt(masterSelectedTokenAmountBN)
+
+  const exceedsBalanceSell = isIdeaTokenBalanceLoading
+    ? false
+    : ideaTokenBalanceBN.lt(masterIdeaTokenAmountBN)
 
   const exceedsBalance =
-    tradeType === 'buy'
-      ? isTokenBalanceLoading || !tokenAmountBN
-        ? false
-        : tokenBalanceBN.lt(tokenAmountBN)
-      : isIdeaTokenBalanceLoading
-      ? false
-      : ideaTokenBalanceBN.lt(floatToWeb3BN(ideaTokenAmount, 18))
+    tradeType === 'buy' ? exceedsBalanceBuy : exceedsBalanceSell
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
   const [approveButtonKey, setApproveButtonKey] = useState(0)
   const [isValid, setIsValid] = useState(false)
   const txManager = useTransactionManager()
 
-  let slippage = 0.01
+  let maxSlippage = 0.01
   type SlippageValue = {
     value: number
     label: string
@@ -145,24 +272,29 @@ export default function TradeInterface({
     setIdeaTokenAmount('')
     setTradeType('buy')
     setApproveButtonKey(approveButtonKey + 1)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetOn])
 
   useEffect(() => {
     let isValid =
       selectedToken !== undefined &&
-      ideaTokenAmount !== '' &&
-      tokenAmount !== '' &&
-      tokenAmountBN !== undefined &&
-      tokenAmountBN.gt(new BN('0')) &&
-      floatToWeb3BN(ideaTokenAmount, 18).gt(new BN('0'))
+      masterIdeaTokenAmountBN !== undefined &&
+      masterSelectedTokenAmountBN !== undefined &&
+      !isNaN(masterIdeaTokenAmount) &&
+      !isNaN(masterSelectedTokenAmount) &&
+      !/\s/g.test(masterSelectedTokenAmount) && // No whitespace allowed in inputs
+      !/\s/g.test(masterIdeaTokenAmount) &&
+      masterIdeaTokenAmountBN.gt(new BN('0')) &&
+      masterSelectedTokenAmountBN.gt(new BN('0'))
 
     if (isValid) {
+      // Make sure user has high enough balance. If not, disable buttons
       if (tradeType === 'buy') {
-        if (tokenAmountBN.gt(tokenBalanceBN)) {
+        if (masterSelectedTokenAmountBN.gt(tokenBalanceBN)) {
           isValid = false
         }
       } else {
-        if (floatToWeb3BN(ideaTokenAmount, 18).gt(ideaTokenBalanceBN)) {
+        if (masterIdeaTokenAmountBN.gt(ideaTokenBalanceBN)) {
           isValid = false
         }
       }
@@ -170,42 +302,57 @@ export default function TradeInterface({
 
     setIsValid(isValid)
 
+    // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
+    const ideaTokenAmountBNLocal = floatToWeb3BN(
+      masterIdeaTokenAmount,
+      18,
+      BigNumber.ROUND_DOWN
+    )
+    const selectedTokenAmountBNLocal = floatToWeb3BN(
+      masterSelectedTokenAmount,
+      selectedToken.decimals,
+      BigNumber.ROUND_DOWN
+    )
+
     onValuesChanged(
-      floatToWeb3BN(ideaTokenAmount, 18),
+      ideaTokenAmountBNLocal,
       selectedToken?.address,
-      selectedToken?.symbol,
-      tokenAmountBN,
-      slippage,
+      spendTokenSymbol,
+      selectedTokenAmountBNLocal,
+      maxSlippage,
       isLockChecked,
       isUnlockOnceChecked,
       isUnlockPermanentChecked,
-      isValid
+      isValid,
+      recipientAddress,
+      isENSAddressValid,
+      hexAddress,
+      isGiftChecked
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     ideaTokenAmount,
+    selectedTokenAmount,
     selectedToken,
-    tokenAmountBN,
+    calculatedIdeaTokenAmountBN,
+    calculatedTokenAmountBN,
     isLockChecked,
-    slippage,
+    maxSlippage,
     isUnlockOnceChecked,
     isUnlockPermanentChecked,
+    isCalculatedIdeaTokenAmountLoading,
+    isCalculatedTokenAmountLoading,
+    isSelectedTokenDAIValueLoading,
+    recipientAddress,
+    isENSAddressValid,
+    hexAddress,
+    isGiftChecked,
+    spendTokenSymbol,
   ])
 
-  const selectTokensFormat = (entry) => (
-    <div className="flex flex-row">
-      <div className="flex items-center">
-        <img className="w-7.5" src={'' + entry.token.logoURL} />
-      </div>
-      <div className="ml-2.5">
-        <div>{entry.token.symbol}</div>
-        <div className="text-xs font-semibold text-brand-new-dark">
-          {entry.token.name}
-        </div>
-      </div>
-    </div>
-  )
-
   async function maxButtonClicked() {
+    setSelectedTokenAmount('0')
+
     if (tradeType === 'sell') {
       const balanceBN = new BigNumber(ideaTokenBalanceBN.toString())
       setIdeaTokenAmount(
@@ -216,49 +363,45 @@ export default function TradeInterface({
         )
       )
     } else {
-      let balanceAsDai
-      if (selectedToken.symbol === 'Dai') {
-        balanceAsDai = tokenBalanceBN
-      } else {
-        balanceAsDai = await getUniswapDaiOutputSwap(
-          selectedToken.address,
-          tokenBalanceBN
-        )
-      }
-      const buyableBN = calculateMaxIdeaTokensBuyable(
-        balanceAsDai,
-        ideaToken?.rawSupply || new BN('0'),
-        market
-      )
-      setIdeaTokenAmount(
-        formatBigNumber(
-          buyableBN.div(new BigNumber('10').pow(new BigNumber('18'))),
-          18,
-          BigNumber.ROUND_DOWN
-        )
-      )
+      setSelectedTokenAmount(tokenBalance)
     }
   }
 
   async function onTradeClicked() {
     const name = tradeType === 'buy' ? 'Buy' : 'Sell'
     const func = tradeType === 'buy' ? buyToken : sellToken
+    // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
+    const ideaTokenAmountBNLocal = floatToWeb3BN(
+      masterIdeaTokenAmount,
+      18,
+      BigNumber.ROUND_DOWN
+    )
+    const selectedTokenAmountBNLocal = floatToWeb3BN(
+      masterSelectedTokenAmount,
+      selectedToken.decimals,
+      BigNumber.ROUND_DOWN
+    )
+
+    const giftAddress = isENSAddressValid ? hexAddress : recipientAddress
+
     const args =
       tradeType === 'buy'
         ? [
             ideaToken.address,
             selectedToken.address,
-            floatToWeb3BN(ideaTokenAmount, 18),
-            tokenAmountBN,
-            slippage,
+            ideaTokenAmountBNLocal,
+            selectedTokenAmountBNLocal,
+            maxSlippage,
             isLockChecked ? 31556952 : 0,
+            isGiftChecked ? giftAddress : account,
           ]
         : [
             ideaToken.address,
             selectedToken.address,
-            floatToWeb3BN(ideaTokenAmount, 18),
-            tokenAmountBN,
-            slippage,
+            ideaTokenAmountBNLocal,
+            selectedTokenAmountBNLocal,
+            maxSlippage,
+            isGiftChecked ? giftAddress : account,
           ]
 
     try {
@@ -268,177 +411,115 @@ export default function TradeInterface({
       return
     }
 
+    setIdeaTokenAmount('0')
     setApproveButtonKey(approveButtonKey + 1)
     onTradeSuccessful()
+    setTradeToggle(!tradeToggle)
   }
+
+  // Did user type a valid ENS address or hex-address?
+  const isValidAddress = !isENSAddressValid ? isAddress(recipientAddress) : true
+
+  const isApproveButtonDisabled =
+    !isValid ||
+    exceedsBalance ||
+    !isMissingAllowance ||
+    txManager.isPending ||
+    (isGiftChecked && !isValidAddress)
 
   const isTradeButtonDisabled =
     txManager.isPending ||
     !isValid ||
     exceedsBalance ||
     isMissingAllowance ||
-    !parseFloat(ideaTokenAmount) ||
-    parseFloat(ideaTokenAmount) <= 0.0
+    (isGiftChecked && !isValidAddress)
+
+  const marketSpecifics = getMarketSpecificsByMarketName(market?.name)
+  const { tokenIconURL } = useTokenIconURL({
+    marketSpecifics,
+    tokenName: ideaToken?.name,
+  })
+
+  const commonProps = {
+    setIdeaTokenAmount,
+    setSelectedTokenAmount,
+    tradeType,
+    exceedsBalance,
+    disabled,
+    market,
+    maxButtonClicked,
+    selectedToken,
+    setSelectedToken,
+    selectTokensValues,
+    setTradeType,
+    txManager,
+    slippage,
+    isInputAmountGTSupply: masterIdeaTokenAmount < 0,
+  }
+
+  const selectedTokenProps = {
+    ideaTokenAmount: isCalculatedTokenAmountLoading
+      ? '...'
+      : masterSelectedTokenAmount,
+    isIdeaToken: false, // Selected token is never an ideaToken. It is ETH/DAI/etc (if this changes, can call this isSelectedToken instead)
+    tokenBalance,
+    isTokenBalanceLoading,
+    selectedIdeaToken: null,
+    tokenValue: web3BNToFloatString(
+      selectedTokenDAIValueBN || new BN('0'),
+      tenPow18,
+      2
+    ),
+  }
+
+  const selectedIdeaToken = {
+    symbol: ideaToken?.name,
+    logoURL: tokenIconURL,
+  }
+
+  const ideaTokenProps = {
+    ideaTokenAmount: isCalculatedIdeaTokenAmountLoading
+      ? '...'
+      : masterIdeaTokenAmount,
+    isIdeaToken: true,
+    tokenBalance: ideaTokenBalance,
+    isTokenBalanceLoading: isIdeaTokenBalanceLoading,
+    selectedIdeaToken: newIdeaToken || selectedIdeaToken,
+    tokenValue: ideaTokenValue,
+  }
 
   return (
-    <>
-      {showTypeSelection && (
-        <nav className="flex">
-          <A
-            onClick={() => {
-              if (!txManager.isPending) setTradeType('buy')
-            }}
-            className={classNames(
-              'text-base cursor-pointer pb-2 m-1 font-semibold',
-              centerTypeSelection ? 'flex-grow text-center' : 'px-3',
-              tradeType === 'buy'
-                ? 'text-brand-new-dark border-brand-new-dark border-b-2'
-                : 'text-brand-new-dark font-semibold border-transparent'
-            )}
+    <div>
+      <div
+        className="p-4 mx-auto bg-white dark:bg-gray-700 rounded-xl"
+        style={{ maxWidth: 550 }}
+      >
+        <div className="flex justify-between">
+          <div />
+          <Tooltip
+            className="w-4 h-4 mb-4 ml-2 cursor-pointer text-brand-gray-2 dark:text-white"
+            placement="down"
+            IconComponent={CogIcon}
           >
-            Buy
-          </A>
-          <A
-            onClick={() => {
-              if (!txManager.isPending) setTradeType('sell')
-            }}
-            className={classNames(
-              'text-base cursor-pointer pb-2 m-1 font-semibold',
-              centerTypeSelection ? 'flex-grow text-center' : 'px-3',
-              tradeType === 'sell'
-                ? 'text-brand-new-dark border-brand-new-dark border-b-2'
-                : 'text-brand-new-dark font-semibold border-transparent'
-            )}
-          >
-            Sell
-          </A>
-        </nav>
-      )}
-      <div className="mx-auto" style={{ maxWidth: 550 }}>
-        <div style={bgcolor ? { backgroundColor: bgcolor } : {}}>
-          <p className="mx-5 mt-5 mb-2 text-sm font-semibold text-brand-new-dark">
-            {tradeType === 'buy' ? 'Pay with' : 'Receive'}
-          </p>
-          <div className="mx-5">
-            <Select
-              className="border-2 border-gray-200 rounded-md text-brand-gray-4 trade-select"
-              isClearable={false}
-              isSearchable={false}
-              isDisabled={txManager.isPending || disabled}
-              onChange={(value) => {
-                setSelectedToken(value.token)
-              }}
-              options={selectTokensValues}
-              formatOptionLabel={selectTokensFormat}
-              defaultValue={selectTokensValues[0]}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 2,
-                colors: {
-                  ...theme.colors,
-                  primary25: '#d8d8d8', // brand-gray
-                  primary: '#0857e0', // brand-blue
-                },
-              })}
-              styles={{
-                valueContainer: (provided) => ({
-                  ...provided,
-                  minHeight: '50px',
-                }),
-              }}
-            />
-          </div>
-          <div className="flex flex-row justify-between mx-5 mt-5">
-            <p className="mb-2 text-sm font-semibold text-brand-new-dark">
-              {tradeType === 'buy'
-                ? 'Amount of tokens to buy'
-                : 'Amount of tokens to sell'}
-            </p>
-            <p
-              className={classNames(
-                'text-sm  mb-2',
-                exceedsBalance
-                  ? 'text-brand-red font-bold'
-                  : 'text-brand-new-dark font-semibold'
-              )}
-            >
-              {tradeType === 'buy'
-                ? ''
-                : 'Available: ' +
-                  (isIdeaTokenBalanceLoading ? '...' : ideaTokenBalance)}
-            </p>
-          </div>
-          <div className="flex items-center mx-5">
-            <input
-              className="flex-grow w-full px-4 py-2 border-2 border-gray-200 rounded-md text-brand-gray-2 focus:outline-none focus:bg-white focus:border-brand-blue"
-              type="number"
-              min="0"
-              value={ideaTokenAmount}
-              onChange={(event) => {
-                setIdeaTokenAmount(event.target.value)
-              }}
-              disabled={txManager.isPending || disabled}
-            />
-            <button
-              className={classNames(
-                'w-20 py-1 ml-2 text-sm font-medium bg-white border-2 rounded-lg tracking-tightest-2',
-                txManager.isPending || disabled
-                  ? 'border-brand-gray-2 text-brand-new-dark font-semibold cursor-default'
-                  : 'border-brand-blue text-brand-blue hover:text-white hover:bg-brand-blue'
-              )}
-              disabled={txManager.isPending || disabled}
-              onClick={maxButtonClicked}
-            >
-              Max
-            </button>
-          </div>
-
-          <div className="flex flex-row justify-between mx-5 mt-5">
-            <p className="mb-2 text-sm font-semibold text-brand-new-dark">
-              {tradeType === 'buy' ? 'You will pay' : 'You will receive'}
-            </p>
-            <p
-              className={classNames(
-                'text-sm mb-2',
-                exceedsBalance
-                  ? 'text-brand-red font-bold'
-                  : 'text-brand-new-dark font-semibold'
-              )}
-            >
-              {tradeType === 'buy'
-                ? 'Available: ' + (isTokenBalanceLoading ? '...' : tokenBalance)
-                : ''}
-            </p>
-          </div>
-
-          <div className="mx-5">
-            <input
-              className="w-full px-4 py-2 border-2 border-gray-200 rounded text-brand-gray-2 focus:outline-none focus:bg-white focus:border-brand-blue"
-              type="text"
-              disabled={true}
-              value={isTokenAmountLoading ? '...' : tokenAmount}
-            />
-          </div>
-
-          <div className="flex flex-col justify-between mx-5 mt-5 text-sm font-semibold md:flex-row text-brand-gray-2">
-            <div className="flex items-center">
-              Trading fee:{' '}
-              {market && market.platformFeeRate && market.tradingFeeRate
-                ? (
-                    parseFloat(market.platformFeeRate) +
-                    parseFloat(market.tradingFeeRate)
-                  ).toFixed(2)
-                : '-'}
-              %
+            <div className="w-64 mb-2">
+              <AdvancedOptions
+                disabled={txManager.isPending || disabled}
+                setIsUnlockOnceChecked={setIsUnlockOnceChecked}
+                isUnlockOnceChecked={isUnlockOnceChecked}
+                isUnlockPermanentChecked={isUnlockPermanentChecked}
+                setIsUnlockPermanentChecked={setIsUnlockPermanentChecked}
+                unlockText={unlockText || 'for trading'}
+              />
             </div>
-            <div className="flex-1 mb-3 text-base md:ml-8 md:mb-0 text-brand-gray-2">
+
+            <div className="flex-1 mb-3 text-base text-brand-gray-2">
               <Select
                 className="border-2 border-gray-200 rounded-md text-brand-gray-2 trade-select"
                 isClearable={false}
                 isSearchable={false}
                 isDisabled={txManager.isPending || disabled}
                 onChange={(option: SlippageValue) => {
-                  slippage = option.value
+                  maxSlippage = option.value
                 }}
                 options={slippageValues}
                 defaultValue={slippageValues[0]}
@@ -453,132 +534,173 @@ export default function TradeInterface({
                 })}
               />
             </div>
-          </div>
-        </div>
-        <div
-          className={classNames(
-            'cursor-pointer flex items-center mt-5 text-sm mx-5',
-            tradeType === 'sell' && 'invisible'
-          )}
-        >
-          <input
-            type="checkbox"
-            className="border-2 border-gray-200 rounded-sm cursor-pointer"
-            id="lockCheckbox"
-            disabled={txManager.isPending || disabled}
-            checked={isLockChecked}
-            onChange={(e) => {
-              setIsLockChecked(e.target.checked)
-            }}
-          />
-          <label
-            htmlFor="lockCheckbox"
-            className={classNames(
-              'ml-2 cursor-pointer',
-              isLockChecked
-                ? 'text-brand-blue font-medium'
-                : 'text-brand-new-dark font-semibold'
-            )}
-          >
-            Lock purchased tokens for 1YR
-          </label>
-          <Tooltip className="ml-2">
-            <div className="w-32 md:w-64">
-              Lock tokens to show your long-term confidence in a listing. You
-              will be unable to sell or withdraw locked tokens for the time
-              period specified.
-              <br />
-              <br />
-              For more information, see{' '}
-              <A
-                href="https://docs.ideamarket.io/user-guide/hiw-buy-and-sell#locking-tokens"
-                target="_blank"
-                className="underline"
-              >
-                locking tokens
-              </A>
-              .
-            </div>
           </Tooltip>
         </div>
-        <AdvancedOptions
-          disabled={txManager.isPending || disabled}
-          isUnlockOnceChecked={isUnlockOnceChecked}
-          setIsUnlockOnceChecked={setIsUnlockOnceChecked}
-          isUnlockPermanentChecked={isUnlockPermanentChecked}
-          setIsUnlockPermanentChecked={setIsUnlockPermanentChecked}
-          unlockText={unlockText || 'for trading'}
-        />
-        {showTradeButton && (
-          <div className="max-w-sm mx-auto">
-            <div className={classNames('flex mt-8 mx-5 text-xs')}>
-              <div className="flex justify-center flex-grow">
-                <ApproveButton
-                  tokenAddress={spendTokenAddress}
-                  tokenSymbol={spendTokenSymbol}
-                  spenderAddress={spender}
-                  requiredAllowance={requiredAllowance}
-                  unlockPermanent={isUnlockPermanentChecked}
-                  txManager={txManager}
-                  setIsMissingAllowance={setIsMissingAllowance}
-                  disable={
-                    !isValid ||
-                    exceedsBalance ||
-                    !isMissingAllowance ||
-                    txManager.isPending
-                  }
-                  key={approveButtonKey}
-                />
-              </div>
-              <div className="flex justify-center flex-grow">
-                <button
-                  className={classNames(
-                    'ml-6 w-28 md:w-40 h-12 text-base border-2 rounded-lg tracking-tightest-2 ',
-                    isTradeButtonDisabled
-                      ? 'text-brand-gray-2 bg-brand-gray cursor-default border-brand-gray'
-                      : 'border-brand-blue text-white bg-brand-blue font-medium'
-                  )}
-                  disabled={isTradeButtonDisabled}
-                  onClick={onTradeClicked}
-                >
-                  {tradeType === 'buy' ? 'Buy' : 'Sell'}
-                </button>
-              </div>
-            </div>
 
-            <div
+        <TradeInterfaceBox
+          {...commonProps}
+          label="Spend"
+          {...(tradeType === 'sell'
+            ? { ...ideaTokenProps }
+            : { ...selectedTokenProps })}
+        />
+
+        <TradeInterfaceBox
+          {...commonProps}
+          label="Receive"
+          showBuySellSwitch={!newIdeaToken}
+          {...(tradeType === 'buy'
+            ? { ...ideaTokenProps }
+            : { ...selectedTokenProps })}
+        />
+
+        <div className={classNames('flex flex-col my-2 text-sm')}>
+          <div
+            className={classNames(
+              tradeType === 'sell' && 'hidden',
+              'flex items-center cursor-pointer'
+            )}
+          >
+            <input
+              type="checkbox"
+              className="border-2 border-gray-200 rounded-sm cursor-pointer"
+              id="lockCheckbox"
+              disabled={txManager.isPending || disabled}
+              checked={isLockChecked}
+              onChange={(e) => {
+                setIsLockChecked(e.target.checked)
+              }}
+            />
+            <label
+              htmlFor="lockCheckbox"
               className={classNames(
-                'flex w-1/2 mt-2.5 mx-auto justify-center items-center text-xs'
+                'ml-2 cursor-pointer',
+                isLockChecked
+                  ? 'text-brand-blue dark:text-blue-400'
+                  : 'text-gray-500 dark:text-white'
               )}
             >
-              <div
-                className={classNames(
-                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
-                  !isValid || exceedsBalance
-                    ? 'bg-brand-gray text-brand-gray-2'
-                    : 'bg-brand-blue text-white'
-                )}
-              >
-                1
+              Lock for 1 year
+            </label>
+            <Tooltip className="ml-2">
+              <div className="w-32 md:w-64">
+                Lock tokens to show your long-term confidence in a listing. You
+                will be unable to sell or withdraw locked tokens for the time
+                period specified.
+                <br />
+                <br />
+                For more information, see{' '}
+                <A
+                  href="https://docs.ideamarket.io/user-guide/hiw-buy-and-sell#locking-tokens"
+                  target="_blank"
+                  className="underline"
+                >
+                  locking tokens
+                </A>
+                .
               </div>
-              <div
-                className={classNames(
-                  'flex-grow h-0.5',
-                  !isValid || isMissingAllowance || exceedsBalance
-                    ? 'bg-brand-gray'
-                    : 'bg-brand-blue'
-                )}
-              ></div>
-              <div
-                className={classNames(
-                  'flex-grow-0 flex items-center justify-center w-5 h-5 rounded-full',
-                  !isValid || isMissingAllowance || exceedsBalance
-                    ? 'bg-brand-gray text-brand-gray-2'
-                    : 'bg-brand-blue text-white'
-                )}
-              >
-                2
+            </Tooltip>
+          </div>
+
+          <div className="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="border-2 border-gray-200 rounded-sm cursor-pointer"
+              id="giftCheckbox"
+              disabled={txManager.isPending || disabled}
+              checked={isGiftChecked}
+              onChange={(e) => {
+                setIsGiftChecked(e.target.checked)
+              }}
+            />
+            <label
+              htmlFor="giftCheckbox"
+              className={classNames(
+                'ml-2 cursor-pointer',
+                isGiftChecked
+                  ? 'text-brand-blue dark:text-blue-400'
+                  : 'text-gray-500 dark:text-white'
+              )}
+            >
+              Gift
+            </label>
+            <Tooltip className="ml-2">
+              <div className="w-32 md:w-64">
+                Send this purchase to someone else's wallet, such as the listing
+                owner or a friend.
               </div>
+            </Tooltip>
+          </div>
+        </div>
+
+        {isGiftChecked && (
+          <div className="flex flex-col items-center justify-between mb-2 md:flex-row">
+            <input
+              type="text"
+              id="recipient-input"
+              className={classNames(
+                'h-full border rounded-md sm:text-sm my-1 text-black dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
+                !ideaToken ||
+                  (ideaToken && ideaToken.tokenOwner === ZERO_ADDRESS)
+                  ? 'w-full'
+                  : 'w-full md:w-96',
+                isAddress(recipientAddress) || isENSAddressValid
+                  ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
+                  : 'border-brand-red focus:border-brand-red focus:ring-red-500'
+              )}
+              placeholder="Recipient address"
+              value={recipientAddress}
+              onChange={(e) => {
+                setRecipientAddress(e.target.value)
+              }}
+            />
+            {ideaToken &&
+              ideaToken.tokenOwner &&
+              ideaToken.tokenOwner !== ZERO_ADDRESS && (
+                <button
+                  className="p-1 mt-1 text-base font-medium bg-white border-2 rounded-lg cursor-pointer md:mt-0 dark:bg-gray-600 md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 hover:bg-brand-blue"
+                  onClick={() => setRecipientAddress(ideaToken.tokenOwner)}
+                >
+                  Listing owner
+                </button>
+              )}
+          </div>
+        )}
+
+        {showTradeButton && (
+          <>
+            <ApproveButton
+              tokenAddress={spendTokenAddress}
+              tokenName={spendTokenSymbol}
+              spenderAddress={spender}
+              requiredAllowance={floatToWeb3BN(
+                requiredAllowance,
+                18,
+                BigNumber.ROUND_UP
+              )}
+              unlockPermanent={isUnlockPermanentChecked}
+              txManager={txManager}
+              setIsMissingAllowance={setIsMissingAllowance}
+              disable={isApproveButtonDisabled}
+              key={approveButtonKey}
+            />
+            <div className="mt-4 ">
+              <button
+                className={classNames(
+                  'py-4 text-lg font-bold rounded-2xl w-full font-sf-compact-medium',
+                  isTradeButtonDisabled
+                    ? 'text-brand-gray-2 dark:text-gray-300 bg-brand-gray dark:bg-gray-500 cursor-default border-brand-gray'
+                    : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
+                )}
+                disabled={isTradeButtonDisabled}
+                onClick={onTradeClicked}
+              >
+                {tradeType === 'buy' ? 'Buy' : 'Sell'}
+              </button>
+            </div>
+
+            <div className="mt-2 text-xs text-center text-gray-500">
+              Confirm transaction in wallet to complete.
             </div>
 
             <div
@@ -606,9 +728,9 @@ export default function TradeInterface({
                 <CircleSpinner color="#0857e0" bgcolor={bgcolor} />
               </div>
             </div>
-          </div>
+          </>
         )}
       </div>
-    </>
+    </div>
   )
 }

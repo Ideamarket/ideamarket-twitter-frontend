@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix --ext .js,.ts,.tsx --ignore-path .gitignore .",
+    "lint": "eslint --fix --max-warnings=0 --ext .js,.ts,.tsx --ignore-path .gitignore .",
     "check-types": "tsc",
     "prettier": "prettier --ignore-path .gitignore --write \"**/*.+(js|json|ts|tsx)\"",
     "format": "npm run prettier -- --write",
@@ -18,12 +18,13 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@heroicons/react": "1.0.1",
-    "@portis/web3": "^2.0.0-beta.59",
+    "@ensdomains/ensjs": "^2.0.1",
     "@ethersproject/contracts": "^5.2.0",
     "@ethersproject/providers": "^5.2.0",
     "@ethersproject/solidity": "^5.2.0",
     "@headlessui/react": "1.2.0",
+    "@heroicons/react": "1.0.1",
+    "@portis/web3": "^2.0.0-beta.59",
     "@tailwindcss/aspect-ratio": "0.2.1",
     "@tailwindcss/forms": "0.3.2",
     "@tailwindcss/typography": "0.4.1",
@@ -49,8 +50,10 @@
     "immer": "9.0.2",
     "lodash": "^4.17.21",
     "luxon": "1.27.0",
-    "next": "10.2.3",
+    "next": "^11.0.1",
+    "next-pwa": "^5.2.24",
     "next-seo": "4.24.0",
+    "next-themes": "^0.0.14",
     "nprogress": "0.2.0",
     "numeral": "^2.0.6",
     "postcss": "8.3.0",
@@ -79,8 +82,9 @@
     "@typescript-eslint/eslint-plugin": "4.25.0",
     "@typescript-eslint/parser": "4.25.0",
     "babel-eslint": "10.1.0",
-    "babel-plugin-inline-react-svg": "2.0.1",
+    "babel-plugin-inline-react-svg": "^2.0.1",
     "eslint": "7.27.0",
+    "eslint-config-next": "^11.0.1",
     "eslint-config-prettier": "8.3.0",
     "eslint-config-react-app": "6.0.0",
     "eslint-plugin-flowtype": "5.7.2",
@@ -95,7 +99,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "2.3.0",
     "tailwindcss": "2.1.2",
-    "typescript": "4.2.4"
+    "typescript": "^4.3.4"
   },
   "lint-staged": {
     "*.+(js|ts|tsx)": [

@@ -1,10 +1,3 @@
-html,
-body,
-#__next {
-  width: 100%;
-  height: 100%;
-}
-
 button:focus,
 [type='checkbox']:focus,
 [type='radio']:focus {
@@ -23,10 +16,33 @@ span svg {
 
 .trade-select > div:first-child > div:first-child > div,
 .market-select > div:first-child > div:first-child > div {
-  color: #708090;
+  color: #9ca3af;
 }
 
 .market-select > div,
 .market-select > div > div:first-child {
   min-height: initial !important;
+}
+
+/* Change Autocomplete styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: black;
+}
+/* Target safari browser */
+@media not all and (min-resolution: 0.001dpcm) {
+  @supports (-webkit-appearance: none) {
+    @media (min-width: 768px) {
+      .sticky-safari {
+        top: 4rem;
+      }
+    }
+  }
 }

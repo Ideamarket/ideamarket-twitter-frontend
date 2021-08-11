@@ -7,7 +7,7 @@ export default function EmailForm() {
   const [email, setEmail] = useState('')
   const [isError, setIsError] = useState(false)
   const toastId = useRef('')
-  const { setIsEmailHeaderActive } = useContext(GlobalContext)
+  const { setIsEmailFooterActive } = useContext(GlobalContext)
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function EmailForm() {
             }
 
             setEmail('')
-            setIsEmailHeaderActive(false)
+            setIsEmailFooterActive(false)
             localStorage.setItem('IS_EMAIL_BAR_CLOSED', 'true')
             toast.success('Successfully added you to our list!', {
               id: toastId.current,
@@ -62,7 +62,7 @@ export default function EmailForm() {
                 'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
                 isError
                   ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
-                  : 'border-gray-300 focus:ring-brand-blue focus:border-brand-blue'
+                  : 'border-gray-300 text-gray-700 focus:ring-brand-blue focus:border-brand-blue'
               )}
               placeholder="you@example.com"
               value={email}
@@ -74,16 +74,16 @@ export default function EmailForm() {
           <div className="flex items-center justify-between mt-2">
             <label
               htmlFor="email"
-              className="flex-shrink-0 block text-sm font-medium text-gray-700"
+              className="flex-shrink-0 block text-sm font-medium text-gray-400 mr-2"
             >
-              Stay in the loop
+              Arbitrum L2 launch soon
             </label>
 
             <button
               type="submit"
               className="bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue focus:border-brand-blue"
             >
-              Submit
+              Notify me
             </button>
           </div>
         </div>
@@ -93,21 +93,21 @@ export default function EmailForm() {
         <div className="hidden md:flex items-center space-x-2">
           <label
             htmlFor="email"
-            className="flex-shrink-0 block text-sm font-medium text-gray-700"
+            className="flex-shrink-0 block text-sm font-medium text-gray-400"
           >
-            Stay in the loop
+            Arbitrum L2 launch soon
           </label>
 
           <div>
             <input
               type="email"
               name="email"
-              id="header-email"
+              id="footer-email"
               className={classNames(
                 'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
                 isError
                   ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
-                  : 'border-gray-300 focus:ring-brand-blue focus:border-brand-blue'
+                  : 'border-gray-300 text-gray-700 focus:ring-brand-blue focus:border-brand-blue'
               )}
               placeholder="you@example.com"
               value={email}
@@ -120,7 +120,7 @@ export default function EmailForm() {
             type="submit"
             className="bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue focus:border-brand-blue"
           >
-            Submit
+            Notify me
           </button>
         </div>
         {/* Desktop END */}

@@ -110,7 +110,7 @@ export default function Bridge() {
                       {isPairSelected && (
                         <div className="w-6 h-6 mr-2">
                           {isPairSelected &&
-                            marketSpecifics.getMarketOutlineSVG()}
+                            marketSpecifics.getMarketSVGBlack()}
                         </div>
                       )}
 
@@ -152,7 +152,7 @@ export default function Bridge() {
                           {formatNumber(
                             web3BNToFloatString(
                               calculateIdeaTokenDaiValue(
-                                selectedPair.token,
+                                selectedPair.token.rawSupply,
                                 selectedPair.market,
                                 selectedPair.rawBalance
                               ),

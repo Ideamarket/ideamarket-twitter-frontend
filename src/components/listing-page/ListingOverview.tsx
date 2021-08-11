@@ -6,10 +6,14 @@ import {
   calculateCurrentPriceBN,
   formatNumber,
   formatNumberInt,
+  formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
+  ZERO_ADDRESS,
 } from '../../utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
+import { BadgeCheckIcon } from '@heroicons/react/solid'
+import Image from 'next/image'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -76,11 +80,17 @@ export default function TokenCard({
   return (
     <>
       <div className="flex flex-none mt-7">
-        <div className="w-20 h-20 mr-5">
+        <div className="w-20 h-20 mr-5 relative">
           {loading || isTokenIconLoading ? (
             <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
           ) : (
-            <img className="rounded-full" src={tokenIconURL} alt="" />
+            <Image
+              className="rounded-full"
+              src={tokenIconURL || '/gray.svg'}
+              alt=""
+              layout="fill"
+              objectFit="contain"
+            />
           )}
         </div>
         <div className="mt-1 text-2xl font-semibold text-brand-alto">
@@ -89,7 +99,7 @@ export default function TokenCard({
               <span className="invisible">A</span>
             </div>
           ) : (
-            <div>
+            <div className="flex">
               <span className="align-middle">
                 <A
                   href={`${marketSpecifics.getTokenURL(token.name)}`}
@@ -101,9 +111,14 @@ export default function TokenCard({
                   {token.name}
                 </A>
               </span>
-              <span className="ml-2.5 mr-1">
+              <span className="hidden md:block ml-2.5 mr-1 w-5 h-5">
                 {marketSpecifics.getMarketSVGWhite()}
               </span>
+              {token.tokenOwner !== ZERO_ADDRESS && (
+                <span className="hidden md:block inline w-6 h-6 ml-1.5">
+                  <BadgeCheckIcon className="w-6 h-6" />
+                </span>
+              )}
             </div>
           )}
           {loading ? (
@@ -111,8 +126,16 @@ export default function TokenCard({
               <span className="invisible">A</span>
             </div>
           ) : (
-            <div className="mt-1 text-sm">
+            <div className="mt-1 text-sm flex">
               Rank {token.rank ? token.rank : '-'}
+              <span className="block md:hidden ml-2.5 mr-1 w-5 h-5">
+                {marketSpecifics.getMarketSVGWhite()}
+              </span>
+              {token.tokenOwner !== ZERO_ADDRESS && (
+                <span className="block md:hidden inline w-6 h-6 ml-1.5">
+                  <BadgeCheckIcon className="w-6 h-6" />
+                </span>
+              )}
             </div>
           )}
         </div>
@@ -136,7 +159,9 @@ export default function TokenCard({
             ) : parseFloat(token.daiInToken) <= 0.0 ? (
               <>&mdash;</>
             ) : (
-              <>{`$${formatNumber(token.daiInToken)}`}</>
+              <>{`$${formatNumberWithCommasAsThousandsSerperator(
+                parseInt(token.daiInToken)
+              )}`}</>
             )}
           </DetailsOverChartEntry>
 
@@ -149,7 +174,9 @@ export default function TokenCard({
             ) : parseFloat(token.supply) <= 0.0 ? (
               <>&mdash;</>
             ) : (
-              <>{`${formatNumber(token.supply)}`}</>
+              <>{`${formatNumberWithCommasAsThousandsSerperator(
+                parseInt(token.supply)
+              )}`}</>
             )}
           </DetailsOverChartEntry>
 
@@ -184,8 +211,8 @@ export default function TokenCard({
               <div
                 className={
                   parseFloat(token.dayChange) >= 0.0
-                    ? 'text-brand-neon-green'
-                    : 'text-brand-red'
+                    ? 'text-brand-neon-green dark:text-green-400'
+                    : 'text-brand-red dark:text-red-500'
                 }
               >
                 {formatNumber(token.dayChange)}%

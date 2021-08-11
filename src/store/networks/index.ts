@@ -45,7 +45,7 @@ export function getL1Network(l2Network: INetworkSpecifics) {
     case 'kovan':
       return getNetworkSpecificsByNetworkName('kovan')
     default:
-      throw 'getL1Network: missing'
+      throw Error('getL1Network: missing')
   }
 }
 
@@ -61,5 +61,5 @@ export const NETWORK = getNetworkSpecificsByNetworkName(networkName)
 export const L1_NETWORK = getL1Network(NETWORK)
 
 if (!NETWORK) {
-  throw 'no network config: ' + networkName
+  throw Error('no network config: ' + networkName)
 }

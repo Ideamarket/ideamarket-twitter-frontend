@@ -5,7 +5,11 @@ import { getERC20Contract } from 'store/contractStore'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 
-export default function useBalance(address: string, decimals: number) {
+export default function useBalance(
+  address: string,
+  decimals: number,
+  tradeToggle: boolean
+) {
   const [isLoading, setIsLoading] = useState(true)
   const [balanceBN, setBalanceBN] = useState(undefined)
   const [balance, setBalance] = useState(undefined)
@@ -53,7 +57,7 @@ export default function useBalance(address: string, decimals: number) {
       if (!isCancelled) {
         const pow = new BigNumber('10').pow(new BigNumber(decimals))
         setBalanceBN(bn)
-        setBalance(web3BNToFloatString(bn, pow, 4))
+        setBalance(web3BNToFloatString(bn, pow, 4, BigNumber.ROUND_DOWN))
         setIsLoading(false)
       }
     }
@@ -64,7 +68,7 @@ export default function useBalance(address: string, decimals: number) {
     return () => {
       isCancelled = true
     }
-  }, [address, web3])
+  }, [address, web3, tradeToggle, decimals])
 
   return [isLoading, balanceBN, balance]
 }

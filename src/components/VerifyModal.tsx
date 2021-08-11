@@ -161,17 +161,17 @@ export default function VerifyModal({
     setTx('')
     setIsLoading(false)
     setErrorMessage('')
-  }, [])
+  }, [PAGES.TOS])
 
   return (
-    <Modal close={() => close()}>
+    <Modal close={close}>
       <div className="md:min-w-150 md:max-w-150">
         <div className="p-4 bg-top-mobile ">
           <p className="text-2xl text-center text-gray-300 md:text-3xl font-gilroy-bold">
             Verify: {token.name}
           </p>
         </div>
-        <div className="p-5 text-brand-gray-2">
+        <div className="p-5 text-brand-gray-2 dark:text-gray-300">
           {page === PAGES.TOS && (
             <>
               <p className="mt-5 text-xl font-bold text-center">
@@ -254,7 +254,7 @@ export default function VerifyModal({
                     'mt-5 w-32 h-10 text-base border-2 rounded-lg tracking-tightest-2 font-sf-compact-medium',
                     tosCheckboxChecked
                       ? 'bg-brand-blue text-white border-brand-blue'
-                      : 'bg-white border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
+                      : 'bg-white dark:bg-gray-500 dark:text-gray-300  border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
                   )}
                   onClick={() => {
                     setPage(PAGES.OWNER_ADDRESS)
@@ -449,10 +449,7 @@ export default function VerifyModal({
                 accumulated interest.
               </p>
               <div className="p-5 mt-5 text-black bg-gray-200 border rounded border-brand-gray-2">
-                <A
-                  className="underline"
-                  href={NETWORK.getEtherscanTxUrl(txManager.hash)}
-                >
+                <A className="underline" href={NETWORK.getEtherscanTxUrl(tx)}>
                   Transaction: {tx.slice(0, 8)}...{tx.slice(-6)}
                 </A>
               </div>

@@ -1,4 +1,3 @@
-import { useWalletStore } from 'store/walletStore'
 import { useContractStore } from 'store/contractStore'
 import { ZERO_ADDRESS } from '../utils'
 import { NETWORK } from 'store/networks'
@@ -13,9 +12,9 @@ export default function listAndBuyToken(
   amount: BN,
   cost: BN,
   slippage: number,
-  lockDuration: number
+  lockDuration: number,
+  recipientAddress: string
 ) {
-  const userAddress = useWalletStore.getState().address
   const multiAction = useContractStore.getState().multiActionContract
 
   const slippageAmount = new BN(
@@ -34,7 +33,7 @@ export default function listAndBuyToken(
       market.marketID,
       amount,
       lockDuration,
-      userAddress
+      recipientAddress
     )
   } else {
     contractCall = multiAction.methods.convertAddAndBuy(
@@ -45,7 +44,7 @@ export default function listAndBuyToken(
       fallbackAmount,
       cost,
       lockDuration,
-      userAddress
+      recipientAddress
     )
 
     if (inputTokenAddress === ZERO_ADDRESS) {

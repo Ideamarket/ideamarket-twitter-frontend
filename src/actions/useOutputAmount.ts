@@ -44,6 +44,7 @@ export default function useOutputAmount(
 
       let requiredDaiAmount
       if (!ideaToken) {
+        // No ideaToken yet because it is being listed
         const factoryContract = useContractStore.getState().factoryContract
         const marketDetails = await factoryContract.methods
           .getMarketDetailsByID(market.marketID)
@@ -80,31 +81,40 @@ export default function useOutputAmount(
       const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
 
       if (!path) {
-        throw 'No Uniswap path exists'
+        throw Error('No Uniswap path exists')
       }
 
-      const trade = new Trade(
-        path.route,
-        new TokenAmount(path.outToken, requiredDaiAmount.toString()),
-        TradeType.EXACT_OUTPUT
-      )
-      const requiredInputBN = new BN(
-        new BigNumber(trade.inputAmount.toExact())
-          .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-          .toFixed()
-      )
+      try {
+        const trade = new Trade(
+          path.route,
+          new TokenAmount(path.outToken, requiredDaiAmount.toString()),
+          TradeType.EXACT_OUTPUT
+        )
+        const requiredInputBN = new BN(
+          new BigNumber(trade.inputAmount.toExact())
+            .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
+            .toFixed()
+        )
 
-      return requiredInputBN
+        return requiredInputBN
+      } catch (ex) {
+        return new BN('0')
+      }
     }
 
     async function calculateSellPrice() {
-      if (!useWalletStore.getState().web3 || !ideaToken || !tokenAddress) {
-        return new BN('0')
-      }
-
       const amountBN = new BN(
         new BigNumber(amount).multipliedBy(tenPow18).toFixed()
       )
+
+      if (
+        !useWalletStore.getState().web3 ||
+        !ideaToken ||
+        !tokenAddress ||
+        amountBN.eq(new BN('0'))
+      ) {
+        return new BN('0')
+      }
 
       const exchangeContract = useContractStore.getState().exchangeContract
       let daiOutputAmount
@@ -130,21 +140,25 @@ export default function useOutputAmount(
       const path = await getUniswapPath(inputTokenAddress, outputTokenAddress)
 
       if (!path) {
-        throw 'No Uniswap path exists'
+        throw Error('No Uniswap path exists')
       }
 
-      const trade = new Trade(
-        path.route,
-        new TokenAmount(path.inToken, daiOutputAmount.toString()),
-        TradeType.EXACT_INPUT
-      )
-      const outputBN = new BN(
-        new BigNumber(trade.outputAmount.toExact())
-          .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
-          .toFixed()
-      )
+      try {
+        const trade = new Trade(
+          path.route,
+          new TokenAmount(path.inToken, daiOutputAmount.toString()),
+          TradeType.EXACT_INPUT
+        )
+        const outputBN = new BN(
+          new BigNumber(trade.outputAmount.toExact())
+            .multipliedBy(new BigNumber('10').exponentiatedBy(decimals))
+            .toFixed()
+        )
 
-      return outputBN
+        return outputBN
+      } catch (ex) {
+        return new BN('0')
+      }
     }
 
     async function run(fn) {
@@ -159,7 +173,7 @@ export default function useOutputAmount(
       if (!isCancelled) {
         const pow = new BigNumber('10').pow(new BigNumber(decimals))
         setOutputBN(bn)
-        setOutput(web3BNToFloatString(bn, pow, 4))
+        setOutput(web3BNToFloatString(bn, pow, 8))
         setIsLoading(false)
       }
     }
@@ -174,7 +188,7 @@ export default function useOutputAmount(
     return () => {
       isCancelled = true
     }
-  }, [ideaToken, tokenAddress, amount, tradeType])
+  }, [ideaToken, tokenAddress, amount, tradeType, decimals, market])
 
   return [isLoading, outputBN, output]
 }

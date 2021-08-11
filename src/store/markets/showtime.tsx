@@ -1,7 +1,6 @@
 import { IMarketSpecifics } from '.'
-import ShowtimeWhite from '../../assets/showtime-white.svg'
-import ShowtimeBlack from '../../assets/showtime-black.svg'
-import ShowtimeOutline from '../../assets/showtime-outline.svg'
+import ShowtimeOutlineWhite from '../../assets/showtime-outline-white.svg'
+import ShowtimeOutlineBlack from '../../assets/showtime-outline-black.svg'
 import { queryLambdavatar } from 'actions'
 
 export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
@@ -20,15 +19,19 @@ export default class ShowtimeMarketSpecifics implements IMarketSpecifics {
   }
 
   getMarketSVGBlack(): JSX.Element {
-    return <ShowtimeBlack />
+    return <ShowtimeOutlineBlack />
   }
 
   getMarketSVGWhite(): JSX.Element {
-    return <ShowtimeWhite />
+    return <ShowtimeOutlineWhite />
   }
 
-  getMarketOutlineSVG(): JSX.Element {
-    return <ShowtimeOutline />
+  getMarketSVGTheme(theme?): JSX.Element {
+    if (theme === 'dark') {
+      return <ShowtimeOutlineWhite />
+    } else {
+      return <ShowtimeOutlineBlack />
+    }
   }
 
   // Tokens
