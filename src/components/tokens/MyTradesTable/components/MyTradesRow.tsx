@@ -41,13 +41,9 @@ const MyTradesRow = ({
     new BN(ideaTokenAmount)
   )
 
-  const pnlNumber = Number(
+  const pln = Number(
     web3BNToFloatString(ideaTokenValueBN.sub(new BN(daiAmount)), tenPow18, 2)
   )
-
-  const daiNumber = Number(web3BNToFloatString(new BN(daiAmount), tenPow18, 2))
-
-  const plnPercentage = (pnlNumber / daiNumber) * 100
 
   return (
     <>
@@ -62,7 +58,7 @@ const MyTradesRow = ({
         }}
       >
         {/* Market desktop */}
-        <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 hidden md:table-cell whitespace-nowrap">
+        <td className="flex items-center justify-center hidden py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
           <div className="flex items-center justify-end w-full h-full">
             <div className="w-5 h-auto">
               {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
@@ -74,9 +70,9 @@ const MyTradesRow = ({
           <div className="flex items-center text-gray-900 dark:text-gray-200">
             <div className="flex-shrink-0 w-7.5 h-7.5">
               {isTokenIconLoading ? (
-                <div className="w-full h-full bg-gray-400 dark:bg-gray-600 rounded-full animate-pulse"></div>
+                <div className="w-full h-full bg-gray-400 rounded-full dark:bg-gray-600 animate-pulse"></div>
               ) : (
-                <div className="w-full h-full rounded-full relative">
+                <div className="relative w-full h-full rounded-full">
                   <Image
                     src={tokenIconURL || '/gray.svg'}
                     alt="token"
@@ -171,13 +167,13 @@ const MyTradesRow = ({
             className={classNames(
               'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
               {
-                'text-brand-red dark:text-red-400': plnPercentage < 0.0,
-                'text-brand-green dark:text-green-400': plnPercentage > 0.0,
-                'text-very-dark-blue dark:text-gray-300': plnPercentage === 0.0,
+                'text-brand-red dark:text-red-400': pln < 0.0,
+                'text-brand-green dark:text-green-400': pln > 0.0,
+                'text-very-dark-blue dark:text-gray-300': pln === 0.0,
               }
             )}
           >
-            {plnPercentage.toFixed(2)}%
+            {pln}
           </p>
         </td>
         <td className="px-4 py-4">
