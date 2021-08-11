@@ -20,20 +20,30 @@ export default function TradeCompleteModal({
   tokenName: string
   transactionType: TRANSACTION_TYPES
 }) {
-  let tweetText = ''
-  if (transactionType === TRANSACTION_TYPES.LIST) {
-    tweetText = `Just listed ${tokenName} on @ideamarket_io`
-  } else if (transactionType === TRANSACTION_TYPES.BUY) {
-    tweetText = `Just bought ${tokenName} on @ideamarket_io`
-  } else if (transactionType === TRANSACTION_TYPES.LOCK) {
-    tweetText = `Just locked ${tokenName} for 1 year on @ideamarket_io`
-  }
+  const tweetTemplate = getTweetTemplate(transactionType, tokenName)
+  const tweetableTypes = [
+    TRANSACTION_TYPES.LIST,
+    TRANSACTION_TYPES.BUY,
+    TRANSACTION_TYPES.LOCK,
+  ]
+  const canTweet = tweetableTypes.includes(transactionType)
 
-  const tweetTemplate = encodeURIComponent(tweetText)
-  const canTweet =
-    transactionType === TRANSACTION_TYPES.LIST ||
-    transactionType === TRANSACTION_TYPES.BUY ||
-    transactionType === TRANSACTION_TYPES.LOCK
+  function getTweetTemplate(
+    transactionType: TRANSACTION_TYPES,
+    tokenName: string
+  ) {
+    let tweetText = ''
+
+    if (transactionType === TRANSACTION_TYPES.LIST) {
+      tweetText = `Just listed ${tokenName} on @ideamarket_io`
+    } else if (transactionType === TRANSACTION_TYPES.BUY) {
+      tweetText = `Just bought ${tokenName} on @ideamarket_io`
+    } else if (transactionType === TRANSACTION_TYPES.LOCK) {
+      tweetText = `Just locked ${tokenName} for 1 year on @ideamarket_io`
+    }
+
+    return encodeURIComponent(tweetText)
+  }
 
   return (
     <Modal close={close}>
