@@ -22,8 +22,10 @@ import { NextSeo } from 'next-seo'
 import {
   queryOwnedTokensMaybeMarket,
   queryLockedTokens,
+  queryMyTrades,
 } from 'store/ideaMarketsStore'
 import ModalService from 'components/modals/ModalService'
+import MyTradesTable from 'components/tokens/MyTradesTable/MyTradesTable'
 
 export default function MyTokens() {
   const web3 = useWalletStore((state) => state.web3)
@@ -60,6 +62,15 @@ export default function MyTokens() {
   } = useQuery(
     ['locked-tokens', selectedMarketLockedTokens, address],
     queryLockedTokens
+  )
+
+  const {
+    data: myTrades,
+    isLoading: isMyTradesDataLoading,
+    refetch: refetchMyTrades,
+  } = useQuery(
+    ['my-trades', selectedMarketLockedTokens, address],
+    queryMyTrades
   )
 
   const [table, setTable] = useState('holdings')
@@ -104,6 +115,7 @@ export default function MyTokens() {
   function refetch() {
     refetchOwned()
     refetchLocked()
+    refetchMyTrades()
   }
 
   return (
@@ -162,7 +174,7 @@ export default function MyTokens() {
                   </div>
                   <div
                     className={classNames(
-                      'text-base text-brand-new-dark dark:text-gray-300 font-semibold px-2 py-3 pt-2 inline-block cursor-pointer',
+                      'text-base text-brand-new-dark dark:text-gray-300 font-semibold px-2 mr-5 py-3 pt-2 inline-block cursor-pointer',
                       table === 'locked'
                         ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
                         : ''
@@ -172,6 +184,19 @@ export default function MyTokens() {
                     }}
                   >
                     Locked
+                  </div>
+                  <div
+                    className={classNames(
+                      'text-base text-brand-new-dark dark:text-gray-300 font-semibold px-2 py-3 pt-2 inline-block cursor-pointer',
+                      table === 'trades'
+                        ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
+                        : ''
+                    )}
+                    onClick={() => {
+                      setTable('trades')
+                    }}
+                  >
+                    My Trades
                   </div>
                 </div>
                 <div
@@ -221,10 +246,19 @@ export default function MyTokens() {
                     market={selectedMarketMyTokens}
                   />
                 )}
+
                 {table === 'locked' && web3 !== undefined && (
                   <LockedTokenTable
                     rawPairs={rawLockedPairs}
                     isPairsDataLoading={isLockedPairsDataLoading}
+                    currentPage={lockedTokensTablePage}
+                    setCurrentPage={setLockedTokensTablePage}
+                  />
+                )}
+                {table === 'trades' && web3 !== undefined && (
+                  <MyTradesTable
+                    rawPairs={myTrades}
+                    isPairsDataLoading={isMyTradesDataLoading}
                     currentPage={lockedTokensTablePage}
                     setCurrentPage={setLockedTokensTablePage}
                   />

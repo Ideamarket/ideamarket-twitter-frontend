@@ -20,6 +20,7 @@ import {
   getQuerySinglePricePoint,
   getQueryTokenBalances,
   getQueryBalancesOfHolders,
+  getQueryMyTrades,
 } from './queries'
 import { NETWORK } from 'store/networks'
 
@@ -106,6 +107,15 @@ export type LockedAmount = {
   rawAmount: BN
   amount: string
   lockedUntil: number
+}
+
+export type IdeaTokenTrade = {
+  token: IdeaToken
+  isBuy: boolean
+  timestamp: number
+  ideaTokenAmount: number
+  daiAmount: number
+  market: IdeaMarket
 }
 
 type State = {
@@ -626,6 +636,59 @@ export async function queryLockedTokens(
   return tokenAmounts.map((locked) =>
     apiResponseToLockedIdeaTokenMarketPair(locked)
   )
+}
+
+export async function queryMyTrades(
+  queryKey,
+  market: IdeaMarket,
+  ownerAddress: string
+): Promise<IdeaTokenTrade[]> {
+  if (!ownerAddress) {
+    return []
+  }
+
+  const marketID = market ? market.marketID : undefined
+
+  let page = 0
+  const myTrades: any = []
+
+  // API can return max of 100 entries. That means we need to query the API multiple times to retrieve all entries
+  while (true) {
+    const result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryMyTrades({
+        ownerAddress,
+        first: 100,
+        skip: page * 100,
+      })
+    )
+
+    const tokensInThisPage = result.ideaTokenTrades ?? []
+
+    myTrades.push(...tokensInThisPage)
+    if (tokensInThisPage.length < 100) {
+      break
+    }
+    page += 1
+  }
+
+  const mapTradeResponse = (trade) => ({
+    ...trade,
+    token: {
+      ...trade.token,
+      ...apiResponseToIdeaToken(trade.token, trade.token.market),
+      market: apiResponseToIdeaMarket(trade.token.market),
+    },
+  })
+
+  // Filter by market if user chooses market option in the select box
+  if (marketID) {
+    return myTrades
+      .filter((trade) => trade?.token?.market?.marketID === marketID)
+      .map(mapTradeResponse)
+  }
+
+  return myTrades.map(mapTradeResponse)
 }
 
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
