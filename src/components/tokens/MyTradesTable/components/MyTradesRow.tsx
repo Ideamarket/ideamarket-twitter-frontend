@@ -14,7 +14,7 @@ import { BadgeCheckIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import moment from 'moment'
-import { IdeaTokenTrade } from 'store/ideaMarketsStore'
+import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -23,9 +23,16 @@ const MyTradesRow = ({
   market,
   isBuy,
   timestamp,
-  ideaTokenAmount,
-  daiAmount,
-}: IdeaTokenTrade) => {
+  rawIdeaTokenAmount,
+  rawDaiAmount,
+}: {
+  token: IdeaToken
+  market: IdeaMarket
+  isBuy: boolean
+  timestamp: number
+  rawIdeaTokenAmount: BN
+  rawDaiAmount: BN
+}) => {
   const router = useRouter()
   const { resolvedTheme } = useThemeMode()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
@@ -35,15 +42,23 @@ const MyTradesRow = ({
     tokenName: token.name,
   })
 
+  const tokenSupply = isBuy
+    ? token?.rawSupply
+    : token?.rawSupply.add(rawIdeaTokenAmount)
+
   const ideaTokenValueBN = calculateIdeaTokenDaiValue(
-    token?.rawSupply,
+    tokenSupply,
     market,
-    new BN(ideaTokenAmount)
+    rawIdeaTokenAmount
   )
 
-  const pln = Number(
-    web3BNToFloatString(ideaTokenValueBN.sub(new BN(daiAmount)), tenPow18, 2)
+  const pnlNumber = Number(
+    web3BNToFloatString(ideaTokenValueBN.sub(rawDaiAmount), tenPow18, 2)
   )
+
+  const daiNumber = Number(web3BNToFloatString(rawDaiAmount, tenPow18, 2))
+
+  const plnPercentage = (pnlNumber / daiNumber) * 100
 
   return (
     <>
@@ -148,7 +163,7 @@ const MyTradesRow = ({
             Amount
           </p>
           <p className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
-            {web3BNToFloatString(new BN(ideaTokenAmount), tenPow18, 2)}
+            {web3BNToFloatString(rawIdeaTokenAmount, tenPow18, 2)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -156,7 +171,7 @@ const MyTradesRow = ({
             Value
           </p>
           <p className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
-            ${web3BNToFloatString(new BN(daiAmount), tenPow18, 2)}
+            ${web3BNToFloatString(rawDaiAmount, tenPow18, 2)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -167,13 +182,13 @@ const MyTradesRow = ({
             className={classNames(
               'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
               {
-                'text-brand-red dark:text-red-400': pln < 0.0,
-                'text-brand-green dark:text-green-400': pln > 0.0,
-                'text-very-dark-blue dark:text-gray-300': pln === 0.0,
+                'text-brand-red dark:text-red-400': plnPercentage < 0.0,
+                'text-brand-green dark:text-green-400': plnPercentage > 0.0,
+                'text-very-dark-blue dark:text-gray-300': plnPercentage === 0.0,
               }
             )}
           >
-            {pln}
+            {plnPercentage.toFixed(2)}%
           </p>
         </td>
         <td className="px-4 py-4">

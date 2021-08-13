@@ -101,7 +101,7 @@ export default function MyTradesTable({
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <div className="overflow-hidden dark:border-gray-500">
-              <table className="min-w-full divide-y dark:divide-gray-500 divide-gray-200">
+              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
                 <thead className="hidden md:table-header-group">
                   <tr>
                     {headers.map((header) => (
@@ -140,15 +140,15 @@ export default function MyTradesTable({
                     ))
                   ) : (
                     <>
-                      {pairs.map((pair: any, i) => (
+                      {pairs.map((pair: IdeaTokenTrade, i) => (
                         <MyTradesRow
-                          key={pair.token.id + i.toString()}
+                          key={pair.token.tokenID + i.toString()}
                           token={pair.token}
-                          market={pair.token.market}
-                          daiAmount={pair.daiAmount}
+                          market={pair.market}
+                          rawDaiAmount={pair.rawDaiAmount}
                           isBuy={pair.isBuy}
                           timestamp={pair.timestamp}
-                          ideaTokenAmount={pair.ideaTokenAmount}
+                          rawIdeaTokenAmount={pair.rawIdeaTokenAmount}
                         />
                       ))}
 

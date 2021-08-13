@@ -113,7 +113,9 @@ export type IdeaTokenTrade = {
   token: IdeaToken
   isBuy: boolean
   timestamp: number
+  rawIdeaTokenAmount: BN
   ideaTokenAmount: number
+  rawDaiAmount: BN
   daiAmount: number
   market: IdeaMarket
 }
@@ -672,14 +674,7 @@ export async function queryMyTrades(
     page += 1
   }
 
-  const mapTradeResponse = (trade) => ({
-    ...trade,
-    token: {
-      ...trade.token,
-      ...apiResponseToIdeaToken(trade.token, trade.token.market),
-      market: apiResponseToIdeaMarket(trade.token.market),
-    },
-  })
+  const mapTradeResponse = (trade) => apiResponseToIdeaTokenTrade(trade)
 
   // Filter by market if user chooses market option in the select box
   if (marketID) {
@@ -887,4 +882,24 @@ function apiResponseToLockedIdeaTokenMarketPair(
   } as LockedIdeaTokenMarketPair
 
   return ret
+}
+
+function apiResponseToIdeaTokenTrade(apiResponse) {
+  return {
+    isBuy: apiResponse.isBuy,
+    timestamp: Number(apiResponse.timestamp),
+    rawIdeaTokenAmount: new BN(apiResponse.ideaTokenAmount),
+    ideaTokenAmount: Number(
+      web3BNToFloatString(new BN(apiResponse.ideaTokenAmount), tenPow18, 2)
+    ),
+    rawDaiAmount: new BN(apiResponse.daiAmount),
+    daiAmount: Number(
+      web3BNToFloatString(new BN(apiResponse.daiAmount), tenPow18, 2)
+    ),
+    token: {
+      ...apiResponse.token,
+      ...apiResponseToIdeaToken(apiResponse.token, apiResponse.token.market),
+    },
+    market: apiResponseToIdeaMarket(apiResponse.token.market),
+  } as IdeaTokenTrade
 }
