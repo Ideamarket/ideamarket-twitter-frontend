@@ -14,6 +14,9 @@ import ModalService from 'components/modals/ModalService'
 import LeftListingPanel from 'components/listing-page/LeftListingPanel'
 import ListingStats from 'components/listing-page/ListingStats'
 import ListingSEO from 'components/listing-page/ListingSEO'
+import TradeCompleteModal, {
+  TRANSACTION_TYPES,
+} from 'components/trade/TradeCompleteModal'
 
 export default function TokenDetails({
   rawMarketName,
@@ -52,6 +55,19 @@ export default function TokenDetails({
   const isLoading =
     isTokenLoading || isMarketLoading || isCompoundExchangeRateLoading
 
+  function onTradeComplete(
+    isSuccess: boolean,
+    tokenName: string,
+    transactionType: TRANSACTION_TYPES
+  ) {
+    refetch()
+    ModalService.open(TradeCompleteModal, {
+      isSuccess,
+      tokenName,
+      transactionType,
+    })
+  }
+
   return (
     <>
       <ListingSEO
@@ -82,7 +98,7 @@ export default function TokenDetails({
                   <TradeInterface
                     ideaToken={token}
                     market={market}
-                    onTradeSuccessful={refetch}
+                    onTradeComplete={onTradeComplete}
                     onValuesChanged={() => {}}
                     resetOn={false}
                     centerTypeSelection={false}

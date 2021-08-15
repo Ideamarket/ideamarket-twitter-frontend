@@ -35,6 +35,7 @@ import useReversePrice from 'actions/useReversePrice'
 import useTokenToDAI from 'actions/useTokenToDAI'
 import { useWeb3React } from '@web3-react/core'
 import { useENSAddress } from './hooks/useENSAddress'
+import { TRANSACTION_TYPES } from './TradeCompleteModal'
 
 type NewIdeaToken = {
   symbol: string
@@ -44,7 +45,11 @@ type NewIdeaToken = {
 type TradeInterfaceProps = {
   ideaToken: IdeaToken
   market: IdeaMarket
-  onTradeSuccessful: () => void
+  onTradeComplete: (
+    isSuccess: boolean,
+    tokenName: string,
+    transactionType: TRANSACTION_TYPES
+  ) => void
   onValuesChanged: (
     ideaTokenAmount: BN,
     tokenAddress: string,
@@ -75,7 +80,7 @@ const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 export default function TradeInterface({
   ideaToken,
   market,
-  onTradeSuccessful,
+  onTradeComplete,
   onValuesChanged,
   resetOn,
   showTradeButton,
@@ -408,13 +413,17 @@ export default function TradeInterface({
       await txManager.executeTx(name, func, ...args)
     } catch (ex) {
       console.log(ex)
+      onTradeComplete(false, ideaToken?.name, TRANSACTION_TYPES.NONE)
       return
     }
 
+    const transactionType =
+      tradeType === 'buy' ? TRANSACTION_TYPES.BUY : TRANSACTION_TYPES.SELL
+
     setIdeaTokenAmount('0')
     setApproveButtonKey(approveButtonKey + 1)
-    onTradeSuccessful()
     setTradeToggle(!tradeToggle)
+    onTradeComplete(true, ideaToken?.name, transactionType)
   }
 
   // Did user type a valid ENS address or hex-address?

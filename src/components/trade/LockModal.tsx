@@ -14,6 +14,8 @@ import { CogIcon } from '@heroicons/react/outline'
 import CircleSpinner from 'components/animations/CircleSpinner'
 import { A } from 'components'
 import { NETWORK } from 'store/networks'
+import ModalService from 'components/modals/ModalService'
+import TradeCompleteModal, { TRANSACTION_TYPES } from './TradeCompleteModal'
 
 export default function LockModal({
   close,
@@ -54,6 +56,18 @@ export default function LockModal({
     setAmountToLock(setValue)
   }
 
+  function onTradeComplete(
+    isSuccess: boolean,
+    tokenName: string,
+    transactionType: TRANSACTION_TYPES
+  ) {
+    ModalService.open(TradeCompleteModal, {
+      isSuccess,
+      tokenName,
+      transactionType,
+    })
+  }
+
   async function onLockClicked() {
     const amount = floatToWeb3BN(amountToLock, 18, BigNumber.ROUND_DOWN)
 
@@ -63,11 +77,12 @@ export default function LockModal({
       await txManager.executeTx('Lock', lockToken, ...args)
     } catch (ex) {
       console.log(ex)
+      onTradeComplete(false, token.name, TRANSACTION_TYPES.NONE)
       return
     }
 
-    close()
     refetch()
+    onTradeComplete(true, token.name, TRANSACTION_TYPES.LOCK)
   }
 
   return (
