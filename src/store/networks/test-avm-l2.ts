@@ -1,23 +1,23 @@
 import { INetworkSpecifics, ExternalAddresses } from '.'
-import DeployedAddressesKovanAVM from '../../assets/deployed-kovan-avm.json'
-import DeployedABIsKovanAVM from '../../assets/abis-kovan-avm.json'
-import TokenListKovanAVM from '../../assets/token-list-kovan-avm.json'
+import DeployedAddressesTestAVML2 from '../../assets/deployed-test-avm-l2.json'
+import DeployedABIsTestAVML2 from '../../assets/abis-test-avm-l2.json'
+import TokenListTestAVML2 from '../../assets/token-list-test-avm-l2.json'
 
 export default class KovanAVMNetworkSpecifics implements INetworkSpecifics {
   getNetworkName(): string {
-    return 'kovan_avm'
+    return 'test-avm-l2'
   }
 
   getChainID(): number {
-    return 144545313136048
+    return 421611
   }
 
   getDeployedAddresses(): any {
-    return DeployedAddressesKovanAVM
+    return DeployedAddressesTestAVML2
   }
 
   getDeployedABIs(): any {
-    return DeployedABIsKovanAVM
+    return DeployedABIsTestAVML2
   }
 
   getExternalAddresses(): ExternalAddresses {
@@ -29,14 +29,14 @@ export default class KovanAVMNetworkSpecifics implements INetworkSpecifics {
   }
 
   getTokenList(): any {
-    return TokenListKovanAVM
+    return TokenListTestAVML2
   }
 
   getSubgraphURL(): string {
-    return 'https://subgraph-kovan-avm.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketKOVANAVM'
+    return 'https://subgraph-test-avm-l2.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTESTAVML2'
   }
 
   getEtherscanTxUrl(tx: string): string {
-    return `https://kovan.etherscan.io/tx/${tx}`
+    return `https://rinkeby-explorer.arbitrum.io/tx/${tx}`
   }
 }

@@ -1,8 +1,8 @@
 import MainnetNetworkSpecifics from './mainnet'
 import RinkebyNetworkSpecifics from './rinkeby'
-import KovanNetworkSpecifics from './kovan'
 import TestNetworkSpecifics from './test'
 import TestAVML1NetworkSpecifics from './test-avm-l1'
+import TestAVML2NetworkSpecifics from './test-avm-l2'
 
 export type ExternalAddresses = {
   dai: string
@@ -24,9 +24,9 @@ export type INetworkSpecifics = {
 const specifics: INetworkSpecifics[] = [
   new MainnetNetworkSpecifics(),
   new RinkebyNetworkSpecifics(),
-  new KovanNetworkSpecifics(),
   new TestNetworkSpecifics(),
   new TestAVML1NetworkSpecifics(),
+  new TestAVML2NetworkSpecifics(),
 ]
 
 export function getNetworkSpecificsByNetworkName(
@@ -39,11 +39,10 @@ export function getNetworkSpecificsByNetworkName(
   }
 }
 
-// TODO: Complete
 export function getL1Network(l2Network: INetworkSpecifics) {
   switch (l2Network.getNetworkName()) {
-    case 'kovan':
-      return getNetworkSpecificsByNetworkName('kovan')
+    case 'test-avm-l2':
+      return getNetworkSpecificsByNetworkName('test-avm-l1')
     default:
       throw Error('getL1Network: missing')
   }
