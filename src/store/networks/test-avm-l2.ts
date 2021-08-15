@@ -22,7 +22,7 @@ export default class KovanAVMNetworkSpecifics implements INetworkSpecifics {
 
   getExternalAddresses(): ExternalAddresses {
     return {
-      dai: '0x59d141841328f89bF38672419655175F53740010',
+      dai: '0x5364Dc963c402aAF150700f38a8ef52C1D7D7F14',
       cDai: '0x0000000000000000000000000000000000000001',
       weth: '0x0000000000000000000000000000000000000001',
     }
