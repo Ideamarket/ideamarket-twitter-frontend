@@ -28,8 +28,13 @@ const headers: Header[] = [
     sortable: true,
   },
   {
-    title: 'Value',
-    value: 'value',
+    title: 'Purchase Value',
+    value: 'purchaseValue',
+    sortable: true,
+  },
+  {
+    title: 'Current Value',
+    value: 'currentValue',
     sortable: true,
   },
   {

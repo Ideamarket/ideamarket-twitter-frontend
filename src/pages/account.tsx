@@ -35,6 +35,7 @@ export default function MyTokens() {
     useState(undefined)
   const [ownedTokenTotalValue, setOwnedTokensTotalValue] = useState('0.00')
   const [lockedTokenTotalValue, setLockedTokensTotalValue] = useState('0.00')
+  const [purchaseTotalValue, setPurchaseTotalValue] = useState('0.00')
 
   const [myTokensTablePage, setMyTokensTablePage] = useState(0)
   const [selectedMarketMyTokens, setSelectedMarketMyTokens] =
@@ -100,6 +101,17 @@ export default function MyTokens() {
       )
     }
 
+    // Calculate the total purchase value
+    let purchaseTotal = new BN('0')
+    for (const pair of myTrades ?? []) {
+      if (pair.isBuy) purchaseTotal = purchaseTotal.add(pair.rawDaiAmount)
+    }
+
+    setPurchaseTotalValue(
+      myTrades
+        ? web3BNToFloatString(purchaseTotal, bigNumberTenPow18, 18)
+        : '0.00'
+    )
     setOwnedTokensTotalValue(
       rawOwnedPairs
         ? web3BNToFloatString(ownedTotal, bigNumberTenPow18, 18)
@@ -110,7 +122,7 @@ export default function MyTokens() {
         ? web3BNToFloatString(lockedTotal, bigNumberTenPow18, 18)
         : '0.00'
     )
-  }, [rawOwnedPairs, rawLockedPairs])
+  }, [rawOwnedPairs, rawLockedPairs, myTrades])
 
   function refetch() {
     refetchOwned()
@@ -128,18 +140,37 @@ export default function MyTokens() {
               <div className="text-2xl font-semibold flex flex-col justify-end mb-2.5">
                 My Wallet
               </div>
-              <div className="text-center ">
-                <div className="text-sm font-semibold text-brand-gray text-opacity-60">
-                  Total Value
+              <div className="flex">
+                <div className="text-center pr-6">
+                  <div className="text-sm font-semibold text-brand-gray text-opacity-60">
+                    Total Purchase Value
+                  </div>
+                  <div
+                    className="text-2xl mb-2.5 font-semibold uppercase"
+                    title={'$' + +purchaseTotalValue}
+                  >
+                    $
+                    {formatNumberWithCommasAsThousandsSerperator(
+                      (+purchaseTotalValue).toFixed(2)
+                    )}
+                  </div>
                 </div>
-                <div
-                  className="text-2xl mb-2.5 font-semibold uppercase"
-                  title={'$' + +ownedTokenTotalValue + +lockedTokenTotalValue}
-                >
-                  $
-                  {formatNumberWithCommasAsThousandsSerperator(
-                    (+ownedTokenTotalValue + +lockedTokenTotalValue).toFixed(2)
-                  )}
+
+                <div className="text-center">
+                  <div className="text-sm font-semibold text-brand-gray text-opacity-60">
+                    Total Current Value
+                  </div>
+                  <div
+                    className="text-2xl mb-2.5 font-semibold uppercase"
+                    title={'$' + +ownedTokenTotalValue + +lockedTokenTotalValue}
+                  >
+                    $
+                    {formatNumberWithCommasAsThousandsSerperator(
+                      (+ownedTokenTotalValue + +lockedTokenTotalValue).toFixed(
+                        2
+                      )
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

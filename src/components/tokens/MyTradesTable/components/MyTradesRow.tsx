@@ -168,10 +168,18 @@ const MyTradesRow = ({
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
-            Value
+            Purchase Value
           </p>
           <p className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             ${web3BNToFloatString(rawDaiAmount, tenPow18, 2)}
+          </p>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
+            Current Value
+          </p>
+          <p className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+            ${web3BNToFloatString(ideaTokenValueBN, tenPow18, 2)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
