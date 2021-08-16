@@ -1,5 +1,7 @@
 import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
 import { Modal, TradeInterface } from 'components'
+import ModalService from 'components/modals/ModalService'
+import TradeCompleteModal, { TRANSACTION_TYPES } from './TradeCompleteModal'
 
 export default function TradeModal({
   close,
@@ -10,13 +12,26 @@ export default function TradeModal({
   ideaToken: IdeaToken
   market: IdeaMarket
 }) {
+  function onTradeComplete(
+    isSuccess: boolean,
+    tokenName: string,
+    transactionType: TRANSACTION_TYPES
+  ) {
+    close()
+    ModalService.open(TradeCompleteModal, {
+      isSuccess,
+      tokenName,
+      transactionType,
+    })
+  }
+
   return (
     <Modal close={close}>
       <div className="pt-2">
         <TradeInterface
           ideaToken={ideaToken}
           market={market}
-          onTradeSuccessful={close}
+          onTradeComplete={onTradeComplete}
           onValuesChanged={() => {}}
           resetOn={true}
           centerTypeSelection={true}
