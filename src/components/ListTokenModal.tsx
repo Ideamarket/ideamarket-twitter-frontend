@@ -339,8 +339,8 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           </div>
 
           <div className="max-w-sm mx-auto mt-2">
-            <div className="">
-              <div className="">
+            <div>
+              <div>
                 <ApproveButton
                   tokenAddress={buyPayWithAddress}
                   tokenName={buyPayWithSymbol}
@@ -407,7 +407,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
               className="twitter-share-button"
               href={`https://twitter.com/intent/tweet?text=${tweetTemplate}&url=https://ideamarket.io`}
             >
-              <button className="w-32 h-10 text-base font-medium bg-white dark:text-gray-50 inborder-2 dark:bg-gray-500 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
+              <button className="w-32 h-10 text-base font-medium bg-white rounded-lg dark:text-gray-50 inborder-2 dark:bg-gray-500 border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
                 Tweet about it
               </button>
             </A>

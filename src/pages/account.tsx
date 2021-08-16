@@ -143,64 +143,68 @@ export default function MyTokens() {
                 </div>
               </div>
             </div>
-            <div className="pt-2 bg-white dark:bg-gray-700 border rounded-md dark:border-gray-500 border-brand-border-gray ">
+            <div className="pt-2 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray ">
               <div className="flex flex-col mx-5 dark:border-gray-500 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <div
-                    className={classNames(
-                      'text-base text-brand-new-dark dark:text-gray-300 font-semibold px-2 mr-5 py-3 pt-2 inline-block cursor-pointer',
-                      table === 'holdings'
-                        ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
-                        : ''
-                    )}
-                    onClick={() => {
-                      setTable('holdings')
-                    }}
-                  >
-                    My Holdings
+                  <div className="md:inline-block">
+                    <div
+                      className={classNames(
+                        'text-base text-brand-new-dark dark:text-gray-300 font-semibold sm:px-2 mr-5 py-3 pt-2 inline-block cursor-pointer',
+                        table === 'holdings'
+                          ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
+                          : ''
+                      )}
+                      onClick={() => {
+                        setTable('holdings')
+                      }}
+                    >
+                      My Holdings
+                    </div>
+                    <div
+                      className={classNames(
+                        'text-base text-brand-new-dark dark:text-gray-300 font-semibold sm:px-2 mr-5 py-3 pt-2 inline-block cursor-pointer',
+                        table === 'listings'
+                          ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
+                          : ''
+                      )}
+                      onClick={() => {
+                        setTable('listings')
+                      }}
+                    >
+                      My Listings
+                    </div>
                   </div>
-                  <div
-                    className={classNames(
-                      'text-base text-brand-new-dark dark:text-gray-300 font-semibold px-2 mr-5 py-3 pt-2 inline-block cursor-pointer',
-                      table === 'listings'
-                        ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
-                        : ''
-                    )}
-                    onClick={() => {
-                      setTable('listings')
-                    }}
-                  >
-                    My Listings
-                  </div>
-                  <div
-                    className={classNames(
-                      'text-base text-brand-new-dark dark:text-gray-300 font-semibold px-2 mr-5 py-3 pt-2 inline-block cursor-pointer',
-                      table === 'locked'
-                        ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
-                        : ''
-                    )}
-                    onClick={() => {
-                      setTable('locked')
-                    }}
-                  >
-                    Locked
-                  </div>
-                  <div
-                    className={classNames(
-                      'text-base text-brand-new-dark dark:text-gray-300 font-semibold px-2 py-3 pt-2 inline-block cursor-pointer',
-                      table === 'trades'
-                        ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
-                        : ''
-                    )}
-                    onClick={() => {
-                      setTable('trades')
-                    }}
-                  >
-                    My Trades
+                  <div className="md:inline-block">
+                    <div
+                      className={classNames(
+                        'text-base text-brand-new-dark dark:text-gray-300 font-semibold sm:px-2 mr-5 py-3 pt-2 inline-block cursor-pointer',
+                        table === 'locked'
+                          ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
+                          : ''
+                      )}
+                      onClick={() => {
+                        setTable('locked')
+                      }}
+                    >
+                      Locked
+                    </div>
+                    <div
+                      className={classNames(
+                        'text-base text-brand-new-dark dark:text-gray-300 font-semibold sm:px-2 py-3 pt-2 inline-block cursor-pointer',
+                        table === 'trades'
+                          ? 'border-b-2 border-brand-new-dark dark:border-gray-300'
+                          : ''
+                      )}
+                      onClick={() => {
+                        setTable('trades')
+                      }}
+                    >
+                      My Trades
+                    </div>
                   </div>
                 </div>
                 <div
-                  className="w-48 pt-6 pr-0 mb-4 md:w-80 md:pt-0 md:mb-0"
+                  className="w-48 pt-6 pr-0 mb-4 lg:w-80 md:pt-0 md:mb-0"
                   style={{ marginTop: -8 }}
                 >
                   <MarketSelect
