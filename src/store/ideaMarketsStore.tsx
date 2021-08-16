@@ -167,12 +167,12 @@ export async function queryOwnedTokensMaybeMarket(
   }
 
   const L1Result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
+    HTTP_GRAPHQL_ENDPOINT_L1,
     getQueryOwnedTokensMaybeMarket(market ? market.marketID : undefined, owner)
   )
 
   const L2Result = await request(
-    HTTP_GRAPHQL_ENDPOINT_L1,
+    HTTP_GRAPHQL_ENDPOINT,
     getQueryOwnedTokensMaybeMarket(market ? market.marketID : undefined, owner)
   )
 
