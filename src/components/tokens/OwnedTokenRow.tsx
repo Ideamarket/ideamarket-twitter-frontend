@@ -210,16 +210,18 @@ export default function TokenRow({
             %
           </p>
         </td>
-        {/* Lock Button */}
+        {/* Lock or Bridge Button */}
         <td className="px-4 py-4 md:px-0 whitespace-nowrap">
           <button
             onClick={(e) => {
               e.stopPropagation()
-              ModalService.open(LockModal, { token, refetch })
+              isL1
+                ? router.push('/bridge')
+                : ModalService.open(LockModal, { token, refetch })
             }}
             className="w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
-            <span>Lock</span>
+            <span>{isL1 ? 'Bridge' : 'Lock'}</span>
           </button>
         </td>
         {/* Add to Metamask button */}
