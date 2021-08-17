@@ -132,13 +132,13 @@ export default function MyTokens() {
 
   return (
     <>
-      <NextSeo title="My Wallet" />
+      <NextSeo title="Wallet" />
       <div className="min-h-screen bg-brand-gray dark:bg-gray-900">
         <div className="h-64 px-4 pt-8 pb-5 text-white md:px-6 md:pt-6 bg-top-mobile md:bg-top-desktop md:h-96">
           <div className="mx-auto md:px-4 max-w-88 md:max-w-304">
             <div className="flex justify-between">
               <div className="text-2xl font-semibold flex flex-col justify-end mb-2.5">
-                My Wallet
+                Wallet
               </div>
               <div className="flex">
                 <div className="text-center pr-6">
@@ -189,7 +189,7 @@ export default function MyTokens() {
                         setTable('holdings')
                       }}
                     >
-                      My Holdings
+                      Holdings
                     </div>
                     <div
                       className={classNames(
@@ -202,7 +202,7 @@ export default function MyTokens() {
                         setTable('listings')
                       }}
                     >
-                      My Listings
+                      Listings
                     </div>
                   </div>
                   <div className="md:inline-block">
@@ -230,7 +230,7 @@ export default function MyTokens() {
                         setTable('trades')
                       }}
                     >
-                      My Trades
+                      Trades
                     </div>
                   </div>
                 </div>
