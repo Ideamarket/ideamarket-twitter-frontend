@@ -208,7 +208,7 @@ export default function TokenRow({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              ModalService.open(LockModal, { token, refetch })
+              ModalService.open(LockModal, { token, balance, refetch })
             }}
             className="w-20 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
