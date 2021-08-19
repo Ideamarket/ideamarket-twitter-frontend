@@ -101,7 +101,7 @@ export default function LockedTokenRow({
                 </div>
               )}
             </div>
-            <div className="ml-4 text-base font-semibold leading-5">
+            <div className="flex ml-4 text-base font-semibold leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
