@@ -4,12 +4,13 @@ import UniswapFactoryABI from '../assets/abi-uniswap-factory.json'
 import UniswapPairABI from '../assets/abi-uniswap-pair.json'
 import ERC20ABI from '../assets/abi-erc20.json'
 import { useWalletStore } from './walletStore'
-import { NETWORK } from 'store/networks'
+import { getL1Network, NETWORK } from 'store/networks'
 
 type State = {
   daiContract: any
   factoryContract: any
   exchangeContract: any
+  exchangeContractL1: any
   multiActionContract: any
   uniswapFactoryContract: any
   ideaTokenVaultContract: any
@@ -19,6 +20,7 @@ export const useContractStore = create<State>((set) => ({
   daiContract: undefined,
   factoryContract: undefined,
   exchangeContract: undefined,
+  exchangeContractL1: undefined,
   multiActionContract: undefined,
   uniswapFactoryContract: undefined,
   ideaTokenVaultContract: undefined,
@@ -29,6 +31,7 @@ export function clearContracts() {
     daiContract: undefined,
     factoryContract: undefined,
     exchangeContract: undefined,
+    exchangeContractL1: undefined,
     multiActionContract: undefined,
     uniswapFactoryContract: undefined,
     ideaTokenVaultContract: undefined,
@@ -36,6 +39,10 @@ export function clearContracts() {
 }
 
 export function initContractsFromWeb3(web3: Web3) {
+  const l1Network = getL1Network(NETWORK)
+  const deployedAddressesL1 = l1Network.getDeployedAddresses()
+  const abisL1 = l1Network.getDeployedABIs()
+
   const deployedAddresses = NETWORK.getDeployedAddresses()
   const abis = NETWORK.getDeployedABIs()
 
@@ -56,6 +63,12 @@ export function initContractsFromWeb3(web3: Web3) {
   const exchangeContract = new web3.eth.Contract(
     abis.ideaTokenExchange as any,
     deployedAddresses.ideaTokenExchange,
+    { from: web3.eth.defaultAccount }
+  )
+
+  const exchangeContractL1 = new web3.eth.Contract(
+    abisL1.ideaTokenExchange as any,
+    deployedAddressesL1.ideaTokenExchange,
     { from: web3.eth.defaultAccount }
   )
 
@@ -81,6 +94,7 @@ export function initContractsFromWeb3(web3: Web3) {
     daiContract: daiContract,
     factoryContract: factoryContract,
     exchangeContract: exchangeContract,
+    exchangeContractL1: exchangeContractL1,
     multiActionContract: multiActionContract,
     uniswapFactoryContract: uniswapFactoryContract,
     ideaTokenVaultContract: ideaTokenVaultContract,

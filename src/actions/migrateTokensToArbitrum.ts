@@ -6,7 +6,7 @@ export default function migrateTokensToArbitrum(
   tokenID: number,
   l2Recipient: string
 ) {
-  const exchangeContract = useContractStore.getState().exchangeContract
+  const exchangeContract = useContractStore.getState().exchangeContractL1
 
   const maxSubmissionCost = new BN('1000000000000000') // 0.001 ETH
   const l2GasLimit = new BN('2000000') // 2MM
