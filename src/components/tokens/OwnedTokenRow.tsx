@@ -76,7 +76,7 @@ export default function TokenRow({
         }}
       >
         {/* Market desktop */}
-        <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 hidden md:table-cell whitespace-nowrap">
+        <td className="flex items-center justify-center hidden py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
           <div className="flex items-center justify-end w-full h-full">
             <div className="w-5 h-auto">
               {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
@@ -87,9 +87,9 @@ export default function TokenRow({
           <div className="flex items-center text-gray-900 dark:text-gray-200">
             <div className="flex-shrink-0 w-7.5 h-7.5">
               {isTokenIconLoading ? (
-                <div className="w-full h-full bg-gray-400 dark:bg-gray-600 rounded-full animate-pulse"></div>
+                <div className="w-full h-full bg-gray-400 rounded-full dark:bg-gray-600 animate-pulse"></div>
               ) : (
-                <div className="w-full h-full rounded-full relative">
+                <div className="relative w-full h-full rounded-full">
                   <Image
                     src={tokenIconURL || '/gray.svg'}
                     alt="token"
@@ -186,10 +186,15 @@ export default function TokenRow({
           </p>
           <p
             className={classNames(
-              'text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300 uppercase',
-              parseFloat(token.dayChange) >= 0.0
-                ? 'text-brand-green dark:text-green-400'
-                : 'text-brand-red dark:text-red-400'
+              'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
+              {
+                'text-brand-red dark:text-red-400':
+                  parseFloat(token.dayChange) < 0.0,
+                'text-brand-green dark:text-green-400':
+                  parseFloat(token.dayChange) > 0.0,
+                'text-very-dark-blue dark:text-gray-300':
+                  parseFloat(token.dayChange) === 0.0,
+              }
             )}
             title={
               parseFloat(token.dayChange) >= 0.0
@@ -204,13 +209,13 @@ export default function TokenRow({
           </p>
         </td>
         {/* Lock Button */}
-        <td className="px-4 md:px-0 py-4 whitespace-nowrap">
+        <td className="px-4 py-4 md:px-0 whitespace-nowrap">
           <button
             onClick={(e) => {
               e.stopPropagation()
               ModalService.open(LockModal, { token, balance, refetch })
             }}
-            className="w-20 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+            className="w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
             <span>Lock</span>
           </button>
