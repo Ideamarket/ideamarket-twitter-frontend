@@ -2,19 +2,19 @@ import React from 'react'
 import classNames from 'classnames'
 import Tooltip from 'components/tooltip/Tooltip'
 import { A } from 'components'
-import { useQuery } from 'react-query'
+/*import { useQuery } from 'react-query'
 import {
   investmentTokenToUnderlying,
   queryExchangeRate,
-} from 'store/compoundStore'
+} from 'store/compoundStore'*/
 import { IdeaMarket } from 'store/ideaMarketsStore'
-import BN from 'bn.js'
+/*import BN from 'bn.js'
 import {
   bigNumberTenPow18,
   formatNumber,
   formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
-} from 'utils'
+} from 'utils'*/
 
 type Props = {
   currentColumn: string
@@ -52,7 +52,7 @@ export const OverviewColumns = ({
   columnClicked,
   markets,
 }: Props) => {
-  const { data: compoundExchangeRate } = useQuery(
+  /*const { data: compoundExchangeRate } = useQuery(
     'compound-exchange-rate',
     queryExchangeRate,
     {
@@ -82,10 +82,10 @@ export const OverviewColumns = ({
             ),
     })
     allPlatformsEarnedBN = allPlatformsEarnedBN.add(platformEarnedBN)
-  })
+  })*/
   // If over $1,000 - no decimals
   // If under $1,000 - show cents also
-  const allPlatformsEarnedString = web3BNToFloatString(
+  /*const allPlatformsEarnedString = web3BNToFloatString(
     allPlatformsEarnedBN,
     bigNumberTenPow18,
     4
@@ -95,7 +95,7 @@ export const OverviewColumns = ({
       ? formatNumber(parseFloat(allPlatformsEarnedString))
       : formatNumberWithCommasAsThousandsSerperator(
           parseInt(allPlatformsEarnedString)
-        )
+        )*/
 
   function getColumnContent(column) {
     switch (column.value) {
@@ -133,7 +133,7 @@ export const OverviewColumns = ({
               className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50"
               key={column.value}
             >
-              ${allPlatformsEarned}
+              {/*${allPlatformsEarned}
               <br />
               <div className="flex items-center">
                 earned for platforms
@@ -150,7 +150,7 @@ export const OverviewColumns = ({
                     new income stream.
                   </div>
                 </Tooltip>
-              </div>
+              </div>*/}
             </th>
           )
         } else {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
+//import { useQuery } from 'react-query'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import {
+/*import {
   queryCDaiBalance,
   queryExchangeRate,
   investmentTokenToUnderlying,
@@ -10,10 +10,10 @@ import {
   web3BNToFloatString,
   bigNumberTenPow18,
   formatNumberWithCommasAsThousandsSerperator,
-} from 'utils'
+} from 'utils'*/
 import { Table, TradeModal, ListTokenModal, WalletModal } from 'components'
 import ModalService from 'components/modals/ModalService'
-import { NETWORK } from 'store/networks'
+//import { NETWORK } from 'store/networks'
 import Plus from '../assets/plus-white.svg'
 import { GlobalContext } from '../pages/_app'
 import { useWalletStore } from 'store/walletStore'
@@ -127,7 +127,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
-  const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
+  //const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
   const visibleColumns = defaultColumns.filter(
     (h) => !h.isOptional || selectedColumns.has(h.name)
   )
@@ -163,7 +163,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markets])
 
-  const { data: compoundExchangeRate } = useQuery(
+  /*const { data: compoundExchangeRate } = useQuery(
     'compound-exchange-rate',
     queryExchangeRate,
     {
@@ -186,7 +186,8 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
       bigNumberTenPow18,
       0
     )
-  )
+  )*/
+
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
   function onNameSearchChanged(nameSearch) {
     setSelectedFilterId(Filters.TOP.id)
@@ -241,7 +242,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     <>
       <NextSeo title="Home" />
       <div className="overflow-x-hidden lg:overflow-x-visible bg-brand-gray dark:bg-gray-900">
-        <div className="px-6 pt-10 pb-40 text-center text-white dark:text-gray-200 bg-cover bg-top-mobile md:bg-top-desktop">
+        <div className="px-6 pt-10 pb-40 text-center text-white bg-cover dark:text-gray-200 bg-top-mobile md:bg-top-desktop">
           <div>
             <h2 className="text-3xl md:text-6xl font-gilroy-bold">
               The credibility layer{' '}
@@ -251,7 +252,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
               Profit by discovering the world’s best information.
             </p>
           </div>
-          <div className="flex flex-col md:flex-row justify-center items-center">
+          <div className="flex flex-col items-center justify-center md:flex-row">
             <button
               onClick={() => {
                 onListTokenClicked()
@@ -264,7 +265,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
               </div>
             </button>
             <button
-              className="py-2 mt-3 md:mt-10 md:ml-5 text-lg font-bold text-white rounded-lg w-44 font-sf-compact-medium border-white border hover:bg-white hover:text-brand-blue"
+              className="py-2 mt-3 text-lg font-bold text-white border border-white rounded-lg md:mt-10 md:ml-5 w-44 font-sf-compact-medium hover:bg-white hover:text-brand-blue"
               onClick={() =>
                 window.open(
                   'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
@@ -275,12 +276,16 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
               Browser Extension
             </button>
           </div>
+          {/*
+            NOTE: This is currently disabled since we need a L2 Compound subgraph to calculate this value
+
           <div className="flex flex-col items-center justify-center mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
             <div className="text-2xl text-brand-blue md:text-5xl">
               ${cDaiBalanceInDai}
             </div>
             <div className="md:ml-2">in credibility crowdsourced</div>
           </div>
+          */}
         </div>
         <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-28 font-sf-compact-medium">
           <OverviewFilters
