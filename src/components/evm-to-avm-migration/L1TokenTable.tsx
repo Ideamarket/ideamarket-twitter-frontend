@@ -2,12 +2,7 @@ import classNames from 'classnames'
 import { useQuery } from 'react-query'
 import { IdeaTokenMarketPair, queryTokensHeld } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
-import {
-  calculateIdeaTokenDaiValue,
-  bigNumberTenPow18,
-  web3BNToFloatString,
-  formatNumber,
-} from 'utils'
+import { formatNumber } from 'utils'
 import L1TokenTableRow from './L1TokenTableRow'
 
 type Header = {
@@ -27,10 +22,6 @@ const headers: Header[] = [
   {
     title: 'Balance',
     value: 'balance',
-  },
-  {
-    title: 'Value',
-    value: 'value',
   },
 ]
 
@@ -86,17 +77,6 @@ export default function L1TokenTable({
                           }
                           pair={pair}
                           balance={formatNumber(pair.balance)}
-                          value={formatNumber(
-                            web3BNToFloatString(
-                              calculateIdeaTokenDaiValue(
-                                pair.token.rawSupply,
-                                pair.market,
-                                pair.rawBalance
-                              ),
-                              bigNumberTenPow18,
-                              18
-                            )
-                          )}
                           setSelectedPair={setSelectedPair}
                         />
                       ))}

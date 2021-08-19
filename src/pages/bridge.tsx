@@ -5,14 +5,7 @@ import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
 import { IMarketSpecifics, getMarketSpecificsByMarketName } from 'store/markets'
 import { getL1Network, NETWORK } from 'store/networks'
-import {
-  formatNumber,
-  web3BNToFloatString,
-  calculateIdeaTokenDaiValue,
-  bigNumberTenPow18,
-  isAddress,
-  useTransactionManager,
-} from 'utils'
+import { formatNumber, isAddress, useTransactionManager } from 'utils'
 import { useTokenIconURL, migrateTokensToArbitrum } from 'actions'
 import { L1TokenTable, Footer, DefaultLayout, WalletModal } from 'components'
 import { GlobalContext } from './_app'
@@ -154,20 +147,7 @@ export default function Bridge() {
                       )}
                     >
                       {isPairSelected && (
-                        <span>
-                          {formatNumber(selectedPair.balance)} tokens ≈ $
-                          {formatNumber(
-                            web3BNToFloatString(
-                              calculateIdeaTokenDaiValue(
-                                selectedPair.token.rawSupply,
-                                selectedPair.market,
-                                selectedPair.rawBalance
-                              ),
-                              bigNumberTenPow18,
-                              18
-                            )
-                          )}
-                        </span>
+                        <span>{formatNumber(selectedPair.balance)} tokens</span>
                       )}
                     </div>
 

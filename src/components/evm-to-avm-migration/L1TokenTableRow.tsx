@@ -1,19 +1,15 @@
 import classNames from 'classnames'
-import {
-  IdeaTokenMarketPair,
-} from 'store/ideaMarketsStore'
+import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { useTokenIconURL } from 'actions'
 
 export default function L1TokenTableRow({
   pair,
   balance,
-  value,
   setSelectedPair,
 }: {
   pair: IdeaTokenMarketPair
   balance: string
-  value: string
   setSelectedPair: (pair: IdeaTokenMarketPair) => void
 }) {
   const { token, market } = pair
@@ -68,15 +64,6 @@ export default function L1TokenTableRow({
             title={balance}
           >
             {balance}
-          </p>
-        </td>
-        {/* Value */}
-        <td className="flex items-center justify-center py-4 pl-6 mr-4 md:table-cell whitespace-nowrap md:mr-0">
-          <p
-            className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue"
-            title={`$${value}`}
-          >
-            ${value}
           </p>
         </td>
       </tr>
