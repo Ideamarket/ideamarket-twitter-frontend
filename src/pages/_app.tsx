@@ -26,12 +26,15 @@ import Web3ReactManager from 'components/wallet/Web3ReactManager'
 import ModalRoot from 'components/modals/ModalRoot'
 import { WrongNetworkOverlay } from 'components'
 import { initUseMarketStore } from 'store/markets'
+import { NETWORK, INetworkSpecifics } from 'store/networks'
 
 export const GlobalContext = createContext({
   onWalletConnectedCallback: () => {},
   setOnWalletConnectedCallback: (f: () => void) => {},
   isEmailFooterActive: false,
   setIsEmailFooterActive: (val: boolean) => {},
+  requiredNetwork: null,
+  setRequiredNetwork: (val: INetworkSpecifics) => {},
 })
 
 function getLibrary(provider: any): Web3 {
@@ -63,6 +66,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [onWalletConnectedCallback, setOnWalletConnectedCallback] = useState(
     () => () => {}
   )
+
+  const [requiredNetwork, setRequiredNetwork] = useState(NETWORK)
 
   initUseMarketStore()
 
@@ -104,6 +109,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           setOnWalletConnectedCallback,
           isEmailFooterActive,
           setIsEmailFooterActive,
+          requiredNetwork,
+          setRequiredNetwork,
         }}
       >
         <ThemeProvider attribute="class" defaultTheme="light">

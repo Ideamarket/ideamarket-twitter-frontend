@@ -402,7 +402,7 @@ export async function queryTokensHeld(
 
   while (true) {
     const result = await request(
-      HTTP_GRAPHQL_ENDPOINT,
+      HTTP_GRAPHQL_ENDPOINT_L1,
       getQueryBalancesOfHolders({
         holders: [holder],
         first: 100,

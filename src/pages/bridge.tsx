@@ -1,9 +1,10 @@
 import classNames from 'classnames'
 import { NextSeo } from 'next-seo'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
 import { IMarketSpecifics, getMarketSpecificsByMarketName } from 'store/markets'
+import { getL1Network, NETWORK } from 'store/networks'
 import {
   formatNumber,
   web3BNToFloatString,
@@ -14,10 +15,16 @@ import {
 } from 'utils'
 import { useTokenIconURL, migrateTokensToArbitrum } from 'actions'
 import { L1TokenTable, Footer, DefaultLayout, WalletModal } from 'components'
+import { GlobalContext } from './_app'
 import ModalService from 'components/modals/ModalService'
 import Wand from '../assets/wand.svg'
 
 export default function Bridge() {
+  const { setRequiredNetwork } = useContext(GlobalContext)
+  useEffect(() => {
+    setRequiredNetwork(getL1Network(NETWORK))
+  }, [setRequiredNetwork])
+
   const connectedAddress = useWalletStore((state) => state.address)
   const isWalletConnected = connectedAddress !== ''
 

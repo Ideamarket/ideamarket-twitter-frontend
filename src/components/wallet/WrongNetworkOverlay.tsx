@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
+import { GlobalContext } from 'pages/_app'
 import { useWalletStore } from 'store/walletStore'
-import { NETWORK } from 'store/networks'
+import { INetworkSpecifics } from 'store/networks'
 
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -12,7 +13,10 @@ const NoSSRWalletInterface = dynamic(() => import('./WalletInterface'), {
 export default function WrongNetworkOverlay() {
   const web3 = useWalletStore((state) => state.web3)
   const web3ChainID = useWalletStore((state) => state.chainID)
-  const isWrongNetwork = NETWORK.getChainID() !== web3ChainID
+  const { requiredNetwork } = useContext(GlobalContext) as {
+    requiredNetwork: INetworkSpecifics
+  }
+  const isWrongNetwork = requiredNetwork.getChainID() !== web3ChainID
 
   const show = web3 !== undefined && isWrongNetwork
 
@@ -50,10 +54,10 @@ export default function WrongNetworkOverlay() {
             Your wallet is connected to the wrong network.
           </div>
           <div className="text-sm">
-            Please connect to <strong>{NETWORK.getNetworkName()}</strong> and
-            try again.
+            Please connect to{' '}
+            <strong>{requiredNetwork.getNetworkName()}</strong> and try again.
           </div>
-          <div className="mt-5 bg-white dark:bg-gray-700 border dark:border-gray-500 rounded border-brand-gray-2">
+          <div className="mt-5 bg-white border rounded dark:bg-gray-700 dark:border-gray-500 border-brand-gray-2">
             <NoSSRWalletInterface />
           </div>
         </div>

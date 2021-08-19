@@ -39,6 +39,12 @@ export default function Nav() {
       isSelected: router.pathname === '/account',
     },
     {
+      name: 'Bridge',
+      value: 'bridge',
+      onClick: () => router.push('/bridge'),
+      isSelected: router.pathname === '/bridge',
+    },
+    {
       name: 'Community',
       value: 'community',
       onClick: () => window.open('https://discord.gg/zaXZXGE4Ke', '_blank'),
@@ -113,12 +119,12 @@ export default function Nav() {
               <button
                 id="switchTheme"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="h-10 w-10 flex justify-center items-center focus:outline-none text-blue-50"
+                className="flex items-center justify-center w-10 h-10 focus:outline-none text-blue-50"
               >
                 {resolvedTheme === 'dark' ? (
-                  <SunIcon className="h-5 w-5 text-blue-50" />
+                  <SunIcon className="w-5 h-5 text-blue-50" />
                 ) : (
-                  <MoonIcon className="h-5 w-5 text-blue-50" />
+                  <MoonIcon className="w-5 h-5 text-blue-50" />
                 )}
               </button>
               <WalletStatus openModal={() => ModalService.open(WalletModal)} />
@@ -179,12 +185,12 @@ export default function Nav() {
               <button
                 id="switchTheme"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="h-10 w-10 flex justify-center items-center focus:outline-none  text-blue-50"
+                className="flex items-center justify-center w-10 h-10 focus:outline-none text-blue-50"
               >
                 {theme === 'dark' ? (
-                  <SunIcon className="h-5 w-5 text-blue-50" />
+                  <SunIcon className="w-5 h-5 text-blue-50" />
                 ) : (
-                  <MoonIcon className="h-5 w-5 text-blue-50" />
+                  <MoonIcon className="w-5 h-5 text-blue-50" />
                 )}
               </button>
             </div>
