@@ -20,10 +20,12 @@ import TradeCompleteModal, { TRANSACTION_TYPES } from './TradeCompleteModal'
 export default function LockModal({
   close,
   token,
+  balance,
   refetch,
 }: {
   close: () => void
   token: IdeaToken
+  balance: string
   refetch: () => void
 }) {
   const txManager = useTransactionManager()
@@ -39,11 +41,14 @@ export default function LockModal({
 
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
 
+  const isInputAmountGTSupply = parseFloat(amountToLock) > parseFloat(balance)
+
   const isInvalid =
     txManager.isPending ||
     amountToLock === '0' ||
     amountToLock === '' ||
-    !/^\d*\.?\d*$/.test(amountToLock)
+    !/^\d*\.?\d*$/.test(amountToLock) ||
+    isInputAmountGTSupply
 
   const isApproveButtonDisabled = isInvalid || !isMissingAllowance
   const isLockButtonDisabled = isInvalid || isMissingAllowance
@@ -117,6 +122,9 @@ export default function LockModal({
             onChange={onInputChanged}
             value={amountToLock}
           />
+          {isInputAmountGTSupply && (
+            <div className="text-brand-red">Insufficient balance</div>
+          )}
           <ApproveButton
             tokenAddress={token.address}
             tokenName={token.name}

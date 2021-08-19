@@ -20,6 +20,13 @@ export default function Nav() {
 
   const menuItems = [
     {
+      name: 'Tutorial',
+      value: 'tutorial',
+      onClick: () =>
+        window.open('https://docs.ideamarket.io/user-guide/tutorial', '_blank'),
+      isSelected: false,
+    },
+    {
       name: 'Whitepaper',
       value: 'about',
       onClick: () => window.open('https://docs.ideamarket.io', '_blank'),

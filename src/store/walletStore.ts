@@ -23,8 +23,10 @@ export const useWalletStore = create<State>((set) => ({
 async function handleWeb3Change() {
   const web3 = useWalletStore.getState().web3 as any
 
+  if (!web3) return
+
   if (web3.currentProvider.off !== undefined) {
-    web3.currentProvider.off('networkChanged', handleWeb3Change)
+    web3.currentProvider.off('chainChanged', handleWeb3Change)
     web3.currentProvider.off('accountsChanged', handleWeb3Change)
   }
 
@@ -36,7 +38,7 @@ export async function setWeb3(web3, wallet) {
   web3.eth.defaultAccount = address
 
   if (web3.currentProvider.on !== undefined) {
-    web3.currentProvider.on('networkChanged', handleWeb3Change)
+    web3.currentProvider.on('chainChanged', handleWeb3Change)
     web3.currentProvider.on('accountsChanged', handleWeb3Change)
   }
 

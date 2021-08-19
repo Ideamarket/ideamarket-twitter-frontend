@@ -217,7 +217,7 @@ export default function TokenRow({
               e.stopPropagation()
               isL1
                 ? router.push('/bridge')
-                : ModalService.open(LockModal, { token, refetch })
+                : ModalService.open(LockModal, { token, balance, refetch })
             }}
             className="w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
