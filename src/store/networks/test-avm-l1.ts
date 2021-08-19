@@ -8,6 +8,10 @@ export default class TestNetworkSpecifics implements INetworkSpecifics {
     return 'test-avm-l1'
   }
 
+  getHumanReadableNetworkName(): string {
+    return 'Rinkeby'
+  }
+
   getChainID(): number {
     return 4
   }

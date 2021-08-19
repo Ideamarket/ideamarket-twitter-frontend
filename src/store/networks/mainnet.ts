@@ -8,6 +8,10 @@ export default class MainnetNetworkSpecifics implements INetworkSpecifics {
     return 'mainnet'
   }
 
+  getHumanReadableNetworkName(): string {
+    return 'Ethereum'
+  }
+
   getChainID(): number {
     return 1
   }

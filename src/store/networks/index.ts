@@ -12,6 +12,7 @@ export type ExternalAddresses = {
 
 export type INetworkSpecifics = {
   getNetworkName(): string
+  getHumanReadableNetworkName(): string
   getChainID(): number
   getDeployedAddresses(): any
   getDeployedABIs(): any

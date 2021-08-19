@@ -55,7 +55,8 @@ export default function WrongNetworkOverlay() {
           </div>
           <div className="text-sm">
             Please connect to{' '}
-            <strong>{requiredNetwork.getNetworkName()}</strong> and try again.
+            <strong>{requiredNetwork.getHumanReadableNetworkName()}</strong> and
+            try again.
           </div>
           <div className="mt-5 bg-white border rounded dark:bg-gray-700 dark:border-gray-500 border-brand-gray-2">
             <NoSSRWalletInterface />

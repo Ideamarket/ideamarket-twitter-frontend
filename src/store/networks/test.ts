@@ -8,6 +8,10 @@ export default class TestNetworkSpecifics implements INetworkSpecifics {
     return 'test'
   }
 
+  getHumanReadableNetworkName(): string {
+    return 'Rinkeby'
+  }
+
   getChainID(): number {
     return 4
   }

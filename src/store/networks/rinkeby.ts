@@ -8,6 +8,10 @@ export default class RinkebyNetworkSpecifics implements INetworkSpecifics {
     return 'rinkeby'
   }
 
+  getHumanReadableNetworkName(): string {
+    return 'Rinkeby'
+  }
+
   getChainID(): number {
     return 4
   }

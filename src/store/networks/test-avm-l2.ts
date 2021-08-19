@@ -8,6 +8,10 @@ export default class KovanAVMNetworkSpecifics implements INetworkSpecifics {
     return 'test-avm-l2'
   }
 
+  getHumanReadableNetworkName(): string {
+    return 'Arbitrum Rinkeby'
+  }
+
   getChainID(): number {
     return 421611
   }
