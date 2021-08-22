@@ -5,9 +5,9 @@ export default function ListingSEO({ tokenName, rawMarketName, rawTokenName }) {
   return (
     <NextSeo
       title={tokenName}
-      canonical={`https://app.ideamarket.io/i/${rawMarketName}/${rawTokenName}`}
+      canonical={`https://ideamarket.io/i/${rawMarketName}/${rawTokenName}`}
       openGraph={{
-        url: `https://app.ideamarket.io/i/${rawMarketName}/${rawTokenName}`,
+        url: `https://ideamarket.io/i/${rawMarketName}/${rawTokenName}`,
         images: [
           {
             url: `${

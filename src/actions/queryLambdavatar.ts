@@ -10,11 +10,11 @@ export default async function queryLambdavatar({
   )
     .then((res) => {
       if (!res.ok) {
-        return 'https://app.ideamarket.io/logo.png'
+        return 'https://ideamarket.io/logo.png'
       }
       return `https://d3hjr60szea5ud.cloudfront.net/${rawMarketName}/${rawTokenName}.png`
     })
     .catch((ex) => {
-      return 'https://app.ideamarket.io/logo.png'
+      return 'https://ideamarket.io/logo.png'
     })
 }

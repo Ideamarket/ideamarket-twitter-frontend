@@ -46,6 +46,11 @@ const moduleExports = withPWA({
         permanent: true,
         destination: '/',
       },
+      {
+        source: '/discord',
+        destination: 'https://discord.gg/TPTHvutjnc',
+        permanent: true,
+      },
     ]
   },
 })

@@ -104,7 +104,7 @@ export default function IframeEmbed() {
         <div className="-ml-2 flex-grow-0 flex items-center justify-center w-[68px] h-full font-medium text-white bg-brand-new-blue rounded-md">
           <A
             className="flex items-center justify-center"
-            href={`https://app.ideamarket.io/i/${rawMarketName}/${rawTokenName}`}
+            href={`https://ideamarket.io/i/${rawMarketName}/${rawTokenName}`}
           >
             <ArrowCircleUpIcon className="w-5 h-5 mr-1 text-[#a5bbfb]" />
             Buy

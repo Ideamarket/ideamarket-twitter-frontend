@@ -6,7 +6,7 @@ import CopyCheck from '../../assets/copy-check.svg'
 import CopyIcon from '../../assets/copy-icon.svg'
 
 export default function ListingIframe({ rawMarketName, rawTokenName }) {
-  const embedCode = `<iframe src="https://app.ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" title="Ideamarket Embed" style="width: 400px; height: 75px;"`
+  const embedCode = `<iframe src="https://ideamarket.io/iframe/${rawMarketName}/${rawTokenName}" title="Ideamarket Embed" style="width: 400px; height: 75px;"`
   const [isEmbedCopyDone, setIsEmbedCopyDone] = useState(false)
   const [showEmbedSkeleton, setShowEmbedSkeleton] = useState(true)
 
