@@ -1,20 +1,22 @@
 import React from 'react'
 import classNames from 'classnames'
+import BigNumber from 'bignumber.js'
 import Tooltip from 'components/tooltip/Tooltip'
 import { A } from 'components'
-/*import { useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import {
-  investmentTokenToUnderlying,
-  queryExchangeRate,
-} from 'store/compoundStore'*/
-import { IdeaMarket } from 'store/ideaMarketsStore'
-/*import BN from 'bn.js'
+  IdeaMarket,
+  queryInterestManagerTotalShares,
+} from 'store/ideaMarketsStore'
+import { queryDaiBalance } from 'store/daiStore'
+import { NETWORK } from 'store/networks'
+import BN from 'bn.js'
 import {
   bigNumberTenPow18,
   formatNumber,
   formatNumberWithCommasAsThousandsSerperator,
-  web3BNToFloatString,
-} from 'utils'*/
+  bnToFloatString,
+} from 'utils'
 
 type Props = {
   currentColumn: string
@@ -52,22 +54,33 @@ export const OverviewColumns = ({
   columnClicked,
   markets,
 }: Props) => {
-  /*const { data: compoundExchangeRate } = useQuery(
-    'compound-exchange-rate',
-    queryExchangeRate,
-    {
-      refetchOnWindowFocus: false,
-    }
+  const { data: interestManagerTotalShares } = useQuery(
+    'interest-manager-total-shares',
+    queryInterestManagerTotalShares
   )
 
-  let allPlatformsEarnedBN = new BN('0')
+  const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
+  const { data: interestManagerDaiBalance } = useQuery(
+    ['interest-manager-dai-balance', interestManagerAddress],
+    queryDaiBalance
+  )
+
+  let allPlatformsEarnedBN = new BigNumber('0')
   const platformEarnedPairs = [] // { name, earned } -- name = platform name, earned = amount platform earned
   markets.forEach((market) => {
-    const platformEarnedBN = investmentTokenToUnderlying(
-      market.rawPlatformFeeInvested,
-      compoundExchangeRate
-    ).add(market.rawPlatformFeeRedeemed || new BN('0'))
-    const platformEarned = web3BNToFloatString(
+    const platformEarnedBN =
+      interestManagerTotalShares && interestManagerDaiBalance
+        ? new BigNumber(market.rawPlatformFeeInvested.toString())
+            .dividedBy(new BigNumber(interestManagerTotalShares.toString()))
+            .multipliedBy(new BigNumber(interestManagerDaiBalance.toString()))
+            .plus(
+              new BigNumber(
+                (market.rawPlatformFeeRedeemed || new BN('0')).toString()
+              )
+            )
+        : new BigNumber('0')
+
+    const platformEarned = bnToFloatString(
       platformEarnedBN,
       bigNumberTenPow18,
       4
@@ -81,11 +94,11 @@ export const OverviewColumns = ({
               parseInt(platformEarned)
             ),
     })
-    allPlatformsEarnedBN = allPlatformsEarnedBN.add(platformEarnedBN)
-  })*/
+    allPlatformsEarnedBN = allPlatformsEarnedBN.plus(platformEarnedBN)
+  })
   // If over $1,000 - no decimals
   // If under $1,000 - show cents also
-  /*const allPlatformsEarnedString = web3BNToFloatString(
+  const allPlatformsEarnedString = bnToFloatString(
     allPlatformsEarnedBN,
     bigNumberTenPow18,
     4
@@ -95,7 +108,7 @@ export const OverviewColumns = ({
       ? formatNumber(parseFloat(allPlatformsEarnedString))
       : formatNumberWithCommasAsThousandsSerperator(
           parseInt(allPlatformsEarnedString)
-        )*/
+        )
 
   function getColumnContent(column) {
     switch (column.value) {
@@ -133,7 +146,7 @@ export const OverviewColumns = ({
               className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50"
               key={column.value}
             >
-              {/*${allPlatformsEarned}
+              ${allPlatformsEarned}
               <br />
               <div className="flex items-center">
                 earned for platforms
@@ -150,7 +163,7 @@ export const OverviewColumns = ({
                     new income stream.
                   </div>
                 </Tooltip>
-              </div>*/}
+              </div>
             </th>
           )
         } else {
