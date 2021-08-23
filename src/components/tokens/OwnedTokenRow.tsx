@@ -193,10 +193,15 @@ export default function TokenRow({
           </p>
           <p
             className={classNames(
-              'text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300 uppercase',
-              parseFloat(token.dayChange) >= 0.0
-                ? 'text-brand-green dark:text-green-400'
-                : 'text-brand-red dark:text-red-400'
+              'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
+              {
+                'text-brand-red dark:text-red-400':
+                  parseFloat(token.dayChange) < 0.0,
+                'text-brand-green dark:text-green-400':
+                  parseFloat(token.dayChange) > 0.0,
+                'text-very-dark-blue dark:text-gray-300':
+                  parseFloat(token.dayChange) === 0.0,
+              }
             )}
             title={
               parseFloat(token.dayChange) >= 0.0

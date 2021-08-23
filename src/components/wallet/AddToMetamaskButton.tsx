@@ -18,7 +18,7 @@ export default function AddToMetamaskButton({ token }: { token: IdeaToken }) {
             address: token.address,
             symbol: `IDT`,
             decimals: 18,
-            image: 'https://app.ideamarket.io/logo.png',
+            image: 'https://ideamarket.io/logo.png',
           },
         },
       })
