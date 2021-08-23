@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { web3TenPow18, bigNumberTenPow18 } from '../utils'
+import { web3TenPow18 /*, bigNumberTenPow18 */ } from '../utils'
 import { NETWORK } from 'store/networks'
 import BN from 'bn.js'
-import BigNumber from 'bignumber.js'
+//import BigNumber from 'bignumber.js'
 
 export async function querySupplyRate(queryKey: string): Promise<number> {
   /*
@@ -23,7 +23,7 @@ export async function querySupplyRate(queryKey: string): Promise<number> {
     NOTE: We leave out the *100 at the end since we do not want the result in percentages (0-100) but rather between (0-1)
     */
 
-  try {
+  /*try {
     const response = await axios.get(
       `https://onchain-values.backend.ideamarket.io/cDaiSupplyRate/${NETWORK.getNetworkName()}`
     )
@@ -41,7 +41,10 @@ export async function querySupplyRate(queryKey: string): Promise<number> {
     return Number(result.toFixed(8))
   } catch (ex) {
     throw Error('Failed to query cDai Supply Rate')
-  }
+  }*/
+
+  // Since there is no Compound on L2 yet, hardcode this to some value
+  return 0.25
 }
 
 export async function queryExchangeRate(queryKey: string): Promise<BN> {
