@@ -1,19 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
-//import { useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-/*import {
-  queryCDaiBalance,
-  queryExchangeRate,
-  investmentTokenToUnderlying,
-} from 'store/compoundStore'
+import { queryDaiBalance } from 'store/daiStore'
 import {
   web3BNToFloatString,
   bigNumberTenPow18,
   formatNumberWithCommasAsThousandsSerperator,
-} from 'utils'*/
+} from 'utils'
 import { Table, TradeModal, ListTokenModal, WalletModal } from 'components'
 import ModalService from 'components/modals/ModalService'
-//import { NETWORK } from 'store/networks'
+import { NETWORK } from 'store/networks'
 import Plus from '../assets/plus-white.svg'
 import { GlobalContext } from '../pages/_app'
 import { useWalletStore } from 'store/walletStore'
@@ -25,6 +21,7 @@ import {
   DropdownFilters,
 } from 'components/tokens/OverviewFilters'
 import { useMarketStore } from 'store/markets'
+import BN from 'bn.js'
 
 export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   const defaultColumns = [
@@ -127,7 +124,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
-  //const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
+  const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
   const visibleColumns = defaultColumns.filter(
     (h) => !h.isOptional || selectedColumns.has(h.name)
   )
@@ -163,30 +160,20 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [markets])
 
-  /*const { data: compoundExchangeRate } = useQuery(
-    'compound-exchange-rate',
-    queryExchangeRate,
+  const { data: rawInterestManagerDaiBalance } = useQuery(
+    ['interest-manager-dai-balance', interestManagerAddress],
+    queryDaiBalance,
     {
       refetchOnWindowFocus: false,
     }
   )
-  const { data: interestManagerCDaiBalance } = useQuery(
-    ['interest-manager-cdai-balance', interestManagerAddress],
-    queryCDaiBalance,
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
-  const cDaiBalanceInDai = formatNumberWithCommasAsThousandsSerperator(
+  const interestManagerDaiBalance = formatNumberWithCommasAsThousandsSerperator(
     web3BNToFloatString(
-      investmentTokenToUnderlying(
-        interestManagerCDaiBalance,
-        compoundExchangeRate
-      ),
+      rawInterestManagerDaiBalance || new BN('0'),
       bigNumberTenPow18,
       0
     )
-  )*/
+  )
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
   function onNameSearchChanged(nameSearch) {
@@ -276,16 +263,13 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
               Browser Extension
             </button>
           </div>
-          {/*
-            NOTE: This is currently disabled since we need a L2 Compound subgraph to calculate this value
 
           <div className="flex flex-col items-center justify-center mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
             <div className="text-2xl text-brand-blue md:text-5xl">
-              ${cDaiBalanceInDai}
+              ${interestManagerDaiBalance}
             </div>
             <div className="md:ml-2">in credibility crowdsourced</div>
           </div>
-          */}
         </div>
         <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-28 font-sf-compact-medium">
           <OverviewFilters
