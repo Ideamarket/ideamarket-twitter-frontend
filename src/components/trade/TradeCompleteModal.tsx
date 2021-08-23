@@ -7,6 +7,33 @@ export enum TRANSACTION_TYPES {
   SELL,
   LOCK,
   LIST,
+  GIFT,
+}
+
+const tweetableTypes = [
+  TRANSACTION_TYPES.LIST,
+  TRANSACTION_TYPES.BUY,
+  TRANSACTION_TYPES.LOCK,
+  TRANSACTION_TYPES.GIFT,
+]
+
+function getTweetTemplate(
+  transactionType: TRANSACTION_TYPES,
+  tokenName: string
+) {
+  let tweetText = ''
+
+  if (transactionType === TRANSACTION_TYPES.LIST) {
+    tweetText = `Just listed ${tokenName} on @ideamarket_io`
+  } else if (transactionType === TRANSACTION_TYPES.BUY) {
+    tweetText = `Just bought ${tokenName} on @ideamarket_io`
+  } else if (transactionType === TRANSACTION_TYPES.LOCK) {
+    tweetText = `Just locked ${tokenName} for 1 year on @ideamarket_io`
+  } else if (transactionType === TRANSACTION_TYPES.GIFT) {
+    tweetText = `Just gifted ${tokenName} on @ideamarket_io`
+  }
+
+  return encodeURIComponent(tweetText)
 }
 
 export default function TradeCompleteModal({
@@ -21,29 +48,8 @@ export default function TradeCompleteModal({
   transactionType: TRANSACTION_TYPES
 }) {
   const tweetTemplate = getTweetTemplate(transactionType, tokenName)
-  const tweetableTypes = [
-    TRANSACTION_TYPES.LIST,
-    TRANSACTION_TYPES.BUY,
-    TRANSACTION_TYPES.LOCK,
-  ]
+
   const canTweet = tweetableTypes.includes(transactionType)
-
-  function getTweetTemplate(
-    transactionType: TRANSACTION_TYPES,
-    tokenName: string
-  ) {
-    let tweetText = ''
-
-    if (transactionType === TRANSACTION_TYPES.LIST) {
-      tweetText = `Just listed ${tokenName} on @ideamarket_io`
-    } else if (transactionType === TRANSACTION_TYPES.BUY) {
-      tweetText = `Just bought ${tokenName} on @ideamarket_io`
-    } else if (transactionType === TRANSACTION_TYPES.LOCK) {
-      tweetText = `Just locked ${tokenName} for 1 year on @ideamarket_io`
-    }
-
-    return encodeURIComponent(tweetText)
-  }
 
   return (
     <Modal close={close}>
@@ -60,7 +66,7 @@ export default function TradeCompleteModal({
                   className="twitter-share-button"
                   href={`https://twitter.com/intent/tweet?text=${tweetTemplate}&url=https://ideamarket.io`}
                 >
-                  <button className="w-32 h-10 text-base font-medium bg-white dark:text-gray-50 inborder-2 dark:bg-gray-500 rounded-lg border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
+                  <button className="w-32 h-10 text-base font-medium bg-white rounded-lg dark:text-gray-50 inborder-2 dark:bg-gray-500 border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
                     Tweet about it
                   </button>
                 </A>

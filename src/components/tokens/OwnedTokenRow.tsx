@@ -20,10 +20,11 @@ import ModalService from 'components/modals/ModalService'
 import LockModal from 'components/trade/LockModal'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
+import GitModal from 'components/trade/GiftModal'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
-export default function TokenRow({
+export default function OwnedTokenRow({
   token,
   market,
   balance,
@@ -209,7 +210,7 @@ export default function TokenRow({
           </p>
         </td>
         {/* Lock Button */}
-        <td className="px-4 py-4 md:px-0 whitespace-nowrap">
+        <td className="px-4 py-4 md:px-2 whitespace-nowrap">
           <button
             onClick={(e) => {
               e.stopPropagation()
@@ -218,6 +219,17 @@ export default function TokenRow({
             className="w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
             <span>Lock</span>
+          </button>
+        </td>
+        <td className="px-4 py-4 md:px-2 whitespace-nowrap">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              ModalService.open(GitModal, { token, balance, refetch })
+            }}
+            className="w-20 h-10 text-base font-medium bg-white border-2 rounded-lg text-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+          >
+            <span>Gift</span>
           </button>
         </td>
         {/* Add to Metamask button */}
