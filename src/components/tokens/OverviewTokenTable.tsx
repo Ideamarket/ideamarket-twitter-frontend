@@ -95,7 +95,7 @@ export default function Table({
           : orderDirection,
         nameSearch,
         filterTokens,
-        selectedFilterId === Filters.VERIFIED.id,
+        // selectedFilterId === Filters.VERIFIED.id,
       ],
     ],
     queryTokens,

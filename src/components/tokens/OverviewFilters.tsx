@@ -1,14 +1,15 @@
 import classNames from 'classnames'
 import { useMarketStore } from 'store/markets'
-import ArrowUp from '../../assets/arrow-up.svg'
-import Fire from '../../assets/fire.svg'
-import Sparkles from '../../assets/sparkles.svg'
-import Star from '../../assets/star.svg'
-import QuestionMark from '../../assets/question-mark.svg'
-import { ChevronDownIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon, BadgeCheckIcon } from '@heroicons/react/solid'
+import {
+  StarIcon,
+  SparklesIcon,
+  FireIcon,
+  ArrowSmUpIcon,
+  QuestionMarkCircleIcon,
+} from '@heroicons/react/outline'
 import React, { useEffect, useRef, useState } from 'react'
 import { OverviewSearchbar } from './OverviewSearchbar'
-import { BadgeCheckIcon } from '@heroicons/react/solid'
 
 export const Filters = {
   TOP: {
@@ -23,10 +24,10 @@ export const Filters = {
     id: 3,
     value: 'New',
   },
-  VERIFIED: {
-    id: 4,
-    value: 'Verified',
-  },
+  // VERIFIED: {
+  //   id: 4,
+  //   value: 'Verified',
+  // },
   STARRED: {
     id: 5,
     value: 'Starred',
@@ -156,24 +157,26 @@ const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
   function getButtonIcon(filterId: number) {
     switch (filterId) {
       case 1:
-        return <ArrowUp className="stroke-current" />
+        return <ArrowSmUpIcon className="stroke-current w-4 h-4" />
       case 2:
-        return <Fire />
+        return <FireIcon className="w-4 h-4 mr-1" />
       case 3:
-        return <Sparkles />
+        return <SparklesIcon className="w-4 h-4 mr-1" />
       case 4:
-        return <BadgeCheckIcon className="w-5 h-5" />
+        return <BadgeCheckIcon className="w-5 h-5 mr-1" />
       case 5:
-        return <Star />
+        return <StarIcon className="w-4 h-4 mr-1" />
       default:
-        return <QuestionMark />
+        return <QuestionMarkCircleIcon className="w-4 h-4 mr-1" />
     }
   }
 
   return (
     <button
       className={classNames(
-        'flex items-center p-1 border rounded-md px-3 text-sm',
+        'flex flex-grow md:flex-auto justify-center items-center md:px-3 p-2 border md:rounded-md text-sm',
+        filter.value === 'Top' && 'rounded-l-md',
+        filter.value === 'Starred' && 'rounded-r-md',
         {
           'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
             isSelected,
@@ -185,8 +188,45 @@ const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
       }}
     >
       {getButtonIcon(filter.id)}
-      <span className="ml-1">{filter.value}</span>
+      <span>{filter.value}</span>
     </button>
+  )
+}
+
+type FilterButtonRowProps = {
+  filters: any
+  onFilterChanged: (filterId: number) => void
+  selectedFilterId: number
+}
+
+const FilterButtonRow = ({
+  filters,
+  onFilterChanged,
+  selectedFilterId,
+}: FilterButtonRowProps) => {
+  return (
+    <>
+      <div className="flex md:hidden">
+        {Object.values(filters).map((filter: { id: number; value: string }) => (
+          <FiltersButton
+            key={filter.id}
+            filter={filter}
+            onClick={onFilterChanged}
+            isSelected={filter.id === selectedFilterId}
+          />
+        ))}
+      </div>
+      <div className="hidden md:flex gap-x-2">
+        {Object.values(filters).map((filter: { id: number; value: string }) => (
+          <FiltersButton
+            key={filter.id}
+            filter={filter}
+            onClick={onFilterChanged}
+            isSelected={filter.id === selectedFilterId}
+          />
+        ))}
+      </div>
+    </>
   )
 }
 
@@ -297,17 +337,15 @@ export const OverviewFilters = ({
   }, [markets])
 
   return (
-    <div className="grid md:flex justify-center grid-cols-2 md:grid-cols-none p-4 bg-white dark:bg-gray-700 rounded-t-lg gap-x-2 gap-y-2 md:justify-start  overflow-x-scroll lg:overflow-x-visible">
-      {Object.values(Filters).map((filter) => (
-        <FiltersButton
-          key={filter.id}
-          filter={filter}
-          onClick={onFilterChanged}
-          isSelected={filter.id === selectedFilterId}
-        />
-      ))}
+    <div className="md:flex justify-center p-3 bg-white dark:bg-gray-700 rounded-t-lg gap-x-2 gap-y-2 md:justify-start overflow-x-scroll lg:overflow-x-visible">
+      <FilterButtonRow
+        filters={Filters}
+        onFilterChanged={onFilterChanged}
+        selectedFilterId={selectedFilterId}
+      />
 
       <DropdownButton
+        className="hidden md:flex"
         filters={DropdownFilters.PLATFORMS.values}
         name={DropdownFilters.PLATFORMS.name}
         selectedOptions={selectedMarkets}
@@ -322,7 +360,9 @@ export const OverviewFilters = ({
         toggleOption={toggleColumn}
       />
 
-      <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
+      <div className="ml-auto mt-2 md:mt-0 w-full">
+        <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
+      </div>
     </div>
   )
 }

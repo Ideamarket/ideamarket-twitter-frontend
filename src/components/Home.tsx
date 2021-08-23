@@ -193,10 +193,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
     setNameSearch(nameSearch)
   }
   function onOrderByChanged(orderBy: string, direction: string) {
-    if (
-      selectedFilterId === Filters.STARRED.id ||
-      selectedFilterId === Filters.VERIFIED.id
-    ) {
+    if (selectedFilterId === Filters.STARRED.id) {
       return
     }
     if (orderBy === 'dayChange' && direction === 'desc') {
@@ -292,7 +289,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
             onColumnChanged={onColumnChanged}
             onNameSearchChanged={onNameSearchChanged}
           />
-          <div className="bg-white border border-brand-gray-3 dark:border-gray-500 rounded-b-xlg shadow-home">
+          <div className="bg-white border border-brand-gray-3 dark:border-gray-500 shadow-home">
             {/* selectedMarkets is empty on load. If none selected, it will have 1 element called 'None' */}
             {visibleColumns && selectedMarkets.size > 0 && (
               <Table
