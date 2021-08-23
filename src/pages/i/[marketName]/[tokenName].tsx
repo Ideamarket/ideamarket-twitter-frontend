@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import { useQuery } from 'react-query'
 import {
   TradeInterface,
@@ -5,9 +6,14 @@ import {
   DefaultLayout,
   WalletModal,
 } from 'components'
-import { queryExchangeRate } from 'store/compoundStore'
 import { useWalletStore } from 'store/walletStore'
-import { querySingleToken, queryMarket } from 'store/ideaMarketsStore'
+import { queryDaiBalance } from 'store/daiStore'
+import { NETWORK } from 'store/networks'
+import {
+  querySingleToken,
+  queryMarket,
+  queryInterestManagerTotalShares,
+} from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
 import { GetServerSideProps } from 'next'
 import ModalService from 'components/modals/ModalService'
@@ -17,6 +23,7 @@ import ListingSEO from 'components/listing-page/ListingSEO'
 import TradeCompleteModal, {
   TRANSACTION_TYPES,
 } from 'components/trade/TradeCompleteModal'
+import { bnToFloatString, bigNumberTenPow18 } from 'utils'
 
 export default function TokenDetails({
   rawMarketName,
@@ -48,12 +55,40 @@ export default function TokenDetails({
   )
 
   const {
-    data: compoundExchangeRate,
-    isLoading: isCompoundExchangeRateLoading,
-  } = useQuery('compound-exchange-rate', queryExchangeRate)
+    data: interestManagerTotalShares,
+    isLoading: isInterestManagerTotalSharesLoading,
+  } = useQuery('interest-manager-total-shares', queryInterestManagerTotalShares)
+
+  const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
+  const {
+    data: interestManagerDaiBalance,
+    isLoading: isInterestManagerDaiBalanceLoading,
+  } = useQuery(
+    ['interest-manager-dai-balance', interestManagerAddress],
+    queryDaiBalance
+  )
+
+  const claimableIncome =
+    interestManagerTotalShares &&
+    interestManagerDaiBalance &&
+    token &&
+    token.rawInvested &&
+    token.rawDaiInToken
+      ? bnToFloatString(
+          new BigNumber(token.rawInvested.toString())
+            .dividedBy(new BigNumber(interestManagerTotalShares.toString()))
+            .multipliedBy(new BigNumber(interestManagerDaiBalance.toString()))
+            .minus(new BigNumber(token.rawDaiInToken.toString())),
+          bigNumberTenPow18,
+          2
+        )
+      : '0.00'
 
   const isLoading =
-    isTokenLoading || isMarketLoading || isCompoundExchangeRateLoading
+    isTokenLoading ||
+    isMarketLoading ||
+    isInterestManagerTotalSharesLoading ||
+    isInterestManagerDaiBalanceLoading
 
   function onTradeComplete(
     isSuccess: boolean,
@@ -85,7 +120,7 @@ export default function TokenDetails({
                 isLoading={isLoading}
                 market={market}
                 token={token}
-                compoundExchangeRate={compoundExchangeRate}
+                claimableIncome={claimableIncome}
                 marketSpecifics={marketSpecifics}
                 refetch={refetch}
                 rawMarketName={rawMarketName}
