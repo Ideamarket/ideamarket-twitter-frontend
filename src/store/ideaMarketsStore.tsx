@@ -1,3 +1,4 @@
+import axios from 'axios'
 import create from 'zustand'
 import produce from 'immer'
 import BN from 'bn.js'
@@ -746,6 +747,17 @@ export async function queryLockedTokens(
   )
 
   return L1Pairs.concat(L2Pairs)
+}
+
+export async function queryInterestManagerTotalShares(queryKey): Promise<BN> {
+  try {
+    const response = await axios.get(
+      `https://onchain-values.backend.ideamarket.io/interestManagerTotalShares/${NETWORK.getNetworkName()}`
+    )
+    return new BN(response.data.value)
+  } catch (ex) {
+    throw Error('Failed to query interestManager total shares')
+  }
 }
 
 export function setIsWatching(token: IdeaToken, watching: boolean): void {

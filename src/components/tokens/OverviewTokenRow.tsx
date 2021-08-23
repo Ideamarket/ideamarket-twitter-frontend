@@ -2,7 +2,13 @@ import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
 import { WatchingStar } from 'components'
-import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
+import { NETWORK } from 'store/networks'
+import { queryDaiBalance } from 'store/daiStore'
+import {
+  queryInterestManagerTotalShares,
+  IdeaMarket,
+  IdeaToken,
+} from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   calculateCurrentPriceBN,
@@ -11,12 +17,9 @@ import {
   web3BNToFloatString,
   ZERO_ADDRESS,
   bigNumberTenPow18,
+  bnToFloatString,
 } from 'utils'
 import { useTokenIconURL } from 'actions'
-import {
-  investmentTokenToUnderlying,
-  queryExchangeRate,
-} from 'store/compoundStore'
 import { useQuery } from 'react-query'
 import { BadgeCheckIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
@@ -64,18 +67,28 @@ export default function TokenRow({
     2
   )
 
-  const { data: compoundExchangeRate } = useQuery(
-    'compound-exchange-rate',
-    queryExchangeRate
+  const { data: interestManagerTotalShares } = useQuery(
+    'interest-manager-total-shares',
+    queryInterestManagerTotalShares
   )
 
-  const claimableIncome = web3BNToFloatString(
-    investmentTokenToUnderlying(token.rawInvested, compoundExchangeRate).sub(
-      token.rawDaiInToken
-    ),
-    bigNumberTenPow18,
-    2
+  const interestManagerAddress = NETWORK.getDeployedAddresses().interestManager
+  const { data: interestManagerDaiBalance } = useQuery(
+    ['interest-manager-dai-balance', interestManagerAddress],
+    queryDaiBalance
   )
+
+  const claimableIncome =
+    interestManagerTotalShares && interestManagerDaiBalance
+      ? bnToFloatString(
+          new BigNumber(token.rawInvested.toString())
+            .dividedBy(new BigNumber(interestManagerTotalShares.toString()))
+            .multipliedBy(new BigNumber(interestManagerDaiBalance.toString()))
+            .minus(new BigNumber(token.rawDaiInToken.toString())),
+          bigNumberTenPow18,
+          2
+        )
+      : '0'
 
   return (
     <>
@@ -114,7 +127,7 @@ export default function TokenRow({
               {isTokenIconLoading ? (
                 <div className="w-full h-full bg-gray-400 rounded-full animate-pulse"></div>
               ) : (
-                <div className="w-full h-full rounded-full relative">
+                <div className="relative w-full h-full rounded-full">
                   <Image
                     src={tokenIconURL || '/gray.svg'}
                     alt="token"
@@ -142,7 +155,7 @@ export default function TokenRow({
           </div>
         </td>
         {/* Mobile Verified Badge */}
-        <td className="md:hidden flex items-center justify-center py-4 text-sm leading-5 text-center text-black dark:text-white md:table-cell whitespace-nowrap">
+        <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-black md:hidden dark:text-white md:table-cell whitespace-nowrap">
           <div className="flex items-center justify-end h-full">
             <div className="w-5 h-5">
               {token.tokenOwner !== ZERO_ADDRESS && <BadgeCheckIcon />}
@@ -261,35 +274,35 @@ export default function TokenRow({
         )}
 
         {/* Buy Button */}
-        <td className="hidden py-4 md:table-cell whitespace-nowrap text-center">
+        <td className="hidden py-4 text-center md:table-cell whitespace-nowrap">
           <button
             onClick={(e) => {
               e.stopPropagation()
               onTradeClicked(token, market)
             }}
-            className="w-24 h-10 text-base font-medium bg-brand-blue dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-white dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+            className="w-24 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 md:table-cell border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
             <div className="flex">
-              <ArrowSmUpIcon className="ml-4 w-6 h-6" />
+              <ArrowSmUpIcon className="w-6 h-6 ml-4" />
               <span>Buy</span>
             </div>
           </button>
         </td>
         {/* Buy Button mobile */}
-        <td className="py-4 px-3 md:hidden whitespace-nowrap">
+        <td className="px-3 py-4 md:hidden whitespace-nowrap">
           <button
             onClick={(e) => {
               e.stopPropagation()
               onTradeClicked(token, market)
             }}
-            className="w-16 px-2 py-1 text-base font-medium bg-white dark:bg-gray-600 border-2 rounded-lg border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
+            className="w-16 px-2 py-1 text-base font-medium bg-white border-2 rounded-lg dark:bg-gray-600 border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
           >
             ${formatNumber(tokenPrice)}
           </button>
         </td>
 
         {/* Star desktop */}
-        <td className="hidden md:table-cell px-3 py-4 text-sm leading-5 text-gray-500 dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap">
+        <td className="hidden px-3 py-4 text-sm leading-5 text-gray-500 md:table-cell dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap">
           <div className="flex items-center justify-center h-full">
             <WatchingStar token={token} />
           </div>
