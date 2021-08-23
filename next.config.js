@@ -14,6 +14,7 @@ const moduleExports = withPWA({
     domains: [
       'd3hjr60szea5ud.cloudfront.net',
       'app.ideamarket.io',
+      'ideamarket.io',
       'raw.githubusercontent.com',
     ],
   },
