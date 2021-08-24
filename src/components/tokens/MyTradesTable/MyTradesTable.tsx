@@ -19,9 +19,9 @@ export default function MyTradesTable({
 }: MyTradesTableProps) {
   const TOKENS_PER_PAGE = 6
 
-  const [currentHeader, setCurrentHeader] = useState('lockedUntil')
-  const [orderBy, setOrderBy] = useState('lockedUntil')
-  const [orderDirection, setOrderDirection] = useState('asc')
+  const [currentHeader, setCurrentHeader] = useState('date')
+  const [orderBy, setOrderBy] = useState('date')
+  const [orderDirection, setOrderDirection] = useState('desc')
 
   const [pairs, setPairs]: [IdeaTokenTrade[], any] = useState([])
 
