@@ -1,6 +1,11 @@
 const withPWA = require('next-pwa')
+const { withSentryConfig } = require('@sentry/nextjs')
 
-module.exports = withPWA({
+const SentryWebpackPluginOptions = {
+  silent: true, // Suppresses all logs
+}
+
+const moduleExports = withPWA({
   pwa: {
     dest: 'public',
     disable: process.env.NODE_ENV === 'development',
@@ -9,6 +14,7 @@ module.exports = withPWA({
     domains: [
       'd3hjr60szea5ud.cloudfront.net',
       'app.ideamarket.io',
+      'ideamarket.io',
       'raw.githubusercontent.com',
     ],
   },
@@ -41,6 +47,15 @@ module.exports = withPWA({
         permanent: true,
         destination: '/',
       },
+      {
+        source: '/discord',
+        destination: 'https://discord.gg/TPTHvutjnc',
+        permanent: true,
+      },
     ]
   },
 })
+
+// Make sure adding Sentry options is the last code to run before exporting, to
+// ensure that your source maps include changes from all other Webpack plugins
+module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions)
