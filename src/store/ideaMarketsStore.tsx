@@ -20,6 +20,7 @@ import {
   getQuerySinglePricePoint,
   getQueryTokenBalances,
   getQueryBalancesOfHolders,
+  getQueryMyTrades,
 } from './queries'
 import { NETWORK } from 'store/networks'
 
@@ -106,6 +107,17 @@ export type LockedAmount = {
   rawAmount: BN
   amount: string
   lockedUntil: number
+}
+
+export type IdeaTokenTrade = {
+  token: IdeaToken
+  isBuy: boolean
+  timestamp: number
+  rawIdeaTokenAmount: BN
+  ideaTokenAmount: number
+  rawDaiAmount: BN
+  daiAmount: number
+  market: IdeaMarket
 }
 
 type State = {
@@ -628,6 +640,52 @@ export async function queryLockedTokens(
   )
 }
 
+export async function queryMyTrades(
+  queryKey,
+  market: IdeaMarket,
+  ownerAddress: string
+): Promise<IdeaTokenTrade[]> {
+  if (!ownerAddress) {
+    return []
+  }
+
+  const marketID = market ? market.marketID : undefined
+
+  let page = 0
+  const myTrades: any = []
+
+  // API can return max of 100 entries. That means we need to query the API multiple times to retrieve all entries
+  while (true) {
+    const result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryMyTrades({
+        ownerAddress,
+        first: 100,
+        skip: page * 100,
+      })
+    )
+
+    const tokensInThisPage = result.ideaTokenTrades ?? []
+
+    myTrades.push(...tokensInThisPage)
+    if (tokensInThisPage.length < 100) {
+      break
+    }
+    page += 1
+  }
+
+  const mapTradeResponse = (trade) => apiResponseToIdeaTokenTrade(trade)
+
+  // Filter by market if user chooses market option in the select box
+  if (marketID) {
+    return myTrades
+      .filter((trade) => trade?.token?.market?.marketID === marketID)
+      .map(mapTradeResponse)
+  }
+
+  return myTrades.map(mapTradeResponse)
+}
+
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
   const address = token.address
 
@@ -824,4 +882,24 @@ function apiResponseToLockedIdeaTokenMarketPair(
   } as LockedIdeaTokenMarketPair
 
   return ret
+}
+
+function apiResponseToIdeaTokenTrade(apiResponse) {
+  return {
+    isBuy: apiResponse.isBuy,
+    timestamp: Number(apiResponse.timestamp),
+    rawIdeaTokenAmount: new BN(apiResponse.ideaTokenAmount),
+    ideaTokenAmount: Number(
+      web3BNToFloatString(new BN(apiResponse.ideaTokenAmount), tenPow18, 2)
+    ),
+    rawDaiAmount: new BN(apiResponse.daiAmount),
+    daiAmount: Number(
+      web3BNToFloatString(new BN(apiResponse.daiAmount), tenPow18, 2)
+    ),
+    token: {
+      ...apiResponse.token,
+      ...apiResponseToIdeaToken(apiResponse.token, apiResponse.token.market),
+    },
+    market: apiResponseToIdeaMarket(apiResponse.token.market),
+  } as IdeaTokenTrade
 }
