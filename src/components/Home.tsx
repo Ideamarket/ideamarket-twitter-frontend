@@ -19,12 +19,9 @@ import { GlobalContext } from '../pages/_app'
 import { useWalletStore } from 'store/walletStore'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'
 import { NextSeo } from 'next-seo'
-import {
-  OverviewFilters,
-  Filters,
-  DropdownFilters,
-} from 'components/tokens/OverviewFilters'
+import { OverviewFilters } from 'components/tokens/OverviewFilters'
 import { useMarketStore } from 'store/markets'
+import { CheckboxFilters, MainFilters } from './tokens/utils/OverviewUtils'
 
 export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   const defaultColumns = [
@@ -123,7 +120,8 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   // After trade or list success, the token data needs to be refetched. This toggle does that.
   const [tradeOrListSuccessToggle, setTradeOrListSuccessToggle] =
     useState(false)
-  const [selectedFilterId, setSelectedFilterId] = useState(Filters.TOP.id)
+  const [selectedFilterId, setSelectedFilterId] = useState(MainFilters.TOP.id)
+  const [isVerifiedFilterActive, setIsVerifiedFilterActive] = useState(false)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
@@ -134,12 +132,12 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   const startingOptionalColumns = defaultColumns
     .filter(
       (c) =>
-        c.isSelectedAtStart && DropdownFilters.COLUMNS.values.includes(c.name)
+        c.isSelectedAtStart && CheckboxFilters.COLUMNS.values.includes(c.name)
     )
     .map((c) => c.name)
   if (
     startingOptionalColumns.length ===
-    DropdownFilters.COLUMNS.values.length - 1
+    CheckboxFilters.COLUMNS.values.length - 1
   ) {
     startingOptionalColumns.push('All')
   }
@@ -189,19 +187,19 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
   )
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
   function onNameSearchChanged(nameSearch) {
-    setSelectedFilterId(Filters.TOP.id)
+    setSelectedFilterId(MainFilters.TOP.id)
     setNameSearch(nameSearch)
   }
   function onOrderByChanged(orderBy: string, direction: string) {
-    if (selectedFilterId === Filters.STARRED.id) {
+    if (selectedFilterId === MainFilters.STARRED.id) {
       return
     }
     if (orderBy === 'dayChange' && direction === 'desc') {
-      setSelectedFilterId(Filters.HOT.id)
+      setSelectedFilterId(MainFilters.HOT.id)
     } else if (orderBy === 'listedAt' && direction === 'desc') {
-      setSelectedFilterId(Filters.NEW.id)
+      setSelectedFilterId(MainFilters.NEW.id)
     } else {
-      setSelectedFilterId(Filters.TOP.id)
+      setSelectedFilterId(MainFilters.TOP.id)
     }
   }
   function onTradeClicked(token: IdeaToken, market: IdeaMarket) {
@@ -279,15 +277,17 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
             <div className="md:ml-2">in credibility crowdsourced</div>
           </div>
         </div>
-        <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-28 font-sf-compact-medium">
+        <div className="px-2 mx-auto transform md:px-4 max-w-88 md:max-w-304 -translate-y-28">
           <OverviewFilters
             selectedFilterId={selectedFilterId}
             selectedMarkets={selectedMarkets}
             selectedColumns={selectedColumns}
+            isVerifiedFilterActive={isVerifiedFilterActive}
             onMarketChanged={onMarketChanged}
             setSelectedFilterId={setSelectedFilterId}
             onColumnChanged={onColumnChanged}
             onNameSearchChanged={onNameSearchChanged}
+            setIsVerifiedFilterActive={setIsVerifiedFilterActive}
           />
           <div className="bg-white border border-brand-gray-3 dark:border-gray-500 shadow-home">
             {/* selectedMarkets is empty on load. If none selected, it will have 1 element called 'None' */}
@@ -296,6 +296,7 @@ export default function Home({ urlMarkets }: { urlMarkets?: string[] }) {
                 nameSearch={nameSearch}
                 selectedMarkets={selectedMarkets}
                 selectedFilterId={selectedFilterId}
+                isVerifiedFilterActive={isVerifiedFilterActive}
                 columnData={visibleColumns}
                 getColumn={(column) => selectedColumns.has(column)}
                 onOrderByChanged={onOrderByChanged}

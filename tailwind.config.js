@@ -93,6 +93,7 @@ module.exports = {
       textOpacity: {
         60: '0.6',
       },
+      backgroundOpacity: ['active'],
     },
   },
   variants: {

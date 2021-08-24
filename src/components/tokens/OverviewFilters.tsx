@@ -10,49 +10,13 @@ import {
 } from '@heroicons/react/outline'
 import React, { useEffect, useRef, useState } from 'react'
 import { OverviewSearchbar } from './OverviewSearchbar'
-
-export const Filters = {
-  TOP: {
-    id: 1,
-    value: 'Top',
-  },
-  HOT: {
-    id: 2,
-    value: 'Hot',
-  },
-  NEW: {
-    id: 3,
-    value: 'New',
-  },
-  // VERIFIED: {
-  //   id: 4,
-  //   value: 'Verified',
-  // },
-  STARRED: {
-    id: 5,
-    value: 'Starred',
-  },
-}
-
-export const DropdownFilters = {
-  PLATFORMS: {
-    id: 1,
-    name: 'Platforms',
-    values: ['All'], // Don't hardcode the markets. They are set in OverviewFilters component below
-  },
-  COLUMNS: {
-    id: 2,
-    name: 'Columns',
-    values: [
-      'All',
-      'Deposits',
-      '% Locked',
-      '1YR Income',
-      '24H Change',
-      'Claimable Income',
-    ],
-  },
-}
+import ModalService from 'components/modals/ModalService'
+import { OverviewFiltersModal } from 'components'
+import {
+  CheckboxFilters,
+  MainFilters,
+  toggleMarketHelper,
+} from './utils/OverviewUtils'
 
 type DropdownButtonProps = {
   filters: any
@@ -92,7 +56,7 @@ const DropdownButton = ({
     <div
       className={classNames(
         className,
-        `relative flex items-center p-1 border rounded-md pl-3 pr-1 text-sm text-brand-black dark:text-gray-50 cursor-pointer z-40`
+        `relative flex items-center p-1 border rounded-md pl-3 pr-1 font-semibold text-sm text-brand-black dark:text-gray-50 cursor-pointer z-40`
       )}
       onClick={() => {
         setIsDropdownOpen(true)
@@ -150,10 +114,18 @@ const DropdownButton = ({
 type FiltersButtonProps = {
   filter: any
   isSelected: boolean
+  isVerifiedFilterActive: boolean
   onClick: (filterId: number) => void
+  setIsVerifiedFilterActive: (isActive: boolean) => void
 }
 
-const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
+const FiltersButton = ({
+  filter,
+  isSelected,
+  isVerifiedFilterActive,
+  onClick,
+  setIsVerifiedFilterActive,
+}: FiltersButtonProps) => {
   function getButtonIcon(filterId: number) {
     switch (filterId) {
       case 1:
@@ -174,7 +146,8 @@ const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
   return (
     <button
       className={classNames(
-        'flex flex-grow md:flex-auto justify-center items-center md:px-3 p-2 border md:rounded-md text-sm',
+        'flex flex-grow md:flex-auto justify-center items-center md:px-3 p-2 border md:rounded-md text-sm font-semibold',
+        filter.value === 'Verified' && 'hidden md:flex',
         filter.value === 'Top' && 'rounded-l-md',
         filter.value === 'Starred' && 'rounded-r-md',
         {
@@ -184,6 +157,11 @@ const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
         { 'text-brand-black dark:text-gray-50': !isSelected }
       )}
       onClick={() => {
+        if (filter.value === 'Verified') {
+          setIsVerifiedFilterActive(true)
+        } else if (isVerifiedFilterActive) {
+          setIsVerifiedFilterActive(false)
+        }
         onClick(filter.id)
       }}
     >
@@ -193,101 +171,31 @@ const FiltersButton = ({ filter, isSelected, onClick }: FiltersButtonProps) => {
   )
 }
 
-type FilterButtonRowProps = {
-  filters: any
-  onFilterChanged: (filterId: number) => void
-  selectedFilterId: number
-}
-
-const FilterButtonRow = ({
-  filters,
-  onFilterChanged,
-  selectedFilterId,
-}: FilterButtonRowProps) => {
-  return (
-    <>
-      <div className="flex md:hidden">
-        {Object.values(filters).map((filter: { id: number; value: string }) => (
-          <FiltersButton
-            key={filter.id}
-            filter={filter}
-            onClick={onFilterChanged}
-            isSelected={filter.id === selectedFilterId}
-          />
-        ))}
-      </div>
-      <div className="hidden md:flex gap-x-2">
-        {Object.values(filters).map((filter: { id: number; value: string }) => (
-          <FiltersButton
-            key={filter.id}
-            filter={filter}
-            onClick={onFilterChanged}
-            isSelected={filter.id === selectedFilterId}
-          />
-        ))}
-      </div>
-    </>
-  )
-}
-
 type OverviewFiltersProps = {
   selectedFilterId: number
   selectedMarkets: Set<string>
   selectedColumns: Set<string>
+  isVerifiedFilterActive: boolean
   onMarketChanged: (set: Set<string>) => void
   setSelectedFilterId: (filterId: number) => void
   onColumnChanged: (set: Set<string>) => void
   onNameSearchChanged: (value: string) => void
+  setIsVerifiedFilterActive: (isActive: boolean) => void
 }
 
 export const OverviewFilters = ({
   selectedFilterId,
   selectedMarkets,
   selectedColumns,
+  isVerifiedFilterActive,
   onMarketChanged,
   setSelectedFilterId,
   onColumnChanged,
   onNameSearchChanged,
+  setIsVerifiedFilterActive,
 }: OverviewFiltersProps) => {
   const toggleMarket = (marketName: string) => {
-    const newSet = new Set(selectedMarkets)
-
-    if (newSet.has('None')) {
-      newSet.delete('None')
-    }
-
-    if (newSet.has(marketName)) {
-      newSet.delete(marketName)
-      if (newSet.size === 0) {
-        // If removed last option, add 'None' which will query to show no tokens
-        newSet.add('None')
-      }
-      if (marketName === 'All') {
-        // Remove all other options too
-        newSet.clear()
-        // If clicked 'All', add 'None' which will query to show no tokens
-        newSet.add('None')
-      }
-      if (newSet.has('All') && marketName !== 'All') {
-        // Remove 'All' option if any option is removed
-        newSet.delete('All')
-      }
-    } else {
-      if (marketName === 'All') {
-        DropdownFilters.PLATFORMS.values.forEach((platform) => {
-          if (!newSet.has(platform)) {
-            newSet.add(platform)
-          }
-        })
-      } else {
-        newSet.add(marketName)
-        // If all options selected, make sure the 'All' option is selected too
-        if (DropdownFilters.PLATFORMS.values.length - newSet.size === 1) {
-          newSet.add('All')
-        }
-      }
-    }
-
+    const newSet = toggleMarketHelper(marketName, selectedMarkets)
     onMarketChanged(newSet)
   }
 
@@ -306,7 +214,7 @@ export const OverviewFilters = ({
       }
     } else {
       if (columnName === 'All') {
-        DropdownFilters.COLUMNS.values.forEach((column) => {
+        CheckboxFilters.COLUMNS.values.forEach((column) => {
           if (!newSet.has(column)) {
             newSet.add(column)
           }
@@ -314,7 +222,7 @@ export const OverviewFilters = ({
       } else {
         newSet.add(columnName)
         // If all options selected, make sure the 'All' option is selected too
-        if (DropdownFilters.COLUMNS.values.length - newSet.size === 1) {
+        if (CheckboxFilters.COLUMNS.values.length - newSet.size === 1) {
           newSet.add('All')
         }
       }
@@ -331,37 +239,67 @@ export const OverviewFilters = ({
     state.markets.map((m) => m?.market?.name)
   )
 
+  const [numActiveFilters, setNumActiveFilters] = useState(0)
+
   useEffect(() => {
-    // toggleMarket method is dependent on DropdownFilters.PLATFORMS.values
-    DropdownFilters.PLATFORMS.values = ['All', ...markets]
+    // toggleMarket method is dependent on CheckboxFilters.PLATFORMS.values
+    CheckboxFilters.PLATFORMS.values = ['All', ...markets]
   }, [markets])
 
   return (
     <div className="md:flex justify-center p-3 bg-white dark:bg-gray-700 rounded-t-lg gap-x-2 gap-y-2 md:justify-start overflow-x-scroll lg:overflow-x-visible">
-      <FilterButtonRow
-        filters={Filters}
-        onFilterChanged={onFilterChanged}
-        selectedFilterId={selectedFilterId}
-      />
+      <div className="flex md:gap-x-2">
+        {Object.values(MainFilters).map(
+          (filter: { id: number; value: string }) => (
+            <FiltersButton
+              key={filter.id}
+              filter={filter}
+              isVerifiedFilterActive={isVerifiedFilterActive}
+              onClick={onFilterChanged}
+              setIsVerifiedFilterActive={setIsVerifiedFilterActive}
+              isSelected={filter.id === selectedFilterId}
+            />
+          )
+        )}
+      </div>
 
       <DropdownButton
         className="hidden md:flex"
-        filters={DropdownFilters.PLATFORMS.values}
-        name={DropdownFilters.PLATFORMS.name}
+        filters={CheckboxFilters.PLATFORMS.values}
+        name={CheckboxFilters.PLATFORMS.name}
         selectedOptions={selectedMarkets}
         toggleOption={toggleMarket}
       />
 
       <DropdownButton
         className="hidden md:flex"
-        filters={DropdownFilters.COLUMNS.values}
-        name={DropdownFilters.COLUMNS.name}
+        filters={CheckboxFilters.COLUMNS.values}
+        name={CheckboxFilters.COLUMNS.name}
         selectedOptions={selectedColumns}
         toggleOption={toggleColumn}
       />
 
-      <div className="ml-auto mt-2 md:mt-0 w-full">
+      <div className="flex ml-auto mt-2 md:mt-0 w-full">
         <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
+        <button
+          className="md:hidden flex justify-center items-center p-2 ml-2 border rounded-md text-sm font-semibold"
+          onClick={() => {
+            ModalService.open(OverviewFiltersModal, {
+              selectedMarkets,
+              onMarketChanged,
+              isVerifiedFilterActive,
+              setIsVerifiedFilterActive,
+              setNumActiveFilters,
+            })
+          }}
+        >
+          <span>Filters</span>
+          {numActiveFilters !== 0 && (
+            <div className="bg-gray-200 px-1 ml-2 rounded text-brand-blue">
+              {numActiveFilters}
+            </div>
+          )}
+        </button>
       </div>
     </div>
   )
