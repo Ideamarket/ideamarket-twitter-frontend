@@ -67,9 +67,6 @@ module.exports = {
         'top-mobile': "url('/topbg-mobile.svg')",
         'top-desktop': "url('/topbg.svg')",
       }),
-      borderRadius: {
-        xlg: '0.625rem',
-      },
       boxShadow: {
         home: '0 1px 5px 0 rgba(0, 0, 0, 0.05)',
         embed: '0px 0px 8px rgba(0, 0, 0, 0.25)',
@@ -96,6 +93,7 @@ module.exports = {
       textOpacity: {
         60: '0.6',
       },
+      backgroundOpacity: ['active'],
     },
   },
   variants: {

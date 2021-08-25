@@ -21,7 +21,11 @@ export default function ModalRoot() {
 
   return (
     <section
-      className={modal.component ? 'fixed top-0 w-full h-full z-40' : ''}
+      className={
+        modal.component
+          ? 'fixed inset-0 overflow-y-auto z-40 bg-gray-500 bg-opacity-75'
+          : ''
+      }
     >
       {ModalComponent && (
         <ModalComponent

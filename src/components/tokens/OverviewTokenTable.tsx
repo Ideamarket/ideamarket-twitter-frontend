@@ -13,12 +13,13 @@ import { querySupplyRate } from 'store/compoundStore'
 import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './OverviewTokenRow'
 import TokenRowSkeleton from './OverviewTokenRowSkeleton'
-import { Filters } from 'components/tokens/OverviewFilters'
 import { OverviewColumns } from './table/OverviewColumns'
+import { MainFilters } from './utils/OverviewUtils'
 
 type Props = {
   selectedMarkets: Set<string>
   selectedFilterId: number
+  isVerifiedFilterActive: boolean
   nameSearch: string
   columnData: Array<any>
   getColumn: (column: string) => boolean
@@ -30,6 +31,7 @@ type Props = {
 export default function Table({
   selectedMarkets,
   selectedFilterId,
+  isVerifiedFilterActive,
   nameSearch,
   columnData,
   getColumn,
@@ -55,7 +57,7 @@ export default function Table({
   )
 
   const filterTokens =
-    selectedFilterId === Filters.STARRED.id ? watchingTokens : undefined
+    selectedFilterId === MainFilters.STARRED.id ? watchingTokens : undefined
 
   const { data: compoundSupplyRate, isFetching: isCompoundSupplyRateLoading } =
     useQuery('compound-supply-rate', querySupplyRate, {
@@ -84,18 +86,18 @@ export default function Table({
         markets,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
-        selectedFilterId === Filters.HOT.id
+        selectedFilterId === MainFilters.HOT.id
           ? 'dayChange'
-          : selectedFilterId === Filters.NEW.id
+          : selectedFilterId === MainFilters.NEW.id
           ? 'listedAt'
           : orderBy,
-        selectedFilterId === Filters.HOT.id ||
-        selectedFilterId === Filters.NEW.id
+        selectedFilterId === MainFilters.HOT.id ||
+        selectedFilterId === MainFilters.NEW.id
           ? 'desc'
           : orderDirection,
         nameSearch,
         filterTokens,
-        selectedFilterId === Filters.VERIFIED.id,
+        isVerifiedFilterActive,
       ],
     ],
     queryTokens,
@@ -134,6 +136,7 @@ export default function Table({
   }, [
     markets,
     selectedFilterId,
+    isVerifiedFilterActive,
     orderBy,
     orderDirection,
     nameSearch,

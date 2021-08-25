@@ -1,4 +1,4 @@
-import { DropdownFilters } from 'components/tokens/OverviewFilters'
+import { CheckboxFilters } from 'components/tokens/utils/OverviewUtils'
 import defaultColumns from './defaultColumns'
 
 export const getVisibleColumns = (selectedColumns: any) =>
@@ -7,6 +7,6 @@ export const getVisibleColumns = (selectedColumns: any) =>
 export const startingOptionalColumns = defaultColumns
   .filter(
     (c) =>
-      c.isSelectedAtStart && DropdownFilters.COLUMNS.values.includes(c.name)
+      c.isSelectedAtStart && CheckboxFilters.COLUMNS.values.includes(c.name)
   )
   .map((c) => c.name)

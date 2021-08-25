@@ -7,11 +7,7 @@ import ModalService from 'components/modals/ModalService'
 import { useWalletStore } from 'store/walletStore'
 import { ScrollToTop } from 'components/tokens/ScrollToTop'
 import { NextSeo } from 'next-seo'
-import {
-  OverviewFilters,
-  Filters,
-  DropdownFilters,
-} from 'components/tokens/OverviewFilters'
+import { OverviewFilters } from 'components/tokens/OverviewFilters'
 import { useMarketStore } from 'store/markets'
 import { GlobalContext } from 'pages/_app'
 import {
@@ -19,6 +15,7 @@ import {
   startingOptionalColumns,
 } from 'components/home/utils'
 import { HomeHeader } from 'components'
+import { CheckboxFilters, MainFilters } from 'components/tokens/utils/OverviewUtils'
 
 type Props = { urlMarkets?: string[] }
 
@@ -26,7 +23,8 @@ const Home = ({ urlMarkets }: Props) => {
   // After trade or list success, the token data needs to be refetched. This toggle does that.
   const [tradeOrListSuccessToggle, setTradeOrListSuccessToggle] =
     useState(false)
-  const [selectedFilterId, setSelectedFilterId] = useState(Filters.TOP.id)
+  const [selectedFilterId, setSelectedFilterId] = useState(MainFilters.TOP.id)
+  const [isVerifiedFilterActive, setIsVerifiedFilterActive] = useState(false)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
@@ -35,7 +33,7 @@ const Home = ({ urlMarkets }: Props) => {
 
   if (
     startingOptionalColumns.length ===
-    DropdownFilters.COLUMNS.values.length - 1
+    CheckboxFilters.COLUMNS.values.length - 1
   ) {
     startingOptionalColumns.push('All')
   }
@@ -61,23 +59,23 @@ const Home = ({ urlMarkets }: Props) => {
   }, [markets])
 
   const onNameSearchChanged = (nameSearch) => {
-    setSelectedFilterId(Filters.TOP.id)
+    setSelectedFilterId(MainFilters.TOP.id)
     setNameSearch(nameSearch)
   }
 
   const onOrderByChanged = (orderBy: string, direction: string) => {
     if (
-      selectedFilterId === Filters.STARRED.id ||
-      selectedFilterId === Filters.VERIFIED.id
+      selectedFilterId === MainFilters.STARRED.id ||
+      selectedFilterId === MainFilters.VERIFIED.id
     ) {
       return
     }
     if (orderBy === 'dayChange' && direction === 'desc') {
-      setSelectedFilterId(Filters.HOT.id)
+      setSelectedFilterId(MainFilters.HOT.id)
     } else if (orderBy === 'listedAt' && direction === 'desc') {
-      setSelectedFilterId(Filters.NEW.id)
+      setSelectedFilterId(MainFilters.NEW.id)
     } else {
-      setSelectedFilterId(Filters.TOP.id)
+      setSelectedFilterId(MainFilters.TOP.id)
     }
   }
 
@@ -113,16 +111,19 @@ const Home = ({ urlMarkets }: Props) => {
     selectedFilterId,
     selectedMarkets,
     selectedColumns,
+    isVerifiedFilterActive,
     onMarketChanged,
     setSelectedFilterId,
     onColumnChanged,
     onNameSearchChanged,
+    setIsVerifiedFilterActive
   }
 
   const tableProps = {
     nameSearch,
     selectedMarkets,
     selectedFilterId,
+    isVerifiedFilterActive,
     columnData: visibleColumns,
     getColumn: (column) => selectedColumns.has(column),
     onOrderByChanged,

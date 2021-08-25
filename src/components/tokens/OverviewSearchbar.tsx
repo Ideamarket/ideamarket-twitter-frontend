@@ -6,8 +6,7 @@ type Props = {
 
 export const OverviewSearchbar = ({ onNameSearchChanged }: Props) => {
   return (
-    // The gridColumn makes search bar span 2 columns for mobile devices. TailwindCSS wouldn't work here for some reason
-    <div className="w-full" style={{ gridColumn: 'span 2 / span 2' }}>
+    <div className="w-full h-full">
       <label htmlFor="search-input" className="sr-only">
         Search
       </label>
