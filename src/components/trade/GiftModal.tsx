@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { IdeaToken } from 'store/ideaMarketsStore'
-import { floatToWeb3BN, useTransactionManager } from 'utils'
+import { floatToWeb3BN, isAddress, useTransactionManager } from 'utils'
 import { lockToken } from 'actions'
 import Modal from '../modals/Modal'
 import BigNumber from 'bignumber.js'
@@ -16,6 +16,7 @@ import { NETWORK } from 'store/networks'
 import ModalService from 'components/modals/ModalService'
 import TradeCompleteModal, { TRANSACTION_TYPES } from './TradeCompleteModal'
 import transferToken from 'actions/transferToken'
+import { useENSAddress } from './hooks/useENSAddress'
 
 export default function GiftModal({
   close,
@@ -31,6 +32,7 @@ export default function GiftModal({
   const txManager = useTransactionManager()
   const [amountToGift, setamountToGift] = useState('')
   const [recipientAddress, setRecipientAddress] = useState('')
+  const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
 
   const [isLockChecked, setIsLockChecked] = useState(false)
 
@@ -53,7 +55,8 @@ export default function GiftModal({
     isInputAmountGTSupply
 
   const isApproveButtonDisabled = isInvalid || !isMissingAllowance
-  const isLockButtonDisabled = isInvalid || isMissingAllowance
+  const isLockButtonDisabled =
+    isInvalid || (isLockChecked && isMissingAllowance)
 
   function onInputChanged(event) {
     const oldValue = amountToGift
@@ -75,11 +78,13 @@ export default function GiftModal({
     })
   }
 
+  const giftAddress = isENSAddressValid ? hexAddress : recipientAddress
+
   async function onGiftClicked() {
     const amount = floatToWeb3BN(amountToGift, 18, BigNumber.ROUND_DOWN)
 
-    const lockArgs = [token.address, amount, 31556952, recipientAddress]
-    const transferArgs = [token.address, recipientAddress, amount]
+    const lockArgs = [token.address, amount, 31556952, giftAddress]
+    const transferArgs = [token.address, giftAddress, amount]
 
     try {
       isLockChecked
@@ -134,10 +139,12 @@ export default function GiftModal({
           <p>Recipient address or ENS</p>
           <input
             className={classNames(
-              'pl-2 w-40 md:w-60 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600'
+              'pl-2 w-40 md:w-60 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600',
+              isAddress(recipientAddress) || isENSAddressValid
+                ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
+                : 'border-brand-red focus:border-brand-red focus:ring-red-500'
             )}
-            min="0"
-            placeholder=""
+            placeholder="Recipient address or ENS"
             onChange={(event: any) => setRecipientAddress(event.target.value)}
             value={recipientAddress}
           />

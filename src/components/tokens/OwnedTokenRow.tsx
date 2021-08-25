@@ -20,7 +20,7 @@ import ModalService from 'components/modals/ModalService'
 import LockModal from 'components/trade/LockModal'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
-import GitModal from 'components/trade/GiftModal'
+import GiftModal from 'components/trade/GiftModal'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -225,7 +225,7 @@ export default function OwnedTokenRow({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              ModalService.open(GitModal, { token, balance, refetch })
+              ModalService.open(GiftModal, { token, balance, refetch })
             }}
             className="w-20 h-10 text-base font-medium bg-white border-2 rounded-lg text-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >

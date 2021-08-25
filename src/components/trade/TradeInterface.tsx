@@ -93,6 +93,7 @@ export default function TradeInterface({
   const [tradeType, setTradeType] = useState('buy')
   const [recipientAddress, setRecipientAddress] = useState('')
   const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
+
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
