@@ -22,11 +22,18 @@ export default function OverviewFiltersModal({
   setIsVerifiedFilterActive: (isActive: boolean) => void
   setNumActiveFilters: (amount: number) => void
 }) {
+  const [localSelectedMarkets, setLocalSelectedMarkets] =
+    useState(selectedMarkets)
+  const [localIsVerifiedFilterActive, setLocalIsVerifiedFilterActive] =
+    useState(isVerifiedFilterActive)
+
   const calculateActiveFilters = () => {
     let numberOfActiveFilters = 0
 
-    if (!localSelectedMarkets.has('All') && !localSelectedMarkets.has('None'))
-      numberOfActiveFilters += [...(localSelectedMarkets as any)].filter(
+    const areFiltersSelectedAndNonDefault =
+      !localSelectedMarkets.has('All') && !localSelectedMarkets.has('None')
+    if (areFiltersSelectedAndNonDefault)
+      numberOfActiveFilters += Array.from(localSelectedMarkets).filter(
         (o) => o !== 'All' && o !== 'None'
       ).length
     if (localIsVerifiedFilterActive) numberOfActiveFilters += 1
@@ -50,11 +57,6 @@ export default function OverviewFiltersModal({
     const newSet = toggleMarketHelper(marketName, localSelectedMarkets)
     setLocalSelectedMarkets(newSet)
   }
-
-  const [localSelectedMarkets, setLocalSelectedMarkets] =
-    useState(selectedMarkets)
-  const [localIsVerifiedFilterActive, setLocalIsVerifiedFilterActive] =
-    useState(isVerifiedFilterActive)
 
   return (
     <Modal className="w-full" isCloseActive={false} close={close}>

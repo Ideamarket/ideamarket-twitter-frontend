@@ -7,7 +7,7 @@ export default function Modal({
   className = '',
   children,
   close,
-  isCloseActive = true, // Is close button there by default?
+  isCloseActive = true, // This says: "is close button there by default?"
 }: {
   className?: string
   children?: ReactNode
