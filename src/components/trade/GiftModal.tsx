@@ -102,7 +102,7 @@ export default function GiftModal({
 
   return (
     <Modal close={close}>
-      <div className="md:min-w-150 md:max-w-150">
+      <div className="w-72 md:min-w-150 md:max-w-150">
         <div className="flex justify-end">
           <Tooltip
             className="w-4 h-4 m-4 cursor-pointer text-brand-gray-2 dark:text-gray-300"
@@ -125,7 +125,7 @@ export default function GiftModal({
           <p>Amount of {token.name} to gift</p>
           <input
             className={classNames(
-              'pl-2 w-40 h-10  leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600'
+              'pl-2 w-60 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600'
             )}
             min="0"
             placeholder="0.0"
@@ -139,7 +139,7 @@ export default function GiftModal({
           <p>Recipient address or ENS</p>
           <input
             className={classNames(
-              'pl-2 w-40 md:w-60 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600',
+              'pl-2 w-60 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600',
               isAddress(recipientAddress) || isENSAddressValid
                 ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                 : 'border-brand-red focus:border-brand-red focus:ring-red-500'

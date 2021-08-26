@@ -658,7 +658,7 @@ export default function TradeInterface({
                   ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                   : 'border-brand-red focus:border-brand-red focus:ring-red-500'
               )}
-              placeholder="Recipient address"
+              placeholder="Recipient address or ENS"
               value={recipientAddress}
               onChange={(e) => {
                 setRecipientAddress(e.target.value)
