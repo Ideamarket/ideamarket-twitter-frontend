@@ -10,20 +10,20 @@ export default function Footer() {
       <div className="flex justify-center space-x-5 font-sf-pro-text">
         <A
           href="https://docs.ideamarket.io"
-          className="text-sm leading-none tracking-tightest-2 text-brand-gray-2"
+          className="text-sm leading-none tracking-tightest-2"
         >
           Need Help?
         </A>
         <A
           href="https://docs.ideamarket.io"
-          className="text-sm leading-none tracking-tightest-2 text-brand-gray-2"
+          className="text-sm leading-none tracking-tightest-2"
         >
           Contact
         </A>
         <A
           href="/TOS.pdf"
           target="_blank"
-          className="text-sm leading-none tracking-tightest-2 text-brand-gray-2"
+          className="text-sm leading-none tracking-tightest-2"
         >
           Legal &amp; Privacy
         </A>
@@ -41,7 +41,7 @@ export default function Footer() {
         <A href="https://defipulse.com/defi-list">
           <BrandDefiPulse stroke="#303030" className="w-7 h-7" />
         </A>
-        <p className="pl-2 text-sm leading-none text-center tracking-tightest-2 text-brand-gray-2">
+        <p className="pl-2 text-sm leading-none text-center tracking-tightest-2">
           &copy;2021 IdeaMarkets
         </p>
       </div>

@@ -23,6 +23,7 @@ module.exports = {
         'brand-gray-white': '#E5E4E5',
         'brand-gray-white-2': '#868686',
         'brand-blue': '#0857e0',
+        'brand-navy': '#102360',
         'brand-gray': '#f6f6f6',
         'brand-gray-2': '#708090',
         'brand-gray-3': '#dc2e9',
@@ -66,6 +67,7 @@ module.exports = {
       backgroundImage: (theme) => ({
         'top-mobile': "url('/topbg-mobile.svg')",
         'top-desktop': "url('/topbg.svg')",
+        maintenance: "url('/MaintenanceBg.png')",
       }),
       boxShadow: {
         home: '0 1px 5px 0 rgba(0, 0, 0, 0.05)',
@@ -87,13 +89,14 @@ module.exports = {
         150: '37.5rem',
         304: '76rem',
       },
-      fontSize: {
-        '6+xl': '4.2rem',
-      },
       textOpacity: {
         60: '0.6',
       },
       backgroundOpacity: ['active'],
+      zIndex: {
+        '-10': '-10',
+        '-20': '-20',
+      },
     },
   },
   variants: {
