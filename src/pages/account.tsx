@@ -300,7 +300,7 @@ export default function MyTokens() {
                 )}
               </div>
             </div>
-            <div className="px-1 mt-12">
+            <div className="px-1 py-12">
               <Footer />
             </div>
           </div>
