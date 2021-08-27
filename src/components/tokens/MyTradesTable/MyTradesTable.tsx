@@ -98,8 +98,8 @@ export default function MyTradesTable({
   return (
     <>
       <div className="flex flex-col">
-        <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <div className="-my-2 overflow-x-auto">
+          <div className="inline-block min-w-full py-2 align-middle">
             <div className="overflow-hidden dark:border-gray-500">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
                 <thead className="hidden md:table-header-group">
