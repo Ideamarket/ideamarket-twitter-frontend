@@ -1,7 +1,6 @@
 import BrandDiscord from '../assets/brand-discord.svg'
 import BrandTwitter from '../assets/brand-twitter.svg'
 import BrandGithub from '../assets/brand-github.svg'
-import BrandDefiPulse from '../assets/brand-defipulse.svg'
 import A from './A'
 
 export default function Footer() {
@@ -37,9 +36,6 @@ export default function Footer() {
         </A>
         <A href="https://github.com/Ideamarket">
           <BrandGithub className="w-7 h-7" />
-        </A>
-        <A href="https://defipulse.com/defi-list">
-          <BrandDefiPulse stroke="#303030" className="w-7 h-7" />
         </A>
         <p className="pl-2 text-sm leading-none text-center tracking-tightest-2 text-brand-gray-2">
           &copy;2021 IdeaMarkets
