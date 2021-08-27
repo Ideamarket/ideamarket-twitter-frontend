@@ -205,7 +205,7 @@ export default function LockedTokenTable({
                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-700">
                   {isPairsDataLoading ? (
                     Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                      <LockedTokenRowSkeleton key={token} page="account" />
+                      <LockedTokenRowSkeleton key={token} />
                     ))
                   ) : (
                     <>
