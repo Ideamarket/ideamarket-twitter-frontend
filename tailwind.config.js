@@ -67,7 +67,7 @@ module.exports = {
       backgroundImage: (theme) => ({
         'top-mobile': "url('/topbg-mobile.svg')",
         'top-desktop': "url('/topbg.svg')",
-        maintenance: "url('/MaintenanceBg.png')",
+        maintenance: "url('/MaintenanceBg.svg')",
       }),
       boxShadow: {
         home: '0 1px 5px 0 rgba(0, 0, 0, 0.05)',
