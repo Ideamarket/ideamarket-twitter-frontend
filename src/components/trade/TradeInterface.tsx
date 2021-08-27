@@ -93,6 +93,7 @@ export default function TradeInterface({
   const [tradeType, setTradeType] = useState('buy')
   const [recipientAddress, setRecipientAddress] = useState('')
   const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
+
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
@@ -643,7 +644,7 @@ export default function TradeInterface({
         </div>
 
         {isGiftChecked && (
-          <div className="flex flex-col md:flex-row justify-between items-center mb-2">
+          <div className="flex flex-col items-center justify-between mb-2 md:flex-row">
             <input
               type="text"
               id="recipient-input"
@@ -657,7 +658,7 @@ export default function TradeInterface({
                   ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                   : 'border-brand-red focus:border-brand-red focus:ring-red-500'
               )}
-              placeholder="Recipient address"
+              placeholder="Recipient address or ENS"
               value={recipientAddress}
               onChange={(e) => {
                 setRecipientAddress(e.target.value)
@@ -667,7 +668,7 @@ export default function TradeInterface({
               ideaToken.tokenOwner &&
               ideaToken.tokenOwner !== ZERO_ADDRESS && (
                 <button
-                  className="p-1 mt-1 md:mt-0 cursor-pointer text-base font-medium bg-white dark:bg-gray-600 border-2 rounded-lg md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 hover:bg-brand-blue"
+                  className="p-1 mt-1 text-base font-medium bg-white border-2 rounded-lg cursor-pointer md:mt-0 dark:bg-gray-600 md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 hover:bg-brand-blue"
                   onClick={() => setRecipientAddress(ideaToken.tokenOwner)}
                 >
                   Listing owner

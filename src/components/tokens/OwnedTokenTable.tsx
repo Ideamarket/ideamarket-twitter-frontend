@@ -52,6 +52,11 @@ const headers: Header[] = [
   },
   {
     title: '',
+    value: 'giftButton',
+    sortable: false,
+  },
+  {
+    title: '',
     value: 'metamaskButton',
     sortable: false,
   },
