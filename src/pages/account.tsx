@@ -133,7 +133,7 @@ export default function MyTokens() {
   return (
     <>
       <NextSeo title="Wallet" />
-      <div className="min-h-screen bg-brand-gray dark:bg-gray-900">
+      <div className="min-h-screen bg-brand-gray dark:bg-gray-900 font-inter">
         <div className="h-64 px-4 pt-8 pb-5 text-white md:px-6 md:pt-6 bg-top-mobile md:bg-top-desktop md:h-96">
           <div className="mx-auto md:px-4 max-w-88 md:max-w-304">
             <div className="flex justify-between">

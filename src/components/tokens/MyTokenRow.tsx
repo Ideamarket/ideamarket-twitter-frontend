@@ -71,7 +71,7 @@ export default function MyTokenRow({
                 </div>
               )}
             </div>
-            <div className="ml-4 text-base font-semibold leading-5">
+            <div className="ml-4 text-base leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -117,7 +117,7 @@ export default function MyTokenRow({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Price
           </p>
-          <p className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+          <p className="text-base leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             $
             {web3BNToFloatString(
               calculateCurrentPriceBN(
@@ -137,7 +137,7 @@ export default function MyTokenRow({
           </p>
           <p
             className={classNames(
-              'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
+              'text-base leading-4 tracking-tightest-2 uppercase',
               {
                 'text-brand-red dark:text-red-400':
                   parseFloat(token.dayChange) < 0.0,
@@ -158,7 +158,7 @@ export default function MyTokenRow({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             1YR Income
           </p>
-          <p className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+          <p className="text-base leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             $
             {formatNumberWithCommasAsThousandsSerperator(
               (parseFloat(token.daiInToken) * compoundSupplyRate).toFixed(2)

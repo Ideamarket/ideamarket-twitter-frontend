@@ -68,6 +68,7 @@ module.exports = {
           ...defaultTheme.fontFamily.sans,
         ],
         'sf-pro-text': ['SFProText', ...defaultTheme.fontFamily.sans],
+        inter: ['Inter Regular', ...defaultTheme.fontFamily.sans],
       },
       spacing: {
         7.5: '1.875rem',

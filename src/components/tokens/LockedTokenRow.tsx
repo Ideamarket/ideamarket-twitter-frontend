@@ -99,7 +99,7 @@ export default function LockedTokenRow({
                 </div>
               )}
             </div>
-            <div className="ml-4 text-base font-semibold leading-5">
+            <div className="ml-4 text-base leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -146,7 +146,7 @@ export default function LockedTokenRow({
             Price
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + tokenPrice}
           >
             $
@@ -160,7 +160,7 @@ export default function LockedTokenRow({
             Balance
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={balance}
           >
             {formatNumberWithCommasAsThousandsSerperator(
@@ -173,7 +173,7 @@ export default function LockedTokenRow({
             Value
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + balanceValue}
           >
             ${balanceValue}
@@ -184,7 +184,7 @@ export default function LockedTokenRow({
             Locked Until
           </p>
           <p
-            className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={moment(lockedUntil * 1000).format('LLL')}
           >
             {moment(lockedUntil * 1000).format('LLL')}

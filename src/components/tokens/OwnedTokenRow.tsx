@@ -101,7 +101,7 @@ export default function OwnedTokenRow({
                 </div>
               )}
             </div>
-            <div className="ml-4 text-base font-semibold leading-5">
+            <div className="ml-4 text-base leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -148,7 +148,7 @@ export default function OwnedTokenRow({
             Price
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + tokenPrice}
           >
             $
@@ -162,7 +162,7 @@ export default function OwnedTokenRow({
             Balance
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={balance}
           >
             {formatNumberWithCommasAsThousandsSerperator(
@@ -175,7 +175,7 @@ export default function OwnedTokenRow({
             Value
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + balanceValue}
           >
             ${balanceValue}
@@ -187,7 +187,7 @@ export default function OwnedTokenRow({
           </p>
           <p
             className={classNames(
-              'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
+              'text-base leading-4 tracking-tightest-2 uppercase',
               {
                 'text-brand-red dark:text-red-400':
                   parseFloat(token.dayChange) < 0.0,

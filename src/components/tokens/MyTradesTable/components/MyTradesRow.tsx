@@ -98,7 +98,7 @@ const MyTradesRow = ({
                 </div>
               )}
             </div>
-            <div className="ml-4 text-base font-semibold leading-5">
+            <div className="ml-4 text-base leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -162,7 +162,7 @@ const MyTradesRow = ({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Amount
           </p>
-          <p className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+          <p className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             {web3BNToFloatString(rawIdeaTokenAmount, tenPow18, 2)}
           </p>
         </td>
@@ -170,7 +170,7 @@ const MyTradesRow = ({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Purchase Value
           </p>
-          <p className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+          <p className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             ${web3BNToFloatString(rawDaiAmount, tenPow18, 2)}
           </p>
         </td>
@@ -178,7 +178,7 @@ const MyTradesRow = ({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Current Value
           </p>
-          <p className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+          <p className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             ${web3BNToFloatString(ideaTokenValueBN, tenPow18, 2)}
           </p>
         </td>
@@ -188,7 +188,7 @@ const MyTradesRow = ({
           </p>
           <p
             className={classNames(
-              'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
+              'text-base leading-4 tracking-tightest-2 uppercase',
               {
                 'text-brand-red dark:text-red-400': plnPercentage < 0.0,
                 'text-brand-green dark:text-green-400': plnPercentage > 0.0,
@@ -203,7 +203,7 @@ const MyTradesRow = ({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Date
           </p>
-          <p className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+          <p className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             {moment(timestamp * 1000).format('LLL')}
           </p>
         </td>
