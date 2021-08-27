@@ -3,11 +3,13 @@ import { useWalletStore } from 'store/walletStore'
 
 export function useENSAddress(recipientAddress: string) {
   const ens = useWalletStore((state) => state.ens)
-  const [hexAddress, setHexAddress] = useState('')
+  const [hexAddress /*, setHexAddress*/] = useState('0x0')
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect((): any => {
-    async function run() {
+    /* ENS is disabled on AVM for now */
+
+    /*async function run() {
       try {
         setHexAddress(await ens.name(recipientAddress).getAddress())
       } catch (e) {
@@ -16,7 +18,9 @@ export function useENSAddress(recipientAddress: string) {
     }
 
     setIsLoading(true)
-    run()
+    run()*/
+
+    setIsLoading(false)
   }, [recipientAddress, ens])
 
   // First return value says if is valid ENS address or not
