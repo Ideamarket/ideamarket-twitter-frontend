@@ -88,9 +88,9 @@ export default function EmailForm({ isMaintenance = false }: EmailFormProps) {
               type="submit"
               className={classNames(
                 isMaintenance
-                  ? 'bg-brand-navy text-white'
+                  ? 'bg-brand-navy text-white w-full'
                   : 'bg-white text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue',
-                'bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md text-brand-gray-4 focus:border-brand-blue'
+                'bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md focus:border-brand-blue'
               )}
             >
               {isMaintenance ? 'Submit' : 'Notify me'}
