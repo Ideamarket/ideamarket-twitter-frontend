@@ -27,7 +27,6 @@ import Web3ReactManager from 'components/wallet/Web3ReactManager'
 import ModalRoot from 'components/modals/ModalRoot'
 import { WrongNetworkOverlay } from 'components'
 import { initUseMarketStore } from 'store/markets'
-import router from 'next/router'
 
 export const GlobalContext = createContext({
   onWalletConnectedCallback: () => {},
@@ -56,8 +55,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       ? localStorage.getItem('IS_EMAIL_BAR_CLOSED') === 'true'
       : false
     setIsEmailFooterActive(!isEmailBarClosed)
-
-    router.push('/backSoon')
   }, [])
 
   useEffect(() => {
