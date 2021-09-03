@@ -58,7 +58,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [])
 
   useEffect(() => {
-    TimeAgo.addDefaultLocale(en)
+    TimeAgo.setDefaultLocale(en)
   }, [])
 
   const [onWalletConnectedCallback, setOnWalletConnectedCallback] = useState(
