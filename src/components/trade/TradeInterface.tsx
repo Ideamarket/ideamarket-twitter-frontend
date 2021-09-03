@@ -219,10 +219,10 @@ export default function TradeInterface({
 
   const exchangeContractAddress = useContractStore(
     (state) => state.exchangeContract
-  ).options.address
+  )?.options?.address
   const multiActionContractAddress = useContractStore(
     (state) => state.multiActionContract
-  ).options.address
+  )?.options?.address
 
   const spender =
     tradeType === 'buy'
