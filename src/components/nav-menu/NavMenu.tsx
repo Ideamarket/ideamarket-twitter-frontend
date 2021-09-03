@@ -39,8 +39,8 @@ const NavMenu = () => {
 
   return (
     <div className="relative bg-top-desktop items-center w-full shadow overflow-none font-inter">
-      <div className="py-3 px-2 md:px-24">
-        <nav className="flex relative w-full justify-between items-center">
+      <div className="py-3 px-2 lg:px-24">
+        <nav className="flex flex-wrap relative w-full justify-center lg:justify-between items-center">
           <div
             className="flex items-center cursor-pointer"
             onClick={() => router.push('/')}
@@ -74,7 +74,7 @@ const NavMenu = () => {
                       }
                     }}
                   >
-                    <span className="capitalize">{menuItem.name}</span>
+                    <span>{menuItem.name}</span>
                     {menuItem.subMenu && (
                       <ChevronDownIcon className="w-5 h-5" />
                     )}
@@ -90,7 +90,7 @@ const NavMenu = () => {
                       role="menu"
                     >
                       {menuItem.subMenu &&
-                        menuItem.subMenu.map(({ name, onClick }, idx) => (
+                        menuItem.subMenu.map(({ name, onClick }) => (
                           <A
                             key={name}
                             onClick={() => {

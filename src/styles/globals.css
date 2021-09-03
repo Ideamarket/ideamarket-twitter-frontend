@@ -47,22 +47,12 @@ select:-webkit-autofill:focus {
   }
 }
 
-/* CSS for NavMenu*/
+/* CSS for NavMenu */
 .dropdown:focus-within .dropdown-menu {
   background-color: #ffffff;
   transform: translate(0) scale(1);
   visibility: visible;
 }
-
-.menu-items{
-  background-color: white;
-
-}
-
-.description{
-  font-size: 0.65rem;
-}
-
 .dropdown-menu::before {
   border-bottom: 9px solid rgba(0, 0, 0, 0.2);
   border-left: 9px solid rgba(0, 0, 0, 0);

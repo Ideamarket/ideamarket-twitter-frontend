@@ -216,7 +216,7 @@ export default function Table({
           <div className="overflow-x-scroll border-b border-gray-200 dark:border-gray-500 sm:rounded-t-lg lg:overflow-x-visible">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
               <thead className="hidden md:table-header-group">
-                <tr className="z-10 lg:sticky md:top-44 sticky-safari">
+                <tr className="z-10 lg:sticky md:top-28 sticky-safari">
                   <OverviewColumns
                     currentColumn={currentColumn}
                     orderDirection={orderDirection}
