@@ -1,5 +1,5 @@
 import { useRouter } from 'next/dist/client/router'
-import { NavBar, EmailFooter } from 'components'
+import { EmailFooter } from 'components'
 import { ReactNode, useEffect, useContext } from 'react'
 import CookieConsent from 'react-cookie-consent'
 import { Toaster } from 'react-hot-toast'
@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
 import { GlobalContext } from '../../pages/_app'
+import NavMenu from 'components/nav-menu/NavMenu'
 
 export default function DefaultLayout({ children }: { children: ReactNode }) {
   const router = useRouter()
@@ -18,9 +19,9 @@ export default function DefaultLayout({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <div className="min-h-screen bg-brand-gray dark:bg-gray-900 py-16">
+    <div className="min-h-screen bg-brand-gray dark:bg-gray-900 pb-16">
       <Toaster />
-      <NavBar />
+      <NavMenu />
       {children}
       <div className="fixed bottom-0 z-20 w-full">
         <CookieConsent
