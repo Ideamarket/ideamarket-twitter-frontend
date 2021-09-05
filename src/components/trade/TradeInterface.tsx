@@ -601,7 +601,7 @@ export default function TradeInterface({
                 <br />
                 For more information, see{' '}
                 <A
-                  href="https://docs.ideamarket.io/user-guide/hiw-buy-and-sell#locking-tokens"
+                  href="https://docs.ideamarket.io/user-guide/tutorial#buy-upvotes"
                   target="_blank"
                   className="underline"
                 >
