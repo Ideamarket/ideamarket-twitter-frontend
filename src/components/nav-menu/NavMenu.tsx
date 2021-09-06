@@ -89,23 +89,16 @@ const NavMenu = () => {
                       id="headlessui-menu-items-117"
                       role="menu"
                     >
-                      {menuItem.subMenu &&
-                        menuItem.subMenu.map(({ name, onClick }) => (
-                          <A
-                            key={name}
-                            onClick={() => {
-                              onClick()
-                            }}
-                            className="flex flex-row py-4 px-2 w-full leading-5 items-center space-x-2 transform transition-colors hover:bg-gray-100 hover:cursor-pointer"
-                            role="menuitem"
-                          >
-                            <div className="block">
-                              <p className="text-black font-medium font-bold">
-                                {name}
-                              </p>
-                            </div>
-                          </A>
-                        ))}
+                      {menuItem.subMenu.map(({ name, onClick }) => (
+                        <A
+                          key={name}
+                          onClick={onClick}
+                          className="flex flex-row py-4 px-2 w-full leading-5 items-center space-x-2 transform transition-colors hover:bg-gray-100 hover:cursor-pointer"
+                          role="menuitem"
+                        >
+                          <p className="text-black font-bold">{name}</p>
+                        </A>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -114,7 +107,6 @@ const NavMenu = () => {
           </div>
           <div className="hidden md:flex">
             <button
-              id="switchTheme"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="h-10 w-10 flex justify-center items-center focus:outline-none text-blue-50"
             >
