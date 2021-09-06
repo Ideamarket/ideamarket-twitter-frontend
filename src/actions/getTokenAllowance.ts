@@ -19,7 +19,11 @@ export default async function getTokenAllowance(
   const tokenContract = getERC20Contract(tokenAddress)
   try {
     return new BN(
-      await tokenContract.methods.allowance(ownerAddress, spenderAddress).call()
+      tokenContract
+        ? await tokenContract.methods
+            .allowance(ownerAddress, spenderAddress)
+            .call()
+        : '0'
     )
   } catch (ex) {
     console.log(ex)
