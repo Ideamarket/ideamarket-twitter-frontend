@@ -64,7 +64,7 @@ const NavMenu = () => {
               <div className="dropdown" key={i}>
                 <span className="rounded-md shadow-sm">
                   <button
-                    className="inline-flex justify-center w-full px-4 py-2 text-lg font-large leading-5 text-white transition duration-150 ease-in-out bg-transparent hover:text-gray-500 focus:outline-none active:bg-gray-50 active:text-gray-800"
+                    className="inline-flex justify-center w-full px-4 py-2 text-lg font-large leading-5 text-white transition duration-150 ease-in-out bg-transparent hover:text-gray-500 focus:outline-none active:text-gray-800"
                     type="button"
                     aria-haspopup="true"
                     aria-controls="headlessui-menu-items-117"
