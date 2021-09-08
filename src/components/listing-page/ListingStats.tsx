@@ -188,7 +188,7 @@ export default function ListingStats({ isLoading, market, token }) {
               Price
             </A>
 
-            <A
+            {/* <A
               onClick={() => {
                 setSelectedChart(CHART.LOCKED)
               }}
@@ -200,7 +200,7 @@ export default function ListingStats({ isLoading, market, token }) {
               )}
             >
               Locked
-            </A>
+            </A> */}
           </div>
           <div className="pt-0">
             <ChartDurationEntry
