@@ -72,10 +72,6 @@ export const config: any = {
           onClick: () =>
             window.open('https://ideamarket-io.myshopify.com', '_blank'),
         },
-        {
-          name: 'Brand Assets',
-          onClick: () => window.open('', '_blank'),
-        },
       ],
     },
     {
