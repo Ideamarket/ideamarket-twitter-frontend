@@ -1,6 +1,9 @@
+import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { IdeaTokenTrade } from 'store/ideaMarketsStore'
+import { calculateIdeaTokenDaiValue, web3BNToFloatString } from 'utils'
+import { sortNumberByOrder, sortStringByOrder } from '../utils'
 import { MyTradesRow, MyTradesRowSkeleton } from './components'
 import headers from './headers'
 
@@ -10,6 +13,8 @@ type MyTradesTableProps = {
   currentPage: number
   setCurrentPage: (p: number) => void
 }
+
+const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function MyTradesTable({
   rawPairs,
@@ -32,38 +37,94 @@ export default function MyTradesTable({
     }
 
     let sorted
-    const strCmpFunc =
-      orderDirection === 'asc'
-        ? (a, b) => {
-            return a.localeCompare(b)
-          }
-        : (a, b) => {
-            return b.localeCompare(a)
-          }
-    const numCmpFunc =
-      orderDirection === 'asc'
-        ? (a, b) => {
-            return a - b
-          }
-        : (a, b) => {
-            return b - a
-          }
+    const strCmpFunc = sortStringByOrder(orderDirection)
+    const numCmpFunc = sortNumberByOrder(orderDirection)
 
-    if (orderBy === 'type') {
+    if (orderBy === 'name') {
+      sorted = rawPairs.sort((lhs, rhs) => {
+        return strCmpFunc(lhs.token.name, rhs.token.name)
+      })
+    } else if (orderBy === 'type') {
       sorted = rawPairs.sort((lhs: any, rhs: any) => {
         return numCmpFunc(lhs.isBuy, rhs.isBuy)
       })
     } else if (orderBy === 'amount') {
       sorted = rawPairs.sort((lhs, rhs) => {
-        return strCmpFunc(lhs.token.name, rhs.token.name)
+        return numCmpFunc(lhs.ideaTokenAmount, rhs.ideaTokenAmount)
       })
-    } else if (orderBy === 'value') {
+    } else if (orderBy === 'purchaseValue') {
       sorted = rawPairs.sort((lhs, rhs) => {
         return numCmpFunc(lhs.daiAmount, rhs.daiAmount)
       })
-    } else if (orderBy === 'name') {
+    } else if (orderBy === 'currentValue') {
       sorted = rawPairs.sort((lhs, rhs) => {
-        return strCmpFunc(lhs.token.name, rhs.token.name)
+        const tokenSupplyLeft = lhs?.isBuy
+          ? lhs?.token.rawSupply
+          : lhs?.token.rawSupply.add(lhs?.rawIdeaTokenAmount)
+        const ideaTokenValueLeft = parseFloat(
+          web3BNToFloatString(
+            calculateIdeaTokenDaiValue(
+              tokenSupplyLeft,
+              lhs?.market,
+              lhs?.rawIdeaTokenAmount
+            ),
+            tenPow18,
+            2
+          )
+        )
+        const tokenSupplyRight = rhs?.isBuy
+          ? rhs?.token.rawSupply
+          : rhs?.token.rawSupply.add(rhs?.rawIdeaTokenAmount)
+        const ideaTokenValueRight = parseFloat(
+          web3BNToFloatString(
+            calculateIdeaTokenDaiValue(
+              tokenSupplyRight,
+              rhs?.market,
+              rhs?.rawIdeaTokenAmount
+            ),
+            tenPow18,
+            2
+          )
+        )
+        return numCmpFunc(ideaTokenValueLeft, ideaTokenValueRight)
+      })
+    } else if (orderBy === 'pnl') {
+      sorted = rawPairs.sort((lhs, rhs) => {
+        const tokenSupplyLeft = lhs?.isBuy
+          ? lhs?.token.rawSupply
+          : lhs?.token.rawSupply.add(lhs?.rawIdeaTokenAmount)
+        const ideaTokenValueLeft = parseFloat(
+          web3BNToFloatString(
+            calculateIdeaTokenDaiValue(
+              tokenSupplyLeft,
+              lhs?.market,
+              lhs?.rawIdeaTokenAmount
+            ),
+            tenPow18,
+            2
+          )
+        )
+        const pnlNumberLeft = ideaTokenValueLeft - lhs.daiAmount
+        const pnlPercentageLeft = (pnlNumberLeft / lhs.daiAmount) * 100
+
+        const tokenSupplyRight = rhs?.isBuy
+          ? rhs?.token.rawSupply
+          : rhs?.token.rawSupply.add(rhs?.rawIdeaTokenAmount)
+        const ideaTokenValueRight = parseFloat(
+          web3BNToFloatString(
+            calculateIdeaTokenDaiValue(
+              tokenSupplyRight,
+              rhs?.market,
+              rhs?.rawIdeaTokenAmount
+            ),
+            tenPow18,
+            2
+          )
+        )
+        const pnlNumberRight = ideaTokenValueRight - rhs.daiAmount
+        const pnlPercentageRight = (pnlNumberRight / rhs.daiAmount) * 100
+
+        return numCmpFunc(pnlPercentageLeft, pnlPercentageRight)
       })
     } else if (orderBy === 'date') {
       sorted = rawPairs.sort((lhs, rhs) => {
@@ -117,18 +178,21 @@ export default function MyTradesTable({
                           }
                         }}
                       >
-                        {header.sortable && (
-                          <>
-                            {currentHeader === header.value &&
-                              orderDirection === 'asc' && <span>&#x25B2;</span>}
-                            {currentHeader === header.value &&
-                              orderDirection === 'desc' && (
-                                <span>&#x25bc;</span>
-                              )}
-                            &nbsp;
-                          </>
-                        )}
-                        {header.title}
+                        <div className="flex">
+                          {header.sortable && (
+                            <>
+                              {currentHeader === header.value &&
+                                orderDirection === 'asc' && (
+                                  <span className="mr-1">&#x25B2;</span>
+                                )}
+                              {currentHeader === header.value &&
+                                orderDirection === 'desc' && (
+                                  <span className="mr-1">&#x25bc;</span>
+                                )}
+                            </>
+                          )}
+                          {header.title}
+                        </div>
                       </th>
                     ))}
                   </tr>

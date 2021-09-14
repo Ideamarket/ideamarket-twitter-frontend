@@ -15,7 +15,7 @@ const headers: Header[] = [
   {
     title: 'Name',
     value: 'name',
-    sortable: false,
+    sortable: true,
   },
   {
     title: 'Type',
@@ -39,8 +39,8 @@ const headers: Header[] = [
   },
   {
     title: <PnlTitleWithTooltip />,
-    value: 'pln',
-    sortable: false,
+    value: 'pnl',
+    sortable: true,
   },
   {
     title: 'Date',
