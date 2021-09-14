@@ -11,6 +11,7 @@ import {
   useTokenIconURL,
 } from 'actions'
 import {
+  bigNumberTenPow18,
   calculateIdeaTokenDaiValue,
   floatToWeb3BN,
   formatBigNumber,
@@ -74,8 +75,6 @@ type TradeInterfaceProps = {
   unlockText?: string
   newIdeaToken?: NewIdeaToken | null
 }
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function TradeInterface({
   ideaToken,
@@ -187,7 +186,7 @@ export default function TradeInterface({
       market,
       masterIdeaTokenAmountBN
     ),
-    tenPow18,
+    bigNumberTenPow18,
     2
   )
 
@@ -477,7 +476,7 @@ export default function TradeInterface({
     selectedIdeaToken: null,
     tokenValue: web3BNToFloatString(
       selectedTokenDAIValueBN || new BN('0'),
-      tenPow18,
+      bigNumberTenPow18,
       2
     ),
   }

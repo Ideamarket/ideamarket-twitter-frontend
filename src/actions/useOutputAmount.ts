@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { TokenAmount, Trade, TradeType } from '@uniswap/sdk'
-import { web3BNToFloatString } from '../utils'
+import { bigNumberTenPow18, web3BNToFloatString } from '../utils'
 import { useWalletStore } from 'store/walletStore'
 import { useContractStore } from 'store/contractStore'
 import { ZERO_ADDRESS, getUniswapPath } from '../utils'
@@ -9,8 +9,6 @@ import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function useOutputAmount(
   ideaToken: IdeaToken,
@@ -37,7 +35,7 @@ export default function useOutputAmount(
       }
 
       const amountBN = new BN(
-        new BigNumber(amount).multipliedBy(tenPow18).toFixed()
+        new BigNumber(amount).multipliedBy(bigNumberTenPow18).toFixed()
       )
 
       const exchangeContract = useContractStore.getState().exchangeContract
@@ -104,7 +102,7 @@ export default function useOutputAmount(
 
     async function calculateSellPrice() {
       const amountBN = new BN(
-        new BigNumber(amount).multipliedBy(tenPow18).toFixed()
+        new BigNumber(amount).multipliedBy(bigNumberTenPow18).toFixed()
       )
 
       if (

@@ -1,5 +1,4 @@
 import { useRouter } from 'next/dist/client/router'
-import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import moment from 'moment'
 
@@ -18,8 +17,6 @@ import { useTokenIconURL } from 'actions'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function LockedTokenRow({
   token,
@@ -49,7 +46,7 @@ export default function LockedTokenRow({
       market.rawPriceRise,
       market.rawHatchTokens
     ),
-    tenPow18,
+    bigNumberTenPow18,
     2
   )
 

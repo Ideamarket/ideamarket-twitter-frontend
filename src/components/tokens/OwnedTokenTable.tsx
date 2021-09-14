@@ -1,8 +1,11 @@
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
-import { calculateCurrentPriceBN, web3BNToFloatString } from 'utils'
+import {
+  bigNumberTenPow18,
+  calculateCurrentPriceBN,
+  web3BNToFloatString,
+} from 'utils'
 import OwnedTokenRow from './OwnedTokenRow'
 import OwnedTokenRowSkeleton from './OwnedTokenRowSkeleton'
 import TablePagination from './TablePagination'
@@ -61,8 +64,6 @@ const headers: Header[] = [
     sortable: false,
   },
 ]
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function OwnedTokenTable({
   rawPairs,
@@ -132,7 +133,7 @@ export default function OwnedTokenTable({
                 lhs.market.rawPriceRise,
                 lhs.market.rawHatchTokens
               ),
-              tenPow18,
+              bigNumberTenPow18,
               2
             )
           ) * parseFloat(lhs.balance)
@@ -146,7 +147,7 @@ export default function OwnedTokenTable({
                 rhs.market.rawPriceRise,
                 rhs.market.rawHatchTokens
               ),
-              tenPow18,
+              bigNumberTenPow18,
               2
             )
           ) * parseFloat(rhs.balance)

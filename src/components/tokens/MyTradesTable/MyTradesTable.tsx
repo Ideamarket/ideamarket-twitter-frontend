@@ -1,8 +1,11 @@
-import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { IdeaTokenTrade } from 'store/ideaMarketsStore'
-import { calculateIdeaTokenDaiValue, web3BNToFloatString } from 'utils'
+import {
+  bigNumberTenPow18,
+  calculateIdeaTokenDaiValue,
+  web3BNToFloatString,
+} from 'utils'
 import { sortNumberByOrder, sortStringByOrder } from '../utils'
 import { MyTradesRow, MyTradesRowSkeleton } from './components'
 import headers from './headers'
@@ -13,8 +16,6 @@ type MyTradesTableProps = {
   currentPage: number
   setCurrentPage: (p: number) => void
 }
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function MyTradesTable({
   rawPairs,
@@ -68,7 +69,7 @@ export default function MyTradesTable({
               lhs?.market,
               lhs?.rawIdeaTokenAmount
             ),
-            tenPow18,
+            bigNumberTenPow18,
             2
           )
         )
@@ -82,7 +83,7 @@ export default function MyTradesTable({
               rhs?.market,
               rhs?.rawIdeaTokenAmount
             ),
-            tenPow18,
+            bigNumberTenPow18,
             2
           )
         )
@@ -100,7 +101,7 @@ export default function MyTradesTable({
               lhs?.market,
               lhs?.rawIdeaTokenAmount
             ),
-            tenPow18,
+            bigNumberTenPow18,
             2
           )
         )
@@ -117,7 +118,7 @@ export default function MyTradesTable({
               rhs?.market,
               rhs?.rawIdeaTokenAmount
             ),
-            tenPow18,
+            bigNumberTenPow18,
             2
           )
         )

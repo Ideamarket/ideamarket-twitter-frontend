@@ -1,9 +1,9 @@
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import { useRouter } from 'next/dist/client/router'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
+  bigNumberTenPow18,
   calculateIdeaTokenDaiValue,
   web3BNToFloatString,
   ZERO_ADDRESS,
@@ -15,8 +15,6 @@ import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import moment from 'moment'
 import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 const MyTradesRow = ({
   token,
@@ -53,10 +51,16 @@ const MyTradesRow = ({
   )
 
   const pnlNumber = Number(
-    web3BNToFloatString(ideaTokenValueBN.sub(rawDaiAmount), tenPow18, 2)
+    web3BNToFloatString(
+      ideaTokenValueBN.sub(rawDaiAmount),
+      bigNumberTenPow18,
+      2
+    )
   )
 
-  const daiNumber = Number(web3BNToFloatString(rawDaiAmount, tenPow18, 2))
+  const daiNumber = Number(
+    web3BNToFloatString(rawDaiAmount, bigNumberTenPow18, 2)
+  )
 
   const pnlPercentage = (pnlNumber / daiNumber) * 100
 
@@ -163,7 +167,7 @@ const MyTradesRow = ({
             Amount
           </p>
           <p className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
-            {web3BNToFloatString(rawIdeaTokenAmount, tenPow18, 2)}
+            {web3BNToFloatString(rawIdeaTokenAmount, bigNumberTenPow18, 2)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -171,7 +175,7 @@ const MyTradesRow = ({
             Purchase Value
           </p>
           <p className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
-            ${web3BNToFloatString(rawDaiAmount, tenPow18, 2)}
+            ${web3BNToFloatString(rawDaiAmount, bigNumberTenPow18, 2)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -179,7 +183,7 @@ const MyTradesRow = ({
             Current Value
           </p>
           <p className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
-            ${web3BNToFloatString(ideaTokenValueBN, tenPow18, 2)}
+            ${web3BNToFloatString(ideaTokenValueBN, bigNumberTenPow18, 2)}
           </p>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

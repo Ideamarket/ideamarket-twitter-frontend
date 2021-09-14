@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
 import { WatchingStar } from 'components'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
@@ -21,8 +20,6 @@ import { useQuery } from 'react-query'
 import { BadgeCheckIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 type Props = {
   token: IdeaToken
@@ -62,7 +59,7 @@ export default function TokenRow({
       market.rawPriceRise,
       market.rawHatchTokens
     ),
-    tenPow18,
+    bigNumberTenPow18,
     2
   )
 

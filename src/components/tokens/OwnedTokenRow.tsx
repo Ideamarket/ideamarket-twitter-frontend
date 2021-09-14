@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
@@ -21,8 +20,6 @@ import LockModal from 'components/trade/LockModal'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import GiftModal from 'components/trade/GiftModal'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function OwnedTokenRow({
   token,
@@ -50,7 +47,7 @@ export default function OwnedTokenRow({
       market.rawPriceRise,
       market.rawHatchTokens
     ),
-    tenPow18,
+    bigNumberTenPow18,
     2
   )
   const { resolvedTheme } = useThemeMode()

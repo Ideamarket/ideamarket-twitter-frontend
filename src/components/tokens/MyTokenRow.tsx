@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
@@ -8,14 +7,13 @@ import {
   web3BNToFloatString,
   formatNumberWithCommasAsThousandsSerperator,
   ZERO_ADDRESS,
+  bigNumberTenPow18,
 } from 'utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function MyTokenRow({
   token,
@@ -126,7 +124,7 @@ export default function MyTokenRow({
                 market.rawPriceRise,
                 market.rawHatchTokens
               ),
-              tenPow18,
+              bigNumberTenPow18,
               2
             )}
           </p>
