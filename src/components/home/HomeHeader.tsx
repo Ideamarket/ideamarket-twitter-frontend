@@ -156,7 +156,7 @@ const HomeHeader = ({
         <div className="text-2xl text-brand-blue md:text-5xl">
           ${cDaiBalanceInDai}
         </div>
-        <div className="md:ml-2">trust signaled</div>
+        <div className="md:ml-2">in trust signaled</div>
       </div>
     </div>
   )
