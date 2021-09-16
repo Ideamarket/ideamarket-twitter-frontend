@@ -64,7 +64,7 @@ const DropdownButton = ({
     >
       <span className="mr-1">{name}</span>
       {name === 'Platforms' && (
-        <span className="w-7 text-center text-xs text-gray-400">
+        <span className="w-8 text-center text-xs text-gray-400">
           {
             [...selectedOptions].filter((o) => o !== 'All' && o !== 'None')
               .length
