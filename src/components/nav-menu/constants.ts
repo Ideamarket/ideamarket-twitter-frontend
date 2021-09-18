@@ -75,6 +75,10 @@ export const navbarConfig: any = {
       ],
     },
     {
+      name: 'Bridge',
+      onClick: () => router.push('/bridge'),
+    },
+    {
       name: 'Wallet',
       onClick: () => router.push('/account'),
     },
