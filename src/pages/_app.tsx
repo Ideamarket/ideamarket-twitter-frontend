@@ -28,8 +28,8 @@ import ModalRoot from 'components/modals/ModalRoot'
 import { WrongNetworkOverlay } from 'components'
 import { initUseMarketStore } from 'store/markets'
 import { NETWORK, INetworkSpecifics } from 'store/networks'
-import ModalService from 'components/modals/ModalService'
-import MigrationDoneModal from 'components/MigrationDoneModal'
+//import ModalService from 'components/modals/ModalService'
+//import MigrationDoneModal from 'components/MigrationDoneModal'
 
 export const GlobalContext = createContext({
   onWalletConnectedCallback: () => {},
@@ -62,7 +62,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     setIsEmailFooterActive(!isEmailBarClosed)
     const migrationModalSeen = localStorage.getItem('MIGRATION_MODAL_SEEN')
     if (migrationModalSeen !== 'true') {
-      ModalService.open(MigrationDoneModal)
+      //ModalService.open(MigrationDoneModal)
     }
   }, [])
 

@@ -13,8 +13,7 @@ const MigrationDoneModal = ({ close }: Props) => {
   return (
     <Modal close={closeModal}>
       <div className="md:min-w-100 p-4 md:p-20">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum a
-        purus eget lorem tempus euismod non et lacus.
+        Migration to L2 is completed!...
       </div>
     </Modal>
   )
