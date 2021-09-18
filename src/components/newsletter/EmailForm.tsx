@@ -1,15 +1,21 @@
 import classNames from 'classnames'
-import { useRef, useState } from 'react'
+import { useRef, useState, useContext } from 'react'
 import toast from 'react-hot-toast'
+import { GlobalContext } from 'pages/_app'
+import { MailIcon } from '@heroicons/react/solid'
 
-export default function EmailForm() {
+type EmailFormProps = { isMaintenance?: boolean }
+
+export default function EmailForm({ isMaintenance = false }: EmailFormProps) {
   const [email, setEmail] = useState('')
   const [isError, setIsError] = useState(false)
   const toastId = useRef('')
+  const { setIsEmailFooterActive } = useContext(GlobalContext)
+
   return (
     <>
       <form
-        className="flex flex-col items-center px-2 pb-2 space-x-2 space-y-2 bg-white dark:bg-gray-700 md:pb-0 md:rounded-tr-lg md:flex-row md:space-y-0 md:ml-auto"
+        className="px-2 md:rounded-tr-lg z-20"
         onSubmit={async (e) => {
           e.preventDefault()
           if (email.trim() === '') {
@@ -38,42 +44,106 @@ export default function EmailForm() {
               setIsError(true)
               return
             }
+
             setEmail('')
+            setIsEmailFooterActive(false)
+            localStorage.setItem('IS_EMAIL_BAR_CLOSED', 'true')
             toast.success('Successfully added you to our list!', {
               id: toastId.current,
             })
           })
         }}
       >
-        <label
-          htmlFor="email"
-          className="flex-shrink-0 block text-sm font-medium text-gray-700 dark:text-gray-300"
-        >
-          Notify me of new markets:
-        </label>
-        <div>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            className={classNames(
-              'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
-              isError
-                ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
-                : 'border-gray-300 dark:border-gray-500 focus:ring-brand-blue focus:border-brand-blue'
+        {/* Moble START */}
+        <div className="md:hidden">
+          <div>
+            <input
+              type="email"
+              name="email"
+              id="mobile-email"
+              className={classNames(
+                'h-8 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
+                isError
+                  ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
+                  : 'border-gray-300 text-gray-700 focus:ring-brand-blue focus:border-brand-blue'
+              )}
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="flex items-center justify-between mt-2">
+            {!isMaintenance && (
+              <label
+                htmlFor="email"
+                className="flex-shrink-0 block text-sm font-medium text-gray-400 mr-2"
+              >
+                Arbitrum L2 launch soon
+              </label>
             )}
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+
+            <button
+              type="submit"
+              className={classNames(
+                isMaintenance
+                  ? 'bg-brand-navy text-white w-full'
+                  : 'bg-white text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue',
+                'bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md focus:border-brand-blue'
+              )}
+            >
+              {isMaintenance ? 'Submit' : 'Notify me'}
+            </button>
+          </div>
         </div>
-        <button
-          type="submit"
-          className="flex-shrink-0 p-2 px-3 text-xs border dark:border-gray-500 rounded-md text-brand-gray-4 dark:text-gray-200 hover:border-brand-blue hover:text-brand-blue focus:border-brand-blue dark:hover:border-brand-blue"
-        >
-          Sign up
-        </button>
+        {/* Mobile END */}
+
+        {/* Desktop START */}
+        <div className="hidden md:flex items-center space-x-2">
+          {!isMaintenance && (
+            <label
+              htmlFor="email"
+              className="flex-shrink-0 block text-sm font-medium text-gray-400"
+            >
+              Arbitrum L2 launch soon
+            </label>
+          )}
+
+          <div className="relative flex items-center">
+            <div className="absolute flex items-center justify-center w-6 h-6 ml-1 bg-gray-300 rounded-md">
+              <MailIcon className="w-5 h-5 text-white" />
+            </div>
+            <input
+              type="email"
+              name="email"
+              id="footer-email"
+              className={classNames(
+                'h-8 pl-9 pr-20 shadow-sm block w-full sm:text-sm rounded-md focus:outline-none',
+                isError
+                  ? 'border-red-300 text-brand-red placeholder-red-300 focus:ring-red-500 focus:border-brand-red'
+                  : 'border-gray-300 text-gray-700 focus:ring-brand-blue focus:border-brand-blue'
+              )}
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className={classNames(
+              isMaintenance
+                ? 'bg-brand-navy text-white'
+                : 'bg-white text-brand-gray-4 hover:border-brand-blue hover:text-brand-blue',
+              'bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md focus:border-brand-blue'
+            )}
+          >
+            {isMaintenance ? 'Submit' : 'Notify me'}
+          </button>
+        </div>
+        {/* Desktop END */}
       </form>
     </>
   )
