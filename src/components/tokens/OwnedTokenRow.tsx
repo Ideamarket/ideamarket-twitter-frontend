@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
@@ -20,10 +19,9 @@ import ModalService from 'components/modals/ModalService'
 import LockModal from 'components/trade/LockModal'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
+import GiftModal from 'components/trade/GiftModal'
 
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
-
-export default function TokenRow({
+export default function OwnedTokenRow({
   token,
   market,
   balance,
@@ -51,7 +49,7 @@ export default function TokenRow({
       market.rawPriceRise,
       market.rawHatchTokens
     ),
-    tenPow18,
+    bigNumberTenPow18,
     2
   )
   const { resolvedTheme } = useThemeMode()
@@ -102,7 +100,7 @@ export default function TokenRow({
                 </div>
               )}
             </div>
-            <div className="flex ml-4 text-base font-semibold leading-5">
+            <div className="ml-4 text-base leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -154,7 +152,7 @@ export default function TokenRow({
             Price
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + tokenPrice}
           >
             $
@@ -168,7 +166,7 @@ export default function TokenRow({
             Balance
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={balance}
           >
             {formatNumberWithCommasAsThousandsSerperator(
@@ -181,7 +179,7 @@ export default function TokenRow({
             Value
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + balanceValue}
           >
             ${balanceValue}
@@ -193,7 +191,7 @@ export default function TokenRow({
           </p>
           <p
             className={classNames(
-              'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
+              'text-base leading-4 tracking-tightest-2 uppercase',
               {
                 'text-brand-red dark:text-red-400':
                   parseFloat(token.dayChange) < 0.0,
@@ -227,6 +225,17 @@ export default function TokenRow({
             className="w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
           >
             <span>{isL1 ? 'Bridge' : 'Lock'}</span>
+          </button>
+        </td>
+        <td className="px-4 py-4 md:px-2 whitespace-nowrap">
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              ModalService.open(GiftModal, { token, balance, refetch })
+            }}
+            className="w-20 h-10 text-base font-medium bg-white border-2 rounded-lg text-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+          >
+            <span>Gift</span>
           </button>
         </td>
         {/* Add to Metamask button */}

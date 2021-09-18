@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { flatten } from 'lodash'
 
@@ -13,12 +19,13 @@ import { querySupplyRate } from 'store/compoundStore'
 import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './OverviewTokenRow'
 import TokenRowSkeleton from './OverviewTokenRowSkeleton'
-import { Filters } from 'components/tokens/OverviewFilters'
 import { OverviewColumns } from './table/OverviewColumns'
+import { MainFilters } from './utils/OverviewUtils'
 
 type Props = {
   selectedMarkets: Set<string>
   selectedFilterId: number
+  isVerifiedFilterActive: boolean
   nameSearch: string
   columnData: Array<any>
   getColumn: (column: string) => boolean
@@ -30,6 +37,7 @@ type Props = {
 export default function Table({
   selectedMarkets,
   selectedFilterId,
+  isVerifiedFilterActive,
   nameSearch,
   columnData,
   getColumn,
@@ -38,13 +46,13 @@ export default function Table({
   tradeOrListSuccessToggle,
 }: Props) {
   const TOKENS_PER_PAGE = 10
-  const LOADING_MARGIN = 200
 
   const [currentColumn, setCurrentColumn] = useState('')
   const [orderBy, setOrderBy] = useState('supply')
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
-  const canFetchMoreRef = useRef<boolean>()
+  const observer: MutableRefObject<any> = useRef()
+
   const marketsMap = markets.reduce(
     (acc, curr) => ({ ...acc, [curr.marketID]: curr }),
     {}
@@ -55,7 +63,7 @@ export default function Table({
   )
 
   const filterTokens =
-    selectedFilterId === Filters.STARRED.id ? watchingTokens : undefined
+    selectedFilterId === MainFilters.STARRED.id ? watchingTokens : undefined
 
   const { data: compoundSupplyRate, isFetching: isCompoundSupplyRateLoading } =
     useQuery('compound-supply-rate', querySupplyRate, {
@@ -84,18 +92,18 @@ export default function Table({
         markets,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
-        selectedFilterId === Filters.HOT.id
+        selectedFilterId === MainFilters.HOT.id
           ? 'dayChange'
-          : selectedFilterId === Filters.NEW.id
+          : selectedFilterId === MainFilters.NEW.id
           ? 'listedAt'
           : orderBy,
-        selectedFilterId === Filters.HOT.id ||
-        selectedFilterId === Filters.NEW.id
+        selectedFilterId === MainFilters.HOT.id ||
+        selectedFilterId === MainFilters.NEW.id
           ? 'desc'
           : orderDirection,
         nameSearch,
         filterTokens,
-        selectedFilterId === Filters.VERIFIED.id,
+        isVerifiedFilterActive,
       ],
     ],
     queryTokens,
@@ -115,7 +123,20 @@ export default function Table({
     }
   )
 
-  canFetchMoreRef.current = canFetchMore
+  const lastElementRef = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect()
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && canFetchMore) {
+          fetchMore()
+        }
+      })
+
+      if (node) observer.current.observe(node)
+    },
+    [canFetchMore, fetchMore]
+  )
 
   const tokenData = flatten(infiniteData || [])
 
@@ -134,29 +155,13 @@ export default function Table({
   }, [
     markets,
     selectedFilterId,
+    isVerifiedFilterActive,
     orderBy,
     orderDirection,
     nameSearch,
     tradeOrListSuccessToggle,
     refetch,
   ])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      const height = document.documentElement.scrollHeight
-      const windowHeight = window.innerHeight
-      const diff = height - windowHeight - currentScrollY
-
-      if (diff < LOADING_MARGIN && canFetchMoreRef.current) {
-        fetchMore()
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [fetchMore])
 
   const isLoading =
     isMarketLoading || isTokenDataLoading || isCompoundSupplyRateLoading
@@ -205,53 +210,54 @@ export default function Table({
   }
 
   return (
-    <>
-      <div className="flex flex-col">
-        <div className="-my-2 overflow-x-auto lg:overflow-x-visible">
-          <div className="inline-block w-full py-2 align-middle">
-            <div className="border-b border-gray-200 dark:border-gray-500 sm:rounded-t-lg overflow-x-scroll lg:overflow-x-visible">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
-                <thead className="hidden md:table-header-group">
-                  <tr className="lg:sticky md:top-44 sticky-safari z-10">
-                    <OverviewColumns
-                      currentColumn={currentColumn}
-                      orderDirection={orderDirection}
-                      columnData={columnData}
-                      columnClicked={columnClicked}
-                      markets={markets}
-                    />
-                  </tr>
-                </thead>
-                <tbody className="w-full bg-white dark:bg-gray-700 divide-y divide-gray-200 dark:divide-gray-500">
-                  {(tokenData as IdeaToken[]).map((token) => {
-                    // Only load the rows if a market is found
-                    if (marketsMap[token.marketID]) {
-                      return (
-                        <TokenRow
-                          key={token.marketID + '-' + token.tokenID}
-                          token={token}
-                          market={marketsMap[token.marketID]}
-                          showMarketSVG={false}
-                          compoundSupplyRate={compoundSupplyRate}
-                          getColumn={getColumn}
-                          onTradeClicked={onTradeClicked}
-                        />
-                      )
-                    }
+    <div className="flex flex-col">
+      <div className="-my-2 overflow-x-auto lg:overflow-x-visible">
+        <div className="inline-block w-full py-2 align-middle">
+          <div className="overflow-x-scroll border-b border-gray-200 dark:border-gray-500 sm:rounded-t-lg lg:overflow-x-visible">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
+              <thead className="hidden md:table-header-group">
+                <tr className="z-10 lg:sticky md:top-28 sticky-safari">
+                  <OverviewColumns
+                    currentColumn={currentColumn}
+                    orderDirection={orderDirection}
+                    columnData={columnData}
+                    columnClicked={columnClicked}
+                    markets={markets}
+                  />
+                </tr>
+              </thead>
+              <tbody className="w-full bg-white divide-y divide-gray-200 dark:bg-gray-700 dark:divide-gray-500">
+                {(tokenData as IdeaToken[]).map((token, index) => {
+                  // Only load the rows if a market is found
+                  if (marketsMap[token.marketID]) {
+                    return (
+                      <TokenRow
+                        key={token.marketID + '-' + token.tokenID}
+                        token={token}
+                        market={marketsMap[token.marketID]}
+                        showMarketSVG={false}
+                        compoundSupplyRate={compoundSupplyRate}
+                        getColumn={getColumn}
+                        onTradeClicked={onTradeClicked}
+                        lastElementRef={
+                          tokenData.length === index + 1 ? lastElementRef : null
+                        }
+                      />
+                    )
+                  }
 
-                    return null
-                  })}
-                  {isLoading
-                    ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                        <TokenRowSkeleton key={token} getColumn={getColumn} />
-                      ))
-                    : null}
-                </tbody>
-              </table>
-            </div>
+                  return null
+                })}
+                {isLoading
+                  ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
+                      <TokenRowSkeleton key={token} getColumn={getColumn} />
+                    ))
+                  : null}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }

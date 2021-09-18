@@ -11,6 +11,7 @@ import {
   useTokenIconURL,
 } from 'actions'
 import {
+  bigNumberTenPow18,
   calculateIdeaTokenDaiValue,
   floatToWeb3BN,
   formatBigNumber,
@@ -75,8 +76,6 @@ type TradeInterfaceProps = {
   newIdeaToken?: NewIdeaToken | null
 }
 
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
-
 export default function TradeInterface({
   ideaToken,
   market,
@@ -93,6 +92,7 @@ export default function TradeInterface({
   const [tradeType, setTradeType] = useState('buy')
   const [recipientAddress, setRecipientAddress] = useState('')
   const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
+
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
@@ -186,7 +186,7 @@ export default function TradeInterface({
       market,
       masterIdeaTokenAmountBN
     ),
-    tenPow18,
+    bigNumberTenPow18,
     2
   )
 
@@ -218,10 +218,10 @@ export default function TradeInterface({
 
   const exchangeContractAddress = useContractStore(
     (state) => state.exchangeContract
-  ).options.address
+  )?.options?.address
   const multiActionContractAddress = useContractStore(
     (state) => state.multiActionContract
-  ).options.address
+  )?.options?.address
 
   const spender =
     tradeType === 'buy'
@@ -476,7 +476,7 @@ export default function TradeInterface({
     selectedIdeaToken: null,
     tokenValue: web3BNToFloatString(
       selectedTokenDAIValueBN || new BN('0'),
-      tenPow18,
+      bigNumberTenPow18,
       2
     ),
   }
@@ -600,7 +600,7 @@ export default function TradeInterface({
                 <br />
                 For more information, see{' '}
                 <A
-                  href="https://docs.ideamarket.io/user-guide/hiw-buy-and-sell#locking-tokens"
+                  href="https://docs.ideamarket.io/user-guide/tutorial#buy-upvotes"
                   target="_blank"
                   className="underline"
                 >
@@ -657,7 +657,7 @@ export default function TradeInterface({
                   ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                   : 'border-brand-red focus:border-brand-red focus:ring-red-500'
               )}
-              placeholder="Recipient address"
+              placeholder="Recipient address or ENS"
               value={recipientAddress}
               onChange={(e) => {
                 setRecipientAddress(e.target.value)

@@ -209,16 +209,18 @@ export function calculateMaxIdeaTokensBuyable(
   supplyBN: BN,
   market: IdeaMarket
 ): BigNumber {
-  const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
-
-  const dai = new BigNumber(daiBN.toString()).div(tenPow18)
-  const supply = new BigNumber(supplyBN.toString()).div(tenPow18)
+  const dai = new BigNumber(daiBN.toString()).div(bigNumberTenPow18)
+  const supply = new BigNumber(supplyBN.toString()).div(bigNumberTenPow18)
 
   const hatchTokens = new BigNumber(market.rawHatchTokens.toString()).div(
-    tenPow18
+    bigNumberTenPow18
   )
-  const baseCost = new BigNumber(market.rawBaseCost.toString()).div(tenPow18)
-  const priceRise = new BigNumber(market.rawPriceRise.toString()).div(tenPow18)
+  const baseCost = new BigNumber(market.rawBaseCost.toString()).div(
+    bigNumberTenPow18
+  )
+  const priceRise = new BigNumber(market.rawPriceRise.toString()).div(
+    bigNumberTenPow18
+  )
   const totalFee = new BigNumber(
     market.rawTradingFeeRate.add(market.rawPlatformFeeRate).toString()
   )
@@ -242,13 +244,13 @@ export function calculateMaxIdeaTokensBuyable(
     if (costForRemainingHatch.gte(dai)) {
       // We cannot buy the full remaining hatch
       const hatchBuyable = dai.div(applyFee(baseCost))
-      const result = hatchBuyable.multipliedBy(tenPow18)
+      const result = hatchBuyable.multipliedBy(bigNumberTenPow18)
       // Handle rounding error
       return result.multipliedBy(new BigNumber('0.9999'))
     }
 
     // We can buy the full remaining hatch
-    buyable = remainingHatch.multipliedBy(tenPow18)
+    buyable = remainingHatch.multipliedBy(bigNumberTenPow18)
     updatedDai = dai.minus(costForRemainingHatch)
     updatedSupply = new BigNumber('0')
   } else {
@@ -274,7 +276,9 @@ export function calculateMaxIdeaTokensBuyable(
   const root = applyFee(b2f.plus(b2rsf).plus(d2r).plus(fr2s2)).sqrt()
   const numerator = root.minus(bf).minus(frs)
   const denominator = fr
-  const result = buyable.plus(numerator.div(denominator).multipliedBy(tenPow18))
+  const result = buyable.plus(
+    numerator.div(denominator).multipliedBy(bigNumberTenPow18)
+  )
   // Handle rounding error
   return result.multipliedBy(new BigNumber('0.9999'))
 }
@@ -284,16 +288,18 @@ export function calculateIdeaTokensInputForDaiOutput(
   supplyBN: BN,
   market: IdeaMarket
 ): BigNumber {
-  const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
-
-  const dai = new BigNumber(daiBN.toString()).div(tenPow18)
-  const supply = new BigNumber(supplyBN.toString()).div(tenPow18)
+  const dai = new BigNumber(daiBN.toString()).div(bigNumberTenPow18)
+  const supply = new BigNumber(supplyBN.toString()).div(bigNumberTenPow18)
 
   const hatchTokens = new BigNumber(market.rawHatchTokens.toString()).div(
-    tenPow18
+    bigNumberTenPow18
   )
-  const baseCost = new BigNumber(market.rawBaseCost.toString()).div(tenPow18)
-  const priceRise = new BigNumber(market.rawPriceRise.toString()).div(tenPow18)
+  const baseCost = new BigNumber(market.rawBaseCost.toString()).div(
+    bigNumberTenPow18
+  )
+  const priceRise = new BigNumber(market.rawPriceRise.toString()).div(
+    bigNumberTenPow18
+  )
   const totalFee = new BigNumber(
     market.rawTradingFeeRate.add(market.rawPlatformFeeRate).toString()
   )
@@ -306,7 +312,7 @@ export function calculateIdeaTokensInputForDaiOutput(
       .dividedBy(
         baseCost.multipliedBy(feeScale).minus(baseCost.multipliedBy(totalFee))
       )
-      .multipliedBy(tenPow18)
+      .multipliedBy(bigNumberTenPow18)
       .multipliedBy(new BigNumber('1.001'))
 
     return result
@@ -341,7 +347,7 @@ export function calculateIdeaTokensInputForDaiOutput(
 
     return oneDivRFT
       .multipliedBy(afterRoot.minus(root))
-      .multipliedBy(tenPow18)
+      .multipliedBy(bigNumberTenPow18)
       .multipliedBy(new BigNumber('1.001'))
   }
 
@@ -353,7 +359,7 @@ export function calculateIdeaTokensInputForDaiOutput(
     .dividedBy(
       baseCost.multipliedBy(feeScale).minus(baseCost.multipliedBy(totalFee))
     )
-    .multipliedBy(tenPow18)
+    .multipliedBy(bigNumberTenPow18)
     .plus(new BigNumber(distance.toString()))
     .multipliedBy(new BigNumber('1.001'))
 

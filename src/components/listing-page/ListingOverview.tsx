@@ -1,8 +1,8 @@
-import BigNumber from 'bignumber.js'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import classNames from 'classnames'
 import {
+  bigNumberTenPow18,
   calculateCurrentPriceBN,
   formatNumber,
   formatNumberInt,
@@ -14,8 +14,6 @@ import A from 'components/A'
 import { useTokenIconURL } from 'actions'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 function DetailsSkeleton() {
   return (
@@ -74,13 +72,13 @@ export default function TokenCard({
           market.rawPriceRise,
           market.rawHatchTokens
         ),
-        tenPow18,
+        bigNumberTenPow18,
         2
       )
   return (
     <>
       <div className="flex flex-none mt-7">
-        <div className="w-20 h-20 mr-5 relative">
+        <div className="relative w-20 h-20 mr-5">
           {loading || isTokenIconLoading ? (
             <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
           ) : (
@@ -126,7 +124,7 @@ export default function TokenCard({
               <span className="invisible">A</span>
             </div>
           ) : (
-            <div className="mt-1 text-sm flex">
+            <div className="flex mt-1 text-sm">
               Rank {token.rank ? token.rank : '-'}
               <span className="block md:hidden ml-2.5 mr-1 w-5 h-5">
                 {marketSpecifics.getMarketSVGWhite()}

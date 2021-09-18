@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import classNames from 'classnames'
 import BN from 'bn.js'
-import BigNumber from 'bignumber.js'
 import { SHA3 } from 'sha3'
 import { GlobalContext } from 'pages/_app'
 import {
@@ -13,14 +12,17 @@ import {
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { useWalletStore } from 'store/walletStore'
-import { isAddress, useTransactionManager, web3BNToFloatString } from '../utils'
+import {
+  bigNumberTenPow18,
+  isAddress,
+  useTransactionManager,
+  web3BNToFloatString,
+} from '../utils'
 import { NETWORK } from 'store/networks'
 import { Modal, CircleSpinner } from './'
 import A from './A'
 import ModalService from './modals/ModalService'
 import WalletModal from './wallet/WalletModal'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function VerifyModal({
   close,
@@ -383,8 +385,11 @@ export default function VerifyModal({
                 Ownership verified!
                 <br />
                 <br />A one-time payment of{' '}
-                <i>{web3BNToFloatString(new BN(weiFee), tenPow18, 5)} ETH</i> is
-                required to cover the Ethereum network fee for transferring
+                <i>
+                  {web3BNToFloatString(new BN(weiFee), bigNumberTenPow18, 5)}{' '}
+                  ETH
+                </i>{' '}
+                is required to cover the Ethereum network fee for transferring
                 listing ownership to you.
                 <br />
                 <br />

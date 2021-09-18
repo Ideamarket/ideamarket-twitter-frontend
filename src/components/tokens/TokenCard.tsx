@@ -1,9 +1,9 @@
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { WatchingStar } from '../'
 import {
+  bigNumberTenPow18,
   calculateCurrentPriceBN,
   formatNumber,
   web3BNToFloatString,
@@ -11,8 +11,6 @@ import {
 import { useTokenIconURL } from 'actions'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function TokenCard({
   token,
@@ -45,7 +43,7 @@ export default function TokenCard({
           market.rawPriceRise,
           market.rawHatchTokens
         ),
-        tenPow18,
+        bigNumberTenPow18,
         2
       )
   return (
@@ -60,7 +58,7 @@ export default function TokenCard({
         {loading || isTokenIconLoading ? (
           <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
         ) : (
-          <div className="w-full h-full rounded-full relative max-w-18 max-h-18">
+          <div className="relative w-full h-full rounded-full max-w-18 max-h-18">
             <Image
               src={tokenIconURL || '/gray.svg'}
               alt="token"

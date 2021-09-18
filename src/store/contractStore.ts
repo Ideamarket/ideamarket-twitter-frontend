@@ -103,14 +103,18 @@ export function initContractsFromWeb3(web3: Web3) {
 
 export function getERC20Contract(address: string) {
   const web3 = useWalletStore.getState().web3
-  return new web3.eth.Contract(ERC20ABI as any, address, {
-    from: web3.eth.defaultAccount,
-  })
+  return web3
+    ? new web3.eth.Contract(ERC20ABI as any, address, {
+        from: web3.eth.defaultAccount,
+      })
+    : null
 }
 
 export function getUniswapPairContract(pairAddress: string) {
   const web3 = useWalletStore.getState().web3
-  return new web3.eth.Contract(UniswapPairABI as any, pairAddress, {
-    from: web3.eth.defaultAccount,
-  })
+  return web3
+    ? new web3.eth.Contract(UniswapPairABI as any, pairAddress, {
+        from: web3.eth.defaultAccount,
+      })
+    : null
 }

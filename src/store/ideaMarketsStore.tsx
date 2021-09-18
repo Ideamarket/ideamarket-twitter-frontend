@@ -4,7 +4,7 @@ import produce from 'immer'
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { request } from 'graphql-request'
-import { web3BNToFloatString } from 'utils'
+import { bigNumberTenPow18, web3BNToFloatString } from 'utils'
 import {
   getQueryLockedAmounts,
   getQueryLockedTokens,
@@ -21,11 +21,11 @@ import {
   getQuerySinglePricePoint,
   getQueryTokenBalances,
   getQueryBalancesOfHolders,
+  getQueryMyTrades,
 } from './queries'
 import { NETWORK, L1_NETWORK } from 'store/networks'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 const HTTP_GRAPHQL_ENDPOINT_L1 = L1_NETWORK.getSubgraphURL()
 const HTTP_GRAPHQL_ENDPOINT = NETWORK.getSubgraphURL()
@@ -111,6 +111,17 @@ export type LockedAmount = {
   lockedUntil: number
 }
 
+export type IdeaTokenTrade = {
+  token: IdeaToken
+  isBuy: boolean
+  timestamp: number
+  rawIdeaTokenAmount: BN
+  ideaTokenAmount: number
+  rawDaiAmount: BN
+  daiAmount: number
+  market: IdeaMarket
+}
+
 type State = {
   watching: { [address: string]: boolean }
 }
@@ -184,7 +195,7 @@ export async function queryOwnedTokensMaybeMarket(
         market: apiResponseToIdeaMarket(balance.market),
         rawBalance: balance.amount ? new BN(balance.amount) : undefined,
         balance: balance.amount
-          ? web3BNToFloatString(new BN(balance.amount), tenPow18, 2)
+          ? web3BNToFloatString(new BN(balance.amount), bigNumberTenPow18, 2)
           : undefined,
       } as IdeaTokenMarketPair)
   )
@@ -196,7 +207,7 @@ export async function queryOwnedTokensMaybeMarket(
         market: apiResponseToIdeaMarket(balance.market),
         rawBalance: balance.amount ? new BN(balance.amount) : undefined,
         balance: balance.amount
-          ? web3BNToFloatString(new BN(balance.amount), tenPow18, 2)
+          ? web3BNToFloatString(new BN(balance.amount), bigNumberTenPow18, 2)
           : undefined,
       } as IdeaTokenMarketPair)
   )
@@ -417,7 +428,7 @@ export async function queryTokensHeld(
       const token = apiResponseToIdeaToken(raw.token)
       res.push({
         token: token,
-        balance: web3BNToFloatString(new BN(raw.amount), tenPow18, 2),
+        balance: web3BNToFloatString(new BN(raw.amount), bigNumberTenPow18, 2),
         rawBalance: new BN(raw.amount),
         market: null,
       })
@@ -760,6 +771,52 @@ export async function queryInterestManagerTotalShares(queryKey): Promise<BN> {
   }
 }
 
+export async function queryMyTrades(
+  queryKey,
+  market: IdeaMarket,
+  ownerAddress: string
+): Promise<IdeaTokenTrade[]> {
+  if (!ownerAddress) {
+    return []
+  }
+
+  const marketID = market ? market.marketID : undefined
+
+  let page = 0
+  const myTrades: any = []
+
+  // API can return max of 100 entries. That means we need to query the API multiple times to retrieve all entries
+  while (true) {
+    const result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryMyTrades({
+        ownerAddress,
+        first: 100,
+        skip: page * 100,
+      })
+    )
+
+    const tokensInThisPage = result.ideaTokenTrades ?? []
+
+    myTrades.push(...tokensInThisPage)
+    if (tokensInThisPage.length < 100) {
+      break
+    }
+    page += 1
+  }
+
+  const mapTradeResponse = (trade) => apiResponseToIdeaTokenTrade(trade)
+
+  // Filter by market if user chooses market option in the select box
+  if (marketID) {
+    return myTrades
+      .filter((trade) => trade?.token?.market?.marketID === marketID)
+      .map(mapTradeResponse)
+  }
+
+  return myTrades.map(mapTradeResponse)
+}
+
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
   const address = token.address
 
@@ -796,12 +853,12 @@ function apiResponseToIdeaToken(
     tokenID: apiResponse.tokenID,
     name: apiResponse.name,
     supply: apiResponse.supply
-      ? web3BNToFloatString(new BN(apiResponse.supply), tenPow18, 2)
+      ? web3BNToFloatString(new BN(apiResponse.supply), bigNumberTenPow18, 2)
       : undefined,
     rawSupply: apiResponse.supply ? new BN(apiResponse.supply) : undefined,
     holders: apiResponse.holders,
     marketCap: apiResponse.marketCap
-      ? web3BNToFloatString(new BN(apiResponse.marketCap), tenPow18, 2)
+      ? web3BNToFloatString(new BN(apiResponse.marketCap), bigNumberTenPow18, 2)
       : undefined,
     rawMarketCap: apiResponse.marketCap
       ? new BN(apiResponse.marketCap)
@@ -809,13 +866,17 @@ function apiResponseToIdeaToken(
     rank: apiResponse.rank,
     tokenOwner: apiResponse.tokenOwner ? apiResponse.tokenOwner : undefined,
     daiInToken: apiResponse.daiInToken
-      ? web3BNToFloatString(new BN(apiResponse.daiInToken), tenPow18, 2)
+      ? web3BNToFloatString(
+          new BN(apiResponse.daiInToken),
+          bigNumberTenPow18,
+          2
+        )
       : undefined,
     rawDaiInToken: apiResponse.daiInToken
       ? new BN(apiResponse.daiInToken)
       : undefined,
     invested: apiResponse.invested
-      ? web3BNToFloatString(new BN(apiResponse.invested), tenPow18, 2)
+      ? web3BNToFloatString(new BN(apiResponse.invested), bigNumberTenPow18, 2)
       : undefined,
     rawInvested: apiResponse.invested
       ? new BN(apiResponse.invested)
@@ -823,7 +884,7 @@ function apiResponseToIdeaToken(
     tokenInterestRedeemed: apiResponse.tokenInterestRedeemed
       ? web3BNToFloatString(
           new BN(apiResponse.tokenInterestRedeemed),
-          tenPow18,
+          bigNumberTenPow18,
           2
         )
       : undefined,
@@ -845,7 +906,11 @@ function apiResponseToIdeaToken(
       : undefined,
     listedAt: apiResponse.listedAt,
     lockedAmount: apiResponse.lockedAmount
-      ? web3BNToFloatString(new BN(apiResponse.lockedAmount), tenPow18, 2)
+      ? web3BNToFloatString(
+          new BN(apiResponse.lockedAmount),
+          bigNumberTenPow18,
+          2
+        )
       : undefined,
     rawLockedAmount: apiResponse.lockedAmount
       ? new BN(apiResponse.lockedAmount)
@@ -864,19 +929,23 @@ function apiResponseToIdeaMarket(apiResponse): IdeaMarket {
     name: apiResponse.name,
     marketID: apiResponse.marketID,
     baseCost: apiResponse.baseCost
-      ? web3BNToFloatString(new BN(apiResponse.baseCost), tenPow18, 2)
+      ? web3BNToFloatString(new BN(apiResponse.baseCost), bigNumberTenPow18, 2)
       : undefined,
     rawBaseCost: apiResponse.baseCost
       ? new BN(apiResponse.baseCost)
       : undefined,
     priceRise: apiResponse.priceRise
-      ? web3BNToFloatString(new BN(apiResponse.priceRise), tenPow18, 4)
+      ? web3BNToFloatString(new BN(apiResponse.priceRise), bigNumberTenPow18, 4)
       : undefined,
     rawPriceRise: apiResponse.priceRise
       ? new BN(apiResponse.priceRise)
       : undefined,
     hatchTokens: apiResponse.hatchTokens
-      ? web3BNToFloatString(new BN(apiResponse.hatchTokens), tenPow18, 2)
+      ? web3BNToFloatString(
+          new BN(apiResponse.hatchTokens),
+          bigNumberTenPow18,
+          2
+        )
       : undefined,
     rawHatchTokens: apiResponse.hatchTokens
       ? new BN(apiResponse.hatchTokens)
@@ -890,7 +959,7 @@ function apiResponseToIdeaMarket(apiResponse): IdeaMarket {
     platformFeeInvested: apiResponse.platformFeeInvested
       ? web3BNToFloatString(
           new BN(apiResponse.platformFeeInvested),
-          tenPow18,
+          bigNumberTenPow18,
           2
         )
       : undefined,
@@ -938,7 +1007,7 @@ function apiResponseToPricePoint(apiResponse): IdeaTokenPricePoint {
 function apiResponseToLockedAmount(apiResponse): LockedAmount {
   const ret = {
     amount: apiResponse.amount
-      ? web3BNToFloatString(new BN(apiResponse.amount), tenPow18, 2)
+      ? web3BNToFloatString(new BN(apiResponse.amount), bigNumberTenPow18, 2)
       : undefined,
     rawAmount: apiResponse.amount ? new BN(apiResponse.amount) : undefined,
     lockedUntil: parseInt(apiResponse.lockedUntil),
@@ -960,10 +1029,34 @@ function apiResponseToLockedIdeaTokenMarketPair(
     market: apiResponseToIdeaMarket(apiResponse.token.market),
     rawBalance: apiResponse.amount ? new BN(apiResponse.amount) : undefined,
     balance: apiResponse.amount
-      ? web3BNToFloatString(new BN(apiResponse.amount), tenPow18, 2)
+      ? web3BNToFloatString(new BN(apiResponse.amount), bigNumberTenPow18, 2)
       : undefined,
     lockedUntil: apiResponse.lockedUntil,
   } as LockedIdeaTokenMarketPair
 
   return ret
+}
+
+function apiResponseToIdeaTokenTrade(apiResponse) {
+  return {
+    isBuy: apiResponse.isBuy,
+    timestamp: Number(apiResponse.timestamp),
+    rawIdeaTokenAmount: new BN(apiResponse.ideaTokenAmount),
+    ideaTokenAmount: Number(
+      web3BNToFloatString(
+        new BN(apiResponse.ideaTokenAmount),
+        bigNumberTenPow18,
+        2
+      )
+    ),
+    rawDaiAmount: new BN(apiResponse.daiAmount),
+    daiAmount: Number(
+      web3BNToFloatString(new BN(apiResponse.daiAmount), bigNumberTenPow18, 2)
+    ),
+    token: {
+      ...apiResponse.token,
+      ...apiResponseToIdeaToken(apiResponse.token, apiResponse.token.market),
+    },
+    market: apiResponseToIdeaMarket(apiResponse.token.market),
+  } as IdeaTokenTrade
 }

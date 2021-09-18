@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/dist/client/router'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
@@ -8,14 +7,13 @@ import {
   web3BNToFloatString,
   formatNumberWithCommasAsThousandsSerperator,
   ZERO_ADDRESS,
+  bigNumberTenPow18,
 } from 'utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function MyTokenRow({
   token,
@@ -71,7 +69,7 @@ export default function MyTokenRow({
                 </div>
               )}
             </div>
-            <div className="ml-4 text-base font-semibold leading-5">
+            <div className="ml-4 text-base leading-5">
               <A
                 href={`${marketSpecifics.getTokenURL(token.name)}`}
                 className="hover:underline"
@@ -117,7 +115,7 @@ export default function MyTokenRow({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             Price
           </p>
-          <p className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+          <p className="text-base leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             $
             {web3BNToFloatString(
               calculateCurrentPriceBN(
@@ -126,7 +124,7 @@ export default function MyTokenRow({
                 market.rawPriceRise,
                 market.rawHatchTokens
               ),
-              tenPow18,
+              bigNumberTenPow18,
               2
             )}
           </p>
@@ -137,7 +135,7 @@ export default function MyTokenRow({
           </p>
           <p
             className={classNames(
-              'text-base font-semibold leading-4 tracking-tightest-2 uppercase',
+              'text-base leading-4 tracking-tightest-2 uppercase',
               {
                 'text-brand-red dark:text-red-400':
                   parseFloat(token.dayChange) < 0.0,
@@ -158,7 +156,7 @@ export default function MyTokenRow({
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             1YR Income
           </p>
-          <p className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
+          <p className="text-base leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             $
             {formatNumberWithCommasAsThousandsSerperator(
               (parseFloat(token.daiInToken) * compoundSupplyRate).toFixed(2)

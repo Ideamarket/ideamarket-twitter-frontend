@@ -1,5 +1,4 @@
 import { useRouter } from 'next/dist/client/router'
-import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import moment from 'moment'
 
@@ -18,8 +17,6 @@ import { useTokenIconURL } from 'actions'
 import { BadgeCheckIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
-
-const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 export default function LockedTokenRow({
   token,
@@ -51,7 +48,7 @@ export default function LockedTokenRow({
       market.rawPriceRise,
       market.rawHatchTokens
     ),
-    tenPow18,
+    bigNumberTenPow18,
     2
   )
 
@@ -153,7 +150,7 @@ export default function LockedTokenRow({
             Price
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + tokenPrice}
           >
             $
@@ -167,7 +164,7 @@ export default function LockedTokenRow({
             Balance
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={balance}
           >
             {formatNumberWithCommasAsThousandsSerperator(
@@ -180,7 +177,7 @@ export default function LockedTokenRow({
             Value
           </p>
           <p
-            className="text-base font-semibold leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + balanceValue}
           >
             ${balanceValue}
@@ -191,7 +188,7 @@ export default function LockedTokenRow({
             Locked Until
           </p>
           <p
-            className="text-base font-semibold leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+            className="text-base leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={moment(lockedUntil * 1000).format('LLL')}
           >
             {moment(lockedUntil * 1000).format('LLL')}

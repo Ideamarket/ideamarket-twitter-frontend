@@ -2,6 +2,7 @@ import 'tailwindcss/tailwind.css'
 import '../styles/globals.css'
 import '../styles/fonts/gilroy/style.css'
 import '../styles/fonts/sf-compact-display/style.css'
+import '../styles/fonts/inter/style.css'
 import '../styles/nprogress.css'
 import { ThemeProvider } from 'next-themes'
 
@@ -60,7 +61,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [])
 
   useEffect(() => {
-    TimeAgo.addDefaultLocale(en)
+    TimeAgo.setDefaultLocale(en)
   }, [])
 
   const [onWalletConnectedCallback, setOnWalletConnectedCallback] = useState(

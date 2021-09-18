@@ -7,6 +7,25 @@ module.exports = {
     content: ['./src/**/*.{js,ts,jsx,tsx}'],
   },
   theme: {
+    screens: {
+      xs: '320px',
+      // => @media (min-width: 320px) { ... }
+
+      sm: '640px',
+      // => @media (min-width: 640px) { ... }
+
+      md: '768px',
+      // => @media (min-width: 768px) { ... }
+
+      lg: '1024px',
+      // => @media (min-width: 1024px) { ... }
+
+      xl: '1280px',
+      // => @media (min-width: 1280px) { ... }
+
+      '2xl': '1536px',
+      // => @media (min-width: 1536px) { ... }
+    },
     typography: (theme) => ({}),
     extend: {
       typography: (theme) => ({
@@ -49,6 +68,7 @@ module.exports = {
           ...defaultTheme.fontFamily.sans,
         ],
         'sf-pro-text': ['SFProText', ...defaultTheme.fontFamily.sans],
+        inter: ['Inter Regular', ...defaultTheme.fontFamily.sans],
       },
       spacing: {
         7.5: '1.875rem',
@@ -67,9 +87,6 @@ module.exports = {
         'top-mobile': "url('/topbg-mobile.svg')",
         'top-desktop': "url('/topbg.svg')",
       }),
-      borderRadius: {
-        xlg: '0.625rem',
-      },
       boxShadow: {
         home: '0 1px 5px 0 rgba(0, 0, 0, 0.05)',
         embed: '0px 0px 8px rgba(0, 0, 0, 0.25)',
@@ -96,6 +113,7 @@ module.exports = {
       textOpacity: {
         60: '0.6',
       },
+      backgroundOpacity: ['active'],
     },
   },
   variants: {
