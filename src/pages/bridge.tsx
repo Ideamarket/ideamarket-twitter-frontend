@@ -16,6 +16,10 @@ export default function Bridge() {
   const { setRequiredNetwork } = useContext(GlobalContext)
   useEffect(() => {
     setRequiredNetwork(getL1Network(NETWORK))
+
+    return () => {
+      setRequiredNetwork(NETWORK)
+    }
   }, [setRequiredNetwork])
 
   const connectedAddress = useWalletStore((state) => state.address)
