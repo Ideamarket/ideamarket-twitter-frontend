@@ -1,4 +1,4 @@
-import { INetworkSpecifics, ExternalAddresses } from '.'
+import { INetworkSpecifics, ExternalAddresses, AddNetworkParams } from '.'
 import DeployedAddressesTestAVML2 from '../../assets/deployed-test-avm-l2.json'
 import DeployedABIsTestAVML2 from '../../assets/abis-test-avm-l2.json'
 import TokenListTestAVML2 from '../../assets/token-list-test-avm-l2.json'
@@ -42,5 +42,19 @@ export default class KovanAVMNetworkSpecifics implements INetworkSpecifics {
 
   getEtherscanTxUrl(tx: string): string {
     return `https://rinkeby-explorer.arbitrum.io/tx/${tx}`
+  }
+
+  getAddNetworkParams(): AddNetworkParams | undefined {
+    return {
+      chainId: '0x66EEB',
+      chainName: 'Arbitrum Rinkeby',
+      nativeCurrency: {
+        name: 'ETH',
+        symbol: 'ETH',
+        decimals: 18,
+      },
+      rpcUrls: ['https://rinkeby.arbitrum.io/rpc'],
+      blockExplorerUrls: ['https://rinkeby-explorer.arbitrum.io/#/'],
+    }
   }
 }

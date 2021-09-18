@@ -17,6 +17,7 @@ export default function WrongNetworkOverlay() {
     requiredNetwork: INetworkSpecifics
   }
   const isWrongNetwork = requiredNetwork.getChainID() !== web3ChainID
+  const addNetworkParams = requiredNetwork.getAddNetworkParams()
 
   const show = web3 !== undefined && isWrongNetwork
 
@@ -32,6 +33,18 @@ export default function WrongNetworkOverlay() {
 
   if (!show) {
     return <></>
+  }
+
+  function addNetworkToWallet() {
+    const { ethereum } = window as any
+    ethereum
+      .request({
+        method: 'wallet_addEthereumChain',
+        params: [addNetworkParams],
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
@@ -58,6 +71,14 @@ export default function WrongNetworkOverlay() {
             <strong>{requiredNetwork.getHumanReadableNetworkName()}</strong> and
             try again.
           </div>
+          {addNetworkParams !== undefined && (
+            <button
+              className="mt-5 p-2 text-lg font-bold text-brand-blue border border-brand-blue rounded-lg font-sf-compact-medium hover:bg-brand-blue hover:text-white"
+              onClick={addNetworkToWallet}
+            >
+              Add network to Metamask
+            </button>
+          )}
           <div className="mt-5 bg-white border rounded dark:bg-gray-700 dark:border-gray-500 border-brand-gray-2">
             <NoSSRWalletInterface />
           </div>

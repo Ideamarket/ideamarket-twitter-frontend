@@ -1,4 +1,4 @@
-import { INetworkSpecifics, ExternalAddresses } from '.'
+import { INetworkSpecifics, ExternalAddresses, AddNetworkParams } from '.'
 import DeployedAddressesMainnet from '../../assets/deployed-mainnet.json'
 import DeployedABIsMainnet from '../../assets/abis-mainnet.json'
 import TokenListMainnet from '../../assets/token-list-mainnet.json'
@@ -42,5 +42,9 @@ export default class MainnetNetworkSpecifics implements INetworkSpecifics {
 
   getEtherscanTxUrl(tx: string): string {
     return `https://etherscan.io/tx/${tx}`
+  }
+
+  getAddNetworkParams(): AddNetworkParams | undefined {
+    return undefined
   }
 }

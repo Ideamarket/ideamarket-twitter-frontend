@@ -10,6 +10,18 @@ export type ExternalAddresses = {
   weth: string
 }
 
+export type AddNetworkParams = {
+  chainId: string
+  chainName: string
+  nativeCurrency: {
+    name: string
+    symbol: string
+    decimals: number
+  }
+  rpcUrls: string[]
+  blockExplorerUrls: string[]
+}
+
 export type INetworkSpecifics = {
   getNetworkName(): string
   getHumanReadableNetworkName(): string
@@ -20,6 +32,7 @@ export type INetworkSpecifics = {
   getTokenList(): any
   getSubgraphURL(): string
   getEtherscanTxUrl(tx: string): string
+  getAddNetworkParams(): AddNetworkParams | undefined
 }
 
 const specifics: INetworkSpecifics[] = [

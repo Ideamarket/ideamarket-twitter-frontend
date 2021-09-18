@@ -1,4 +1,4 @@
-import { INetworkSpecifics, ExternalAddresses } from '.'
+import { INetworkSpecifics, ExternalAddresses, AddNetworkParams } from '.'
 import DeployedAddressesTestAVML1 from '../../assets/deployed-test-avm-l1.json'
 import DeployedABIsTestAVML1 from '../../assets/abis-test-avm-l1.json'
 import TokenListRinkeby from '../../assets/token-list-rinkeby.json'
@@ -42,5 +42,9 @@ export default class TestNetworkSpecifics implements INetworkSpecifics {
 
   getEtherscanTxUrl(tx: string): string {
     return `https://rinkeby.etherscan.io/tx/${tx}`
+  }
+
+  getAddNetworkParams(): AddNetworkParams | undefined {
+    return undefined
   }
 }

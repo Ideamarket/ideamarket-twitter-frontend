@@ -1,4 +1,4 @@
-import { INetworkSpecifics, ExternalAddresses } from '.'
+import { INetworkSpecifics, ExternalAddresses, AddNetworkParams } from '.'
 import DeployedAddressesRinkeby from '../../assets/deployed-rinkeby.json'
 import DeployedABIsRinkeby from '../../assets/abis-rinkeby.json'
 import TokenListRinkeby from '../../assets/token-list-rinkeby.json'
@@ -42,5 +42,9 @@ export default class RinkebyNetworkSpecifics implements INetworkSpecifics {
 
   getEtherscanTxUrl(tx: string): string {
     return `https://rinkeby.etherscan.io/tx/${tx}`
+  }
+
+  getAddNetworkParams(): AddNetworkParams | undefined {
+    return undefined
   }
 }
