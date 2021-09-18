@@ -4,11 +4,7 @@ import { useQuery } from 'react-query'
 import { NETWORK } from 'store/networks'
 import { GlobalContext } from 'pages/_app'
 import Image from 'next/image'
-import {
-  queryCDaiBalance,
-  queryExchangeRate,
-  investmentTokenToUnderlying,
-} from 'store/compoundStore'
+import { queryDaiBalance } from 'store/daiStore'
 import {
   web3BNToFloatString,
   bigNumberTenPow18,
@@ -18,27 +14,20 @@ import ModalService from 'components/modals/ModalService'
 import { ListTokenModal, WalletModal } from 'components'
 import Plus from '../../assets/plus-white.svg'
 import A from 'components/A'
+import BN from 'bn.js'
 
 const HomeHeader = ({
   setTradeOrListSuccessToggle,
   tradeOrListSuccessToggle,
 }: any) => {
-  const { data: compoundExchangeRate } = useQuery(
-    'compound-exchange-rate',
-    queryExchangeRate,
-    {
-      refetchOnWindowFocus: false,
-    }
-  )
-
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
   const { interestManager: interestManagerAddress } =
     NETWORK.getDeployedAddresses()
 
-  const { data: interestManagerCDaiBalance } = useQuery(
-    ['interest-manager-cdai-balance', interestManagerAddress],
-    queryCDaiBalance,
+  const { data: interestManagerDaiBalance } = useQuery(
+    ['interest-manager-dai-balance', interestManagerAddress],
+    queryDaiBalance,
     {
       refetchOnWindowFocus: false,
     }
@@ -63,12 +52,9 @@ const HomeHeader = ({
     )
   }
 
-  const cDaiBalanceInDai = formatNumberWithCommasAsThousandsSerperator(
+  const daiBalance = formatNumberWithCommasAsThousandsSerperator(
     web3BNToFloatString(
-      investmentTokenToUnderlying(
-        interestManagerCDaiBalance,
-        compoundExchangeRate
-      ),
+      interestManagerDaiBalance || new BN('0'),
       bigNumberTenPow18,
       0
     )
@@ -154,7 +140,7 @@ const HomeHeader = ({
       </div>
       <div className="flex flex-col items-center justify-center mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
         <div className="text-2xl text-brand-blue md:text-5xl">
-          ${cDaiBalanceInDai}
+          ${daiBalance}
         </div>
         <div className="md:ml-2">in trust signaled</div>
       </div>
