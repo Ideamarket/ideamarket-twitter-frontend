@@ -14,14 +14,15 @@ import Wand from '../assets/wand.svg'
 import CircleSpinner from 'components/animations/CircleSpinner'
 
 export default function Bridge() {
+  const l1Network = getL1Network(NETWORK)
   const { setRequiredNetwork } = useContext(GlobalContext)
   useEffect(() => {
-    setRequiredNetwork(getL1Network(NETWORK))
+    setRequiredNetwork(l1Network)
 
     return () => {
       setRequiredNetwork(NETWORK)
     }
-  }, [setRequiredNetwork])
+  }, [setRequiredNetwork, l1Network])
 
   const connectedAddress = useWalletStore((state) => state.address)
   const isWalletConnected = connectedAddress !== ''
@@ -221,7 +222,7 @@ export default function Bridge() {
                             'underline',
                             txManager.hash === '' ? 'hidden' : ''
                           )}
-                          href={NETWORK.getEtherscanTxUrl(txManager.hash)}
+                          href={l1Network.getEtherscanTxUrl(txManager.hash)}
                           target="_blank"
                         >
                           {txManager.hash.slice(0, 8)}...
