@@ -233,8 +233,12 @@ export default function Bridge() {
                         <CircleSpinner color="#0857e0" />
                       </div>
                     </div>
-                  </div>
 
+                    <div className="mx-5 font-black text-strong">
+                      NOTE: After your transaction is confirmed it can take up
+                      to 20 minutes for the tokens to be available on L2.
+                    </div>
+                  </div>
                   <L1TokenTable setSelectedPair={setSelectedPair} />
                 </>
               )}
