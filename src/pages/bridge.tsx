@@ -7,10 +7,11 @@ import { IMarketSpecifics, getMarketSpecificsByMarketName } from 'store/markets'
 import { getL1Network, NETWORK } from 'store/networks'
 import { formatNumber, isAddress, useTransactionManager } from 'utils'
 import { useTokenIconURL, migrateTokensToArbitrum } from 'actions'
-import { L1TokenTable, Footer, DefaultLayout, WalletModal } from 'components'
+import { L1TokenTable, Footer, DefaultLayout, WalletModal, A } from 'components'
 import { GlobalContext } from './_app'
 import ModalService from 'components/modals/ModalService'
 import Wand from '../assets/wand.svg'
+import CircleSpinner from 'components/animations/CircleSpinner'
 
 export default function Bridge() {
   const { setRequiredNetwork } = useContext(GlobalContext)
@@ -40,9 +41,10 @@ export default function Bridge() {
   const { tokenIconURL, isLoading: isTokenIconLoading } =
     useTokenIconURL(tokenIconURLParams)
 
-  const migrateButtonDisabled = !isPairSelected || !isValidL2Recipient
-
   const txManager = useTransactionManager()
+
+  const migrateButtonDisabled =
+    !isPairSelected || !isValidL2Recipient || txManager.isPending
 
   useEffect(() => {
     if (selectedPair) {
@@ -202,6 +204,33 @@ export default function Bridge() {
                         <Wand className="w-6 h-6 mr-2" />
                         Migrate
                       </button>
+                    </div>
+
+                    <div
+                      className={classNames(
+                        'grid grid-cols-3 my-5 text-sm text-brand-new-dark font-semibold',
+                        txManager.isPending ? '' : 'invisible'
+                      )}
+                    >
+                      <div className="font-bold justify-self-center">
+                        {txManager.name}
+                      </div>
+                      <div className="justify-self-center">
+                        <A
+                          className={classNames(
+                            'underline',
+                            txManager.hash === '' ? 'hidden' : ''
+                          )}
+                          href={NETWORK.getEtherscanTxUrl(txManager.hash)}
+                          target="_blank"
+                        >
+                          {txManager.hash.slice(0, 8)}...
+                          {txManager.hash.slice(-6)}
+                        </A>
+                      </div>
+                      <div className="justify-self-center">
+                        <CircleSpinner color="#0857e0" />
+                      </div>
                     </div>
                   </div>
 
