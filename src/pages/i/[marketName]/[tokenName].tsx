@@ -24,6 +24,9 @@ import TradeCompleteModal, {
   TRANSACTION_TYPES,
 } from 'components/trade/TradeCompleteModal'
 import { bnToFloatString, bigNumberTenPow18 } from 'utils'
+import { useEffect } from 'react'
+import DesktopRelatedInfo from 'components/listing-page/DesktopRelatedInfo'
+import MobileRelatedInfo from 'components/listing-page/MobileRelatedInfo'
 
 export default function TokenDetails({
   rawMarketName,
@@ -90,6 +93,12 @@ export default function TokenDetails({
     isInterestManagerTotalSharesLoading ||
     isInterestManagerDaiBalanceLoading
 
+  const retalatedInfoProps = {
+    rawTokenName,
+    tokenName,
+    marketName,
+  }
+
   function onTradeComplete(
     isSuccess: boolean,
     tokenName: string,
@@ -102,6 +111,15 @@ export default function TokenDetails({
       transactionType,
     })
   }
+
+  useEffect(() => {
+    const timeout = setTimeout(
+      () => (window as any)?.twttr?.widgets?.load(),
+      3000
+    ) // Load tweets
+
+    return () => clearTimeout(timeout)
+  }, [rawTokenName])
 
   return (
     <>
@@ -157,7 +175,14 @@ export default function TokenDetails({
             </div>
           </div>
           <div className="px-2 mx-auto max-w-88 md:max-w-304 -mt-30 md:-mt-28">
-            <MutualTokensList tokenName={tokenName} marketName={marketName} />
+            {marketName?.toLowerCase() === 'twitter' ? (
+              <>
+                <MobileRelatedInfo {...retalatedInfoProps} />
+                <DesktopRelatedInfo {...retalatedInfoProps} />
+              </>
+            ) : (
+              <MutualTokensList tokenName={tokenName} marketName={marketName} />
+            )}
           </div>
         </div>
       )}
