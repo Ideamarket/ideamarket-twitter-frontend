@@ -8,9 +8,9 @@ export default function migrateTokensToArbitrum(
 ) {
   const exchangeContract = useContractStore.getState().exchangeContractL1
 
-  const maxSubmissionCost = new BN('1000000000000000') // 0.001 ETH
-  const l2GasLimit = new BN('2000000') // 2MM
-  const l2GasPriceBid = new BN('1000000000') // 1 gwei
+  const maxSubmissionCost = new BN('5000000000000000') // 0.005 ETH
+  const l2GasLimit = new BN('3000000') // 3MM
+  const l2GasPriceBid = new BN('3000000000') // 3 gwei
 
   const value = maxSubmissionCost.add(l2GasLimit.mul(l2GasPriceBid))
 
