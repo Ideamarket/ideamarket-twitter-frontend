@@ -1,3 +1,4 @@
+import AVMNetworkSpecifics from './avm'
 import MainnetNetworkSpecifics from './mainnet'
 import RinkebyNetworkSpecifics from './rinkeby'
 import TestNetworkSpecifics from './test'
@@ -36,6 +37,7 @@ export type INetworkSpecifics = {
 }
 
 const specifics: INetworkSpecifics[] = [
+  new AVMNetworkSpecifics(),
   new MainnetNetworkSpecifics(),
   new RinkebyNetworkSpecifics(),
   new TestNetworkSpecifics(),
@@ -55,6 +57,8 @@ export function getNetworkSpecificsByNetworkName(
 
 export function getL1Network(l2Network: INetworkSpecifics) {
   switch (l2Network.getNetworkName()) {
+    case 'avm':
+      return getNetworkSpecificsByNetworkName('mainnet')
     case 'test-avm-l2':
       return getNetworkSpecificsByNetworkName('test-avm-l1')
     default:
