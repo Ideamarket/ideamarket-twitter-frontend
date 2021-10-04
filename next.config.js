@@ -20,7 +20,7 @@ const moduleExports = withPWA({
   },
   async redirects() {
     return [
-      /*{
+      {
         source: '/',
         destination: '/backSoon',
         permanent: false,
@@ -39,7 +39,7 @@ const moduleExports = withPWA({
         source: '/m/:path*',
         destination: '/backSoon',
         permanent: false,
-      },*/
+      },
       {
         source: '/:path*',
         has: [
