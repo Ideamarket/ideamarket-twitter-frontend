@@ -10,7 +10,7 @@ export default function migrateTokensToArbitrum(
 
   const maxSubmissionCost = new BN('5000000000000000') // 0.005 ETH
   const l2GasLimit = new BN('3000000') // 3MM
-  const l2GasPriceBid = new BN('3000000000') // 3 gwei
+  const l2GasPriceBid = new BN('2000000000') // 2 gwei
 
   const value = maxSubmissionCost.add(l2GasLimit.mul(l2GasPriceBid))
 
