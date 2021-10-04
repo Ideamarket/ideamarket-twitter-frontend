@@ -21,26 +21,6 @@ const moduleExports = withPWA({
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/backSoon',
-        permanent: false,
-      },
-      {
-        source: '/account',
-        destination: '/backSoon',
-        permanent: false,
-      },
-      {
-        source: '/i/:path*',
-        destination: '/backSoon',
-        permanent: false,
-      },
-      {
-        source: '/m/:path*',
-        destination: '/backSoon',
-        permanent: false,
-      },
-      {
         source: '/:path*',
         has: [
           {
