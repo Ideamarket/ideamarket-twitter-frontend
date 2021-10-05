@@ -41,7 +41,7 @@ function IncomeColumn() {
             </A>{' '}
             is not on Arbitrum, interest generation has been paused until they
             launch, or we replace them with another lending protocol. Columns
-            currently display ~3% APR
+            currently display 6% APR
           </div>
         </Tooltip>
       </div>

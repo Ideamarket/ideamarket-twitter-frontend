@@ -44,7 +44,7 @@ export async function querySupplyRate(queryKey: string): Promise<number> {
   }*/
 
   // Since there is no Compound on L2 yet, hardcode this to some value
-  return 0.25
+  return 0.06
 }
 
 export async function queryExchangeRate(queryKey: string): Promise<BN> {
