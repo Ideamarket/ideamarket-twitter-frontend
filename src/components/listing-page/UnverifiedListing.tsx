@@ -10,7 +10,9 @@ export default function UnverifiedListing({
   return (
     <div className="flex flex-col items-center text-xl">
       <span>Claimable interest</span>
-      <span className="font-semibold">${claimableInterest}</span>
+      <span className="font-semibold">
+        ${claimableInterest <= 0 ? '0' : claimableInterest}
+      </span>
       <div className="mt-5 mb-2 text-sm md:mb-5 text-brand-blue dark:text-blue-500">
         {marketSpecifics.isVerificationEnabled() ? (
           <button
