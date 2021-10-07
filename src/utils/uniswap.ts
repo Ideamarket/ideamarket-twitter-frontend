@@ -173,6 +173,10 @@ export async function getUniswapDaiOutputSwap(
  * @return string that represents the exchange rate of a pair of tokens
  */
 export async function getExchangeRate(address: string) {
+  // For now, hard code DAI to $1
+  if (address === NETWORK.getExternalAddresses().dai) {
+    return '1'
+  }
   const inputTokenAddress =
     address === ZERO_ADDRESS ? NETWORK.getExternalAddresses().weth : address
   const outputTokenAddress = NETWORK.getExternalAddresses().dai
