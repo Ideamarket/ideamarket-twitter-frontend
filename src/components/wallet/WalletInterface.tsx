@@ -112,7 +112,7 @@ export default function WalletInterface({
     rightSvg?: JSX.Element
   }) {
     return (
-      <div className="flex pl-4 pr-4 mt-4">
+      <div className="flex relative pl-4 pr-4 mt-4">
         {isDisabled && (
           <Tooltip
             className="absolute w-full h-full right-0 cursor-not-allowed"
