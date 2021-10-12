@@ -17,7 +17,7 @@ export default function EmailHeader() {
         <EmailForm />
         <button
           type="button"
-          className="absolute right-1 p-2 text-gray transition duration-150 ease-in-out rounded-xl w-9 h-9 hover:text-gray-500 focus:outline-none focus:text-gray-500"
+          className="absolute right-1 z-50 p-2 text-gray transition duration-150 ease-in-out rounded-xl w-9 h-9 hover:text-gray-500 focus:outline-none focus:text-gray-500"
           aria-label="Close"
           onClick={close}
         >
