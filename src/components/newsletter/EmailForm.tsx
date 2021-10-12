@@ -15,7 +15,7 @@ export default function EmailForm({ isMaintenance = false }: EmailFormProps) {
   return (
     <>
       <form
-        className="px-2 md:rounded-tr-lg z-20"
+        className="px-10 md:rounded-tr-lg z-20"
         onSubmit={async (e) => {
           e.preventDefault()
           if (email.trim() === '') {
@@ -80,7 +80,7 @@ export default function EmailForm({ isMaintenance = false }: EmailFormProps) {
                 htmlFor="email"
                 className="flex-shrink-0 block text-sm font-medium text-gray-400 mr-2"
               >
-                Arbitrum L2 launch soon
+                Stay connected
               </label>
             )}
 
@@ -93,7 +93,7 @@ export default function EmailForm({ isMaintenance = false }: EmailFormProps) {
                 'bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md focus:border-brand-blue'
               )}
             >
-              {isMaintenance ? 'Submit' : 'Notify me'}
+              Submit
             </button>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function EmailForm({ isMaintenance = false }: EmailFormProps) {
               htmlFor="email"
               className="flex-shrink-0 block text-sm font-medium text-gray-400"
             >
-              Arbitrum L2 launch soon
+              Stay connected
             </label>
           )}
 
@@ -140,7 +140,7 @@ export default function EmailForm({ isMaintenance = false }: EmailFormProps) {
               'bg-white flex-shrink-0 p-2 px-3 text-xs border rounded-md focus:border-brand-blue'
             )}
           >
-            {isMaintenance ? 'Submit' : 'Notify me'}
+            Submit
           </button>
         </div>
         {/* Desktop END */}
