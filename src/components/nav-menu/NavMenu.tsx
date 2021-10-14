@@ -35,7 +35,7 @@ const NavMenu = () => {
 
   return (
     <div className="absolute z-50 items-center w-full shadow t-0 bg-top-desktop overflow-none font-inter">
-      <div className="px-2 py-3 lg:px-24">
+      <div className="px-2 py-3">
         <nav className="relative flex flex-wrap items-center justify-center w-full mx-auto max-w-7xl lg:justify-between">
           <div
             className="flex items-center cursor-pointer"
