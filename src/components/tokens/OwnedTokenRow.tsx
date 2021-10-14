@@ -216,6 +216,7 @@ export default function OwnedTokenRow({
         {/* Lock or Bridge Button */}
         <td className="px-4 py-4 md:px-0 whitespace-nowrap">
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation()
               isL1
@@ -234,6 +235,7 @@ export default function OwnedTokenRow({
         </td>
         <td className="px-4 py-4 md:px-2 whitespace-nowrap">
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation()
               ModalService.open(GiftModal, {
