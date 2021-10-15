@@ -3,22 +3,18 @@ import Web3 from 'web3'
 
 import { initContractsFromWeb3, clearContracts } from './contractStore'
 
-import ENS /*, { getEnsAddress }*/ from '@ensdomains/ensjs'
-//import { NETWORK } from 'store/networks'
 import { checkAndPostNewAddresses } from 'lib/utils/address'
 
 type State = {
   web3: Web3
   address: string
   chainID: number
-  ens: ENS
 }
 
 export const useWalletStore = create<State>((set) => ({
   web3: undefined,
   address: '',
   chainID: -1,
-  ens: undefined,
 }))
 
 async function handleWeb3Change() {
@@ -46,16 +42,11 @@ export async function setWeb3(web3, wallet, session, refetchSession) {
   initContractsFromWeb3(web3)
 
   const chainID = await web3.eth.getChainId()
-  /*const ens = new ENS({
-    provider: web3.currentProvider,
-    ensAddress: getEnsAddress(NETWORK.getChainID().toString()),
-  })*/
 
   useWalletStore.setState({
     web3: web3,
     address: address,
     chainID: chainID,
-    ens: undefined,
   })
 
   checkAndPostNewAddresses(address, session, refetchSession)
@@ -70,7 +61,6 @@ export async function unsetWeb3() {
     web3: undefined,
     address: '',
     chainID: -1,
-    ens: undefined,
   })
 
   localStorage.removeItem('WALLET_TYPE')
