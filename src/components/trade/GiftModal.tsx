@@ -140,7 +140,7 @@ export default function GiftModal({
             <div className="text-brand-red">Insufficient balance</div>
           )}
 
-          <p>Recipient address or ENS</p>
+          <p>Recipient address</p>
           <input
             className={classNames(
               'pl-2 w-60 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600',
@@ -148,7 +148,7 @@ export default function GiftModal({
                 ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                 : 'border-brand-red focus:border-brand-red focus:ring-red-500'
             )}
-            placeholder="Recipient address or ENS"
+            placeholder="Recipient address"
             onChange={(event: any) => setRecipientAddress(event.target.value)}
             value={recipientAddress}
           />
