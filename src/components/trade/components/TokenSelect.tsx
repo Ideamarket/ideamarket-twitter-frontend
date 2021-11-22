@@ -92,6 +92,7 @@ export default function TokenSelect({
       theme={selectTheme}
       styles={selectStyles}
       components={{ MenuList }}
+      // @ts-ignore
       isAllTokensLoaded={isAllTokensLoaded}
       setAllTokensLoaded={setAllTokensLoaded}
       isDarkMode={resolvedTheme === 'dark'}

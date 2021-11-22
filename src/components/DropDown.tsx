@@ -49,6 +49,7 @@ export default function MarketSelect({
         valueContainer: (provided) => ({
           ...provided,
           minHeight: '50px',
+          display: 'flex',
         }),
         control: (base, state) => ({
           ...base,

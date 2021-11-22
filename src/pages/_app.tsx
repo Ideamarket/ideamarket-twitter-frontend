@@ -19,8 +19,6 @@ import {
   SITE_NAME,
   TWITTER_HANDLE,
 } from 'utils/seo-constants'
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en'
 import { Web3ReactProvider } from '@web3-react/core'
 import Web3 from 'web3'
 import Web3ReactManager from 'components/wallet/Web3ReactManager'
@@ -69,10 +67,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     if (migrationModalSeen !== 'true') {
       //ModalService.open(MigrationDoneModal)
     }
-  }, [])
-
-  useEffect(() => {
-    TimeAgo.setDefaultLocale(en)
   }, [])
 
   const [onWalletConnectedCallback, setOnWalletConnectedCallback] = useState(

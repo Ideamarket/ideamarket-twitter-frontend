@@ -111,6 +111,7 @@ const HomeHeader = ({
                   alt="Coindesk"
                   layout="fill"
                   objectFit="contain"
+                  priority={true}
                   className="rounded-full"
                 />
               </div>
