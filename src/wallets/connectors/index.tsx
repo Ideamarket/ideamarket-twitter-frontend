@@ -8,7 +8,6 @@ import { getNetworkSpecifics, NETWORK } from 'store/networks'
 import { FortmaticConnector } from './fortmatic-connector'
 import { PortisConnector } from './portis-connector'
 
-const POLLING_INTERVAL = 12000
 const CHAIN_IDS = [
   ...(new Set(getNetworkSpecifics().map((v) => v.getChainID())) as any),
 ]
@@ -26,7 +25,6 @@ export const walletconnect = new WalletConnectConnector({
   supportedChainIds: CHAIN_IDS,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
-  pollingInterval: POLLING_INTERVAL,
   chainId: NETWORK.getChainID(),
 })
 
