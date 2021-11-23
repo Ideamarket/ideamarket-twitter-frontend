@@ -8,7 +8,7 @@ type TradeInterfaceBoxProps = {
   label: string
   setIdeaTokenAmount: (value: string) => void
   setSelectedTokenAmount: (value: string) => void
-  ideaTokenAmount: string | number | any
+  inputTokenAmount: string | number | any // Amount of token being typed in (idea token or selected token)
   isTokenBalanceLoading: boolean
   tokenBalance: string
   maxButtonClicked: () => void
@@ -32,7 +32,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   label,
   setIdeaTokenAmount,
   setSelectedTokenAmount,
-  ideaTokenAmount = '',
+  inputTokenAmount = '',
   isTokenBalanceLoading,
   tokenBalance,
   maxButtonClicked,
@@ -60,16 +60,16 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {
-    if (inputValue !== ideaTokenAmount) {
-      if (isNaN(ideaTokenAmount) || parseFloat(ideaTokenAmount) <= 0) {
+    if (inputValue !== inputTokenAmount) {
+      if (isNaN(inputTokenAmount) || parseFloat(inputTokenAmount) <= 0) {
         setInputValue('') // If one input is 0, make other one 0 too
       } else {
         // Determines how many decimals to show
         const output8Decimals = parseFloat(
-          parseFloat(ideaTokenAmount).toFixed(8)
+          parseFloat(inputTokenAmount).toFixed(8)
         )
         const output4Decimals = parseFloat(
-          parseFloat(ideaTokenAmount).toFixed(4)
+          parseFloat(inputTokenAmount).toFixed(4)
         )
         setInputValue(
           output8Decimals >= 1
@@ -79,7 +79,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ideaTokenAmount])
+  }, [inputTokenAmount])
 
   function onInputChanged(event) {
     const oldValue = inputValue

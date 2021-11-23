@@ -479,7 +479,7 @@ export default function TradeInterface({
   }
 
   const selectedTokenProps = {
-    ideaTokenAmount: isCalculatedTokenAmountLoading
+    inputTokenAmount: isCalculatedTokenAmountLoading
       ? '...'
       : masterSelectedTokenAmount,
     isIdeaToken: false, // Selected token is never an ideaToken. It is ETH/DAI/etc (if this changes, can call this isSelectedToken instead)
@@ -499,7 +499,7 @@ export default function TradeInterface({
   }
 
   const ideaTokenProps = {
-    ideaTokenAmount: isCalculatedIdeaTokenAmountLoading
+    inputTokenAmount: isCalculatedIdeaTokenAmountLoading
       ? '...'
       : masterIdeaTokenAmount,
     isIdeaToken: true,
@@ -704,6 +704,7 @@ export default function TradeInterface({
               setIsMissingAllowance={setIsMissingAllowance}
               disable={isApproveButtonDisabled}
               key={approveButtonKey}
+              txType="spend"
             />
             <div className="mt-4 ">
               <button

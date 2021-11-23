@@ -14,7 +14,11 @@ export default function useBalance(
   const [balanceBN, setBalanceBN] = useState(undefined)
   const [balance, setBalance] = useState(undefined)
 
-  const web3 = useWalletStore((state) => state.web3)
+  // Need walletAddress to detect when user changes wallet accounts
+  const { web3, walletAddress } = useWalletStore((state) => ({
+    web3: state.web3,
+    walletAddress: state.address,
+  }))
 
   useEffect(() => {
     let isCancelled = false
@@ -68,7 +72,7 @@ export default function useBalance(
     return () => {
       isCancelled = true
     }
-  }, [address, web3, refreshToggle, decimals])
+  }, [address, web3, walletAddress, refreshToggle, decimals])
 
   return [isLoading, balanceBN, balance]
 }
