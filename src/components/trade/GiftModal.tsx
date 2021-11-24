@@ -38,9 +38,8 @@ export default function GiftModal({
 
   const [isLockChecked, setIsLockChecked] = useState(false)
 
-  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
-    useState(false)
+  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(false)
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(true)
   const ideaTokenVaultContractAddress = useContractStore(
     (state) => state.ideaTokenVaultContract
   ).options.address

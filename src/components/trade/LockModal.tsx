@@ -34,9 +34,8 @@ export default function LockModal({
   const [amountToLock, setAmountToLock] = useState('')
   const { account } = useWeb3React()
 
-  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
-    useState(false)
+  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(false)
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(true)
   const ideaTokenVaultContractAddress = useContractStore(
     (state) => state.ideaTokenVaultContract
   ).options.address

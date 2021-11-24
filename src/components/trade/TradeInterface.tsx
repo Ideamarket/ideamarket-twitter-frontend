@@ -103,9 +103,8 @@ export default function TradeInterface({
 
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isGiftChecked, setIsGiftChecked] = useState(false)
-  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(true)
-  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] =
-    useState(false)
+  const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(false)
+  const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(true)
 
   const tokenList = useTokenListStore((state) => state.tokens)
   const selectTokensValues = tokenList.map((token) => ({
