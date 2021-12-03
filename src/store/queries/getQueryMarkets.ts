@@ -1,11 +1,34 @@
 import { gql } from 'graphql-request'
+import { getData } from 'lib/utils/fetch'
 
-export default function getQueryMarkets(marketNames: string[]): string {
-  // TODO: remove once Wikipedia is needed
-  const filteredMarketNames = marketNames.filter(name => name !== 'Wikipedia')
-  const inMarkets = filteredMarketNames.map((name) => `"${name}"`).join(',')
+export default async function getQueryMarkets(
+  marketNames: string[]
+): Promise<string> {
+  const { data: mindsFeature } = await getData({ url: '/api/fs?value=MINDS' })
+  const { data: wikiFeature } = await getData({
+    url: '/api/fs?value=WIKIPEDIA',
+  })
+
+  // TODO: once feature switch is no longer needed for Minds and Wiki, comment these out until next market launch
+  let filteredMarkets = marketNames.filter((market) => market !== 'All')
+  filteredMarkets = mindsFeature.enabled
+    ? filteredMarkets
+    : filteredMarkets.filter((market) => market !== 'Minds')
+  filteredMarkets = wikiFeature.enabled
+    ? filteredMarkets
+    : filteredMarkets.filter((market) => market !== 'Wikipedia')
+  const notInList = []
+  if (!mindsFeature.enabled) notInList.push('Minds')
+  if (!wikiFeature.enabled) notInList.push('Wikipedia')
+
+  const inMarkets = filteredMarkets.map((name) => `"${name}"`).join(',')
+  const outMarkets =
+    notInList.length > 0 ? notInList.map((name) => `"${name}"`).join(',') : `""`
+  // Need to use outMarkets because empty query will fetch all markets, despite feature switches
   const where =
-    filteredMarketNames.length === 0 ? '' : `(where:{name_in:[${inMarkets}]})`
+    marketNames.length === 0
+      ? `(where:{name_not_in:[${outMarkets}]})`
+      : `(where:{name_in:[${inMarkets}]})`
   return gql`
     {
       ideaMarkets${where} {

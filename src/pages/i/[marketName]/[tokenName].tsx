@@ -27,13 +27,17 @@ import { ReactElement, useEffect } from 'react'
 import DesktopRelatedInfo from 'components/listing-page/DesktopRelatedInfo'
 import MobileRelatedInfo from 'components/listing-page/MobileRelatedInfo'
 import InvestmentCalculator from 'components/investment-calculator/InvestmentCalculator'
+import { getData } from 'lib/utils/fetch'
+import getSsrBaseUrl from 'utils/getSsrBaseUrl'
 
 export default function TokenDetails({
   rawMarketName,
   rawTokenName,
+  dontRender,
 }: {
   rawMarketName: string
   rawTokenName: string
+  dontRender: boolean
 }) {
   const web3 = useWalletStore((state) => state.web3)
 
@@ -119,6 +123,10 @@ export default function TokenDetails({
 
     return () => clearTimeout(timeout)
   }, [rawTokenName])
+
+  if (dontRender) {
+    return <div>{rawMarketName} market not currently on Ideamarket</div>
+  }
 
   return (
     <>
@@ -214,10 +222,24 @@ export default function TokenDetails({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  // TODO: once feature switch is no longer needed for Minds and Wiki, comment these out until next market launch
+  const baseUrl = getSsrBaseUrl(context.req)
+  const { data: mindsFeature } = await getData({
+    url: `${baseUrl}/api/fs?value=MINDS`,
+  })
+  const { data: wikiFeature } = await getData({
+    url: `${baseUrl}/api/fs?value=WIKIPEDIA`,
+  })
+
   return {
     props: {
       rawMarketName: context.query.marketName,
       rawTokenName: context.query.tokenName,
+      dontRender:
+        ((context.query.marketName as any).toLowerCase() === 'minds' &&
+          !mindsFeature.enabled) ||
+        ((context.query.marketName as any).toLowerCase() === 'wikipedia' &&
+          !wikiFeature.enabled),
     },
   }
 }
