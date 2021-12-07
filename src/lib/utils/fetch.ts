@@ -23,5 +23,5 @@ export const getData = async <TData>({
 }): Promise<TData> => {
   const res = await fetch(url)
 
-  return res.json()
+  return await res.json()
 }
