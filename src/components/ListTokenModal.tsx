@@ -247,10 +247,10 @@ export default function ListTokenModal({ close }: { close: () => void }) {
             type="text"
             disabled={txManager.isPending || !selectedMarket}
             className={classNames(
-              'w-12 md:w-full flex-grow py-2 pl-1 pr-4 leading-tight bg-gray-200 dark:bg-gray-600 border-2 dark:border-gray-500 rounded appearance-none focus:bg-white focus:outline-none',
+              'w-12 md:w-full flex-grow py-2 pl-1 pr-4 leading-tight bg-gray-200 dark:bg-gray-600 border-2 rounded appearance-none focus:bg-white focus:outline-none',
               !isValidTokenName && tokenName.length > 0
-                ? 'border-brand-red focus:border-brand-red'
-                : 'border-gray-200 focus:border-brand-blue'
+                ? 'border-red-400 focus:ring-red-400 focus:border-red-400'
+                : 'border-gray-200 dark:border-gray-500 focus:border-brand-blue'
             )}
             onChange={debounce(
               (e) => tokenNameInputChanged(e.target.value),
