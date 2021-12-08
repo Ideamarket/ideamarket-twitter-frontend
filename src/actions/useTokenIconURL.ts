@@ -8,7 +8,7 @@ export default function useTokenIconURL({
   marketSpecifics: IMarketSpecifics
   tokenName: string
 }) {
-  const [tokenIconURL, setTokenIconURL] = useState('')
+  const [tokenIconURL, setTokenIconURL] = useState('/gray.svg')
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {

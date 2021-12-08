@@ -39,7 +39,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
 
   const [tokenName, setTokenName] = useState('')
   const [isValidTokenName, setIsValidTokenName] = useState(false)
-  const [isTokenIconLoading, setIsTokenIconLoading] = useState(true)
 
   const [isWantBuyChecked, setIsWantBuyChecked] = useState(false)
   const [buyPayWithAddress, setBuyPayWithAddress] = useState(undefined)
@@ -99,8 +98,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     (isGiftChecked && !isValidAddress)
 
   async function tokenNameInputChanged(val) {
-    setIsTokenIconLoading(true)
-
     const normalized = marketSpecifics.normalizeUserInputTokenName(val)
     setTokenName(normalized)
 
@@ -269,7 +266,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         >
           {tokenNameSuffix || ''}
         </div>
-        {(isTokenIconLoading || !isValidTokenName) && (
+        {(isTokenIconURLLoading || !isValidTokenName) && (
           <div
             className={classNames(
               'inline-block w-12 h-12 ml-3 align-middle bg-gray-400 rounded-full',
@@ -289,19 +286,12 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           <div
             className={classNames(
               'relative rounded-full w-12 h-12 ml-3',
-              (isTokenIconLoading ||
-                isTokenIconURLLoading ||
-                !isValidTokenName) &&
-                'hidden'
+              (isTokenIconURLLoading || !isValidTokenName) && 'hidden'
             )}
           >
             <Image
               className="rounded-full"
-              src={
-                (selectedMarket && marketSpecifics && tokenIconURL) ||
-                '/gray.svg'
-              }
-              onLoadingComplete={() => setIsTokenIconLoading(false)}
+              src={tokenIconURL}
               alt=""
               layout="fill"
               objectFit="contain"
@@ -348,7 +338,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
             logoURL:
               selectedMarket &&
               marketSpecifics &&
-              !isTokenIconLoading &&
+              !isTokenIconURLLoading &&
               tokenIconURL,
           }}
           ideaToken={undefined}
