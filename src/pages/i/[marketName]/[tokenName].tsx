@@ -32,6 +32,7 @@ import getSsrBaseUrl from 'utils/getSsrBaseUrl'
 import GoogleTrendsPanel from 'components/listing-page/GoogleTrendsPanel'
 import WikiRelatedInfo from 'components/listing-page/WikiRelatedInfo'
 import PageViewsPanel from 'components/listing-page/PageViewsPanel'
+import classNames from 'classnames'
 
 export default function TokenDetails({
   rawMarketName,
@@ -83,12 +84,12 @@ export default function TokenDetails({
   //   interestManagerDaiBalance &&
   //   token &&
   //   token.rawInvested &&
-  //   token.rawDaiInToken
+  //   token.rawMarketCap
   //     ? bnToFloatString(
   //         new BigNumber(token.rawInvested.toString())
   //           .dividedBy(new BigNumber(interestManagerTotalShares.toString()))
   //           .multipliedBy(new BigNumber(interestManagerDaiBalance.toString()))
-  //           .minus(new BigNumber(token.rawDaiInToken.toString())),
+  //           .minus(new BigNumber(token.rawMarketCap.toString())),
   //         bigNumberTenPow18,
   //         2
   //       )
@@ -159,7 +160,12 @@ export default function TokenDetails({
                 rawMarketName={rawMarketName}
                 rawTokenName={rawTokenName}
               /> */}
-              <div className="p-5 mb-5 md:mr-5 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray">
+              <div
+                className={classNames(
+                  !web3 && 'md:overflow-hidden',
+                  'relative p-5 mb-5 md:mr-5 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray'
+                )}
+              >
                 {/* <div className="relative">
                   <WatchingStar
                     className="absolute top-0 right-0"
@@ -167,10 +173,23 @@ export default function TokenDetails({
                   />
                 </div> */}
 
+                {!web3 && (
+                  <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 z-40 rounded-md flex justify-center items-center">
+                    <button
+                      onClick={() => {
+                        ModalService.open(WalletModal)
+                      }}
+                      className="w-56 p-4 text-xl text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
+                    >
+                      Connect wallet
+                    </button>
+                  </div>
+                )}
+
                 {isLoading ? (
                   <div className="h-full p-18 md:p-0">loading</div>
-                ) : web3 ? (
-                  <div>
+                ) : (
+                  <div className={classNames(!web3 && 'md:absolute')}>
                     <TradeInterface
                       ideaToken={token}
                       market={market}
@@ -182,17 +201,6 @@ export default function TokenDetails({
                       showTradeButton={true}
                       disabled={false}
                     />
-                  </div>
-                ) : (
-                  <div className="flex justify-center p-18 md:p-0 md:mt-20">
-                    <button
-                      onClick={() => {
-                        ModalService.open(WalletModal)
-                      }}
-                      className="w-44 p-2.5 text-xl text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
-                    >
-                      Buy / Sell
-                    </button>
                   </div>
                 )}
               </div>

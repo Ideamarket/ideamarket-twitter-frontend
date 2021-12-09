@@ -195,15 +195,15 @@ export default function TokenCard({
 
           <DetailsOverChartEntry
             header="Deposits"
-            contentTitle={'$' + token.daiInToken}
+            contentTitle={'$' + token.marketCap}
           >
             {isLoading ? (
               <DetailsSkeleton />
-            ) : parseFloat(token.daiInToken) <= 0.0 ? (
+            ) : parseFloat(token.marketCap) <= 0.0 ? (
               <>&mdash;</>
             ) : (
               <>{`$${formatNumberWithCommasAsThousandsSerperator(
-                parseInt(token.daiInToken)
+                parseInt(token.marketCap)
               )}`}</>
             )}
           </DetailsOverChartEntry>

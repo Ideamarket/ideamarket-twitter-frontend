@@ -159,7 +159,7 @@ export default function MyTokenRow({
           <p className="text-base leading-4 tracking-tightest-2 text-very-dark-blue dark:text-gray-300">
             $
             {formatNumberWithCommasAsThousandsSerperator(
-              (parseFloat(token.daiInToken) * compoundSupplyRate).toFixed(2)
+              (parseFloat(token.marketCap) * compoundSupplyRate).toFixed(2)
             )}
           </p>
         </td>

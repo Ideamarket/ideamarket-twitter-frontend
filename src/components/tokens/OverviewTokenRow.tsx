@@ -54,9 +54,9 @@ export default function TokenRow({
   })
   const { resolvedTheme } = useThemeMode()
 
-  const yearIncome = (
-    parseFloat(token.daiInToken) * compoundSupplyRate
-  ).toFixed(2)
+  const yearIncome = (parseFloat(token.marketCap) * compoundSupplyRate).toFixed(
+    2
+  )
 
   const tokenPrice = web3BNToFloatString(
     calculateCurrentPriceBN(
@@ -87,7 +87,7 @@ export default function TokenRow({
           new BigNumber(token.rawInvested.toString())
             .dividedBy(new BigNumber(interestManagerTotalShares.toString()))
             .multipliedBy(new BigNumber(interestManagerDaiBalance.toString()))
-            .minus(new BigNumber(token.rawDaiInToken.toString())),
+            .minus(new BigNumber(token.rawMarketCap.toString())),
           bigNumberTenPow18,
           2
         )
@@ -236,12 +236,12 @@ export default function TokenRow({
           </p>
           <p
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
-            title={'$' + token.daiInToken}
+            title={'$' + token.marketCap}
           >
-            {parseFloat(token.daiInToken) > 0.0 ? (
+            {parseFloat(token.marketCap) > 0.0 ? (
               `$` +
               formatNumberWithCommasAsThousandsSerperator(
-                parseInt(token.daiInToken)
+                parseInt(token.marketCap)
               )
             ) : (
               <>&mdash;</>
