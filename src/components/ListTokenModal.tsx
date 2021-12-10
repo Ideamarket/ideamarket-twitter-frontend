@@ -39,6 +39,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
 
   const [tokenName, setTokenName] = useState('')
   const [isValidTokenName, setIsValidTokenName] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const [isWantBuyChecked, setIsWantBuyChecked] = useState(false)
   const [buyPayWithAddress, setBuyPayWithAddress] = useState(undefined)
@@ -104,9 +105,16 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     const finalTokenName = getMarketSpecificsByMarketName(
       selectedMarket.name
     ).convertUserInputToTokenName(normalized)
-    setIsValidTokenName(
-      await verifyTokenName(finalTokenName, selectedMarket.marketID)
+
+    const { isValid, isAlreadyListed } = await verifyTokenName(
+      finalTokenName,
+      selectedMarket.marketID
     )
+
+    if (isAlreadyListed) setErrorMessage('This token is already listed')
+    else setErrorMessage('')
+
+    setIsValidTokenName(isValid)
   }
 
   function onTradeInterfaceValuesChanged(
@@ -299,7 +307,10 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           </div>
         </A>
       </div>
-      <div className="flex items-center justify-center mt-5 text-sm">
+      {errorMessage !== '' && (
+        <div className="text-red-400 text-center">{errorMessage}</div>
+      )}
+      <div className="flex items-center justify-center mt-2 text-sm">
         <input
           type="checkbox"
           id="buyCheckbox"

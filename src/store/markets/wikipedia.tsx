@@ -52,7 +52,9 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
   }
 
   convertUserInputToTokenName(userInput: string): string {
-    return `${userInput}`
+    // Decode any special characters
+    const decodedInput = decodeURI(userInput)
+    return `${decodedInput}`
   }
 
   getTokenNameURLRepresentation(tokenName: string): string {
