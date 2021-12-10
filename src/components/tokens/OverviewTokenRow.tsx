@@ -48,6 +48,7 @@ export default function TokenRow({
   const router = useRouter()
   const { mixpanel } = useMixPanel()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
+  const displayName = marketSpecifics.getTokenDisplayName(token.name)
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
     tokenName: token.name,
@@ -148,10 +149,10 @@ export default function TokenRow({
           </div>
           <div className="ml-4 text-base font-medium leading-5 truncate hover:underline">
             <span>
-              {token.name.substr(
+              {displayName.substr(
                 0,
-                token.name.length > 25 ? 25 : token.name.length
-              ) + (token.name.length > 25 ? '...' : '')}
+                displayName.length > 25 ? 25 : displayName.length
+              ) + (displayName.length > 25 ? '...' : '')}
             </span>
           </div>
           {/* Desktop Verified Badge */}

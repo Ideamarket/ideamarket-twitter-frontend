@@ -162,7 +162,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
               </div>
               {selectedIdeaToken?.symbol && (
                 <div className="ml-2.5">
-                  <div>{selectedIdeaToken?.symbol}</div>
+                  <div>{selectedIdeaToken?.symbol.replace(/_/g, ' ')}</div>
                 </div>
               )}
             </div>

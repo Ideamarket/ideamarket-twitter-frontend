@@ -98,7 +98,7 @@ export default function TokenCard({
 
   return (
     <>
-      <div className="flex flex-none mt-7">
+      <div className="flex mt-7">
         <div className="relative w-20 h-20 mr-5">
           {loading || isTokenIconLoading ? (
             <div className="bg-gray-400 rounded-full w-18 h-18 animate animate-pulse"></div>
@@ -127,7 +127,7 @@ export default function TokenCard({
                     e.stopPropagation()
                   }}
                 >
-                  {token.name}
+                  {marketSpecifics.getTokenDisplayName(token.name)}
                 </A>
               </span>
               <span className="hidden md:block ml-2.5 mr-1 w-5 h-5">

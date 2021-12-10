@@ -27,6 +27,7 @@ export type IMarketSpecifics = {
   getTokenNameFromURLRepresentation(
     tokenNameInURLRepresentation: string
   ): string
+  getTokenDisplayName(tokenName: string): string
 
   // List Token
   getListTokenPrefix(): string

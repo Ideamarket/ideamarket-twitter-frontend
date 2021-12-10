@@ -108,7 +108,7 @@ const MyTradesRow = ({
                 e.stopPropagation()
               }}
             >
-              {token.name}
+              {marketSpecifics.getTokenDisplayName(token.name)}
             </A>
           </div>
           {/* Verified Badge */}

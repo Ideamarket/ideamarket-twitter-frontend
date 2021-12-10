@@ -218,7 +218,9 @@ export default function TokenDetails({
                 </div>
                 <GoogleTrendsPanel
                   title="Google Trends"
-                  rawTokenName={rawTokenName}
+                  rawTokenName={marketSpecifics.getTokenDisplayName(
+                    rawTokenName
+                  )}
                 />
               </div>
             )}

@@ -108,7 +108,7 @@ export default function OwnedTokenRow({
                   e.stopPropagation()
                 }}
               >
-                {token.name}
+                {marketSpecifics.getTokenDisplayName(token.name)}
               </A>
               {isL1 && (
                 <div className="ml-2 text-xs py-0.5 px-2.5 text-gray-400 border border-gray-400 rounded">

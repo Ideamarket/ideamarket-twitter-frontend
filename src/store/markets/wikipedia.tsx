@@ -65,6 +65,11 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
     return `${tokenNameInURLRepresentation}`
   }
 
+  getTokenDisplayName(tokenName: string): string {
+    // Replace underscores with spaces
+    return tokenName.replace(/_/g, ' ')
+  }
+
   // List Token
 
   getListTokenPrefix(): string {

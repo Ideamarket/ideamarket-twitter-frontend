@@ -13,6 +13,7 @@ import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import classNames from 'classnames'
 import { useBalance } from 'actions'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 
 const sliderCurve = Math.exp
 const inverseCurve = Math.log
@@ -53,6 +54,7 @@ type Props = {
 }
 
 const InvestmentCalculator = ({ ideaToken, market }: Props) => {
+  const marketSpecifics = getMarketSpecificsByMarketName(market.name)
   const [usdBuyAmount, setUsdBuyAmount] = useState(1)
   const [otherUsdBuyAmount, setOtherUsdBuyAmount] = useState(1)
 
@@ -212,8 +214,8 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
             <span className="text-blue-700 font-bold">
               ${formatNumberWithCommasAsThousandsSerperator(usdBuyAmount)}
             </span>{' '}
-            worth of {ideaToken.name}, and then others{' '}
-            {otherUsdBuyAmount <= 0 ? 'sell' : 'buy'}{' '}
+            worth of {marketSpecifics.getTokenDisplayName(ideaToken.name)}, and
+            then others {otherUsdBuyAmount <= 0 ? 'sell' : 'buy'}{' '}
             <span className="text-blue-700 font-bold">
               $
               {formatNumberWithCommasAsThousandsSerperator(

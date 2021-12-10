@@ -65,6 +65,10 @@ export default class SubstackMarketSpecifics implements IMarketSpecifics {
     return tokenNameInURLRepresentation
   }
 
+  getTokenDisplayName(tokenName: string): string {
+    return tokenName
+  }
+
   // List Token
 
   getListTokenPrefix(): string {

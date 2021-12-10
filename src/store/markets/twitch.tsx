@@ -65,6 +65,10 @@ export default class TwitchMarketSpecifics implements IMarketSpecifics {
     return `${tokenNameInURLRepresentation}`
   }
 
+  getTokenDisplayName(tokenName: string): string {
+    return tokenName
+  }
+
   // List Token
 
   getListTokenPrefix(): string {
