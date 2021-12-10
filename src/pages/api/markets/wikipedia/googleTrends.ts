@@ -6,7 +6,7 @@ import { DAY_SECONDS } from 'utils'
 import { GoogleTrends } from 'types/wikipedia'
 
 // Constants
-const WIKIPEDIA_GOOGLE_TRENDS_DURATION = 90 // 90 days
+const WIKIPEDIA_GOOGLE_TRENDS_DURATION = 425 // 425 days
 
 // Cache Validity
 const cacheValidity =

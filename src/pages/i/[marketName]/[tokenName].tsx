@@ -29,10 +29,11 @@ import MobileRelatedInfo from 'components/listing-page/MobileRelatedInfo'
 import InvestmentCalculator from 'components/investment-calculator/InvestmentCalculator'
 import { getData } from 'lib/utils/fetch'
 import getSsrBaseUrl from 'utils/getSsrBaseUrl'
-import GoogleTrendsPanel from 'components/listing-page/GoogleTrendsPanel'
+// import GoogleTrendsPanel from 'components/listing-page/GoogleTrendsPanel'
 import WikiRelatedInfo from 'components/listing-page/WikiRelatedInfo'
-import PageViewsPanel from 'components/listing-page/PageViewsPanel'
+// import PageViewsPanel from 'components/listing-page/PageViewsPanel'
 import classNames from 'classnames'
+import MultiChart from 'components/listing-page/MultiChart'
 
 export default function TokenDetails({
   rawMarketName,
@@ -209,19 +210,24 @@ export default function TokenDetails({
               </div>
             </div>
             {marketName?.toLowerCase() === 'wikipedia' && (
-              <div className="flex flex-col md:grid md:grid-cols-2">
-                <div className="mb-4 md:mr-5 md:mb-0">
-                  <PageViewsPanel
+              <div className="flex flex-col">
+                <div className="mb-4 md:mb-0">
+                  {/* <PageViewsPanel
                     title="Pageviews"
                     rawTokenName={rawTokenName}
+                  /> */}
+                  <MultiChart
+                    rawTokenName={marketSpecifics.getTokenDisplayName(
+                      rawTokenName
+                    )}
                   />
                 </div>
-                <GoogleTrendsPanel
+                {/* <GoogleTrendsPanel
                   title="Google Trends"
                   rawTokenName={marketSpecifics.getTokenDisplayName(
                     rawTokenName
                   )}
-                />
+                /> */}
               </div>
             )}
           </div>

@@ -58,10 +58,11 @@ const WikiMobileRelatedInfo = ({
           )}
 
           {wikiSnapshot?.type === 'local' && (
-            <embed
+            <iframe
               id="wiki-iframe"
               src={`${wikiSnapshot.url}#toolbar=0&navpanes=0&scrollbar=0`}
-              type="application/pdf"
+              // type="application/pdf"
+              title="wiki-iframe-mobile"
               className="w-full"
             />
           )}

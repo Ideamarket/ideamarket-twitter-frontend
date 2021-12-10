@@ -15,7 +15,7 @@ import { q } from 'lib/faunaDb'
 import { DAY_SECONDS, HOUR_SECONDS } from 'utils'
 
 // Constants
-const WIKIPEDIA_PAGE_VIEWS_DURATION = 90 // 90 days
+const WIKIPEDIA_PAGE_VIEWS_DURATION = 425 // 425 days
 
 // Env Variables
 const cacheValidity =

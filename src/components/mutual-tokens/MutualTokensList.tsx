@@ -88,12 +88,7 @@ export default function MutualTokensList({
         </div>
       </div>
 
-      <dl
-        className={classNames(
-          marketName.toLowerCase() !== 'twitter' && 'md:grid-cols-2',
-          'grid grid-cols-1 gap-10 mt-5'
-        )}
-      >
+      <dl className={classNames('grid grid-cols-1 gap-10 mt-5')}>
         {isLoading && (
           <>
             <MutualTokenSkeleton />

@@ -54,7 +54,7 @@ type Props = {
 }
 
 const InvestmentCalculator = ({ ideaToken, market }: Props) => {
-  const marketSpecifics = getMarketSpecificsByMarketName(market.name)
+  const marketSpecifics = market && getMarketSpecificsByMarketName(market.name)
   const [usdBuyAmount, setUsdBuyAmount] = useState(1)
   const [otherUsdBuyAmount, setOtherUsdBuyAmount] = useState(1)
 
