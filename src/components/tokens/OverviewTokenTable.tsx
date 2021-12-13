@@ -193,7 +193,7 @@ export default function Table({
       } else if (column === 'change') {
         setOrderBy('dayChange')
         onOrderByChanged('dayChange', 'desc')
-      } else if (column === 'change') {
+      } else if (column === '7d-change') {
         setOrderBy('dayChange')
         onOrderByChanged('dayChange', 'desc')
       } else if (column === 'locked') {
