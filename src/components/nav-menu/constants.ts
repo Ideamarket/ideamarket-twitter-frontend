@@ -33,6 +33,16 @@ export const getNavbarConfig = (mixPanel: any) => ({
             mixPanel.track('LINK_WHITEPAPER')
           },
         },
+        {
+          name: 'Browser Extension',
+          onClick: () => {
+            window.open(
+              'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
+              '_blank'
+            )
+            mixPanel.track('LINK_EXTENSION')
+          },
+        },
       ],
     },
     {
@@ -83,13 +93,6 @@ export const getNavbarConfig = (mixPanel: any) => ({
           },
         },
       ],
-    },
-    {
-      name: 'Bridge',
-      onClick: () => {
-        router.push('/bridge')
-        mixPanel.track('BRIDGE')
-      },
     },
     {
       name: IS_ACCOUNT_ENABLED ? 'Account' : 'Wallet',

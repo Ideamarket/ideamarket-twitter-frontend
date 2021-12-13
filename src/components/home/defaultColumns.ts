@@ -51,7 +51,7 @@ const defaultColumns = [
     value: '7d-change',
     sortable: true,
     isOptional: true,
-    isSelectedAtStart: false,
+    isSelectedAtStart: true,
   },
   {
     id: 6,
@@ -69,7 +69,7 @@ const defaultColumns = [
     value: 'locked',
     sortable: true,
     isOptional: true,
-    isSelectedAtStart: true,
+    isSelectedAtStart: false,
   },
   {
     id: 8,

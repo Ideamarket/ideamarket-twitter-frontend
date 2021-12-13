@@ -251,14 +251,26 @@ export const OverviewFilters = ({
   return (
     <div className="justify-center p-3 overflow-x-scroll bg-white rounded-t-lg md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start lg:overflow-x-visible">
       <div className="flex md:gap-x-2">
-        {CheckboxFilters.PLATFORMS.values.map((platform: string) => (
-          <PlatformButton
-            key={platform}
-            platform={platform}
-            isSelected={selectedMarkets ? selectedMarkets.has(platform) : false}
-            onClick={toggleMarket}
-          />
-        ))}
+        {CheckboxFilters.PLATFORMS.values
+          .sort((p1, p2) => {
+            // Sort so that All is first and then Wikipedia is 2nd. Rest of order not controlled
+            if (p1 === 'All') return -1
+            if (p1 === 'Wikipedia' && p2 !== 'All') {
+              return -1
+            }
+
+            return 1
+          })
+          .map((platform: string) => (
+            <PlatformButton
+              key={platform}
+              platform={platform}
+              isSelected={
+                selectedMarkets ? selectedMarkets.has(platform) : false
+              }
+              onClick={toggleMarket}
+            />
+          ))}
       </div>
 
       <DropdownButton

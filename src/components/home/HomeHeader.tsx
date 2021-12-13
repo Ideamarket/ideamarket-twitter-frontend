@@ -49,13 +49,6 @@ const HomeHeader = ({
     }
   }
 
-  const onBrowserExtensionClick = () => {
-    window.open(
-      'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
-      '_blank'
-    )
-  }
-
   const daiBalance = formatNumberWithCommasAsThousandsSerperator(
     web3BNToFloatString(
       interestManagerDaiBalance || new BN('0'),
@@ -119,11 +112,12 @@ const HomeHeader = ({
           </div>
         </div>
         <h2 className="mt-8 text-3xl md:text-6xl font-gilroy-bold">
-          The credibility layer{' '}
-          <span className="text-brand-blue">of the internet</span>
+          The <span className="text-brand-blue">literal</span> marketplace of
+          ideas
         </h2>
         <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
-          Profit by discovering the world’s best information.
+          Some information has a future. Some doesn't. Buy on the right side of
+          history.
         </p>
       </div>
       <div className="flex flex-col items-center justify-center md:flex-row">
@@ -138,9 +132,12 @@ const HomeHeader = ({
         </button>
         <button
           className="py-2 mt-3 text-lg font-bold text-white border border-white rounded-lg md:mt-10 md:ml-5 w-44 font-sf-compact-medium hover:bg-white hover:text-brand-blue"
-          onClick={onBrowserExtensionClick}
+          onClick={() => {
+            window.open('https://docs.ideamarket.io/', '_blank')
+            mixpanel.track('LINK_WHITEPAPER')
+          }}
         >
-          Browser Extension
+          What is Ideamarket?
         </button>
       </div>
       <div className="flex flex-col items-center justify-center mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
@@ -148,6 +145,23 @@ const HomeHeader = ({
           ${daiBalance}
         </div>
         <div className="md:ml-2">in trust signaled</div>
+        <div
+          className="flex justify-center flex-grow-0 flex-shrink-0 mt-8 md:mt-0 md:ml-6 mr-8 md:mr-0"
+          data-aos="zoom-y-out"
+        >
+          <A href="https://docs.ideamarket.io/contracts/audit">
+            <div className="relative h-8 opacity-50 w-40">
+              <Image
+                src="/Quantstamp.svg"
+                alt="Quantstamp"
+                layout="fill"
+                objectFit="contain"
+                priority={true}
+                className="rounded-full"
+              />
+            </div>
+          </A>
+        </div>
       </div>
     </div>
   )
