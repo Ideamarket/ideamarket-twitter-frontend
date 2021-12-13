@@ -100,16 +100,17 @@ export default function ListTokenModal({ close }: { close: () => void }) {
 
   async function tokenNameInputChanged(val) {
     const normalized = marketSpecifics.normalizeUserInputTokenName(val)
-    setTokenName(normalized)
 
     const finalTokenName = getMarketSpecificsByMarketName(
       selectedMarket.name
     ).convertUserInputToTokenName(normalized)
 
-    const { isValid, isAlreadyListed } = await verifyTokenName(
+    const { isValid, isAlreadyListed, validName } = await verifyTokenName(
       finalTokenName,
       selectedMarket.marketID
     )
+
+    setTokenName(validName ? validName : normalized)
 
     if (isAlreadyListed) setErrorMessage('This token is already listed')
     else setErrorMessage('')
