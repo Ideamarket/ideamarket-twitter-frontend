@@ -137,6 +137,11 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
     2
   )
 
+  const displayName =
+    marketSpecifics && ideaToken
+      ? marketSpecifics.getTokenDisplayName(ideaToken.name)
+      : ''
+
   return (
     <div className="px-2">
       <div className="pb-5 mb-5 border-b text-center text-xl text-gray-400 font-medium">
@@ -214,8 +219,8 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
             <span className="text-blue-700 font-bold">
               ${formatNumberWithCommasAsThousandsSerperator(usdBuyAmount)}
             </span>{' '}
-            worth of {marketSpecifics.getTokenDisplayName(ideaToken.name)}, and
-            then others {otherUsdBuyAmount <= 0 ? 'sell' : 'buy'}{' '}
+            worth of {displayName}, and then others{' '}
+            {otherUsdBuyAmount <= 0 ? 'sell' : 'buy'}{' '}
             <span className="text-blue-700 font-bold">
               $
               {formatNumberWithCommasAsThousandsSerperator(

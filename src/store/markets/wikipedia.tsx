@@ -48,7 +48,7 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
   }
 
   normalizeUserInputTokenName(userInput: string): string {
-    return userInput.charAt(0).toUpperCase() + userInput.slice(1).toLowerCase()
+    return userInput.charAt(0).toUpperCase() + userInput.slice(1)
   }
 
   convertUserInputToTokenName(userInput: string): string {
