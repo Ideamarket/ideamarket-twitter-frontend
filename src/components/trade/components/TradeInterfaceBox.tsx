@@ -152,7 +152,7 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
                       src={selectedIdeaToken?.logoURL || '/gray.svg'}
                       alt="token"
                       layout="fill"
-                      objectFit="contain"
+                      objectFit="cover"
                       className="rounded-full"
                     />
                   </div>

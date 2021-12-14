@@ -63,7 +63,7 @@ export default function TokenCard({
               src={tokenIconURL || '/gray.svg'}
               alt="token"
               layout="fill"
-              objectFit="contain"
+              objectFit="cover"
               className="rounded-full"
             />
           </div>

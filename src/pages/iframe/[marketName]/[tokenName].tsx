@@ -85,7 +85,7 @@ export default function IframeEmbed() {
                 alt={rawTokenName}
                 className="rounded-full"
                 layout="fill"
-                objectFit="contain"
+                objectFit="cover"
               />
             </div>
           )}

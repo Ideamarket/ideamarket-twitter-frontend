@@ -43,7 +43,7 @@ export default function MutualToken({
                       src={tokenIconURL || '/gray.svg'}
                       alt={token.name}
                       layout="fill"
-                      objectFit="contain"
+                      objectFit="cover"
                       className="rounded-full"
                     />
                   </div>
@@ -59,7 +59,7 @@ export default function MutualToken({
                   )}`}
                 >
                   <p className="flex justify-center text-xl font-bold text-gray-900 dark:text-gray-200 lg:text-xl hover:underline">
-                    {token.name}{' '}
+                    {marketSpecifics.getTokenDisplayName(token.name)}{' '}
                     <span className="w-5 h-5 ml-1">
                       {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
                     </span>

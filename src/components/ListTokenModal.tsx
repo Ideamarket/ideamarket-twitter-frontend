@@ -292,7 +292,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
               src={tokenIconURL}
               alt=""
               layout="fill"
-              objectFit="contain"
+              objectFit="cover"
             />
           </div>
         </A>
