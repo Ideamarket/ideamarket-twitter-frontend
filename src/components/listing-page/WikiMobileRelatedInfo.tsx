@@ -13,24 +13,24 @@ const WikiMobileRelatedInfo = ({
   marketName,
   wikiSnapshot,
 }: Props) => {
-  const [relatedOrTweets, setRelatedOrTweets] = useState('related')
+  const [relatedOrWiki, setRelatedOrWiki] = useState('wiki')
 
   return (
     <>
       <div className="flex justify-between mb-12 md:hidden">
         <button
-          onClick={() => setRelatedOrTweets('related')}
+          onClick={() => setRelatedOrWiki('related')}
           className={classNames(
-            relatedOrTweets === 'related' && 'bg-gray-200',
+            relatedOrWiki === 'related' && 'bg-gray-200',
             'px-6 py-3 text-lg font-semibold text-black border border-gray-400 rounded-lg w-36'
           )}
         >
           Related
         </button>
         <button
-          onClick={() => setRelatedOrTweets('tweets')}
+          onClick={() => setRelatedOrWiki('wiki')}
           className={classNames(
-            relatedOrTweets === 'tweets' && 'bg-gray-200',
+            relatedOrWiki === 'wiki' && 'bg-gray-200',
             'px-6 py-3 text-lg font-semibold text-black border border-gray-400 rounded-lg w-36'
           )}
         >
@@ -40,7 +40,7 @@ const WikiMobileRelatedInfo = ({
       <div className="flex md:hidden">
         <div
           className={classNames(
-            relatedOrTweets === 'tweets' ? 'visible' : 'hidden',
+            relatedOrWiki === 'wiki' ? 'visible' : 'hidden',
             'w-full'
           )}
         >
@@ -69,7 +69,7 @@ const WikiMobileRelatedInfo = ({
         </div>
         <div
           className={classNames(
-            relatedOrTweets === 'related' ? 'visible' : 'hidden',
+            relatedOrWiki === 'related' ? 'visible' : 'hidden',
             'w-full'
           )}
         >

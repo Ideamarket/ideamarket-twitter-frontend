@@ -55,8 +55,8 @@ type Props = {
 
 const InvestmentCalculator = ({ ideaToken, market }: Props) => {
   const marketSpecifics = market && getMarketSpecificsByMarketName(market.name)
-  const [usdBuyAmount, setUsdBuyAmount] = useState(1)
-  const [otherUsdBuyAmount, setOtherUsdBuyAmount] = useState(1)
+  const [usdBuyAmount, setUsdBuyAmount] = useState(100)
+  const [otherUsdBuyAmount, setOtherUsdBuyAmount] = useState(10000)
 
   const isSell = otherUsdBuyAmount < 0
 
@@ -154,7 +154,7 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
           </div>
           <div className="w-full">
             <CustomSlider
-              defaultValue={inverseCurve(1)}
+              defaultValue={inverseCurve(100)}
               onChange={(value) =>
                 setUsdBuyAmount(parseInt(sliderCurve(value).toString()))
               }
@@ -176,7 +176,7 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
           </div>
           <div className="w-full">
             <CustomSlider
-              defaultValue={inverseCurve(1)}
+              defaultValue={inverseCurve(10000)}
               onChange={(value) => {
                 const isNegative = value < 0
                 const updatedValue = isNegative ? value * -1 : value

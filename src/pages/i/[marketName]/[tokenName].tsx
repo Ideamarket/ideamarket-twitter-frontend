@@ -216,11 +216,7 @@ export default function TokenDetails({
                     title="Pageviews"
                     rawTokenName={rawTokenName}
                   /> */}
-                  <MultiChart
-                    rawTokenName={marketSpecifics.getTokenDisplayName(
-                      rawTokenName
-                    )}
-                  />
+                  <MultiChart rawTokenName={rawTokenName} />
                 </div>
                 {/* <GoogleTrendsPanel
                   title="Google Trends"

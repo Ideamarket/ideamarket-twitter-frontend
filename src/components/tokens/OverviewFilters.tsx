@@ -173,7 +173,7 @@ const PlatformButton = ({
   return (
     <button
       className={classNames(
-        'flex flex-grow md:flex-auto justify-center items-center px-3 border md:rounded-md text-sm font-semibold',
+        'flex flex-grow md:flex-auto justify-center items-center px-3 py-2 border md:rounded-md text-sm font-semibold',
         platform === 'All' && 'rounded-l-md',
         {
           'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
