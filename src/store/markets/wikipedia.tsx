@@ -47,14 +47,17 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
     })
   }
 
-  normalizeUserInputTokenName(userInput: string): string {
-    return userInput.charAt(0).toUpperCase() + userInput.slice(1)
-  }
-
+  /**
+   * @param userInput - The input coming from the user as they type in listing token modal
+   * @returns token name in correct format for inserting into smart contract
+   */
   convertUserInputToTokenName(userInput: string): string {
+    // Replaces all &ndash; (–) and &mdash; (—) symbols with simple dashes (-) because only simple dashes can be decoded
+    const removedSpecialDashes = userInput.replace(/\u2013|\u2014/g, '-')
     // Decode any special characters
-    const decodedInput = decodeURI(userInput)
-    return `${decodedInput}`
+    const decodedInput = decodeURI(removedSpecialDashes)
+    // Make sure first char is capitalized
+    return `${decodedInput.charAt(0).toUpperCase() + decodedInput.slice(1)}`
   }
 
   getTokenNameURLRepresentation(tokenName: string): string {

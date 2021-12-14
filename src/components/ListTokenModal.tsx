@@ -77,7 +77,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
 
   const { tokenIconURL, isLoading: isTokenIconURLLoading } = useTokenIconURL({
     marketSpecifics,
-    tokenName: marketSpecifics?.convertUserInputToTokenName(tokenName),
+    tokenName,
   })
 
   // Did user type a valid ENS address or hex-address?
@@ -98,19 +98,17 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     (isWantBuyChecked && (isMissingAllowance || !isBuyValid)) ||
     (isGiftChecked && !isValidAddress)
 
-  async function tokenNameInputChanged(val) {
-    const normalized = marketSpecifics.normalizeUserInputTokenName(val)
-
+  async function tokenNameInputChanged(userInput) {
     const finalTokenName = getMarketSpecificsByMarketName(
       selectedMarket.name
-    ).convertUserInputToTokenName(normalized)
+    ).convertUserInputToTokenName(userInput)
 
     const { isValid, isAlreadyListed, validName } = await verifyTokenName(
       finalTokenName,
       selectedMarket.marketID
     )
 
-    setTokenName(validName ? validName : normalized)
+    setTokenName(validName ? validName : finalTokenName)
 
     if (isAlreadyListed) setErrorMessage('This token is already listed')
     else setErrorMessage('')
@@ -161,9 +159,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   }
 
   async function listClicked() {
-    const finalTokenName = getMarketSpecificsByMarketName(
-      selectedMarket.name
-    ).convertUserInputToTokenName(tokenName)
     mixpanel.track(`ADD_LISTING_${selectedMarket.name.toUpperCase()}`)
 
     if (isWantBuyChecked) {
@@ -172,7 +167,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         await txManager.executeTx(
           'List and buy',
           listAndBuyToken,
-          finalTokenName,
+          tokenName,
           selectedMarket,
           buyPayWithAddress,
           buyOutputAmountBN,
@@ -183,12 +178,12 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         )
       } catch (ex) {
         console.log(ex)
-        onTradeComplete(false, finalTokenName, TRANSACTION_TYPES.NONE)
+        onTradeComplete(false, tokenName, TRANSACTION_TYPES.NONE)
         return
       }
 
       close()
-      onTradeComplete(true, finalTokenName, TRANSACTION_TYPES.BUY)
+      onTradeComplete(true, tokenName, TRANSACTION_TYPES.BUY)
       mixpanel.track(
         `ADD_LISTING_${selectedMarket.name.toUpperCase()}_COMPLETED`
       )
@@ -197,16 +192,16 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         await txManager.executeTx(
           'List Token',
           listToken,
-          finalTokenName,
+          tokenName,
           selectedMarket.marketID
         )
       } catch (ex) {
         console.log(ex)
-        onTradeComplete(false, finalTokenName, TRANSACTION_TYPES.NONE)
+        onTradeComplete(false, tokenName, TRANSACTION_TYPES.NONE)
         return
       }
       close()
-      onTradeComplete(true, finalTokenName, TRANSACTION_TYPES.LIST)
+      onTradeComplete(true, tokenName, TRANSACTION_TYPES.LIST)
       mixpanel.track(
         `ADD_LISTING_${selectedMarket.name.toUpperCase()}_COMPLETED`
       )
@@ -284,13 +279,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           ></div>
         )}
         <A
-          href={
-            !marketSpecifics
-              ? ''
-              : marketSpecifics.getTokenURL(
-                  marketSpecifics.convertUserInputToTokenName(tokenName)
-                )
-          }
+          href={!marketSpecifics ? '' : marketSpecifics.getTokenURL(tokenName)}
         >
           <div
             className={classNames(
@@ -343,10 +332,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         <TradeInterface
           market={selectedMarket}
           newIdeaToken={{
-            symbol:
-              tokenName !== '' && marketSpecifics
-                ? marketSpecifics.convertUserInputToTokenName(tokenName)
-                : '',
+            symbol: tokenName !== '' && marketSpecifics ? tokenName : '',
             logoURL:
               selectedMarket &&
               marketSpecifics &&

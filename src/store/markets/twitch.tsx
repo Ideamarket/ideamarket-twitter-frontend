@@ -47,12 +47,8 @@ export default class TwitchMarketSpecifics implements IMarketSpecifics {
     })
   }
 
-  normalizeUserInputTokenName(userInput: string): string {
-    return userInput.toLowerCase()
-  }
-
   convertUserInputToTokenName(userInput: string): string {
-    return `${userInput}`
+    return `${userInput.toLowerCase()}`
   }
 
   getTokenNameURLRepresentation(tokenName: string): string {
