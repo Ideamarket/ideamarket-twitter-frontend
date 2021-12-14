@@ -2,12 +2,16 @@ import { Chart } from 'chart.js'
 import { useEffect, useRef, useState } from 'react'
 import { useMutation } from 'react-query'
 import moment from 'moment'
+import useBreakpoint from 'use-breakpoint'
+import { BREAKPOINTS } from 'utils/constants'
 
 type Props = {
   rawTokenName: string
 }
 
 const MultiChart = ({ rawTokenName }: Props) => {
+  const { breakpoint } = useBreakpoint(BREAKPOINTS, 'mobile')
+
   const [viewsData, setViewsData] = useState({
     counts: [],
     dates: [],
@@ -130,7 +134,12 @@ const MultiChart = ({ rawTokenName }: Props) => {
                 ticks: {
                   display: true,
                   maxTicksLimit: 14,
-                  // maxRotation: 0, // Stops ticks from rotating
+                  maxRotation:
+                    breakpoint === 'md' ||
+                    breakpoint === 'sm' ||
+                    breakpoint === 'mobile'
+                      ? 50
+                      : 0, // Stops ticks from rotating
                   callback: function (value: string, index, values) {
                     // Set custom tick value
                     if (value.includes('Jan')) {
@@ -178,7 +187,7 @@ const MultiChart = ({ rawTokenName }: Props) => {
       })
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewsData, trendsData])
+  }, [viewsData, trendsData, breakpoint])
 
   return (
     <div className="h-full p-5 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray">
