@@ -2,13 +2,14 @@ import classNames from 'classnames'
 import { useState } from 'react'
 import Modal from '../modals/Modal'
 import { MainFilters } from './utils/OverviewUtils'
-import { BadgeCheckIcon, StarIcon } from '@heroicons/react/solid'
+import { StarIcon } from '@heroicons/react/solid'
 import {
   SparklesIcon,
   FireIcon,
   ArrowSmUpIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/outline'
+import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
 import mixpanel from 'mixpanel-browser'
 import getConfig from 'next/config'
 
@@ -79,7 +80,7 @@ export default function OverviewFiltersModal({
               setIsVerifiedFilterActive(!localIsVerifiedFilterActive)
             }}
           >
-            <BadgeCheckIcon className="w-5 h-5 mr-1" />
+            <IdeaverifyIcon className="w-5 h-5 mr-1" />
             <span>Verified</span>
           </button>
           <button

@@ -20,10 +20,11 @@ import {
 } from 'utils'
 import { useTokenIconURL } from 'actions'
 import { useQuery } from 'react-query'
-import { BadgeCheckIcon, ArrowSmUpIcon } from '@heroicons/react/solid'
+import { ArrowSmUpIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import BigNumber from 'bignumber.js'
+import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
 import { useMixPanel } from 'utils/mixPanel'
 
 type Props = {
@@ -158,7 +159,7 @@ export default function TokenRow({
           {/* Desktop Verified Badge */}
           {token.tokenOwner !== ZERO_ADDRESS && (
             <div className="hidden md:inline w-5 h-5 ml-1.5 text-black dark:text-white">
-              <BadgeCheckIcon />
+              <IdeaverifyIcon className="w-full h-full" />
             </div>
           )}
         </div>
@@ -167,7 +168,9 @@ export default function TokenRow({
       <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-black md:hidden dark:text-white md:table-cell whitespace-nowrap">
         <div className="flex items-center justify-end h-full">
           <div className="w-5 h-5">
-            {token.tokenOwner !== ZERO_ADDRESS && <BadgeCheckIcon />}
+            {token.tokenOwner !== ZERO_ADDRESS && (
+              <IdeaverifyIcon className="w-full h-full" />
+            )}
           </div>
         </div>
       </td>

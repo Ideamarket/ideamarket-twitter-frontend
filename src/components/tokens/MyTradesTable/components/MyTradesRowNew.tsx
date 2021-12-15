@@ -10,11 +10,11 @@ import {
 } from 'utils'
 import { A } from 'components'
 import { useTokenIconURL } from 'actions'
-import { BadgeCheckIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import moment from 'moment'
 import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
+import IdeaverifyIcon from '../../../../assets/IdeaverifyIcon.svg'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -134,7 +134,7 @@ const MyTradesRowNew = ({
           {/* Verified Badge */}
           {token.tokenOwner !== ZERO_ADDRESS && (
             <div className="w-5 h-5 ml-1.5">
-              <BadgeCheckIcon />
+              <IdeaverifyIcon className="w-full h-full" />
             </div>
           )}
           <div className="flex items-center justify-center ml-auto md:hidden">

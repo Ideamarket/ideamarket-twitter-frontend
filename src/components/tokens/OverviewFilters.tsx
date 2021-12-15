@@ -1,10 +1,6 @@
 import classNames from 'classnames'
 import { getMarketSpecificsByMarketName, useMarketStore } from 'store/markets'
-import {
-  ChevronDownIcon,
-  BadgeCheckIcon,
-  StarIcon,
-} from '@heroicons/react/solid'
+import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import {
   SparklesIcon,
   FireIcon,
@@ -26,6 +22,7 @@ import { useMixPanel } from 'utils/mixPanel'
 import useThemeMode from 'components/useThemeMode'
 import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import DropdownCheckbox from 'components/dropdowns/DropdownCheckbox'
+import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
 
 type DropdownButtonProps = {
   filters: any
@@ -66,7 +63,7 @@ const DropdownButton = ({
       case 3:
         return <SparklesIcon className="w-4 h-4 mr-1" />
       case 4:
-        return <BadgeCheckIcon className="w-5 h-5 mr-1" />
+        return <IdeaverifyIcon className="w-5 h-5 mr-1" />
       case 5:
         return <StarIcon className="w-4 h-4 mr-1" />
       default:
@@ -291,7 +288,7 @@ export const OverviewFilters = ({
         className="hidden md:flex"
         onClick={setIsVerifiedFilterActive}
         isSelected={isVerifiedFilterActive}
-        label={<BadgeCheckIcon className="w-5 h-5" />}
+        label={<IdeaverifyIcon className="w-5 h-5" />}
       />
 
       <FiltersButton
