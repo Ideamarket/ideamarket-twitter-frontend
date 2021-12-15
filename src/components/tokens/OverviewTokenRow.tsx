@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useRouter } from 'next/dist/client/router'
-import { WatchingStar } from 'components'
+import { A, WatchingStar } from 'components'
 import { NETWORK } from 'store/networks'
 import { queryDaiBalance } from 'store/daiStore'
 import {
@@ -95,6 +95,16 @@ export default function TokenRow({
         )
       : '0'
 
+  // This makes it so each row can be right clicked in order to open listing in new tab
+  const pageLink = (
+    <A
+      href={`/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
+        token.name
+      )}`}
+      className="absolute top-0 left-0 w-full h-full"
+    />
+  )
+
   return (
     <tr
       ref={lastElementRef}
@@ -113,19 +123,21 @@ export default function TokenRow({
       }}
     >
       {/* Rank */}
-      <td className="hidden py-4 pl-3 pr-1 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
+      <td className="relative hidden  py-4 pl-3 pr-1 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
         {token.rank}
+        {pageLink}
       </td>
       {/* Market */}
-      <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
+      <td className="relative flex items-center justify-center py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
         <div className="flex items-center justify-end w-full h-full">
           <div className="w-5 h-auto mr-2 md:mr-0">
             {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
           </div>
         </div>
+        {pageLink}
       </td>
       {/* Icon and Name */}
-      <td className="flex py-4 pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap">
+      <td className="relative flex py-4 pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap">
         <div className="flex items-center w-full text-gray-900 dark:text-gray-200">
           {showMarketSVG && marketSpecifics.getMarketSVGTheme(resolvedTheme)}
           <div
@@ -163,6 +175,7 @@ export default function TokenRow({
             </div>
           )}
         </div>
+        {pageLink}
       </td>
       {/* Mobile Verified Badge */}
       <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-black md:hidden dark:text-white md:table-cell whitespace-nowrap">
@@ -175,7 +188,7 @@ export default function TokenRow({
         </div>
       </td>
       {/* Price */}
-      <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+      <td className="relative hidden py-4 pl-6 md:table-cell whitespace-nowrap">
         <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
           Price
         </p>
@@ -185,10 +198,11 @@ export default function TokenRow({
         >
           ${formatNumber(tokenPrice)}
         </p>
+        {pageLink}
       </td>
       {/* 24H Change */}
       {getColumn('24H Change') && (
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+        <td className="relative hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p
             className={classNames(
               'text-base font-medium leading-4 tracking-tightest-2 uppercase',
@@ -207,11 +221,12 @@ export default function TokenRow({
               : `- ${parseInt(token.dayChange.slice(1))}`}
             %
           </p>
+          {pageLink}
         </td>
       )}
       {/* 7D Change */}
       {getColumn('7D Change') && (
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+        <td className="relative hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p
             className={classNames(
               'text-base font-medium leading-4 tracking-tightest-2 uppercase',
@@ -230,11 +245,12 @@ export default function TokenRow({
               : `- ${parseInt(token.weeklyChange.slice(1))}`}
             %
           </p>
+          {pageLink}
         </td>
       )}
       {/* Deposits */}
       {getColumn('Deposits') && (
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+        <td className="relative hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
             Deposits
           </p>
@@ -251,11 +267,12 @@ export default function TokenRow({
               <>&mdash;</>
             )}
           </p>
+          {pageLink}
         </td>
       )}
       {/* %Locked */}
       {getColumn('% Locked') && (
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+        <td className="relative hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
             % Locked
           </p>
@@ -269,22 +286,24 @@ export default function TokenRow({
               <>&mdash;</>
             )}
           </p>
+          {pageLink}
         </td>
       )}
       {/* Year Income */}
       {getColumn('1YR Income') && (
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+        <td className="relative hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + yearIncome}
           >
             ${formatNumberWithCommasAsThousandsSerperator(parseInt(yearIncome))}
           </p>
+          {pageLink}
         </td>
       )}
       {/* Claimable Income */}
       {getColumn('Claimable Income') ? (
-        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
+        <td className="relative hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p
             className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
             title={'$' + claimableIncome}
@@ -294,6 +313,7 @@ export default function TokenRow({
               parseInt(claimableIncome)
             )}
           </p>
+          {pageLink}
         </td>
       ) : (
         <></>
