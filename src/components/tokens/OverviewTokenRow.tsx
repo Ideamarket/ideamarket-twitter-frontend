@@ -24,7 +24,7 @@ import { ArrowSmUpIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import BigNumber from 'bignumber.js'
-import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
+import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import { useMixPanel } from 'utils/mixPanel'
 
 type Props = {
@@ -159,7 +159,7 @@ export default function TokenRow({
           {/* Desktop Verified Badge */}
           {token.tokenOwner !== ZERO_ADDRESS && (
             <div className="hidden md:inline w-5 h-5 ml-1.5 text-black dark:text-white">
-              <IdeaverifyIcon className="w-full h-full" />
+              <IdeaverifyIconBlue className="w-full h-full" />
             </div>
           )}
         </div>
@@ -169,7 +169,7 @@ export default function TokenRow({
         <div className="flex items-center justify-end h-full">
           <div className="w-5 h-5">
             {token.tokenOwner !== ZERO_ADDRESS && (
-              <IdeaverifyIcon className="w-full h-full" />
+              <IdeaverifyIconBlue className="w-full h-full" />
             )}
           </div>
         </div>

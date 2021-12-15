@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import copy from 'copy-to-clipboard'
 import { MinusCircleIcon } from '@heroicons/react/outline'
-import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
+import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 
 const EthAddressSwitcher = ({ ethAddresses, removeAddress }) => {
   return (
@@ -9,7 +9,7 @@ const EthAddressSwitcher = ({ ethAddresses, removeAddress }) => {
       {ethAddresses?.map((ethAddress, index) => (
         <div className="flex items-center" key={index}>
           {ethAddress.verified ? (
-            <IdeaverifyIcon className="w-5 h-5" />
+            <IdeaverifyIconBlue className="w-5 h-5" />
           ) : (
             <div className="w-5 h-5"></div>
           )}

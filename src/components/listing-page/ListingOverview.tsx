@@ -12,7 +12,7 @@ import {
 } from '../../utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
-import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
+import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import Image from 'next/image'
 import { useWeb3React } from '@web3-react/core'
 import ModalService from 'components/modals/ModalService'
@@ -135,7 +135,7 @@ export default function TokenCard({
               </span>
               {token.tokenOwner !== ZERO_ADDRESS && (
                 <span className="hidden md:block inline w-6 h-6 ml-1.5">
-                  <IdeaverifyIcon className="w-6 h-6" />
+                  <IdeaverifyIconBlue className="w-6 h-6" />
                 </span>
               )}
             </div>
@@ -158,7 +158,7 @@ export default function TokenCard({
               </span>
               {token.tokenOwner !== ZERO_ADDRESS && (
                 <span className="block md:hidden inline w-6 h-6 ml-1.5">
-                  <IdeaverifyIcon className="w-6 h-6" />
+                  <IdeaverifyIconBlue className="w-6 h-6" />
                 </span>
               )}
             </div>

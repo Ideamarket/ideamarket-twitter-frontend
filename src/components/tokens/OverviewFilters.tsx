@@ -22,7 +22,8 @@ import { useMixPanel } from 'utils/mixPanel'
 import useThemeMode from 'components/useThemeMode'
 import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import DropdownCheckbox from 'components/dropdowns/DropdownCheckbox'
-import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
+import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
+import { getIconVersion } from 'utils/icons'
 
 type DropdownButtonProps = {
   filters: any
@@ -63,7 +64,7 @@ const DropdownButton = ({
       case 3:
         return <SparklesIcon className="w-4 h-4 mr-1" />
       case 4:
-        return <IdeaverifyIcon className="w-5 h-5 mr-1" />
+        return <IdeaverifyIconBlue className="w-5 h-5 mr-1" />
       case 5:
         return <StarIcon className="w-4 h-4 mr-1" />
       default:
@@ -220,6 +221,7 @@ export const OverviewFilters = ({
   setIsStarredFilterActive,
 }: OverviewFiltersProps) => {
   const { mixpanel } = useMixPanel()
+  const { resolvedTheme } = useThemeMode()
 
   const toggleMarket = (marketName: string) => {
     const newSet = toggleMarketHelper(marketName, selectedMarkets)
@@ -288,7 +290,7 @@ export const OverviewFilters = ({
         className="hidden md:flex"
         onClick={setIsVerifiedFilterActive}
         isSelected={isVerifiedFilterActive}
-        label={<IdeaverifyIcon className="w-5 h-5" />}
+        label={getIconVersion('verify', resolvedTheme, isVerifiedFilterActive)}
       />
 
       <FiltersButton

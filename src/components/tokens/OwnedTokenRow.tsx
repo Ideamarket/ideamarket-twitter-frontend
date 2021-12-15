@@ -19,7 +19,7 @@ import LockModal from 'components/trade/LockModal'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import GiftModal from 'components/trade/GiftModal'
-import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
+import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 
 export default function OwnedTokenRow({
   token,
@@ -119,7 +119,7 @@ export default function OwnedTokenRow({
             {/* Verified Badge */}
             {token.tokenOwner !== ZERO_ADDRESS && (
               <div className="w-5 h-5 ml-1.5">
-                <IdeaverifyIcon className="w-full h-full" />
+                <IdeaverifyIconBlue className="w-full h-full" />
               </div>
             )}
             <div className="flex items-center justify-center ml-auto md:hidden">

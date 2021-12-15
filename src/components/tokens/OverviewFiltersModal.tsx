@@ -9,7 +9,7 @@ import {
   ArrowSmUpIcon,
   QuestionMarkCircleIcon,
 } from '@heroicons/react/outline'
-import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
+import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import mixpanel from 'mixpanel-browser'
 import getConfig from 'next/config'
 
@@ -80,7 +80,7 @@ export default function OverviewFiltersModal({
               setIsVerifiedFilterActive(!localIsVerifiedFilterActive)
             }}
           >
-            <IdeaverifyIcon className="w-5 h-5 mr-1" />
+            <IdeaverifyIconBlue className="w-5 h-5 mr-1" />
             <span>Verified</span>
           </button>
           <button

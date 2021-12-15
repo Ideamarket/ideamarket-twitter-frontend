@@ -14,7 +14,7 @@ import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import moment from 'moment'
 import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
-import IdeaverifyIcon from '../../../../assets/IdeaverifyIcon.svg'
+import IdeaverifyIconBlue from '../../../../assets/IdeaverifyIconBlue.svg'
 
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
@@ -114,7 +114,7 @@ const MyTradesRow = ({
           {/* Verified Badge */}
           {token.tokenOwner !== ZERO_ADDRESS && (
             <div className="w-5 h-5 ml-1.5">
-              <IdeaverifyIcon className="w-full h-full" />
+              <IdeaverifyIconBlue className="w-full h-full" />
             </div>
           )}
           <div className="flex items-center justify-center ml-auto md:hidden">

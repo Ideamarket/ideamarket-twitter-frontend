@@ -14,7 +14,7 @@ import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { A, AddToMetamaskButton } from 'components'
 import { useTokenIconURL } from 'actions'
-import IdeaverifyIcon from '../../assets/IdeaverifyIcon.svg'
+import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 
@@ -138,7 +138,7 @@ export default function LockedTokenRowNew({
           {/* Verified Badge */}
           {token.tokenOwner !== ZERO_ADDRESS && (
             <div className="w-5 h-5 ml-1.5">
-              <IdeaverifyIcon className="w-full h-full" />
+              <IdeaverifyIconBlue className="w-full h-full" />
             </div>
           )}
           <div className="flex items-center justify-center ml-auto md:hidden">
