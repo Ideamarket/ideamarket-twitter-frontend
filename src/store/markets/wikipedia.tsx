@@ -2,6 +2,7 @@ import { IMarketSpecifics } from '.'
 import WikipediaOutlineWhite from '../../assets/wikipedia-outline-white.svg'
 import WikipediaOutlineBlack from '../../assets/wikipedia-outline-black.svg'
 import { queryLambdavatar } from 'actions'
+import { getRealTokenName } from 'utils/wikipedia'
 
 export default class WikipediaMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -37,7 +38,8 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
   // Tokens
 
   getTokenURL(tokenName: string): string {
-    return `https://en.wikipedia.org/wiki/${tokenName}`
+    const realName = getRealTokenName(tokenName)
+    return `https://en.wikipedia.org/wiki/${realName}`
   }
 
   getTokenIconURL(tokenName: string): Promise<string> {
@@ -71,8 +73,9 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
   }
 
   getTokenDisplayName(tokenName: string): string {
+    const realName = getRealTokenName(tokenName)
     // Replace underscores with spaces
-    return tokenName.replace(/_/g, ' ')
+    return realName.replace(/_/g, ' ')
   }
 
   // List Token

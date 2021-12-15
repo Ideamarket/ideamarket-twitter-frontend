@@ -491,7 +491,9 @@ export default function TradeInterface({
   }
 
   const selectedIdeaToken = {
-    symbol: ideaToken?.name,
+    symbol: marketSpecifics
+      ? marketSpecifics.getTokenDisplayName(ideaToken?.name)
+      : ideaToken?.name,
     logoURL: tokenIconURL,
   }
 
