@@ -35,7 +35,6 @@ const ignoreWords = [
 
 async function getPageTitleIfValidPage(title: string) {
   const res = await fetch(`${WIKIPEDIA_BASE_URL}/${encodeURIComponent(title)}`)
-  console.log({ title, res })
   if (!res.ok) {
     return null
   }
@@ -44,7 +43,6 @@ async function getPageTitleIfValidPage(title: string) {
 }
 
 export async function findValidPageTitle(title: string) {
-  console.log({ title })
   let validPageTitle = await getPageTitleIfValidPage(title)
   if (!validPageTitle) {
     const allPossiblePageTitles = getAllPossiblePageTitles(title)

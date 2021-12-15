@@ -38,7 +38,7 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
   // Tokens
 
   getTokenURL(tokenName: string): string {
-    const realName = getRealTokenName(tokenName)
+    const realName = tokenName ? getRealTokenName(tokenName) : ''
     return `https://en.wikipedia.org/wiki/${realName}`
   }
 
@@ -73,7 +73,7 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
   }
 
   getTokenDisplayName(tokenName: string): string {
-    const realName = getRealTokenName(tokenName)
+    const realName = tokenName ? getRealTokenName(tokenName) : ''
     // Replace underscores with spaces
     return realName.replace(/_/g, ' ')
   }
