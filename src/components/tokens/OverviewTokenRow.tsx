@@ -26,6 +26,7 @@ import Image from 'next/image'
 import BigNumber from 'bignumber.js'
 import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import { useMixPanel } from 'utils/mixPanel'
+import { getRealTokenName } from 'utils/wikipedia'
 
 type Props = {
   token: IdeaToken
@@ -52,7 +53,7 @@ export default function TokenRow({
   const displayName = marketSpecifics.getTokenDisplayName(token.name)
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
-    tokenName: token.name,
+    tokenName: getRealTokenName(token.name),
   })
   const { resolvedTheme } = useThemeMode()
 
