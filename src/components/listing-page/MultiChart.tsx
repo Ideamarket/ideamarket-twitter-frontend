@@ -5,6 +5,43 @@ import moment from 'moment'
 import useBreakpoint from 'use-breakpoint'
 import { BREAKPOINTS } from 'utils/constants'
 
+export const bindChartEvents = (myChart: Chart, containerElement, setChart) => {
+  const legendItemSelector = '.legend-item'
+  const labelSeletor = '#legend-checkbox'
+
+  const legendItems = [...containerElement.querySelectorAll(legendItemSelector)]
+  legendItems.forEach((item, i) => {
+    item.addEventListener('click', (e) => updateDataset(e.target.parentNode, i))
+  })
+
+  const updateDataset = (currentEl, index) => {
+    const selectedMeta = myChart.getDatasetMeta(index) // Meta data for selected dataset
+    const axis = myChart.options.scales.yAxes.find(
+      (axis) => axis.id === selectedMeta.yAxisID
+    )
+    const otherAxis = myChart.options.scales.yAxes.find(
+      (axis) => axis.id !== selectedMeta.yAxisID
+    )
+    const labelEl = currentEl.querySelector(labelSeletor)
+    const isSelectedHidden = selectedMeta.hidden === true // Is selected dataset hidden before click?
+    if (!isSelectedHidden) {
+      selectedMeta.hidden = true
+      labelEl.checked = false
+      axis.display = false
+      axis.gridLines.display = false
+      otherAxis.gridLines.display = true
+    } else {
+      selectedMeta.hidden = false
+      labelEl.checked = true
+      axis.display = true
+      axis.gridLines.display = true
+      otherAxis.gridLines.display = false
+    }
+    myChart.update()
+    setChart(myChart)
+  }
+}
+
 type Props = {
   rawTokenName: string
 }
@@ -84,7 +121,10 @@ const MultiChart = ({ rawTokenName }: Props) => {
     setChart(
       new Chart(ref.current.getContext('2d'), {
         data: {
-          labels: trendsData?.dates,
+          labels:
+            trendsData && trendsData.dates.length > 0
+              ? trendsData?.dates
+              : viewsData?.dates,
           datasets: [
             {
               type: 'line',
@@ -124,7 +164,7 @@ const MultiChart = ({ rawTokenName }: Props) => {
           responsive: true,
           maintainAspectRatio: false,
           legend: {
-            display: true,
+            display: false,
           },
           scales: {
             xAxes: [
@@ -168,9 +208,11 @@ const MultiChart = ({ rawTokenName }: Props) => {
                 ticks: {
                   beginAtZero: true,
                   maxTicksLimit: 11,
+                  display:
+                    trendsData && trendsData.dates.length > 0 ? true : false, // Only show if there is trends data
                 },
                 gridLines: {
-                  display: false, // Don't show grid lines for right-y-axis because they are not aligned with left-y-axis
+                  display: false, // On load, don't show grid lines for right-y-axis because they are not aligned with left-y-axis
                 },
               },
             ],
@@ -183,22 +225,63 @@ const MultiChart = ({ rawTokenName }: Props) => {
               bottom: 0,
             },
           },
+          legendCallback: (chart) => {
+            const renderLabels = (chart) => {
+              const { data } = chart
+              return data.datasets
+                .map(
+                  (dataset, i) => `
+                    <button
+                      id="legend-${i}-item"
+                      class="legend-item border rounded p-2 flex items-center space-x-2"
+                    >
+                      <input id="legend-checkbox" type="checkbox" checked={true} style="color: ${
+                        dataset.borderColor
+                      }" />
+                      <span class="label" style="color: ${
+                        dataset.borderColor
+                      }">${dataset.label}${
+                    dataset.data.length <= 0 ? ' [NO DATA]' : ''
+                  }</span>
+                    </button>
+                  `
+                )
+                .join('')
+            }
+            return `
+              <div class="chartjs-legend flex space-x-2">
+                ${renderLabels(chart)}
+              </div>
+            `
+          },
         },
       })
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewsData, trendsData, breakpoint])
 
+  useEffect(() => {
+    if (chart) {
+      // Need to do this to create custom legend HTML
+      document.getElementById('chart-legends').innerHTML =
+        chart.generateLegend()
+      // Need to do this to update chart on custom legend events
+      bindChartEvents(chart, document, setChart)
+    }
+  }, [chart])
+
   return (
-    <div className="h-full p-5 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray">
+    <div className="h-full py-5 px-2 md:p-5 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray">
       <div className="relative">
         <div
-          className="flex-grow"
+          id="chart-legends"
+          className="flex justify-center md:block mb-6"
+        ></div>
+        <div
           style={{
             position: 'relative',
             height: '350px',
             width: '100%',
-            contain: 'content',
           }}
         >
           <canvas
