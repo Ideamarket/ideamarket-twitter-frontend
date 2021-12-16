@@ -17,7 +17,7 @@ export default async function verifyTokenName(name: string, marketID: number) {
 
   const factoryContract = useContractStore.getState().factoryContract
   const contractIsValid = await factoryContract.methods
-    .isValidTokenName(name, marketID.toString())
+    .isValidTokenName(validName ? validName : name, marketID.toString())
     .call()
 
   const isWikipedia = marketID === 4

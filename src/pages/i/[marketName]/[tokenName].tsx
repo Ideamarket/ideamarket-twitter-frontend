@@ -256,12 +256,24 @@ export default function TokenDetails({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // TODO: once feature switch is no longer needed for Minds and Wiki, comment these out until next market launch
   const baseUrl = getSsrBaseUrl(context.req)
-  const { data: mindsFeature } = await getData({
-    url: `${baseUrl}/api/fs?value=MINDS`,
-  })
-  const { data: wikiFeature } = await getData({
-    url: `${baseUrl}/api/fs?value=WIKIPEDIA`,
-  })
+  let mindsFeature = { feature: 'MINDS', enabled: false }
+  let wikiFeature = { feature: 'WIKIPEDIA', enabled: false }
+  try {
+    const { data: mindsResponse } = await getData({
+      url: `${baseUrl}/api/fs?value=MINDS`,
+    })
+    mindsFeature = mindsResponse
+  } catch (error) {
+    console.error('Failed to fetch api/fs for MINDS')
+  }
+  try {
+    const { data: wikiResponse } = await getData({
+      url: `${baseUrl}/api/fs?value=WIKIPEDIA`,
+    })
+    wikiFeature = wikiResponse
+  } catch (error) {
+    console.error('Failed to fetch api/fs for WIKIPEDIA')
+  }
 
   return {
     props: {
