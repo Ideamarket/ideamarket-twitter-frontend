@@ -1,33 +1,40 @@
 import { getData } from 'lib/utils/fetch'
 import { useContractStore } from 'store/contractStore'
+import { getBrokenTokenName } from 'utils/wikipedia'
 
 export default async function verifyTokenName(name: string, marketID: number) {
-  const { data: response } = await getData({
+  const isWikipedia = marketID === 4
+
+  // TODO: only call API if market is Wikipedia
+  const { data: apiData } = await getData({
     url: `/api/markets/wikipedia/validPageTitle?title=${name}`,
   })
 
   let apiIsValid = false
   let validName = null
+  // If broken name, use broken name to verify since that is how it was placed in contract
+  const brokenName = getBrokenTokenName(name)
 
-  if (response.validPageTitle) {
+  if (isWikipedia && apiData.validPageTitle) {
     // Set correct name that is returned from API
-    validName = response.validPageTitle
+    validName = apiData.validPageTitle
     apiIsValid = true
   }
 
+  const nameToVerify = brokenName ? brokenName : validName ? validName : name
+
   const factoryContract = useContractStore.getState().factoryContract
   const contractIsValid = await factoryContract.methods
-    .isValidTokenName(validName ? validName : name, marketID.toString())
+    .isValidTokenName(nameToVerify, marketID.toString())
     .call()
 
-  const isWikipedia = marketID === 4
   let isValid = isWikipedia ? apiIsValid && contractIsValid : contractIsValid
 
   let isAlreadyListed = false
   if (!isValid) {
     isAlreadyListed =
       (await factoryContract.methods
-        .getTokenIDByName(apiIsValid ? validName : name, marketID.toString())
+        .getTokenIDByName(nameToVerify, marketID.toString())
         .call()) !== '0'
   }
 

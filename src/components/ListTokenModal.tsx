@@ -238,7 +238,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         Token Name
       </p>
       <div className="flex items-center mx-5">
-        <div className="text-base text-brand-gray-2 text-semibold">
+        <div className="text-base text-brand-gray-2 dark:text-white text-semibold">
           {tokenNamePrefix || ''}
         </div>
         <div
