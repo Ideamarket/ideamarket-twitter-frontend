@@ -2,11 +2,11 @@ import classNames from 'classnames'
 import { getMarketSpecificsByMarketName, useMarketStore } from 'store/markets'
 import { ChevronDownIcon, StarIcon } from '@heroicons/react/solid'
 import {
+  AdjustmentsIcon,
   SparklesIcon,
   FireIcon,
   ArrowSmUpIcon,
   QuestionMarkCircleIcon,
-  ViewBoardsIcon,
 } from '@heroicons/react/outline'
 import React, { useEffect, useRef, useState } from 'react'
 import { OverviewSearchbar } from './OverviewSearchbar'
@@ -103,7 +103,7 @@ const DropdownButton = ({
     >
       {dropdownType === 'buttons' && (
         <div className="flex">
-          <span className="mr-1 text-xs text-gray-500 whitespace-nowrap">
+          <span className="mr-1 text-xs text-gray-500 dark:text-white whitespace-nowrap">
             Sort by:
           </span>
           {getButtonIcon(selectedFilterId)}
@@ -272,20 +272,6 @@ export const OverviewFilters = ({
           ))}
       </div>
 
-      <DropdownButton
-        className="hidden md:flex"
-        filters={Object.values(MainFilters)}
-        name={
-          Object.values(MainFilters).find(
-            (filter) => filter.id === selectedFilterId
-          )?.value
-        }
-        selectedOptions={new Set([selectedFilterId])}
-        toggleOption={onFilterChanged}
-        dropdownType="buttons"
-        selectedFilterId={selectedFilterId}
-      />
-
       <FiltersButton
         className="hidden md:flex"
         onClick={setIsVerifiedFilterActive}
@@ -302,14 +288,19 @@ export const OverviewFilters = ({
 
       <DropdownButton
         className="hidden md:flex"
-        filters={CheckboxFilters.COLUMNS.values}
-        name={<ViewBoardsIcon className="w-5 h-5" />}
-        selectedOptions={selectedColumns}
-        toggleOption={toggleColumn}
-        dropdownType="columns"
+        filters={Object.values(MainFilters)}
+        name={
+          Object.values(MainFilters).find(
+            (filter) => filter.id === selectedFilterId
+          )?.value
+        }
+        selectedOptions={new Set([selectedFilterId])}
+        toggleOption={onFilterChanged}
+        dropdownType="buttons"
+        selectedFilterId={selectedFilterId}
       />
 
-      <div className="flex w-full mt-2 ml-auto md:mt-0">
+      <div className="flex w-full h-9 md:h-auto mt-2 ml-auto md:mt-0">
         <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
         <button
           className="flex items-center justify-center p-2 ml-2 text-sm font-semibold border rounded-md md:hidden"
@@ -332,6 +323,15 @@ export const OverviewFilters = ({
           )} */}
         </button>
       </div>
+
+      <DropdownButton
+        className="hidden md:flex"
+        filters={CheckboxFilters.COLUMNS.values}
+        name={<AdjustmentsIcon className="w-5 h-5" />}
+        selectedOptions={selectedColumns}
+        toggleOption={toggleColumn}
+        dropdownType="columns"
+      />
     </div>
   )
 }
