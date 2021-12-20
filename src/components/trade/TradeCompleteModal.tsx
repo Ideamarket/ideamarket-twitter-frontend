@@ -1,5 +1,8 @@
+import { ExclamationCircleIcon } from '@heroicons/react/solid'
 import { Modal } from 'components'
 import A from 'components/A'
+import Wrong from '../../assets/SomethingWentWrong.svg'
+import TwitterCircleIcon from '../../assets/TwitterCircleIcon.svg'
 
 export enum TRANSACTION_TYPES {
   NONE,
@@ -53,14 +56,24 @@ export default function TradeCompleteModal({
 
   const canTweet = tweetableTypes.includes(transactionType)
 
+  const bgImageURL = isSuccess ? '/txSuccess.png' : '/txFail.png'
+
   return (
-    <Modal close={close}>
-      <div className="md:min-w-100 px-2.5 py-5">
+    <Modal className="bg-transparent" close={close}>
+      <div
+        className="relative w-full md:w-120 px-2.5 py-5 flex flex-col justify-center items-center"
+        style={{
+          backgroundImage: `url("${bgImageURL}"), linear-gradient(180deg, #011032 0%, #02194D 100%)`,
+          backgroundSize: 'cover',
+          height: '300px',
+        }}
+      >
         {isSuccess ? (
           <>
-            <div className="flex justify-center text-4xl">🎉</div>
-            <div className="flex justify-center mt-2 text-3xl text-brand-green">
-              Success!
+            <div className="flex justify-center text-3xl text-white text-center font-gilroy-bold">
+              Transaction
+              <br />
+              Successful!
             </div>
             {canTweet && (
               <div className="flex justify-center mt-10">
@@ -71,8 +84,16 @@ export default function TradeCompleteModal({
                     ''
                   )}`}
                 >
-                  <button className="w-32 h-10 text-base font-medium bg-white rounded-lg dark:text-gray-50 inborder-2 dark:bg-gray-500 border-brand-blue text-brand-blue hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue">
-                    Tweet about it
+                  <button
+                    className="w-32 h-10 text-white rounded-2xl flex justify-center items-center"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '2px solid rgba(255, 255, 255, 0.2)',
+                      backdropFilter: 'blur(100px)',
+                    }}
+                  >
+                    Share
+                    <TwitterCircleIcon className="w-5 h-5 ml-2" />
                   </button>
                 </A>
               </div>
@@ -80,11 +101,24 @@ export default function TradeCompleteModal({
           </>
         ) : (
           <>
-            <div className="flex justify-center mt-2 text-3xl text-brand-red dark:text-red-500">
-              Something went wrong
-            </div>
-            <div className="mt-5 text-base break-all text-brand-gray-2 dark:text-gray-300">
-              The transaction failed to execute.
+            <Wrong
+              style={{
+                width: '19rem',
+                height: '16rem',
+                position: 'absolute',
+                top: 0,
+              }}
+            />
+            <div
+              className="mt-48 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
+              style={{
+                background: 'rgba(199, 43, 67, 0.2)',
+                border: '2px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(100px)',
+              }}
+            >
+              <ExclamationCircleIcon className="w-5 h-5 text-red-700 mr-2" />
+              Transaction Failed to execute
             </div>
           </>
         )}
