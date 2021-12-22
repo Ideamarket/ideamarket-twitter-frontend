@@ -171,7 +171,7 @@ const PlatformButton = ({
   return (
     <button
       className={classNames(
-        'flex flex-grow md:flex-auto justify-center items-center px-3 py-2 border md:rounded-md text-sm font-semibold',
+        'h-10 flex flex-grow md:flex-auto justify-center items-center px-3 py-2 border md:rounded-md text-sm font-semibold',
         platform === 'All' && 'rounded-l-md',
         {
           'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
@@ -184,7 +184,12 @@ const PlatformButton = ({
       }}
     >
       {platform !== 'All' && (
-        <span className="w-4 h-auto mr-1">
+        <span
+          className={classNames(
+            marketSpecifics.getMarketName() === 'Wikipedia' ? 'mr-2' : 'mr-1',
+            'w-4 h-auto'
+          )}
+        >
           {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
         </span>
       )}
