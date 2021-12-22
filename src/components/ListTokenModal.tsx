@@ -99,16 +99,18 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     (isGiftChecked && !isValidAddress)
 
   async function tokenNameInputChanged(userInput) {
-    const finalTokenName = getMarketSpecificsByMarketName(
+    // Only reason this is needed before API call is because cannot encode/decode EM dashes, so need to replace them
+    // TODO: move dash replace logic to backend eventually
+    const nameBeforeAPI = getMarketSpecificsByMarketName(
       selectedMarket.name
     ).convertUserInputToTokenName(userInput)
 
     const { isValid, isAlreadyListed, validName } = await verifyTokenName(
-      finalTokenName,
-      selectedMarket.marketID
+      nameBeforeAPI,
+      selectedMarket
     )
 
-    setTokenName(validName ? validName : finalTokenName)
+    setTokenName(validName)
 
     if (isAlreadyListed) setErrorMessage('This token is already listed')
     else setErrorMessage('')
@@ -252,7 +254,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
             disabled={txManager.isPending || !selectedMarket}
             className={classNames(
               'w-12 md:w-full flex-grow py-2 pl-1 pr-4 leading-tight bg-gray-200 dark:bg-gray-600 border-2 rounded appearance-none focus:bg-white focus:outline-none',
-              !isValidTokenName && tokenName.length > 0
+              !isValidTokenName
                 ? 'border-red-400 focus:ring-red-400 focus:border-red-400'
                 : 'border-gray-200 dark:border-gray-500 focus:border-brand-blue'
             )}
@@ -279,7 +281,11 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           ></div>
         )}
         <A
-          href={!marketSpecifics ? '' : marketSpecifics.getTokenURL(tokenName)}
+          href={
+            !marketSpecifics || !tokenName
+              ? ''
+              : marketSpecifics.getTokenURL(tokenName)
+          }
         >
           <div
             className={classNames(

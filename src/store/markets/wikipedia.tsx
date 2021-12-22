@@ -55,7 +55,7 @@ export default class WikipediaMarketSpecifics implements IMarketSpecifics {
    */
   convertUserInputToTokenName(userInput: string): string {
     // Replaces all &ndash; (–) and &mdash; (—) symbols with simple dashes (-) because only simple dashes can be decoded
-    const removedSpecialDashes = userInput.replace(/\u2013|\u2014/g, '-')
+    const removedSpecialDashes = userInput?.replace(/\u2013|\u2014/g, '-')
     // Decode any special characters
     const decodedInput = decodeURI(removedSpecialDashes)
     // Make sure first char is capitalized
