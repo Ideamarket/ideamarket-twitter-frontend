@@ -48,7 +48,7 @@ export default class MindsMarketSpecifics implements IMarketSpecifics {
   }
 
   convertUserInputToTokenName(userInput: string): string {
-    return `@${userInput.toLowerCase()}`
+    return `@${userInput}`
   }
 
   getTokenNameURLRepresentation(tokenName: string): string {
