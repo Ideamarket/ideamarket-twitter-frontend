@@ -13,16 +13,35 @@ import NavThemeButton from './NavThemeButton'
 import LoginAndLogoutButton from './LoginAndLogoutButton'
 import IS_ACCOUNT_ENABLED from 'utils/isAccountEnabled'
 import { useMixPanel } from 'utils/mixPanel'
+import { getData } from 'lib/utils/fetch'
 
 const NavMenu = () => {
   const router = useRouter()
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
+  const [imoFeature, setIMOFeature] = useState({
+    feature: 'IMO',
+    enabled: false,
+  })
   const { mixpanel } = useMixPanel()
 
   const navbarConfig = getNavbarConfig(mixpanel)
 
   useEffect(() => {
+    const featureSwitch = async () => {
+      try {
+        const { data: imoResponse } = await getData({
+          url: `/api/fs?value=IMO`,
+        })
+        setIMOFeature(imoResponse)
+      } catch (error) {
+        console.error('Failed to fetch api/fs for IMO')
+      }
+    }
+
     NProgress.configure({ trickleSpeed: 100 })
+
+    // Feature switch for IMO
+    featureSwitch()
   }, [])
 
   useEffect(() => {
@@ -60,9 +79,14 @@ const NavMenu = () => {
 
           {/* Desktop START */}
           <div className="relative items-center justify-center hidden md:flex">
-            {navbarConfig.menu.map((menuItem, i) => (
-              <NavItem menuItem={menuItem} key={i} />
-            ))}
+            {navbarConfig.menu
+              .filter(
+                (m) =>
+                  m.name !== 'IMO' || (m.name === 'IMO' && imoFeature.enabled)
+              )
+              .map((menuItem, i) => (
+                <NavItem menuItem={menuItem} key={i} />
+              ))}
           </div>
           <div className="hidden md:flex">
             <NavThemeButton />

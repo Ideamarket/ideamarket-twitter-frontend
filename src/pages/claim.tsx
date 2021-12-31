@@ -4,6 +4,9 @@ import { NextSeo } from 'next-seo'
 import ClaimInner from 'components/claim/ClaimInner'
 import { BlankLayout } from 'components/layouts'
 import FlowNavMenu from 'components/claim/flow-nav/NavMenu'
+import getSsrBaseUrl from 'utils/getSsrBaseUrl'
+import { getData } from 'lib/utils/fetch'
+import { GetServerSideProps } from 'next'
 
 const STEPPER = {
   CLAIM: 'CLAIM',
@@ -29,6 +32,33 @@ const Claim = () => {
       </AccountContext.Provider>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // TODO: once feature switch is no longer needed for IMO, remove
+  const baseUrl = getSsrBaseUrl(context.req)
+  let imoFeature = { feature: 'IMO', enabled: false }
+  try {
+    const { data: imoResponse } = await getData({
+      url: `${baseUrl}/api/fs?value=IMO`,
+    })
+    imoFeature = imoResponse
+  } catch (error) {
+    console.error('Failed to fetch api/fs for IMO')
+  }
+
+  if (!imoFeature.enabled) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }
 
 export default Claim
