@@ -28,7 +28,11 @@ export const Accordion: React.FC<Props> = ({ title, body }) => {
           )}
         ></span>
       </div>
-      {opened && <div className="pl-2 pt-4 text-sm opacity-75">{body}</div>}
+      {opened && (
+        <div className="pl-2 pt-4 text-sm opacity-75 whitespace-pre-line">
+          {body}
+        </div>
+      )}
     </div>
   )
 }

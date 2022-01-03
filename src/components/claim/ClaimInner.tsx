@@ -8,11 +8,11 @@ const ClaimInner = () => {
   const accordionData = [
     {
       title: 'What is Ideamarket?',
-      body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velcongue nibh scelerisque cursus enim.',
+      body: 'Ideamarket is the Ethereum-based marketplace of ideas where you can make money by buying tokens linked to ideas and their champions.',
     },
     {
       title: 'Why did we launch a token?',
-      body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velcongue nibh scelerisque cursus enim.',
+      body: 'While Ideamarket is currently a company, we want to transition to a DAO in the near future. $IMO will enable holders to vote on proposals for Ideamarket’s future plans and projects.',
     },
     {
       title: 'Why now?',
@@ -20,7 +20,7 @@ const ClaimInner = () => {
     },
     {
       title: 'How will $IMO be distributed?',
-      body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velcongue nibh scelerisque cursus enim.',
+      body: 'The total supply of $IMO is 100 million. The distribution will be: existing stakeholders — 40%, Retroactive Airdrop — 5%, Ecosystem & Treasury — 25%, Token rewards — 30%\n\nClick the ‘Ideamarket Token Overview’ below for more information.',
     },
   ]
 
@@ -42,12 +42,11 @@ const ClaimInner = () => {
             </div>
           </div>
           <div className="text-5xl md:text-6xl font-extrabold opacity-75">
-            Lorem ipsum dolor sit amet, consectetur
+            The token of the literal marketplace of Ideas
           </div>
           <div className="my-16 text-sm md:text-base font-normal opacity-75 max-w-2xl font-sans">
-            Dui elit sollicitudin cursus mi scelerisque. Sit urna felis id quis
-            egestas dictum mauris. Placerat enim lacus tincidunt viverra
-            pharetra, sed vestibulum at pellentesque.
+            If you have participated on the Ideamarket protocol, you may be
+            eligible to receive $IMO tokens. Click below to get started!
           </div>
           <Link href="/claim-dashboard">
             <div
