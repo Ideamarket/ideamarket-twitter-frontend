@@ -13,26 +13,14 @@ export default async function getQueryMarkets(
       },
     })
   ).json()
-  const { data: wikiFeature } = await (
-    await fetch(`${getURL()}/api/fs?value=WIKIPEDIA`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-  ).json()
 
-  // TODO: once feature switch is no longer needed for Minds and Wiki, comment these out until next market launch
+  // TODO: once feature switch is no longer needed for Minds, comment these out until next market launch
   let filteredMarkets = marketNames.filter((market) => market !== 'All')
   filteredMarkets = mindsFeature.enabled
     ? filteredMarkets
     : filteredMarkets.filter((market) => market !== 'Minds')
-  filteredMarkets = wikiFeature.enabled
-    ? filteredMarkets
-    : filteredMarkets.filter((market) => market !== 'Wikipedia')
   const notInList = []
   if (!mindsFeature.enabled) notInList.push('Minds')
-  if (!wikiFeature.enabled) notInList.push('Wikipedia')
 
   const inMarkets = filteredMarkets.map((name) => `"${name}"`).join(',')
   const outMarkets =

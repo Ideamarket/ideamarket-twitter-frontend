@@ -254,10 +254,9 @@ export default function TokenDetails({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // TODO: once feature switch is no longer needed for Minds and Wiki, comment these out until next market launch
+  // TODO: once feature switch is no longer needed for Minds, comment these out until next market launch
   const baseUrl = getSsrBaseUrl(context.req)
   let mindsFeature = { feature: 'MINDS', enabled: false }
-  let wikiFeature = { feature: 'WIKIPEDIA', enabled: false }
   try {
     const { data: mindsResponse } = await getData({
       url: `${baseUrl}/api/fs?value=MINDS`,
@@ -266,24 +265,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   } catch (error) {
     console.error('Failed to fetch api/fs for MINDS')
   }
-  try {
-    const { data: wikiResponse } = await getData({
-      url: `${baseUrl}/api/fs?value=WIKIPEDIA`,
-    })
-    wikiFeature = wikiResponse
-  } catch (error) {
-    console.error('Failed to fetch api/fs for WIKIPEDIA')
-  }
 
   return {
     props: {
       rawMarketName: context.query.marketName,
       rawTokenName: context.query.tokenName,
       dontRender:
-        ((context.query.marketName as any).toLowerCase() === 'minds' &&
-          !mindsFeature.enabled) ||
-        ((context.query.marketName as any).toLowerCase() === 'wikipedia' &&
-          !wikiFeature.enabled),
+        (context.query.marketName as any).toLowerCase() === 'minds' &&
+        !mindsFeature.enabled,
     },
   }
 }
