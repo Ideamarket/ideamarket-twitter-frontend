@@ -4,10 +4,7 @@ import BigNumber from 'bignumber.js'
 import Tooltip from 'components/tooltip/Tooltip'
 import { A } from 'components'
 import { useQuery } from 'react-query'
-import {
-  IdeaMarket,
-  queryInterestManagerTotalShares,
-} from 'store/ideaMarketsStore'
+import { queryInterestManagerTotalShares } from 'store/ideaMarketsStore'
 import { queryDaiBalance } from 'store/daiStore'
 import { NETWORK } from 'store/networks'
 import BN from 'bn.js'
@@ -17,13 +14,13 @@ import {
   formatNumberWithCommasAsThousandsSerperator,
   bnToFloatString,
 } from 'utils'
+import { useMarketStore } from 'store/markets'
 
 type Props = {
   currentColumn: string
   orderDirection: string
   columnData: Array<any>
   columnClicked: (column: string) => void
-  markets: IdeaMarket[]
 }
 
 function IncomeColumn() {
@@ -54,7 +51,6 @@ export const OverviewColumns = ({
   orderDirection,
   columnData,
   columnClicked,
-  markets,
 }: Props) => {
   const { data: interestManagerTotalShares } = useQuery(
     'interest-manager-total-shares',
@@ -67,6 +63,9 @@ export const OverviewColumns = ({
     ['interest-manager-dai-balance', interestManagerAddress],
     queryDaiBalance
   )
+
+  const marketObjects = useMarketStore((state) => state.markets)
+  const markets = marketObjects.map((m) => m.market)
 
   let allPlatformsEarnedBN = new BigNumber('0')
   const platformEarnedPairs = [] // { name, earned } -- name = platform name, earned = amount platform earned

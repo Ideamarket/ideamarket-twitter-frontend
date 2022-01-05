@@ -224,7 +224,6 @@ export default function Table({
                     orderDirection={orderDirection}
                     columnData={columnData}
                     columnClicked={columnClicked}
-                    markets={markets}
                   />
                 </tr>
               </thead>
