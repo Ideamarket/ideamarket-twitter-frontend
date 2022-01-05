@@ -257,9 +257,12 @@ export const OverviewFilters = ({
       <div className="flex md:gap-x-2">
         {CheckboxFilters.PLATFORMS.values
           .sort((p1, p2) => {
-            // Sort so that All is first and then Wikipedia is 2nd. Rest of order not controlled
+            // Sort so that All is first and then Wikipedia is 2nd. Minds is 3rd. Rest of order not controlled
             if (p1 === 'All') return -1
             if (p1 === 'Wikipedia' && p2 !== 'All') {
+              return -1
+            }
+            if (p1 === 'Minds' && p2 !== 'All' && p2 !== 'Wikipedia') {
               return -1
             }
 

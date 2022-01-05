@@ -37,7 +37,7 @@ export default class MindsMarketSpecifics implements IMarketSpecifics {
   // Tokens
 
   getTokenURL(tokenName: string): string {
-    return `https://minds.com/${tokenName}`
+    return `https://minds.com/${this.getTokenNameURLRepresentation(tokenName)}`
   }
 
   getTokenIconURL(tokenName: string): Promise<string> {

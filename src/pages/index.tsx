@@ -47,6 +47,12 @@ const Home = ({ urlMarkets }: Props) => {
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
   useEffect(() => {
+    // TODO: remove this once WIKI and MINDS no longer only default selected
+    if (localStorage.getItem('clearStorage') !== '2') {
+      localStorage.clear()
+      localStorage.setItem('clearStorage', '2')
+    }
+
     const storedMarkets = JSON.parse(localStorage.getItem('STORED_MARKETS'))
 
     // TODO: replace line 57 to how it used be once no longer want WIKI to be only default selected
