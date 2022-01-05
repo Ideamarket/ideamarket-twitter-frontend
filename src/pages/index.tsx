@@ -48,9 +48,9 @@ const Home = ({ urlMarkets }: Props) => {
 
   useEffect(() => {
     // TODO: remove this once WIKI and MINDS no longer only default selected
-    if (localStorage.getItem('clearStorage') !== '3') {
+    if (localStorage.getItem('clearStorage') !== '4') {
       localStorage.clear()
-      localStorage.setItem('clearStorage', '3')
+      localStorage.setItem('clearStorage', '4')
     }
 
     const storedMarkets = JSON.parse(localStorage.getItem('STORED_MARKETS'))
@@ -60,11 +60,7 @@ const Home = ({ urlMarkets }: Props) => {
       ? urlMarkets
       : storedMarkets
       ? [...storedMarkets]
-      : [
-          ...marketNames?.filter(
-            (market) => market === 'Wikipedia' || market === 'Minds'
-          ),
-        ]
+      : [...marketNames?.filter((market) => market === 'Minds')]
 
     setSelectedMarkets(new Set(initialMarkets))
     const storedColumns = JSON.parse(localStorage.getItem('STORED_COLUMNS'))
