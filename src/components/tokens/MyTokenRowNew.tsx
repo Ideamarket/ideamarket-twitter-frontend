@@ -6,7 +6,6 @@ import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
   calculateCurrentPriceBN,
   web3BNToFloatString,
-  formatNumberWithCommasAsThousandsSerperator,
   ZERO_ADDRESS,
 } from 'utils'
 import A from 'components/A'
@@ -176,7 +175,7 @@ export default function MyTokenRowNew({
           %
         </p>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      {/* <td className="px-6 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           1YR Income
         </p>
@@ -186,7 +185,7 @@ export default function MyTokenRowNew({
             (parseFloat(token.marketCap) * compoundSupplyRate).toFixed(2)
           )}
         </p>
-      </td>
+      </td> */}
     </tr>
   )
 }

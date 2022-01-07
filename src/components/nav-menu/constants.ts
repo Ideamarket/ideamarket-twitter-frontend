@@ -33,16 +33,16 @@ export const getNavbarConfig = (mixPanel: any) => ({
             mixPanel.track('LINK_WHITEPAPER')
           },
         },
-        {
-          name: 'Browser Extension',
-          onClick: () => {
-            window.open(
-              'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
-              '_blank'
-            )
-            mixPanel.track('LINK_EXTENSION')
-          },
-        },
+        // {
+        //   name: 'Browser Extension',
+        //   onClick: () => {
+        //     window.open(
+        //       'https://chrome.google.com/webstore/detail/ideamarket/hgpemhabnkecancnpcdilfojngkoahei',
+        //       '_blank'
+        //     )
+        //     mixPanel.track('LINK_EXTENSION')
+        //   },
+        // },
       ],
     },
     {
@@ -58,35 +58,17 @@ export const getNavbarConfig = (mixPanel: any) => ({
           onClick: () =>
             window.open('https://twitter.com/ideamarket_io', '_blank'),
         },
-        {
-          name: 'Reddit',
-          onClick: () =>
-            window.open('https://www.reddit.com/r/ideamarket/', '_blank'),
-        },
+        // {
+        //   name: 'Reddit',
+        //   onClick: () =>
+        //     window.open('https://www.reddit.com/r/ideamarket/', '_blank'),
+        // },
         {
           name: `We're hiring`,
           onClick: () => window.open('https://jobs.ideamarket.io', '_blank'),
         },
-      ],
-    },
-    {
-      name: 'Media',
-      subMenu: [
         {
-          name: 'Podcast',
-          onClick: () =>
-            window.open(
-              'https://www.youtube.com/channel/UCZRFb695b8pVWErrDPKO8Ag',
-              '_blank'
-            ),
-        },
-        {
-          name: 'Newsletter',
-          onClick: () =>
-            window.open('http://ideamarket.substack.com', '_blank'),
-        },
-        {
-          name: 'Shop',
+          name: 'Swag Shop',
           onClick: () => {
             window.open('https://ideamarket-io.myshopify.com', '_blank')
             mixPanel.track('LINK_SHOW')
@@ -94,7 +76,6 @@ export const getNavbarConfig = (mixPanel: any) => ({
         },
       ],
     },
-
     {
       name: 'IMO',
       subMenu: [
