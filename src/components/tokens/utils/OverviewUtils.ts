@@ -35,10 +35,10 @@ export const CheckboxFilters = {
       'All',
       'Deposits',
       '% Locked',
-      // '1YR Income',
+      '1YR Income',
       '24H Change',
       '7D Change',
-      // 'Claimable Income',
+      'Claimable Income',
     ],
   },
 }

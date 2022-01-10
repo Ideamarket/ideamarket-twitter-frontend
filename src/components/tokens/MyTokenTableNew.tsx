@@ -33,11 +33,11 @@ const headers: Header[] = [
     value: 'change',
     sortable: true,
   },
-  // {
-  //   title: '1YR Income',
-  //   value: 'income',
-  //   sortable: true,
-  // },
+  {
+    title: '1YR Income',
+    value: 'income',
+    sortable: true,
+  },
 ]
 
 type MyTokenTableProps = {

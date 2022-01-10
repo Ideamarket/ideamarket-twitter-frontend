@@ -7,6 +7,7 @@ import {
   web3BNToFloatString,
   ZERO_ADDRESS,
   bigNumberTenPow18,
+  formatNumberWithCommasAsThousandsSerperator,
 } from 'utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
@@ -151,7 +152,7 @@ export default function MyTokenRow({
             %
           </p>
         </td>
-        {/* <td className="px-6 py-4 whitespace-nowrap">
+        <td className="px-6 py-4 whitespace-nowrap">
           <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
             1YR Income
           </p>
@@ -161,7 +162,7 @@ export default function MyTokenRow({
               (parseFloat(token.marketCap) * compoundSupplyRate).toFixed(2)
             )}
           </p>
-        </td> */}
+        </td>
       </tr>
     </>
   )

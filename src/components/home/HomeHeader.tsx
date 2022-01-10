@@ -1,20 +1,20 @@
 import React, { useContext } from 'react'
 import { useWalletStore } from 'store/walletStore'
-// import { useQuery } from 'react-query'
-// import { NETWORK } from 'store/networks'
+import { useQuery } from 'react-query'
+import { NETWORK } from 'store/networks'
 import { GlobalContext } from 'pages/_app'
 import Image from 'next/image'
-// import { queryDaiBalance } from 'store/daiStore'
-// import {
-//   web3BNToFloatString,
-//   bigNumberTenPow18,
-//   formatNumberWithCommasAsThousandsSerperator,
-// } from 'utils'
+import { queryDaiBalance } from 'store/daiStore'
+import {
+  web3BNToFloatString,
+  bigNumberTenPow18,
+  formatNumberWithCommasAsThousandsSerperator,
+} from 'utils'
 import ModalService from 'components/modals/ModalService'
 import { ListTokenModal, WalletModal } from 'components'
 import Plus from '../../assets/plus-white.svg'
 import A from 'components/A'
-// import BN from 'bn.js'
+import BN from 'bn.js'
 import { useMixPanel } from 'utils/mixPanel'
 
 const HomeHeader = ({
@@ -24,16 +24,16 @@ const HomeHeader = ({
   const { mixpanel } = useMixPanel()
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
-  // const { interestManagerAVM: interestManagerAddress } =
-  //   NETWORK.getDeployedAddresses()
+  const { interestManagerAVM: interestManagerAddress } =
+    NETWORK.getDeployedAddresses()
 
-  // const { data: interestManagerDaiBalance } = useQuery(
-  //   ['interest-manager-dai-balance', interestManagerAddress],
-  //   queryDaiBalance,
-  //   {
-  //     refetchOnWindowFocus: false,
-  //   }
-  // )
+  const { data: interestManagerDaiBalance } = useQuery(
+    ['interest-manager-dai-balance', interestManagerAddress],
+    queryDaiBalance,
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
 
   const onListTokenClicked = () => {
     mixpanel.track('ADD_LISTING_START')
@@ -49,13 +49,13 @@ const HomeHeader = ({
     }
   }
 
-  // const daiBalance = formatNumberWithCommasAsThousandsSerperator(
-  //   web3BNToFloatString(
-  //     interestManagerDaiBalance || new BN('0'),
-  //     bigNumberTenPow18,
-  //     0
-  //   )
-  // )
+  const daiBalance = formatNumberWithCommasAsThousandsSerperator(
+    web3BNToFloatString(
+      interestManagerDaiBalance || new BN('0'),
+      bigNumberTenPow18,
+      0
+    )
+  )
 
   return (
     <div className="px-6 pt-10 pb-40 text-center text-white bg-cover dark:text-gray-200 bg-top-mobile md:bg-top-desktop">
@@ -140,12 +140,12 @@ const HomeHeader = ({
         </button>
       </div>
       <div className="flex flex-col items-center justify-center mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
-        {/* <div className="text-2xl text-brand-blue md:text-5xl">
+        <div className="text-2xl text-brand-blue md:text-5xl">
           ${daiBalance}
         </div>
-        <div className="md:ml-2">in trust signaled</div> */}
+        <div className="md:ml-2">in trust signaled</div>
         <div
-          className="flex justify-center flex-grow-0 flex-shrink-0 mt-8 md:mt-0"
+          className="flex justify-center flex-grow-0 flex-shrink-0 mt-8 md:mt-0 md:ml-6 mr-8 md:mr-0"
           data-aos="zoom-y-out"
         >
           <A href="https://docs.ideamarket.io/contracts/audit">

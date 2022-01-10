@@ -100,17 +100,17 @@ export const OverviewColumns = ({
   })
   // If over $1,000 - no decimals
   // If under $1,000 - show cents also
-  // const allPlatformsEarnedString = bnToFloatString(
-  //   allPlatformsEarnedBN,
-  //   bigNumberTenPow18,
-  //   4
-  // )
-  // const allPlatformsEarned =
-  //   parseFloat(allPlatformsEarnedString) < 1000
-  //     ? formatNumber(parseFloat(allPlatformsEarnedString))
-  //     : formatNumberWithCommasAsThousandsSerperator(
-  //         parseInt(allPlatformsEarnedString)
-  //       )
+  const allPlatformsEarnedString = bnToFloatString(
+    allPlatformsEarnedBN,
+    bigNumberTenPow18,
+    4
+  )
+  const allPlatformsEarned =
+    parseFloat(allPlatformsEarnedString) < 1000
+      ? formatNumber(parseFloat(allPlatformsEarnedString))
+      : formatNumberWithCommasAsThousandsSerperator(
+          parseInt(allPlatformsEarnedString)
+        )
 
   function getColumnContent(column) {
     switch (column.value) {
@@ -157,7 +157,7 @@ export const OverviewColumns = ({
               className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50"
               key={column.value}
             >
-              {/* ${allPlatformsEarned}
+              ${allPlatformsEarned}
               <br />
               <div className="flex items-center">
                 earned for platforms
@@ -173,7 +173,7 @@ export const OverviewColumns = ({
                     team@ideamarket.io to claim your new income stream.
                   </div>
                 </Tooltip>
-              </div> */}
+              </div>
             </th>
           )
         } else {
