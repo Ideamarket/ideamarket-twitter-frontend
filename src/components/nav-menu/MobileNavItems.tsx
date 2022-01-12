@@ -9,9 +9,10 @@ import NavThemeButton from './NavThemeButton'
 
 type Props = {
   isMobileNavOpen: boolean
+  imoFeature: any
 }
 
-const MobileNavItems = ({ isMobileNavOpen }: Props) => {
+const MobileNavItems = ({ isMobileNavOpen, imoFeature }: Props) => {
   const { mixpanel } = useMixPanel()
 
   const navbarConfig = getNavbarConfig(mixpanel)
@@ -28,9 +29,13 @@ const MobileNavItems = ({ isMobileNavOpen }: Props) => {
       className="md:hidden"
     >
       <div className="px-2 pt-2 pb-3 space-y-3 sm:px-3">
-        {navbarConfig.menu.map((menuItem, i) => (
-          <NavItem menuItem={menuItem} key={i} />
-        ))}
+        {navbarConfig.menu
+          .filter(
+            (m) => m.name !== 'IMO' || (m.name === 'IMO' && imoFeature?.enabled)
+          )
+          .map((menuItem, i) => (
+            <NavItem menuItem={menuItem} key={i} />
+          ))}
         <div className="flex px-2 mt-5">
           <WalletStatus openModal={() => ModalService.open(WalletModal)} />
         </div>

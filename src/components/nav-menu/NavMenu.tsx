@@ -122,7 +122,10 @@ const NavMenu = () => {
           {/* Mobile END */}
         </nav>
       </div>
-      <MobileNavItems isMobileNavOpen={isMobileNavOpen} />
+      <MobileNavItems
+        isMobileNavOpen={isMobileNavOpen}
+        imoFeature={imoFeature}
+      />
     </div>
   )
 }
