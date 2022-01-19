@@ -2,7 +2,8 @@ import axios from 'axios'
 
 const client = axios.create({ baseURL: process.env.IDEAMARKET_BACKEND_HOST })
 const BASE_URL =
-  process.env.IDEAMARKET_BACKEND_HOST || 'https://server-dev.ideamarket.io'
+  process.env.NEXT_PUBLIC_IDEAMARKET_BACKEND_HOST ||
+  'https://server-dev.ideamarket.io'
 
 export default client
 
