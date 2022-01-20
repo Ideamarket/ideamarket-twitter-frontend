@@ -1,9 +1,1 @@
-<svg width="1400" height="626" viewBox="0 0 1400 626" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="1400" height="626" fill="url(#paint0_radial_167_1765)"/>
-<defs>
-<radialGradient id="paint0_radial_167_1765" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(474.5 226) rotate(23.6015) scale(999.07 706.673)">
-<stop stop-color="#02194D"/>
-<stop offset="1" stop-color="#011032"/>
-</radialGradient>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="626"><defs><linearGradient id="a" x1="50%" x2="50%" y1="13.083%" y2="100%"><stop offset="0%" stop-color="#011135"/><stop offset="100%" stop-color="#032167"/></linearGradient><path id="b" d="M0 0h1440v625.461H0z"/></defs><use fill="url(#a)" xlink:href="#b" fill-rule="evenodd"/></svg>
