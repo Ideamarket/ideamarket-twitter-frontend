@@ -1,4 +1,5 @@
 import { Transition } from '@headlessui/react'
+import router from 'next/router'
 import { useMixPanel } from 'utils/mixPanel'
 import { getNavbarConfig } from './constants'
 import NavItem from './NavItem'
@@ -12,7 +13,12 @@ type Props = {
 const MobileNavItems = ({ isMobileNavOpen, imoFeature }: Props) => {
   const { mixpanel } = useMixPanel()
 
-  const navbarConfig = getNavbarConfig(mixpanel)
+  let navbarConfig = getNavbarConfig(mixpanel)
+
+  navbarConfig.menu.push({
+    name: 'Account',
+    onClick: () => router.push('/account'),
+  } as any)
 
   return (
     <Transition
