@@ -34,7 +34,8 @@ export default function useReversePrice(
     async function calculateBuyCost() {
       if (
         !selectedTokenAddress ||
-        (!ideaToken && !market) ||
+        !ideaToken ||
+        !market ||
         !tokenBalanceBN ||
         isNaN(parseFloat(selectedTokenAmount)) ||
         parseFloat(selectedTokenAmount) <= 0.0
@@ -94,6 +95,7 @@ export default function useReversePrice(
       if (
         !useWalletStore.getState().web3 ||
         !ideaToken ||
+        !market ||
         !selectedTokenAddress ||
         isNaN(parseFloat(selectedTokenAmount)) ||
         parseFloat(selectedTokenAmount) <= 0.0

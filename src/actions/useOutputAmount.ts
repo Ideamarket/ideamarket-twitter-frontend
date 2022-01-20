@@ -29,7 +29,8 @@ export default function useOutputAmount(
       if (
         !useWalletStore.getState().web3 ||
         !selectedTokenAddress ||
-        (!ideaToken && !market) ||
+        !ideaToken ||
+        !market ||
         isNaN(parseFloat(ideaTokenAmount)) ||
         parseFloat(ideaTokenAmount) <= 0.0
       ) {

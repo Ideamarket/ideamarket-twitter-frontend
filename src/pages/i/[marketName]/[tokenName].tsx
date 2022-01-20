@@ -27,8 +27,6 @@ import { ReactElement, useEffect } from 'react'
 import DesktopRelatedInfo from 'components/listing-page/DesktopRelatedInfo'
 import MobileRelatedInfo from 'components/listing-page/MobileRelatedInfo'
 import InvestmentCalculator from 'components/investment-calculator/InvestmentCalculator'
-import { getData } from 'lib/utils/fetch'
-import getSsrBaseUrl from 'utils/getSsrBaseUrl'
 // import GoogleTrendsPanel from 'components/listing-page/GoogleTrendsPanel'
 import WikiRelatedInfo from 'components/listing-page/WikiRelatedInfo'
 // import PageViewsPanel from 'components/listing-page/PageViewsPanel'
@@ -38,11 +36,9 @@ import MultiChart from 'components/listing-page/MultiChart'
 export default function TokenDetails({
   rawMarketName,
   rawTokenName,
-  dontRender,
 }: {
   rawMarketName: string
   rawTokenName: string
-  dontRender: boolean
 }) {
   const web3 = useWalletStore((state) => state.web3)
 
@@ -128,10 +124,6 @@ export default function TokenDetails({
 
     return () => clearTimeout(timeout)
   }, [rawTokenName])
-
-  if (dontRender) {
-    return <div>{rawMarketName} market not currently on Ideamarket</div>
-  }
 
   return (
     <>
@@ -255,25 +247,10 @@ export default function TokenDetails({
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // TODO: once feature switch is no longer needed for Minds, comment these out until next market launch
-  const baseUrl = getSsrBaseUrl(context.req)
-  let mindsFeature = { feature: 'MINDS', enabled: false }
-  try {
-    const { data: mindsResponse } = await getData({
-      url: `${baseUrl}/api/fs?value=MINDS`,
-    })
-    mindsFeature = mindsResponse
-  } catch (error) {
-    console.error('Failed to fetch api/fs for MINDS')
-  }
-
   return {
     props: {
       rawMarketName: context.query.marketName,
       rawTokenName: context.query.tokenName,
-      dontRender:
-        (context.query.marketName as any).toLowerCase() === 'minds' &&
-        !mindsFeature.enabled,
     },
   }
 }
