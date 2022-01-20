@@ -21,7 +21,6 @@ import {
   ConnectorIds,
 } from 'wallets/connectors/index'
 import { Tooltip } from 'components'
-import { useCustomSession } from 'utils/useCustomSession'
 import getConfig from 'next/config'
 
 const { publicRuntimeConfig } = getConfig()
@@ -48,14 +47,12 @@ export default function WalletInterface({
   const { active, account, library, connector, activate, deactivate } =
     useWeb3React()
 
-  const { session, loading, refetchSession } = useCustomSession()
-
   // handle logic to recognize the connector currently being activated
   const [activatingConnector, setActivatingConnector] = useState<any>()
 
   useEffect(() => {
     const setWeb3WithWait = async () => {
-      await setWeb3(library, connectingWallet, session, refetchSession)
+      await setWeb3(library, connectingWallet)
 
       if (onWalletConnectedCallback) {
         onWalletConnectedCallback()
@@ -91,7 +88,7 @@ export default function WalletInterface({
       setActivatingConnector(undefined)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activatingConnector, connector, loading])
+  }, [activatingConnector, connector])
 
   async function onWalletClicked(wallet) {
     if (onWalletClickedToConnect) {

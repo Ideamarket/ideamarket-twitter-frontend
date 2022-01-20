@@ -86,7 +86,7 @@ export default function ProfileWallet({ walletState, userData }: Props) {
 
     setSelectedMarkets(new Set(initialMarkets))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [allMarkets])
 
   useEffect(() => {
     refetch()

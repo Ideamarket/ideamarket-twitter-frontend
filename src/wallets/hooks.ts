@@ -3,12 +3,10 @@ import { useWeb3React } from '@web3-react/core'
 import { setWeb3 } from 'store/walletStore'
 
 import { injected, connectorsById } from './connectors/index'
-import { useCustomSession } from 'utils/useCustomSession'
 import usePrevious from 'utils/usePrevious'
 
 export function useEagerConnect() {
   const { activate, active, library, account } = useWeb3React()
-  const { session, loading, refetchSession } = useCustomSession()
 
   const [tried, setTried] = useState(false)
 
@@ -48,25 +46,16 @@ export function useEagerConnect() {
 
   // if the connection worked, wait until we get confirmation of that to flip the flag
   useEffect(() => {
-    if (!tried && !loading && active) {
-      setWeb3(library, undefined, session, refetchSession)
+    if (!tried && active) {
+      setWeb3(library, undefined)
 
       setTried(true)
     }
 
     if (library && prevAccount !== account) {
-      setWeb3(library, undefined, session, refetchSession)
+      setWeb3(library, undefined)
     }
-  }, [
-    tried,
-    active,
-    library,
-    session,
-    refetchSession,
-    loading,
-    prevAccount,
-    account,
-  ])
+  }, [tried, active, library, prevAccount, account])
 
   return tried
 }

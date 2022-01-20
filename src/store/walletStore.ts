@@ -3,8 +3,6 @@ import Web3 from 'web3'
 
 import { initContractsFromWeb3, clearContracts } from './contractStore'
 
-import { checkAndPostNewAddresses } from 'lib/utils/address'
-
 type State = {
   web3: Web3
   address: string
@@ -27,10 +25,10 @@ async function handleWeb3Change() {
     web3.currentProvider.off('accountsChanged', handleWeb3Change)
   }
 
-  await setWeb3(web3, localStorage.getItem('WALLET_TYPE'), null, () => null)
+  await setWeb3(web3, localStorage.getItem('WALLET_TYPE'))
 }
 
-export async function setWeb3(web3, wallet, session, refetchSession) {
+export async function setWeb3(web3, wallet) {
   const address = (await web3.eth.getAccounts())[0]
   web3.eth.defaultAccount = address
 
@@ -48,8 +46,6 @@ export async function setWeb3(web3, wallet, session, refetchSession) {
     address: address,
     chainID: chainID,
   })
-
-  checkAndPostNewAddresses(address, session, refetchSession)
 
   if (wallet) {
     localStorage.setItem('WALLET_TYPE', wallet.toString())
