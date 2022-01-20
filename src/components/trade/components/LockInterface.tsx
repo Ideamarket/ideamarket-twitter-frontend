@@ -177,7 +177,7 @@ const LockInterface = ({
               <span className="text-xs opacity-0">(x days)</span>
             </div>
             {/* <div className="my-4">Estimated APR</div> */}
-            <div>Redemption Date (if locked today)</div>
+            <div>Redemption Date</div>
           </div>
 
           <div className="w-52 flex flex-col justify-between items-end border rounded-lg p-2">
@@ -321,7 +321,7 @@ const LockInterface = ({
                   <span className="text-xs opacity-0">(x days)</span>
                 </div>
                 {/* <div className="my-4">Estimated APR</div> */}
-                <div>Redemption Date (if locked today)</div>
+                <div>Redemption Date</div>
               </div>
 
               <div

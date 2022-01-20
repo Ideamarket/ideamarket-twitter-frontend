@@ -143,7 +143,7 @@ const HomeHeader = ({
         <div className="text-2xl text-brand-blue md:text-5xl">
           ${daiBalance}
         </div>
-        <div className="md:ml-2">in attention signal</div>
+        <div className="md:ml-2">of information valued</div>
         <div
           className="flex justify-center flex-grow-0 flex-shrink-0 mt-8 md:mt-0 md:ml-6 mr-8 md:mr-0"
           data-aos="zoom-y-out"
