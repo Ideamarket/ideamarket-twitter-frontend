@@ -261,7 +261,9 @@ export default function TradeInterface({
   const ideaTokenValue = web3BNToFloatString(
     calculateIdeaTokenDaiValue(
       tradeType === 'buy'
-        ? ideaToken?.rawSupply.add(masterIdeaTokenAmountBN)
+        ? // If there is no ideaToken (when listing new IDT), then just use masterIdeaTokenAmountBN
+          ideaToken?.rawSupply.add(masterIdeaTokenAmountBN) ||
+            masterIdeaTokenAmountBN
         : ideaToken?.rawSupply,
       market,
       masterIdeaTokenAmountBN

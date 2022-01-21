@@ -34,7 +34,7 @@ export default function useReversePrice(
     async function calculateBuyCost() {
       if (
         !selectedTokenAddress ||
-        !ideaToken ||
+        (!ideaToken && !market) ||
         !market ||
         !tokenBalanceBN ||
         isNaN(parseFloat(selectedTokenAmount)) ||
