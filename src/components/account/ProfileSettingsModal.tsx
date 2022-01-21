@@ -48,12 +48,7 @@ const initialState: UserProfile = {
 }
 
 export default function ProfileSettingsModal({ close }: { close: () => void }) {
-  const {
-    user: currentUser,
-    setUser,
-    jwtToken,
-    signedWalletAddress,
-  } = useContext(GlobalContext)
+  const { user: currentUser, setUser, jwtToken } = useContext(GlobalContext)
   const [user, dispatch] = useReducer(reducer, initialState)
 
   const { name, username, bio, email, walletAddress, profilePhoto } = user
@@ -102,7 +97,7 @@ export default function ProfileSettingsModal({ close }: { close: () => void }) {
       name,
       username,
       bio,
-      signedWalletAddress,
+      profilePhoto,
     }
 
     if (fileUploadState === '') {

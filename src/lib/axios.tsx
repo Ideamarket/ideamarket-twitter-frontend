@@ -16,10 +16,10 @@ export const loginAccount = ({ signedWalletAddress }) =>
     signedWalletAddress,
   })
 
-export const getAccount = ({ token }) =>
+export const getAccount = ({ jwt }) =>
   client.get(`${BASE_URL}/account`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${jwt}`,
     },
   })
 

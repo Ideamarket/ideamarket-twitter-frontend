@@ -13,8 +13,6 @@ interface GlobalContextState {
   setJwtToken: (val: string) => void
   user: UserProfile
   setUser: (val: any) => void
-  signedWalletAddress: any
-  setSignedWalletAddress: (val: any) => void
 }
 
 export const initialState: GlobalContextState = {
@@ -28,8 +26,6 @@ export const initialState: GlobalContextState = {
   setJwtToken: (val: string) => {},
   user: {},
   setUser: (val: UserProfile) => {},
-  signedWalletAddress: {},
-  setSignedWalletAddress: (val: any) => {},
 }
 
 export const GlobalContext = React.createContext(initialState)
@@ -44,7 +40,6 @@ export const GlobalContextComponent: React.FC<Props> = ({ children }) => {
   const [isEmailFooterActive, setIsEmailFooterActive] = useState(false)
   const [jwtToken, setJwtToken] = useState(null)
   const [user, setUser] = useState({})
-  const [signedWalletAddress, setSignedWalletAddress] = useState({})
 
   useEffect(() => {
     const isEmailBarClosed = localStorage.getItem('IS_EMAIL_BAR_CLOSED')
@@ -70,8 +65,6 @@ export const GlobalContextComponent: React.FC<Props> = ({ children }) => {
         setJwtToken,
         user,
         setUser,
-        signedWalletAddress,
-        setSignedWalletAddress,
       }}
     >
       {children}

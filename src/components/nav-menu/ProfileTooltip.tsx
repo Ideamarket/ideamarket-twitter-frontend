@@ -15,13 +15,16 @@ import { GlobalContext } from 'lib/GlobalContext'
 import { BsFillBellFill } from 'react-icons/bs'
 import SpearkIcon from '../../assets/speaker.svg'
 
-export const ProfileTooltip = ({ openModal }: { openModal: () => void }) => {
-  const { user, signedWalletAddress } = useContext(GlobalContext)
+export const ProfileTooltip = ({
+  onLoginClicked,
+}: {
+  onLoginClicked: () => void
+}) => {
+  const { user, jwtToken } = useContext(GlobalContext)
   const { active, connector, deactivate } = useWeb3React()
   const router = useRouter()
 
-  const isSignedIn =
-    active && signedWalletAddress?.signature && signedWalletAddress?.message
+  const isSignedIn = active && jwtToken
 
   const onClickSettings = () => {
     ModalService.open(ProfileSettingsModal)
@@ -42,7 +45,7 @@ export const ProfileTooltip = ({ openModal }: { openModal: () => void }) => {
     <div className="flex flex-col w-32 md:w-64 dark:text-black">
       {!isSignedIn && (
         <div
-          onClick={() => openModal()}
+          onClick={() => onLoginClicked()}
           className="cursor-pointer flex items-center py-3 px-4 hover:bg-brand-gray"
         >
           <IdentificationIcon className="w-6 h-6 text-gray-400" />
