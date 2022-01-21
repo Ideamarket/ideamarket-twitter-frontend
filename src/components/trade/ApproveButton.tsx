@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import classNames from 'classnames'
 import BN from 'bn.js'
 
 import { useTokenAllowance, approveToken } from '../../actions'
 import { TransactionManager, web3UintMax, zeroBN } from '../../utils'
 import Tooltip from 'components/tooltip/Tooltip'
-import { cloneDeep } from 'utils/lodash'
 
 export default function ApproveButton({
   tokenAddress,
@@ -28,19 +27,19 @@ export default function ApproveButton({
   setIsMissingAllowance: (b: boolean) => void
   txType: string
 }) {
-  const [hasAllowanceFor, setHasAllowanceFor] = useState({})
+  // allowance is the amount of user's tokens they allow our smart contract to interact with
   const [allowance] = useTokenAllowance(
     tokenAddress,
     spenderAddress,
-    hasAllowanceFor
+    requiredAllowance
   )
 
+  // isMissingAllowance says whether the user has enough allowance on the ERC20 token to perform the trade. If isMissingAllowance == true then the user needs to do an approve tx first
   const isMissingAllowance =
-    allowance &&
-    !allowance.lte(zeroBN) &&
-    hasAllowanceFor[tokenAddress]?.[spenderAddress]
-      ? hasAllowanceFor[tokenAddress][spenderAddress].lt(requiredAllowance)
-      : allowance !== undefined && allowance.lt(requiredAllowance)
+    !allowance ||
+    allowance === undefined ||
+    allowance.lte(zeroBN) ||
+    allowance.lt(requiredAllowance)
 
   const getValuesByTxType = (txType: string) => {
     if (txType === 'stake') {
@@ -97,13 +96,6 @@ export default function ApproveButton({
       console.log(ex)
       return
     }
-
-    const allowances = cloneDeep(hasAllowanceFor)
-    if (!allowances[tokenAddress]) {
-      allowances[tokenAddress] = {}
-    }
-    allowances[tokenAddress][spenderAddress] = allowanceAmount
-    setHasAllowanceFor(allowances)
   }
 
   return (

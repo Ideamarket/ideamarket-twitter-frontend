@@ -325,6 +325,7 @@ export default function TradeInterface({
       ? selectedToken?.symbol
       : marketSpecifics.getTokenDisplayName(ideaToken.name)
 
+  // Amount of token that needs approval before tx
   const requiredAllowance =
     tradeType === 'buy' ? masterSelectedTokenAmount : masterIdeaTokenAmount
 
@@ -342,7 +343,7 @@ export default function TradeInterface({
       ? exceedsBalanceBuy
       : exceedsBalanceSell
 
-  const [isMissingAllowance, setIsMissingAllowance] = useState(false)
+  const [isMissingAllowance, setIsMissingAllowance] = useState(false) // isMissingAllowance says whether the user has enough allowance on the ERC20 token to perform the trade. If isMissingAllowance == true then the user needs to do an approve tx first
   const [approveButtonKey, setApproveButtonKey] = useState(0)
   const [isValid, setIsValid] = useState(false)
   const txManager = useTransactionManager()
@@ -475,7 +476,9 @@ export default function TradeInterface({
     setIdeaTokenAmount('0')
     setApproveButtonKey(approveButtonKey + 1)
     setTradeToggle(!tradeToggle)
-    onTradeComplete(true, ideaToken?.name, transactionType)
+    if (tradeType !== 'lock')
+      // This is handled in LockInterface
+      onTradeComplete(true, ideaToken?.name, transactionType)
 
     mixpanel.track(`${tradeType.toUpperCase()}_COMPLETED`, {
       tokenName: ideaToken.name,
@@ -541,10 +544,10 @@ export default function TradeInterface({
   const isValidAddress = !isENSAddressValid ? isAddress(recipientAddress) : true
 
   const isApproveButtonDisabled =
+    txManager.isPending ||
     !isValid ||
     exceedsBalance ||
     !isMissingAllowance ||
-    txManager.isPending ||
     (isGiftChecked && !isValidAddress)
 
   const isTradeButtonDisabled =
