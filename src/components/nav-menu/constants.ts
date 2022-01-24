@@ -6,16 +6,6 @@ export const getNavbarConfig = (mixPanel: any) => ({
       name: 'Start',
       subMenu: [
         {
-          name: 'What is Ideamarket?',
-          onClick: () => {
-            window.open(
-              'https://medium.com/@harmonylion1/decentralizing-the-search-for-truth-using-financial-markets-648bf4408b5c#:~:text=Media%20corporations%20are%20the%20central,media%20corporations%20say%20they%20are',
-              '_blank'
-            )
-            mixPanel.track('LINK_WHAT')
-          },
-        },
-        {
           name: 'User Tutorial',
           onClick: () => {
             window.open(
