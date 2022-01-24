@@ -122,7 +122,7 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
   )
 
   const { account } = useWeb3React()
-  const [isUserIdeaTokenBalanceLoading, userIdeaTokenBalanceBN] = useBalance(
+  const [, userIdeaTokenBalanceBN, isUserIdeaTokenBalanceLoading] = useBalance(
     ideaToken?.address,
     account,
     18
