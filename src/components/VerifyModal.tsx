@@ -198,29 +198,29 @@ export default function VerifyModal({
                 <br />
                 <ul>
                   <li>
-                    - you must be an adult of sound mind and the ability to
+                    - You must be an adult of sound mind and the ability to
                     understand and evaluate the risks of using Ideamarket;{' '}
                   </li>
                   <li>
-                    - your use of Ideamarket must comply with all applicable
+                    - Your use of Ideamarket must comply with all applicable
                     laws, rules and regulations;{' '}
                   </li>
                   <li>
-                    - you must not subject to national or international
+                    - You must not subject to national or international
                     sanctions or located or ordinarily resident in Cuba, Iran,
                     North Korea, Sudan, Syria, the Crimea region or any other
                     country or jurisdiction against which the U.S. maintains
                     economic sanctions;{' '}
                   </li>
                   <li>
-                    - you use Ideamarket solely for its intended purposes of
+                    - You use Ideamarket solely for its intended purposes of
                     providing support signals for accounts on supported
                     third-party social media platforms, and must not use
                     Ideamarket to conduct any ICO or securities offering or
                     other regulated financial activity; and
                   </li>
                   <li>
-                    - will not hold Idea Markets, Inc. or its representatives or
+                    - Will not hold Idea Markets, Inc. or its representatives or
                     affiliates liable for any damages you suffer in connection
                     with your use of Ideamarket.{' '}
                   </li>

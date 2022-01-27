@@ -89,12 +89,19 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
     sha: string,
     marketName: string,
     tokenName: string
-  ): string {
-    return `Verifying myself on ideamarket.io: ${sha} ideamarket.io/i/${marketName}/${tokenName}`
+  ): any {
+    return (
+      <span>
+        Verifying myself on the credibility layer of the internet:{' '}
+        <b>
+          {sha} attn.to/i/{marketName}/{tokenName}
+        </b>
+      </span>
+    )
   }
 
   getVerificationSHAPromptExplanation(): string {
-    return 'Please post a Tweet containing the content in the box below. After you have posted the Tweet, click Next. (Note: This must be a new Tweet — a reply to another Tweet will not work properly.)'
+    return 'Please post a Tweet containing the code and listing link below. You can edit the text any way you like, as long as the bold text is there. After you have posted the Tweet, click Next. (Note: This must be a new Tweet — a reply to another Tweet will not work properly)'
   }
 
   getVerificationConfirmCheckboxLabel(): string {

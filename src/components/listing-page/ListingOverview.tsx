@@ -165,7 +165,7 @@ export default function TokenCard({
           )}
         </div>
       </div>
-      {market?.name !== 'Wikipedia' && (
+      {market?.name === 'Twitter' && (
         <div className="w-full md:w-auto text-center mt-2">
           {account &&
             token.tokenOwner !== ZERO_ADDRESS &&
