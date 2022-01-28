@@ -116,7 +116,7 @@ const HomeHeader = ({
           ideas
         </h2>
         <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
-          Some information has a future. Buy on the right side of history.
+          Buy on the right side of history.
         </p>
       </div>
       <div className="flex flex-col items-center justify-center md:flex-row">
