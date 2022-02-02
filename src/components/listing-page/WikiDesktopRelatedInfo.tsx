@@ -11,8 +11,8 @@ const WikiDesktopRelatedInfo = ({
   marketName,
 }: Props) => {
   return (
-    <div className="hidden md:flex mt-4">
-      <div className="w-full">
+    <div className="hidden md:flex mt-4 h-full">
+      <div className="w-full h-full">
         {wikiSnapshot?.type === 'wikipedia' && (
           <iframe
             id="wiki-iframe"

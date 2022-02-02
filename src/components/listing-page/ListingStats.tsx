@@ -82,7 +82,7 @@ export default function ListingStats({ isLoading, market, token, refetch }) {
     chartFromTs,
     now,
     rawPriceChartData,
-    token.latestPricePoint.price,
+    token?.latestPricePoint?.price,
   ])
 
   useEffect(() => {

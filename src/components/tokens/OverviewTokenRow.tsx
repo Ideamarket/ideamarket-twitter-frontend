@@ -26,11 +26,9 @@ import BigNumber from 'bignumber.js'
 import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import { useMixPanel } from 'utils/mixPanel'
 import { getRealTokenName } from 'utils/wikipedia'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
-import { GhostIconBlack } from 'assets'
-import { TrendingUpIcon } from '@heroicons/react/outline'
-import { GlobalContext } from 'lib/GlobalContext'
+import { GlobeAltIcon } from '@heroicons/react/outline'
 
 type Props = {
   token: any
@@ -52,7 +50,6 @@ export default function TokenRow({
   lastElementRef,
 }: Props) {
   const { mixpanel } = useMixPanel()
-  const { isGhostMarketActive } = useContext(GlobalContext)
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
   // const displayName = marketSpecifics.getTokenDisplayName(token?.name)
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
@@ -126,7 +123,10 @@ export default function TokenRow({
   return (
     <tr
       ref={lastElementRef}
-      className="relative grid grid-flow-col cursor-pointer grid-cols-mobile-row md:table-row hover:bg-gray-100 dark:hover:bg-gray-600"
+      className={classNames(
+        !isOnChain && 'bg-gray-100',
+        'relative grid grid-flow-col cursor-pointer grid-cols-mobile-row md:table-row hover:bg-gray-200 dark:hover:bg-gray-600'
+      )}
       onClick={() => {
         setIsExpanded(!isExpanded)
         // router.push(
@@ -141,83 +141,6 @@ export default function TokenRow({
         // })
       }}
     >
-      {/* Rank */}
-      <td
-        className={classNames(
-          isExpanded ? 'pt-4 pb-96' : 'py-4',
-          'relative hidden pl-3 pr-1 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap'
-        )}
-      >
-        {token?.rank}
-        {pageLink}
-
-        {isExpanded && (
-          <div className="relative w-full h-full">
-            <div
-              className="absolute h-full"
-              style={{ left: '-30px', bottom: '-10px' }}
-            >
-              <div>
-                <div className="flex flex-col">
-                  <div className="flex items-center space-x-1 mt-4 pl-10 text-sm">
-                    <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
-                      Ghost Listed by @testing 87 days ago
-                    </div>
-                    <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
-                      Listed by @someone 56 days ago
-                    </div>
-                  </div>
-
-                  {/* Didn't use Next image because can't do wildcard domain allow in next config file */}
-                  <a
-                    href={url}
-                    className="pl-10 h-56 cursor-pointer"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      className="rounded-xl mt-4 h-full"
-                      src={
-                        !isURLMetaDataLoading &&
-                        urlMetaData &&
-                        urlMetaData?.ogImage
-                          ? urlMetaData.ogImage
-                          : '/gray.svg'
-                      }
-                      alt=""
-                    />
-                    <div className="my-4 text-gray-300 text-sm text-left leading-5">
-                      {!isURLMetaDataLoading &&
-                      urlMetaData &&
-                      urlMetaData?.ogDescription
-                        ? urlMetaData.ogDescription
-                        : 'No description found'}
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-      </td>
-      {/* Market */}
-      <td
-        className={classNames(
-          isExpanded ? 'pt-4 pb-96' : 'py-4',
-          'relative flex items-center justify-center text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap'
-        )}
-      >
-        <div className="flex items-center justify-end w-full h-full">
-          <div className="h-auto mr-2 md:mr-0">
-            {isOnChain ? (
-              marketSpecifics.getMarketSVGTheme(resolvedTheme)
-            ) : (
-              <GhostIconBlack className="w-7 h-7" />
-            )}
-          </div>
-        </div>
-        {pageLink}
-      </td>
       {/* Icon and Name */}
       <td
         className={classNames(
@@ -235,6 +158,8 @@ export default function TokenRow({
           >
             {isTokenIconLoading ? (
               <div className="w-full h-full bg-gray-400 rounded-full animate-pulse"></div>
+            ) : !isOnChain || market?.name === 'URL' ? (
+              <GlobeAltIcon className="w-7" />
             ) : (
               <div className="relative w-full h-full rounded-full">
                 <Image
@@ -250,23 +175,13 @@ export default function TokenRow({
           <div className="ml-4 text-base font-medium leading-5 truncate z-30">
             {urlMetaData && urlMetaData?.ogTitle ? (
               <div>
-                <a
-                  href={`/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
-                    token?.name
-                  )}`}
-                  className="hover:underline"
-                >
+                <a href={`/i/${token?.listingId}`} className="hover:underline">
                   {urlMetaData?.ogTitle}
                 </a>
               </div>
             ) : (
               <div>
-                <a
-                  href={`/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
-                    token?.name
-                  )}`}
-                  className="hover:underline"
-                >
+                <a href={`/i/${token?.listingId}`} className="hover:underline">
                   {marketSpecifics?.convertUserInputToTokenName(token?.url)}
                 </a>
               </div>
@@ -282,21 +197,75 @@ export default function TokenRow({
             </a>
           </div>
           {/* Desktop Verified Badge */}
-          {market?.name !== 'URL' && token?.tokenOwner !== ZERO_ADDRESS && (
-            <div className="hidden md:inline w-5 h-5 ml-1.5 text-black dark:text-white">
-              <IdeaverifyIconBlue className="w-full h-full" />
-            </div>
-          )}
+          {isOnChain &&
+            market?.name !== 'URL' &&
+            token?.tokenOwner !== ZERO_ADDRESS && (
+              <div className="hidden md:inline w-5 h-5 ml-1.5 text-black dark:text-white">
+                <IdeaverifyIconBlue className="w-full h-full" />
+              </div>
+            )}
         </div>
+
         {pageLink}
+
+        {isExpanded && (
+          <div className="relative w-full h-full">
+            <div
+              className="absolute h-full"
+              style={{ left: '-30px', bottom: '-10px' }}
+            >
+              <div>
+                <div className="flex flex-col">
+                  {/* <div className="flex items-center space-x-1 mt-4 pl-10 text-sm">
+                    <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
+                      Ghost Listed by @testing 87 days ago
+                    </div>
+                    <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
+                      Listed by @someone 56 days ago
+                    </div>
+                  </div> */}
+
+                  {/* Didn't use Next image because can't do wildcard domain allow in next config file */}
+                  <a
+                    href={url}
+                    className="mt-4 pl-10 h-56 cursor-pointer"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      className="rounded-xl mt-4 h-full"
+                      src={
+                        !isURLMetaDataLoading &&
+                        urlMetaData &&
+                        urlMetaData?.ogImage
+                          ? urlMetaData.ogImage
+                          : '/gray.svg'
+                      }
+                      alt=""
+                    />
+                    <div className="w-full my-4 text-black/[.5] text-sm text-left leading-5">
+                      {!isURLMetaDataLoading &&
+                      urlMetaData &&
+                      urlMetaData?.ogDescription
+                        ? urlMetaData.ogDescription
+                        : 'No description found'}
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </td>
       {/* Mobile Verified Badge */}
       <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-black md:hidden dark:text-white md:table-cell whitespace-nowrap">
         <div className="flex items-center justify-end h-full">
           <div className="w-5 h-5">
-            {market?.name !== 'URL' && token?.tokenOwner !== ZERO_ADDRESS && (
-              <IdeaverifyIconBlue className="w-full h-full" />
-            )}
+            {isOnChain &&
+              market?.name !== 'URL' &&
+              token?.tokenOwner !== ZERO_ADDRESS && (
+                <IdeaverifyIconBlue className="w-full h-full" />
+              )}
           </div>
         </div>
       </td>
@@ -488,7 +457,7 @@ export default function TokenRow({
         )}
       >
         <div className="flex space-x-2">
-          {isGhostMarketActive && (
+          {/* {isGhostMarketActive && (
             <button
               onClick={(e) => {
                 e.stopPropagation()
@@ -502,21 +471,23 @@ export default function TokenRow({
               <span className="">{token?.totalVotes}</span>
               <TrendingUpIcon className="w-6 h-6" />
             </button>
-          )}
+          )} */}
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              onTradeClicked(token, market)
-              mixpanel.track('BUY_START', {
-                tokenName: token?.name,
-              })
-            }}
-            className="flex justify-center items-center w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2"
-          >
-            <ArrowSmUpIcon className="w-6 h-6" />
-            <span className="mr-1">Buy</span>
-          </button>
+          {isOnChain && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onTradeClicked(token, market)
+                mixpanel.track('BUY_START', {
+                  tokenName: token?.name,
+                })
+              }}
+              className="flex justify-center items-center w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2"
+            >
+              <ArrowSmUpIcon className="w-6 h-6" />
+              <span className="mr-1">Buy</span>
+            </button>
+          )}
         </div>
       </td>
       {/* Buy Button mobile */}

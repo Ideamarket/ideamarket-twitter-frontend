@@ -1,22 +1,13 @@
 const defaultColumns = [
-  {
-    id: 1,
-    name: 'Rank',
-    content: 'Rank',
-    value: 'rank',
-    sortable: true,
-    isOptional: false,
-    isSelectedAtStart: true,
-  },
-  {
-    id: 2,
-    name: 'Market',
-    content: '',
-    value: 'market',
-    sortable: false,
-    isOptional: false,
-    isSelectedAtStart: true,
-  },
+  // {
+  //   id: 1,
+  //   name: 'Rank',
+  //   content: 'Rank',
+  //   value: 'rank',
+  //   sortable: true,
+  //   isOptional: false,
+  //   isSelectedAtStart: true,
+  // },
   {
     id: 3,
     name: 'Name',

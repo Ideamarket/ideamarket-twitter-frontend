@@ -44,7 +44,7 @@ export const GlobalContextComponent: React.FC<Props> = ({ children }) => {
   const [isEmailFooterActive, setIsEmailFooterActive] = useState(false)
   const [jwtToken, setJwtToken] = useState(null)
   const [user, setUser] = useState({})
-  const [isGhostMarketActive, setIsGhostMarketActive] = useState(false)
+  const [isGhostMarketActive, setIsGhostMarketActive] = useState(true)
 
   useEffect(() => {
     const isEmailBarClosed = localStorage.getItem('IS_EMAIL_BAR_CLOSED')

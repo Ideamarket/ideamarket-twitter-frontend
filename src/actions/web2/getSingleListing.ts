@@ -2,7 +2,7 @@ import client from 'lib/axios'
 
 /**
  * Get a single token (Ghost or onchain).
- * @param value -- value of token being listed in format that it is stored on blockchain
+ * @param value -- the canonical URL (not a token name from old market)
  * @param marketID -- id of market this token is being listed on. ID determined by data returned from subgraph
  */
 export const getSingleListing = async (value: string, marketId: number) => {

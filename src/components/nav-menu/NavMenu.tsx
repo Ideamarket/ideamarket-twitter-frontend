@@ -13,11 +13,11 @@ import { getData } from 'lib/utils/fetch'
 import { ProfileTooltip } from './ProfileTooltip'
 import { useWeb3React } from '@web3-react/core'
 import { useMutation } from 'react-query'
-import { SignedAddress } from 'types/customTypes'
 import useAuth from 'components/account/useAuth'
 import { GhostIcon } from 'assets'
 import ToggleSwitch from 'components/ToggleSwitch'
 import { GlobalContext } from 'lib/GlobalContext'
+import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 
 const NavMenu = () => {
   const router = useRouter()
@@ -33,7 +33,8 @@ const NavMenu = () => {
 
   const navbarConfig = getNavbarConfig(mixpanel)
 
-  const { isGhostMarketActive, setIsGhostMarketActive } = useContext(GlobalContext)
+  const { isGhostMarketActive, setIsGhostMarketActive } =
+    useContext(GlobalContext)
 
   useEffect(() => {
     const featureSwitch = async () => {
@@ -95,40 +96,6 @@ const NavMenu = () => {
       return res.json()
     })
   )
-  const getSignedInWalletAddress = async (): Promise<SignedAddress> => {
-    const { data } = await walletVerificationRequest()
-    const uuid: string = data?.uuid
-    const message: string = `
-      Welcome to Ideamarket!
-
-      Click to sign in and accept the Ideamarket Terms of Service: https://docs.ideamarket.io/legal/terms-of-service
-
-      This request will not trigger a blockchain transaction or cost any gas fees.
-
-      Your authentication status will reset after 30 days.
-
-      Wallet address:
-      ${account}
-
-      UUID:
-      ${uuid}
-    `
-    let signature: string = null
-
-    if (message) {
-      try {
-        signature = await library?.eth?.personal?.sign(message, account, '')
-      } catch (error) {
-        console.log('metamask signin error', error)
-      }
-    }
-    return message && signature
-      ? {
-          message,
-          signature,
-        }
-      : null
-  }
 
   const { loginByWallet } = useAuth()
 
@@ -136,7 +103,11 @@ const NavMenu = () => {
     mixpanel.track('ADD_ACCOUNT_START')
 
     if (active) {
-      const signedWalletAddress = await getSignedInWalletAddress()
+      const signedWalletAddress = await getSignedInWalletAddress({
+        walletVerificationRequest,
+        account,
+        library,
+      })
       await loginByWallet(signedWalletAddress)
     }
   }
@@ -212,7 +183,9 @@ const NavMenu = () => {
           <div className="flex text-lg items-center">
             <GhostIcon className="w-6 h-6" />
             <span className="text-white ml-1 mr-2">Ghost Market</span>
-            {isGhostMarketActive && <span className="text-brand-blue mr-2">LIVE</span>}
+            {isGhostMarketActive && (
+              <span className="text-brand-blue mr-2">LIVE</span>
+            )}
             <ToggleSwitch
               handleChange={() => setIsGhostMarketActive(!isGhostMarketActive)}
               isOn={isGhostMarketActive}

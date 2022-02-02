@@ -84,7 +84,7 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
   const ideaTokenValue = web3BNToFloatString(
     calculateIdeaTokenDaiValue(
       ideaTokenAmountBN
-        ? ideaToken?.rawSupply.add(ideaTokenAmountBN)
+        ? ideaToken?.rawSupply?.add(ideaTokenAmountBN)
         : new BN('0'),
       market,
       ideaTokenAmountBN
@@ -95,7 +95,7 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
 
   const supplyAfterYouAndOther =
     ideaTokenAmountBN && otherIdeaTokenAmountBN
-      ? ideaToken?.rawSupply.add(
+      ? ideaToken?.rawSupply?.add(
           ideaTokenAmountBN.add(
             isSell ? otherIdeaTokenAmountBN.neg() : otherIdeaTokenAmountBN
           )
@@ -131,7 +131,7 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
   const userIdeaTokenValue = web3BNToFloatString(
     calculateIdeaTokenDaiValue(
       ideaToken && userIdeaTokenBalanceBN
-        ? ideaToken?.rawSupply.add(userIdeaTokenBalanceBN)
+        ? ideaToken?.rawSupply?.add(userIdeaTokenBalanceBN)
         : new BN('0'),
       market,
       userIdeaTokenBalanceBN

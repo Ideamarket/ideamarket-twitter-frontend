@@ -2,12 +2,13 @@ import React, { useContext, useRef, useState } from 'react'
 import { GlobalContext } from 'pages/_app'
 import Image from 'next/image'
 import ModalService from 'components/modals/ModalService'
+import CreateAccountModal from 'components/account/CreateAccountModal'
 import { CircleSpinner, WalletModal } from 'components'
 import A from 'components/A'
 import { GlobeAltIcon, PlusCircleIcon, XIcon } from '@heroicons/react/outline'
 import useOnClickOutside from 'utils/useOnClickOutside'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import classNames from 'classnames'
 import { ghostListToken } from 'actions/web2/ghostListToken'
 import { getMarketFromURL } from 'utils/markets'
@@ -20,6 +21,8 @@ import { useTransactionManager } from 'utils'
 import TradeCompleteModal, {
   TRANSACTION_TYPES,
 } from 'components/trade/TradeCompleteModal'
+import useAuth from 'components/account/useAuth'
+import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 
 const HomeHeader = ({
   setTradeOrListSuccessToggle,
@@ -27,7 +30,7 @@ const HomeHeader = ({
 }: any) => {
   const { mixpanel } = useMixPanel()
   const txManager = useTransactionManager()
-  const { active } = useWeb3React()
+  const { active, account, library } = useWeb3React()
   const { jwtToken } = useContext(GlobalContext)
   const [showListingCards, setShowListingCards] = useState(false)
   const [urlInput, setURLInput] = useState('')
@@ -83,16 +86,55 @@ const HomeHeader = ({
     })
   }
 
+  const [walletVerificationRequest] = useMutation<{
+    message: string
+    data: any
+  }>(() =>
+    fetch('/api/walletVerificationRequest', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(async (res) => {
+      if (!res.ok) {
+        const response = await res.json()
+        throw new Error(response.message)
+      }
+      return res.json()
+    })
+  )
+
+  const { loginByWallet } = useAuth()
+
+  const onLoginClicked = async () => {
+    if (active) {
+      const signedWalletAddress = await getSignedInWalletAddress({
+        walletVerificationRequest,
+        account,
+        library,
+      })
+      await loginByWallet(signedWalletAddress)
+    }
+  }
+
   /**
    * User clicked the button to list token on Ghost Market
    */
   const onClickGhostList = async () => {
+    // if jwtToken is not present, then popup modal and MM popup to ask user to create account or sign in
+    if (!jwtToken) {
+      onLoginClicked()
+      ModalService.open(CreateAccountModal, {}, () => setShowListingCards(true))
+      return
+    }
+
     setIsListing(true)
     const market = getMarketFromURL(urlInput, markets)
 
     await ghostListToken(urlInput, market?.marketID, jwtToken)
 
     setIsListing(false)
+    setURLInput('')
     setShowListingCards(false)
     setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
   }
@@ -135,10 +177,6 @@ const HomeHeader = ({
     //   )
     // } else {
 
-    console.log('finalTokenValue==', finalTokenValue)
-    console.log('market==', market)
-    console.log('jwtToken==', jwtToken)
-
     try {
       await txManager.executeTx(
         'List Token',
@@ -165,6 +203,7 @@ const HomeHeader = ({
     )
 
     setIsListing(false)
+    setURLInput('')
     setShowListingCards(false)
     setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
   }
@@ -342,7 +381,11 @@ const HomeHeader = ({
                   {!isValidToken &&
                     !isAlreadyGhostListed &&
                     !isAlreadyOnChain && (
-                      <div className="text-red-400">INVALID URL</div>
+                      <div className="text-red-400">
+                        {urlInput === ''
+                          ? 'Enter a URL to list'
+                          : 'INVALID URL'}
+                      </div>
                     )}
                   {!isAlreadyOnChain && isAlreadyGhostListed && (
                     <div className="text-red-400">
@@ -415,7 +458,11 @@ const HomeHeader = ({
                   </div>
                 ) : (
                   <button
-                    onClick={() => ModalService.open(WalletModal)}
+                    onClick={() =>
+                      ModalService.open(WalletModal, {}, () =>
+                        setShowListingCards(true)
+                      )
+                    }
                     className="text-white bg-blue-500 flex flex-col justify-center items-center w-full h-20 mt-4 font-bold rounded-lg"
                   >
                     <div className="font-bold text-lg">CONNECT WALLET</div>
