@@ -97,13 +97,13 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
   getVerificationSHAPrompt(
     sha: string,
     marketName: string,
-    tokenName: string
+    listingId: string
   ): any {
     return (
       <span>
         Verifying myself on the credibility layer of the internet:{' '}
         <b>
-          {sha} attn.to/i/{marketName}/{tokenName}
+          {sha} attn.to/i/{listingId}
         </b>
       </span>
     )
