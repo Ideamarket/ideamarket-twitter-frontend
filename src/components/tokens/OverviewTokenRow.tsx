@@ -64,18 +64,19 @@ export default function TokenRow({
     parseFloat(token?.marketCap) * compoundSupplyRate
   ).toFixed(2)
 
-  const tokenPrice = isOnChain
-    ? web3BNToFloatString(
-        calculateCurrentPriceBN(
-          token?.rawSupply,
-          market.rawBaseCost,
-          market.rawPriceRise,
-          market.rawHatchTokens
-        ),
-        bigNumberTenPow18,
-        2
-      )
-    : '0'
+  const tokenPrice =
+    isOnChain && token?.rawSupply
+      ? web3BNToFloatString(
+          calculateCurrentPriceBN(
+            token?.rawSupply,
+            market.rawBaseCost,
+            market.rawPriceRise,
+            market.rawHatchTokens
+          ),
+          bigNumberTenPow18,
+          2
+        )
+      : '0'
 
   const { data: interestManagerTotalShares } = useQuery(
     'interest-manager-total-shares',
@@ -97,7 +98,10 @@ export default function TokenRow({
   )
 
   const claimableIncome =
-    interestManagerTotalShares && interestManagerDaiBalance && isOnChain
+    interestManagerTotalShares &&
+    interestManagerDaiBalance &&
+    isOnChain &&
+    token?.rawInvested
       ? bnToFloatString(
           new BigNumber(token?.rawInvested.toString())
             .dividedBy(new BigNumber(interestManagerTotalShares.toString()))
