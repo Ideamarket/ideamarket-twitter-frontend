@@ -66,8 +66,15 @@ export const getNavbarConfig = (mixPanel: any) => ({
       ],
     },
     {
-      name: 'IMO',
+      name: '$IMO',
       subMenu: [
+        {
+          name: 'Token Address',
+          onClick: () => {
+            window.open('https://arbiscan.io/address/0xB41bd4C99dA73510d9e081C5FADBE7A27Ac1F814', '_blank')
+            mixPanel.track('GO_TO_TOKEN_ON_BLOCK_EXPLORER')
+          },
+        },
         {
           name: 'Stake',
           onClick: () => router.push('/stake'),
