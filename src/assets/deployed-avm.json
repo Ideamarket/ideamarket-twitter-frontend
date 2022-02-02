@@ -19,9 +19,9 @@
   "multiAction": "0x3e2e703159e2a9fe4290c5949ab6ac2aa60c8524",
   "addMarketSpell": "0x4332df6a97abb1776a4909ee283a7f04994b6b1c",
   "merkleDistributor": "0x80125E8016B30D10Dd5f96A3D0b7d4594a3309B1",
-  "imo": "0xC6C77506134cFc29E62cF35cEb2b964bE313FBC9",
+  "imo": "0xB41bd4C99dA73510d9e081C5FADBE7A27Ac1F814",
   "imoStaking": "0x902ed1D30212a3DaCC471FBbD8e421fa80c3d2B4",
   "sushiStaking": "0xb0448763523E129Bfc2Cd20ceeFAcC16c620F726",
   "lptoken": "0x9eAE34FAa17CaF99D2109f513edc5A6E3A7435B5",
-  "drippingIMOSource": ""
+  "drippingIMOSource": "0xc1092Eb50fa05Ec3b632e8Cf993d57Da5152cA29"
 }
