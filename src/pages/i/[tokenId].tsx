@@ -370,7 +370,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                     </div>
                   </div>
 
-                  <div className="flex justify-end space-x-2 items-center w-full w-1/2">
+                  {token?.isOnChain && <div className="flex justify-end space-x-2 items-center w-full w-1/2">
                     <button
                       onClick={() =>
                         ModalService.open(
@@ -392,7 +392,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                       <LockClosedIcon className="w-5" />
                       Lock
                     </button>
-                  </div>
+                  </div>}
                 </div>
               </div>
 

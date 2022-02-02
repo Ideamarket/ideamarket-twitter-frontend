@@ -262,7 +262,7 @@ export default function TradeInterface({
     calculateIdeaTokenDaiValue(
       tradeType === 'buy'
         ? // If there is no ideaToken (when listing new IDT), then just use masterIdeaTokenAmountBN
-          ideaToken?.rawSupply.add(masterIdeaTokenAmountBN) ||
+          ideaToken?.rawSupply?.add(masterIdeaTokenAmountBN) ||
             masterIdeaTokenAmountBN
         : ideaToken?.rawSupply,
       market,
