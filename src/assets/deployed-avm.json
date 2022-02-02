@@ -21,5 +21,6 @@
   "merkleDistributor": "0x80125E8016B30D10Dd5f96A3D0b7d4594a3309B1",
   "imo": "0xC6C77506134cFc29E62cF35cEb2b964bE313FBC9",
   "imoStaking": "0x902ed1D30212a3DaCC471FBbD8e421fa80c3d2B4",
+  "sushiStaking": "0xb0448763523E129Bfc2Cd20ceeFAcC16c620F726",
   "drippingIMOSource": ""
 }
