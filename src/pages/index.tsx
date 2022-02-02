@@ -29,6 +29,7 @@ const Home = ({ urlMarkets }: Props) => {
   const [selectedFilterId, setSelectedFilterId] = useState(MainFilters.TOP.id)
   const [isVerifiedFilterActive, setIsVerifiedFilterActive] = useState(false)
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
+  const [isGhostOnlyActive, setIsGhostOnlyActive] = useState(false)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
@@ -118,12 +119,14 @@ const Home = ({ urlMarkets }: Props) => {
     selectedColumns,
     isVerifiedFilterActive,
     isStarredFilterActive,
+    isGhostOnlyActive,
     onMarketChanged,
     setSelectedFilterId,
     onColumnChanged,
     onNameSearchChanged,
     setIsVerifiedFilterActive,
     setIsStarredFilterActive,
+    setIsGhostOnlyActive,
   }
 
   const tableProps = {
@@ -132,6 +135,7 @@ const Home = ({ urlMarkets }: Props) => {
     selectedFilterId,
     isVerifiedFilterActive,
     isStarredFilterActive,
+    isGhostOnlyActive,
     columnData: visibleColumns,
     getColumn: (column) => selectedColumns.has(column),
     onOrderByChanged,

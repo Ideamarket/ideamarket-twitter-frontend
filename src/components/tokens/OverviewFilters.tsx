@@ -24,6 +24,7 @@ import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import DropdownCheckbox from 'components/dropdowns/DropdownCheckbox'
 import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import { getIconVersion } from 'utils/icons'
+import { GhostIconBlack } from 'assets'
 
 type DropdownButtonProps = {
   filters: any
@@ -205,12 +206,14 @@ type OverviewFiltersProps = {
   selectedColumns: Set<string>
   isVerifiedFilterActive: boolean
   isStarredFilterActive: boolean
+  isGhostOnlyActive: boolean
   onMarketChanged: (set: Set<string>) => void
   setSelectedFilterId: (filterId: number) => void
   onColumnChanged: (set: Set<string>) => void
   onNameSearchChanged: (value: string) => void
   setIsVerifiedFilterActive: (isActive: boolean) => void
   setIsStarredFilterActive: (isActive: boolean) => void
+  setIsGhostOnlyActive: (isActive: boolean) => void
 }
 
 export const OverviewFilters = ({
@@ -219,12 +222,14 @@ export const OverviewFilters = ({
   selectedColumns,
   isVerifiedFilterActive,
   isStarredFilterActive,
+  isGhostOnlyActive,
   onMarketChanged,
   setSelectedFilterId,
   onColumnChanged,
   onNameSearchChanged,
   setIsVerifiedFilterActive,
   setIsStarredFilterActive,
+  setIsGhostOnlyActive,
 }: OverviewFiltersProps) => {
   // const { mixpanel } = useMixPanel()
   const { resolvedTheme } = useThemeMode()
@@ -307,6 +312,18 @@ export const OverviewFilters = ({
         toggleOption={onFilterChanged}
         dropdownType="buttons"
         selectedFilterId={selectedFilterId}
+      />
+
+      <FiltersButton
+        className="hidden md:flex w-56 text-sm"
+        onClick={setIsGhostOnlyActive}
+        isSelected={isGhostOnlyActive}
+        label={
+          <div>
+            <GhostIconBlack className="w-6 h-6" />
+            Ghost Listings
+          </div>
+        }
       />
 
       <div className="flex w-full h-9 md:h-auto mt-2 ml-auto md:mt-0">

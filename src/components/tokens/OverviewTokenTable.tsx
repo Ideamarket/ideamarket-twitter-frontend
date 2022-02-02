@@ -29,6 +29,7 @@ type Props = {
   selectedFilterId: number
   isVerifiedFilterActive: boolean
   isStarredFilterActive: boolean
+  isGhostOnlyActive: boolean
   nameSearch: string
   columnData: Array<any>
   getColumn: (column: string) => boolean
@@ -42,6 +43,7 @@ export default function Table({
   selectedFilterId,
   isVerifiedFilterActive,
   isStarredFilterActive,
+  isGhostOnlyActive,
   nameSearch,
   columnData,
   getColumn,
@@ -110,6 +112,7 @@ export default function Table({
         filterTokens,
         isVerifiedFilterActive,
         isGhostMarketActive,
+        isGhostOnlyActive,
       ],
     ],
     queryTokens,
@@ -168,6 +171,7 @@ export default function Table({
     nameSearch,
     tradeOrListSuccessToggle,
     isGhostMarketActive,
+    isGhostOnlyActive,
     refetch,
   ])
 

@@ -278,7 +278,8 @@ type Params = [
   search: string,
   filterTokens: string[],
   isVerifiedFilter: boolean,
-  isGhostMarketActive: boolean
+  isGhostMarketActive: boolean,
+  isGhostOnlyActive: boolean
 ]
 
 export async function queryTokens(
@@ -301,6 +302,7 @@ export async function queryTokens(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isVerifiedFilter,
     isGhostMarketActive,
+    isGhostOnlyActive,
   ] = params
 
   const fromTs = Math.floor(Date.now() / 1000) - duration
@@ -325,7 +327,11 @@ export async function queryTokens(
   // ).tokenNameSearch
   // } else {
 
-  const marketType = isGhostMarketActive ? null : 'onchain'
+  const marketType = isGhostMarketActive
+    ? isGhostOnlyActive
+      ? 'ghost'
+      : null
+    : 'onchain'
 
   const L2Result = await getAllListings({
     marketType, // TODO: make this dynamic based on filters
