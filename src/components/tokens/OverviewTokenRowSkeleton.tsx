@@ -8,14 +8,6 @@ export default function TokenRowSkeleton({
   return (
     <>
       <tr className="grid grid-flow-col grid-cols-mobile-row md:table-row animate animate-pulse">
-        {/* Rank */}
-        <td className="hidden py-4 pl-3 pr-1 md:table-cell">
-          <div className="w-8 h-5 mx-auto bg-gray-400 rounded"></div>
-        </td>
-        {/* Market */}
-        <td className="flex items-center justify-center h-full py-4 md:table-cell">
-          <div className="w-5 h-5 bg-gray-400 rounded md:ml-auto"></div>
-        </td>
         {/* Icon and Name */}
         <td className="flex py-4 pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap">
           <div className="flex items-center">
@@ -56,13 +48,13 @@ export default function TokenRowSkeleton({
             <p className="w-10 h-4 bg-gray-400 rounded"></p>
           </td>
         )}
-        {/* %Locked */}
+        {/* %Locked
         {getColumn('% Locked') && (
           <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
             <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
             <p className="w-10 h-4 mt-1 bg-gray-400 rounded"></p>
           </td>
-        )}
+        )} */}
         {/* Year Income */}
         {getColumn('1YR Income') && (
           <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">

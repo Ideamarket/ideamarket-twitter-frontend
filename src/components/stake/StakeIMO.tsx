@@ -19,7 +19,6 @@ import { IoMdExit } from 'react-icons/io'
 import { NETWORK } from 'store/networks'
 import {
   floatToWeb3BN,
-  formatNumberWithCommasAsThousandsSerperator,
   oneBigNumber,
   useTransactionManager,
 } from 'utils'
@@ -69,12 +68,12 @@ const StakeIMO = () => {
   )
 
   // How much IMO the user will get by withdrawing xIMO
-  const [imoPayoutAmount] = useIMOPayoutAmount(
-    inputAmount,
-    stakingContractIMOBalanceBN,
-    xIMOTotalSupplyBN,
-    dripSourceIMOBalanceBN
-  )
+  // const [imoPayoutAmount] = useIMOPayoutAmount(
+  //   inputAmount,
+  //   stakingContractIMOBalanceBN,
+  //   xIMOTotalSupplyBN,
+  //   dripSourceIMOBalanceBN
+  // )
   const [ratioImoAmount] = useIMOPayoutAmount(
     '1',
     stakingContractIMOBalanceBN,
@@ -327,7 +326,7 @@ const StakeIMO = () => {
               </div>
             </div>
 
-            {!isStakeSelected && (
+            {/* {!isStakeSelected && (
               <div>
                 Payout:{' '}
                 {formatNumberWithCommasAsThousandsSerperator(
@@ -335,7 +334,7 @@ const StakeIMO = () => {
                 )}{' '}
                 IMO
               </div>
-            )}
+            )} */}
 
             <div className="pb-4 pt-2">
               {account ? (
