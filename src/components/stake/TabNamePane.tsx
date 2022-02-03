@@ -123,7 +123,7 @@ export default function TabNamePane({ stakeType, onClickStakeType }: Props) {
           {/* {apr
             ? formatNumberWithCommasAsThousandsSerperator(apr.toFixed(2))
             : 0} */}
-          400
+          300
           % APR
         </span>
       </div>

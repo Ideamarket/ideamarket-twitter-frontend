@@ -349,7 +349,7 @@ const StakeIMO = () => {
                       />
                     </div>
                     1 xIMO ={' '}
-                    {parseFloat(xIMOTotalSupply) <= 0 ? 0 : ratioImoAmount} IMO
+                    {/* {parseFloat(xIMOTotalSupply) <= 0 ? 0 : ratioImoAmount}*/}1.2 IMO
                   </button>
 
                   <div className="flex justify-between">

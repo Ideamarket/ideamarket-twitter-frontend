@@ -15,12 +15,6 @@ const ClaimInner: React.FC<Props> = ({ isCommunityAirdrop }) => {
       body: `Ideamarket is a dapp for creating public narratives without trusted third parties — a literal marketplace of ideas, built on Arbitrum (Ethereum Layer 2).`,
     },
     {
-      title: 'Why did we launch a token?',
-      body: `In the long run, the future of public knowledge must belong to the public. $IMO enables the  gradual transfer of Ideamarket’s ownership from the team to the community at large.
-
-            $IMO enables holders to vote on proposals for Ideamarket’s future plans and projects, and in future releases, will enable users to pay for platform-specific features.`,
-    },
-    {
       title: 'How will $IMO be distributed?',
       body: `The initial distribution for IMO is as follows:
               Early investors — 10%
@@ -36,9 +30,9 @@ const ClaimInner: React.FC<Props> = ({ isCommunityAirdrop }) => {
               Verification rewards — 2%
               Future rewards programs: 13%
 
-              All $IMO allocated to Ideamarket team members are subject to a 2-year 
-              vesting schedule — a 1-year lockup, plus a 1-year linear unlock. 85% of 
-              investor tokens are subject to the same schedule, with 15% unlocked 
+              All $IMO allocated to Ideamarket team members are subject to a 2-year
+              vesting schedule — a 1-year lockup, plus a 1-year linear unlock. 85% of
+              investor tokens are subject to the same schedule, with 15% unlocked
               immediately to provide liquidity on Sushiswap.`,
     },
   ]
