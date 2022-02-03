@@ -37,8 +37,7 @@ export default async function verifyTokenName(
   const isAlreadyOnChain = getExistingListing?.web3TokenData
 
   // Is valid if 1) canonical is not null 2) contract validation works 3) not already on chain 4) not already on ghost market
-  const isValid =
-    canonical && contractIsValid && !isAlreadyOnChain && !isAlreadyGhostListed
+  const isValid = canonical && contractIsValid && !isAlreadyOnChain
 
   return {
     isValid,

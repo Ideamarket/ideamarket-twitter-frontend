@@ -152,7 +152,6 @@ const HomeHeader = ({
     setIsListing(true)
     const market = getMarketFromURL(urlInput, markets)
 
-    // TODO: do actual contract part right here
     mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}`)
 
     // if (isWantBuyChecked) {
@@ -313,14 +312,20 @@ const HomeHeader = ({
               style={{ top: 64 }}
             >
               <div className="w-full p-4 text-black bg-white rounded-lg shadow-2xl">
-                <div className="flex items-center space-x-2 mb-4 text-lg">
-                  <div className="font-bold">Listing on</div>
-                  <div className="bg-gray-200 flex items-center rounded-lg px-2 py-1 text-sm">
-                    <GlobeAltIcon className="w-5 mr-1" />
-                    URLs
+                {isAlreadyGhostListed && !isAlreadyOnChain ? (
+                  <div className="font-bold">
+                    Listing Found on Ghost Market!
                   </div>
-                  <div className="font-bold">Market</div>
-                </div>
+                ) : (
+                  <div className="flex items-center space-x-2 mb-4 text-lg">
+                    <div className="font-bold">Listing on</div>
+                    <div className="bg-gray-200 flex items-center rounded-lg px-2 py-1 text-sm">
+                      <GlobeAltIcon className="w-5 mr-1" />
+                      URLs
+                    </div>
+                    <div className="font-bold">Market</div>
+                  </div>
+                )}
 
                 <div className="bg-gray-200 flex items-center rounded-lg p-4 mt-2">
                   {isValidToken && (
@@ -394,11 +399,6 @@ const HomeHeader = ({
                           : 'INVALID URL'}
                       </div>
                     )}
-                  {!isAlreadyOnChain && isAlreadyGhostListed && (
-                    <div className="text-red-400">
-                      THIS URL IS ALREADY GHOST LISTED
-                    </div>
-                  )}
                   {isAlreadyOnChain && (
                     <div className="text-red-400">
                       THIS URL IS ALREADY LISTED ON-CHAIN
@@ -431,21 +431,23 @@ const HomeHeader = ({
 
                 {active ? (
                   <div className="flex justify-between items-center space-x-4 mt-4">
-                    <button
-                      onClick={onClickGhostList}
-                      disabled={!isValidToken}
-                      className={classNames(
-                        'flex flex-col justify-center items-center w-full h-20 rounded-lg',
-                        !isValidToken
-                          ? 'text-brand-gray-2 dark:text-gray-300 bg-brand-gray dark:bg-gray-500 cursor-default border-brand-gray'
-                          : 'text-white bg-brand-navy'
-                      )}
-                    >
-                      <div className="font-bold text-lg">
-                        List on Ghost Market
-                      </div>
-                      <div className="text-sm">Free & instant</div>
-                    </button>
+                    {!isAlreadyGhostListed && (
+                      <button
+                        onClick={onClickGhostList}
+                        disabled={!isValidToken}
+                        className={classNames(
+                          'flex flex-col justify-center items-center w-full h-20 rounded-lg',
+                          !isValidToken
+                            ? 'text-brand-gray-2 dark:text-gray-300 bg-brand-gray dark:bg-gray-500 cursor-default border-brand-gray'
+                            : 'text-white bg-brand-navy'
+                        )}
+                      >
+                        <div className="font-bold text-lg">
+                          List on Ghost Market
+                        </div>
+                        <div className="text-sm">Free & instant</div>
+                      </button>
+                    )}
 
                     <button
                       onClick={onClickOnChainList}
