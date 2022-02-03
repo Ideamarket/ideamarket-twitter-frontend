@@ -33,6 +33,7 @@ const HomeHeader = ({
   const { active, account, library } = useWeb3React()
   const { jwtToken } = useContext(GlobalContext)
   const [showListingCards, setShowListingCards] = useState(false)
+  const [finalURL, setFinalURL] = useState('')
   const [urlInput, setURLInput] = useState('')
   const [finalTokenValue, setFinalTokenValue] = useState('')
   // const [isWantBuyChecked, setIsWantBuyChecked] = useState(false)
@@ -54,6 +55,8 @@ const HomeHeader = ({
   const onURLTyped = async (event: any) => {
     const typedURL = event.target.value
 
+    setURLInput(typedURL)
+
     const market = getMarketFromURL(typedURL, markets)
 
     const {
@@ -64,7 +67,7 @@ const HomeHeader = ({
       canonical,
     } = await verifyTokenName(typedURL, market, active)
 
-    setURLInput(canonical)
+    setFinalURL(canonical)
     setFinalTokenValue(finalTokenValue)
 
     setIsValidToken(isValid)
@@ -129,12 +132,14 @@ const HomeHeader = ({
     }
 
     setIsListing(true)
-    const market = getMarketFromURL(urlInput, markets)
+    const market = getMarketFromURL(finalURL, markets)
 
-    const ghostListResponse = await ghostListToken(urlInput, market, jwtToken)
+    const ghostListResponse = await ghostListToken(finalURL, market, jwtToken)
 
     setIsListing(false)
+    setFinalURL('')
     setURLInput('')
+    setIsValidToken(false)
     setShowListingCards(false)
 
     if (!ghostListResponse) {
@@ -150,7 +155,7 @@ const HomeHeader = ({
    */
   const onClickOnChainList = async () => {
     setIsListing(true)
-    const market = getMarketFromURL(urlInput, markets)
+    const market = getMarketFromURL(finalURL, markets)
 
     mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}`)
 
@@ -192,6 +197,10 @@ const HomeHeader = ({
     } catch (ex) {
       console.log(ex)
       setIsListing(false)
+      setFinalURL('')
+      setURLInput('')
+      setIsValidToken(false)
+      setShowListingCards(false)
       onTradeComplete(false, finalTokenValue, TRANSACTION_TYPES.NONE, market)
       return
     }
@@ -200,7 +209,7 @@ const HomeHeader = ({
 
     await onChainListToken(
       finalTokenValue,
-      urlInput,
+      finalURL,
       market?.marketID,
       jwtToken
     )
@@ -209,13 +218,15 @@ const HomeHeader = ({
     mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}_COMPLETED`)
 
     setIsListing(false)
+    setFinalURL('')
     setURLInput('')
+    setIsValidToken(false)
     setShowListingCards(false)
     setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
   }
 
   const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
-    [urlInput],
+    [finalURL],
     getURLMetaData
   )
 
@@ -300,6 +311,7 @@ const HomeHeader = ({
             className="py-3 pl-4 pr-12 text-lg font-bold text-white rounded-lg w-full font-sf-compact-medium bg-gray-600"
             onFocus={onURLInputClicked}
             onChange={onURLTyped}
+            value={urlInput}
             placeholder="Paste a URL here to add a listing..."
           />
         </div>
@@ -344,18 +356,18 @@ const HomeHeader = ({
                         </div>
 
                         <a
-                          href={urlInput}
+                          href={finalURL}
                           className="text-brand-blue font-normal text-sm mt-1"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          {urlInput?.substr(
+                          {finalURL?.substr(
                             0,
-                            urlInput?.length > 60 ? 60 : urlInput?.length
-                          ) + (urlInput?.length > 60 ? '...' : '')}
+                            finalURL?.length > 60 ? 60 : finalURL?.length
+                          ) + (finalURL?.length > 60 ? '...' : '')}
                         </a>
                         <a
-                          href={urlInput}
+                          href={finalURL}
                           className="h-56 mb-4 cursor-pointer"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -394,7 +406,7 @@ const HomeHeader = ({
                     !isAlreadyGhostListed &&
                     !isAlreadyOnChain && (
                       <div className="text-red-400">
-                        {urlInput === ''
+                        {finalURL === ''
                           ? 'Enter a URL to list'
                           : 'INVALID URL'}
                       </div>

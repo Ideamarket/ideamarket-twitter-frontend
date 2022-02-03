@@ -8,6 +8,15 @@ export default async function verifyTokenName(
   selectedMarket: any,
   isWalletConnected: boolean // Is there a user connected to a wallet?
 ) {
+  if (!url || url === '')
+    return {
+      isValid: false,
+      isAlreadyGhostListed: false,
+      isAlreadyOnChain: false,
+      finalTokenValue: '',
+      canonical: '',
+    }
+
   const canonical = await getValidURL(url)
 
   // Final value that will be stored on chain as token's value
