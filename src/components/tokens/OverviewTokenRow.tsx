@@ -193,6 +193,8 @@ export default function TokenRow({
             <a
               href={token?.url}
               className="text-sm text-brand-blue hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               {token?.url.substr(
                 0,

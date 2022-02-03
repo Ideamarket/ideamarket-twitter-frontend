@@ -36,7 +36,7 @@ export const onChainListToken = async (
       { value: decodedURL, onchainValue: decodedValue, marketId },
       {
         headers: {
-          Authorization: `Bearer ${jwt}`,
+          Authorization: jwt ? `Bearer ${jwt}` : null,
         },
       }
     )

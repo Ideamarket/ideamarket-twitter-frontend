@@ -221,6 +221,13 @@ const HomeHeader = ({
         finalTokenValue,
         market.marketID
       )
+
+      await onChainListToken(
+        finalTokenValue,
+        finalURL,
+        market?.marketID,
+        jwtToken
+      )
     } catch (ex) {
       console.log(ex)
       setIsListing(false)
@@ -233,13 +240,6 @@ const HomeHeader = ({
     }
     // close()
     // }
-
-    await onChainListToken(
-      finalTokenValue,
-      finalURL,
-      market?.marketID,
-      jwtToken
-    )
 
     onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.LIST, market)
     mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}_COMPLETED`)
