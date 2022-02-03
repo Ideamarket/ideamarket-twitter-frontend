@@ -15,7 +15,11 @@ export default function useIMOPayoutAmount(
   const [isLoading, setIsLoading] = useState(true)
   const [imoPayout, setIMOPayout] = useState(undefined)
 
-  const web3 = useWalletStore((state) => state.web3)
+  const { web3, walletAddress, chainID } = useWalletStore((state) => ({
+    web3: state.web3,
+    walletAddress: state.address,
+    chainID: state.chainID,
+  }))
 
   useEffect(() => {
     let isCancelled = false
@@ -76,6 +80,8 @@ export default function useIMOPayoutAmount(
     web3,
     xIMOAmount,
     xIMOTotalSupply,
+    walletAddress,
+    chainID,
   ])
 
   return [imoPayout, isLoading]

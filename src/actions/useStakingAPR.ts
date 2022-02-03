@@ -21,7 +21,11 @@ export default function useStakingAPR(
   const [isLoading, setIsLoading] = useState(true)
   const [apr, setAPR] = useState(undefined)
 
-  const web3 = useWalletStore((state) => state.web3)
+  const { web3, walletAddress, chainID } = useWalletStore((state) => ({
+    web3: state.web3,
+    walletAddress: state.address,
+    chainID: state.chainID,
+  }))
 
   useEffect(() => {
     let isCancelled = false
@@ -77,7 +81,14 @@ export default function useStakingAPR(
     return () => {
       isCancelled = true
     }
-  }, [ratioImoAmount, stakingContractIMOBalance, web3, xIMOTotalSupply])
+  }, [
+    ratioImoAmount,
+    stakingContractIMOBalance,
+    web3,
+    xIMOTotalSupply,
+    walletAddress,
+    chainID,
+  ])
 
   return [apr, isLoading]
 }
