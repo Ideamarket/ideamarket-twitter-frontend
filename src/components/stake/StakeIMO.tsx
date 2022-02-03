@@ -1,9 +1,8 @@
 import { CogIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid'
 import { useWeb3React } from '@web3-react/core'
-import { useBalance } from 'actions'
+import { useBalance, useTotalSupply } from 'actions'
 import stakeIMO from 'actions/stakeIMO'
-// import useIMOPayoutAmount from 'actions/useIMOPayoutAmount'
 import withdrawxIMO from 'actions/withdrawxIMO'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
@@ -17,16 +16,21 @@ import TradeCompleteModal, {
 import { useState } from 'react'
 import { IoMdExit } from 'react-icons/io'
 import { NETWORK } from 'store/networks'
-import { floatToWeb3BN, oneBigNumber, useTransactionManager } from 'utils'
+import {
+  floatToWeb3BN,
+  formatNumberWithCommasAsThousandsSerperator,
+  oneBigNumber,
+  useTransactionManager,
+} from 'utils'
 import { LockingAccordion } from './LockingAccordion'
 import StakePriceItem from './StakePriceItem'
 import Image from 'next/image'
 import { accordionData } from 'pages/stake'
+import useIMOPayoutAmount from 'actions/useIMOPayoutAmount'
 
 const imoAddress = NETWORK.getDeployedAddresses().imo
 const imoStakingAddress = NETWORK.getDeployedAddresses().imoStaking
-// const dripIMOSourceAddress =
-//   NETWORK.getDeployedAddresses().drippingIMOSourceContract
+const dripIMOSourceAddress = NETWORK.getDeployedAddresses().drippingIMOSource
 
 const StakeIMO = () => {
   const [showLockInfo, setShowLockInfo] = useState(true)
@@ -45,37 +49,37 @@ const StakeIMO = () => {
     useBalance(imoAddress, account, 18, balanceToggle)
   const [userxIMOBalance, userxIMOBalanceBN, isUserxIMOBalanceLoading] =
     useBalance(imoStakingAddress, account, 18, balanceToggle)
-  // const [, stakingContractIMOBalanceBN] = useBalance(
-  //   imoAddress,
-  //   imoStakingAddress,
-  //   18,
-  //   balanceToggle
-  // )
-  // const [, dripSourceIMOBalanceBN] = useBalance(
-  //   imoAddress,
-  //   dripIMOSourceAddress,
-  //   18,
-  //   balanceToggle
-  // )
-  // const [xIMOTotalSupply, xIMOTotalSupplyBN] = useTotalSupply(
-  //   imoStakingAddress,
-  //   18,
-  //   balanceToggle
-  // )
+  const [, stakingContractIMOBalanceBN] = useBalance(
+    imoAddress,
+    imoStakingAddress,
+    18,
+    balanceToggle
+  )
+  const [, dripSourceIMOBalanceBN] = useBalance(
+    imoAddress,
+    dripIMOSourceAddress,
+    18,
+    balanceToggle
+  )
+  const [xIMOTotalSupply, xIMOTotalSupplyBN] = useTotalSupply(
+    imoStakingAddress,
+    18,
+    balanceToggle
+  )
 
   // How much IMO the user will get by withdrawing xIMO
-  // const [imoPayoutAmount] = useIMOPayoutAmount(
-  //   inputAmount,
-  //   stakingContractIMOBalanceBN,
-  //   xIMOTotalSupplyBN,
-  //   dripSourceIMOBalanceBN
-  // )
-  // const [ratioImoAmount] = useIMOPayoutAmount(
-  //   '1',
-  //   stakingContractIMOBalanceBN,
-  //   xIMOTotalSupplyBN,
-  //   dripSourceIMOBalanceBN
-  // )
+  const [imoPayoutAmount] = useIMOPayoutAmount(
+    inputAmount,
+    stakingContractIMOBalanceBN,
+    xIMOTotalSupplyBN,
+    dripSourceIMOBalanceBN
+  )
+  const [ratioImoAmount] = useIMOPayoutAmount(
+    '1',
+    stakingContractIMOBalanceBN,
+    xIMOTotalSupplyBN,
+    dripSourceIMOBalanceBN
+  )
 
   const inputAmountBigNumber = new BigNumber(inputAmount).multipliedBy(
     new BigNumber('10').exponentiatedBy(18)
@@ -234,7 +238,7 @@ const StakeIMO = () => {
       </div>
 
       <div className="w-full md:w-1/2">
-        <div className="relative w-full h-2/3 pt-10 mt-8">
+        <div className="relative w-full h-2/3 pt-10 my-8">
           <div className="absolute top-0 left-0 bg-white/20 rounded-2xl w-full h-40 z-0"></div>
 
           <div className="bg-white rounded-2xl w-full h-full p-4 relative z-10">
@@ -322,31 +326,32 @@ const StakeIMO = () => {
               </div>
             </div>
 
-            {/* {!isStakeSelected && (
+            {!isStakeSelected && (
               <div>
                 Payout:{' '}
-                {formatNumberWithCommasAsThousandsSerperator(
-                  parseFloat(imoPayoutAmount).toFixed()
-                )}{' '}
+                {!inputAmount || inputAmount === ''
+                  ? '0'
+                  : formatNumberWithCommasAsThousandsSerperator(
+                      parseFloat(imoPayoutAmount).toFixed()
+                    )}{' '}
                 IMO
               </div>
-            )} */}
+            )}
 
             <div className="pb-4 pt-2">
               {account ? (
                 <div>
                   <button className="flex items-center px-4 py-2 mt-4 text-blue-700 rounded-lg dark:text-blue-400 md:mt-0 m-auto">
-                    <div className="relative w-6 h-4">
+                    <div className="relative w-6 h-6 mr-1">
                       <Image
-                        src="/logo.png"
+                        src="/ximo-logo.png"
                         alt="Workflow logo"
                         layout="fill"
                         objectFit="contain"
                       />
                     </div>
                     1 xIMO ={' '}
-                    {/* {parseFloat(xIMOTotalSupply) <= 0 ? 0 : ratioImoAmount}*/}
-                    1.2 IMO
+                    {parseFloat(xIMOTotalSupply) <= 0 ? 0 : ratioImoAmount} IMO
                   </button>
 
                   <div className="flex justify-between">

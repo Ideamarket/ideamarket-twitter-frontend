@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react'
-import { bnToFloatString, oneBigNumber, tenMillionBigNumber } from '../utils'
+import {
+  bigNumberTenPow18,
+  bnToFloatString,
+  oneBigNumber,
+  sixMillionBigNumber,
+} from '../utils'
 import { useWalletStore } from 'store/walletStore'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
@@ -42,15 +47,16 @@ export default function useStakingAPR(
           stakingContractIMOBalance.toString()
         )
         const xIMOAmount = oneBigNumber.dividedBy(ratioImoAmountBigNumber) // This gives the xIMO amount that equals 1 IMO
+
         const payoutAfterYearBigNumber = xIMOAmount
           .multipliedBy(
-            stakingContractIMOBalanceBigNumber.plus(tenMillionBigNumber)
+            stakingContractIMOBalanceBigNumber.plus(sixMillionBigNumber)
           )
           .dividedBy(xIMOTotalSupplyBigNumber)
-        const one = new BigNumber('1')
         const payoutAfterYear = parseFloat(
-          bnToFloatString(payoutAfterYearBigNumber, one, 18)
+          bnToFloatString(payoutAfterYearBigNumber, bigNumberTenPow18, 18)
         )
+
         return calculatePercentChange(1, payoutAfterYear)
       } catch (error) {
         return 0

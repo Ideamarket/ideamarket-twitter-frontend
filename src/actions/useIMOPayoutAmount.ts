@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { oneBigNumber, web3BNToFloatString } from '../utils'
+import { bigNumberTenPow18, bnToFloatString, oneBigNumber } from '../utils'
 import { useWalletStore } from 'store/walletStore'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
@@ -13,7 +13,6 @@ export default function useIMOPayoutAmount(
   dripSourceIMOBalanceBN: BN
 ) {
   const [isLoading, setIsLoading] = useState(true)
-  const [imoPayoutBN, setIMOPayoutBN] = useState(undefined)
   const [imoPayout, setIMOPayout] = useState(undefined)
 
   const web3 = useWalletStore((state) => state.web3)
@@ -31,7 +30,7 @@ export default function useIMOPayoutAmount(
         !xIMOTotalSupply ||
         xIMOTotalSupplyBigNumber.isLessThan(oneBigNumber)
       ) {
-        return new BN('0')
+        return '0'
       }
 
       try {
@@ -50,18 +49,17 @@ export default function useIMOPayoutAmount(
             stakingContractIMOBalanceBigNumber.plus(pendingIMOBigNumber)
           )
           .dividedBy(xIMOTotalSupplyBigNumber)
-        return new BN(imoPayoutBigNumber.toFixed())
+
+        return bnToFloatString(imoPayoutBigNumber, bigNumberTenPow18, 4)
       } catch (error) {
-        return new BN('0')
+        return '0'
       }
     }
 
     async function run() {
-      const bn = await getIMOPayout()
+      const payout = await getIMOPayout()
       if (!isCancelled) {
-        const pow = new BigNumber('10').pow(new BigNumber(18))
-        setIMOPayoutBN(bn)
-        setIMOPayout(web3BNToFloatString(bn, pow, 4))
+        setIMOPayout(payout)
         setIsLoading(false)
       }
     }
@@ -80,5 +78,5 @@ export default function useIMOPayoutAmount(
     xIMOTotalSupply,
   ])
 
-  return [imoPayout, imoPayoutBN, isLoading]
+  return [imoPayout, isLoading]
 }

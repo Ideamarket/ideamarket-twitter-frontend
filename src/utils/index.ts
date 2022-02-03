@@ -18,7 +18,7 @@ export const zeroBN = new BN('0')
 export const zeroBigNumber = new BigNumber('0')
 export const bigNumberTenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 // The amount of IMO that will flow into staking contract in 1 year
-export const tenMillionBigNumber = new BigNumber(10000000).multipliedBy(
+export const sixMillionBigNumber = new BigNumber(6000000).multipliedBy(
   new BigNumber('10').exponentiatedBy(18)
 )
 export const oneBigNumber = new BigNumber(1).multipliedBy(
