@@ -179,13 +179,21 @@ export default function TokenRow({
           <div className="ml-4 text-base font-medium leading-5 truncate z-30">
             {urlMetaData && urlMetaData?.ogTitle ? (
               <div>
-                <a href={`/i/${token?.listingId}`} className="hover:underline">
+                <a
+                  href={`/i/${token?.listingId}`}
+                  onClick={(event) => event.stopPropagation()}
+                  className="hover:underline"
+                >
                   {urlMetaData?.ogTitle}
                 </a>
               </div>
             ) : (
               <div>
-                <a href={`/i/${token?.listingId}`} className="hover:underline">
+                <a
+                  href={`/i/${token?.listingId}`}
+                  onClick={(event) => event.stopPropagation()}
+                  className="hover:underline"
+                >
                   {marketSpecifics?.convertUserInputToTokenName(token?.url)}
                 </a>
               </div>

@@ -98,8 +98,6 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
   const tokenData = flatten(infiniteData || []) as any
   const token = tokenData ? tokenData[0] : null
 
-  console.log('tokenData==', tokenData)
-
   const marketName = token?.marketName
   const tokenName = token?.name ? token?.name : token?.url
 
