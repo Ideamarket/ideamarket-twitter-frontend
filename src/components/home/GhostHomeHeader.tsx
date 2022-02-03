@@ -17,12 +17,20 @@ import { listToken, verifyTokenName } from 'actions'
 import { useWeb3React } from '@web3-react/core'
 import { onChainListToken } from 'actions/web2/onChainListToken'
 import { useMixPanel } from 'utils/mixPanel'
-import { useTransactionManager } from 'utils'
+import BN from 'bn.js'
+import {
+  bigNumberTenPow18,
+  formatNumberWithCommasAsThousandsSerperator,
+  useTransactionManager,
+  web3BNToFloatString,
+} from 'utils'
 import TradeCompleteModal, {
   TRANSACTION_TYPES,
 } from 'components/trade/TradeCompleteModal'
 import useAuth from 'components/account/useAuth'
 import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
+import { queryDaiBalance } from 'store/daiStore'
+import { NETWORK } from 'store/networks'
 
 const HomeHeader = ({
   setTradeOrListSuccessToggle,
@@ -41,6 +49,25 @@ const HomeHeader = ({
   const [isValidToken, setIsValidToken] = useState(false)
   const [isAlreadyGhostListed, setIsAlreadyGhostListed] = useState(false)
   const [isAlreadyOnChain, setIsAlreadyOnChain] = useState(false)
+
+  const { interestManagerAVM: interestManagerAddress } =
+    NETWORK.getDeployedAddresses()
+
+  const { data: interestManagerDaiBalance } = useQuery(
+    ['interest-manager-dai-balance', interestManagerAddress],
+    queryDaiBalance,
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  const daiBalance = formatNumberWithCommasAsThousandsSerperator(
+    web3BNToFloatString(
+      interestManagerDaiBalance || new BN('0'),
+      bigNumberTenPow18,
+      0
+    )
+  )
 
   const ref = useRef()
   useOnClickOutside(ref, () => setShowListingCards(false))
@@ -291,6 +318,29 @@ const HomeHeader = ({
         <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
           Buy on the right side of history.
         </p>
+      </div>
+      <div className="flex flex-col items-center justify-center mt-4 md:mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
+        <div className="text-2xl text-brand-blue md:text-5xl">
+          ${daiBalance}
+        </div>
+        <div className="md:ml-2">of information valued</div>
+        <div
+          className="flex justify-center flex-grow-0 flex-shrink-0 mt-8 md:mt-0 md:ml-6 mr-8 md:mr-0"
+          data-aos="zoom-y-out"
+        >
+          <A href="https://docs.ideamarket.io/contracts/audit">
+            <div className="relative h-8 opacity-50 w-40">
+              <Image
+                src="/Quantstamp.svg"
+                alt="Quantstamp"
+                layout="fill"
+                objectFit="contain"
+                priority={true}
+                className="rounded-full"
+              />
+            </div>
+          </A>
+        </div>
       </div>
       <div className="relative flex flex-col items-center justify-center mt-10 md:flex-row md:w-136 w-full mx-auto">
         <div className="relative w-full">
