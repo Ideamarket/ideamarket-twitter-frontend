@@ -39,7 +39,13 @@ const useClaimable = (
     }
 
     run()
-  }, [address, merkleDistributorContract, isCommunityAirdrop, MerkleRoot])
+  }, [
+    address,
+    merkleDistributorContract,
+    isCommunityAirdrop,
+    MerkleRoot,
+    isGettingAllClaimTokens,
+  ])
 
   return balance
 }

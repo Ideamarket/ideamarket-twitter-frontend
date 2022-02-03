@@ -42,7 +42,7 @@ export default function useClaimableRewardsIMO(
 
     setIsLoading(true)
     run()
-    return () => { 
+    return () => {
       isCancelled = true
     }
   }, [user, sushiStaking, balanceToggle])

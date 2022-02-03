@@ -138,7 +138,7 @@ const HomeHeader = ({
     setShowListingCards(false)
 
     if (!ghostListResponse) {
-      return  // Do not show success modal if it was a failed ghost list
+      return // Do not show success modal if it was a failed ghost list
     }
 
     setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)

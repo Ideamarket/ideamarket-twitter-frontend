@@ -1,6 +1,5 @@
 import { DefaultLayout } from 'components/layouts'
 import { NextSeo } from 'next-seo'
-import StakeInner from 'components/stake/StakeInner'
 import { ReactElement, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import getSsrBaseUrl from 'utils/getSsrBaseUrl'
@@ -23,7 +22,7 @@ export const accordionData = [
   },
   {
     title: 'How do I get started on Ideamaket? ',
-    body: `Just connect your wallet! 
+    body: `Just connect your wallet!
       As Ideamarket is on the Arbitrum layer 2 network, you’ll need to bridge ETH from Ethereum L1 to Arbitrum to be able to buy listing tokens, or to create new on-chain listings.
       Bridge ETH here: https://bridge.arbitrum.io
       More detail: https://docs.ideamarket.io/user-guide/tutorial`,
@@ -47,10 +46,10 @@ export const accordionData = [
            Community airdrops — 4%
            Verification rewards — 2%
            Future rewards programs: 13%
- 
-           All $IMO allocated to Ideamarket team members are subject to a 2-year 
-           vesting schedule — a 1-year lockup, plus a 1-year linear unlock. 85% of 
-           investor tokens are subject to the same schedule, with 15% unlocked 
+
+           All $IMO allocated to Ideamarket team members are subject to a 2-year
+           vesting schedule — a 1-year lockup, plus a 1-year linear unlock. 85% of
+           investor tokens are subject to the same schedule, with 15% unlocked
            immediately to provide liquidity on Sushiswap.`,
   },
 ]

@@ -370,29 +370,31 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                     </div>
                   </div>
 
-                  {token?.isOnChain && <div className="flex justify-end space-x-2 items-center w-full w-1/2">
-                    <button
-                      onClick={() =>
-                        ModalService.open(
-                          TradeModal,
-                          { ideaToken: token, market },
-                          refetch
-                        )
-                      }
-                      className="bg-blue-500 px-4 py-2 flex items-center text-white rounded-lg"
-                    >
-                      <ArrowSmUpIcon className="w-5" />
-                      Buy
-                    </button>
-                    <button className="border px-4 py-2 flex items-center text-black rounded-lg">
-                      <ArrowSmDownIcon className="w-5" />
-                      Sell
-                    </button>
-                    <button className="border px-4 py-2 flex items-center text-black rounded-lg">
-                      <LockClosedIcon className="w-5" />
-                      Lock
-                    </button>
-                  </div>}
+                  {token?.isOnChain && (
+                    <div className="flex justify-end space-x-2 items-center w-full w-1/2">
+                      <button
+                        onClick={() =>
+                          ModalService.open(
+                            TradeModal,
+                            { ideaToken: token, market },
+                            refetch
+                          )
+                        }
+                        className="bg-blue-500 px-4 py-2 flex items-center text-white rounded-lg"
+                      >
+                        <ArrowSmUpIcon className="w-5" />
+                        Buy
+                      </button>
+                      <button className="border px-4 py-2 flex items-center text-black rounded-lg">
+                        <ArrowSmDownIcon className="w-5" />
+                        Sell
+                      </button>
+                      <button className="border px-4 py-2 flex items-center text-black rounded-lg">
+                        <LockClosedIcon className="w-5" />
+                        Lock
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
