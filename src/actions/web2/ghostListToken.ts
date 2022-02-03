@@ -1,27 +1,39 @@
+import ModalService from 'components/modals/ModalService'
+import TradeCompleteModal, {
+  TRANSACTION_TYPES,
+} from 'components/trade/TradeCompleteModal'
 import client from 'lib/axios'
 
 /**
  * List a token onto the Ghost Market.
- * @param value -- value of token being listed in format that it is stored on blockchain
+ * @param url -- normalized url of token
  * @param marketID -- id of market this token is being listed on. ID determined by data returned from subgraph
  */
 export const ghostListToken = async (
-  value: string,
-  marketId: number,
+  url: string,
+  market: any,
   jwtToken: string
 ) => {
-  const decodedValue = decodeURIComponent(value) // Decode so that no special characters are added to blockchain
+  const decodedValue = decodeURIComponent(url) // Decode so that no special characters are added to blockchain
   try {
-    await client.post(
+    const response = await client.post(
       `/listing/ghost`,
-      { value: decodedValue, marketId },
+      { value: decodedValue, marketId: market?.marketID },
       {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },
       }
     )
+    return response
   } catch (error) {
-    console.error(`Could not list ${value} on the ghost market`, error)
+    console.error(`Could not list ${url} on the ghost market`, error)
+    ModalService.open(TradeCompleteModal, {
+      isSuccess: false,
+      tokenName: url,
+      marketName: market?.name,
+      transactionType: TRANSACTION_TYPES.NONE,
+    })
+    return null
   }
 }

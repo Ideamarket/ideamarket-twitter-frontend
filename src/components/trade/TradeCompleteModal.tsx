@@ -10,6 +10,7 @@ export enum TRANSACTION_TYPES {
   SELL,
   LOCK,
   LIST,
+  GHOST_LIST,
   GIFT,
   CLAIM,
   STAKE,
@@ -18,6 +19,7 @@ export enum TRANSACTION_TYPES {
 
 const tweetableTypes = [
   TRANSACTION_TYPES.LIST,
+  // TRANSACTION_TYPES.GHOST_LIST,
   TRANSACTION_TYPES.BUY,
   TRANSACTION_TYPES.LOCK,
   TRANSACTION_TYPES.GIFT,
@@ -33,6 +35,8 @@ const getTweetTemplate = (
 
   if (transactionType === TRANSACTION_TYPES.LIST) {
     tweetText = `Just listed ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
+  } else if (transactionType === TRANSACTION_TYPES.GHOST_LIST) {
+    tweetText = `Just ghost listed ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
   } else if (transactionType === TRANSACTION_TYPES.BUY) {
     tweetText = `Just bought ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
   } else if (transactionType === TRANSACTION_TYPES.LOCK) {

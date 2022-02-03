@@ -131,12 +131,18 @@ const HomeHeader = ({
     setIsListing(true)
     const market = getMarketFromURL(urlInput, markets)
 
-    await ghostListToken(urlInput, market?.marketID, jwtToken)
+    const ghostListResponse = await ghostListToken(urlInput, market, jwtToken)
 
     setIsListing(false)
     setURLInput('')
     setShowListingCards(false)
+
+    if (!ghostListResponse) {
+      return  // Do not show success modal if it was a failed ghost list
+    }
+
     setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
+    onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.GHOST_LIST, market)
   }
 
   /**
@@ -191,8 +197,6 @@ const HomeHeader = ({
       return
     }
     // close()
-    onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.LIST, market)
-    mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}_COMPLETED`)
     // }
 
     await onChainListToken(
@@ -201,6 +205,9 @@ const HomeHeader = ({
       market?.marketID,
       jwtToken
     )
+
+    onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.LIST, market)
+    mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}_COMPLETED`)
 
     setIsListing(false)
     setURLInput('')
