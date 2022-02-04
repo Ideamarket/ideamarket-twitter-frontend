@@ -7,8 +7,14 @@ import { isURL } from 'services/URLService'
  */
 export const getURLMetaData = async (url: string) => {
   if (!isURL(url)) return null
-  const response = await client.post(`/general/url-metadata`, {
-    url,
-  })
-  return response?.data?.data
+  try {
+    const response = await client.post(`/general/url-metadata`, {
+      url,
+    })
+
+    return response?.data?.data
+  } catch (error) {
+    console.error(`Could not get URL meta data for ${url}`, error)
+    return null
+  }
 }

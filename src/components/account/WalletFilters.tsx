@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { OverviewSearchbar } from 'components/tokens/OverviewSearchbar'
 import {
   CheckboxFilters,
-  toggleMarketHelper,
+  // toggleMarketHelper,
 } from 'components/tokens/utils/OverviewUtils'
 import useThemeMode from 'components/useThemeMode'
 import { useEffect } from 'react'
@@ -15,6 +15,7 @@ type PlatformButtonProps = {
   onClick: (platform: string) => void
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PlatformButton = ({
   platform,
   isSelected,
@@ -111,10 +112,10 @@ const WalletFilters = ({
   setIsStarredFilterActive,
   setIsLockedFilterActive,
 }: Props) => {
-  const toggleMarket = (marketName: string) => {
-    const newSet = toggleMarketHelper(marketName, selectedMarkets)
-    onMarketChanged(newSet)
-  }
+  // const toggleMarket = (marketName: string) => {
+  //   const newSet = toggleMarketHelper(marketName, selectedMarkets)
+  //   onMarketChanged(newSet)
+  // }
 
   const markets = useMarketStore((state) =>
     state.markets.map((m) => m?.market?.name)
@@ -127,7 +128,7 @@ const WalletFilters = ({
 
   return (
     <div className="justify-center p-3 overflow-x-scroll bg-white rounded-t-lg text-black md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start lg:overflow-x-visible">
-      <div className="flex md:gap-x-2">
+      {/* <div className="flex md:gap-x-2">
         {CheckboxFilters.PLATFORMS.values
           .sort((p1, p2) => {
             // Sort so that All is first and then Wikipedia is 2nd. Rest of order not controlled
@@ -148,7 +149,7 @@ const WalletFilters = ({
               onClick={toggleMarket}
             />
           ))}
-      </div>
+      </div> */}
 
       {/* <FiltersButton
         className="hidden md:flex"

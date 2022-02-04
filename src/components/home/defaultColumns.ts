@@ -33,7 +33,7 @@ const defaultColumns = [
     value: 'change',
     sortable: true,
     isOptional: true,
-    isSelectedAtStart: false,
+    isSelectedAtStart: true,
   },
   {
     id: 11,

@@ -221,15 +221,8 @@ const HomeHeader = ({
         finalTokenValue,
         market.marketID
       )
-
-      await onChainListToken(
-        finalTokenValue,
-        finalURL,
-        market?.marketID,
-        jwtToken
-      )
     } catch (ex) {
-      console.log(ex)
+      console.error(ex)
       setIsListing(false)
       setFinalURL('')
       setURLInput('')
@@ -240,6 +233,13 @@ const HomeHeader = ({
     }
     // close()
     // }
+
+    await onChainListToken(
+      finalTokenValue,
+      finalURL,
+      market?.marketID,
+      jwtToken
+    )
 
     onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.LIST, market)
     mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}_COMPLETED`)
@@ -358,7 +358,7 @@ const HomeHeader = ({
             />
           )}
           <input
-            className="py-3 pl-4 pr-12 text-lg font-bold text-white rounded-lg w-full font-sf-compact-medium bg-gray-600"
+            className="py-3 pl-4 pr-12 text-lg font-bold text-white rounded-lg w-full bg-white/[.1]"
             onFocus={onURLInputClicked}
             onChange={onURLTyped}
             value={urlInput}
@@ -432,6 +432,7 @@ const HomeHeader = ({
                                 : '/gray.svg'
                             }
                             alt=""
+                            referrerPolicy="no-referrer"
                           />
                         </a>
                         <div className="mt-4 text-gray-400 text-sm text-left leading-5">
@@ -496,10 +497,10 @@ const HomeHeader = ({
                     {!isAlreadyGhostListed && (
                       <button
                         onClick={onClickGhostList}
-                        disabled={!isValidToken}
+                        disabled={!isValidToken || isListing}
                         className={classNames(
                           'flex flex-col justify-center items-center w-full h-20 rounded-lg',
-                          !isValidToken
+                          !isValidToken || isListing
                             ? 'text-brand-gray-2 dark:text-gray-300 bg-brand-gray dark:bg-gray-500 cursor-default border-brand-gray'
                             : 'text-white bg-brand-navy'
                         )}
@@ -513,10 +514,10 @@ const HomeHeader = ({
 
                     <button
                       onClick={onClickOnChainList}
-                      disabled={!isValidToken}
+                      disabled={!isValidToken || isListing}
                       className={classNames(
                         'flex flex-col justify-center items-center w-full h-20 font-bold rounded-lg',
-                        !isValidToken
+                        !isValidToken || isListing
                           ? 'text-brand-gray-2 dark:text-gray-300 bg-brand-gray dark:bg-gray-500 cursor-default border-brand-gray'
                           : 'text-white bg-blue-500 '
                       )}

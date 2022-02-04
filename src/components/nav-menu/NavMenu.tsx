@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import NProgress from 'nprogress'
 import { getNavbarConfig } from './constants'
@@ -14,9 +14,6 @@ import { ProfileTooltip } from './ProfileTooltip'
 import { useWeb3React } from '@web3-react/core'
 import { useMutation } from 'react-query'
 import useAuth from 'components/account/useAuth'
-import { GhostIcon } from 'assets'
-import ToggleSwitch from 'components/ToggleSwitch'
-import { GlobalContext } from 'lib/GlobalContext'
 import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 
 const NavMenu = () => {
@@ -32,9 +29,6 @@ const NavMenu = () => {
   const { mixpanel } = useMixPanel()
 
   const navbarConfig = getNavbarConfig(mixpanel)
-
-  const { isGhostMarketActive, setIsGhostMarketActive } =
-    useContext(GlobalContext)
 
   useEffect(() => {
     const featureSwitch = async () => {
@@ -179,17 +173,6 @@ const NavMenu = () => {
               .map((menuItem, i) => (
                 <NavItem menuItem={menuItem} key={i} />
               ))}
-          </div>
-          <div className="flex text-lg items-center">
-            <GhostIcon className="w-6 h-6" />
-            <span className="text-white ml-1 mr-2">Ghost Market</span>
-            {isGhostMarketActive && (
-              <span className="text-brand-blue mr-2">LIVE</span>
-            )}
-            <ToggleSwitch
-              handleChange={() => setIsGhostMarketActive(!isGhostMarketActive)}
-              isOn={isGhostMarketActive}
-            />
           </div>
           <div className="hidden md:flex">
             <NavThemeButton />

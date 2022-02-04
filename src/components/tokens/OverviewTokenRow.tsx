@@ -51,7 +51,14 @@ export default function TokenRow({
 }: Props) {
   const { mixpanel } = useMixPanel()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
-  // const displayName = marketSpecifics.getTokenDisplayName(token?.name)
+  const url = marketSpecifics?.getTokenURL(token?.name)
+
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
+    [url],
+    getURLMetaData
+  )
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
     tokenName: getRealTokenName(token?.name),
@@ -90,12 +97,10 @@ export default function TokenRow({
     queryDaiBalance
   )
 
-  const url = marketSpecifics?.getTokenURL(token?.name)
-
-  const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
-    [url],
-    getURLMetaData
-  )
+  const displayName =
+    urlMetaData && urlMetaData?.ogTitle
+      ? urlMetaData?.ogTitle
+      : marketSpecifics?.convertUserInputToTokenName(token?.url)
 
   const claimableIncome =
     interestManagerTotalShares &&
@@ -121,8 +126,6 @@ export default function TokenRow({
       className="absolute top-0 left-0 w-full h-full"
     />
   )
-
-  const [isExpanded, setIsExpanded] = useState(false)
 
   return (
     <tr
@@ -177,24 +180,17 @@ export default function TokenRow({
             )}
           </div>
           <div className="ml-4 text-base font-medium leading-5 truncate z-30">
-            {urlMetaData && urlMetaData?.ogTitle ? (
+            {displayName && (
               <div>
                 <a
                   href={`/i/${token?.listingId}`}
                   onClick={(event) => event.stopPropagation()}
                   className="hover:underline"
                 >
-                  {urlMetaData?.ogTitle}
-                </a>
-              </div>
-            ) : (
-              <div>
-                <a
-                  href={`/i/${token?.listingId}`}
-                  onClick={(event) => event.stopPropagation()}
-                  className="hover:underline"
-                >
-                  {marketSpecifics?.convertUserInputToTokenName(token?.url)}
+                  {displayName?.substr(
+                    0,
+                    displayName?.length > 60 ? 60 : displayName?.length
+                  ) + (displayName?.length > 60 ? '...' : '')}
                 </a>
               </div>
             )}
@@ -256,6 +252,7 @@ export default function TokenRow({
                           : '/gray.svg'
                       }
                       alt=""
+                      referrerPolicy="no-referrer"
                     />
                     <div className="w-full my-4 text-black/[.5] text-sm text-left leading-5">
                       {!isURLMetaDataLoading &&

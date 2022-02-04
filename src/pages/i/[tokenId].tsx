@@ -318,6 +318,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                             : '/gray.svg'
                         }
                         alt=""
+                        referrerPolicy="no-referrer"
                       />
                       <div className="my-4 text-gray-300 text-sm leading-5">
                         {!isURLMetaDataLoading &&

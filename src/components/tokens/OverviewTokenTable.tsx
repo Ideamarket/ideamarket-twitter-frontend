@@ -1,7 +1,6 @@
 import React, {
   MutableRefObject,
   useCallback,
-  useContext,
   useEffect,
   useRef,
   useState,
@@ -22,7 +21,6 @@ import TokenRowSkeleton from './OverviewTokenRowSkeleton'
 import { OverviewColumns } from './table/OverviewColumns'
 import { MainFilters } from './utils/OverviewUtils'
 import { flatten } from 'utils/lodash'
-import { GlobalContext } from 'lib/GlobalContext'
 
 type Props = {
   selectedMarkets: Set<string>
@@ -53,10 +51,8 @@ export default function Table({
 }: Props) {
   const TOKENS_PER_PAGE = 10
 
-  const { isGhostMarketActive } = useContext(GlobalContext)
-
   const [currentColumn, setCurrentColumn] = useState('')
-  const [orderBy, setOrderBy] = useState('supply')
+  const [orderBy, setOrderBy] = useState('dayChange')
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
   const observer: MutableRefObject<any> = useRef()
@@ -111,7 +107,6 @@ export default function Table({
         nameSearch,
         filterTokens,
         isVerifiedFilterActive,
-        isGhostMarketActive,
         isGhostOnlyActive,
       ],
     ],
@@ -170,7 +165,6 @@ export default function Table({
     orderDirection,
     nameSearch,
     tradeOrListSuccessToggle,
-    isGhostMarketActive,
     isGhostOnlyActive,
     refetch,
   ])
