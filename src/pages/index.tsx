@@ -26,7 +26,7 @@ const Home = ({ urlMarkets }: Props) => {
   // After trade or list success, the token data needs to be refetched. This toggle does that.
   const [tradeOrListSuccessToggle, setTradeOrListSuccessToggle] =
     useState(false)
-  const [selectedFilterId, setSelectedFilterId] = useState(MainFilters.TOP.id)
+  const [selectedFilterId, setSelectedFilterId] = useState(MainFilters.HOT.id)
   const [isVerifiedFilterActive, setIsVerifiedFilterActive] = useState(false)
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
   const [isGhostOnlyActive, setIsGhostOnlyActive] = useState(false)

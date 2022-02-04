@@ -35,9 +35,11 @@ export const onChainListToken = async (
       `/listing/onchain`,
       { value: decodedURL, onchainValue: decodedValue, marketId },
       {
-        headers: {
-          Authorization: jwt ? `Bearer ${jwt}` : null,
-        },
+        headers: jwt
+          ? {
+              Authorization: `Bearer ${jwt}`,
+            }
+          : null,
       }
     )
     return response?.data?.data

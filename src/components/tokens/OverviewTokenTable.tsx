@@ -82,6 +82,25 @@ export default function Table({
     }
   )
 
+  const calculateOrderBy = () => {
+    let subgraphOrderBy = orderBy
+
+    if (selectedFilterId === MainFilters.HOT.id && orderDirection === 'desc')
+      subgraphOrderBy = 'dayChange'
+    else if (
+      selectedFilterId === MainFilters.NEW.id &&
+      orderDirection === 'desc'
+    )
+      subgraphOrderBy = 'listedAt'
+    else if (
+      selectedFilterId === MainFilters.TOP.id &&
+      orderDirection === 'desc'
+    )
+      subgraphOrderBy = 'supply'
+
+    return subgraphOrderBy
+  }
+
   const {
     data: infiniteData,
     isFetching: isTokenDataLoading,
@@ -95,11 +114,7 @@ export default function Table({
         markets,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
-        selectedFilterId === MainFilters.HOT.id
-          ? 'dayChange'
-          : selectedFilterId === MainFilters.NEW.id
-          ? 'listedAt'
-          : orderBy,
+        calculateOrderBy(),
         selectedFilterId === MainFilters.HOT.id ||
         selectedFilterId === MainFilters.NEW.id
           ? 'desc'

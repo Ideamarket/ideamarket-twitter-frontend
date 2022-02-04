@@ -161,6 +161,8 @@ const HomeHeader = ({
     setIsListing(true)
     const market = getMarketFromURL(finalURL, markets)
 
+    mixpanel.track(`LIST_GHOST_${market.name.toUpperCase()}`)
+
     const ghostListResponse = await ghostListToken(finalURL, market, jwtToken)
 
     setIsListing(false)
@@ -173,6 +175,8 @@ const HomeHeader = ({
       return // Do not show success modal if it was a failed ghost list
     }
 
+    mixpanel.track(`LIST_GHOST_${market.name.toUpperCase()}_COMPLETED`)
+
     setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
     onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.GHOST_LIST, market)
   }
@@ -184,7 +188,7 @@ const HomeHeader = ({
     setIsListing(true)
     const market = getMarketFromURL(finalURL, markets)
 
-    mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}`)
+    mixpanel.track(`LIST_ONCHAIN_${market.name.toUpperCase()}`)
 
     // if (isWantBuyChecked) {
     //   const giftAddress = isENSAddressValid ? hexAddress : recipientAddress
@@ -242,7 +246,7 @@ const HomeHeader = ({
     )
 
     onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.LIST, market)
-    mixpanel.track(`ADD_LISTING_${market.name.toUpperCase()}_COMPLETED`)
+    mixpanel.track(`LIST_ONCHAIN_${market.name.toUpperCase()}_COMPLETED`)
 
     setIsListing(false)
     setFinalURL('')
