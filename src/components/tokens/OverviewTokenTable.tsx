@@ -107,7 +107,7 @@ export default function Table({
         nameSearch,
         filterTokens,
         isVerifiedFilterActive,
-        isGhostOnlyActive,
+        isGhostOnlyActive ? 'ghost' : 'onchain',
       ],
     ],
     queryTokens,

@@ -89,7 +89,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
         '',
         rawTokenId,
         false,
-        true,
+        'both',
       ],
     ],
     queryTokens
