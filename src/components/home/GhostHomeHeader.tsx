@@ -219,9 +219,53 @@ const HomeHeader = ({
     // } else {
 
     try {
-      await txManager.executeTx(
+      await txManager.executeTxWithCallbacks(
         'List Token',
         listToken,
+        {
+          onReceipt: async (receipt: any) => {
+            // Run this code if tx was success. For some reason putting this code after try/catch did NOT work
+            if (receipt?.status) {
+              await onChainListToken(
+                finalTokenValue,
+                finalURL,
+                market?.marketID,
+                jwtToken
+              )
+
+              onTradeComplete(
+                true,
+                finalTokenValue,
+                TRANSACTION_TYPES.LIST,
+                market
+              )
+              mixpanel.track(
+                `LIST_ONCHAIN_${market.name.toUpperCase()}_COMPLETED`
+              )
+
+              setIsListing(false)
+              setFinalURL('')
+              setURLInput('')
+              setIsValidToken(false)
+              setShowListingCards(false)
+              setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
+            } else {
+              console.error('Receipt status of false')
+              setIsListing(false)
+              setFinalURL('')
+              setURLInput('')
+              setIsValidToken(false)
+              setShowListingCards(false)
+              onTradeComplete(
+                false,
+                finalTokenValue,
+                TRANSACTION_TYPES.NONE,
+                market
+              )
+              return
+            }
+          },
+        },
         finalTokenValue,
         market.marketID
       )
@@ -237,23 +281,6 @@ const HomeHeader = ({
     }
     // close()
     // }
-
-    await onChainListToken(
-      finalTokenValue,
-      finalURL,
-      market?.marketID,
-      jwtToken
-    )
-
-    onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.LIST, market)
-    mixpanel.track(`LIST_ONCHAIN_${market.name.toUpperCase()}_COMPLETED`)
-
-    setIsListing(false)
-    setFinalURL('')
-    setURLInput('')
-    setIsValidToken(false)
-    setShowListingCards(false)
-    setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
   }
 
   const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
