@@ -31,6 +31,7 @@ import useAuth from 'components/account/useAuth'
 import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 import { queryDaiBalance } from 'store/daiStore'
 import { NETWORK } from 'store/networks'
+import { getValidURL } from 'actions/web2/getValidURL'
 
 const HomeHeader = ({
   setTradeOrListSuccessToggle,
@@ -84,15 +85,14 @@ const HomeHeader = ({
 
     setURLInput(typedURL)
 
-    const market = getMarketFromURL(typedURL, markets)
+    const canonical = await getValidURL(typedURL)
 
-    const {
-      isValid,
-      isAlreadyGhostListed,
-      isAlreadyOnChain,
-      finalTokenValue,
-      canonical,
-    } = await verifyTokenName(typedURL, market, active)
+    const market = getMarketFromURL(canonical, markets)
+
+    // console.log('market from typed URL==', market)  // Keep here for debug purposes
+
+    const { isValid, isAlreadyGhostListed, isAlreadyOnChain, finalTokenValue } =
+      await verifyTokenName(canonical, market, active)
 
     setFinalURL(canonical)
     setFinalTokenValue(finalTokenValue)

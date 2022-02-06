@@ -52,11 +52,19 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
    */
   convertUserInputToTokenName(userInput: string): string {
     if (!userInput) return null
-    const parsedURL = userInput
+    let parsedURL = userInput
       .replace('https://', '')
       .replace('www.', '')
       .replace('twitter.com/', '')
-      .replaceAll('/', '') // get rid of any extra slashes at end of URL
+
+    const indexOfSlash = parsedURL.indexOf('/')
+    const textAfterSlash = parsedURL.substring(indexOfSlash, parsedURL.length)
+
+    // If there is an extra slash (or more) at end, then get rid of it (assuming this is Twitter market token)
+    if (indexOfSlash !== -1 && textAfterSlash?.length >= 1) {
+      parsedURL = parsedURL.substring(0, parsedURL.lastIndexOf('/')) // get rid of any extra slashes at end of URL and any text after
+    }
+
     return `@${parsedURL.toLowerCase()}`
   }
 
