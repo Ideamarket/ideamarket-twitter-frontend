@@ -20,26 +20,19 @@ export default class TransactionManager {
   async executeTxWithCallbacks(
     name: string,
     func: (...args: any[]) => any,
-    callbacks: {
-      onHash?: (hash: string) => void
-      onReceipt?: (receipt: any) => void
-    },
+    callbacks: { onHash?: (hash: string) => void },
     ...args: any[]
   ) {
-    const { onHash, onReceipt } = callbacks
+    const { onHash } = callbacks
 
     this.setIsPending(true)
     this.setName(name)
 
     try {
-      await func(...args)
-        .on('transactionHash', (hash: string) => {
-          this.setHash(hash)
-          onHash && onHash(hash)
-        })
-        .on('receipt', function (receipt) {
-          onReceipt && onReceipt(receipt)
-        })
+      await func(...args).on('transactionHash', (hash: string) => {
+        this.setHash(hash)
+        onHash && onHash(hash)
+      })
     } catch (ex) {
       throw Error(`Transaction execution failed: ${ex}`)
     } finally {
