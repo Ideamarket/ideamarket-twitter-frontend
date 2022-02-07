@@ -49,9 +49,9 @@ const Home = ({ urlMarkets }: Props) => {
 
   useEffect(() => {
     // TODO: remove this once WIKI and MINDS no longer only default selected
-    if (localStorage.getItem('clearStorage') !== '7') {
+    if (localStorage.getItem('clearStorage') !== '8') {
       localStorage.clear()
-      localStorage.setItem('clearStorage', '7')
+      localStorage.setItem('clearStorage', '8')
     }
 
     const storedMarkets = JSON.parse(localStorage.getItem('STORED_MARKETS'))

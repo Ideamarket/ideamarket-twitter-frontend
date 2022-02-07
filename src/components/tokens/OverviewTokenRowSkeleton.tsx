@@ -56,19 +56,19 @@ export default function TokenRowSkeleton({
           </td>
         )} */}
         {/* Year Income */}
-        {getColumn('1YR Income') && (
+        {/* {getColumn('1YR Income') && (
           <td className="hidden px-6 py-4 md:table-cell whitespace-nowrap">
             <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
             <p className="w-10 h-4 mt-1 bg-gray-400 rounded"></p>
           </td>
-        )}
+        )} */}
         {/* Claimable Income */}
-        {getColumn('Claimable Income') && (
+        {/* {getColumn('Claimable Income') && (
           <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
             <p className="w-10 h-4 bg-gray-400 rounded md:hidden"></p>
             <p className="w-10 h-4 mt-1 bg-gray-400 rounded"></p>
           </td>
-        )}
+        )} */}
         {/* Buy Button */}
         <td className="hidden py-4 text-center md:table-cell whitespace-nowrap">
           <button className="w-24 h-10 bg-gray-400 rounded-lg">

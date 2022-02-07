@@ -67,9 +67,9 @@ export default function TokenRow({
 
   const isOnChain = token?.isOnChain
 
-  const yearIncome = (
-    parseFloat(token?.marketCap) * compoundSupplyRate
-  ).toFixed(2)
+  // const yearIncome = (
+  //   parseFloat(token?.marketCap) * compoundSupplyRate
+  // ).toFixed(2)
 
   const tokenPrice =
     isOnChain && token?.rawSupply
@@ -102,6 +102,7 @@ export default function TokenRow({
       ? urlMetaData?.ogTitle
       : marketSpecifics?.convertUserInputToTokenName(token?.url)
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const claimableIncome =
     interestManagerTotalShares &&
     interestManagerDaiBalance &&
@@ -411,7 +412,7 @@ export default function TokenRow({
         </td>
       )} */}
       {/* Year Income */}
-      {getColumn('1YR Income') && (
+      {/* {getColumn('1YR Income') && (
         <td
           className={classNames(
             isExpanded ? 'pt-4 pb-96' : 'py-4',
@@ -433,9 +434,9 @@ export default function TokenRow({
           )}
           {pageLink}
         </td>
-      )}
+      )} */}
       {/* Claimable Income */}
-      {getColumn('Claimable Income') ? (
+      {/* {getColumn('Claimable Income') ? (
         <td
           className={classNames(
             isExpanded ? 'pt-4 pb-96' : 'py-4',
@@ -459,7 +460,7 @@ export default function TokenRow({
         </td>
       ) : (
         <></>
-      )}
+      )} */}
       {/* Buy Button */}
       <td
         className={classNames(
