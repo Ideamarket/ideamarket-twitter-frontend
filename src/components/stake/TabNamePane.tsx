@@ -97,7 +97,9 @@ export default function TabNamePane({
           )}
         >
           {lockingAPR
-            ? formatNumberWithCommasAsThousandsSerperator(lockingAPR.toFixed(2))
+            ? formatNumberWithCommasAsThousandsSerperator(
+                (lockingAPR * 1.2).toFixed(2)
+              )
             : 0}
           % APR
         </span>
