@@ -40,7 +40,7 @@ const getTweetTemplate = (
   } else if (transactionType === TRANSACTION_TYPES.BUY) {
     tweetText = `Just bought ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
   } else if (transactionType === TRANSACTION_TYPES.LOCK) {
-    tweetText = `Just locked ${tokenName} for 1 year on @ideamarket_io, the literal marketplace of ideas!`
+    tweetText = `Just locked ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
   } else if (transactionType === TRANSACTION_TYPES.GIFT) {
     tweetText = `Just gifted ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
   } else if (transactionType === TRANSACTION_TYPES.CLAIM) {
