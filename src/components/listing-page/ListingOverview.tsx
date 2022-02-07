@@ -166,7 +166,7 @@ export default function TokenCard({
         </div>
       </div>
       {market?.name === 'Twitter' && (
-        <div className="w-full md:w-auto text-center mt-2">
+        <div className="w-full md:w-auto text-center my-2">
           {account &&
             token.tokenOwner !== ZERO_ADDRESS &&
             token.tokenOwner.toLowerCase() === account.toLowerCase() && (

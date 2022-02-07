@@ -152,7 +152,7 @@ export default function TokenRow({
       <td
         className={classNames(
           isExpanded ? 'pt-4 pb-96' : 'py-4',
-          'relative flex pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap'
+          'w-52 md:w-auto relative flex pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap'
         )}
       >
         <div className="flex items-center w-full text-gray-900 dark:text-gray-200">
@@ -269,7 +269,7 @@ export default function TokenRow({
         )}
       </td>
       {/* Mobile Verified Badge */}
-      <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-black md:hidden dark:text-white md:table-cell whitespace-nowrap">
+      {/* <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-black md:hidden dark:text-white md:table-cell whitespace-nowrap">
         <div className="flex items-center justify-end h-full">
           <div className="w-5 h-5">
             {isOnChain &&
@@ -279,7 +279,7 @@ export default function TokenRow({
               )}
           </div>
         </div>
-      </td>
+      </td> */}
       {/* Price */}
       <td
         className={classNames(

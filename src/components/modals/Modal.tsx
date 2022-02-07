@@ -15,7 +15,7 @@ export default function Modal({
   isCloseActive?: boolean
 }) {
   return (
-    <div className="absolute flex items-center justify-center text-center pt-4 pb-10">
+    <div className="absolute flex items-center justify-center w-full text-center pt-4 pb-10">
       <span className="inline-block h-screen align-middle"></span>
       &#8203;
       <Transition

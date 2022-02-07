@@ -8,9 +8,6 @@ const DesktopRelatedInfo = ({ rawTokenName, tokenName, marketName }: Props) => {
   return (
     <div className="hidden md:flex">
       <div className="w-full">
-        <div className="flex items-end justify-between h-16 pb-5">
-          <span className="text-xl font-semibold">Latest Tweets</span>
-        </div>
         <div style={{ height: '450px', overflowY: 'scroll', zIndex: '-20' }}>
           <a
             className="twitter-timeline"

@@ -13,7 +13,6 @@ export default async function verifyTokenName(
       isAlreadyGhostListed: false,
       isAlreadyOnChain: false,
       finalTokenValue: '',
-      canonical: '',
     }
 
   // Final value that will be stored on chain as token's value

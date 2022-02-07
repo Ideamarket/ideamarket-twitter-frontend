@@ -259,7 +259,7 @@ export const OverviewFilters = ({
   }, [markets])
 
   return (
-    <div className="justify-center p-3 overflow-x-scroll bg-white rounded-t-lg md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start lg:overflow-x-visible">
+    <div className="h-16 justify-center p-3 bg-white rounded-t-lg md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start">
       {/* <div className="flex md:gap-x-2">
         {CheckboxFilters.PLATFORMS.values
           .sort((p1, p2) => {
@@ -315,7 +315,7 @@ export const OverviewFilters = ({
       />
 
       <FiltersButton
-        className="hidden md:flex w-56 text-sm"
+        className="hidden md:flex w-56 text-sm leading-tight"
         onClick={setIsGhostOnlyActive}
         isSelected={isGhostOnlyActive}
         label={
@@ -326,7 +326,7 @@ export const OverviewFilters = ({
         }
       />
 
-      <div className="flex w-full h-9 md:h-auto mt-2 ml-auto md:mt-0">
+      <div className="flex w-full h-9 md:h-auto ml-auto">
         <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
         <button
           className="flex items-center justify-center p-2 ml-2 text-sm font-semibold border rounded-md md:hidden"
