@@ -269,7 +269,7 @@ const HomeHeader = ({
   )
 
   return (
-    <div className="px-6 pt-10 pb-40 text-center text-white bg-cover dark:text-gray-200 bg-top-mobile md:bg-top-desktop">
+    <div className="px-6 pt-10 pb-40 text-center text-white font-inter bg-cover dark:text-gray-200 bg-top-mobile md:bg-top-desktop">
       <div>
         <div className="flex flex-wrap justify-center mt-4">
           <div
@@ -323,11 +323,18 @@ const HomeHeader = ({
           </div>
         </div>
         <h2 className="mt-8 text-3xl md:text-6xl font-gilroy-bold">
-          The credibility layer
-          <span className="text-brand-blue"> of the internet</span>
+          Make lying
+          <span className="text-brand-blue"> expensive.</span>
         </h2>
-        <p className="mt-8 text-lg md:text-2xl font-sf-compact-medium">
-          Buy on the right side of history.
+        <p className="mt-8 text-md md:text-xl">
+          <p>Ideamarket values the world's information,</p>
+          <span>creating public narratives without third parties. </span>
+          <A
+            href="https://docs.ideamarket.io"
+            className="underline hover:text-brand-blue cursor-pointer"
+          >
+            (How it works)
+          </A>
         </p>
       </div>
       <div className="flex flex-col items-center justify-center mt-4 md:mt-10 text-md md:text-3xl font-gilroy-bold md:flex-row">
