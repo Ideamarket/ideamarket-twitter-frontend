@@ -237,7 +237,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
             {/* TODO: find a better way to add space to top and keep blue background */}
           </div>
 
-          <div className="px-2 pb-5 pt-40 md:pt-24 transform md:mt-10 -translate-y-30 md:-translate-y-28 md:max-w-304">
+          <div className="px-2 pb-5 mx-auto pt-40 md:pt-24 transform md:mt-10 -translate-y-30 md:-translate-y-28 md:max-w-304">
             <div className="flex flex-col md:grid md:grid-cols-2 mb-20">
               <div className="relative flex flex-col justify-between bg-white/[.1] text-white rounded-lg">
                 <div className="p-6">
@@ -265,6 +265,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                       <a
                         href={url}
                         className="text-brand-blue font-normal text-sm mt-1"
+                        style={{ overflowWrap: 'anywhere' }}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
