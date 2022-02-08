@@ -219,9 +219,16 @@ const HomeHeader = ({
     // } else {
 
     try {
-      await txManager.executeTx(
+      await txManager.executeTxWithCallbacks(
         'List Token',
         listToken,
+        {
+          onReceipt: async (receipt: any) => {
+            // TODO: call trigger API and send marketID and tokenID (get from receipt), remove onchain list api below
+            // const tokenID = receipt?.events?.NewToken?.returnValues[0]
+            // console.log('tokenID==', tokenID)
+          },
+        },
         finalTokenValue,
         market.marketID
       )
