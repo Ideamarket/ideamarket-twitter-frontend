@@ -88,7 +88,7 @@ export const getNavbarConfig = (mixPanel: any) => ({
           onClick: () => router.push(`/claim/${AIRDROP_TYPES.USER}`),
         },
         {
-          name: 'Community Claim',
+          name: 'Community Airdrop Claim',
           onClick: () => router.push(`/claim/${AIRDROP_TYPES.COMMUNITY}`),
         },
         {
