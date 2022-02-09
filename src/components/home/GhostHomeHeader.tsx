@@ -5,7 +5,12 @@ import ModalService from 'components/modals/ModalService'
 import CreateAccountModal from 'components/account/CreateAccountModal'
 import { CircleSpinner, WalletModal } from 'components'
 import A from 'components/A'
-import { GlobeAltIcon, PlusCircleIcon, XIcon } from '@heroicons/react/outline'
+import {
+  ExternalLinkIcon,
+  GlobeAltIcon,
+  PlusCircleIcon,
+  XIcon,
+} from '@heroicons/react/outline'
 import useOnClickOutside from 'utils/useOnClickOutside'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { useMutation, useQuery } from 'react-query'
@@ -326,14 +331,19 @@ const HomeHeader = ({
           Make lying
           <span className="text-brand-blue"> expensive.</span>
         </h2>
-        <p className="mt-8 text-md md:text-xl">
-          <p>Ideamarket values the world's information,</p>
-          <span>creating public narratives without third parties. </span>
+        <p className="mt-8 md:px-28 text-sm md:text-lg">
+          <span className="inline-block mr-1">
+            Ideamarket values the world's information,
+          </span>
+          <span className="inline-block mr-1">
+            creating public narratives without third parties.{' '}
+          </span>
           <A
             href="https://docs.ideamarket.io"
-            className="underline hover:text-brand-blue cursor-pointer"
+            className="underline inline-block hover:text-brand-blue opacity-60 cursor-pointer"
           >
-            (How it works)
+            <span>How it Works</span>
+            <ExternalLinkIcon className="w-5 inline ml-1 mb-1" />
           </A>
         </p>
       </div>
