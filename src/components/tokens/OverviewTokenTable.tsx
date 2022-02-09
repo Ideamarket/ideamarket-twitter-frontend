@@ -33,6 +33,7 @@ type Props = {
   getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
+  onMarketChanged: (set: Set<string>) => void
   tradeOrListSuccessToggle: boolean
 }
 
@@ -47,6 +48,7 @@ export default function Table({
   getColumn,
   onOrderByChanged,
   onTradeClicked,
+  onMarketChanged,
   tradeOrListSuccessToggle,
 }: Props) {
   const TOKENS_PER_PAGE = 10
@@ -242,7 +244,9 @@ export default function Table({
                     currentColumn={currentColumn}
                     orderDirection={orderDirection}
                     columnData={columnData}
+                    selectedMarkets={selectedMarkets}
                     columnClicked={columnClicked}
+                    onMarketChanged={onMarketChanged}
                   />
                 </tr>
               </thead>

@@ -13,7 +13,7 @@ const defaultColumns = [
     name: 'Name',
     content: 'Name',
     value: 'name',
-    sortable: true,
+    sortable: false,
     isOptional: false,
     isSelectedAtStart: true,
   },

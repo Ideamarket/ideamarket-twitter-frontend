@@ -140,6 +140,7 @@ const Home = ({ urlMarkets }: Props) => {
     getColumn: (column) => selectedColumns.has(column),
     onOrderByChanged,
     onTradeClicked,
+    onMarketChanged,
     tradeOrListSuccessToggle,
   }
   return (
