@@ -912,7 +912,7 @@ export async function queryMyTrades(
 }
 
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
-  const address = token.address
+  const address = token.listingId
 
   setNestedState((s: State) => {
     if (watching) {

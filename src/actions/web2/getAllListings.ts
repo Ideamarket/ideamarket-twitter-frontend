@@ -17,6 +17,8 @@ export const getAllListings = async ({
   earliestPricePointTs,
   search,
 }) => {
+  const filterTokensString =
+    filterTokens && filterTokens?.length > 0 ? filterTokens?.join(',') : null
   const response = await client.get(`/listing`, {
     params: {
       marketType,
@@ -25,7 +27,7 @@ export const getAllListings = async ({
       limit,
       orderBy,
       orderDirection,
-      filterTokens,
+      filterTokens: filterTokensString,
       earliestPricePointTs,
       search,
     },

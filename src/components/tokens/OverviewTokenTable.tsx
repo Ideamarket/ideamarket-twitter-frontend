@@ -162,6 +162,7 @@ export default function Table({
     selectedFilterId,
     isVerifiedFilterActive,
     isStarredFilterActive,
+    filterTokens?.length, // Need this to detect change in starred tokens. Otherwise, you click a star and it shows no tokens if starred filter is on
     orderBy,
     orderDirection,
     nameSearch,
@@ -224,7 +225,15 @@ export default function Table({
               <tbody className="w-full bg-white divide-y divide-gray-200 dark:bg-gray-700 dark:divide-gray-500">
                 {(tokenData as any[]).map((token, index) => {
                   const marketID = token?.marketID
-                  // Only load the rows if a market is found
+                  if (
+                    isStarredFilterActive &&
+                    filterTokens &&
+                    filterTokens?.length <= 0
+                  ) {
+                    // If starred filter is active, but no starred tokens, then show none. Have to do this because passing nothing to API causes it to fetch all tokens
+                    return null
+                  }
+                  // Only load the rows if a market is found and 2nd condition
                   if (marketsMap[marketID]) {
                     return (
                       <TokenRow
