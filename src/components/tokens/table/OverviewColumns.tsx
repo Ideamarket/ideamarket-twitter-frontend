@@ -201,7 +201,7 @@ export const OverviewColumns = ({
             Income
           </>
         )
-      case 'change':
+      case 'dayChange':
         return (
           <>
             24H
@@ -210,7 +210,7 @@ export const OverviewColumns = ({
           </>
         )
 
-      case '7d-change':
+      case 'weekChange':
         return (
           <>
             7D

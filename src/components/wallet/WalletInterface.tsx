@@ -54,13 +54,13 @@ export default function WalletInterface({
     const setWeb3WithWait = async () => {
       await setWeb3(library, connectingWallet)
 
+      if (onWalletConnected) {
+        onWalletConnected()
+      }
+
       if (onWalletConnectedCallback) {
         onWalletConnectedCallback()
         setOnWalletConnectedCallback(undefined)
-      }
-
-      if (onWalletConnected) {
-        onWalletConnected()
       }
     }
 

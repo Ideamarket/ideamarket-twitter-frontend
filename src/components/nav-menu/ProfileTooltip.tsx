@@ -9,7 +9,6 @@ import ProfileSettingsModal from 'components/account/ProfileSettingsModal'
 import { disconnectWalletConnector } from 'wallets/connectors'
 import { unsetWeb3 } from 'store/walletStore'
 import { useWeb3React } from '@web3-react/core'
-import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
 import { BsFillBellFill } from 'react-icons/bs'
@@ -22,7 +21,6 @@ export const ProfileTooltip = ({
 }) => {
   const { user, jwtToken } = useContext(GlobalContext)
   const { active, connector, deactivate } = useWeb3React()
-  const router = useRouter()
 
   const isSignedIn = active && jwtToken
 
@@ -38,7 +36,6 @@ export const ProfileTooltip = ({
       console.log(ex)
     }
     unsetWeb3()
-    router.push('/')
   }
 
   return (

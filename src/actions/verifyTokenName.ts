@@ -1,6 +1,6 @@
 import { useContractStore } from 'store/contractStore'
+import { querySingleToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import { getSingleListing } from './web2/getSingleListing'
 
 export default async function verifyTokenName(
   url: string,
@@ -33,13 +33,14 @@ export default async function verifyTokenName(
   }
 
   // When fetching listing, backend always expects URL (not a token name from old market)
-  const getExistingListing = await getSingleListing(
+  const existingListing = await querySingleToken(
     url,
+    finalTokenValue,
     selectedMarket.marketID
   )
 
-  const isAlreadyGhostListed = getExistingListing?.web2TokenData
-  const isAlreadyOnChain = getExistingListing?.web3TokenData
+  const isAlreadyGhostListed = Boolean(existingListing)
+  const isAlreadyOnChain = existingListing?.isOnChain
 
   // Is valid if 1) canonical is not null 2) contract validation works 3) not already on chain 4) not already on ghost market
   const isValid = url && contractIsValid && !isAlreadyOnChain

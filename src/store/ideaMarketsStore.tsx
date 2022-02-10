@@ -12,7 +12,6 @@ import {
   getQueryMarkets,
   getQueryMyTokensMaybeMarket,
   getQueryOwnedTokensMaybeMarket,
-  getQuerySingleToken,
   getQuerySingleTokenByID,
   getQueryTokenChartData,
   getQueryTokenLockedChartData,
@@ -24,6 +23,7 @@ import {
 import { NETWORK, L1_NETWORK } from 'store/networks'
 import { getAllListings } from 'actions/web2/getAllListings'
 import { getMarketSpecificsByMarketName } from './markets'
+import { getSingleListing } from 'actions/web2/getSingleListing'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 
@@ -65,6 +65,7 @@ export type IdeaToken = {
   marketID: number
   marketName: string
   tokenID: number
+  listingId: number
   name: string
   supply: string
   rawSupply: BN
@@ -90,6 +91,8 @@ export type IdeaToken = {
   lockedPercentage: string
   isL1: boolean
   holder: string
+  isOnChain: boolean
+  url: string
 }
 
 export type IdeaTokenMarketPair = {
@@ -376,29 +379,33 @@ export async function queryTokens(
   //   })
   // )
 
-  return L2Result.map((token) => newApiResponseToIdeaToken(token))
+  return await Promise.all(
+    L2Result.map(async (token) => {
+      // const apiResponse = await getSingleListing(
+      //   null,
+      //   null,
+      //   null,
+      //   token?.listingId
+      // )
+      // newApiResponseToIdeaToken(apiResponse)
+      return await querySingleToken(null, null, null, token?.listingId)
+    })
+  )
 }
 
 export async function querySingleToken(
-  queryKey: string,
-  marketName: string,
-  tokenName: string,
-  queryL1: boolean = false
+  value: string,
+  onchainValue: string,
+  marketId: number,
+  listingId?: string
 ): Promise<IdeaToken> {
-  if (!marketName || !tokenName) {
-    return undefined
-  }
-
-  const result = await request(
-    queryL1 ? HTTP_GRAPHQL_ENDPOINT_L1 : HTTP_GRAPHQL_ENDPOINT,
-    getQuerySingleToken(marketName, tokenName)
+  const apiResponse = await getSingleListing(
+    value,
+    onchainValue,
+    marketId,
+    listingId
   )
-
-  if (result?.ideaMarkets?.[0]?.tokens?.[0]) {
-    return apiResponseToIdeaToken(result.ideaMarkets[0].tokens[0])
-  }
-
-  return undefined
+  return apiResponse ? newApiResponseToIdeaToken(apiResponse) : null
 }
 
 export async function querySingleTokenByID(
@@ -1031,55 +1038,40 @@ function apiResponseToIdeaToken(
   return ret
 }
 
-function newApiResponseToIdeaToken(
+export function newApiResponseToIdeaToken(
   apiResponse,
   marketApiResponse?,
   holder?,
   isL1?
 ): IdeaToken {
-  const { web2TokenData } = apiResponse
-  const { web3TokenData } = apiResponse
-
-  let market
-  if (web3TokenData?.market) {
-    market = web3TokenData?.market
-  } else if (marketApiResponse) {
-    market = marketApiResponse
-  }
-
-  const marketID = web3TokenData ? market?.id : web2TokenData?.marketId
-  const marketName = web3TokenData ? market?.name : web2TokenData?.marketName
-  const isOnChain = web3TokenData ? true : web2TokenData?.isOnChain
-  const onchainId = web3TokenData
-    ? web3TokenData?.tokenID
-    : web2TokenData?.onchainId
+  const web3TokenData = apiResponse?.web3TokenData
+  const isOnChain = apiResponse?.isOnchain
 
   // When marketType is 'onchain', no web2TokenData is returned
-  const url = web2TokenData
-    ? web2TokenData?.value
-    : getMarketSpecificsByMarketName(marketName).getTokenURL(
-        web3TokenData?.name
+  const url = apiResponse?.value
+    ? apiResponse?.value
+    : getMarketSpecificsByMarketName(apiResponse?.marketName).getTokenURL(
+        apiResponse?.onchainValue
       )
 
-  const onchainValue =
-    getMarketSpecificsByMarketName(marketName).convertUserInputToTokenName(url)
-
-  const name = web3TokenData ? web3TokenData?.name : onchainValue
+  const onchainValue = apiResponse?.onchainValue
+  // getMarketSpecificsByMarketName(apiResponse?.marketName).convertUserInputToTokenName(url)
 
   const ret = {
     address: web3TokenData?.id,
-    marketID,
-    marketName,
-    tokenID: onchainId, // web3 token ID
-    listingId: web2TokenData?.listingId, // web2 ghost ID
+    marketID: apiResponse?.marketId,
+    marketName: apiResponse?.marketName,
+    tokenID: apiResponse?.onchainId, // web3 token ID
+    listingId: apiResponse?.listingId, // web2 ghost ID
     url,
-    name,
+    name: onchainValue,
     isOnChain,
-    ghostListedBy: web2TokenData?.ghostListedBy,
-    ghostListedAt: web2TokenData?.ghostListedAt,
-    onchainListedBy: web2TokenData?.onchainListedBy,
-    onchainListedAt: web2TokenData?.onchainListedAt,
-    totalVotes: web2TokenData?.totalVotes,
+    price: apiResponse?.price,
+    ghostListedBy: apiResponse?.ghostListedBy,
+    ghostListedAt: apiResponse?.ghostListedAt,
+    onchainListedBy: apiResponse?.onchainListedBy,
+    onchainListedAt: apiResponse?.onchainListedAt,
+    totalVotes: apiResponse?.totalVotes,
     supply: web3TokenData?.supply
       ? web3BNToFloatString(new BN(web3TokenData?.supply), bigNumberTenPow18, 2)
       : undefined,
@@ -1138,13 +1130,12 @@ function newApiResponseToIdeaToken(
       web3TokenData?.earliestPricePoint &&
       web3TokenData?.earliestPricePoint.length > 0 &&
       apiResponseToPricePoint(web3TokenData?.earliestPricePoint[0]),
-    dayChange: web3TokenData?.dayChange
-      ? (parseFloat(web3TokenData?.dayChange) * 100).toFixed(2)
-      : undefined,
-    weeklyChange:
-      (web3TokenData?.pricePoints &&
-        getWeeklyChange(web3TokenData?.pricePoints)) ||
-      '0',
+    dayChange: apiResponse?.dayChange
+      ? parseFloat(apiResponse?.dayChange).toFixed(2)
+      : 0,
+    weeklyChange: apiResponse?.weekChange
+      ? parseFloat(apiResponse?.weekChange).toFixed(2)
+      : 0,
     dayVolume: web3TokenData?.dayVolume
       ? parseFloat(web3TokenData?.dayVolume).toFixed(2)
       : undefined,

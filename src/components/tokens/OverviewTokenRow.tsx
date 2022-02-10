@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { A, WatchingStar } from 'components'
+import { WatchingStar } from 'components'
 import { NETWORK } from 'store/networks'
 import { queryDaiBalance } from 'store/daiStore'
 import {
@@ -51,12 +51,11 @@ export default function TokenRow({
 }: Props) {
   const { mixpanel } = useMixPanel()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
-  const url = marketSpecifics?.getTokenURL(token?.name)
 
   const [isExpanded, setIsExpanded] = useState(false)
 
   const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
-    [url],
+    [token?.url],
     getURLMetaData
   )
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
@@ -117,16 +116,6 @@ export default function TokenRow({
           2
         )
       : '0'
-
-  // This makes it so each row can be right clicked in order to open listing in new tab
-  const pageLink = (
-    <A
-      // href={`/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
-      //   token?.name
-      // )}`}
-      className="w-full h-full"
-    />
-  )
 
   return (
     <tr
@@ -217,8 +206,6 @@ export default function TokenRow({
             )}
         </div>
 
-        {pageLink}
-
         {isExpanded && (
           <div className="relative w-full ">
             <div className="flex flex-col">
@@ -233,7 +220,7 @@ export default function TokenRow({
 
               {/* Didn't use Next image because can't do wildcard domain allow in next config file */}
               <a
-                href={url}
+                href={token?.url}
                 className="mt-4 pl-10 cursor-pointer"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -284,11 +271,10 @@ export default function TokenRow({
         </p>
         <p
           className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
-          title={'$' + tokenPrice}
+          title={'$' + token?.price}
         >
-          {isOnChain ? `$${formatNumber(tokenPrice)}` : <>&mdash;</>}
+          {isOnChain ? `$${formatNumber(token?.price)}` : <>&mdash;</>}
         </p>
-        {pageLink}
       </td>
       {/* 24H Change */}
       {getColumn('24H Change') && (
@@ -309,18 +295,17 @@ export default function TokenRow({
               title={`${
                 parseFloat(token?.dayChange) >= 0.0
                   ? `+ ${parseInt(token?.dayChange)}`
-                  : `- ${parseInt(token?.dayChange.slice(1))}`
+                  : `- ${parseInt(token?.dayChange?.slice(1))}`
               }%`}
             >
               {parseFloat(token?.dayChange) >= 0.0
                 ? `+ ${parseInt(token?.dayChange)}`
-                : `- ${parseInt(token?.dayChange.slice(1))}`}
+                : `- ${parseInt(token?.dayChange?.slice(1))}`}
               %
             </p>
           ) : (
             <>&mdash;</>
           )}
-          {pageLink}
         </td>
       )}
       {/* 7D Change */}
@@ -353,7 +338,6 @@ export default function TokenRow({
           ) : (
             <>&mdash;</>
           )}
-          {pageLink}
         </td>
       )}
       {/* Deposits */}
@@ -380,7 +364,6 @@ export default function TokenRow({
               <>&mdash;</>
             )}
           </p>
-          {pageLink}
         </td>
       )}
       {/* %Locked */}

@@ -1,7 +1,6 @@
-import { getSingleListing } from 'actions/web2/getSingleListing'
 import { getValidURL } from 'actions/web2/getValidURL'
 import { GetServerSideProps } from 'next'
-import { queryMarkets } from 'store/ideaMarketsStore'
+import { queryMarkets, querySingleToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketNameInURLRepresentation } from 'store/markets'
 
 const ListingPage = () => {
@@ -35,9 +34,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       (market) => market.name.toLowerCase() === marketName?.toLowerCase()
     ).marketID
 
-    const getExistingListing = await getSingleListing(canonical, marketID)
+    const existingListing = await querySingleToken(
+      canonical,
+      contractTokenName,
+      marketID
+    )
 
-    const listingId = getExistingListing?.web2TokenData?.listingId
+    const listingId = existingListing?.listingId
 
     return {
       redirect: {

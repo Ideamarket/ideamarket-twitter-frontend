@@ -33,6 +33,8 @@ const Home = ({ urlMarkets }: Props) => {
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
+  const [orderBy, setOrderBy] = useState('dayChange')
+  const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
 
   const visibleColumns = getVisibleColumns(selectedColumns)
 
@@ -76,12 +78,29 @@ const Home = ({ urlMarkets }: Props) => {
   }
 
   const onOrderByChanged = (orderBy: string, direction: string) => {
+    setOrderBy(orderBy)
+    setOrderDirection(direction as any)
     if (orderBy === 'dayChange' && direction === 'desc') {
       setSelectedFilterId(MainFilters.HOT.id)
     } else if (orderBy === 'listedAt' && direction === 'desc') {
       setSelectedFilterId(MainFilters.NEW.id)
     } else {
       setSelectedFilterId(MainFilters.TOP.id)
+    }
+  }
+
+  const onSelectedFilterByIdChanged = (filterId: number) => {
+    setSelectedFilterId(filterId)
+
+    if (filterId === MainFilters.HOT.id) {
+      setOrderBy('dayChange')
+      setOrderDirection('desc')
+    } else if (filterId === MainFilters.TOP.id) {
+      setOrderBy('price')
+      setOrderDirection('desc')
+    } else if (filterId === MainFilters.NEW.id) {
+      setOrderBy('listedAt')
+      setOrderDirection('desc')
     }
   }
 
@@ -121,7 +140,7 @@ const Home = ({ urlMarkets }: Props) => {
     isStarredFilterActive,
     isGhostOnlyActive,
     onMarketChanged,
-    setSelectedFilterId,
+    setSelectedFilterId: onSelectedFilterByIdChanged,
     onColumnChanged,
     onNameSearchChanged,
     setIsVerifiedFilterActive,
@@ -131,6 +150,8 @@ const Home = ({ urlMarkets }: Props) => {
 
   const tableProps = {
     nameSearch,
+    orderBy,
+    orderDirection,
     selectedMarkets,
     selectedFilterId,
     isVerifiedFilterActive,

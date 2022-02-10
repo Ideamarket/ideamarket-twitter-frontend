@@ -4,13 +4,14 @@ import {
   DefaultLayout,
   TradeModal,
   VerifyModal,
+  WalletModal,
 } from 'components'
 // import { useWalletStore } from 'store/walletStore'
 // import { queryDaiBalance } from 'store/daiStore'
 // import { NETWORK } from 'store/networks'
 import {
   queryMarket,
-  queryTokens,
+  querySingleToken,
   // queryInterestManagerTotalShares,
 } from 'store/ideaMarketsStore'
 import { GetServerSideProps } from 'next'
@@ -18,11 +19,8 @@ import ModalService from 'components/modals/ModalService'
 // import LeftListingPanel from 'components/listing-page/LeftListingPanel'
 import ListingStats from 'components/listing-page/ListingStats'
 import ListingSEO from 'components/listing-page/ListingSEO'
-// import TradeCompleteModal, {
-//   TRANSACTION_TYPES,
-// } from 'components/trade/TradeCompleteModal'
 // import { bnToFloatString, bigNumberTenPow18 } from 'utils'
-import { ReactElement, useEffect } from 'react'
+import { ReactElement, useContext, useEffect, useState } from 'react'
 import DesktopRelatedInfo from 'components/listing-page/DesktopRelatedInfo'
 import MobileRelatedInfo from 'components/listing-page/MobileRelatedInfo'
 import InvestmentCalculator from 'components/investment-calculator/InvestmentCalculator'
@@ -49,7 +47,8 @@ import { useBalance } from 'actions'
 import { useWeb3React } from '@web3-react/core'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { useMixPanel } from 'utils/mixPanel'
-import { flatten } from 'lodash'
+import { useWalletStore } from 'store/walletStore'
+import { GlobalContext } from 'lib/GlobalContext'
 
 const DetailsSkeleton = () => (
   <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
@@ -67,36 +66,10 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
   //   marketSpecifics?.getTokenNameFromURLRepresentation(rawTokenId)
 
   const {
-    data: infiniteData, // For now will be list due to using this API
+    data: token,
     isLoading: isTokenLoading,
     refetch,
-  } = useQuery(
-    [
-      'keyHere',
-      [
-        [
-          { marketID: 1 },
-          { marketID: 2 },
-          { marketID: 3 },
-          { marketID: 4 },
-          { marketID: 5 },
-          { marketID: 6 },
-        ],
-        10,
-        604800,
-        'totalVotes',
-        'asc',
-        '',
-        rawTokenId,
-        false,
-        'both',
-      ],
-    ],
-    queryTokens
-  )
-
-  const tokenData = flatten(infiniteData || []) as any
-  const token = tokenData ? tokenData[0] : null
+  } = useQuery([null, null, null, rawTokenId], querySingleToken)
 
   const marketName = token?.marketName
   const tokenName = token?.name ? token?.name : token?.url
@@ -106,13 +79,13 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
     queryMarket
   )
 
-  // const [tradeToggle, setTradeToggle] = useState(false) // Need toggle to reload balances after trade
+  const [tradeToggle, setTradeToggle] = useState(false) // Need toggle to reload balances after trade
 
   const [, ideaTokenBalanceBN] = useBalance(
     token?.address,
     account,
     18,
-    true /*tradeToggle*/
+    tradeToggle
   )
 
   const ideaTokenBalanceDisplay = ideaTokenBalanceBN
@@ -182,20 +155,31 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
     marketName,
   }
 
-  // function onTradeComplete(
-  //   isSuccess: boolean,
-  //   tokenName: string,
-  //   transactionType: TRANSACTION_TYPES
-  // ) {
-  //   refetch()
-  //   setTradeToggle(!tradeToggle)
-  //   ModalService.open(TradeCompleteModal, {
-  //     isSuccess,
-  //     tokenName,
-  //     marketName,
-  //     transactionType,
-  //   })
-  // }
+  const onTradeComplete = () => {
+    refetch()
+    setTradeToggle(!tradeToggle)
+  }
+
+  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
+
+  const onTradeClicked = () => {
+    if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        ModalService.open(
+          TradeModal,
+          { ideaToken: token, market },
+          onTradeComplete
+        )
+      })
+      ModalService.open(WalletModal)
+    } else {
+      ModalService.open(
+        TradeModal,
+        { ideaToken: token, market },
+        onTradeComplete
+      )
+    }
+  }
 
   const { mixpanel } = useMixPanel()
 
@@ -370,13 +354,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                   {token?.isOnChain && (
                     <div className="flex justify-end space-x-2 items-center w-full w-1/2">
                       <button
-                        onClick={() =>
-                          ModalService.open(
-                            TradeModal,
-                            { ideaToken: token, market },
-                            refetch
-                          )
-                        }
+                        onClick={onTradeClicked}
                         className="bg-blue-500 px-4 py-2 flex items-center text-white rounded-lg"
                       >
                         <ArrowSmUpIcon className="w-5" />

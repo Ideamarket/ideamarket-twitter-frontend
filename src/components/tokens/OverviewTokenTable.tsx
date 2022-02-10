@@ -29,6 +29,8 @@ type Props = {
   isStarredFilterActive: boolean
   isGhostOnlyActive: boolean
   nameSearch: string
+  orderBy: string
+  orderDirection: string
   columnData: Array<any>
   getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
@@ -44,6 +46,8 @@ export default function Table({
   isStarredFilterActive,
   isGhostOnlyActive,
   nameSearch,
+  orderBy,
+  orderDirection,
   columnData,
   getColumn,
   onOrderByChanged,
@@ -54,8 +58,7 @@ export default function Table({
   const TOKENS_PER_PAGE = 10
 
   const [currentColumn, setCurrentColumn] = useState('')
-  const [orderBy, setOrderBy] = useState('dayChange')
-  const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
+
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
   const observer: MutableRefObject<any> = useRef()
 
@@ -84,25 +87,6 @@ export default function Table({
     }
   )
 
-  const calculateOrderBy = () => {
-    let subgraphOrderBy = orderBy
-
-    if (selectedFilterId === MainFilters.HOT.id && orderDirection === 'desc')
-      subgraphOrderBy = 'dayChange'
-    else if (
-      selectedFilterId === MainFilters.NEW.id &&
-      orderDirection === 'desc'
-    )
-      subgraphOrderBy = 'listedAt'
-    else if (
-      selectedFilterId === MainFilters.TOP.id &&
-      orderDirection === 'desc'
-    )
-      subgraphOrderBy = 'supply'
-
-    return subgraphOrderBy
-  }
-
   const {
     data: infiniteData,
     isFetching: isTokenDataLoading,
@@ -116,7 +100,7 @@ export default function Table({
         markets,
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
-        calculateOrderBy(),
+        orderBy,
         selectedFilterId === MainFilters.HOT.id ||
         selectedFilterId === MainFilters.NEW.id
           ? 'desc'
@@ -192,43 +176,30 @@ export default function Table({
   function columnClicked(column: string) {
     if (currentColumn === column) {
       if (orderDirection === 'asc') {
-        setOrderDirection('desc')
         onOrderByChanged(orderBy, 'desc')
       } else {
-        setOrderDirection('asc')
         onOrderByChanged(orderBy, 'asc')
       }
     } else {
       setCurrentColumn(column)
 
       if (column === 'name') {
-        setOrderBy('name')
         onOrderByChanged('name', 'desc')
-      } else if (
-        column === 'price' ||
-        column === 'deposits' ||
-        column === 'income'
-      ) {
-        setOrderBy('supply')
-        onOrderByChanged('supply', 'desc')
-      } else if (column === 'change') {
-        setOrderBy('dayChange')
+      } else if (column === 'price') {
+        onOrderByChanged('price', 'desc')
+      } else if (column === 'deposits') {
+        onOrderByChanged('deposits', 'desc')
+      } else if (column === 'dayChange') {
         onOrderByChanged('dayChange', 'desc')
-      } else if (column === '7d-change') {
-        setOrderBy('dayChange')
-        onOrderByChanged('dayChange', 'desc')
+      } else if (column === 'weekChange') {
+        onOrderByChanged('weekChange', 'desc')
       } else if (column === 'locked') {
-        setOrderBy('lockedPercentage')
         onOrderByChanged('lockedAmount', 'desc')
       } else if (column === 'holders') {
-        setOrderBy('holders')
         onOrderByChanged('holders', 'desc')
       } else if (column === 'rank') {
-        setOrderBy('rank')
         onOrderByChanged('rank', 'desc')
       }
-
-      setOrderDirection('desc')
     }
   }
 
@@ -241,7 +212,7 @@ export default function Table({
               <thead className="hidden md:table-header-group">
                 <tr className="z-40 lg:sticky md:top-28 sticky-safari">
                   <OverviewColumns
-                    currentColumn={currentColumn}
+                    currentColumn={orderBy}
                     orderDirection={orderDirection}
                     columnData={columnData}
                     selectedMarkets={selectedMarkets}
