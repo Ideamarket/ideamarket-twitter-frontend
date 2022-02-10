@@ -7,10 +7,9 @@ import NavThemeButton from './NavThemeButton'
 
 type Props = {
   isMobileNavOpen: boolean
-  imoFeature: any
 }
 
-const MobileNavItems = ({ isMobileNavOpen, imoFeature }: Props) => {
+const MobileNavItems = ({ isMobileNavOpen }: Props) => {
   const { mixpanel } = useMixPanel()
 
   let navbarConfig = getNavbarConfig(mixpanel)
@@ -32,13 +31,9 @@ const MobileNavItems = ({ isMobileNavOpen, imoFeature }: Props) => {
       className="md:hidden"
     >
       <div className="px-2 pt-2 pb-3 space-y-3 sm:px-3">
-        {navbarConfig.menu
-          .filter(
-            (m) => m.name !== 'IMO' || (m.name === 'IMO' && imoFeature?.enabled)
-          )
-          .map((menuItem, i) => (
-            <NavItem menuItem={menuItem} key={i} />
-          ))}
+        {navbarConfig.menu.map((menuItem, i) => (
+          <NavItem menuItem={menuItem} key={i} />
+        ))}
         <div className="flex px-1 mt-5">
           <NavThemeButton />
         </div>

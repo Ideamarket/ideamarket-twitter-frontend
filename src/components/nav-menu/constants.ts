@@ -23,6 +23,13 @@ export const getNavbarConfig = (mixPanel: any) => ({
             mixPanel.track('LINK_WHITEPAPER')
           },
         },
+        {
+          name: 'Buy Arb-ETH with credit/debit',
+          onClick: () => {
+            window.open('https://arbitrum.banxa.com', '_blank')
+            mixPanel.track('LINK_BUY_ARB_ETH')
+          },
+        },
         // {
         //   name: 'Browser Extension',
         //   onClick: () => {
