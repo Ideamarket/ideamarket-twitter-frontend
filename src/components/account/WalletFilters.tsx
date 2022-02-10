@@ -1,13 +1,16 @@
+import { GlobeAltIcon } from '@heroicons/react/outline'
 import { LockClosedIcon, StarIcon } from '@heroicons/react/solid'
 import classNames from 'classnames'
 import { OverviewSearchbar } from 'components/tokens/OverviewSearchbar'
 import {
   CheckboxFilters,
+  toggleMarketHelper,
   // toggleMarketHelper,
 } from 'components/tokens/utils/OverviewUtils'
 import useThemeMode from 'components/useThemeMode'
 import { useEffect } from 'react'
 import { getMarketSpecificsByMarketName, useMarketStore } from 'store/markets'
+import { useMixPanel } from 'utils/mixPanel'
 
 type PlatformButtonProps = {
   platform: any
@@ -112,10 +115,22 @@ const WalletFilters = ({
   setIsStarredFilterActive,
   setIsLockedFilterActive,
 }: Props) => {
-  // const toggleMarket = (marketName: string) => {
-  //   const newSet = toggleMarketHelper(marketName, selectedMarkets)
-  //   onMarketChanged(newSet)
-  // }
+  const { mixpanel } = useMixPanel()
+
+  const toggleMarket = (marketName: string) => {
+    let newSet = null
+    if (marketName === 'URL') {
+      newSet = toggleMarketHelper('URL', selectedMarkets)
+      newSet = toggleMarketHelper('Minds', newSet)
+      newSet = toggleMarketHelper('Substack', newSet)
+      newSet = toggleMarketHelper('Showtime', newSet)
+    } else {
+      newSet = toggleMarketHelper(marketName, selectedMarkets)
+    }
+
+    onMarketChanged(newSet)
+    mixpanel.track('FILTER_PLATFORM', { platforms: marketName })
+  }
 
   const markets = useMarketStore((state) =>
     state.markets.map((m) => m?.market?.name)
@@ -125,6 +140,14 @@ const WalletFilters = ({
     // toggleMarket method is dependent on CheckboxFilters.PLATFORMS.values
     CheckboxFilters.PLATFORMS.values = ['All', ...markets]
   }, [markets])
+
+  const twitterMarketSpecifics = getMarketSpecificsByMarketName('Twitter')
+  const wikiMarketSpecifics = getMarketSpecificsByMarketName('Wikipedia')
+  const { resolvedTheme } = useThemeMode()
+
+  const isURLSelected = selectedMarkets.has('URL')
+  const isPeopleSelected = selectedMarkets.has('Twitter')
+  const isWikiSelected = selectedMarkets.has('Wikipedia')
 
   return (
     <div className="justify-center p-3 overflow-x-scroll bg-white rounded-t-lg text-black md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start lg:overflow-x-visible">
@@ -157,6 +180,61 @@ const WalletFilters = ({
         isSelected={isVerifiedFilterActive}
         label={getIconVersion('verify', resolvedTheme, isVerifiedFilterActive)}
       /> */}
+
+      <div className="flex justify-between items-center space-x-2">
+        <button
+          className={classNames(
+            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            {
+              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
+                isURLSelected,
+            },
+            { 'text-brand-black dark:text-gray-50': !isURLSelected }
+          )}
+          onClick={() => {
+            toggleMarket('URL')
+          }}
+        >
+          <GlobeAltIcon className="w-5 mr-1" />
+          <span>URLs</span>
+        </button>
+        <button
+          className={classNames(
+            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            {
+              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
+                isPeopleSelected,
+            },
+            { 'text-brand-black dark:text-gray-50': !isPeopleSelected }
+          )}
+          onClick={() => {
+            toggleMarket('Twitter')
+          }}
+        >
+          <span className="w-5 mr-1">
+            {twitterMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
+          </span>
+          <span>People</span>
+        </button>
+        <button
+          className={classNames(
+            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            {
+              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
+                isWikiSelected,
+            },
+            { 'text-brand-black dark:text-gray-50': !isWikiSelected }
+          )}
+          onClick={() => {
+            toggleMarket('Wikipedia')
+          }}
+        >
+          <span className="w-5 mr-1">
+            {wikiMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
+          </span>
+          <span>Wikipedia</span>
+        </button>
+      </div>
 
       <FiltersButton
         className="hidden md:flex"

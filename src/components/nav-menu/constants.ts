@@ -93,7 +93,8 @@ export const getNavbarConfig = (mixPanel: any) => ({
         },
         {
           name: 'Twitter Verification Airdrop Claim',
-          onClick: () => router.push(`/claim/${AIRDROP_TYPES.TWITTER_VERIFICATION}`),
+          onClick: () =>
+            router.push(`/claim/${AIRDROP_TYPES.TWITTER_VERIFICATION}`),
         },
       ],
     },
