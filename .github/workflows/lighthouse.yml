@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
       - run: yarn install --frozen-lockfile && yarn global add @lhci/cli
       - run: echo -e "NEXT_PUBLIC_NETWORK=avm\nNEXT_PUBLIC_OG_IMAGE_URL=https://og-image.ideamarket.io\nMIX_PANEL_KEY=bdc8707c5ca435eebe1eb76c4a9d85d5" > .env.local
       - run: yarn build
