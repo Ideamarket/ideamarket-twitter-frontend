@@ -20,7 +20,6 @@ import { getMarketFromURL } from 'utils/markets'
 import { useMarketStore } from 'store/markets'
 import { listToken, verifyTokenName } from 'actions'
 import { useWeb3React } from '@web3-react/core'
-import { onChainListToken } from 'actions/web2/onChainListToken'
 import { useMixPanel } from 'utils/mixPanel'
 import BN from 'bn.js'
 import {
@@ -37,6 +36,7 @@ import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 import { queryDaiBalance } from 'store/daiStore'
 import { NETWORK } from 'store/networks'
 import { getValidURL } from 'actions/web2/getValidURL'
+import { addTrigger } from 'actions/web2/addTrigger'
 
 const HomeHeader = ({
   setTradeOrListSuccessToggle,
@@ -229,9 +229,8 @@ const HomeHeader = ({
         listToken,
         {
           onReceipt: async (receipt: any) => {
-            // TODO: call trigger API and send marketID and tokenID (get from receipt), remove onchain list api below
-            // const tokenID = receipt?.events?.NewToken?.returnValues[0]
-            // console.log('tokenID==', tokenID)
+            const tokenID = receipt?.events?.NewToken?.returnValues[0]
+            await addTrigger(tokenID, market?.marketID)
           },
         },
         finalTokenValue,
@@ -249,13 +248,6 @@ const HomeHeader = ({
     }
     // close()
     // }
-
-    await onChainListToken(
-      finalTokenValue,
-      finalURL,
-      market?.marketID,
-      jwtToken
-    )
 
     onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.LIST, market)
     mixpanel.track(`LIST_ONCHAIN_${market.name.toUpperCase()}_COMPLETED`)
