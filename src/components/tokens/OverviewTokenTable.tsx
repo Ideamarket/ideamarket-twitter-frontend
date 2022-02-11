@@ -125,6 +125,7 @@ export default function Table({
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       enabled: false,
+      keepPreviousData: true,
     }
   )
 
