@@ -93,6 +93,7 @@ export type IdeaToken = {
   holder: string
   isOnChain: boolean
   url: string
+  verified: boolean
 }
 
 export type IdeaTokenMarketPair = {
@@ -345,6 +346,7 @@ export async function queryTokens(
     filterTokens,
     earliestPricePointTs: fromTs,
     search,
+    isVerifiedFilter,
   })
   // }
 
@@ -1155,6 +1157,7 @@ export function newApiResponseToIdeaToken(
       : '',
     isL1,
     holder,
+    verified: apiResponse?.verified,
   } as any
 
   return ret

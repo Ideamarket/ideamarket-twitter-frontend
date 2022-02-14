@@ -8,7 +8,6 @@ import {
   formatNumberInt,
   formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
-  ZERO_ADDRESS,
 } from '../../utils'
 import A from 'components/A'
 import { useTokenIconURL } from 'actions'
@@ -133,7 +132,7 @@ export default function TokenCard({
               <span className="hidden md:block ml-2.5 mr-1 w-5 h-5">
                 {marketSpecifics.getMarketSVGWhite()}
               </span>
-              {token.tokenOwner !== ZERO_ADDRESS && (
+              {token?.verified && (
                 <span className="hidden md:block inline w-6 h-6 ml-1.5">
                   <IdeaverifyIconBlue className="w-6 h-6" />
                 </span>
@@ -156,7 +155,7 @@ export default function TokenCard({
               <span className="block md:hidden ml-2.5 mr-1 w-5 h-5">
                 {marketSpecifics.getMarketSVGWhite()}
               </span>
-              {token.tokenOwner !== ZERO_ADDRESS && (
+              {token?.verified && (
                 <span className="block md:hidden inline w-6 h-6 ml-1.5">
                   <IdeaverifyIconBlue className="w-6 h-6" />
                 </span>
@@ -168,12 +167,12 @@ export default function TokenCard({
       {market?.name === 'Twitter' && (
         <div className="w-full md:w-auto text-center my-2">
           {account &&
-            token.tokenOwner !== ZERO_ADDRESS &&
+            token?.verified &&
             token.tokenOwner.toLowerCase() === account.toLowerCase() && (
               <span>Verified by you</span>
             )}
 
-          {token.tokenOwner === ZERO_ADDRESS && (
+          {!token?.verified && (
             <button
               onClick={onVerifyClicked}
               className="py-2 text-lg font-bold text-white border border-white rounded-lg w-44 font-sf-compact-medium hover:bg-white hover:text-brand-blue"

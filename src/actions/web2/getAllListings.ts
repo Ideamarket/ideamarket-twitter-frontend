@@ -16,6 +16,7 @@ export const getAllListings = async ({
   filterTokens,
   earliestPricePointTs,
   search,
+  isVerifiedFilter,
 }) => {
   const filterTokensString =
     filterTokens && filterTokens?.length > 0 ? filterTokens?.join(',') : null
@@ -30,6 +31,7 @@ export const getAllListings = async ({
       filterTokens: filterTokensString,
       earliestPricePointTs,
       search,
+      verified: isVerifiedFilter,
     },
   })
 

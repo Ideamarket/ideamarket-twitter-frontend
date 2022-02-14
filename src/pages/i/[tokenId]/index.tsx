@@ -35,7 +35,6 @@ import {
   formatNumberInt,
   formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
-  ZERO_ADDRESS,
 } from 'utils'
 import {
   ArrowSmDownIcon,
@@ -270,11 +269,11 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                   {marketName === 'Twitter' && (
                     <div className="w-full md:w-auto text-left my-2">
                       {account &&
-                        token?.tokenOwner !== ZERO_ADDRESS &&
+                        token?.verified &&
                         token?.tokenOwner?.toLowerCase() ===
                           account.toLowerCase() && <span>Verified by you</span>}
 
-                      {token?.tokenOwner === ZERO_ADDRESS && (
+                      {!token?.verified && (
                         <button
                           onClick={onVerifyClicked}
                           className="py-2 text-lg font-bold text-white border border-white rounded-lg w-44 font-sf-compact-medium hover:bg-white hover:text-brand-blue"

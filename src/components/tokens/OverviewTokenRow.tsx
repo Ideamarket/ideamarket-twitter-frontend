@@ -13,7 +13,6 @@ import {
   formatNumberWithCommasAsThousandsSerperator,
   formatNumber,
   web3BNToFloatString,
-  ZERO_ADDRESS,
   bigNumberTenPow18,
   bnToFloatString,
 } from 'utils'
@@ -197,13 +196,11 @@ export default function TokenRow({
             </a>
           </div>
           {/* Desktop Verified Badge */}
-          {isOnChain &&
-            market?.name !== 'URL' &&
-            token?.tokenOwner !== ZERO_ADDRESS && (
-              <div className="hidden md:inline w-5 h-5 ml-1.5 text-black dark:text-white">
-                <IdeaverifyIconBlue className="w-full h-full" />
-              </div>
-            )}
+          {isOnChain && market?.name !== 'URL' && token?.verified && (
+            <div className="hidden md:inline w-5 h-5 ml-1.5 text-black dark:text-white">
+              <IdeaverifyIconBlue className="w-full h-full" />
+            </div>
+          )}
         </div>
 
         {isExpanded && (
@@ -253,7 +250,7 @@ export default function TokenRow({
           <div className="w-5 h-5">
             {isOnChain &&
               market?.name !== 'URL' &&
-              token?.tokenOwner !== ZERO_ADDRESS && (
+              token?.verified && (
                 <IdeaverifyIconBlue className="w-full h-full" />
               )}
           </div>
