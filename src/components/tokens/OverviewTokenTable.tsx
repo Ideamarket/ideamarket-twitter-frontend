@@ -207,6 +207,8 @@ export default function Table({
         onOrderByChanged('holders', 'desc')
       } else if (column === 'rank') {
         onOrderByChanged('rank', 'desc')
+      } else if (column === 'totalVotes') {
+        onOrderByChanged('totalVotes', 'desc')
       }
     }
   }
