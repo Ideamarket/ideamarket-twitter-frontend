@@ -277,7 +277,7 @@ export default function TokenRow({
 
               {/* Didn't use Next image because can't do wildcard domain allow in next config file */}
               <a
-                href={token?.url}
+                href={`/i/${token?.listingId}`}
                 className="mt-4 pl-10 cursor-pointer"
                 target="_blank"
                 rel="noopener noreferrer"

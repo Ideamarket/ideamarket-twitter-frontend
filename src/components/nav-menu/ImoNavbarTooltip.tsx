@@ -22,7 +22,7 @@ const ImoNavbarTooltip = () => {
   return (
     <div className="absolute -top-1 md:top-12 left-48 md:left-1/2  transform -translate-x-1/2 w-max bg-brand-light-green rounded-lg p-2 flex items-center text-white text-sm leading-5">
       <span className="relative">
-        upto{' '}
+        up to{' '}
         <span className="font-bold">{formatNumber(lockingAPR * 1.2)}% APR</span>
       </span>
       <TiDeleteOutline

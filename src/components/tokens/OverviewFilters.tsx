@@ -331,7 +331,7 @@ export const OverviewFilters = ({
       />
 
       <FiltersButton
-        className="hidden md:flex w-56 text-sm leading-tight"
+        className="hidden md:flex w-56 text-sm whitespace-nowrap"
         onClick={setIsGhostOnlyActive}
         isSelected={isGhostOnlyActive}
         label={
