@@ -25,7 +25,7 @@ import BigNumber from 'bignumber.js'
 import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import { useMixPanel } from 'utils/mixPanel'
 import { getRealTokenName } from 'utils/wikipedia'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { GlobeAltIcon } from '@heroicons/react/outline'
 import { TrendingUpBlue, TrendingUpGray } from 'assets'
@@ -191,6 +191,11 @@ export default function TokenRow({
 
     refetch()
   }
+
+  useEffect(() => {
+    setIsLocallyUpvoted(token?.upVoted)
+    setLocalTotalVotes(token?.totalVotes)
+  }, [token])
 
   return (
     <tr
