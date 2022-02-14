@@ -238,8 +238,8 @@ export default function TokenRow({
                 >
                   {displayName?.substr(
                     0,
-                    displayName?.length > 60 ? 60 : displayName?.length
-                  ) + (displayName?.length > 60 ? '...' : '')}
+                    displayName?.length > 50 ? 50 : displayName?.length
+                  ) + (displayName?.length > 50 ? '...' : '')}
                 </a>
               </div>
             )}
