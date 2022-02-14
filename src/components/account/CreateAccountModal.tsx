@@ -1,9 +1,7 @@
 import Modal from '../modals/Modal'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
-import { fetchWalletVerification } from 'lib/axios'
 import useAuth from './useAuth'
 import { useWeb3React } from '@web3-react/core'
-import { useMutation } from 'react-query'
 import WalletGreenIcon from '../../assets/wallet-green.svg'
 import { useContext, useEffect } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -12,16 +10,11 @@ import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 export default function CreateAccountModal({ close }: { close: () => void }) {
   const { jwtToken } = useContext(GlobalContext)
   const { active, account, library } = useWeb3React()
-  const [walletVerificationRequest] = useMutation<{
-    message: string
-    data: any
-  }>(fetchWalletVerification)
 
   const { loginByWallet } = useAuth()
   const onLoginClicked = async () => {
     if (active) {
       const signedWalletAddress = await getSignedInWalletAddress({
-        walletVerificationRequest,
         account,
         library,
       })

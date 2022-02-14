@@ -1,3 +1,4 @@
+import { walletVerificationRequest } from 'actions/wallet/walletVerificationRequest'
 import { NETWORK } from 'store/networks'
 import Web3 from 'web3'
 
@@ -23,11 +24,7 @@ export function isAddressValid(address: string) {
   return web3.utils.isAddress(address)
 }
 
-export const getSignedInWalletAddress = async ({
-  walletVerificationRequest,
-  account,
-  library,
-}) => {
+export const getSignedInWalletAddress = async ({ account, library }) => {
   const { data } = await walletVerificationRequest()
   const uuid: string = data?.uuid
   const message: string = `

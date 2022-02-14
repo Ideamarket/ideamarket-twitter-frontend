@@ -65,7 +65,7 @@ export type IdeaToken = {
   marketID: number
   marketName: string
   tokenID: number
-  listingId: number
+  listingId: string
   name: string
   supply: string
   rawSupply: BN
@@ -94,6 +94,8 @@ export type IdeaToken = {
   isOnChain: boolean
   url: string
   verified: boolean
+  upVoted: boolean
+  totalVotes: number
 }
 
 export type IdeaTokenMarketPair = {
@@ -282,7 +284,8 @@ type Params = [
   search: string,
   filterTokens: string[],
   isVerifiedFilter: boolean,
-  marketFilterType: string // Value will be 'ghost', 'onchain', or 'both'
+  marketFilterType: string, // Value will be 'ghost', 'onchain', or 'both'
+  jwt: string
 ]
 
 export async function queryTokens(
@@ -305,6 +308,7 @@ export async function queryTokens(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isVerifiedFilter,
     marketFilterType,
+    jwt,
   ] = params
 
   const fromTs = Math.floor(Date.now() / 1000) - duration
@@ -347,6 +351,7 @@ export async function queryTokens(
     earliestPricePointTs: fromTs,
     search,
     isVerifiedFilter,
+    jwt,
   })
   // }
 
@@ -383,14 +388,7 @@ export async function queryTokens(
 
   return await Promise.all(
     L2Result.map(async (token) => {
-      // const apiResponse = await getSingleListing(
-      //   null,
-      //   null,
-      //   null,
-      //   token?.listingId
-      // )
-      // newApiResponseToIdeaToken(apiResponse)
-      return await querySingleToken(null, null, null, token?.listingId)
+      return await querySingleToken(null, null, null, token?.listingId, jwt)
     })
   )
 }
@@ -399,14 +397,16 @@ export async function querySingleToken(
   value: string,
   onchainValue: string,
   marketId: number,
-  listingId?: string
+  listingId?: string,
+  jwt?: string
 ): Promise<IdeaToken> {
-  const apiResponse = await getSingleListing(
+  const apiResponse = await getSingleListing({
     value,
     onchainValue,
     marketId,
-    listingId
-  )
+    listingId,
+    jwt,
+  })
   return apiResponse ? newApiResponseToIdeaToken(apiResponse) : null
 }
 
@@ -1074,6 +1074,7 @@ export function newApiResponseToIdeaToken(
     onchainListedBy: apiResponse?.onchainListedBy,
     onchainListedAt: apiResponse?.onchainListedAt,
     totalVotes: apiResponse?.totalVotes,
+    upVoted: apiResponse?.upVoted,
     supply: web3TokenData?.supply
       ? web3BNToFloatString(new BN(web3TokenData?.supply), bigNumberTenPow18, 2)
       : undefined,

@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { WatchingStar } from 'components'
+import { WalletModal, WatchingStar } from 'components'
 import { NETWORK } from 'store/networks'
 import { queryDaiBalance } from 'store/daiStore'
 import {
@@ -25,9 +25,18 @@ import BigNumber from 'bignumber.js'
 import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import { useMixPanel } from 'utils/mixPanel'
 import { getRealTokenName } from 'utils/wikipedia'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { GlobeAltIcon } from '@heroicons/react/outline'
+import { TrendingUpBlue, TrendingUpGray } from 'assets'
+import { deleteUpvoteListing } from 'actions/web2/deleteUpvoteListing'
+import { GlobalContext } from 'lib/GlobalContext'
+import { upvoteListing } from 'actions/web2/upvoteListing'
+import { useWalletStore } from 'store/walletStore'
+import ModalService from 'components/modals/ModalService'
+import useAuth from 'components/account/useAuth'
+import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
+import CreateAccountModal from 'components/account/CreateAccountModal'
 
 type Props = {
   token: any
@@ -37,6 +46,7 @@ type Props = {
   getColumn: (column: string) => any
   lastElementRef?: (node) => void
   onTradeClicked: (token: IdeaToken, market: IdeaMarket) => void
+  refetch: () => any
 }
 
 export default function TokenRow({
@@ -47,9 +57,12 @@ export default function TokenRow({
   getColumn,
   onTradeClicked,
   lastElementRef,
+  refetch,
 }: Props) {
   const { mixpanel } = useMixPanel()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
+
+  const { jwtToken, setOnWalletConnectedCallback } = useContext(GlobalContext)
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -115,6 +128,53 @@ export default function TokenRow({
           2
         )
       : '0'
+
+  const { loginByWallet } = useAuth()
+
+  const onLoginClicked = async () => {
+    if (useWalletStore.getState().web3) {
+      const signedWalletAddress = await getSignedInWalletAddress({
+        account: useWalletStore.getState().address,
+        library: useWalletStore.getState().web3,
+      })
+      await loginByWallet(signedWalletAddress)
+    }
+  }
+
+  const onUpvoteClicked = async () => {
+    if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        // if jwtToken is not present, then popup modal and MM popup to ask user to create account or sign in
+        if (!jwtToken) {
+          onLoginClicked()
+          ModalService.open(CreateAccountModal, {})
+          return
+        }
+      })
+      ModalService.open(WalletModal)
+    } else {
+      // if jwtToken is not present, then popup modal and MM popup to ask user to create account or sign in
+      if (!jwtToken) {
+        onLoginClicked()
+        ModalService.open(CreateAccountModal, {})
+        return
+      }
+    }
+
+    if (token?.upVoted) {
+      await deleteUpvoteListing(token?.listingId, jwtToken)
+      mixpanel.track('DELETED_UPVOTE', {
+        tokenName: token?.name,
+      })
+    } else {
+      await upvoteListing(token?.listingId, jwtToken)
+      mixpanel.track('UPVOTE', {
+        tokenName: token?.name,
+      })
+    }
+
+    refetch()
+  }
 
   return (
     <tr
@@ -432,7 +492,7 @@ export default function TokenRow({
       ) : (
         <></>
       )} */}
-      {/* Buy Button */}
+      {/* Buy Button and upvote button */}
       <td
         className={classNames(
           isExpanded ? 'pt-4' : 'py-4',
@@ -440,21 +500,26 @@ export default function TokenRow({
         )}
       >
         <div className="flex space-x-2">
-          {/* {isGhostMarketActive && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                onTradeClicked(token, market)
-                mixpanel.track('BUY_START', {
-                  tokenName: token?.name,
-                })
-              }}
-              className="flex justify-center items-center w-20 h-10 text-base font-medium text-gray-500 rounded-lg bg-black/[.1] dark:bg-gray-600 dark:text-gray-300 tracking-tightest-2"
-            >
-              <span className="">{token?.totalVotes}</span>
-              <TrendingUpIcon className="w-6 h-6" />
-            </button>
-          )} */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+
+              onUpvoteClicked()
+            }}
+            className={classNames(
+              token?.upVoted
+                ? 'text-blue-500 bg-blue-100'
+                : 'text-gray-400 bg-black/[.1]',
+              'flex justify-center items-center space-x-2 w-20 h-10 text-base font-medium rounded-lg dark:bg-gray-600 dark:text-gray-300 hover:border-2 hover:border-blue-500'
+            )}
+          >
+            <span className="">{token?.totalVotes}</span>
+            {token?.upVoted ? (
+              <TrendingUpBlue className="w-4 h-4" />
+            ) : (
+              <TrendingUpGray className="w-4 h-4" />
+            )}
+          </button>
 
           {isOnChain && (
             <button

@@ -11,7 +11,6 @@ import NavThemeButton from './NavThemeButton'
 import { useMixPanel } from 'utils/mixPanel'
 import { ProfileTooltip } from './ProfileTooltip'
 import { useWeb3React } from '@web3-react/core'
-import { useMutation } from 'react-query'
 import useAuth from 'components/account/useAuth'
 import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 
@@ -54,24 +53,6 @@ const NavMenu = () => {
     active && setVisibility(true)
   }
 
-  const [walletVerificationRequest] = useMutation<{
-    message: string
-    data: any
-  }>(() =>
-    fetch('/api/walletVerificationRequest', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(async (res) => {
-      if (!res.ok) {
-        const response = await res.json()
-        throw new Error(response.message)
-      }
-      return res.json()
-    })
-  )
-
   const { loginByWallet } = useAuth()
 
   const onLoginClicked = async () => {
@@ -79,7 +60,6 @@ const NavMenu = () => {
 
     if (active) {
       const signedWalletAddress = await getSignedInWalletAddress({
-        walletVerificationRequest,
         account,
         library,
       })

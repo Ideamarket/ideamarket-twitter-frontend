@@ -13,7 +13,7 @@ import {
 } from '@heroicons/react/outline'
 import useOnClickOutside from 'utils/useOnClickOutside'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
-import { useMutation, useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import classNames from 'classnames'
 import { ghostListToken } from 'actions/web2/ghostListToken'
 import { getMarketFromURL } from 'utils/markets'
@@ -121,30 +121,11 @@ const HomeHeader = ({
     })
   }
 
-  const [walletVerificationRequest] = useMutation<{
-    message: string
-    data: any
-  }>(() =>
-    fetch('/api/walletVerificationRequest', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(async (res) => {
-      if (!res.ok) {
-        const response = await res.json()
-        throw new Error(response.message)
-      }
-      return res.json()
-    })
-  )
-
   const { loginByWallet } = useAuth()
 
   const onLoginClicked = async () => {
     if (active) {
       const signedWalletAddress = await getSignedInWalletAddress({
-        walletVerificationRequest,
         account,
         library,
       })

@@ -48,6 +48,13 @@ import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { useMixPanel } from 'utils/mixPanel'
 import { useWalletStore } from 'store/walletStore'
 import { GlobalContext } from 'lib/GlobalContext'
+import classNames from 'classnames'
+import { TrendingUpBlue, TrendingUpGray } from 'assets'
+import { deleteUpvoteListing } from 'actions/web2/deleteUpvoteListing'
+import { upvoteListing } from 'actions/web2/upvoteListing'
+import CreateAccountModal from 'components/account/CreateAccountModal'
+import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
+import useAuth from 'components/account/useAuth'
 
 const DetailsSkeleton = () => (
   <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
@@ -57,6 +64,7 @@ const DetailsSkeleton = () => (
 
 export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
   const { account } = useWeb3React()
+  const { jwtToken } = useContext(GlobalContext)
 
   // const marketSpecifics =
   //   getMarketSpecificsByMarketNameInURLRepresentation(rawMarketName)
@@ -68,7 +76,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
     data: token,
     isLoading: isTokenLoading,
     refetch,
-  } = useQuery([null, null, null, rawTokenId], querySingleToken)
+  } = useQuery([null, null, null, rawTokenId, jwtToken], querySingleToken)
 
   const marketName = token?.marketName
   const tokenName = token?.name ? token?.name : token?.url
@@ -192,6 +200,53 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
     ModalService.open(VerifyModal, { market, token }, onClose)
   }
 
+  const { loginByWallet } = useAuth()
+
+  const onLoginClicked = async () => {
+    if (useWalletStore.getState().web3) {
+      const signedWalletAddress = await getSignedInWalletAddress({
+        account: useWalletStore.getState().address,
+        library: useWalletStore.getState().web3,
+      })
+      await loginByWallet(signedWalletAddress)
+    }
+  }
+
+  const onUpvoteClicked = async () => {
+    if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        // if jwtToken is not present, then popup modal and MM popup to ask user to create account or sign in
+        if (!jwtToken) {
+          onLoginClicked()
+          ModalService.open(CreateAccountModal, {})
+          return
+        }
+      })
+      ModalService.open(WalletModal)
+    } else {
+      // if jwtToken is not present, then popup modal and MM popup to ask user to create account or sign in
+      if (!jwtToken) {
+        onLoginClicked()
+        ModalService.open(CreateAccountModal, {})
+        return
+      }
+    }
+
+    if (token?.upVoted) {
+      await deleteUpvoteListing(token?.listingId, jwtToken)
+      mixpanel.track('DELETED_UPVOTE', {
+        tokenName: token?.name,
+      })
+    } else {
+      await upvoteListing(token?.listingId, jwtToken)
+      mixpanel.track('UPVOTE', {
+        tokenName: token?.name,
+      })
+    }
+
+    refetch()
+  }
+
   useEffect(() => {
     const timeout = setTimeout(
       () => (window as any)?.twttr?.widgets?.load(),
@@ -313,6 +368,27 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                       </div>
                     </a>
                   )}
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+
+                      onUpvoteClicked()
+                    }}
+                    className={classNames(
+                      token?.upVoted
+                        ? 'text-blue-500 bg-blue-100'
+                        : 'text-white bg-white/[.1]',
+                      'flex justify-center items-center space-x-2 w-20 h-10 text-base font-medium rounded-lg dark:bg-gray-600 dark:text-gray-300 hover:border-2 hover:border-blue-500'
+                    )}
+                  >
+                    <span className="">{token?.totalVotes}</span>
+                    {token?.upVoted ? (
+                      <TrendingUpBlue className="w-4 h-4" />
+                    ) : (
+                      <TrendingUpGray className="w-4 h-4" />
+                    )}
+                  </button>
 
                   {/* <div className="flex items-center space-x-2 mt-4 ">
                     <button className="bg-white px-4 py-2 flex items-center text-brand-navy rounded-lg">

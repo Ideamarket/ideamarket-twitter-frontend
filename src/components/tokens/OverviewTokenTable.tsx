@@ -1,6 +1,7 @@
 import React, {
   MutableRefObject,
   useCallback,
+  useContext,
   useEffect,
   useRef,
   useState,
@@ -21,6 +22,7 @@ import TokenRowSkeleton from './OverviewTokenRowSkeleton'
 import { OverviewColumns } from './table/OverviewColumns'
 import { MainFilters } from './utils/OverviewUtils'
 import { flatten } from 'utils/lodash'
+import { GlobalContext } from 'lib/GlobalContext'
 
 type Props = {
   selectedMarkets: Set<string>
@@ -56,6 +58,8 @@ export default function Table({
   tradeOrListSuccessToggle,
 }: Props) {
   const TOKENS_PER_PAGE = 10
+
+  const { jwtToken } = useContext(GlobalContext)
 
   const [currentColumn, setCurrentColumn] = useState('')
 
@@ -109,6 +113,7 @@ export default function Table({
         filterTokens,
         isVerifiedFilterActive,
         isGhostOnlyActive ? 'ghost' : 'onchain',
+        jwtToken,
       ],
     ],
     queryTokens,
@@ -170,6 +175,7 @@ export default function Table({
     tradeOrListSuccessToggle,
     isGhostOnlyActive,
     refetch,
+    jwtToken,
   ])
 
   const isLoading =
@@ -245,6 +251,7 @@ export default function Table({
                         compoundSupplyRate={compoundSupplyRate}
                         getColumn={getColumn}
                         onTradeClicked={onTradeClicked}
+                        refetch={refetch}
                         lastElementRef={
                           tokenData.length === index + 1 ? lastElementRef : null
                         }
