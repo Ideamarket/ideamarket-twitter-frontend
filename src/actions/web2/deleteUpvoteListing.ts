@@ -14,11 +14,13 @@ export const deleteUpvoteListing = async (listingId: string, jwt: string) => {
   }
 
   try {
-    await client.delete(`/votes/up`, { headers, data })
+    const response = await client.delete(`/votes/up`, { headers, data })
+    return response?.data?.data
   } catch (error) {
     console.error(
       `Could not delete the upvote for listing with listingID of ${listingId}`,
       error
     )
+    return null
   }
 }

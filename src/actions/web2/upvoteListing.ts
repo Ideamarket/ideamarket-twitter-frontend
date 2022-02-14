@@ -7,7 +7,7 @@ import client from 'lib/axios'
  */
 export const upvoteListing = async (listingId: string, jwt: string) => {
   try {
-    await client.post(
+    const response = await client.post(
       `/votes/up`,
       { listingId },
       {
@@ -16,10 +16,13 @@ export const upvoteListing = async (listingId: string, jwt: string) => {
         },
       }
     )
+
+    return response?.data?.data
   } catch (error) {
     console.error(
       `Could not upvote listing with listingID of ${listingId}`,
       error
     )
+    return null
   }
 }

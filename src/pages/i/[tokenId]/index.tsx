@@ -87,6 +87,8 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
   )
 
   const [tradeToggle, setTradeToggle] = useState(false) // Need toggle to reload balances after trade
+  const [isLocallyUpvoted, setIsLocallyUpvoted] = useState(token?.upVoted) // Used to make upvoting display instantly and not wait on API
+  const [localTotalVotes, setLocalTotalVotes] = useState(token?.totalVotes) // Used to make upvoting display instantly and not wait on API
 
   const [, ideaTokenBalanceBN] = useBalance(
     token?.address,
@@ -232,16 +234,30 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
       }
     }
 
+    const newUpvoteState = !token?.upVoted
+    setIsLocallyUpvoted(newUpvoteState)
+    const newTotalVotes = newUpvoteState
+      ? token?.totalVotes + 1
+      : token?.totalVotes - 1
+    setLocalTotalVotes(newTotalVotes)
+
+    let response = null
     if (token?.upVoted) {
-      await deleteUpvoteListing(token?.listingId, jwtToken)
+      response = await deleteUpvoteListing(token?.listingId, jwtToken)
       mixpanel.track('DELETED_UPVOTE', {
         tokenName: token?.name,
       })
     } else {
-      await upvoteListing(token?.listingId, jwtToken)
+      response = await upvoteListing(token?.listingId, jwtToken)
       mixpanel.track('UPVOTE', {
         tokenName: token?.name,
       })
+    }
+
+    // If upvote failed, then change local state back
+    if (!response) {
+      setIsLocallyUpvoted(!newUpvoteState)
+      setLocalTotalVotes(token?.totalVotes)
     }
 
     refetch()
@@ -255,6 +271,11 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
 
     return () => clearTimeout(timeout)
   }, [rawTokenId])
+
+  useEffect(() => {
+    setIsLocallyUpvoted(token?.upVoted)
+    setLocalTotalVotes(token?.totalVotes)
+  }, [token])
 
   return (
     <>
@@ -376,14 +397,14 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                       onUpvoteClicked()
                     }}
                     className={classNames(
-                      token?.upVoted
+                      isLocallyUpvoted
                         ? 'text-blue-500 bg-blue-100'
                         : 'text-white bg-white/[.1]',
                       'flex justify-center items-center space-x-2 w-20 h-10 text-base font-medium rounded-lg dark:bg-gray-600 dark:text-gray-300 hover:border-2 hover:border-blue-500'
                     )}
                   >
-                    <span className="">{token?.totalVotes}</span>
-                    {token?.upVoted ? (
+                    <span className="">{localTotalVotes}</span>
+                    {isLocallyUpvoted ? (
                       <TrendingUpBlue className="w-4 h-4" />
                     ) : (
                       <TrendingUpGray className="w-4 h-4" />
