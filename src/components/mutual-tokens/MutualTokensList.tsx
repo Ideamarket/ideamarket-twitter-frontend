@@ -56,7 +56,7 @@ export default function MutualTokensList({
 
   return (
     <>
-      <div className="md:h-20 pb-5 mb-12 border-b border-gray-200 sm:flex sm:items-end sm:justify-between">
+      <div className="md:h-20 pb-5 mb-12 border-b border-gray-200 text-white sm:flex sm:items-end sm:justify-between">
         <h3
           className={classNames(
             'text-2xl font-medium leading-6',

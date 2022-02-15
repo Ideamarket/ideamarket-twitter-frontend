@@ -285,7 +285,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
         rawTokenName={rawTokenId}
       />
       {token && (
-        <div className="min-h-screen pb-20 bg-brand-navy dark:bg-gray-900 font-inter">
+        <div className="min-h-screen pb-20 bg-theme-blue-1 dark:bg-gray-900 font-inter">
           {/* <ListingStats
             isLoading={isLoading}
             market={market}
@@ -299,28 +299,18 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                 <div className="p-6">
                   <div className="flex">
                     <div className="flex flex-col">
-                      <div className="leading-5">
-                        <div className="inline font-medium mr-1">
-                          {!isURLMetaDataLoading &&
-                          urlMetaData &&
-                          urlMetaData?.ogTitle
-                            ? urlMetaData.ogTitle
-                            : 'loading'}
-                        </div>
-                        {/* <span className="inline-block">
-                          <span className="font-normal mr-2">on</span>
-                          <div className="w-4 h-4 inline-block pt-1 mr-2">
-                            {marketSpecifics.getMarketSVGWhite()}
+                      {isURLMetaDataLoading ||
+                        (urlMetaData && urlMetaData?.ogTitle && (
+                          <div className="inline font-medium mr-1">
+                            {isURLMetaDataLoading
+                              ? 'Display name loading'
+                              : urlMetaData?.ogTitle}
                           </div>
-                          <span className="font-semibold">
-                            {marketSpecifics.getMarketName().toUpperCase()}
-                          </span>
-                        </span> */}
-                      </div>
+                        ))}
 
                       <a
                         href={url}
-                        className="text-brand-blue font-normal text-sm mt-1"
+                        className="text-blue-500 font-normal text-sm my-1"
                         style={{ overflowWrap: 'anywhere' }}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -365,25 +355,31 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <img
-                        className="rounded-xl mt-4"
-                        src={
-                          !isURLMetaDataLoading &&
-                          urlMetaData &&
-                          urlMetaData?.ogImage
-                            ? urlMetaData.ogImage
-                            : '/gray.svg'
-                        }
-                        alt=""
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="my-4 text-gray-300 text-sm leading-5">
-                        {!isURLMetaDataLoading &&
-                        urlMetaData &&
-                        urlMetaData?.ogDescription
-                          ? urlMetaData.ogDescription
-                          : 'Description loading'}
-                      </div>
+                      {isURLMetaDataLoading ||
+                        (urlMetaData && urlMetaData?.ogImage && (
+                          <img
+                            className="rounded-xl mt-4"
+                            src={
+                              !isURLMetaDataLoading &&
+                              urlMetaData &&
+                              urlMetaData?.ogImage
+                                ? urlMetaData.ogImage
+                                : '/gray.svg'
+                            }
+                            alt=""
+                            referrerPolicy="no-referrer"
+                          />
+                        ))}
+                      {isURLMetaDataLoading ||
+                        (urlMetaData && urlMetaData?.ogDescription && (
+                          <div className="my-4 text-gray-300 text-sm leading-5">
+                            {!isURLMetaDataLoading &&
+                            urlMetaData &&
+                            urlMetaData?.ogDescription
+                              ? urlMetaData.ogDescription
+                              : 'Description loading'}
+                          </div>
+                        ))}
                     </a>
                   )}
 
@@ -667,5 +663,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 TokenDetails.getLayout = (page: ReactElement) => (
-  <DefaultLayout bgColor="bg-brand-navy dark:bg-gray-900">{page}</DefaultLayout>
+  <DefaultLayout bgColor="bg-theme-blue-1 dark:bg-gray-900">
+    {page}
+  </DefaultLayout>
 )

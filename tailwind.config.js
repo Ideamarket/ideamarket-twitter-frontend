@@ -44,6 +44,7 @@ module.exports = {
         'brand-gray-white-2': '#868686',
         'brand-blue': '#0857e0',
         'brand-navy': '#102360',
+        'theme-blue-1': '#01133C',
         'brand-gray': '#f6f6f6',
         'brand-gray-2': '#708090',
         'brand-gray-3': '#dc2e9',
