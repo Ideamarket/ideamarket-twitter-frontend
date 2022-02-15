@@ -8,8 +8,14 @@ import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
 import { GlobalContext } from '../../pages/_app'
 import NavMenu from 'components/nav-menu/NavMenu'
+import classNames from 'classnames'
 
-export default function DefaultLayout({ children }: { children: ReactNode }) {
+type Props = {
+  children: ReactNode
+  bgColor?: string // Can style background color of page different from default (needs to be Tailwind bg color)
+}
+
+export default function DefaultLayout({ children, bgColor }: Props) {
   const router = useRouter()
   const { isEmailFooterActive } = useContext(GlobalContext)
 
@@ -19,7 +25,12 @@ export default function DefaultLayout({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <div className="min-h-screen bg-brand-gray dark:bg-gray-900">
+    <div
+      className={classNames(
+        bgColor ? bgColor : 'bg-brand-gray dark:bg-gray-900',
+        'min-h-screen'
+      )}
+    >
       <Toaster />
       <NavMenu />
       <div className="pt-16">{children}</div>
