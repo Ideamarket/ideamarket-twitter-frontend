@@ -9,16 +9,18 @@ import {
 } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import {
-  calculateCurrentPriceBN,
   formatNumberWithCommasAsThousandsSerperator,
   formatNumber,
-  web3BNToFloatString,
   bigNumberTenPow18,
   bnToFloatString,
 } from 'utils'
 import { useTokenIconURL } from 'actions'
 import { useQuery } from 'react-query'
-import { ArrowSmUpIcon } from '@heroicons/react/solid'
+import {
+  ArrowSmUpIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import BigNumber from 'bignumber.js'
@@ -84,19 +86,12 @@ export default function TokenRow({
   //   parseFloat(token?.marketCap) * compoundSupplyRate
   // ).toFixed(2)
 
-  const tokenPrice =
-    isOnChain && token?.rawSupply
-      ? web3BNToFloatString(
-          calculateCurrentPriceBN(
-            token?.rawSupply,
-            market.rawBaseCost,
-            market.rawPriceRise,
-            market.rawHatchTokens
-          ),
-          bigNumberTenPow18,
-          2
-        )
-      : '0'
+  const { loginByWallet } = useAuth()
+
+  useEffect(() => {
+    setIsLocallyUpvoted(token?.upVoted)
+    setLocalTotalVotes(token?.totalVotes)
+  }, [token])
 
   const { data: interestManagerTotalShares } = useQuery(
     'interest-manager-total-shares',
@@ -130,8 +125,6 @@ export default function TokenRow({
           2
         )
       : '0'
-
-  const { loginByWallet } = useAuth()
 
   const onLoginClicked = async () => {
     if (useWalletStore.getState().web3) {
@@ -192,17 +185,12 @@ export default function TokenRow({
     refetch()
   }
 
-  useEffect(() => {
-    setIsLocallyUpvoted(token?.upVoted)
-    setLocalTotalVotes(token?.totalVotes)
-  }, [token])
-
   return (
     <tr
       ref={lastElementRef}
       className={classNames(
         !isOnChain && 'bg-gray-100',
-        'relative grid grid-flow-col cursor-pointer grid-cols-mobile-row md:table-row hover:bg-gray-200 dark:hover:bg-gray-600'
+        'relative cursor-pointer md:table-row hover:bg-gray-200 dark:hover:bg-gray-600'
       )}
       onClick={() => {
         setIsExpanded(!isExpanded)
@@ -221,11 +209,24 @@ export default function TokenRow({
       {/* Icon and Name */}
       <td
         className={classNames(
-          isExpanded ? 'pt-4' : 'py-4',
-          'relative flex flex-col md:flex-row pl-2 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap w-52 md:w-1/3 lg:w-1/2'
+          'relative w-full py-4 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap md:w-1/3 lg:w-1/2 text-xs md:text-base'
         )}
       >
-        <div className="flex items-center w-full text-gray-900 dark:text-gray-200">
+        <div className="md:hidden absolute right-2 top-6">
+          {isExpanded ? (
+            <ChevronUpIcon
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-5 h-5 cursor-pointer text-gray-400"
+            />
+          ) : (
+            <ChevronDownIcon
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-5 h-5 cursor-pointer text-gray-400"
+            />
+          )}
+        </div>
+
+        <div className="relative flex items-center w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
           {showMarketSVG && marketSpecifics.getMarketSVGTheme(resolvedTheme)}
           <div
             className={classNames(
@@ -255,7 +256,7 @@ export default function TokenRow({
                 <a
                   href={`/i/${token?.listingId}`}
                   onClick={(event) => event.stopPropagation()}
-                  className="hover:underline"
+                  className="text-xs md:text-base font-bold hover:underline"
                 >
                   {displayName?.substr(
                     0,
@@ -266,7 +267,7 @@ export default function TokenRow({
             )}
             <a
               href={token?.url}
-              className="text-sm text-brand-blue hover:underline"
+              className="text-xs md:text-sm text-brand-blue hover:underline"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -299,7 +300,7 @@ export default function TokenRow({
               {/* Didn't use Next image because can't do wildcard domain allow in next config file */}
               <a
                 href={`/i/${token?.listingId}`}
-                className="mt-4 pl-10 cursor-pointer"
+                className="mt-4 px-4 md:px-0 cursor-pointer"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -324,6 +325,91 @@ export default function TokenRow({
             </div>
           </div>
         )}
+
+        <div className="md:hidden flex justify-between items-center text-center px-10 py-2 my-4 border-b border-t">
+          <div>
+            <div>Price</div>
+            <div>
+              {isOnChain ? `$${formatNumber(token?.price)}` : <>&mdash;</>}
+            </div>
+          </div>
+          <div>
+            <div>Deposits</div>
+            <div>
+              {parseFloat(token?.marketCap) > 0.0 ? (
+                `$` +
+                formatNumberWithCommasAsThousandsSerperator(
+                  parseInt(token?.marketCap)
+                )
+              ) : (
+                <>&mdash;</>
+              )}
+            </div>
+          </div>
+          <div>
+            <div>7D Change</div>
+            <div>
+              {isOnChain ? (
+                <p
+                  className={classNames(
+                    'text-base font-medium leading-4 tracking-tightest-2 uppercase',
+                    parseFloat(token?.weeklyChange) >= 0.0
+                      ? 'text-brand-green'
+                      : 'text-brand-red'
+                  )}
+                >
+                  {parseFloat(token?.weeklyChange) >= 0.0
+                    ? `+ ${parseInt(token?.weeklyChange)}`
+                    : `- ${parseInt(token?.weeklyChange.slice(1))}`}
+                  %
+                </p>
+              ) : (
+                <>&mdash;</>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="md:hidden">
+          <div className="flex justify-center space-x-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+
+                onUpvoteClicked()
+              }}
+              className={classNames(
+                isLocallyUpvoted
+                  ? 'text-blue-500 bg-blue-100'
+                  : 'text-gray-400 bg-black/[.1]',
+                'flex justify-center items-center space-x-2 w-20 h-10 text-base font-medium rounded-lg dark:bg-gray-600 dark:text-gray-300 hover:border-2 hover:border-blue-500'
+              )}
+            >
+              <span className="">{localTotalVotes}</span>
+              {isLocallyUpvoted ? (
+                <TrendingUpBlue className="w-4 h-4" />
+              ) : (
+                <TrendingUpGray className="w-4 h-4" />
+              )}
+            </button>
+
+            {isOnChain && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onTradeClicked(token, market)
+                  mixpanel.track('BUY_START', {
+                    tokenName: token?.name,
+                  })
+                }}
+                className="flex justify-center items-center w-20 h-10 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2"
+              >
+                <ArrowSmUpIcon className="w-6 h-6" />
+                <span className="mr-1">Buy</span>
+              </button>
+            )}
+          </div>
+        </div>
       </td>
       {/* Mobile Verified Badge */}
       {/* <td className="flex items-center justify-center py-4 text-sm leading-5 text-center text-black md:hidden dark:text-white md:table-cell whitespace-nowrap">
@@ -558,18 +644,6 @@ export default function TokenRow({
             </button>
           )}
         </div>
-      </td>
-      {/* Buy Button mobile */}
-      <td className="px-3 py-4 md:hidden whitespace-nowrap">
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            onTradeClicked(token, market)
-          }}
-          className="w-16 px-2 py-1 text-base font-medium bg-white border-2 rounded-lg dark:bg-gray-600 border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 font-sf-compact-medium hover:bg-brand-blue"
-        >
-          ${formatNumber(tokenPrice)}
-        </button>
       </td>
       {/* Star desktop */}
       <td

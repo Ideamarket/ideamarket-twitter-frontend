@@ -217,8 +217,9 @@ export default function Table({
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto lg:overflow-x-visible">
         <div className="inline-block w-full py-2 align-middle">
-          <div className="overflow-x-scroll border-b border-gray-200 dark:border-gray-500 sm:rounded-t-lg lg:overflow-x-visible">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
+          <div className="overflow-x-scroll border-b border-t-4 border-gray-200 dark:border-gray-500 lg:overflow-x-visible">
+            {/* table-fixed makes it so mobile table does not overflow and stays width defined here (w-full) */}
+            <table className="table-fixed md:table-auto w-full">
               <thead className="hidden md:table-header-group">
                 <tr className="z-40 lg:sticky md:top-28 sticky-safari">
                   <OverviewColumns
@@ -231,7 +232,7 @@ export default function Table({
                   />
                 </tr>
               </thead>
-              <tbody className="w-full bg-white divide-y divide-gray-200 dark:bg-gray-700 dark:divide-gray-500">
+              <tbody className="w-full bg-white divide-y-4 md:divide-y divide-gray-200 dark:bg-gray-700 dark:divide-gray-500">
                 {(tokenData as any[]).map((token, index) => {
                   const marketID = token?.marketID
                   if (
