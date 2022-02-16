@@ -30,7 +30,7 @@ export const ScrollToTop = () => {
     <div
       className={`${
         isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      } fixed bottom-2 right-2 cursor-pointer transition-all`}
+      } fixed bottom-2 right-2 cursor-pointer transition-all hidden md:block`}
     >
       <div
         className="text-white bg-brand-blue rounded-lg font-sf-compact-medium font-bold py-2 px-5"
