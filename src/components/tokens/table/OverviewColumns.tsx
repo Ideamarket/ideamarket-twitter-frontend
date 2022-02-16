@@ -78,7 +78,6 @@ export const OverviewColumns = ({
   const markets = marketObjects.map((m) => m.market)
 
   const twitterMarketSpecifics = getMarketSpecificsByMarketName('Twitter')
-  const wikiMarketSpecifics = getMarketSpecificsByMarketName('Wikipedia')
   const { resolvedTheme } = useThemeMode()
 
   let allPlatformsEarnedBN = new BigNumber('0')
@@ -120,6 +119,7 @@ export const OverviewColumns = ({
       newSet = toggleMarketHelper('Minds', newSet)
       newSet = toggleMarketHelper('Substack', newSet)
       newSet = toggleMarketHelper('Showtime', newSet)
+      newSet = toggleMarketHelper('Wikipedia', newSet)
     } else {
       newSet = toggleMarketHelper(marketName, selectedMarkets)
     }
@@ -131,7 +131,6 @@ export const OverviewColumns = ({
   function getColumnContent(column) {
     const isURLSelected = selectedMarkets.has('URL')
     const isPeopleSelected = selectedMarkets.has('Twitter')
-    const isWikiSelected = selectedMarkets.has('Wikipedia')
 
     switch (column.value) {
       case 'name':
@@ -169,25 +168,7 @@ export const OverviewColumns = ({
               <span className="w-5 mr-1">
                 {twitterMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
               </span>
-              <span>People</span>
-            </button>
-            <button
-              className={classNames(
-                'flex justify-center items-center md:px-3 p-2 border-2 md:rounded-md text-sm font-semibold',
-                {
-                  'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
-                    isWikiSelected,
-                },
-                { 'text-brand-black dark:text-gray-50': !isWikiSelected }
-              )}
-              onClick={() => {
-                toggleMarket('Wikipedia')
-              }}
-            >
-              <span className="w-5 mr-1">
-                {wikiMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
-              </span>
-              <span>Wikipedia</span>
+              <span>Users</span>
             </button>
           </div>
         )
