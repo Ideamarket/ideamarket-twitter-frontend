@@ -1,12 +1,9 @@
-import { useRouter } from 'next/dist/client/router'
-import { EmailFooter } from 'components'
-import { ReactNode, useEffect, useContext } from 'react'
+import { ReactNode, useEffect } from 'react'
 import CookieConsent from 'react-cookie-consent'
 import { Toaster } from 'react-hot-toast'
 
 import { initIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { initTokenList } from 'store/tokenListStore'
-import { GlobalContext } from '../../pages/_app'
 import NavMenu from 'components/nav-menu/NavMenu'
 import classNames from 'classnames'
 
@@ -16,8 +13,8 @@ type Props = {
 }
 
 export default function DefaultLayout({ children, bgColor }: Props) {
-  const router = useRouter()
-  const { isEmailFooterActive } = useContext(GlobalContext)
+  // const router = useRouter()
+  // const { isEmailFooterActive } = useContext(GlobalContext)
 
   useEffect(() => {
     initIdeaMarketsStore()
@@ -45,11 +42,11 @@ export default function DefaultLayout({ children, bgColor }: Props) {
         >
           This website uses cookies to enhance the user experience.
         </CookieConsent>
-        {isEmailFooterActive && router.pathname === '/' ? (
+        {/* {isEmailFooterActive && router.pathname === '/' ? (
           <EmailFooter />
         ) : (
           <></>
-        )}
+        )} */}
       </div>
     </div>
   )
