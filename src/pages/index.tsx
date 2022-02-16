@@ -127,6 +127,20 @@ const Home = ({ urlMarkets }: Props) => {
     setSelectedColumns(columns)
   }
 
+  /**
+   * This method is called when Ghost Filter is clicked.
+   * @param isActive -- the new state of the Ghost Filter after click
+   */
+  const onGhostFilterClicked = (isActive: boolean) => {
+    if (isActive) {
+      onOrderByChanged('totalVotes', 'desc')
+    } else {
+      onOrderByChanged('dayChange', 'desc')
+    }
+
+    setIsGhostOnlyActive(isActive)
+  }
+
   const headerProps = {
     setTradeOrListSuccessToggle,
     tradeOrListSuccessToggle,
@@ -145,7 +159,7 @@ const Home = ({ urlMarkets }: Props) => {
     onNameSearchChanged,
     setIsVerifiedFilterActive,
     setIsStarredFilterActive,
-    setIsGhostOnlyActive,
+    setIsGhostOnlyActive: onGhostFilterClicked,
   }
 
   const tableProps = {
