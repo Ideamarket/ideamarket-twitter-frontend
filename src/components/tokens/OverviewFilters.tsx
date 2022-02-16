@@ -242,6 +242,7 @@ export const OverviewFilters = ({
       newSet = toggleMarketHelper('Minds', newSet)
       newSet = toggleMarketHelper('Substack', newSet)
       newSet = toggleMarketHelper('Showtime', newSet)
+      newSet = toggleMarketHelper('Wikipedia', newSet)
     } else {
       newSet = toggleMarketHelper(marketName, selectedMarkets)
     }
@@ -270,9 +271,7 @@ export const OverviewFilters = ({
 
   const isURLSelected = selectedMarkets.has('URL')
   const isPeopleSelected = selectedMarkets.has('Twitter')
-  const isWikiSelected = selectedMarkets.has('Wikipedia')
   const twitterMarketSpecifics = getMarketSpecificsByMarketName('Twitter')
-  const wikiMarketSpecifics = getMarketSpecificsByMarketName('Wikipedia')
 
   return (
     <div className="h-28 md:h-16 justify-center p-3 bg-white rounded-t-lg md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start">
@@ -369,7 +368,7 @@ export const OverviewFilters = ({
       <div className="md:hidden flex justify-between items-center space-x-2 mt-2">
         <button
           className={classNames(
-            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            'w-1/2 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
             {
               'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
                 isURLSelected,
@@ -385,7 +384,7 @@ export const OverviewFilters = ({
         </button>
         <button
           className={classNames(
-            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            'w-1/2 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
             {
               'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
                 isPeopleSelected,
@@ -400,24 +399,6 @@ export const OverviewFilters = ({
             {twitterMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
           </span>
           <span>People</span>
-        </button>
-        <button
-          className={classNames(
-            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
-            {
-              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
-                isWikiSelected,
-            },
-            { 'text-brand-black dark:text-gray-50': !isWikiSelected }
-          )}
-          onClick={() => {
-            toggleMarket('Wikipedia')
-          }}
-        >
-          <span className="w-5 mr-1">
-            {wikiMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
-          </span>
-          <span>Wikipedia</span>
         </button>
       </div>
 
