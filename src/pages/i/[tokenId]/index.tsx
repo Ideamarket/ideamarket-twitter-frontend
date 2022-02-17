@@ -338,7 +338,7 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-center space-y-1 mt-4 text-sm items-baseline">
+                  <div className="flex flex-col items-center space-y-1 my-2 text-sm items-baseline">
                     {ghostListedBy && timeAfterGhostListedInDays ? (
                       <div className="px-2 py-2 bg-white/[.1] rounded-lg whitespace-nowrap">
                         Ghost Listed by{' '}
@@ -406,7 +406,10 @@ export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
                         ))}
                       {isURLMetaDataLoading ||
                         (urlMetaData && urlMetaData?.ogDescription && (
-                          <div className="my-4 text-gray-300 text-sm leading-5">
+                          <div
+                            className="my-4 text-gray-300 text-sm leading-5"
+                            style={{ overflowWrap: 'anywhere' }}
+                          >
                             {!isURLMetaDataLoading &&
                             urlMetaData &&
                             urlMetaData?.ogDescription

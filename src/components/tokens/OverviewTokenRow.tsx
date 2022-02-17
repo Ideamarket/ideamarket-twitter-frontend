@@ -310,7 +310,7 @@ export default function TokenRow({
               <div className="pl-4 md:pl-0 flex flex-col items-center space-x-0 space-y-1 mt-4 text-sm items-baseline">
                 {ghostListedBy && timeAfterGhostListedInDays ? (
                   <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
-                    Ghost Listed by
+                    Ghost Listed by{' '}
                     <span className="font-bold">
                       {convertAccountName(ghostListedBy)}
                     </span>{' '}
