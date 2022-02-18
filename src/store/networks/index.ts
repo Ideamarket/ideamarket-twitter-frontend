@@ -69,6 +69,8 @@ export function getL1Network(l2Network: INetworkSpecifics) {
     case 'test-avm-l2':
     case 'test-avm-l1':
       return getNetworkSpecificsByNetworkName('test-avm-l1')
+    case 'test':
+      return getNetworkSpecificsByNetworkName('test')
     default:
       throw Error('getL1Network: missing')
   }
