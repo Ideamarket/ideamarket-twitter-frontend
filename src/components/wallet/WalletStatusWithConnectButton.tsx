@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import Image from 'next/image'
 
-import DotGreen from '../../assets/dotgreen.svg'
+import WalletGreenIcon from '../../assets/wallet-green.svg'
 import { useWeb3React } from '@web3-react/core'
 import { GlobalContext } from 'lib/GlobalContext'
 import ModalService from 'components/modals/ModalService'
@@ -32,7 +32,7 @@ export default function WalletStatusWithConnectButton() {
 
         {active && (
           <>
-            <DotGreen className="w-4 h-4" />
+            <WalletGreenIcon className="w-6 h-6" />
             <div className="ml-3 text-gray-400 align-middle whitespace-nowrap hidden md:flex">
               {account.slice(0, 6)}...{account.slice(-4)}
             </div>
