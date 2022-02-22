@@ -20,7 +20,7 @@ import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import TokenRow from './OverviewTokenRow'
 import TokenRowSkeleton from './OverviewTokenRowSkeleton'
 import { OverviewColumns } from './table/OverviewColumns'
-import { MainFilters } from './utils/OverviewUtils'
+import { SortOptions } from './utils/OverviewUtils'
 import { flatten } from 'utils/lodash'
 import { GlobalContext } from 'lib/GlobalContext'
 
@@ -107,8 +107,8 @@ export default function Table({
         TOKENS_PER_PAGE,
         WEEK_SECONDS,
         orderBy,
-        selectedFilterId === MainFilters.HOT.id ||
-        selectedFilterId === MainFilters.NEW.id
+        selectedFilterId === SortOptions.HOT.id ||
+        selectedFilterId === SortOptions.NEW.id
           ? 'desc'
           : orderDirection,
         nameSearch,

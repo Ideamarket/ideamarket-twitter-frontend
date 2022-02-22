@@ -17,7 +17,7 @@ import {
 import { GhostHomeHeader } from 'components'
 import {
   CheckboxFilters,
-  MainFilters,
+  SortOptions,
 } from 'components/tokens/utils/OverviewUtils'
 
 type Props = { urlMarkets?: string[] }
@@ -26,7 +26,7 @@ const Home = ({ urlMarkets }: Props) => {
   // After trade or list success, the token data needs to be refetched. This toggle does that.
   const [tradeOrListSuccessToggle, setTradeOrListSuccessToggle] =
     useState(false)
-  const [selectedFilterId, setSelectedFilterId] = useState(MainFilters.HOT.id)
+  const [selectedFilterId, setSelectedFilterId] = useState(SortOptions.HOT.id)
   const [isVerifiedFilterActive, setIsVerifiedFilterActive] = useState(false)
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
   const [isGhostOnlyActive, setIsGhostOnlyActive] = useState(false)
@@ -74,7 +74,7 @@ const Home = ({ urlMarkets }: Props) => {
   }, [markets])
 
   const onNameSearchChanged = (nameSearch) => {
-    setSelectedFilterId(MainFilters.TOP.id)
+    setSelectedFilterId(SortOptions.TOP.id)
     setNameSearch(nameSearch)
   }
 
@@ -82,24 +82,24 @@ const Home = ({ urlMarkets }: Props) => {
     setOrderBy(orderBy)
     setOrderDirection(direction as any)
     if (orderBy === 'dayChange' && direction === 'desc') {
-      setSelectedFilterId(MainFilters.HOT.id)
+      setSelectedFilterId(SortOptions.HOT.id)
     } else if (orderBy === 'listedAt' && direction === 'desc') {
-      setSelectedFilterId(MainFilters.NEW.id)
+      setSelectedFilterId(SortOptions.NEW.id)
     } else {
-      setSelectedFilterId(MainFilters.TOP.id)
+      setSelectedFilterId(SortOptions.TOP.id)
     }
   }
 
   const onSelectedFilterByIdChanged = (filterId: number) => {
     setSelectedFilterId(filterId)
 
-    if (filterId === MainFilters.HOT.id) {
+    if (filterId === SortOptions.HOT.id) {
       setOrderBy('dayChange')
       setOrderDirection('desc')
-    } else if (filterId === MainFilters.TOP.id) {
+    } else if (filterId === SortOptions.TOP.id) {
       setOrderBy('price')
       setOrderDirection('desc')
-    } else if (filterId === MainFilters.NEW.id) {
+    } else if (filterId === SortOptions.NEW.id) {
       setOrderBy('listedAt')
       setOrderDirection('desc')
     }

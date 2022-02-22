@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import Modal from '../modals/Modal'
-import { MainFilters } from './utils/OverviewUtils'
+import { SortOptions } from './utils/OverviewUtils'
 import { StarIcon } from '@heroicons/react/solid'
 import {
   SparklesIcon,
@@ -105,7 +105,7 @@ export default function OverviewFiltersModal({
           </button>
 
           <div className="text-sm text-gray-400 mb-2 mt-4">SORT BY</div>
-          {Object.values(MainFilters).map((filter) => (
+          {Object.values(SortOptions).map((filter) => (
             <button
               className={classNames(
                 'flex flex-grow justify-start items-center w-full p-2 mb-1 border rounded-md text-sm font-semibold',

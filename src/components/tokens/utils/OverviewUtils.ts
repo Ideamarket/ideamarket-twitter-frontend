@@ -1,4 +1,4 @@
-export const MainFilters = {
+export const SortOptions = {
   TOP: {
     id: 1,
     value: 'Top',
@@ -11,15 +11,13 @@ export const MainFilters = {
     id: 3,
     value: 'New',
   },
-  // VERIFIED: {
-  //   id: 4,
-  //   name: 'Verified Only',
-  //   value: 'Verified',
-  // },
-  // STARRED: {
-  //   id: 5,
-  //   value: 'Starred',
-  // },
+}
+
+export const getSortOptionDisplayNameByID = (sortOptionID: number) => {
+  const displayName = Object.values(SortOptions).find(
+    (option) => option.id === sortOptionID
+  ).value
+  return displayName
 }
 
 export const CheckboxFilters = {

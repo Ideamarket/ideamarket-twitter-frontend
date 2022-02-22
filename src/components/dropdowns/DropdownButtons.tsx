@@ -12,7 +12,7 @@ import { useMixPanel } from 'utils/mixPanel'
 const DropdownButtons = ({
   container,
   filters,
-  selectedOptions,
+  selectedOptions, // Right now can only select one sort option. However, using this value allows us to change that and select multiple values at once if ever needed
   toggleOption,
 }) => {
   const { mixpanel } = useMixPanel()

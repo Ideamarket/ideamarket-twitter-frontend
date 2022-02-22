@@ -7,15 +7,12 @@ import {
   FireIcon,
   ArrowSmUpIcon,
   QuestionMarkCircleIcon,
-  GlobeAltIcon,
 } from '@heroicons/react/outline'
 import React, { useEffect, useRef, useState } from 'react'
 import { OverviewSearchbar } from './OverviewSearchbar'
-import ModalService from 'components/modals/ModalService'
-import { OverviewFiltersModal } from 'components'
 import {
   CheckboxFilters,
-  MainFilters,
+  SortOptions,
   toggleColumnHelper,
   toggleMarketHelper,
 } from './utils/OverviewUtils'
@@ -28,6 +25,8 @@ import { GhostIconBlack } from 'assets'
 import { useMixPanel } from 'utils/mixPanel'
 import { useQuery } from 'react-query'
 import { getCategories } from 'actions/web2/getCategories'
+import OverviewFiltersMobile from 'components/home/OverviewFiltersMobile'
+import SelectableButton from 'components/buttons/SelectableButton'
 
 type DropdownButtonProps = {
   filters: any
@@ -125,39 +124,6 @@ const DropdownButton = ({
   )
 }
 
-type FiltersButtonProps = {
-  isSelected: boolean
-  onClick: (value: any) => void
-  label: any
-  className?: string
-}
-
-const FiltersButton = ({
-  isSelected,
-  onClick,
-  label,
-  className,
-}: FiltersButtonProps) => {
-  return (
-    <button
-      className={classNames(
-        className,
-        'flex justify-center items-center md:px-3 p-2 md:rounded-md text-sm font-semibold',
-        {
-          'text-brand-blue dark:text-white bg-blue-100 border-2 border-blue-600 dark:bg-very-dark-blue':
-            isSelected,
-        },
-        { 'text-brand-black dark:text-gray-50 border': !isSelected }
-      )}
-      onClick={() => {
-        onClick(!isSelected)
-      }}
-    >
-      <span>{label}</span>
-    </button>
-  )
-}
-
 type OverviewFiltersProps = {
   selectedFilterId: number
   selectedMarkets: Set<string>
@@ -246,123 +212,86 @@ export const OverviewFilters = ({
   const twitterMarketSpecifics = getMarketSpecificsByMarketName('Twitter')
 
   return (
-    <div className="h-28 md:h-16 justify-center p-3 bg-white rounded-t-lg md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start">
-      <div className="flex md:gap-x-2">
-        {categoriesData &&
-          categoriesData.map((cat: any) => (
-            <FiltersButton
-              className="hidden md:block"
-              label={cat.name}
-              isSelected={selectedCategories.includes(cat.id)}
-              onClick={() => onCategoryClicked(cat.id)}
-              key={cat.id}
-            />
-          ))}
-      </div>
+    <div>
+      <div className="hidden md:flex md:justify-start justify-center h-28 md:h-16 p-3 bg-white rounded-t-lg dark:bg-gray-700 gap-x-2 gap-y-2">
+        <div className="flex md:gap-x-2">
+          {categoriesData &&
+            categoriesData.map((cat: any) => (
+              <SelectableButton
+                label={cat.name}
+                isSelected={selectedCategories.includes(cat.id)}
+                onClick={() => onCategoryClicked(cat.id)}
+                key={cat.id}
+              />
+            ))}
+        </div>
 
-      <div className="flex w-full h-9 md:h-auto ml-auto">
-        <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
-        <button
-          className="flex items-center justify-center p-2 ml-2 text-sm font-semibold border rounded-md md:hidden"
-          onClick={() => {
-            ModalService.open(OverviewFiltersModal, {
-              isVerifiedFilterActive,
-              isStarredFilterActive,
-              selectedFilterId,
-              setIsVerifiedFilterActive,
-              setIsStarredFilterActive,
-              setSelectedFilterId,
-            })
-          }}
-        >
-          <span>Filters</span>
-          {/* {numActiveFilters !== 0 && (
-            <div className="px-1 ml-2 bg-gray-200 rounded text-brand-blue">
-              {numActiveFilters}
-            </div>
-          )} */}
-        </button>
-      </div>
+        <div className="flex w-full h-9 md:h-auto ml-auto">
+          <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
+        </div>
 
-      <DropdownButton
-        className="hidden md:flex"
-        filters={Object.values(MainFilters)}
-        name={
-          Object.values(MainFilters).find(
-            (filter) => filter.id === selectedFilterId
-          )?.value
-        }
-        selectedOptions={new Set([selectedFilterId])}
-        toggleOption={onFilterChanged}
-        dropdownType="buttons"
-        selectedFilterId={selectedFilterId}
-      />
+        <DropdownButton
+          filters={Object.values(SortOptions)}
+          name={
+            Object.values(SortOptions).find(
+              (filter) => filter.id === selectedFilterId
+            )?.value
+          }
+          selectedOptions={new Set([selectedFilterId])}
+          toggleOption={onFilterChanged}
+          dropdownType="buttons"
+          selectedFilterId={selectedFilterId}
+        />
 
-      <div className="md:hidden flex justify-between items-center space-x-2 mt-2">
-        <button
-          className={classNames(
-            'w-1/2 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
-            {
-              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
-                isURLSelected,
-            },
-            { 'text-brand-black dark:text-gray-50': !isURLSelected }
+        <SelectableButton
+          onClick={setIsVerifiedFilterActive}
+          isSelected={isVerifiedFilterActive}
+          label={getIconVersion(
+            'verify',
+            resolvedTheme,
+            isVerifiedFilterActive
           )}
-          onClick={() => {
-            toggleMarket('URL')
-          }}
-        >
-          <GlobeAltIcon className="w-5 mr-1" />
-          <span>URLs</span>
-        </button>
-        <button
-          className={classNames(
-            'w-1/2 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
-            {
-              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
-                isPeopleSelected,
-            },
-            { 'text-brand-black dark:text-gray-50': !isPeopleSelected }
-          )}
-          onClick={() => {
-            toggleMarket('Twitter')
-          }}
-        >
-          <span className="w-5 mr-1">
-            {twitterMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
-          </span>
-          <span>People</span>
-        </button>
+        />
+
+        <SelectableButton
+          onClick={setIsStarredFilterActive}
+          isSelected={isStarredFilterActive}
+          label={<StarIcon className="w-5 h-5" />}
+        />
+
+        <SelectableButton
+          className="text-sm whitespace-nowrap"
+          onClick={setIsGhostOnlyActive}
+          isSelected={isGhostOnlyActive}
+          label={<GhostIconBlack className="w-6 h-6" />}
+        />
+
+        <DropdownButton
+          filters={CheckboxFilters.COLUMNS.values}
+          name={<AdjustmentsIcon className="w-5 h-5" />}
+          selectedOptions={selectedColumns}
+          toggleOption={toggleColumn}
+          dropdownType="columns"
+        />
       </div>
 
-      <FiltersButton
-        className="hidden md:flex"
-        onClick={setIsVerifiedFilterActive}
-        isSelected={isVerifiedFilterActive}
-        label={getIconVersion('verify', resolvedTheme, isVerifiedFilterActive)}
-      />
-
-      <FiltersButton
-        className="hidden md:flex"
-        onClick={setIsStarredFilterActive}
-        isSelected={isStarredFilterActive}
-        label={<StarIcon className="w-5 h-5" />}
-      />
-
-      <FiltersButton
-        className="hidden md:flex text-sm whitespace-nowrap"
-        onClick={setIsGhostOnlyActive}
-        isSelected={isGhostOnlyActive}
-        label={<GhostIconBlack className="w-6 h-6" />}
-      />
-
-      <DropdownButton
-        className="hidden md:flex"
-        filters={CheckboxFilters.COLUMNS.values}
-        name={<AdjustmentsIcon className="w-5 h-5" />}
-        selectedOptions={selectedColumns}
-        toggleOption={toggleColumn}
-        dropdownType="columns"
+      <OverviewFiltersMobile
+        selectedSortOptionID={selectedFilterId}
+        isVerifiedFilterActive={isVerifiedFilterActive}
+        isStarredFilterActive={isStarredFilterActive}
+        isGhostOnlyActive={isGhostOnlyActive}
+        categoriesData={categoriesData}
+        selectedCategories={selectedCategories}
+        isURLSelected={isURLSelected}
+        isPeopleSelected={isPeopleSelected}
+        twitterMarketSpecifics={twitterMarketSpecifics}
+        toggleSortOption={onFilterChanged}
+        onNameSearchChanged={onNameSearchChanged}
+        setIsVerifiedFilterActive={setIsVerifiedFilterActive}
+        setIsStarredFilterActive={setIsStarredFilterActive}
+        setIsGhostOnlyActive={setIsGhostOnlyActive}
+        onCategoryClicked={onCategoryClicked}
+        toggleMarket={toggleMarket}
       />
     </div>
   )
