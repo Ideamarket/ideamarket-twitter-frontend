@@ -189,7 +189,7 @@ const ListMeContent = ({
                       'border rounded-2xl px-2 py-1 cursor-pointer mr-2 mt-2'
                     )}
                   >
-                    {category.name}
+                    #{category.name}
                   </div>
                 )
               })}
@@ -206,7 +206,7 @@ const ListMeContent = ({
                   {ghostCategories.map((cat) => {
                     return (
                       <div className="border rounded-2xl px-2 py-1 mr-2 mt-2 bg-black/[.05] text-black">
-                        {cat.name}
+                        #{cat.name}
                       </div>
                     )
                   })}
