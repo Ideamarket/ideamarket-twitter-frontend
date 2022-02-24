@@ -219,7 +219,7 @@ export default function WalletInterface({
           {active && (
             <A
               className="underline"
-              href={`https://etherscan.io/address/${account}`}
+              href={`https://arbiscan.io/address/${account}`}
               target="_blank"
               rel="noreferrer"
             >

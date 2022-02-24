@@ -5,7 +5,7 @@ import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import { useWalletStore } from 'store/walletStore'
 import { IMarketSpecifics, getMarketSpecificsByMarketName } from 'store/markets'
 import { getL1Network, NETWORK } from 'store/networks'
-import { formatNumber, isAddress, useTransactionManager } from 'utils'
+import { formatNumber, useTransactionManager } from 'utils'
 import { useTokenIconURL, migrateTokensToArbitrum } from 'actions'
 import { L1TokenTable, Footer, DefaultLayout, WalletModal } from 'components'
 import { GlobalContext } from './_app'
@@ -13,6 +13,7 @@ import ModalService from 'components/modals/ModalService'
 import Wand from '../assets/wand.svg'
 import { useMixPanel } from 'utils/mixPanel'
 import TxPending from 'components/trade/TxPending'
+import { isETHAddress } from 'utils/addresses'
 
 export default function Bridge() {
   const { mixpanel } = useMixPanel()
@@ -30,7 +31,7 @@ export default function Bridge() {
   const isWalletConnected = connectedAddress !== ''
 
   const [l2Recipient, setL2Recipient] = useState<string>('')
-  const isValidL2Recipient = isAddress(l2Recipient)
+  const isValidL2Recipient = isETHAddress(l2Recipient)
 
   const [selectedPair, setSelectedPair] = useState<IdeaTokenMarketPair>(null)
   const [isPairSelected, setIsPairSelected] = useState<boolean>(false)

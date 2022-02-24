@@ -6,7 +6,7 @@ import {
   verifyTokenName,
   useTokenIconURL,
 } from 'actions'
-import { isAddress, useTransactionManager } from 'utils'
+import { useTransactionManager } from 'utils'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { Modal, MarketSelect, TradeInterface } from './'
 import ApproveButton from './trade/ApproveButton'
@@ -24,6 +24,7 @@ import mixpanel from 'mixpanel-browser'
 
 import getConfig from 'next/config'
 import TxPending from './trade/TxPending'
+import { isETHAddress } from 'utils/addresses'
 
 const { publicRuntimeConfig } = getConfig()
 const { MIX_PANEL_KEY } = publicRuntimeConfig
@@ -81,7 +82,9 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   })
 
   // Did user type a valid ENS address or hex-address?
-  const isValidAddress = !isENSAddressValid ? isAddress(recipientAddress) : true
+  const isValidAddress = !isENSAddressValid
+    ? isETHAddress(recipientAddress)
+    : true
 
   const isApproveButtonDisabled =
     selectedMarket === undefined ||

@@ -1,6 +1,5 @@
 import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
-import Web3 from 'web3'
 import { useState, useEffect } from 'react'
 import numeral from 'numeral'
 import { IdeaMarket } from 'store/ideaMarketsStore'
@@ -116,20 +115,6 @@ export function scrollToContentWithId(id: string) {
   const yOffset = 64
   const y = element.getBoundingClientRect().top + window.pageYOffset - yOffset
   window.scrollTo({ behavior: 'smooth', top: y })
-}
-
-export function toChecksumedAddress(addr: string): string {
-  const web3 = new Web3()
-  return web3.utils.toChecksumAddress(addr)
-}
-
-export function isAddress(addr: string): boolean {
-  try {
-    toChecksumedAddress(addr)
-    return true
-  } catch (e) {
-    return false
-  }
 }
 
 export function removeTrailingZeroesFromNumberString(num: string): string {

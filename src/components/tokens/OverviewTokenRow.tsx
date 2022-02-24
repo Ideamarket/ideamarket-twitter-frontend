@@ -41,6 +41,8 @@ import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 import CreateAccountModal from 'components/account/CreateAccountModal'
 import { getTimeDifferenceIndays } from 'lib/utils/dateUtil'
 import { convertAccountName } from 'lib/utils/stringUtil'
+import A from 'components/A'
+import { isETHAddress } from 'utils/addresses'
 
 type Props = {
   token: any
@@ -83,6 +85,26 @@ export default function TokenRow({
   const { resolvedTheme } = useThemeMode()
 
   const isOnChain = token?.isOnChain
+
+  const { ghostListedBy, ghostListedAt, onchainListedAt, onchainListedBy } =
+    (token || {}) as any
+
+  const isGhostListedByETHAddress = isETHAddress(ghostListedBy)
+  const isOnchainListedByETHAddress = isETHAddress(onchainListedBy)
+
+  const timeAfterGhostListedInDays = useMemo(() => {
+    if (!ghostListedAt) return null
+    const ghostListedAtDate = new Date(ghostListedAt)
+    const currentDate = new Date()
+    return getTimeDifferenceIndays(ghostListedAtDate, currentDate)
+  }, [ghostListedAt])
+
+  const timeAfterOnChainListedInDays = useMemo(() => {
+    if (!onchainListedAt) return null
+    const onchainListedAtDate = new Date(onchainListedAt)
+    const currentDate = new Date()
+    return getTimeDifferenceIndays(onchainListedAtDate, currentDate)
+  }, [onchainListedAt])
 
   // const yearIncome = (
   //   parseFloat(token?.marketCap) * compoundSupplyRate
@@ -186,23 +208,6 @@ export default function TokenRow({
 
     refetch()
   }
-
-  const { ghostListedBy, ghostListedAt, onchainListedAt, onchainListedBy } =
-    (token || {}) as any
-
-  const timeAfterGhostListedInDays = useMemo(() => {
-    if (!ghostListedAt) return null
-    const ghostListedAtDate = new Date(ghostListedAt)
-    const currentDate = new Date()
-    return getTimeDifferenceIndays(ghostListedAtDate, currentDate)
-  }, [ghostListedAt])
-
-  const timeAfterOnChainListedInDays = useMemo(() => {
-    if (!onchainListedAt) return null
-    const onchainListedAtDate = new Date(onchainListedAt)
-    const currentDate = new Date()
-    return getTimeDifferenceIndays(onchainListedAtDate, currentDate)
-  }, [onchainListedAt])
 
   return (
     <tr
@@ -308,27 +313,41 @@ export default function TokenRow({
           <div className="relative w-full ">
             <div className="flex flex-col">
               <div className="pl-4 md:pl-0 flex flex-col items-center space-x-0 space-y-1 mt-4 text-sm items-baseline">
-                {ghostListedBy && timeAfterGhostListedInDays ? (
+                {ghostListedBy && timeAfterGhostListedInDays && (
                   <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
                     Ghost Listed by{' '}
-                    <span className="font-bold">
-                      {convertAccountName(ghostListedBy)}
-                    </span>{' '}
+                    {isGhostListedByETHAddress ? (
+                      <A
+                        className="underline font-bold hover:text-blue-600"
+                        href={`https://arbiscan.io/address/${ghostListedBy}`}
+                      >
+                        {convertAccountName(ghostListedBy)}
+                      </A>
+                    ) : (
+                      <span className="font-bold">
+                        {convertAccountName(ghostListedBy)}
+                      </span>
+                    )}{' '}
                     {timeAfterGhostListedInDays} days ago
                   </div>
-                ) : (
-                  ``
                 )}
-                {onchainListedBy && timeAfterOnChainListedInDays ? (
+                {onchainListedBy && timeAfterOnChainListedInDays && (
                   <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
                     Listed by{' '}
-                    <span className="font-bold">
-                      {convertAccountName(onchainListedBy)}
-                    </span>{' '}
+                    {isOnchainListedByETHAddress ? (
+                      <A
+                        className="underline font-bold hover:text-blue-600"
+                        href={`https://arbiscan.io/address/${onchainListedBy}`}
+                      >
+                        {convertAccountName(onchainListedBy)}
+                      </A>
+                    ) : (
+                      <span className="font-bold">
+                        {convertAccountName(onchainListedBy)}
+                      </span>
+                    )}{' '}
                     {timeAfterOnChainListedInDays} days ago
                   </div>
-                ) : (
-                  ``
                 )}
               </div>
 

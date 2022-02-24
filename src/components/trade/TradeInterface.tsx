@@ -23,7 +23,6 @@ import {
   formatBigNumber,
   formatNumber,
   formatNumberWithCommasAsThousandsSerperator,
-  isAddress,
   useTransactionManager,
   web3BNToFloatString,
   ZERO_ADDRESS,
@@ -61,6 +60,7 @@ import moment from 'moment'
 import ToggleSwitch from 'components/ToggleSwitch'
 import { A } from 'components'
 import { getLockingAPR } from 'lib/axios'
+import { isETHAddress } from 'utils/addresses'
 
 const { publicRuntimeConfig } = getConfig()
 const { MIX_PANEL_KEY } = publicRuntimeConfig
@@ -544,7 +544,9 @@ export default function TradeInterface({
   }
 
   // Did user type a valid ENS address or hex-address?
-  const isValidAddress = !isENSAddressValid ? isAddress(recipientAddress) : true
+  const isValidAddress = !isENSAddressValid
+    ? isETHAddress(recipientAddress)
+    : true
 
   const isApproveButtonDisabled =
     txManager.isPending ||
@@ -864,7 +866,7 @@ export default function TradeInterface({
                       (ideaToken && ideaToken.tokenOwner === ZERO_ADDRESS)
                       ? 'w-full'
                       : 'w-full md:w-96',
-                    isAddress(recipientAddress) || isENSAddressValid
+                    isETHAddress(recipientAddress) || isENSAddressValid
                       ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                       : 'border-brand-red focus:border-brand-red focus:ring-red-500'
                   )}

@@ -14,7 +14,6 @@ import { getMarketSpecificsByMarketName } from 'store/markets'
 import { useWalletStore } from 'store/walletStore'
 import {
   bigNumberTenPow18,
-  isAddress,
   useTransactionManager,
   web3BNToFloatString,
 } from '../utils'
@@ -23,6 +22,7 @@ import { Modal, CircleSpinner } from './'
 import A from './A'
 import ModalService from './modals/ModalService'
 import WalletModal from './wallet/WalletModal'
+import { isETHAddress } from 'utils/addresses'
 
 export default function VerifyModal({
   close,
@@ -47,7 +47,7 @@ export default function VerifyModal({
 
   const connectedAddress = useWalletStore((state) => state.address)
   const [ownerAddress, setOwnerAddress] = useState('')
-  const isValidOwnerAddress = isAddress(ownerAddress)
+  const isValidOwnerAddress = isETHAddress(ownerAddress)
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 

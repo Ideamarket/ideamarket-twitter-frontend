@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useState } from 'react'
 import { IdeaToken } from 'store/ideaMarketsStore'
-import { floatToWeb3BN, isAddress, useTransactionManager } from 'utils'
+import { floatToWeb3BN, useTransactionManager } from 'utils'
 import { lockToken } from 'actions'
 import Modal from '../modals/Modal'
 import BigNumber from 'bignumber.js'
@@ -15,6 +15,7 @@ import TradeCompleteModal, { TRANSACTION_TYPES } from './TradeCompleteModal'
 import transferToken from 'actions/transferToken'
 import { useENSAddress } from './hooks/useENSAddress'
 import TxPending from './TxPending'
+import { isETHAddress } from 'utils/addresses'
 
 export default function GiftModal({
   close,
@@ -141,7 +142,7 @@ export default function GiftModal({
           <input
             className={classNames(
               'pl-2 w-60 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600',
-              isAddress(recipientAddress) || isENSAddressValid
+              isETHAddress(recipientAddress) || isENSAddressValid
                 ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
                 : 'border-brand-red focus:border-brand-red focus:ring-red-500'
             )}
