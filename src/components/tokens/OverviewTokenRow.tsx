@@ -657,7 +657,7 @@ export default function TokenRow({
       <td
         className={classNames(
           isExpanded ? 'pt-4' : 'py-4',
-          'hidden text-center md:table-cell whitespace-nowrap align-baseline'
+          'hidden pl-6 text-center md:table-cell whitespace-nowrap align-baseline'
         )}
       >
         <div className="flex space-x-2">

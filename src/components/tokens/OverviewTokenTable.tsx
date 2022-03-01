@@ -23,6 +23,9 @@ import { OverviewColumns } from './table/OverviewColumns'
 import { SortOptions } from './utils/OverviewUtils'
 import { flatten } from 'utils/lodash'
 import { GlobalContext } from 'lib/GlobalContext'
+import ColSize from 'components/tables/ColSize'
+import useBreakpoint from 'use-breakpoint'
+import { BREAKPOINTS } from 'utils/constants'
 
 type Props = {
   selectedMarkets: Set<string>
@@ -60,6 +63,8 @@ export default function Table({
   tradeOrListSuccessToggle,
 }: Props) {
   const TOKENS_PER_PAGE = 10
+
+  const { breakpoint } = useBreakpoint(BREAKPOINTS, 'mobile')
 
   const { jwtToken } = useContext(GlobalContext)
 
@@ -223,7 +228,11 @@ export default function Table({
         <div className="inline-block w-full py-2 align-middle">
           <div className="overflow-x-scroll border-b border-t-4 border-gray-200 dark:border-gray-500 lg:overflow-x-visible">
             {/* table-fixed makes it so mobile table does not overflow and stays width defined here (w-full) */}
-            <table className="table-fixed md:table-auto w-full">
+            <table className="table-fixed w-full">
+              {breakpoint !== 'sm' && breakpoint !== 'mobile' && (
+                <ColSize columnData={columnData} />
+              )}
+
               <thead className="hidden md:table-header-group border-b">
                 <tr className="z-40 lg:sticky md:top-28 sticky-safari">
                   <OverviewColumns
