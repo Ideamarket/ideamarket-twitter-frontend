@@ -26,7 +26,7 @@ export default function TokenRowSkeleton({
           </div>
         </td>
         {/* Price */}
-        <td className="hidden py-4 md:table-cell whitespace-nowrap">
+        <td className="hidden py-4 pl-6 md:table-cell whitespace-nowrap">
           <p className="w-8 h-4 bg-gray-400 rounded"></p>
         </td>
         {/* 24H Change */}

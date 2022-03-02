@@ -213,6 +213,7 @@ export const OverviewColumns = ({
   const getColumnStyle = (column) => {
     switch (column.value) {
       case 'name':
+      case 'price':
         return 'pl-6'
       default:
         return ''

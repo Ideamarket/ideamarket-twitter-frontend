@@ -1,4 +1,5 @@
 import { GlobeAltIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/solid'
 import classNames from 'classnames'
 import { CircleSpinner, WalletModal } from 'components'
 import ModalService from 'components/modals/ModalService'
@@ -168,7 +169,7 @@ const ListMeContent = ({
 
       {categoriesData && categoriesData?.length > 0 && (
         <div className="mt-4 text-sm">
-          <div className="text-black/[.5] font-semibold">TAGS</div>
+          <div className="text-black/[.5] font-semibold">ADD TAGS</div>
           <div className="flex flex-wrap">
             {categoriesData
               .filter(
@@ -186,10 +187,13 @@ const ListMeContent = ({
                       selectedCategories.includes(category.id)
                         ? 'text-blue-500 bg-blue-100'
                         : 'text-black',
-                      'border rounded-2xl px-2 py-1 cursor-pointer mr-2 mt-2'
+                      'flex items-center border rounded-2xl px-2 py-1 cursor-pointer mr-2 mt-2'
                     )}
                   >
-                    #{category.name}
+                    <span>#{category.name}</span>
+                    {selectedCategories.includes(category.id) && (
+                      <XIcon className="w-5 h-5 ml-1" />
+                    )}
                   </div>
                 )
               })}
