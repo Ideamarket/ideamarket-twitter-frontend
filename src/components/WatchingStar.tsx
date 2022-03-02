@@ -36,7 +36,7 @@ export default function WatchingStar({
       <StarOn
         className={classNames(
           className,
-          'w-5 cursor-pointer fill-current text-brand-gray-4 dark:text-gray-300'
+          'w-4 cursor-pointer fill-current text-brand-gray-4 dark:text-gray-300'
         )}
         onClick={onClick}
       />
@@ -46,7 +46,7 @@ export default function WatchingStar({
       <Star
         className={classNames(
           className,
-          'w-5 cursor-pointer fill-current text-brand-blue dark:text-gray-300'
+          'w-4 cursor-pointer fill-current text-brand-blue dark:text-gray-300'
         )}
         onClick={onClick}
       />

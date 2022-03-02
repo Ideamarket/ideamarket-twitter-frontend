@@ -210,6 +210,15 @@ export const OverviewColumns = ({
     }
   }
 
+  const getColumnStyle = (column) => {
+    switch (column.value) {
+      case 'name':
+        return 'pl-6'
+      default:
+        return ''
+    }
+  }
+
   return (
     <>
       {columnData.map((column) => {
@@ -218,7 +227,7 @@ export const OverviewColumns = ({
           return (
             <th
               colSpan={2}
-              className="pr-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50"
+              className="pr-6 py-3 text-xs font-medium leading-4 text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50"
               key={column.value}
             >
               Votes
@@ -228,7 +237,8 @@ export const OverviewColumns = ({
           return (
             <th
               className={classNames(
-                'pl-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
+                getColumnStyle(column),
+                'py-3 text-xs font-medium leading-4 text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
                 column.sortable && 'cursor-pointer',
                 column.value !== 'rank' && 'pr-6'
               )}

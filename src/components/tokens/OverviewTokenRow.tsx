@@ -233,9 +233,13 @@ export default function TokenRow({
       {/* Icon and Name */}
       <td
         className={classNames(
-          'relative w-full py-4 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap md:w-1/3 lg:w-1/2 text-xs md:text-base'
+          'relative w-full py-4 md:table-cell md:col-span-3 md:pl-14 whitespace-nowrap md:w-1/3 lg:w-1/2 text-xs md:text-base'
         )}
       >
+        <div className="absolute left-5 md:left-6 top-7">
+          <WatchingStar token={token} />
+        </div>
+
         <div className="md:hidden absolute right-2 top-6">
           {isExpanded ? (
             <ChevronUpIcon
@@ -481,7 +485,7 @@ export default function TokenRow({
       <td
         className={classNames(
           isExpanded ? 'pt-4' : 'py-4',
-          'relative hidden pl-6 md:table-cell whitespace-nowrap align-baseline'
+          'relative hidden md:table-cell whitespace-nowrap align-baseline'
         )}
       >
         <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
@@ -499,7 +503,7 @@ export default function TokenRow({
         <td
           className={classNames(
             isExpanded ? 'pt-4' : 'py-4',
-            'relative hidden pl-6 md:table-cell whitespace-nowrap align-baseline'
+            'relative hidden md:table-cell whitespace-nowrap align-baseline'
           )}
         >
           {isOnChain ? (
@@ -531,7 +535,7 @@ export default function TokenRow({
         <td
           className={classNames(
             isExpanded ? 'pt-4' : 'py-4',
-            'relative hidden pl-6 md:table-cell whitespace-nowrap align-baseline'
+            'relative hidden md:table-cell whitespace-nowrap align-baseline'
           )}
         >
           {isOnChain ? (
@@ -563,7 +567,7 @@ export default function TokenRow({
         <td
           className={classNames(
             isExpanded ? 'pt-4' : 'py-4',
-            'relative hidden pl-6 md:table-cell whitespace-nowrap align-baseline'
+            'relative hidden md:table-cell whitespace-nowrap align-baseline'
           )}
         >
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
@@ -586,7 +590,7 @@ export default function TokenRow({
       )}
       {/* %Locked */}
       {/* {getColumn('% Locked') && (
-        <td className={classNames(isExpanded ? 'pt-4' : 'py-4', "relative hidden pl-6 md:table-cell whitespace-nowrap align-baseline")}>
+        <td className={classNames(isExpanded ? 'pt-4' : 'py-4', "relative hidden md:table-cell whitespace-nowrap align-baseline")}>
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
             % Locked
           </p>
@@ -608,7 +612,7 @@ export default function TokenRow({
         <td
           className={classNames(
             isExpanded ? 'pt-4' : 'py-4',
-            'relative hidden pl-6 md:table-cell whitespace-nowrap align-baseline'
+            'relative hidden md:table-cell whitespace-nowrap align-baseline'
           )}
         >
           {isOnChain ? (
@@ -632,7 +636,7 @@ export default function TokenRow({
         <td
           className={classNames(
             isExpanded ? 'pt-4' : 'py-4',
-            'relative hidden pl-6 md:table-cell whitespace-nowrap align-baseline'
+            'relative hidden md:table-cell whitespace-nowrap align-baseline'
           )}
         >
           {isOnChain ? (
@@ -657,7 +661,7 @@ export default function TokenRow({
       <td
         className={classNames(
           isExpanded ? 'pt-4' : 'py-4',
-          'hidden pl-6 text-center md:table-cell whitespace-nowrap align-baseline'
+          'relative hidden text-center md:table-cell whitespace-nowrap align-baseline'
         )}
       >
         <div className="flex space-x-2">
@@ -699,15 +703,25 @@ export default function TokenRow({
           )}
         </div>
       </td>
-      {/* Star desktop */}
+      {/* Chevron icon desktop */}
       <td
         className={classNames(
           isExpanded ? 'pt-4' : 'py-4',
-          'hidden px-3 text-sm leading-5 text-gray-500 md:table-cell dark:text-gray-300 md:pl-3 md:pr-6 whitespace-nowrap align-baseline'
+          'relative hidden pl-3 pr-6 text-sm text-gray-500 md:table-cell dark:text-gray-300 whitespace-nowrap align-baseline'
         )}
       >
-        <div className="flex items-center justify-center h-full">
-          <WatchingStar token={token} />
+        <div className="absolute right-1/3 top-7">
+          {isExpanded ? (
+            <ChevronUpIcon
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-5 h-5 cursor-pointer text-gray-400 hover:text-blue-500"
+            />
+          ) : (
+            <ChevronDownIcon
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-5 h-5 cursor-pointer text-gray-400 hover:text-blue-500"
+            />
+          )}
         </div>
       </td>
     </tr>

@@ -91,9 +91,9 @@ const defaultColumns = [
   },
   {
     id: 11,
-    name: 'Star',
+    name: 'Chevron',
     content: '',
-    value: 'star',
+    value: 'chevron',
     sortable: false,
     isOptional: false,
     isSelectedAtStart: true,

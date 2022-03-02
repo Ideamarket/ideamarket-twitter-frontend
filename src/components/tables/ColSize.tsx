@@ -24,9 +24,9 @@ const ColSize = ({ columnData }: Props) => {
       case 'claimable':
         return '8%'
       case 'totalVotes':
-        return '17%'
-      case 'star':
-        return '8%'
+        return '13%'
+      case 'chevron':
+        return '4%'
     }
   }
 
