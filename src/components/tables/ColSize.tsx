@@ -31,11 +31,11 @@ const ColSize = ({ columnData }: Props) => {
   }
 
   return (
-    <>
+    <colgroup>
       {columnData.map((column) => {
-        return <col width={getColumnWidth(column)} />
+        return <col width={getColumnWidth(column)} key={column.value} />
       })}
-    </>
+    </colgroup>
   )
 }
 

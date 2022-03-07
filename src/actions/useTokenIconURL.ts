@@ -13,7 +13,12 @@ export default function useTokenIconURL({
 
   useEffect(() => {
     let isCancelled = false
-    if (tokenName && marketSpecifics) {
+    // TODO: whenever URL market IDT are added to lambdavatar, remove part of condition that blocks URL market
+    if (
+      tokenName &&
+      marketSpecifics &&
+      marketSpecifics.getMarketName() !== 'URL'
+    ) {
       setIsLoading(true)
       marketSpecifics.getTokenIconURL(tokenName).then((url) => {
         if (!isCancelled) {

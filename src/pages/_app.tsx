@@ -27,7 +27,6 @@ import { WrongNetworkOverlay } from 'components'
 import { initUseMarketStore } from 'store/markets'
 //import ModalService from 'components/modals/ModalService'
 //import MigrationDoneModal from 'components/MigrationDoneModal'
-import { Provider } from 'next-auth/client'
 import { NextPage } from 'next'
 
 import MixPanelProvider from 'utils/mixPanel'
@@ -84,23 +83,21 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           },
         ]}
       />
-      <Provider session={pageProps.session}>
-        <GlobalContextComponent>
-          <ThemeProvider attribute="class" defaultTheme="light">
-            <Web3ReactProvider getLibrary={getLibrary}>
-              <Web3ReactManager>
-                <ClientWrapper>
-                  <MixPanelProvider>
-                    {getLayout(<Component {...pageProps} />)}
-                  </MixPanelProvider>
-                </ClientWrapper>
-              </Web3ReactManager>
-              <WrongNetworkOverlay />
-              <ModalRoot />
-            </Web3ReactProvider>
-          </ThemeProvider>
-        </GlobalContextComponent>
-      </Provider>
+      <GlobalContextComponent>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <Web3ReactManager>
+              <ClientWrapper>
+                <MixPanelProvider>
+                  {getLayout(<Component {...pageProps} />)}
+                </MixPanelProvider>
+              </ClientWrapper>
+            </Web3ReactManager>
+            <WrongNetworkOverlay />
+            <ModalRoot />
+          </Web3ReactProvider>
+        </ThemeProvider>
+      </GlobalContextComponent>
     </>
   )
 }

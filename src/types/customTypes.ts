@@ -1,5 +1,3 @@
-import { User } from 'next-auth'
-
 export interface VisibilityOptions {
   email?: boolean
   bio?: boolean
@@ -21,4 +19,4 @@ export type UserProfile = {
   visibilityOptions?: VisibilityOptions
 }
 
-export type UserPublicProfile = Partial<User & { profilePhoto: string }>
+export type UserPublicProfile = Partial<{ profilePhoto: string }>

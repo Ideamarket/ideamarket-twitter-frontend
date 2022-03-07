@@ -5,6 +5,7 @@ import Document, {
   NextScript,
   DocumentContext,
 } from 'next/document'
+import Script from 'next/script'
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -36,44 +37,6 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <script
-            async
-            src="https://platform.twitter.com/widgets.js"
-            charSet="utf-8"
-          />
-          <script
-            async
-            src={`https://www.googletagmanager.com/gtag/js?id=${MyDocument.GA_TRACKING_ID}`}
-          />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${MyDocument.GA_TRACKING_ID}', {
-              page_path: window.location.pathname,
-            });
-          `,
-            }}
-          />
-
-          {/* Hotjar Tracking Code for app.ideamarket.io */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              (function(h,o,t,j,a,r){
-                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                  h._hjSettings={hjid:2487731,hjsv:6};
-                  a=o.getElementsByTagName('head')[0];
-                  r=o.createElement('script');r.async=1;
-                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                  a.appendChild(r);
-              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-            `,
-            }}
-          />
-
           <link rel="manifest" href="/manifest.json" />
           <link
             rel="icon"
@@ -102,6 +65,43 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#317EFB" />
         </Head>
         <body>
+          <Script
+            async
+            src="https://platform.twitter.com/widgets.js"
+            charSet="utf-8"
+          />
+          <Script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${MyDocument.GA_TRACKING_ID}`}
+          />
+          <Script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${MyDocument.GA_TRACKING_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+            }}
+          />
+          {/* Hotjar Tracking Code for app.ideamarket.io */}
+          <Script
+            dangerouslySetInnerHTML={{
+              __html: `
+              (function(h,o,t,j,a,r){
+                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                  h._hjSettings={hjid:2487731,hjsv:6};
+                  a=o.getElementsByTagName('head')[0];
+                  r=o.createElement('script');r.async=1;
+                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                  a.appendChild(r);
+              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+            `,
+            }}
+          />
+
           <Main />
           <NextScript />
         </body>
