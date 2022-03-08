@@ -172,6 +172,7 @@ const ListMeContent = ({
           <div className="text-black/[.5] font-semibold">ADD TAGS</div>
           <div className="flex flex-wrap">
             {categoriesData
+              .filter((cat) => cat.enabled && !cat.hidden) // Only show category if it is enabled and not hidden
               .filter(
                 (cat) =>
                   !(
@@ -189,6 +190,7 @@ const ListMeContent = ({
                         : 'text-black',
                       'flex items-center border rounded-2xl px-2 py-1 cursor-pointer mr-2 mt-2'
                     )}
+                    key={category.name}
                   >
                     <span>#{category.name}</span>
                     {selectedCategories.includes(category.id) && (
@@ -209,7 +211,10 @@ const ListMeContent = ({
                 <div className="flex flex-wrap">
                   {ghostCategories.map((cat) => {
                     return (
-                      <div className="border rounded-2xl px-2 py-1 mr-2 mt-2 bg-black/[.05] text-black">
+                      <div
+                        className="border rounded-2xl px-2 py-1 mr-2 mt-2 bg-black/[.05] text-black"
+                        key={cat.name}
+                      >
                         #{cat.name}
                       </div>
                     )
