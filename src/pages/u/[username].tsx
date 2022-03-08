@@ -9,7 +9,7 @@ type Props = {
   username: string
 }
 
-export default function PublicProfile({ username }: Props) {
+const PublicProfile = ({ username }: Props) => {
   const { data: userData } = useQuery<any>([{ username }], getPublicProfile)
 
   return (
@@ -37,3 +37,5 @@ export const getServerSideProps = async (context) => {
 PublicProfile.getLayout = (page: ReactElement) => (
   <DefaultLayout>{page}</DefaultLayout>
 )
+
+export default PublicProfile

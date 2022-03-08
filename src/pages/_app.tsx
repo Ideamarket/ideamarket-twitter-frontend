@@ -47,7 +47,7 @@ type AppPropsWithLayout = AppProps & {
 }
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component?.getLayout ?? false
+  const getLayout = Component.getLayout ?? ((page) => page)
 
   initUseMarketStore()
 
@@ -89,11 +89,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             <Web3ReactManager>
               <ClientWrapper>
                 <MixPanelProvider>
-                  {getLayout ? (
-                    getLayout(<Component {...pageProps} />)
-                  ) : (
-                    <Component {...pageProps} />
-                  )}
+                  {getLayout(<Component {...pageProps} />)}
                 </MixPanelProvider>
               </ClientWrapper>
             </Web3ReactManager>

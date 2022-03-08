@@ -64,7 +64,7 @@ const DetailsSkeleton = () => (
   </div>
 )
 
-export default function TokenDetails({ rawTokenId }: { rawTokenId: string }) {
+const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const { account } = useWeb3React()
   const { jwtToken } = useContext(GlobalContext)
 
@@ -704,3 +704,5 @@ TokenDetails.getLayout = (page: ReactElement) => (
     {page}
   </DefaultLayout>
 )
+
+export default TokenDetails
