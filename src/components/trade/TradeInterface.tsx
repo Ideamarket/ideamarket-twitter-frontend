@@ -505,8 +505,8 @@ export default function TradeInterface({
 
     const giftAddress = isENSAddressValid ? hexAddress : recipientAddress
 
-    const oneMonthInSecs = 2629800
-    const threeMonthsInSecs = 7889400
+    const oneMonthInSecs = 2592000
+    const threeMonthsInSecs = 7776000
 
     const args =
       tradeType === 'buy'

@@ -87,8 +87,8 @@ const LockInterface = ({
   async function onLockClicked() {
     const amount = floatToWeb3BN(inputTokenAmount, 18, BigNumber.ROUND_DOWN)
 
-    const oneMonthInSecs = 2629800
-    const threeMonthsInSecs = 7889400
+    const oneMonthInSecs = 2592000
+    const threeMonthsInSecs = 7776000
 
     const args = [
       ideaToken.address,
