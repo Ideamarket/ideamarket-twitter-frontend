@@ -187,16 +187,14 @@ const OverviewFiltersMobile = ({
 
         <div className="flex gap-x-2 pl-2">
           {categoriesData &&
-            categoriesData
-              .filter((cat) => !cat.hidden) // Only show category if it is not hidden
-              .map((cat: any) => (
-                <SelectableButton
-                  label={`#${cat.name}`}
-                  isSelected={selectedCategories.includes(cat.id)}
-                  onClick={() => onCategoryClicked(cat.id)}
-                  key={cat.id}
-                />
-              ))}
+            categoriesData.map((cat: any) => (
+              <SelectableButton
+                label={`#${cat.name}`}
+                isSelected={selectedCategories.includes(cat.id)}
+                onClick={() => onCategoryClicked(cat.id)}
+                key={cat.id}
+              />
+            ))}
         </div>
       </div>
     </div>

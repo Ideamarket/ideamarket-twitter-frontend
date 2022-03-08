@@ -216,16 +216,14 @@ export const OverviewFilters = ({
       <div className="hidden md:flex md:justify-start justify-center h-28 md:h-16 p-3 bg-white rounded-t-lg dark:bg-gray-700 gap-x-2 gap-y-2">
         <div className="flex md:gap-x-2">
           {categoriesData &&
-            categoriesData
-              .filter((cat) => !cat.hidden) // Only show category if it is not hidden
-              .map((cat: any) => (
-                <SelectableButton
-                  label={`#${cat.name}`}
-                  isSelected={selectedCategories.includes(cat.id)}
-                  onClick={() => onCategoryClicked(cat.id)}
-                  key={cat.id}
-                />
-              ))}
+            categoriesData.map((cat: any) => (
+              <SelectableButton
+                label={`#${cat.name}`}
+                isSelected={selectedCategories.includes(cat.id)}
+                onClick={() => onCategoryClicked(cat.id)}
+                key={cat.id}
+              />
+            ))}
         </div>
 
         <div className="flex w-full h-9 md:h-auto ml-auto">
