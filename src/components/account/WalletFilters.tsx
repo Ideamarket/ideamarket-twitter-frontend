@@ -124,6 +124,7 @@ const WalletFilters = ({
       newSet = toggleMarketHelper('Minds', newSet)
       newSet = toggleMarketHelper('Substack', newSet)
       newSet = toggleMarketHelper('Showtime', newSet)
+      newSet = toggleMarketHelper('Wikipedia', newSet)
     } else {
       newSet = toggleMarketHelper(marketName, selectedMarkets)
     }
@@ -142,12 +143,10 @@ const WalletFilters = ({
   }, [markets])
 
   const twitterMarketSpecifics = getMarketSpecificsByMarketName('Twitter')
-  const wikiMarketSpecifics = getMarketSpecificsByMarketName('Wikipedia')
   const { resolvedTheme } = useThemeMode()
 
   const isURLSelected = selectedMarkets.has('URL')
   const isPeopleSelected = selectedMarkets.has('Twitter')
-  const isWikiSelected = selectedMarkets.has('Wikipedia')
 
   return (
     <div className="justify-center p-3 overflow-x-scroll bg-white rounded-t-lg text-black md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start lg:overflow-x-visible">
@@ -184,7 +183,7 @@ const WalletFilters = ({
       <div className="flex justify-between items-center space-x-2">
         <button
           className={classNames(
-            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            'w-1/2 md:w-auto h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
             {
               'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
                 isURLSelected,
@@ -200,7 +199,7 @@ const WalletFilters = ({
         </button>
         <button
           className={classNames(
-            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            'w-1/2 md:w-auto h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
             {
               'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
                 isPeopleSelected,
@@ -214,25 +213,7 @@ const WalletFilters = ({
           <span className="w-5 mr-1">
             {twitterMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
           </span>
-          <span>People</span>
-        </button>
-        <button
-          className={classNames(
-            'w-1/3 h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
-            {
-              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
-                isWikiSelected,
-            },
-            { 'text-brand-black dark:text-gray-50': !isWikiSelected }
-          )}
-          onClick={() => {
-            toggleMarket('Wikipedia')
-          }}
-        >
-          <span className="w-5 mr-1">
-            {wikiMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
-          </span>
-          <span>Wikipedia</span>
+          <span>Users</span>
         </button>
       </div>
 
