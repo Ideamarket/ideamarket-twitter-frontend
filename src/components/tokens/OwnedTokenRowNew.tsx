@@ -15,7 +15,6 @@ import {
 import { A, TradeModal } from 'components'
 import { useTokenIconURL } from 'actions'
 import ModalService from 'components/modals/ModalService'
-import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import GiftModal from 'components/trade/GiftModal'
 import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
@@ -43,13 +42,7 @@ export default function OwnedTokenRow({
   userData: any
 }) {
   const router = useRouter()
-  const ethAddresses = userData?.ethAddresses
-  const isMultipleAddresses = ethAddresses && ethAddresses.length > 1
-  const addressNumber = isMultipleAddresses
-    ? ethAddresses.findIndex(
-        (addressObj) => addressObj.address === token.holder
-      ) + 1
-    : null
+
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
@@ -65,7 +58,6 @@ export default function OwnedTokenRow({
     bigNumberTenPow18,
     2
   )
-  const { resolvedTheme } = useThemeMode()
 
   const balanceValueBN = calculateIdeaTokenDaiValue(
     token?.rawSupply,
@@ -92,25 +84,7 @@ export default function OwnedTokenRow({
         )
       }}
     >
-      {/* Market desktop */}
-      <td className="flex items-center justify-center hidden py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
-        <div className="flex items-center justify-end w-full h-full">
-          {isMultipleAddresses && (
-            <div className="relative w-5 h-5 ml-1">
-              <Image
-                src={`/${addressNumber}Emoji.png`}
-                alt="address-number"
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
-          )}
-          <div className="w-5 h-auto ml-3">
-            {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
-          </div>
-        </div>
-      </td>
-      <td className="col-span-3 px-6 py-4 whitespace-nowrap">
+      <td className="col-span-3 px-6 md:pl-6 md:pr-5 py-4 whitespace-nowrap">
         <div className="flex items-center text-gray-900 dark:text-gray-200">
           <div className="flex-shrink-0 w-7.5 h-7.5">
             {isTokenIconLoading ? (
@@ -165,15 +139,6 @@ export default function OwnedTokenRow({
           </div>
         </div>
       </td>
-      {/* Market mobile */}
-      <td className="px-6 py-4 whitespace-nowrap md:hidden">
-        <p className="text-sm font-semibold tracking-tightest text-brand-gray-4 dark:text-gray-400">
-          Market
-        </p>
-        <div className="inline-block w-4 h-4">
-          {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
-        </div>
-      </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           Price
@@ -188,7 +153,7 @@ export default function OwnedTokenRow({
           )}
         </p>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 md:pl-0 md:pr-5 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           Balance
         </p>
@@ -201,7 +166,7 @@ export default function OwnedTokenRow({
           )}
         </p>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 md:pl-0 md:pr-5 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           Value
         </p>
@@ -212,7 +177,7 @@ export default function OwnedTokenRow({
           ${balanceValue}
         </p>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 md:pl-0 md:pr-5 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           24H Change
         </p>
@@ -241,14 +206,9 @@ export default function OwnedTokenRow({
         </p>
       </td>
       {/* Lock or Bridge Button */}
-      <td
-        className={classNames(
-          lockedAmount ? 'justify-between' : 'justify-end',
-          'px-4 py-4 md:px-5 whitespace-nowrap flex flex-col md:flex-row'
-        )}
-      >
+      <td className="justify-end px-4 md:pl-0 md:pr-5 py-4 whitespace-nowrap flex flex-col md:block">
         {lockedAmount && (
-          <div className="text-sm flex items-center dark:text-white">
+          <div className="text-sm mr-auto flex items-center dark:text-white">
             <span>{lockedAmount} tokens</span>
             <LockClosedIcon className="w-5 h-5 ml-1" />
           </div>
@@ -269,12 +229,12 @@ export default function OwnedTokenRow({
                   onTradeClosed
                 )
           }}
-          className="w-20 h-10 mr-4 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+          className="w-16 h-10 mr-4 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
         >
           <span>{isL1 ? 'Bridge' : 'Lock'}</span>
         </button>
       </td>
-      <td className="px-4 py-4 md:px-2 whitespace-nowrap">
+      <td className="px-4 md:pl-0 md:pr-5 py-4 whitespace-nowrap">
         <button
           type="button"
           onClick={(e) => {
@@ -288,7 +248,7 @@ export default function OwnedTokenRow({
               marketName: market.name,
             })
           }}
-          className="w-20 h-10 text-base font-medium bg-white border-2 rounded-lg text-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
+          className="w-16 h-10 text-base font-medium bg-white border-2 rounded-lg text-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300 tracking-tightest-2 font-sf-compact-medium"
         >
           <span>Gift</span>
         </button>

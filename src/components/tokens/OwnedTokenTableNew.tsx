@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { Tooltip } from 'components'
 import A from 'components/A'
+import ColSize, { TABLE_NAMES } from 'components/tables/ColSize'
 import { useCallback, useRef, MutableRefObject } from 'react'
 import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import OwnedTokenRowNew from './OwnedTokenRowNew'
@@ -13,11 +14,6 @@ type Header = {
 }
 
 const headers: Header[] = [
-  {
-    title: '',
-    value: 'market',
-    sortable: true,
-  },
   {
     title: 'Name',
     value: 'name',
@@ -129,18 +125,34 @@ export default function OwnedTokenTableNew({
     }
   }
 
+  const getColumnStyle = (column) => {
+    switch (column.value) {
+      case 'name':
+      case 'price':
+        return 'pl-6'
+      default:
+        return ''
+    }
+  }
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto">
         <div className="inline-block min-w-full py-2 align-middle">
           <div className="overflow-hidden dark:border-gray-500">
-            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-500">
+            <table className="table-fixed w-full divide-y divide-gray-200 dark:divide-gray-500">
+              <ColSize
+                columnData={headers}
+                tableName={TABLE_NAMES.ACCOUNT_HOLDINGS}
+              />
+
               <thead className="hidden md:table-header-group">
                 <tr>
                   {headers.map((header) => (
                     <th
                       className={classNames(
-                        'px-5 py-4 text-sm font-semibold leading-4 tracking-wider text-left text-brand-gray-4 dark:text-gray-200 bg-gray-100 dark:bg-gray-600',
+                        getColumnStyle(header),
+                        'pr-5 py-5 text-sm leading-4 text-left text-brand-gray-4 dark:text-gray-200 bg-gray-100 dark:bg-gray-600',
                         header.sortable && 'cursor-pointer'
                       )}
                       key={header.value}

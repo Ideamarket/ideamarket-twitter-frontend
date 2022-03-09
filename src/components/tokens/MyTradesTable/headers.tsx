@@ -8,11 +8,6 @@ type Header = {
 
 const headers: Header[] = [
   {
-    title: '',
-    value: 'market',
-    sortable: false,
-  },
-  {
     title: 'Name',
     value: 'name',
     sortable: true,

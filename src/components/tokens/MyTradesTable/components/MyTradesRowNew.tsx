@@ -10,7 +10,6 @@ import {
 } from 'utils'
 import { A } from 'components'
 import { useTokenIconURL } from 'actions'
-import useThemeMode from 'components/useThemeMode'
 import Image from 'next/image'
 import moment from 'moment'
 import { IdeaToken, IdeaMarket } from 'store/ideaMarketsStore'
@@ -38,15 +37,6 @@ const MyTradesRowNew = ({
   userData: any
 }) => {
   const router = useRouter()
-  const { resolvedTheme } = useThemeMode()
-  const ethAddresses = userData?.ethAddresses
-
-  const isMultipleAddresses = ethAddresses && ethAddresses.length > 1
-  const addressNumber = isMultipleAddresses
-    ? ethAddresses.findIndex(
-        (addressObj) => addressObj.address === token.holder
-      ) + 1
-    : null
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
 
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
@@ -84,26 +74,7 @@ const MyTradesRowNew = ({
         )
       }}
     >
-      {/* Market desktop */}
-      <td className="flex items-center justify-center hidden py-4 text-sm leading-5 text-center text-gray-500 dark:text-gray-300 md:table-cell whitespace-nowrap">
-        <div className="flex items-center justify-end w-full h-full">
-          {isMultipleAddresses && (
-            <div className="relative w-5 h-5 ml-1">
-              <Image
-                src={`/${addressNumber}Emoji.png`}
-                alt="address-number"
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
-          )}
-          <div className="w-5 h-auto ml-3">
-            {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
-          </div>
-        </div>
-      </td>
-
-      <td className="col-span-3 px-6 py-4 whitespace-nowrap">
+      <td className="col-span-3 px-4 py-4 whitespace-nowrap">
         <div className="flex items-center text-gray-900 dark:text-gray-200">
           <div className="flex-shrink-0 w-7.5 h-7.5">
             {isTokenIconLoading ? (
@@ -120,7 +91,7 @@ const MyTradesRowNew = ({
               </div>
             )}
           </div>
-          <div className="ml-4 text-base leading-5">
+          <div className="ml-4 text-base leading-5 truncate">
             <A
               href={`${marketSpecifics.getTokenURL(token.name)}`}
               className="hover:underline"
@@ -154,17 +125,7 @@ const MyTradesRowNew = ({
         </div>
       </td>
 
-      {/* Market mobile */}
-      <td className="px-6 py-4 whitespace-nowrap md:hidden">
-        <p className="text-sm font-semibold tracking-tightest text-brand-gray-4 dark:text-gray-400">
-          Market
-        </p>
-        <div className="inline-block w-4 h-4">
-          {marketSpecifics.getMarketSVGTheme(resolvedTheme)}
-        </div>
-      </td>
-
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-4 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           Type
         </p>
@@ -180,7 +141,7 @@ const MyTradesRowNew = ({
         </p>
       </td>
 
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-4 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           Amount
         </p>
@@ -188,7 +149,7 @@ const MyTradesRowNew = ({
           {web3BNToFloatString(rawIdeaTokenAmount, tenPow18, 2)}
         </p>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-4 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           Purchase Value
         </p>
@@ -196,7 +157,7 @@ const MyTradesRowNew = ({
           ${web3BNToFloatString(rawDaiAmount, tenPow18, 2)}
         </p>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-4 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           Current Value
         </p>
@@ -204,7 +165,7 @@ const MyTradesRowNew = ({
           ${web3BNToFloatString(ideaTokenValueBN, tenPow18, 2)}
         </p>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-4 py-4 whitespace-nowrap">
         <p className="text-sm font-semibold md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-400">
           PNL
         </p>
