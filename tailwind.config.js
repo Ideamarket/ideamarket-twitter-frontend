@@ -1,11 +1,8 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  mode: 'jit',
   darkMode: 'class',
-  purge: {
-    content: ['./src/**/*.{js,ts,jsx,tsx}'],
-  },
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
       xs: '320px',
@@ -62,7 +59,6 @@ module.exports = {
         'brand-border-gray': '#dce2e9',
         'brand-border-gray-2': '#CECECE',
         'brand-purple': '#08245A',
-        'brand-light-blue': defaultTheme.colors.indigo['100'],
         'brand-blue-1': '#0E8FFF',
         'brand-blue-2': '#2345C3',
         'brand-yellow-green-1': '#68B700',
@@ -161,9 +157,6 @@ module.exports = {
         'brand-sky-blue-1': '#a4b8eb',
       },
     },
-  },
-  variants: {
-    typography: ['dark'],
   },
   plugins: [
     require('@tailwindcss/forms'),

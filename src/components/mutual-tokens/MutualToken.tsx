@@ -87,8 +87,7 @@ export default function MutualToken({
           <div
             className={classNames(
               'px-6 py-5 text-sm font-medium text-center lg:flex lg:flex-col',
-              sortBy === 'totalHolders' &&
-                'bg-brand-light-blue dark:bg-gray-500'
+              sortBy === 'totalHolders' && 'bg-blue-100 dark:bg-gray-500'
             )}
           >
             <span className="text-gray-900 dark:text-gray-200">
@@ -101,7 +100,7 @@ export default function MutualToken({
           <div
             className={classNames(
               'px-6 py-5 text-sm font-medium text-center lg:flex lg:flex-col',
-              sortBy === 'totalAmount' && 'bg-brand-light-blue dark:bg-gray-500'
+              sortBy === 'totalAmount' && 'bg-blue-100 dark:bg-gray-500'
             )}
           >
             <span className="text-gray-900 dark:text-gray-200">
