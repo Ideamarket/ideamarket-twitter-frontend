@@ -263,7 +263,14 @@ export const OverviewFilters = ({
           className="text-sm whitespace-nowrap"
           onClick={setIsGhostOnlyActive}
           isSelected={isGhostOnlyActive}
-          label={<GhostIconBlack className="w-6 h-6" />}
+          label={
+            <GhostIconBlack
+              className={classNames(
+                isGhostOnlyActive && 'stroke-blue-500',
+                'w-6 h-6'
+              )}
+            />
+          }
         />
 
         <DropdownButton

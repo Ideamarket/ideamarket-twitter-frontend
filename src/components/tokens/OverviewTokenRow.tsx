@@ -212,10 +212,7 @@ export default function TokenRow({
   return (
     <tr
       ref={lastElementRef}
-      className={classNames(
-        !isOnChain && 'bg-gray-100',
-        'relative cursor-pointer md:table-row hover:bg-gray-200 dark:hover:bg-gray-600'
-      )}
+      className="relative h-28 cursor-pointer md:table-row hover:bg-black/[.02] dark:hover:bg-gray-600"
       onClick={() => {
         setIsExpanded(!isExpanded)
         // router.push(
@@ -233,10 +230,10 @@ export default function TokenRow({
       {/* Icon and Name */}
       <td
         className={classNames(
-          'relative w-full py-4 md:table-cell md:col-span-3 md:pl-14 whitespace-nowrap md:w-1/3 lg:w-1/2 text-xs md:text-base'
+          'relative w-full py-4 md:py-8 md:table-cell md:col-span-3 md:pl-14 whitespace-nowrap md:w-1/3 lg:w-1/2 text-xs md:text-base  align-baseline'
         )}
       >
-        <div className="absolute left-5 md:left-6 top-7">
+        <div className="absolute left-5 md:left-6 top-7 md:top-11">
           <WatchingStar token={token} />
         </div>
 
@@ -318,7 +315,7 @@ export default function TokenRow({
             <div className="flex flex-col">
               <div className="pl-4 md:pl-0 flex flex-col items-center space-x-0 space-y-1 mt-4 text-sm items-baseline">
                 {ghostListedBy && timeAfterGhostListedInDays && (
-                  <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
+                  <div className="px-2 py-2 bg-black/[.05] rounded-lg whitespace-nowrap">
                     Ghost Listed by{' '}
                     {isGhostListedByETHAddress ? (
                       <A
@@ -336,7 +333,7 @@ export default function TokenRow({
                   </div>
                 )}
                 {onchainListedBy && timeAfterOnChainListedInDays && (
-                  <div className="px-2 py-2 bg-black/[.1] rounded-lg whitespace-nowrap">
+                  <div className="px-2 py-2 bg-black/[.05] rounded-lg whitespace-nowrap">
                     Listed by{' '}
                     {isOnchainListedByETHAddress ? (
                       <A
@@ -439,7 +436,7 @@ export default function TokenRow({
               className={classNames(
                 isLocallyUpvoted
                   ? 'text-blue-500 bg-blue-100'
-                  : 'text-gray-400 bg-black/[.1]',
+                  : 'text-gray-400 bg-black/[.05]',
                 'flex justify-center items-center space-x-2 w-20 h-10 text-base font-medium rounded-lg dark:bg-gray-600 dark:text-gray-300 hover:border-2 hover:border-blue-500'
               )}
             >
@@ -484,15 +481,15 @@ export default function TokenRow({
       {/* Price */}
       <td
         className={classNames(
-          isExpanded ? 'pt-4' : 'py-4',
-          'relative pl-6 hidden md:table-cell whitespace-nowrap align-baseline'
+          isExpanded ? 'pt-12' : 'pt-12 pb-7',
+          'relative pl-6 hidden md:table-cell whitespace-nowrap align-top'
         )}
       >
         <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
           Price
         </p>
         <p
-          className="text-base font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
+          className="font-medium leading-4 uppercase tracking-tightest-2 text-very-dark-blue dark:text-gray-300"
           title={'$' + token?.price}
         >
           {isOnChain ? `$${formatNumber(token?.price)}` : <>&mdash;</>}
@@ -502,8 +499,8 @@ export default function TokenRow({
       {getColumn('24H Change') && (
         <td
           className={classNames(
-            isExpanded ? 'pt-4' : 'py-4',
-            'relative hidden md:table-cell whitespace-nowrap align-baseline'
+            isExpanded ? 'pt-12' : 'pt-12 pb-7',
+            'relative hidden md:table-cell whitespace-nowrap align-top'
           )}
         >
           {isOnChain ? (
@@ -534,8 +531,8 @@ export default function TokenRow({
       {getColumn('7D Change') && (
         <td
           className={classNames(
-            isExpanded ? 'pt-4' : 'py-4',
-            'relative hidden md:table-cell whitespace-nowrap align-baseline'
+            isExpanded ? 'pt-12' : 'pt-12 pb-7',
+            'relative hidden md:table-cell whitespace-nowrap align-top'
           )}
         >
           {isOnChain ? (
@@ -566,8 +563,8 @@ export default function TokenRow({
       {getColumn('Deposits') && (
         <td
           className={classNames(
-            isExpanded ? 'pt-4' : 'py-4',
-            'relative hidden md:table-cell whitespace-nowrap align-baseline'
+            isExpanded ? 'pt-12' : 'pt-12 pb-7',
+            'relative hidden md:table-cell whitespace-nowrap align-top'
           )}
         >
           <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
@@ -660,8 +657,8 @@ export default function TokenRow({
       {/* Buy Button and upvote button */}
       <td
         className={classNames(
-          isExpanded ? 'pt-4' : 'py-4',
-          'relative hidden text-center md:table-cell whitespace-nowrap align-baseline'
+          isExpanded ? 'pt-8' : 'pt-8 pb-7',
+          'relative hidden text-center md:table-cell whitespace-nowrap align-top'
         )}
       >
         <div className="flex space-x-2">
@@ -674,7 +671,7 @@ export default function TokenRow({
             className={classNames(
               isLocallyUpvoted
                 ? 'text-blue-500 bg-blue-100'
-                : 'text-gray-400 bg-black/[.1]',
+                : 'text-gray-400 bg-black/[.05]',
               'flex justify-center items-center space-x-2 w-20 h-10 text-base font-medium rounded-lg dark:bg-gray-600 dark:text-gray-300 hover:border-2 hover:border-blue-500'
             )}
           >
@@ -706,11 +703,11 @@ export default function TokenRow({
       {/* Chevron icon desktop */}
       <td
         className={classNames(
-          isExpanded ? 'pt-4' : 'py-4',
+          isExpanded ? 'pt-12' : 'pt-12 pb-7',
           'relative hidden pl-3 pr-6 text-sm text-gray-500 md:table-cell dark:text-gray-300 whitespace-nowrap align-baseline'
         )}
       >
-        <div className="absolute right-1/3 top-7">
+        <div className="absolute right-1/3 top-7 md:top-11">
           {isExpanded ? (
             <ChevronUpIcon
               onClick={() => setIsExpanded(!isExpanded)}

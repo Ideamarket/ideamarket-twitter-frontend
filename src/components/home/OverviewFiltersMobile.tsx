@@ -151,9 +151,9 @@ const OverviewFiltersMobile = ({
         <div className="flex items-center space-x-2 pr-2 border-r-2">
           <button
             className={classNames(
-              'h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+              'h-10 flex justify-center items-center md:px-3 p-2 rounded-md text-sm font-semibold',
               {
-                'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
+                'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
                   isURLSelected,
               },
               { 'text-brand-black dark:text-gray-50': !isURLSelected }
@@ -167,9 +167,9 @@ const OverviewFiltersMobile = ({
           </button>
           <button
             className={classNames(
-              'h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+              'h-10 flex justify-center items-center md:px-3 p-2 rounded-md text-sm font-semibold',
               {
-                'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
+                'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
                   isPeopleSelected,
               },
               { 'text-brand-black dark:text-gray-50': !isPeopleSelected }
@@ -179,9 +179,12 @@ const OverviewFiltersMobile = ({
             }}
           >
             <span className="w-5 mr-1">
-              {twitterMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
+              {twitterMarketSpecifics?.getMarketSVGTheme(
+                resolvedTheme,
+                isPeopleSelected
+              )}
             </span>
-            <span>People</span>
+            <span>Users</span>
           </button>
         </div>
 

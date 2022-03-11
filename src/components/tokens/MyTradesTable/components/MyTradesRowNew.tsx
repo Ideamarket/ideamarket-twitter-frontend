@@ -65,7 +65,7 @@ const MyTradesRowNew = ({
   return (
     <tr
       ref={lastElementRef}
-      className="grid grid-cols-3 border-b cursor-pointer md:table-row hover:bg-brand-gray border-brand-border-gray dark:hover:bg-gray-600 dark:border-gray-500"
+      className="md:h-28 grid grid-cols-3 border-b cursor-pointer md:table-row hover:bg-black/[.02] border-brand-border-gray dark:hover:bg-gray-600 dark:border-gray-500"
       onClick={() => {
         router.push(
           `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
@@ -74,7 +74,7 @@ const MyTradesRowNew = ({
         )
       }}
     >
-      <td className="col-span-3 px-4 py-4 whitespace-nowrap">
+      <td className="col-span-3 px-4 py-4 truncate whitespace-nowrap">
         <div className="flex items-center text-gray-900 dark:text-gray-200">
           <div className="flex-shrink-0 w-7.5 h-7.5">
             {isTokenIconLoading ? (
@@ -91,7 +91,7 @@ const MyTradesRowNew = ({
               </div>
             )}
           </div>
-          <div className="ml-4 text-base leading-5 truncate">
+          <div className="ml-4 text-base leading-5">
             <A
               href={`${marketSpecifics.getTokenURL(token.name)}`}
               className="hover:underline"

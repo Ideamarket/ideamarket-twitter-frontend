@@ -74,12 +74,12 @@ const FiltersButton = ({
     <button
       className={classNames(
         className,
-        'flex flex-grow md:flex-auto justify-center items-center md:px-3 p-2 border md:rounded-md text-sm font-semibold',
+        'flex flex-grow md:flex-auto justify-center items-center md:px-3 p-2 md:rounded-md text-sm font-semibold',
         {
-          'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
+          'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
             isSelected,
         },
-        { 'text-brand-black dark:text-gray-50': !isSelected }
+        { 'text-brand-black dark:text-gray-50 border': !isSelected }
       )}
       onClick={() => {
         onClick(!isSelected)
@@ -183,12 +183,12 @@ const WalletFilters = ({
       <div className="flex justify-between items-center space-x-2">
         <button
           className={classNames(
-            'w-1/2 md:w-auto h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            'w-1/2 md:w-auto h-10 flex justify-center items-center md:px-3 p-2 rounded-md text-sm font-semibold',
             {
-              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
+              'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
                 isURLSelected,
             },
-            { 'text-brand-black dark:text-gray-50': !isURLSelected }
+            { 'text-brand-black dark:text-gray-50 border': !isURLSelected }
           )}
           onClick={() => {
             toggleMarket('URL')
@@ -199,19 +199,22 @@ const WalletFilters = ({
         </button>
         <button
           className={classNames(
-            'w-1/2 md:w-auto h-10 flex justify-center items-center md:px-3 p-2 border-2 rounded-md text-sm font-semibold',
+            'w-1/2 md:w-auto h-10 flex justify-center items-center md:px-3 p-2 rounded-md text-sm font-semibold',
             {
-              'text-brand-blue dark:text-white bg-blue-100 border-blue-600 dark:bg-very-dark-blue':
+              'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
                 isPeopleSelected,
             },
-            { 'text-brand-black dark:text-gray-50': !isPeopleSelected }
+            { 'text-brand-black dark:text-gray-50 border': !isPeopleSelected }
           )}
           onClick={() => {
             toggleMarket('Twitter')
           }}
         >
           <span className="w-5 mr-1">
-            {twitterMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
+            {twitterMarketSpecifics?.getMarketSVGTheme(
+              resolvedTheme,
+              isPeopleSelected
+            )}
           </span>
           <span>Users</span>
         </button>

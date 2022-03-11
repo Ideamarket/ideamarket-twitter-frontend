@@ -2,6 +2,7 @@ import { IMarketSpecifics } from '.'
 import TwitterOutlineWhite from '../../assets/twitter-outline-white.svg'
 import TwitterOutlineBlack from '../../assets/twitter-outline-black.svg'
 import { queryLambdavatar } from 'actions'
+import classNames from 'classnames'
 
 export default class TwitterMarketSpecifics implements IMarketSpecifics {
   // Market
@@ -26,11 +27,25 @@ export default class TwitterMarketSpecifics implements IMarketSpecifics {
     return <TwitterOutlineWhite className="w-5" />
   }
 
-  getMarketSVGTheme(theme?): JSX.Element {
+  getMarketSVGTheme(theme?, isActive = false): JSX.Element {
     if (theme === 'dark') {
-      return <TwitterOutlineWhite className="w-5" />
+      return (
+        <TwitterOutlineWhite
+          className={classNames(
+            isActive ? 'stroke-blue-500' : 'stroke-white',
+            'w-5'
+          )}
+        />
+      )
     } else {
-      return <TwitterOutlineBlack className="w-5" />
+      return (
+        <TwitterOutlineBlack
+          className={classNames(
+            isActive ? 'stroke-blue-500' : 'stroke-black',
+            'w-5'
+          )}
+        />
+      )
     }
   }
 

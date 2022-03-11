@@ -516,6 +516,8 @@ export default function ProfileWallet({ walletState, userData }: Props) {
             )}
             onClick={() => {
               setTable('holdings')
+              setOrderBy('price')
+              setOrderDirection('desc')
             }}
           >
             Wallet Holdings
@@ -529,6 +531,8 @@ export default function ProfileWallet({ walletState, userData }: Props) {
             )}
             onClick={() => {
               setTable('trades')
+              setOrderBy('date')
+              setOrderDirection('desc')
             }}
           >
             Trades History

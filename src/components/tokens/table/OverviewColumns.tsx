@@ -17,6 +17,7 @@ import {
 import { getMarketSpecificsByMarketName, useMarketStore } from 'store/markets'
 import { toggleMarketHelper } from '../utils/OverviewUtils'
 import { GlobeAltIcon } from '@heroicons/react/outline'
+import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 import useThemeMode from 'components/useThemeMode'
 import { useMixPanel } from 'utils/mixPanel'
 
@@ -138,9 +139,9 @@ export const OverviewColumns = ({
           <div className="flex items-center space-x-2">
             <button
               className={classNames(
-                'flex justify-center items-center md:px-3 p-2 md:rounded-md text-sm font-semibold',
+                'flex justify-center items-center md:px-3 p-3 md:rounded-md text-sm font-semibold',
                 {
-                  'text-brand-blue dark:text-white bg-blue-100 border-2 border-blue-600 dark:bg-very-dark-blue':
+                  'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
                     isURLSelected,
                 },
                 {
@@ -157,9 +158,9 @@ export const OverviewColumns = ({
             </button>
             <button
               className={classNames(
-                'flex justify-center items-center md:px-3 p-2 md:rounded-md text-sm font-semibold',
+                'flex justify-center items-center md:px-3 p-3 md:rounded-md text-sm font-semibold',
                 {
-                  'text-brand-blue dark:text-white bg-blue-100 border-2 border-blue-600 dark:bg-very-dark-blue':
+                  'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
                     isPeopleSelected,
                 },
                 {
@@ -172,7 +173,10 @@ export const OverviewColumns = ({
               }}
             >
               <span className="w-5 mr-1">
-                {twitterMarketSpecifics?.getMarketSVGTheme(resolvedTheme)}
+                {twitterMarketSpecifics?.getMarketSVGTheme(
+                  resolvedTheme,
+                  isPeopleSelected
+                )}
               </span>
               <span>Users</span>
             </button>
@@ -239,7 +243,7 @@ export const OverviewColumns = ({
             <th
               className={classNames(
                 getColumnStyle(column),
-                'py-3 text-xs font-medium leading-4 text-left text-gray-500 uppercase bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
+                'relative py-3 text-xs font-medium leading-4 text-left text-gray-500 bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
                 column.sortable && 'cursor-pointer',
                 column.value !== 'rank' && 'pr-6'
               )}
@@ -250,15 +254,33 @@ export const OverviewColumns = ({
                 }
               }}
             >
-              {column.sortable && (
-                <>
-                  {currentColumn === column.value &&
-                    orderDirection === 'asc' && <span>&#x25B2;&nbsp;</span>}
-                  {currentColumn === column.value &&
-                    orderDirection === 'desc' && <span>&#x25bc;&nbsp;</span>}
-                </>
+              {column.sortable && currentColumn === column.value && (
+                <div className="absolute w-28 h-8 z-[42] -bottom-3 -left-2 text-[.65rem] flex justify-center items-center">
+                  <span className="absolute left-3 top-3">
+                    <SortDescendingIcon
+                      className={classNames(
+                        orderDirection === 'desc' && 'text-blue-500',
+                        'w-3.5'
+                      )}
+                    />
+                    <SortAscendingIcon
+                      className={classNames(
+                        orderDirection === 'asc' && 'text-blue-500',
+                        'w-3.5'
+                      )}
+                    />
+                  </span>
+                  <span className="absolute top-3 right-3 text-blue-500">
+                    {orderDirection === 'asc' ? 'ascending' : 'descending'}
+                  </span>
+                  <img
+                    src="/SortingSliderBg.png"
+                    className="h-full"
+                    alt="SortingSliderBg"
+                  />
+                </div>
               )}
-              {getColumnContent(column)}
+              <span className="uppercase">{getColumnContent(column)}</span>
             </th>
           )
         }

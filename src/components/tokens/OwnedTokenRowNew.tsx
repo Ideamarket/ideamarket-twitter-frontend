@@ -75,7 +75,7 @@ export default function OwnedTokenRow({
   return (
     <tr
       ref={lastElementRef}
-      className="grid grid-cols-3 border-b cursor-pointer md:table-row hover:bg-brand-gray border-brand-border-gray dark:hover:bg-gray-600 dark:border-gray-500 text-black"
+      className="md:h-28 grid grid-cols-3 border-b cursor-pointer md:table-row hover:bg-black/[.02] border-brand-border-gray dark:hover:bg-gray-600 dark:border-gray-500 text-black"
       onClick={() => {
         router.push(
           `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
@@ -84,7 +84,7 @@ export default function OwnedTokenRow({
         )
       }}
     >
-      <td className="col-span-3 px-6 md:pl-6 md:pr-5 py-4 whitespace-nowrap">
+      <td className="col-span-3 px-6 md:pl-6 md:pr-5 py-4 truncate whitespace-nowrap">
         <div className="flex items-center text-gray-900 dark:text-gray-200">
           <div className="flex-shrink-0 w-7.5 h-7.5">
             {isTokenIconLoading ? (
@@ -206,7 +206,7 @@ export default function OwnedTokenRow({
         </p>
       </td>
       {/* Lock or Bridge Button */}
-      <td className="justify-end px-4 md:pl-0 md:pr-5 py-4 whitespace-nowrap flex flex-col md:block">
+      <td className="justify-end px-4 md:pl-0 md:pr-5 py-4 whitespace-nowrap">
         {lockedAmount && (
           <div className="text-sm mr-auto flex items-center dark:text-white">
             <span>{lockedAmount} tokens</span>

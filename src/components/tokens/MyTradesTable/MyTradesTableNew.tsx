@@ -4,6 +4,7 @@ import { useCallback, useRef, MutableRefObject } from 'react'
 import { IdeaTokenTrade } from 'store/ideaMarketsStore'
 import { MyTradesRowNew, MyTradesRowSkeleton } from './components'
 import headers from './headers'
+import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 
 type MyTradesTableProps = {
   rawPairs: IdeaTokenTrade[]
@@ -55,12 +56,12 @@ export default function MyTradesTableNew({
                 tableName={TABLE_NAMES.ACCOUNT_TRADES}
               />
 
-              <thead className="hidden md:table-header-group">
+              <thead className="hidden h-24 md:table-header-group">
                 <tr>
                   {headers.map((header) => (
                     <th
                       className={classNames(
-                        'px-4 py-4 text-sm font-semibold leading-4 tracking-wider text-left text-brand-gray-4 bg-gray-100 dark:bg-gray-600 dark:text-gray-300 bg-gray-50',
+                        'relative px-4 py-4 text-xs leading-4 text-left text-brand-gray-4 bg-gray-50 dark:bg-gray-600 dark:text-gray-300 bg-gray-50',
                         header.sortable && 'cursor-pointer'
                       )}
                       key={header.value}
@@ -70,21 +71,35 @@ export default function MyTradesTableNew({
                         }
                       }}
                     >
-                      <div className="flex">
-                        {header.sortable && (
-                          <>
-                            {orderBy === header.value &&
-                              orderDirection === 'asc' && (
-                                <span className="mr-1">&#x25B2;</span>
+                      {header.sortable && orderBy === header.value && (
+                        <div className="absolute w-28 h-8 z-[42] -bottom-3 -left-2 text-[.65rem] flex justify-center items-center">
+                          <span className="absolute left-3 top-3">
+                            <SortDescendingIcon
+                              className={classNames(
+                                orderDirection === 'desc' && 'text-blue-500',
+                                'w-3.5'
                               )}
-                            {orderBy === header.value &&
-                              orderDirection === 'desc' && (
-                                <span className="mr-1">&#x25bc;</span>
+                            />
+                            <SortAscendingIcon
+                              className={classNames(
+                                orderDirection === 'asc' && 'text-blue-500',
+                                'w-3.5'
                               )}
-                          </>
-                        )}
-                        {header.title}
-                      </div>
+                            />
+                          </span>
+                          <span className="absolute top-3 right-3 text-blue-500">
+                            {orderDirection === 'asc'
+                              ? 'ascending'
+                              : 'descending'}
+                          </span>
+                          <img
+                            src="/SortingSliderBg.png"
+                            className="h-full"
+                            alt="SortingSliderBg"
+                          />
+                        </div>
+                      )}
+                      <div className="flex">{header.title}</div>
                     </th>
                   ))}
                 </tr>

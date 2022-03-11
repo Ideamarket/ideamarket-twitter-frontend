@@ -48,7 +48,7 @@ const SelectableButton = ({
         className,
         'flex justify-center items-center md:px-3 p-2 text-sm font-semibold',
         {
-          'text-brand-blue dark:text-white bg-blue-100 border-2 border-blue-600 dark:bg-very-dark-blue':
+          'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
             isSelected,
         },
         { 'text-brand-black dark:text-gray-50 border': !isSelected }

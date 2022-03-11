@@ -227,7 +227,7 @@ export default function Table({
             <table className="table-fixed w-full">
               <ColSize columnData={columnData} tableName={TABLE_NAMES.HOME} />
 
-              <thead className="hidden md:table-header-group border-b">
+              <thead className="hidden h-24 md:table-header-group border-b-4">
                 <tr className="z-40 lg:sticky md:top-28 sticky-safari">
                   <OverviewColumns
                     currentColumn={orderBy}
@@ -239,7 +239,7 @@ export default function Table({
                   />
                 </tr>
               </thead>
-              <tbody className="w-full bg-white divide-y-4 md:divide-y divide-gray-200 dark:bg-gray-700 dark:divide-gray-500">
+              <tbody className="w-full bg-white divide-y-4 divide-black/[0.05] dark:bg-gray-700 dark:divide-gray-500">
                 {(tokenData as any[]).map((token, index) => {
                   const marketID = token?.marketID
                   if (

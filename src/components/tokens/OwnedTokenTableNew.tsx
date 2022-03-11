@@ -6,6 +6,7 @@ import { useCallback, useRef, MutableRefObject } from 'react'
 import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import OwnedTokenRowNew from './OwnedTokenRowNew'
 import OwnedTokenRowSkeleton from './OwnedTokenRowSkeleton'
+import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 
 type Header = {
   title: string
@@ -146,13 +147,13 @@ export default function OwnedTokenTableNew({
                 tableName={TABLE_NAMES.ACCOUNT_HOLDINGS}
               />
 
-              <thead className="hidden md:table-header-group">
+              <thead className="hidden h-24 md:table-header-group">
                 <tr>
                   {headers.map((header) => (
                     <th
                       className={classNames(
                         getColumnStyle(header),
-                        'pr-5 py-5 text-sm leading-4 text-left text-brand-gray-4 dark:text-gray-200 bg-gray-100 dark:bg-gray-600',
+                        'relative pr-5 py-5 text-xs leading-4 text-left text-brand-gray-4 dark:text-gray-200 bg-gray-50 dark:bg-gray-600',
                         header.sortable && 'cursor-pointer'
                       )}
                       key={header.value}
@@ -162,18 +163,33 @@ export default function OwnedTokenTableNew({
                         }
                       }}
                     >
-                      {header.sortable && (
-                        <>
-                          {orderBy === header.value &&
-                            orderDirection === 'asc' && (
-                              <span className="text-xs">&#x25B2;</span>
-                            )}
-                          {orderBy === header.value &&
-                            orderDirection === 'desc' && (
-                              <span className="text-xs">&#x25bc;</span>
-                            )}
-                          &nbsp;
-                        </>
+                      {header.sortable && orderBy === header.value && (
+                        <div className="absolute w-28 h-8 z-[42] -bottom-3 -left-2 text-[.65rem] flex justify-center items-center">
+                          <span className="absolute left-3 top-3">
+                            <SortDescendingIcon
+                              className={classNames(
+                                orderDirection === 'desc' && 'text-blue-500',
+                                'w-3.5'
+                              )}
+                            />
+                            <SortAscendingIcon
+                              className={classNames(
+                                orderDirection === 'asc' && 'text-blue-500',
+                                'w-3.5'
+                              )}
+                            />
+                          </span>
+                          <span className="absolute top-3 right-3 text-blue-500">
+                            {orderDirection === 'asc'
+                              ? 'ascending'
+                              : 'descending'}
+                          </span>
+                          <img
+                            src="/SortingSliderBg.png"
+                            className="h-full"
+                            alt="SortingSliderBg"
+                          />
+                        </div>
                       )}
                       {getColumnContent(header)}
                     </th>

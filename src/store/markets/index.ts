@@ -17,7 +17,7 @@ export type IMarketSpecifics = {
   getMarketNameURLRepresentation(): string
   getMarketSVGBlack(): JSX.Element
   getMarketSVGWhite(): JSX.Element
-  getMarketSVGTheme(theme?): JSX.Element
+  getMarketSVGTheme(theme?, isActive?): JSX.Element
 
   // Tokens
   getTokenURL(tokenName: string): string
