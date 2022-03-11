@@ -35,14 +35,9 @@ export default function CreateAccountModal({ close }: { close: () => void }) {
           </span>
         </div>
 
-        <div className="flex items-center my-8">
+        <div className="md:flex md:items-center my-8 whitespace-normal break-words">
           <WalletGreenIcon className="w-6 h-6" />
-          <p
-            className="text-sm font-semibold ml-2 font-inter"
-            style={{ overflowWrap: 'anywhere' }}
-          >
-            {account}
-          </p>
+          <p className="text-sm font-semibold ml-2 font-inter">{account}</p>
         </div>
 
         <p className="text-sm font-inter text-gray-400 font-normal my-8">

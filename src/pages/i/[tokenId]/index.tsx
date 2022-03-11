@@ -314,28 +314,25 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
           <div className="px-2 pb-5 mx-auto pt-40 md:pt-24 transform md:mt-10 -translate-y-30 md:-translate-y-28 md:max-w-304">
             <div className="flex flex-col md:grid md:grid-cols-2 mb-20">
               <div className="relative flex flex-col justify-between bg-white/[.1] text-white rounded-lg">
-                <div className="p-6">
-                  <div className="flex">
-                    <div className="flex flex-col">
-                      {isURLMetaDataLoading ||
-                        (urlMetaData && urlMetaData?.ogTitle && (
-                          <div className="inline font-medium mr-1">
-                            {isURLMetaDataLoading
-                              ? 'Display name loading'
-                              : urlMetaData?.ogTitle}
-                          </div>
-                        ))}
+                <div className="p-6 whitespace-normal break-words">
+                  <div className="flex flex-col">
+                    {isURLMetaDataLoading ||
+                      (urlMetaData && urlMetaData?.ogTitle && (
+                        <div className="inline font-medium mr-1">
+                          {isURLMetaDataLoading
+                            ? 'Display name loading'
+                            : urlMetaData?.ogTitle}
+                        </div>
+                      ))}
 
-                      <a
-                        href={url}
-                        className="text-blue-500 font-normal text-sm my-1"
-                        style={{ overflowWrap: 'anywhere' }}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {url}
-                      </a>
-                    </div>
+                    <a
+                      href={url}
+                      className="text-blue-500 font-normal text-sm my-1"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {url}
+                    </a>
                   </div>
 
                   <div className="flex flex-col items-center space-y-1 my-2 text-sm items-baseline">
@@ -406,10 +403,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                         ))}
                       {isURLMetaDataLoading ||
                         (urlMetaData && urlMetaData?.ogDescription && (
-                          <div
-                            className="my-4 text-gray-300 text-sm leading-5"
-                            style={{ overflowWrap: 'anywhere' }}
-                          >
+                          <div className="my-4 text-gray-300 text-sm leading-5">
                             {!isURLMetaDataLoading &&
                             urlMetaData &&
                             urlMetaData?.ogDescription
@@ -666,7 +660,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
             )}
           </div>
 
-          <div className="px-2 mx-auto max-w-88 md:max-w-304 -mt-30 md:-mt-28">
+          <div className="px-2 mx-auto max-w-88 md:max-w-304 truncate -mt-30 md:-mt-28">
             {/* {marketName?.toLowerCase() === 'twitter' && (
               <>
                 <MobileRelatedInfo {...relatedInfoProps} />

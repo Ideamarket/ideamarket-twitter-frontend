@@ -218,8 +218,8 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
             />
           </div>
         </div>
-        <div className="pt-4">
-          <p className="mb-4" style={{ overflowWrap: 'break-word' }}>
+        <div className="pt-4 whitespace-normal break-words">
+          <p className="mb-4">
             If you buy{' '}
             <span className="text-blue-700 font-bold">
               ${formatNumberWithCommasAsThousandsSerperator(usdBuyAmount)}
