@@ -216,11 +216,6 @@ const LockInterface = ({
             <div>{moment(new Date(Date.now() + 7889400000)).format('LL')}</div>
           </div>
         </div>
-
-        {/* <div className="text-gray-500 text-sm w-full mt-4 flex justify-end">
-          <span className="cursor-pointer">FAQ</span>
-          <ExternalLinkIcon className="w-5 h-5 ml-1 cursor-pointer" />
-        </div> */}
       </div>
     )
   } else {
@@ -228,72 +223,64 @@ const LockInterface = ({
       <div>
         {userAlreadyLocked && (
           <div className="mt-8">
-            {rawPairs.map((pair, pairInd) => {
-              const redemptionDate = moment(pair.lockedUntil * 1000).format(
-                'LL'
-              )
+            {rawPairs
+              .filter((pair) => pair.lockedUntil * 1000 > Date.now())
+              .map((pair, pairInd) => {
+                const redemptionDate = moment(pair.lockedUntil * 1000).format(
+                  'LL'
+                )
 
-              return (
-                <div
-                  className="w-full px-5 py-4 mb-4 border border-gray-100 rounded-md bg-gray-50 dark:bg-gray-600 text-brand-new-dark"
-                  key={pairInd}
-                >
-                  <div className="flex justify-between">
-                    <div>
-                      <div className="text-sm">Locked Tokens</div>
-                      <div className="font-bold text-lg">
-                        {formatNumberWithCommasAsThousandsSerperator(
-                          parseFloat(pair.amount).toFixed(2)
+                return (
+                  <div
+                    className="w-full px-5 py-4 mb-4 border border-gray-100 rounded-md bg-gray-50 dark:bg-gray-600 text-brand-new-dark"
+                    key={pairInd}
+                  >
+                    <div className="flex justify-between">
+                      <div>
+                        <div className="text-sm">Locked Tokens</div>
+                        <div className="font-bold text-lg">
+                          {formatNumberWithCommasAsThousandsSerperator(
+                            parseFloat(pair.amount).toFixed(2)
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center">
+                        {pairsToggle[pairInd] ? (
+                          <ChevronUpIcon
+                            onClick={() => togglePairVisibility(pairInd)}
+                            className="w-5 h-5 ml-4 cursor-pointer text-gray-400"
+                          />
+                        ) : (
+                          <ChevronDownIcon
+                            onClick={() => togglePairVisibility(pairInd)}
+                            className="w-5 h-5 ml-4 cursor-pointer text-gray-400"
+                          />
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center">
-                      {/* <div>
-                        <div className="text-sm">APR</div>
-                        <div className="font-bold text-lg text-green-500">
-                          12%
-                        </div>
-                      </div> */}
-                      {pairsToggle[pairInd] ? (
-                        <ChevronUpIcon
-                          onClick={() => togglePairVisibility(pairInd)}
-                          className="w-5 h-5 ml-4 cursor-pointer text-gray-400"
-                        />
-                      ) : (
-                        <ChevronDownIcon
-                          onClick={() => togglePairVisibility(pairInd)}
-                          className="w-5 h-5 ml-4 cursor-pointer text-gray-400"
-                        />
-                      )}
-                    </div>
-                  </div>
 
-                  {pairsToggle[pairInd] && (
-                    <div className="flex flex-col mt-12">
-                      {/* <div className="flex justify-between">
-                        <div>Locked Period</div>
-                        <div>
-                          <div className="font-bold">3 months</div>
-                          <div className="text-sm text-right">(90 days)</div>
+                    {pairsToggle[pairInd] && (
+                      <div className="flex flex-col mt-12">
+                        <div className="flex justify-between">
+                          <div>Redemption Date</div>
+                          <div>{redemptionDate}</div>
                         </div>
                       </div>
-                      <div className="flex justify-between">
-                        <div>Locked Date</div>
-                        <div>23 November 2021</div>
-                      </div> */}
-                      <div className="flex justify-between">
-                        <div>Redemption Date</div>
-                        <div>{redemptionDate}</div>
-                      </div>
-                      {/* <div className="flex justify-between">
-                        <div>Cummulative Interest</div>
-                        <div>0.105</div>
-                      </div> */}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+                    )}
+                  </div>
+                )
+              })}
+
+            {/* {rawPairs
+              .filter((pair) => (pair.lockedUntil * 1000) <= Date.now())
+              .map((pair, pairInd) => {
+
+                return (
+
+                )
+              })
+            } */}
+
             <hr className="my-8" />
           </div>
         )}

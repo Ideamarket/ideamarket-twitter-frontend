@@ -24,6 +24,7 @@ import { NETWORK, L1_NETWORK } from 'store/networks'
 import { getAllListings } from 'actions/web2/getAllListings'
 import { getMarketSpecificsByMarketName } from './markets'
 import { getSingleListing } from 'actions/web2/getSingleListing'
+import { useContractStore } from './contractStore'
 
 const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
 
@@ -752,13 +753,37 @@ export async function queryLockedAmounts(
     )
   )
 
+  const ideaTokenVault = useContractStore.getState().ideaTokenVaultContract
+
+  // Need to get lockedAmounts from blockchain bc subgraph data is not updated after unlocking contract called. This is bc no event is being emitted from contract. Changing contract now would take a lot of time, so can't do now.
+  const blockchainLockedEntries = await ideaTokenVault.methods
+    .getLockedEntries(
+      tokenAddress,
+      ownerAddress,
+      100 // TODO: make bigger # if people start locking more than 100 times at once
+    )
+    .call()
+
+  // Helper method since blockchain returns array of arrays for lockedAmounts
+  const isLockedUntilOnChain = (lockedUntil: any): boolean => {
+    let isOnChain = false
+    blockchainLockedEntries.forEach((entry: any) => {
+      if (entry?.lockedUntil === lockedUntil) isOnChain = true
+    })
+
+    return isOnChain
+  }
+
+  // Locked tokens with already-unlocked filtered out of subgraph data (since subgraph data not updated)
+  const lockedTokens = result.lockedIdeaTokenAmounts.filter((locked) =>
+    isLockedUntilOnChain(locked.lockedUntil)
+  )
+
   if (!result || !result.lockedIdeaTokenAmounts) {
     return []
   }
 
-  return result.lockedIdeaTokenAmounts.map((locked) =>
-    apiResponseToLockedAmount(locked)
-  )
+  return lockedTokens.map((locked) => apiResponseToLockedAmount(locked))
 }
 
 export async function queryLockedTokens(

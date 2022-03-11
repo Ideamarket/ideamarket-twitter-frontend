@@ -41,6 +41,7 @@ import {
   ArrowSmUpIcon,
   ArrowSmDownIcon,
   LockClosedIcon,
+  LockOpenIcon,
 } from '@heroicons/react/outline'
 import useReversePrice from 'actions/useReversePrice'
 import useTokenToDAI from 'actions/useTokenToDAI'
@@ -61,6 +62,7 @@ import ToggleSwitch from 'components/ToggleSwitch'
 import { A } from 'components'
 import { getLockingAPR } from 'lib/axios'
 import { isETHAddress } from 'utils/addresses'
+import unlockIDT from 'actions/web3/unlockIDT'
 
 const { publicRuntimeConfig } = getConfig()
 const { MIX_PANEL_KEY } = publicRuntimeConfig
@@ -156,6 +158,13 @@ export default function TradeInterface({
   const [recipientAddress, setRecipientAddress] = useState('')
   const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
 
+  const [pairsToggle, setPairsToggle] = useState([])
+  const togglePairVisibility = (pairsIndex: number) => {
+    const pairs = [...pairsToggle]
+    pairs[pairsIndex] = !pairs[pairsIndex]
+    setPairsToggle(pairs)
+  }
+
   const [isLockChecked, setIsLockChecked] = useState(false)
   const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(false)
@@ -242,6 +251,11 @@ export default function TradeInterface({
     ['locked-tokens', ideaToken?.address, account, 0, 100, null, null],
     queryLockedAmounts
   )
+
+  const unlockablePairs = rawLockedPairs
+    ? rawLockedPairs.filter((pair) => pair.lockedUntil * 1000 <= Date.now())
+    : []
+  const canUnlock = unlockablePairs && unlockablePairs.length > 0 // Is Unlock tab available?
 
   // Determines which token input was typed in last
   const isSelectedTokenActive = selectedTokenAmount !== '0'
@@ -469,8 +483,11 @@ export default function TradeInterface({
   }
 
   const tradeFinishUp = () => {
-    const transactionType =
-      tradeType === 'buy' ? TRANSACTION_TYPES.BUY : TRANSACTION_TYPES.SELL
+    let transactionType = null
+    if (tradeType === 'buy') transactionType = TRANSACTION_TYPES.BUY
+    else if (tradeType === 'sell') transactionType = TRANSACTION_TYPES.SELL
+    else if (tradeType === 'lock') transactionType = TRANSACTION_TYPES.LOCK
+    else if (tradeType === 'unlock') transactionType = TRANSACTION_TYPES.UNLOCK
 
     if (tradeType === 'lock') {
       refetchLocked()
@@ -534,6 +551,24 @@ export default function TradeInterface({
 
     try {
       await txManager.executeTx(name, func, ...args)
+    } catch (ex) {
+      console.log(ex)
+      onTradeComplete(false, ideaToken?.name, TRANSACTION_TYPES.NONE)
+      return
+    }
+
+    tradeFinishUp()
+  }
+
+  /**
+   * User clicked to unlock their locked tokens on unlock tab.
+   */
+  const onUnlockClicked = async () => {
+    const untils = unlockablePairs.map((pair) => pair.lockedUntil)
+    const args = [ideaToken?.address, untils]
+
+    try {
+      await txManager.executeTx('Unlock', unlockIDT, ...args)
     } catch (ex) {
       console.log(ex)
       onTradeComplete(false, ideaToken?.name, TRANSACTION_TYPES.NONE)
@@ -650,10 +685,10 @@ export default function TradeInterface({
           </div>
         )}
         {parentComponent !== 'ListTokenModal' && (
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 pb-3 overflow-x-scroll md:overflow-auto">
             <button
               className={classNames(
-                'flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
+                'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
                 {
                   'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
                     'buy' === tradeType,
@@ -671,7 +706,7 @@ export default function TradeInterface({
             </button>
             <button
               className={classNames(
-                'flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
+                'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
                 {
                   'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
                     'sell' === tradeType,
@@ -691,7 +726,7 @@ export default function TradeInterface({
             </button>
             <button
               className={classNames(
-                'flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
+                'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
                 {
                   'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
                     'lock' === tradeType,
@@ -707,11 +742,35 @@ export default function TradeInterface({
               }}
             >
               <LockClosedIcon className="w-4 h-4 mr-1" />
-              <span>Lock Tokens</span>
+              <span>Lock</span>
             </button>
+            {canUnlock && (
+              <button
+                className={classNames(
+                  'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
+                  {
+                    'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
+                      'unlock' === tradeType,
+                  },
+                  {
+                    'text-brand-black dark:text-gray-50': !(
+                      'unlock' === tradeType
+                    ),
+                  }
+                )}
+                onClick={() => {
+                  setIdeaTokenAmount('0')
+                  setSelectedTokenAmount('0')
+                  setTradeType('unlock')
+                }}
+              >
+                <LockOpenIcon className="w-4 h-4 mr-1" />
+                <span>Unlock</span>
+              </button>
+            )}
             {/* <button
             className={classNames(
-              'flex justify-center items-center px-4 py-2 border rounded-md text-sm font-semibold',
+              'h-10 flex justify-center items-center px-4 py-2 border rounded-md text-sm font-semibold',
               {
                 'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
                   'claim' === tradeType,
@@ -729,6 +788,7 @@ export default function TradeInterface({
           </button> */}
           </div>
         )}
+
         {tradeType === 'buy' || tradeType === 'sell' ? (
           <div>
             <div className="flex justify-between">
@@ -1066,20 +1126,85 @@ export default function TradeInterface({
           />
         ) : (
           <>
-            {ideaToken.tokenOwner === ZERO_ADDRESS ? (
-              <UnverifiedListing
-                claimableInterest={claimableIncome}
-                marketSpecifics={marketSpecifics}
-                market={market}
-                token={ideaToken}
-                mixpanel={mixpanel}
-              />
-            ) : (
-              <VerifiedListing
-                token={ideaToken}
-                refetch={tradeFinishUp}
-                claimableInterest={claimableIncome}
-              />
+            {tradeType === 'unlock' && (
+              <div className="mt-8">
+                <div>
+                  {unlockablePairs?.map((pair, pairInd) => {
+                    const redemptionDate = moment(
+                      pair.lockedUntil * 1000
+                    ).format('LL')
+
+                    return (
+                      <div
+                        className="w-full px-5 py-4 mb-4 border border-gray-100 rounded-md bg-gray-50 dark:bg-gray-600 text-brand-new-dark"
+                        key={pairInd}
+                      >
+                        <div className="flex justify-between">
+                          <div>
+                            <div className="text-sm">Locked Tokens</div>
+                            <div className="font-bold text-lg">
+                              {formatNumberWithCommasAsThousandsSerperator(
+                                parseFloat(pair.amount).toFixed(2)
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center">
+                            {pairsToggle[pairInd] ? (
+                              <ChevronUpIcon
+                                onClick={() => togglePairVisibility(pairInd)}
+                                className="w-5 h-5 ml-4 cursor-pointer text-gray-400"
+                              />
+                            ) : (
+                              <ChevronDownIcon
+                                onClick={() => togglePairVisibility(pairInd)}
+                                className="w-5 h-5 ml-4 cursor-pointer text-gray-400"
+                              />
+                            )}
+                          </div>
+                        </div>
+
+                        {pairsToggle[pairInd] && (
+                          <div className="flex flex-col mt-12">
+                            <div className="flex justify-between">
+                              <div>Redemption Date</div>
+                              <div>{redemptionDate}</div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+
+                <button
+                  className="py-4 text-lg font-bold rounded-2xl w-full border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800"
+                  onClick={onUnlockClicked}
+                >
+                  Unlock
+                </button>
+
+                <TxPending txManager={txManager} />
+              </div>
+            )}
+
+            {tradeType === 'claim' && (
+              <>
+                {ideaToken.tokenOwner === ZERO_ADDRESS ? (
+                  <UnverifiedListing
+                    claimableInterest={claimableIncome}
+                    marketSpecifics={marketSpecifics}
+                    market={market}
+                    token={ideaToken}
+                    mixpanel={mixpanel}
+                  />
+                ) : (
+                  <VerifiedListing
+                    token={ideaToken}
+                    refetch={tradeFinishUp}
+                    claimableInterest={claimableIncome}
+                  />
+                )}
+              </>
             )}
           </>
         )}

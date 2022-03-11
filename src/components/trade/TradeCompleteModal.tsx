@@ -9,6 +9,7 @@ export enum TRANSACTION_TYPES {
   BUY,
   SELL,
   LOCK,
+  UNLOCK,
   LIST,
   GHOST_LIST,
   GIFT,
@@ -22,6 +23,7 @@ const tweetableTypes = [
   // TRANSACTION_TYPES.GHOST_LIST,
   TRANSACTION_TYPES.BUY,
   TRANSACTION_TYPES.LOCK,
+  TRANSACTION_TYPES.UNLOCK,
   TRANSACTION_TYPES.GIFT,
   TRANSACTION_TYPES.CLAIM,
   TRANSACTION_TYPES.STAKE,
@@ -41,6 +43,8 @@ const getTweetTemplate = (
     tweetText = `Just bought ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
   } else if (transactionType === TRANSACTION_TYPES.LOCK) {
     tweetText = `Just locked ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
+  } else if (transactionType === TRANSACTION_TYPES.UNLOCK) {
+    tweetText = `Just unlocked ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
   } else if (transactionType === TRANSACTION_TYPES.GIFT) {
     tweetText = `Just gifted ${tokenName} on @ideamarket_io, the literal marketplace of ideas!`
   } else if (transactionType === TRANSACTION_TYPES.CLAIM) {
@@ -63,6 +67,7 @@ const getTweetUrl = (
     transactionType === TRANSACTION_TYPES.LIST ||
     transactionType === TRANSACTION_TYPES.BUY ||
     transactionType === TRANSACTION_TYPES.LOCK ||
+    transactionType === TRANSACTION_TYPES.UNLOCK ||
     transactionType === TRANSACTION_TYPES.GIFT
   ) {
     tweetUrl = `https://ideamarket.io/i/${marketName.toLowerCase()}/${tokenName.replace(
