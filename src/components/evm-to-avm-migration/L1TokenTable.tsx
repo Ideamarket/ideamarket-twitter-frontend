@@ -32,9 +32,8 @@ export default function L1TokenTable({
 }) {
   const address = useWalletStore((state) => state.address)
 
-  const { data: rawPairs, isLoading } = useQuery(
-    ['l1-tokens', address],
-    () => queryTokensHeld(address)
+  const { data: rawPairs, isLoading } = useQuery(['l1-tokens', address], () =>
+    queryTokensHeld(address)
   )
 
   if (!rawPairs) {

@@ -28,7 +28,7 @@ const HomeHeader = ({
     NETWORK.getDeployedAddresses()
 
   const { data: interestManagerDaiBalance } = useQuery(
-    ['interest-manager-dai-balance',],
+    ['interest-manager-dai-balance'],
     () => queryDaiBalance(interestManagerAddress),
     {
       refetchOnWindowFocus: false,

@@ -78,9 +78,8 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     data: token,
     isLoading: isTokenLoading,
     refetch,
-  } = useQuery(
-    ['single-listing'],
-    () => querySingleToken(null, null, null, rawTokenId, jwtToken)
+  } = useQuery(['single-listing'], () =>
+    querySingleToken(null, null, null, rawTokenId, jwtToken)
   )
 
   const marketName = token?.marketName

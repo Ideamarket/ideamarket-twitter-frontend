@@ -1,10 +1,5 @@
 import withPWA from 'next-pwa'
 import runtimeCaching from "next-pwa/cache.js"
-import { withSentryConfig } from '@sentry/nextjs'
-
-const SentryWebpackPluginOptions = {
-  silent: true, // Suppresses all logs
-}
 
 const moduleExports = withPWA({
   outputFileTracing: false,
@@ -67,6 +62,4 @@ const moduleExports = withPWA({
   },
 })
 
-// Make sure adding Sentry options is the last code to run before exporting, to
-// ensure that your source maps include changes from all other Webpack plugins
-export default withSentryConfig(moduleExports, SentryWebpackPluginOptions)
+export default moduleExports

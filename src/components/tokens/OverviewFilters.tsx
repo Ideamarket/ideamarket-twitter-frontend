@@ -205,9 +205,8 @@ export const OverviewFilters = ({
     setSelectedCategories(newCategories)
   }
 
-  const { data: categoriesData } = useQuery(
-    [true],
-    () => getCategories({ enabled: true })
+  const { data: categoriesData } = useQuery([true], () =>
+    getCategories({ enabled: true })
   )
 
   const isURLSelected = selectedMarkets.has('URL')

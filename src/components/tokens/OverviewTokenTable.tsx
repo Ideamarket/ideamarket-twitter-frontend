@@ -118,25 +118,26 @@ export default function Table({
       jwtToken,
       selectedCategories,
     ],
-    ({ pageParam = 0 }) => queryTokens(
-      [
-        markets,
-        TOKENS_PER_PAGE,
-        WEEK_SECONDS,
-        orderBy,
-        selectedFilterId === SortOptions.HOT.id ||
-        selectedFilterId === SortOptions.NEW.id
-          ? 'desc'
-          : orderDirection,
-        nameSearch,
-        filterTokens,
-        isVerifiedFilterActive,
-        isGhostOnlyActive ? 'ghost' : 'onchain',
-        jwtToken,
-        selectedCategories,
-      ],
-      pageParam
-    ),
+    ({ pageParam = 0 }) =>
+      queryTokens(
+        [
+          markets,
+          TOKENS_PER_PAGE,
+          WEEK_SECONDS,
+          orderBy,
+          selectedFilterId === SortOptions.HOT.id ||
+          selectedFilterId === SortOptions.NEW.id
+            ? 'desc'
+            : orderDirection,
+          nameSearch,
+          filterTokens,
+          isVerifiedFilterActive,
+          isGhostOnlyActive ? 'ghost' : 'onchain',
+          jwtToken,
+          selectedCategories,
+        ],
+        pageParam
+      ),
     {
       getNextPageParam: (lastGroup, allGroups) => {
         const morePagesExist = lastGroup?.length === 10
@@ -173,7 +174,7 @@ export default function Table({
 
   useEffect(() => {
     const fetch = async () => {
-      const markets = await refetchMarkets() as any
+      const markets = (await refetchMarkets()) as any
       setMarkets(markets?.data as IdeaMarket[])
     }
     fetch()

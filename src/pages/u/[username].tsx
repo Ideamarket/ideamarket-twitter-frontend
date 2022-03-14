@@ -10,9 +10,8 @@ type Props = {
 }
 
 const PublicProfile = ({ username }: Props) => {
-  const { data: userData } = useQuery<any>(
-    [{ username }],
-    () => getPublicProfile({ username })
+  const { data: userData } = useQuery<any>([{ username }], () =>
+    getPublicProfile({ username })
   )
 
   return (

@@ -16,12 +16,6 @@
     "jsx": "preserve",
     "incremental": false
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "sentry.server.config.js",
-    "sentry.client.config.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

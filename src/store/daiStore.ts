@@ -2,9 +2,7 @@ import axios from 'axios'
 import { NETWORK } from 'store/networks'
 import BN from 'bn.js'
 
-export async function queryDaiBalance(
-  address: string
-): Promise<BN> {
+export async function queryDaiBalance(address: string): Promise<BN> {
   try {
     const response = await axios.get(
       `https://onchain-values.backend.ideamarket.io/daiBalance/${NETWORK.getNetworkName()}/${address}`

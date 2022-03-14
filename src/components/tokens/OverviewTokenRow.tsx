@@ -125,8 +125,8 @@ export default function TokenRow({
   const interestManagerAddress =
     NETWORK.getDeployedAddresses().interestManagerAVM
   const { data: interestManagerDaiBalance } = useQuery(
-    ['interest-manager-dai-balance',],
-    () => queryDaiBalance(interestManagerAddress),
+    ['interest-manager-dai-balance'],
+    () => queryDaiBalance(interestManagerAddress)
   )
 
   const displayName =

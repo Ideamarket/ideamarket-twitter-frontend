@@ -29,10 +29,7 @@ import { initUseMarketStore } from 'store/markets'
 //import MigrationDoneModal from 'components/MigrationDoneModal'
 import { NextPage } from 'next'
 
-import {
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 import MixPanelProvider from 'utils/mixPanel'
 import { GlobalContextComponent } from 'lib/GlobalContext'

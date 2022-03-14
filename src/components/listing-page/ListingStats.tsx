@@ -29,23 +29,18 @@ export default function ListingStats({ isLoading, market, token, refetch }) {
   const [chartDurationSeconds, setChartDurationSeconds] = useState(WEEK_SECONDS)
 
   const { data: rawPriceChartData, isLoading: isRawPriceChartDataLoading } =
-    useQuery(
-      [`${token?.address}-chartdata`, chartDurationSeconds],
-      () => queryTokenChartData(
+    useQuery([`${token?.address}-chartdata`, chartDurationSeconds], () =>
+      queryTokenChartData(
         token?.address,
         chartDurationSeconds,
         token?.latestPricePoint,
-        500,
+        500
       )
     )
 
   const { data: rawLockedChartData, isLoading: isRawLockedChartDataLoading } =
-    useQuery(
-      [`lockedChartData-${token?.address}`, chartDurationSeconds],
-      () => queryTokenLockedChartData(
-        token?.address,
-        chartDurationSeconds,
-      )
+    useQuery([`lockedChartData-${token?.address}`, chartDurationSeconds], () =>
+      queryTokenLockedChartData(token?.address, chartDurationSeconds)
     )
   const [priceChartData, setPriceChartData] = useState([])
   const [, setLockedChartData] = useState([])

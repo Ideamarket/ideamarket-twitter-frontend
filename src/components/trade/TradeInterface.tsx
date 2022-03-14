@@ -129,7 +129,7 @@ export default function TradeInterface({
     NETWORK.getDeployedAddresses().interestManagerAVM
   const { data: interestManagerDaiBalance } = useQuery(
     ['interest-manager-dai-balance'],
-    () => queryDaiBalance(interestManagerAddress),
+    () => queryDaiBalance(interestManagerAddress)
   )
 
   const claimableIncome =

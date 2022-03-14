@@ -107,7 +107,7 @@ export default function ProfileWallet({ walletState, userData }: Props) {
     refetch: refetchOwned,
     hasNextPage: canFetchMoreOwned,
   } = useInfiniteQuery(
-    ['owned-tokens',],
+    ['owned-tokens'],
     ({ pageParam = 0 }) => ownedQueryFunction(TOKENS_PER_PAGE, pageParam),
     infiniteQueryConfig
   )
@@ -121,7 +121,7 @@ export default function ProfileWallet({ walletState, userData }: Props) {
     refetch: refetchMyTrades,
     hasNextPage: canFetchMoreTrades,
   } = useInfiniteQuery(
-    ['my-trades',],
+    ['my-trades'],
     ({ pageParam = 0 }) => tradesQueryFunction(TOKENS_PER_PAGE, pageParam),
     infiniteQueryConfig
   )
@@ -225,10 +225,7 @@ export default function ProfileWallet({ walletState, userData }: Props) {
     return finalPairs
   }
 
-  async function ownedQueryFunction(
-    numTokens: number,
-    skip: number = 0
-  ) {
+  async function ownedQueryFunction(numTokens: number, skip: number = 0) {
     const ownedResults = await queryIterator(queryOwnedTokensMaybeMarket)
     const lockedResults = await queryIterator(queryLockedTokens)
     const combinedResults = ownedResults.concat(lockedResults)
@@ -281,10 +278,7 @@ export default function ProfileWallet({ walletState, userData }: Props) {
     return filteredResults?.slice(skip, lastIndex) || []
   }
 
-  async function tradesQueryFunction(
-    numTokens: number,
-    skip: number = 0
-  ) {
+  async function tradesQueryFunction(numTokens: number, skip: number = 0) {
     const result = await queryIterator(queryMyTrades)
     sortTrades(result)
     // Calculate the total purchase value

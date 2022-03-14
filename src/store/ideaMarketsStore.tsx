@@ -165,9 +165,7 @@ export async function queryMarkets(
   return result.ideaMarkets.map((market) => apiResponseToIdeaMarket(market))
 }
 
-export async function queryMarket(
-  marketName: string
-): Promise<IdeaMarket> {
+export async function queryMarket(marketName: string): Promise<IdeaMarket> {
   const result = await request(
     HTTP_GRAPHQL_ENDPOINT,
     getQueryMarket(marketName)

@@ -71,8 +71,8 @@ export const OverviewColumns = ({
   const interestManagerAddress =
     NETWORK.getDeployedAddresses().interestManagerAVM
   const { data: interestManagerDaiBalance } = useQuery(
-    ['interest-manager-dai-balance',],
-    () => queryDaiBalance(interestManagerAddress),
+    ['interest-manager-dai-balance'],
+    () => queryDaiBalance(interestManagerAddress)
   )
 
   const marketObjects = useMarketStore((state) => state.markets)

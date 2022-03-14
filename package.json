@@ -26,7 +26,6 @@
     "@heroicons/react": "1.0.5",
     "@next-auth/fauna-adapter": "0.2.4",
     "@portis/web3": "^4.0.6",
-    "@sentry/nextjs": "^6.18.1",
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.5.0",
     "@tailwindcss/typography": "^0.5.2",
