@@ -10,7 +10,7 @@ import { queryMarkets } from 'store/ideaMarketsStore'
 export default function Embed() {
   const [selectMarketValues, setSelectMarketValues] = useState([])
 
-  const { data: markets } = useQuery('all-markets', queryMarkets)
+  const { data: markets } = useQuery(['all-markets'], () => queryMarkets())
 
   const [tagName, setTagname] = useState('elonmusk')
   const [market, setMarket] = useState('twitter')

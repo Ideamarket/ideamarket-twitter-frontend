@@ -66,7 +66,7 @@ export default function MyTokenTable({
 
   const { data: rawPairs, isLoading: isPairsDataLoading } = useQuery(
     ['my-tokens', market, address],
-    queryMyTokensMaybeMarket
+    () => queryMyTokensMaybeMarket(market, address)
   )
 
   const { data: compoundSupplyRate, isLoading: isCompoundSupplyRateLoading } =

@@ -78,7 +78,7 @@
     "react-hot-toast": "2.1.1",
     "react-icons": "^4.3.1",
     "react-input-verification-code": "^0.8.0",
-    "react-query": "2.26.2",
+    "react-query": "^3.34.16",
     "react-select": "5.2.1",
     "sha3": "^2.1.4",
     "use-breakpoint": "2.0.2",

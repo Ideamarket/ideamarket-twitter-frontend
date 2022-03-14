@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const canonical = await getValidURL(badURL)
 
-    const markets = await queryMarkets('all-markets')
+    const markets = await queryMarkets()
     const marketID = markets.find(
       (market) => market.name.toLowerCase() === marketName?.toLowerCase()
     ).marketID

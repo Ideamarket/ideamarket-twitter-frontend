@@ -83,7 +83,7 @@ export const useMarketStore = create<State>((set) => ({
 }))
 
 export async function initUseMarketStore() {
-  const markets = await queryMarkets('all-markets')
+  const markets = await queryMarkets()
 
   if (markets) {
     useMarketStore.setState({

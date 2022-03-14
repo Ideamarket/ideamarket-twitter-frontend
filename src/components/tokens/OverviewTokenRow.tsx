@@ -76,7 +76,7 @@ export default function TokenRow({
 
   const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
     [token?.url],
-    getURLMetaData
+    () => getURLMetaData(token?.url)
   )
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
@@ -125,8 +125,8 @@ export default function TokenRow({
   const interestManagerAddress =
     NETWORK.getDeployedAddresses().interestManagerAVM
   const { data: interestManagerDaiBalance } = useQuery(
-    ['interest-manager-dai-balance', interestManagerAddress],
-    queryDaiBalance
+    ['interest-manager-dai-balance',],
+    () => queryDaiBalance(interestManagerAddress),
   )
 
   const displayName =

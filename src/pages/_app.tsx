@@ -29,6 +29,11 @@ import { initUseMarketStore } from 'store/markets'
 //import MigrationDoneModal from 'components/MigrationDoneModal'
 import { NextPage } from 'next'
 
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
+
 import MixPanelProvider from 'utils/mixPanel'
 import { GlobalContextComponent } from 'lib/GlobalContext'
 import { ClientWrapper } from 'lib/ClientWrapper'
@@ -45,6 +50,8 @@ type NextPageWithLayout = NextPage & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
+
+const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page)
@@ -83,21 +90,23 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           },
         ]}
       />
-      <GlobalContextComponent>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <Web3ReactManager>
-              <ClientWrapper>
-                <MixPanelProvider>
-                  {getLayout(<Component {...pageProps} />)}
-                </MixPanelProvider>
-              </ClientWrapper>
-            </Web3ReactManager>
-            <WrongNetworkOverlay />
-            <ModalRoot />
-          </Web3ReactProvider>
-        </ThemeProvider>
-      </GlobalContextComponent>
+      <QueryClientProvider client={queryClient}>
+        <GlobalContextComponent>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <Web3ReactProvider getLibrary={getLibrary}>
+              <Web3ReactManager>
+                <ClientWrapper>
+                  <MixPanelProvider>
+                    {getLayout(<Component {...pageProps} />)}
+                  </MixPanelProvider>
+                </ClientWrapper>
+              </Web3ReactManager>
+              <WrongNetworkOverlay />
+              <ModalRoot />
+            </Web3ReactProvider>
+          </ThemeProvider>
+        </GlobalContextComponent>
+      </QueryClientProvider>
     </>
   )
 }

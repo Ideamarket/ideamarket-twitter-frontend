@@ -86,8 +86,8 @@ export default function Table({
     })
 
   const { isFetching: isMarketLoading, refetch: refetchMarkets } = useQuery(
-    [`market-${Array.from(selectedMarkets)}`, Array.from(selectedMarkets)],
-    queryMarkets,
+    [`market-${Array.from(selectedMarkets)}`],
+    () => queryMarkets(Array.from(selectedMarkets)),
     {
       refetchOnWindowFocus: false,
       enabled: false,
@@ -97,12 +97,28 @@ export default function Table({
   const {
     data: infiniteData,
     isFetching: isTokenDataLoading,
-    fetchMore,
+    fetchNextPage: fetchMore,
     refetch,
-    canFetchMore,
+    hasNextPage: canFetchMore,
   } = useInfiniteQuery(
     [
       `tokens-${Array.from(selectedMarkets)}`,
+      markets,
+      TOKENS_PER_PAGE,
+      WEEK_SECONDS,
+      orderBy,
+      selectedFilterId === SortOptions.HOT.id ||
+      selectedFilterId === SortOptions.NEW.id
+        ? 'desc'
+        : orderDirection,
+      nameSearch,
+      filterTokens,
+      isVerifiedFilterActive,
+      isGhostOnlyActive ? 'ghost' : 'onchain',
+      jwtToken,
+      selectedCategories,
+    ],
+    ({ pageParam = 0 }) => queryTokens(
       [
         markets,
         TOKENS_PER_PAGE,
@@ -119,10 +135,10 @@ export default function Table({
         jwtToken,
         selectedCategories,
       ],
-    ],
-    queryTokens,
+      pageParam
+    ),
     {
-      getFetchMore: (lastGroup, allGroups) => {
+      getNextPageParam: (lastGroup, allGroups) => {
         const morePagesExist = lastGroup?.length === 10
 
         if (!morePagesExist) {
@@ -153,12 +169,12 @@ export default function Table({
     [canFetchMore, fetchMore]
   )
 
-  const tokenData = flatten(infiniteData || [])
+  const tokenData = flatten(infiniteData?.pages || [])
 
   useEffect(() => {
     const fetch = async () => {
-      const markets = await refetchMarkets()
-      setMarkets(markets)
+      const markets = await refetchMarkets() as any
+      setMarkets(markets?.data as IdeaMarket[])
     }
     fetch()
   }, [refetchMarkets, selectedMarkets])

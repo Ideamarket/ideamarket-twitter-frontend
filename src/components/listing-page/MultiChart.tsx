@@ -57,7 +57,7 @@ const MultiChart = ({ rawTokenName }: Props) => {
     counts: [],
     dates: [],
   })
-  const [fetchViews] = useMutation<{
+  const { mutateAsync: fetchViews } = useMutation<{
     message: string
     data: any
   }>(() =>
@@ -75,7 +75,7 @@ const MultiChart = ({ rawTokenName }: Props) => {
     })
   )
 
-  const [fetchTrends] = useMutation<{
+  const { mutateAsync: fetchTrends } = useMutation<{
     message: string
     data: any
   }>(() =>

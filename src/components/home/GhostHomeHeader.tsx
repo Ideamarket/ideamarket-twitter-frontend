@@ -61,8 +61,8 @@ const HomeHeader = ({
     NETWORK.getDeployedAddresses()
 
   const { data: interestManagerDaiBalance } = useQuery(
-    ['interest-manager-dai-balance', interestManagerAddress],
-    queryDaiBalance,
+    ['interest-manager-dai-balance'],
+    () => queryDaiBalance(interestManagerAddress),
     {
       refetchOnWindowFocus: false,
     }
@@ -262,10 +262,10 @@ const HomeHeader = ({
 
   const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
     [finalURL],
-    getURLMetaData
+    () => getURLMetaData(finalURL)
   )
 
-  const { data: categoriesData } = useQuery([true], getCategories)
+  const { data: categoriesData } = useQuery([true], () => getCategories({ enabled: true }))
 
   return (
     <div className="px-6 pt-10 pb-40 text-center text-white font-inter bg-cover dark:text-gray-200 bg-top-mobile md:bg-top-desktop">

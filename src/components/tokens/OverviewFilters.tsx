@@ -205,7 +205,10 @@ export const OverviewFilters = ({
     setSelectedCategories(newCategories)
   }
 
-  const { data: categoriesData } = useQuery([true], getCategories)
+  const { data: categoriesData } = useQuery(
+    [true],
+    () => getCategories({ enabled: true })
+  )
 
   const isURLSelected = selectedMarkets.has('URL')
   const isPeopleSelected = selectedMarkets.has('Twitter')

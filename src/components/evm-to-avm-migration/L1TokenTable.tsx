@@ -34,7 +34,7 @@ export default function L1TokenTable({
 
   const { data: rawPairs, isLoading } = useQuery(
     ['l1-tokens', address],
-    queryTokensHeld
+    () => queryTokensHeld(address)
   )
 
   if (!rawPairs) {

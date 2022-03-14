@@ -156,7 +156,6 @@ export async function initIdeaMarketsStore() {
 }
 
 export async function queryMarkets(
-  queryKey: string,
   marketNames: string[] = []
 ): Promise<IdeaMarket[]> {
   const result = await request(
@@ -167,7 +166,6 @@ export async function queryMarkets(
 }
 
 export async function queryMarket(
-  queryKey: string,
   marketName: string
 ): Promise<IdeaMarket> {
   const result = await request(
@@ -180,7 +178,6 @@ export async function queryMarket(
 }
 
 export async function queryOwnedTokensMaybeMarket(
-  queryKey: string,
   owner: string,
   markets: IdeaMarket[],
   filterTokens: string[],
@@ -255,7 +252,6 @@ export async function queryOwnedTokensMaybeMarket(
 }
 
 export async function queryMyTokensMaybeMarket(
-  queryKey: string,
   market: IdeaMarket,
   owner: string
 ): Promise<IdeaTokenMarketPair[]> {
@@ -292,7 +288,6 @@ type Params = [
 ]
 
 export async function queryTokens(
-  queryKey: string,
   params: Params,
   skip = 0
 ): Promise<IdeaToken[]> {
@@ -483,7 +478,6 @@ export async function getHoldersOfAToken({
 }
 
 export async function queryTokensHeld(
-  queryKey: string,
   holder: string
 ): Promise<IdeaTokenMarketPair[]> {
   if (!holder) {
@@ -527,7 +521,7 @@ export async function queryTokensHeld(
     page += 1
   }
 
-  const allMarkets: IdeaMarket[] = await queryMarkets('', allMarketNames)
+  const allMarkets: IdeaMarket[] = await queryMarkets(allMarketNames)
 
   for (let i = 0; i < res.length; i++) {
     const pair = res[i]
@@ -641,7 +635,6 @@ export async function queryMutualHoldersOfToken({
 }
 
 export async function queryTokenChartData(
-  queryKey,
   tokenAddress: string,
   duration: number,
   latestPricePoint: IdeaTokenPricePoint,
@@ -704,7 +697,6 @@ export async function queryTokenChartData(
 }
 
 export async function queryTokenLockedChartData(
-  queryKey,
   tokenAddres: string,
   duration: number
 ): Promise<LockedAmount[]> {
@@ -729,7 +721,6 @@ export async function queryTokenLockedChartData(
 }
 
 export async function queryLockedAmounts(
-  queryKey,
   tokenAddress: string,
   ownerAddress: string,
   skip: number,
@@ -787,7 +778,6 @@ export async function queryLockedAmounts(
 }
 
 export async function queryLockedTokens(
-  queryKey,
   ownerAddress: string,
   markets: IdeaMarket[],
   filterTokens: string[],
@@ -873,7 +863,7 @@ export async function queryLockedTokens(
     )
 }
 
-export async function queryInterestManagerTotalShares(queryKey): Promise<BN> {
+export async function queryInterestManagerTotalShares(): Promise<BN> {
   try {
     const response = await axios.get(
       `https://onchain-values.backend.ideamarket.io/interestManagerTotalShares/${NETWORK.getNetworkName()}`
@@ -885,7 +875,6 @@ export async function queryInterestManagerTotalShares(queryKey): Promise<BN> {
 }
 
 export async function queryMyTrades(
-  queryKey,
   ownerAddress: string,
   markets: IdeaMarket[],
   filterTokens: string[],

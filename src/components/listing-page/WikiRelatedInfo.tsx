@@ -6,7 +6,7 @@ import WikiMobileRelatedInfo from './WikiMobileRelatedInfo'
 const WikiRelatedInfo = ({ rawTokenName, ...other }: any) => {
   const [wikiSnapshot, setWikiSnapshot] = useState(null)
 
-  const [fetchWikiSnapshot] = useMutation<{
+  const { mutateAsync: fetchWikiSnapshot } = useMutation<{
     message: string
     data: any
   }>(() =>

@@ -3,7 +3,6 @@ import { NETWORK } from 'store/networks'
 import BN from 'bn.js'
 
 export async function queryDaiBalance(
-  queryKey: string,
   address: string
 ): Promise<BN> {
   try {

@@ -56,7 +56,7 @@ export default function IframeEmbed() {
 
   const { data: token, isLoading: isTokenLoading } = useQuery(
     [`token-${marketName}-${tokenName}`, marketName, tokenName],
-    querySingleToken
+    () => querySingleToken(null, null, null, '1', null)
   )
 
   if (!router.isReady || isTokenLoading || !token) {

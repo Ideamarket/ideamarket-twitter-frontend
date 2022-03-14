@@ -32,7 +32,7 @@ import { useMarketStore } from 'store/markets'
 const TOKENS_PER_PAGE = 10
 
 const infiniteQueryConfig = {
-  getFetchMore: (lastGroup, allGroups) => {
+  getNextPageParam: (lastGroup, allGroups) => {
     const morePagesExist = lastGroup?.length === TOKENS_PER_PAGE
 
     if (!morePagesExist) {
@@ -77,6 +77,62 @@ export default function ProfileWallet({ walletState, userData }: Props) {
   const allMarkets = useMarketStore((state) => state.markets)
   const marketNames = allMarkets.map((m) => m?.market?.name)
 
+  /*
+   * @return list of tokens from all ETH addresses
+   */
+  const queryIterator = async (queryFunction) => {
+    // Addresses that will be displayed in the tables
+    const finalAddresses = getFinalAddresses()
+    const filteredMarkets = allMarkets
+      .map((m) => m?.market)
+      .filter((m) => selectedMarkets.has(m.name))
+    let result = []
+    for (let i = 0; i < finalAddresses?.length; i++) {
+      const queryResult = await queryFunction(
+        finalAddresses[i]?.address,
+        filteredMarkets,
+        filterTokens,
+        nameSearch
+      )
+      result = result.concat(queryResult)
+    }
+
+    return result
+  }
+
+  const {
+    data: infiniteOwnedData,
+    isFetching: isOwnedPairsDataLoading,
+    fetchNextPage: fetchMoreOwned,
+    refetch: refetchOwned,
+    hasNextPage: canFetchMoreOwned,
+  } = useInfiniteQuery(
+    ['owned-tokens',],
+    ({ pageParam = 0 }) => ownedQueryFunction(TOKENS_PER_PAGE, pageParam),
+    infiniteQueryConfig
+  )
+
+  const ownedPairs = flatten(infiniteOwnedData?.pages || [])
+
+  const {
+    data: infiniteTradesData,
+    isFetching: isTradesPairsDataLoading,
+    fetchNextPage: fetchMoreTrades,
+    refetch: refetchMyTrades,
+    hasNextPage: canFetchMoreTrades,
+  } = useInfiniteQuery(
+    ['my-trades',],
+    ({ pageParam = 0 }) => tradesQueryFunction(TOKENS_PER_PAGE, pageParam),
+    infiniteQueryConfig
+  )
+
+  const myTrades = flatten(infiniteTradesData?.pages || [])
+
+  function refetch() {
+    refetchOwned()
+    refetchMyTrades()
+  }
+
   useEffect(() => {
     const storedMarkets = JSON.parse(localStorage.getItem('STORED_MARKETS'))
 
@@ -103,63 +159,6 @@ export default function ProfileWallet({ walletState, userData }: Props) {
     isLockedFilterActive,
     nameSearch,
   ])
-
-  /*
-   * @return list of tokens from all ETH addresses
-   */
-  const queryIterator = async (key, queryFunction) => {
-    // Addresses that will be displayed in the tables
-    const finalAddresses = getFinalAddresses()
-    const filteredMarkets = allMarkets
-      .map((m) => m?.market)
-      .filter((m) => selectedMarkets.has(m.name))
-    let result = []
-    for (let i = 0; i < finalAddresses?.length; i++) {
-      const queryResult = await queryFunction(
-        key,
-        finalAddresses[i]?.address,
-        filteredMarkets,
-        filterTokens,
-        nameSearch
-      )
-      result = result.concat(queryResult)
-    }
-
-    return result
-  }
-
-  const {
-    data: infiniteOwnedData,
-    isFetching: isOwnedPairsDataLoading,
-    fetchMore: fetchMoreOwned,
-    refetch: refetchOwned,
-    canFetchMore: canFetchMoreOwned,
-  } = useInfiniteQuery(
-    ['owned-tokens', TOKENS_PER_PAGE],
-    ownedQueryFunction,
-    infiniteQueryConfig
-  )
-
-  const ownedPairs = flatten(infiniteOwnedData || [])
-
-  const {
-    data: infiniteTradesData,
-    isFetching: isTradesPairsDataLoading,
-    fetchMore: fetchMoreTrades,
-    refetch: refetchMyTrades,
-    canFetchMore: canFetchMoreTrades,
-  } = useInfiniteQuery(
-    ['my-trades', TOKENS_PER_PAGE],
-    tradesQueryFunction,
-    infiniteQueryConfig
-  )
-
-  const myTrades = flatten(infiniteTradesData || [])
-
-  function refetch() {
-    refetchOwned()
-    refetchMyTrades()
-  }
 
   /**
    * TODO: make more efficient
@@ -227,12 +226,11 @@ export default function ProfileWallet({ walletState, userData }: Props) {
   }
 
   async function ownedQueryFunction(
-    key: string,
     numTokens: number,
     skip: number = 0
   ) {
-    const ownedResults = await queryIterator(key, queryOwnedTokensMaybeMarket)
-    const lockedResults = await queryIterator(key, queryLockedTokens)
+    const ownedResults = await queryIterator(queryOwnedTokensMaybeMarket)
+    const lockedResults = await queryIterator(queryLockedTokens)
     const combinedResults = ownedResults.concat(lockedResults)
     // If there are any duplicate tokens, need to combine them into 1 ROW with different data. Balance will be added up for all dup tokens. Need to add prop for lockedAmount
     const finalPairs = removeDuplicateRows(combinedResults)
@@ -284,11 +282,10 @@ export default function ProfileWallet({ walletState, userData }: Props) {
   }
 
   async function tradesQueryFunction(
-    key: string,
     numTokens: number,
     skip: number = 0
   ) {
-    const result = await queryIterator(key, queryMyTrades)
+    const result = await queryIterator(queryMyTrades)
     sortTrades(result)
     // Calculate the total purchase value
     let purchaseTotal = new BN('0')

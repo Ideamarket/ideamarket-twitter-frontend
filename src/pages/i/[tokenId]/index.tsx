@@ -78,14 +78,17 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     data: token,
     isLoading: isTokenLoading,
     refetch,
-  } = useQuery([null, null, null, rawTokenId, jwtToken], querySingleToken)
+  } = useQuery(
+    ['single-listing'],
+    () => querySingleToken(null, null, null, rawTokenId, jwtToken)
+  )
 
   const marketName = token?.marketName
   const tokenName = token?.name ? token?.name : token?.url
 
   const { data: market, isLoading: isMarketLoading } = useQuery(
-    [`market-${marketName}`, marketName],
-    queryMarket
+    [`market-${marketName}`],
+    () => queryMarket(marketName)
   )
 
   const [tradeToggle, setTradeToggle] = useState(false) // Need toggle to reload balances after trade
@@ -115,8 +118,8 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   //   data: interestManagerDaiBalance,
   //   isLoading: isInterestManagerDaiBalanceLoading,
   // } = useQuery(
-  //   ['interest-manager-dai-balance', interestManagerAddress],
-  //   queryDaiBalance
+  //   ['interest-manager-dai-balance',],
+  //   () => queryDaiBalance(interestManagerAddress),
   // )
 
   // const claimableIncome =
@@ -139,7 +142,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
   const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
     [url],
-    getURLMetaData
+    () => getURLMetaData(url)
   )
 
   const isLoading = isTokenLoading || isMarketLoading /*||

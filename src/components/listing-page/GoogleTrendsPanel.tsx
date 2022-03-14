@@ -13,7 +13,7 @@ export default function GoogleTrendsPanel({ rawTokenName, title }: Props) {
     counts: [],
     dates: [],
   })
-  const [fetchTrends] = useMutation<{
+  const { mutateAsync: fetchTrends } = useMutation<{
     message: string
     data: any
   }>(() =>

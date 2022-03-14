@@ -10,7 +10,10 @@ type Props = {
 }
 
 const PublicProfile = ({ username }: Props) => {
-  const { data: userData } = useQuery<any>([{ username }], getPublicProfile)
+  const { data: userData } = useQuery<any>(
+    [{ username }],
+    () => getPublicProfile({ username })
+  )
 
   return (
     <div className="min-h-screen bg-brand-gray dark:bg-gray-900 font-inter">

@@ -128,8 +128,8 @@ export default function TradeInterface({
   const interestManagerAddress =
     NETWORK.getDeployedAddresses().interestManagerAVM
   const { data: interestManagerDaiBalance } = useQuery(
-    ['interest-manager-dai-balance', interestManagerAddress],
-    queryDaiBalance
+    ['interest-manager-dai-balance'],
+    () => queryDaiBalance(interestManagerAddress),
   )
 
   const claimableIncome =
@@ -249,7 +249,7 @@ export default function TradeInterface({
 
   const { data: rawLockedPairs, refetch: refetchLocked } = useQuery(
     ['locked-tokens', ideaToken?.address, account, 0, 100, null, null],
-    queryLockedAmounts
+    () => queryLockedAmounts(ideaToken?.address, account, 0, 100, null, null)
   )
 
   const unlockablePairs = rawLockedPairs

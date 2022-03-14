@@ -1,4 +1,5 @@
 import withPWA from 'next-pwa'
+import runtimeCaching from "next-pwa/cache.js"
 import { withSentryConfig } from '@sentry/nextjs'
 
 const SentryWebpackPluginOptions = {
@@ -13,7 +14,8 @@ const moduleExports = withPWA({
   pwa: {
     dest: 'public',
     disable: process.env.NODE_ENV === 'development',
-    buildExcludes: [/middleware-manifest.json$/],
+    runtimeCaching,
+    buildExcludes: [/middleware-manifest\.json$/]
   },
   images: {
     domains: [

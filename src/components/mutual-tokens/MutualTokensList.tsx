@@ -37,7 +37,7 @@ export default function MutualTokensList({
     isLoading,
     isError,
   } = useQuery<MutualHoldersData[]>(
-    [`token-mutualHolders-${marketName}-${tokenName}`, marketName, tokenName],
+    [`token-mutualHolders-${marketName}-${tokenName}`],
     () => queryMutualHoldersOfToken({ marketName, tokenName })
   )
 

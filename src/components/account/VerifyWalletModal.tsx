@@ -26,7 +26,7 @@ export default function VerifyWalletModal({ close, submitWallet }: Props) {
     STATE.OWNER_ADDRESS
   )
 
-  const [walletVerificationRequest] = useMutation<{
+  const { mutateAsync: walletVerificationRequest } = useMutation<{
     message: string
     data: any
   }>(() =>

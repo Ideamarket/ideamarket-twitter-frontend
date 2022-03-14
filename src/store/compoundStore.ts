@@ -4,7 +4,7 @@ import { NETWORK } from 'store/networks'
 import BN from 'bn.js'
 //import BigNumber from 'bignumber.js'
 
-export async function querySupplyRate(queryKey: string): Promise<number> {
+export async function querySupplyRate(): Promise<number> {
   /*
     From https://compound.finance/docs
 
