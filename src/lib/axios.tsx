@@ -61,17 +61,22 @@ export const checkAccountEmailVerificationCode = ({ token, code, email }) =>
   )
 
 export const getPublicProfile = async ({ username }) => {
-  const response = await client.get(
-    `/account/publicProfile?username=${username}`,
-    {
-      headers: {
-        // TODO: pass in token if there is one
-        // Authorization: `Bearer ${token}`,
-      },
-    }
-  )
+  try {
+    const response = await client.get(
+      `/account/publicProfile?username=${username}`,
+      {
+        headers: {
+          // TODO: pass in token if there is one
+          // Authorization: `Bearer ${token}`,
+        },
+      }
+    )
 
-  return response?.data?.data
+    return response?.data?.data
+  } catch (error) {
+    console.error(`getPublicProfile for ${username} failed`)
+    return null
+  }
 }
 
 export const getLockingAPR = () => client.get(`general/apr`)

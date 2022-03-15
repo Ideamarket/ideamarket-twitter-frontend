@@ -158,21 +158,31 @@ export async function initIdeaMarketsStore() {
 export async function queryMarkets(
   marketNames: string[] = []
 ): Promise<IdeaMarket[]> {
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    await getQueryMarkets(marketNames.filter((n) => n !== 'All'))
-  )
-  return result.ideaMarkets.map((market) => apiResponseToIdeaMarket(market))
+  try {
+    const result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      await getQueryMarkets(marketNames.filter((n) => n !== 'All'))
+    )
+    return result.ideaMarkets.map((market) => apiResponseToIdeaMarket(market))
+  } catch (error) {
+    console.error('queryMarkets failed')
+    return []
+  }
 }
 
 export async function queryMarket(marketName: string): Promise<IdeaMarket> {
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryMarket(marketName)
-  )
-  return result.ideaMarkets
-    .map((market) => apiResponseToIdeaMarket(market))
-    .pop()
+  try {
+    const result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryMarket(marketName)
+    )
+    return result.ideaMarkets
+      .map((market) => apiResponseToIdeaMarket(market))
+      .pop()
+  } catch (error) {
+    console.error('queryMarket failed')
+    return null
+  }
 }
 
 export async function queryOwnedTokensMaybeMarket(
