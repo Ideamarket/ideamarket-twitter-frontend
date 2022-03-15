@@ -52,6 +52,7 @@
     "cheerio": "1.0.0-rc.10",
     "classnames": "2.3.1",
     "copy-to-clipboard": "^3.3.1",
+    "events": "^3.3.0",
     "fauna-schema-migrate": "2.1.2",
     "faunadb": "4.4.1",
     "fortmatic": "^2.2.1",
@@ -83,7 +84,7 @@
     "use-breakpoint": "2.0.2",
     "uuid": "8.3.2",
     "walletlink": "^2.2.8",
-    "web3": "^1.6.1",
+    "web3": "^1.7.1",
     "zustand": "3.6.5"
   },
   "devDependencies": {
