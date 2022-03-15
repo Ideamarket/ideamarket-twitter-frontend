@@ -7,7 +7,7 @@ export default function TokenRowSkeleton({
 }) {
   return (
     <>
-      <tr className="grid grid-flow-col grid-cols-mobile-row md:table-row animate animate-pulse">
+      <tr className="h-28 grid grid-flow-col grid-cols-mobile-row md:table-row animate animate-pulse">
         {/* Icon and Name */}
         <td className="flex py-4 pl-2 md:pl-14 md:table-cell md:col-span-3 md:pl-6 whitespace-nowrap">
           <div className="flex items-center">

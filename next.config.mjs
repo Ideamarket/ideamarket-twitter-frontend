@@ -22,6 +22,7 @@ const moduleExports = withPWA({
       'zapper.fi',
       'etherscan.io',
       'cryptologos.cc',
+      'ideamarket.azureedge.net',
     ],
   },
   async redirects() {

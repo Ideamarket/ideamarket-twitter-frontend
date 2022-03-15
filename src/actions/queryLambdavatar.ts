@@ -1,3 +1,5 @@
+import axios from 'lib/axios'
+
 export default async function queryLambdavatar({
   rawMarketName,
   rawTokenName,
@@ -6,15 +8,18 @@ export default async function queryLambdavatar({
   rawTokenName: string
 }): Promise<string> {
   try {
-    const response = await fetch(
-      `https://lambdavatar.backend.ideamarket.io/${rawMarketName}/${rawTokenName}`
-    )
-    const lambdavatar = await response.json()
-    if (!lambdavatar.success) {
+    const response = await axios.get(`/avatar`, {
+      params: {
+        provider: rawMarketName,
+        value: rawTokenName,
+      },
+    })
+
+    if (!response?.data?.success) {
       return 'https://ideamarket.io/logo.png'
     }
 
-    return lambdavatar.url
+    return response?.data?.data?.url
   } catch (error) {
     return 'https://ideamarket.io/logo.png'
   }
