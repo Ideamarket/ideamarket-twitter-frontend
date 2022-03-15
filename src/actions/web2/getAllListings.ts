@@ -20,28 +20,33 @@ export const getAllListings = async ({
   jwt,
   categories, // array of strings representing category IDs to add to this new onchain listing (OPTIONAL)
 }) => {
-  const categoriesString =
-    categories && categories.length > 0 ? categories.join(',') : null
-  const filterTokensString =
-    filterTokens && filterTokens?.length > 0 ? filterTokens?.join(',') : null
-  const response = await client.get(`/listing`, {
-    params: {
-      marketType,
-      marketIds,
-      skip,
-      limit,
-      orderBy,
-      orderDirection,
-      filterTokens: filterTokensString,
-      earliestPricePointTs,
-      search,
-      verified: isVerifiedFilter,
-      categories: categoriesString,
-    },
-    headers: {
-      Authorization: jwt ? `Bearer ${jwt}` : null,
-    },
-  })
+  try {
+    const categoriesString =
+      categories && categories.length > 0 ? categories.join(',') : null
+    const filterTokensString =
+      filterTokens && filterTokens?.length > 0 ? filterTokens?.join(',') : null
+    const response = await client.get(`/listing`, {
+      params: {
+        marketType,
+        marketIds,
+        skip,
+        limit,
+        orderBy,
+        orderDirection,
+        filterTokens: filterTokensString,
+        earliestPricePointTs,
+        search,
+        verified: isVerifiedFilter,
+        categories: categoriesString,
+      },
+      headers: {
+        Authorization: jwt ? `Bearer ${jwt}` : null,
+      },
+    })
 
-  return response?.data?.data?.listings
+    return response?.data?.data?.listings
+  } catch (error) {
+    console.error('Could not get all listings', error)
+    return []
+  }
 }

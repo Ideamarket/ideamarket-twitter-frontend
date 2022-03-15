@@ -38,5 +38,6 @@ export const getSingleListing = async ({
     return response?.data?.data?.listing
   } catch (error) {
     console.error('Could not get this single listing', error)
+    return null
   }
 }

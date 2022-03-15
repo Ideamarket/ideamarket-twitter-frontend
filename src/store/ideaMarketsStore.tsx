@@ -197,15 +197,25 @@ export async function queryOwnedTokensMaybeMarket(
 
   const marketIds = markets ? markets.map((market) => market.marketID) : []
 
-  const L1Result = await request(
-    HTTP_GRAPHQL_ENDPOINT_L1,
-    getQueryOwnedTokensMaybeMarket(owner)
-  )
+  let L1Result = null
+  try {
+    L1Result = await request(
+      HTTP_GRAPHQL_ENDPOINT_L1,
+      getQueryOwnedTokensMaybeMarket(owner)
+    )
+  } catch (error) {
+    console.error('getQueryOwnedTokensMaybeMarket failed for L1')
+  }
 
-  const L2Result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryOwnedTokensMaybeMarket(owner)
-  )
+  let L2Result = null
+  try {
+    L2Result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryOwnedTokensMaybeMarket(owner)
+    )
+  } catch (error) {
+    console.error('getQueryOwnedTokensMaybeMarket failed for L2')
+  }
 
   const L1IdeaTokenMarketPairs = L1Result.ideaTokenBalances.map(
     (balance) =>
@@ -267,10 +277,16 @@ export async function queryMyTokensMaybeMarket(
     return []
   }
 
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryMyTokensMaybeMarket(market ? market.marketID : undefined, owner)
-  )
+  let result = null
+  try {
+    result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryMyTokensMaybeMarket(market ? market.marketID : undefined, owner)
+    )
+  } catch (error) {
+    console.error('getQueryMyTokensMaybeMarket failed')
+    return []
+  }
 
   return result.ideaTokens.map(
     (token) =>
@@ -427,16 +443,21 @@ export async function querySingleTokenByID(
     return undefined
   }
 
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQuerySingleTokenByID(marketID, tokenID)
-  )
+  let result = null
+  try {
+    result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQuerySingleTokenByID(marketID, tokenID)
+    )
+  } catch (error) {
+    console.error('getQuerySingleTokenByID failed', error)
+  }
 
   if (result?.ideaMarkets?.[0]?.tokens?.[0]) {
     return apiResponseToIdeaToken(result.ideaMarkets[0].tokens[0])
   }
 
-  return undefined
+  return null
 }
 
 export async function getHoldersOfAToken({
@@ -463,15 +484,20 @@ export async function getHoldersOfAToken({
   const balances: Balance[] = []
 
   while (true) {
-    const result = await request(
-      HTTP_GRAPHQL_ENDPOINT,
-      getQueryTokenBalances({
-        marketName,
-        tokenName,
-        first: 100,
-        skip: page * 100,
-      })
-    )
+    let result = null
+    try {
+      result = await request(
+        HTTP_GRAPHQL_ENDPOINT,
+        getQueryTokenBalances({
+          marketName,
+          tokenName,
+          first: 100,
+          skip: page * 100,
+        })
+      )
+    } catch (error) {
+      console.error('getQueryTokenBalances failed', error)
+    }
 
     const balancesInThisPage: Balance[] =
       result?.ideaMarkets?.[0]?.tokens?.[0].balances ?? []
@@ -498,16 +524,21 @@ export async function queryTokensHeld(
   const allMarketNames: string[] = []
 
   while (true) {
-    const result = await request(
-      HTTP_GRAPHQL_ENDPOINT_L1,
-      getQueryBalancesOfHolders({
-        holders: [holder],
-        first: 100,
-        skip: page * 100,
-      })
-    )
+    let result = null
+    try {
+      result = await request(
+        HTTP_GRAPHQL_ENDPOINT_L1,
+        getQueryBalancesOfHolders({
+          holders: [holder],
+          first: 100,
+          skip: page * 100,
+        })
+      )
+    } catch (error) {
+      console.error('getQueryBalancesOfHolders failed', error)
+    }
 
-    const filtered = result.ideaTokenBalances.filter((b) => b.amount !== '0')
+    const filtered = result?.ideaTokenBalances.filter((b) => b.amount !== '0')
 
     for (let raw of filtered) {
       const token = apiResponseToIdeaToken(raw.token)
@@ -578,16 +609,21 @@ export async function queryMutualHoldersOfToken({
   let page = 0
 
   while (true) {
-    const result = await request(
-      HTTP_GRAPHQL_ENDPOINT,
-      getQueryBalancesOfHolders({
-        holders: holdersOfToken,
-        first: 100,
-        skip: page * 100,
-      })
-    )
+    let result = null
+    try {
+      result = await request(
+        HTTP_GRAPHQL_ENDPOINT,
+        getQueryBalancesOfHolders({
+          holders: holdersOfToken,
+          first: 100,
+          skip: page * 100,
+        })
+      )
+    } catch (error) {
+      console.error('getQueryBalancesOfHolders failed', error)
+    }
 
-    const ideaTokenBalancesInThisPage = result.ideaTokenBalances
+    const ideaTokenBalancesInThisPage = result?.ideaTokenBalances
     allIdeatokenBalances.push(...ideaTokenBalancesInThisPage)
     if (ideaTokenBalancesInThisPage.length < 100) {
       break
@@ -654,10 +690,15 @@ export async function queryTokenChartData(
 
   const fromTs = Math.floor(Date.now() / 1000) - duration
 
-  const earliestPricePointResult = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQuerySinglePricePoint(tokenAddress, fromTs)
-  )
+  let earliestPricePointResult = null
+  try {
+    earliestPricePointResult = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQuerySinglePricePoint(tokenAddress, fromTs)
+    )
+  } catch (error) {
+    console.error('getQuerySinglePricePoint failed', error)
+  }
 
   if (
     !earliestPricePointResult ||
@@ -692,10 +733,15 @@ export async function queryTokenChartData(
     getCounters.push(latestPricePoint.counter)
   }
 
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryTokenChartData(tokenAddress.toLowerCase(), getCounters)
-  )
+  let result = null
+  try {
+    result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryTokenChartData(tokenAddress.toLowerCase(), getCounters)
+    )
+  } catch (error) {
+    console.error('getQueryTokenChartData failed', error)
+  }
 
   if (!result || !result.ideaTokenPricePoints) {
     return []
@@ -714,10 +760,15 @@ export async function queryTokenLockedChartData(
 
   const toTs = Math.floor(Date.now() / 1000) + duration
 
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryTokenLockedChartData(tokenAddres.toLowerCase(), toTs)
-  )
+  let result = null
+  try {
+    result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryTokenLockedChartData(tokenAddres.toLowerCase(), toTs)
+    )
+  } catch (error) {
+    console.error('getQueryTokenLockedChartData failed', error)
+  }
 
   if (!result || !result.lockedIdeaTokenAmounts) {
     return undefined
@@ -740,28 +791,38 @@ export async function queryLockedAmounts(
     return []
   }
 
-  const result = await request(
-    HTTP_GRAPHQL_ENDPOINT,
-    getQueryLockedAmounts(
-      tokenAddress.toLowerCase(),
-      ownerAddress.toLowerCase(),
-      skip,
-      num,
-      orderBy,
-      orderDirection
+  let result = null
+  try {
+    result = await request(
+      HTTP_GRAPHQL_ENDPOINT,
+      getQueryLockedAmounts(
+        tokenAddress.toLowerCase(),
+        ownerAddress.toLowerCase(),
+        skip,
+        num,
+        orderBy,
+        orderDirection
+      )
     )
-  )
+  } catch (error) {
+    console.error('getQueryLockedAmounts failed', error)
+  }
 
   const ideaTokenVault = useContractStore.getState().ideaTokenVaultContract
 
-  // Need to get lockedAmounts from blockchain bc subgraph data is not updated after unlocking contract called. This is bc no event is being emitted from contract. Changing contract now would take a lot of time, so can't do now.
-  const blockchainLockedEntries = await ideaTokenVault.methods
-    .getLockedEntries(
-      tokenAddress,
-      ownerAddress,
-      100 // TODO: make bigger # if people start locking more than 100 times at once
-    )
-    .call()
+  let blockchainLockedEntries = []
+  try {
+    // Need to get lockedAmounts from blockchain bc subgraph data is not updated after unlocking contract called. This is bc no event is being emitted from contract. Changing contract now would take a lot of time, so can't do now.
+    blockchainLockedEntries = await ideaTokenVault.methods
+      .getLockedEntries(
+        tokenAddress,
+        ownerAddress,
+        100 // TODO: make bigger # if people start locking more than 100 times at once
+      )
+      .call()
+  } catch (error) {
+    console.error('getLockedEntries blockchain method call failed', error)
+  }
 
   // Helper method since blockchain returns array of arrays for lockedAmounts
   const isLockedUntilOnChain = (lockedUntil: any): boolean => {
@@ -809,14 +870,19 @@ export async function queryLockedTokens(
 
   // API can return max of 100 entries. That means we need to query the API multiple times to retrieve all entries
   while (true) {
-    const result = await request(
-      HTTP_GRAPHQL_ENDPOINT_L1,
-      getQueryLockedTokens({
-        ownerAddress,
-        first: 100,
-        skip: page * 100,
-      })
-    )
+    let result = null
+    try {
+      result = await request(
+        HTTP_GRAPHQL_ENDPOINT_L1,
+        getQueryLockedTokens({
+          ownerAddress,
+          first: 100,
+          skip: page * 100,
+        })
+      )
+    } catch (error) {
+      console.error('getQueryLockedTokens failed', error)
+    }
 
     const tokensInThisPage = result?.lockedIdeaTokenAmounts ?? []
 
@@ -828,14 +894,19 @@ export async function queryLockedTokens(
   }
   page = 0
   while (true) {
-    const result = await request(
-      HTTP_GRAPHQL_ENDPOINT,
-      getQueryLockedTokens({
-        ownerAddress,
-        first: 100,
-        skip: page * 100,
-      })
-    )
+    let result = null
+    try {
+      result = await request(
+        HTTP_GRAPHQL_ENDPOINT,
+        getQueryLockedTokens({
+          ownerAddress,
+          first: 100,
+          skip: page * 100,
+        })
+      )
+    } catch (error) {
+      console.error('getQueryLockedTokens failed', error)
+    }
 
     const tokensInThisPage = result?.lockedIdeaTokenAmounts ?? []
 
@@ -899,16 +970,21 @@ export async function queryMyTrades(
 
   // API can return max of 100 entries. That means we need to query the API multiple times to retrieve all entries
   while (true) {
-    const result = await request(
-      HTTP_GRAPHQL_ENDPOINT,
-      getQueryMyTrades({
-        ownerAddress,
-        first: 100,
-        skip: page * 100,
-      })
-    )
+    let result = null
+    try {
+      result = await request(
+        HTTP_GRAPHQL_ENDPOINT,
+        getQueryMyTrades({
+          ownerAddress,
+          first: 100,
+          skip: page * 100,
+        })
+      )
+    } catch (error) {
+      console.error('getQueryMyTrades failed', error)
+    }
 
-    const tokensInThisPage = result.ideaTokenTrades ?? []
+    const tokensInThisPage = result?.ideaTokenTrades ?? []
 
     myTrades.push(...tokensInThisPage)
     if (tokensInThisPage.length < 100) {
