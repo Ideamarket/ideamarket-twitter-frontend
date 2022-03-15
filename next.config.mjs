@@ -1,17 +1,17 @@
-import withPWA from 'next-pwa'
-import runtimeCaching from "next-pwa/cache.js"
+// import withPWA from 'next-pwa'
+// import runtimeCaching from "next-pwa/cache.js"
 
-const moduleExports = withPWA({
+const moduleExports = {
   outputFileTracing: false,
   publicRuntimeConfig: {
     MIX_PANEL_KEY: process.env.MIX_PANEL_KEY,
   },
-  pwa: {
-    dest: 'public',
-    disable: process.env.NODE_ENV === 'development',
-    runtimeCaching,
-    buildExcludes: [/middleware-manifest\.json$/]
-  },
+  // pwa: {
+  //   dest: 'public',
+  //   disable: process.env.NODE_ENV === 'development',
+  //   runtimeCaching,
+  //   buildExcludes: [/middleware-manifest\.json$/]
+  // },
   images: {
     domains: [
       'd38ccjc81jdg6l.cloudfront.net',
@@ -60,6 +60,6 @@ const moduleExports = withPWA({
       },
     ]
   },
-})
+}
 
 export default moduleExports
