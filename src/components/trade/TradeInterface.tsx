@@ -47,7 +47,7 @@ import useReversePrice from 'actions/useReversePrice'
 import useTokenToDAI from 'actions/useTokenToDAI'
 import { useWeb3React } from '@web3-react/core'
 import { useENSAddress } from './hooks/useENSAddress'
-import { TRANSACTION_TYPES } from './TradeCompleteModal'
+import { TX_TYPES } from './TradeCompleteModal'
 import mixpanel from 'mixpanel-browser'
 import getConfig from 'next/config'
 import TxPending from './TxPending'
@@ -82,7 +82,7 @@ type TradeInterfaceProps = {
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TRANSACTION_TYPES
+    transactionType: TX_TYPES
   ) => void
   onValuesChanged: (
     ideaTokenAmount: BN,
@@ -152,7 +152,7 @@ export default function TradeInterface({
   const { account } = useWeb3React()
   const [lockingAPR, setLockingAPR] = useState(undefined)
   const [tradeType, setTradeType] = useState(
-    parentComponent === 'OwnedTokenRow' ? 'lock' : 'buy'
+    parentComponent === 'OwnedTokenRow' ? TX_TYPES.LOCK : TX_TYPES.BUY
   ) // Used for smart contracts and which trade UI tab user is on
   const [showLockOptions, setShowLockOptions] = useState(false)
   const [lockPeriod, setLockPeriod] = useState('3month')
@@ -278,7 +278,7 @@ export default function TradeInterface({
 
   const ideaTokenValue = web3BNToFloatString(
     calculateIdeaTokenDaiValue(
-      tradeType === 'buy'
+      tradeType === TX_TYPES.BUY
         ? // If there is no ideaToken (when listing new IDT), then just use masterIdeaTokenAmountBN
           ideaToken?.rawSupply?.add(masterIdeaTokenAmountBN) ||
             masterIdeaTokenAmountBN
@@ -306,7 +306,7 @@ export default function TradeInterface({
   }
 
   const slippage =
-    tradeType === 'buy'
+    tradeType === TX_TYPES.BUY
       ? percentDecrease(
           parseFloat(selectedTokenDAIValue),
           parseFloat(ideaTokenValue)
@@ -326,7 +326,7 @@ export default function TradeInterface({
   )?.options?.address
 
   const spender =
-    tradeType === 'buy'
+    tradeType === TX_TYPES.BUY
       ? selectedToken?.address === NETWORK.getExternalAddresses().dai &&
         !isLockChecked
         ? exchangeContractAddress
@@ -336,16 +336,18 @@ export default function TradeInterface({
       : undefined
 
   const spendTokenAddress =
-    tradeType === 'buy' ? selectedToken?.address : ideaToken.address
+    tradeType === TX_TYPES.BUY ? selectedToken?.address : ideaToken.address
 
   const spendTokenSymbol =
-    tradeType === 'buy'
+    tradeType === TX_TYPES.BUY
       ? selectedToken?.symbol
       : marketSpecifics.getTokenDisplayName(ideaToken.name)
 
   // Amount of token that needs approval before tx
   const requiredAllowance =
-    tradeType === 'buy' ? masterSelectedTokenAmount : masterIdeaTokenAmount
+    tradeType === TX_TYPES.BUY
+      ? masterSelectedTokenAmount
+      : masterIdeaTokenAmount
 
   const exceedsBalanceBuy =
     isTokenBalanceLoading || !masterSelectedTokenAmountBN
@@ -357,7 +359,7 @@ export default function TradeInterface({
     : ideaTokenBalanceBN.lt(masterIdeaTokenAmountBN)
 
   const exceedsBalance =
-    tradeType === 'buy' || tradeType === 'lock'
+    tradeType === TX_TYPES.BUY || tradeType === TX_TYPES.LOCK
       ? exceedsBalanceBuy
       : exceedsBalanceSell
 
@@ -382,7 +384,9 @@ export default function TradeInterface({
   useEffect(() => {
     setSelectedToken(useTokenListStore.getState().tokens[0])
     setIdeaTokenAmount('')
-    setTradeType(parentComponent === 'OwnedTokenRow' ? 'lock' : 'buy')
+    setTradeType(
+      parentComponent === 'OwnedTokenRow' ? TX_TYPES.LOCK : TX_TYPES.BUY
+    )
     setApproveButtonKey(approveButtonKey + 1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetOn])
@@ -401,7 +405,7 @@ export default function TradeInterface({
 
     if (isValid) {
       // Make sure user has high enough balance. If not, disable buttons
-      if (tradeType === 'buy') {
+      if (tradeType === TX_TYPES.BUY) {
         if (masterSelectedTokenAmountBN.gt(tokenBalanceBN)) {
           isValid = false
         }
@@ -465,7 +469,7 @@ export default function TradeInterface({
   async function maxButtonClicked() {
     setSelectedTokenAmount('0')
 
-    if (tradeType === 'sell' || tradeType === 'lock') {
+    if (tradeType === TX_TYPES.SELL || tradeType === TX_TYPES.LOCK) {
       const balanceBN = new BigNumber(ideaTokenBalanceBN.toString())
       setIdeaTokenAmount(
         formatBigNumber(
@@ -484,36 +488,25 @@ export default function TradeInterface({
   }
 
   const tradeFinishUp = () => {
-    let transactionType = null
-    if (tradeType === 'buy') transactionType = TRANSACTION_TYPES.BUY
-    else if (tradeType === 'sell') transactionType = TRANSACTION_TYPES.SELL
-    else if (tradeType === 'lock') transactionType = TRANSACTION_TYPES.LOCK
-    else if (tradeType === 'unlock') transactionType = TRANSACTION_TYPES.UNLOCK
-
-    if (tradeType === 'lock') {
+    if (tradeType === TX_TYPES.LOCK) {
       refetchLocked()
     }
 
     setIdeaTokenAmount('0')
     setApproveButtonKey(approveButtonKey + 1)
     setTradeToggle(!tradeToggle)
-    if (tradeType !== 'lock')
+    if (tradeType !== TX_TYPES.LOCK)
       // This is handled in LockInterface
-      onTradeComplete(
-        true,
-        ideaToken?.listingId,
-        ideaToken?.name,
-        transactionType
-      )
+      onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, tradeType)
 
-    mixpanel.track(`${tradeType.toUpperCase()}_COMPLETED`, {
+    mixpanel.track(`${TX_TYPES[tradeType]}_COMPLETED`, {
       tokenName: ideaToken.name,
     })
   }
 
   async function onTradeClicked() {
-    const name = tradeType === 'buy' ? 'Buy' : 'Sell'
-    const func = tradeType === 'buy' ? buyToken : sellToken
+    const name = tradeType === TX_TYPES.BUY ? 'Buy' : 'Sell'
+    const func = tradeType === TX_TYPES.BUY ? buyToken : sellToken
     // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
     const ideaTokenAmountBNLocal = floatToWeb3BN(
       masterIdeaTokenAmount,
@@ -532,7 +525,7 @@ export default function TradeInterface({
     const threeMonthsInSecs = 7776000
 
     const args =
-      tradeType === 'buy'
+      tradeType === TX_TYPES.BUY
         ? [
             ideaToken.address,
             selectedToken.address,
@@ -563,7 +556,7 @@ export default function TradeInterface({
         false,
         ideaToken?.listingId,
         ideaToken?.name,
-        TRANSACTION_TYPES.NONE
+        TX_TYPES.NONE
       )
       return
     }
@@ -586,7 +579,7 @@ export default function TradeInterface({
         false,
         ideaToken?.listingId,
         ideaToken?.name,
-        TRANSACTION_TYPES.NONE
+        TX_TYPES.NONE
       )
       return
     }
@@ -707,14 +700,18 @@ export default function TradeInterface({
                 'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
                 {
                   'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                    'buy' === tradeType,
+                    TX_TYPES.BUY === tradeType,
                 },
-                { 'text-brand-black dark:text-gray-50': !('buy' === tradeType) }
+                {
+                  'text-brand-black dark:text-gray-50': !(
+                    TX_TYPES.BUY === tradeType
+                  ),
+                }
               )}
               onClick={() => {
                 setIdeaTokenAmount('0')
                 setSelectedTokenAmount('0')
-                setTradeType('buy')
+                setTradeType(TX_TYPES.BUY)
               }}
             >
               <ArrowSmUpIcon className="w-4 h-4 mr-1" />
@@ -725,16 +722,18 @@ export default function TradeInterface({
                 'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
                 {
                   'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                    'sell' === tradeType,
+                    TX_TYPES.SELL === tradeType,
                 },
                 {
-                  'text-brand-black dark:text-gray-50': !('sell' === tradeType),
+                  'text-brand-black dark:text-gray-50': !(
+                    TX_TYPES.SELL === tradeType
+                  ),
                 }
               )}
               onClick={() => {
                 setIdeaTokenAmount('0')
                 setSelectedTokenAmount('0')
-                setTradeType('sell')
+                setTradeType(TX_TYPES.SELL)
               }}
             >
               <ArrowSmDownIcon className="w-4 h-4 mr-1" />
@@ -745,16 +744,18 @@ export default function TradeInterface({
                 'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
                 {
                   'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                    'lock' === tradeType,
+                    TX_TYPES.LOCK === tradeType,
                 },
                 {
-                  'text-brand-black dark:text-gray-50': !('lock' === tradeType),
+                  'text-brand-black dark:text-gray-50': !(
+                    TX_TYPES.LOCK === tradeType
+                  ),
                 }
               )}
               onClick={() => {
                 setIdeaTokenAmount('0')
                 setSelectedTokenAmount('0')
-                setTradeType('lock')
+                setTradeType(TX_TYPES.LOCK)
               }}
             >
               <LockClosedIcon className="w-4 h-4 mr-1" />
@@ -766,18 +767,18 @@ export default function TradeInterface({
                   'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
                   {
                     'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                      'unlock' === tradeType,
+                      TX_TYPES.UNLOCK === tradeType,
                   },
                   {
                     'text-brand-black dark:text-gray-50': !(
-                      'unlock' === tradeType
+                      TX_TYPES.UNLOCK === tradeType
                     ),
                   }
                 )}
                 onClick={() => {
                   setIdeaTokenAmount('0')
                   setSelectedTokenAmount('0')
-                  setTradeType('unlock')
+                  setTradeType(TX_TYPES.UNLOCK)
                 }}
               >
                 <LockOpenIcon className="w-4 h-4 mr-1" />
@@ -789,14 +790,14 @@ export default function TradeInterface({
               'h-10 flex justify-center items-center px-4 py-2 border rounded-md text-sm font-semibold',
               {
                 'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                  'claim' === tradeType,
+                  TX_TYPES.CLAIM === tradeType,
               },
-              { 'text-brand-black dark:text-gray-50': !('claim' === tradeType) }
+              { 'text-brand-black dark:text-gray-50': !(TX_TYPES.CLAIM === tradeType) }
             )}
             onClick={() => {
               setIdeaTokenAmount('0')
               setSelectedTokenAmount('0')
-              setTradeType('claim')
+              setTradeType(TX_TYPES.CLAIM)
             }}
           >
             <span className="mr-1">{getIconVersion('crown', resolvedTheme)}</span>
@@ -805,7 +806,7 @@ export default function TradeInterface({
           </div>
         )}
 
-        {tradeType === 'buy' || tradeType === 'sell' ? (
+        {tradeType === TX_TYPES.BUY || tradeType === TX_TYPES.SELL ? (
           <div>
             <div className="flex justify-between">
               <div />
@@ -854,11 +855,13 @@ export default function TradeInterface({
               <div className="opacity-50">Spend</div>
               <div>
                 You have:{' '}
-                {(tradeType === 'buy' && isTokenBalanceLoading) ||
-                (tradeType === 'sell' && isIdeaTokenBalanceLoading)
+                {(tradeType === TX_TYPES.BUY && isTokenBalanceLoading) ||
+                (tradeType === TX_TYPES.SELL && isIdeaTokenBalanceLoading)
                   ? '...'
                   : parseFloat(
-                      tradeType === 'buy' ? tokenBalance : ideaTokenBalance
+                      tradeType === TX_TYPES.BUY
+                        ? tokenBalance
+                        : ideaTokenBalance
                     )}
                 {!txManager.isPending && (
                   <span
@@ -874,7 +877,7 @@ export default function TradeInterface({
             <TradeInterfaceBox
               {...commonProps}
               label="Spend"
-              {...(tradeType === 'sell'
+              {...(tradeType === TX_TYPES.SELL
                 ? { ...ideaTokenProps }
                 : { ...selectedTokenProps })}
             />
@@ -883,18 +886,20 @@ export default function TradeInterface({
               <div className="opacity-50">Receive</div>
               <div>
                 You have:{' '}
-                {(tradeType === 'buy' && isIdeaTokenBalanceLoading) ||
-                (tradeType === 'sell' && isTokenBalanceLoading)
+                {(tradeType === TX_TYPES.BUY && isIdeaTokenBalanceLoading) ||
+                (tradeType === TX_TYPES.SELL && isTokenBalanceLoading)
                   ? '...'
                   : parseFloat(
-                      tradeType === 'buy' ? ideaTokenBalance : tokenBalance
+                      tradeType === TX_TYPES.BUY
+                        ? ideaTokenBalance
+                        : tokenBalance
                     )}
               </div>
             </div>
             <TradeInterfaceBox
               {...commonProps}
               label="Receive"
-              {...(tradeType === 'buy'
+              {...(tradeType === TX_TYPES.BUY
                 ? { ...ideaTokenProps }
                 : { ...selectedTokenProps })}
             />
@@ -965,7 +970,7 @@ export default function TradeInterface({
               </div>
             )}
 
-            {tradeType === 'buy' && (
+            {tradeType === TX_TYPES.BUY && (
               <div className="mb-4 flex justify-between items-center">
                 <div className="flex items-center space-x-1">
                   <span className="font-bold">Lock for</span>
@@ -1015,7 +1020,7 @@ export default function TradeInterface({
               </div>
             )}
 
-            {showLockOptions && tradeType === 'buy' && (
+            {showLockOptions && tradeType === TX_TYPES.BUY && (
               <div className="flex space-x-2 my-8">
                 <div className="flex flex-col justify-between border border-transparent rounded-lg pr-2 py-2 text-sm">
                   <div className="flex flex-col">
@@ -1109,7 +1114,7 @@ export default function TradeInterface({
                     disabled={isTradeButtonDisabled}
                     onClick={onTradeClicked}
                   >
-                    {tradeType === 'buy' ? 'Buy' : 'Sell'}
+                    {tradeType === TX_TYPES.BUY ? 'Buy' : 'Sell'}
                   </button>
                 </div>
 
@@ -1121,7 +1126,7 @@ export default function TradeInterface({
               </>
             )}
           </div>
-        ) : tradeType === 'lock' ? (
+        ) : tradeType === TX_TYPES.LOCK ? (
           <LockInterface
             ideaToken={ideaToken}
             rawPairs={rawLockedPairs}
@@ -1142,7 +1147,7 @@ export default function TradeInterface({
           />
         ) : (
           <>
-            {tradeType === 'unlock' && (
+            {tradeType === TX_TYPES.UNLOCK && (
               <div className="mt-8">
                 <div>
                   {unlockablePairs?.map((pair, pairInd) => {
@@ -1203,7 +1208,7 @@ export default function TradeInterface({
               </div>
             )}
 
-            {tradeType === 'claim' && (
+            {tradeType === TX_TYPES.CLAIM && (
               <>
                 {ideaToken.tokenOwner === ZERO_ADDRESS ? (
                   <UnverifiedListing

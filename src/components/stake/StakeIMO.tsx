@@ -11,7 +11,7 @@ import ModalService from 'components/modals/ModalService'
 import AdvancedOptions from 'components/trade/AdvancedOptions'
 import ApproveButton from 'components/trade/ApproveButton'
 import TradeCompleteModal, {
-  TRANSACTION_TYPES,
+  TX_TYPES,
 } from 'components/trade/TradeCompleteModal'
 import { useState } from 'react'
 import { IoMdExit } from 'react-icons/io'
@@ -109,10 +109,7 @@ const StakeIMO = () => {
     setInputAmount(isStakeSelected ? userIMOBalance : userxIMOBalance)
   }
 
-  const onTradeComplete = (
-    isSuccess: boolean,
-    transactionType: TRANSACTION_TYPES
-  ) => {
+  const onTradeComplete = (isSuccess: boolean, transactionType: TX_TYPES) => {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId: null, // No IDT when staking IMO
@@ -129,12 +126,12 @@ const StakeIMO = () => {
       await txManager.executeTx('Stake', stakeIMO, ...args)
     } catch (ex) {
       console.log(ex)
-      onTradeComplete(false, TRANSACTION_TYPES.NONE)
+      onTradeComplete(false, TX_TYPES.NONE)
       return
     }
 
     setBalanceToggle(!balanceToggle)
-    onTradeComplete(true, TRANSACTION_TYPES.STAKE)
+    onTradeComplete(true, TX_TYPES.STAKE)
   }
 
   const withdrawxIMOClicked = async () => {
@@ -151,12 +148,12 @@ const StakeIMO = () => {
       await txManager.executeTx('Withdraw', withdrawxIMO, ...args)
     } catch (ex) {
       console.log(ex)
-      onTradeComplete(false, TRANSACTION_TYPES.NONE)
+      onTradeComplete(false, TX_TYPES.NONE)
       return
     }
 
     setBalanceToggle(!balanceToggle)
-    onTradeComplete(true, TRANSACTION_TYPES.UNSTAKE)
+    onTradeComplete(true, TX_TYPES.UNSTAKE)
   }
 
   const onInputChanged = (event) => {

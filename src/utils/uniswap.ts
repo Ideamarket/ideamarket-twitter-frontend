@@ -9,6 +9,7 @@ import { NETWORK } from 'store/networks'
 import { Token } from '@uniswap/sdk-core'
 import { Route, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import BigNumber from 'bignumber.js'
+import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 
 export type UniswapPoolDetails = {
   path: Array<string>
@@ -46,7 +47,7 @@ export async function getInputForOutput(
   inputTokenAddress: string,
   outputTokenAddress: string,
   outputAmountBN: BN,
-  tradeType: string
+  tradeType: TX_TYPES
 ) {
   const quoterContract = useContractStore.getState().quoterContract
   const { path, fees } = await getUniswapPath(
@@ -85,7 +86,7 @@ export async function getOutputForInput(
   inputTokenAddress: string,
   outputTokenAddress: string,
   inputAmountBN: BN,
-  tradeType: string
+  tradeType: TX_TYPES
 ) {
   const quoterContract = useContractStore.getState().quoterContract
   const { path, fees } = await getUniswapPath(
@@ -121,7 +122,7 @@ export async function getOutputForInput(
 export async function getUniswapPath(
   inputTokenAddress: string,
   outputTokenAddress: string,
-  tradeType: string
+  tradeType: TX_TYPES
 ): Promise<UniswapPoolDetails> {
   const wethAddress = NETWORK.getExternalAddresses().weth
   const updatedInputAddress =
@@ -185,7 +186,7 @@ export async function getUniswapPath(
 
   // Liquidity of selected token - WETH pool
   const threeHopLiquidity =
-    tradeType === 'buy' ? liquidityInputWeth : liquidityWethOutput
+    tradeType === TX_TYPES.BUY ? liquidityInputWeth : liquidityWethOutput
   const path = liquidityInputOutput.gte(threeHopLiquidity)
     ? directPath
     : threeHopPath

@@ -17,7 +17,7 @@ import {
 } from 'utils'
 import AdvancedOptions from '../AdvancedOptions'
 import ApproveButton from '../ApproveButton'
-import TradeCompleteModal, { TRANSACTION_TYPES } from '../TradeCompleteModal'
+import TradeCompleteModal, { TX_TYPES } from '../TradeCompleteModal'
 import TxPending from '../TxPending'
 import TradeUIBoxLock from './TradeUIBoxLock'
 
@@ -74,7 +74,7 @@ const LockInterface = ({
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TRANSACTION_TYPES
+    transactionType: TX_TYPES
   ) {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
@@ -105,18 +105,13 @@ const LockInterface = ({
         false,
         ideaToken?.listingId,
         ideaToken?.name,
-        TRANSACTION_TYPES.NONE
+        TX_TYPES.NONE
       )
       return
     }
 
     tradeFinishUp()
-    onTradeComplete(
-      true,
-      ideaToken?.listingId,
-      ideaToken?.name,
-      TRANSACTION_TYPES.LOCK
-    )
+    onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, TX_TYPES.LOCK)
   }
 
   const togglePairVisibility = (pairsIndex: number) => {

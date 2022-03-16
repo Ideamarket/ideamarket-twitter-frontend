@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import TokenSelect from './TokenSelect'
 import Image from 'next/image'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
+import { TX_TYPES } from '../TradeCompleteModal'
 
 type TradeInterfaceBoxProps = {
   label: string
@@ -14,7 +15,7 @@ type TradeInterfaceBoxProps = {
   selectedToken: any
   setSelectedToken: (value: any) => void
   disabled: boolean
-  tradeType: string
+  tradeType: TX_TYPES
   selectedIdeaToken: TokenListEntry | null
   txManager: TransactionManager
   isIdeaToken: boolean
@@ -87,8 +88,8 @@ const TradeInterfaceBox: React.FC<TradeInterfaceBoxProps> = ({
 
   const slippageLabel =
     slippage &&
-    ((tradeType === 'buy' && isIdeaToken) ||
-      (tradeType === 'sell' && !isIdeaToken))
+    ((tradeType === TX_TYPES.BUY && isIdeaToken) ||
+      (tradeType === TX_TYPES.SELL && !isIdeaToken))
       ? ` (-${parseFloat(slippage.toFixed(3))}%)`
       : ''
 

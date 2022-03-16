@@ -12,6 +12,7 @@ import { NETWORK } from 'store/networks'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import { getInputForOutput, getOutputForInput } from 'utils/uniswap'
+import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 
 const nullTokenBalance = new BN('0')
 
@@ -21,7 +22,7 @@ export default function useReversePrice(
   selectedTokenAddress: string,
   selectedTokenAmount: string,
   decimals: number,
-  tradeType: string,
+  tradeType: TX_TYPES,
   tokenBalanceBN = nullTokenBalance
 ) {
   const [isLoading, setIsLoading] = useState(true)
@@ -156,7 +157,7 @@ export default function useReversePrice(
     }
 
     setIsLoading(true)
-    if (tradeType === 'buy') {
+    if (tradeType === TX_TYPES.BUY) {
       run(calculateBuyCost())
     } else {
       run(calculateSellPrice())

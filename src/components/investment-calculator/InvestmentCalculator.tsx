@@ -15,6 +15,7 @@ import classNames from 'classnames'
 import { useBalance } from 'actions'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { useWeb3React } from '@web3-react/core'
+import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 
 const sliderCurve = Math.exp
 const inverseCurve = Math.log
@@ -68,7 +69,7 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
     NETWORK.getExternalAddresses().dai,
     usdBuyAmount.toString(),
     18,
-    'buy'
+    TX_TYPES.BUY
   )
 
   // Calculates the ideaToken amount for otherUsdBuyAmount
@@ -78,7 +79,7 @@ const InvestmentCalculator = ({ ideaToken, market }: Props) => {
     NETWORK.getExternalAddresses().dai,
     (isSell ? otherUsdBuyAmount * -1 : otherUsdBuyAmount).toString(),
     18,
-    'buy'
+    TX_TYPES.BUY
   )
 
   const ideaTokenValue = web3BNToFloatString(

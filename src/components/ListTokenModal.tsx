@@ -15,9 +15,7 @@ import BN from 'bn.js'
 import A from './A'
 import { useWeb3React } from '@web3-react/core'
 import ModalService from './modals/ModalService'
-import TradeCompleteModal, {
-  TRANSACTION_TYPES,
-} from './trade/TradeCompleteModal'
+import TradeCompleteModal, { TX_TYPES } from './trade/TradeCompleteModal'
 import Image from 'next/image'
 import { debounce } from 'utils/lodash'
 import mixpanel from 'mixpanel-browser'
@@ -152,7 +150,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TRANSACTION_TYPES
+    transactionType: TX_TYPES
   ) {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
@@ -182,12 +180,12 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         )
       } catch (ex) {
         console.log(ex)
-        onTradeComplete(false, null, tokenName, TRANSACTION_TYPES.NONE)
+        onTradeComplete(false, null, tokenName, TX_TYPES.NONE)
         return
       }
 
       close()
-      onTradeComplete(true, null, tokenName, TRANSACTION_TYPES.BUY)
+      onTradeComplete(true, null, tokenName, TX_TYPES.BUY)
       mixpanel.track(
         `ADD_LISTING_${selectedMarket.name.toUpperCase()}_COMPLETED`
       )
@@ -201,11 +199,11 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         )
       } catch (ex) {
         console.log(ex)
-        onTradeComplete(false, null, tokenName, TRANSACTION_TYPES.NONE)
+        onTradeComplete(false, null, tokenName, TX_TYPES.NONE)
         return
       }
       close()
-      onTradeComplete(true, null, tokenName, TRANSACTION_TYPES.LIST)
+      onTradeComplete(true, null, tokenName, TX_TYPES.LIST)
       mixpanel.track(
         `ADD_LISTING_${selectedMarket.name.toUpperCase()}_COMPLETED`
       )

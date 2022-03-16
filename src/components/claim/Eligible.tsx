@@ -16,7 +16,7 @@ import {
 import { BreakdownPoint } from './EligibilityOutcome'
 
 import TradeCompleteModal, {
-  TRANSACTION_TYPES,
+  TX_TYPES,
 } from 'components/trade/TradeCompleteModal'
 import ModalService from 'components/modals/ModalService'
 import classNames from 'classnames'
@@ -41,10 +41,7 @@ export const Eligible: React.FC<Props> = ({
   const [txFailed, setTxFailed] = useState<Boolean>(false)
   const [loading, setLoading] = useState<Boolean>(false)
 
-  const onTradeComplete = (
-    isSuccess: boolean,
-    transactionType: TRANSACTION_TYPES
-  ) => {
+  const onTradeComplete = (isSuccess: boolean, transactionType: TX_TYPES) => {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId: null, // No IDT when claiming
@@ -62,12 +59,12 @@ export const Eligible: React.FC<Props> = ({
       console.log(error)
       setLoading(false)
       setTxFailed(true)
-      onTradeComplete(false, TRANSACTION_TYPES.NONE)
+      onTradeComplete(false, TX_TYPES.NONE)
       return
     }
 
     setLoading(false)
-    // onTradeComplete(true, TRANSACTION_TYPES.CLAIM)
+    // onTradeComplete(true, TX_TYPES.CLAIM)
     setClaimStep((c) => c + 1)
   }
 

@@ -9,6 +9,7 @@ import { IdeaToken, IdeaMarket } from '../store/ideaMarketsStore'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import { getInputForOutput, getOutputForInput } from 'utils/uniswap'
+import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 
 export default function useOutputAmount(
   ideaToken: IdeaToken,
@@ -16,7 +17,7 @@ export default function useOutputAmount(
   selectedTokenAddress: string,
   ideaTokenAmount: string,
   decimals: number,
-  tradeType: string
+  tradeType: TX_TYPES
 ) {
   const [isLoading, setIsLoading] = useState(true)
   const [outputBN, setOutputBN] = useState(undefined)
@@ -164,7 +165,7 @@ export default function useOutputAmount(
     }
 
     setIsLoading(true)
-    if (tradeType === 'buy') {
+    if (tradeType === TX_TYPES.BUY) {
       run(calculateBuyCost())
     } else {
       run(calculateSellPrice())

@@ -4,7 +4,7 @@ import A from 'components/A'
 import Wrong from '../../assets/SomethingWentWrong.svg'
 import TwitterCircleIcon from '../../assets/TwitterCircleIcon.svg'
 
-export enum TRANSACTION_TYPES {
+export enum TX_TYPES {
   NONE,
   BUY,
   SELL,
@@ -19,57 +19,54 @@ export enum TRANSACTION_TYPES {
 }
 
 const tweetableTypes = [
-  TRANSACTION_TYPES.LIST,
-  TRANSACTION_TYPES.GHOST_LIST,
-  TRANSACTION_TYPES.BUY,
-  TRANSACTION_TYPES.LOCK,
-  TRANSACTION_TYPES.UNLOCK,
-  TRANSACTION_TYPES.GIFT,
-  TRANSACTION_TYPES.CLAIM,
-  TRANSACTION_TYPES.STAKE,
+  TX_TYPES.LIST,
+  TX_TYPES.GHOST_LIST,
+  TX_TYPES.BUY,
+  TX_TYPES.LOCK,
+  TX_TYPES.UNLOCK,
+  TX_TYPES.GIFT,
+  TX_TYPES.CLAIM,
+  TX_TYPES.STAKE,
 ]
 
-const getTweetTemplate = (
-  transactionType: TRANSACTION_TYPES,
-  idtValue: string
-) => {
+const getTweetTemplate = (transactionType: TX_TYPES, idtValue: string) => {
   let tweetText = ''
 
-  if (transactionType === TRANSACTION_TYPES.LIST) {
+  if (transactionType === TX_TYPES.LIST) {
     tweetText = `Just listed ${idtValue} on @ideamarket_io, the literal marketplace of ideas!`
-  } else if (transactionType === TRANSACTION_TYPES.GHOST_LIST) {
+  } else if (transactionType === TX_TYPES.GHOST_LIST) {
     tweetText = `Just ghost listed ${idtValue} on @ideamarket_io, the literal marketplace of ideas!`
-  } else if (transactionType === TRANSACTION_TYPES.BUY) {
+  } else if (transactionType === TX_TYPES.BUY) {
     tweetText = `Just bought ${idtValue} on @ideamarket_io, the literal marketplace of ideas!`
-  } else if (transactionType === TRANSACTION_TYPES.LOCK) {
+  } else if (transactionType === TX_TYPES.LOCK) {
     tweetText = `Just locked ${idtValue} on @ideamarket_io, the literal marketplace of ideas!`
-  } else if (transactionType === TRANSACTION_TYPES.UNLOCK) {
+  } else if (transactionType === TX_TYPES.UNLOCK) {
     tweetText = `Just unlocked ${idtValue} on @ideamarket_io, the literal marketplace of ideas!`
-  } else if (transactionType === TRANSACTION_TYPES.GIFT) {
+  } else if (transactionType === TX_TYPES.GIFT) {
     tweetText = `Just gifted ${idtValue} on @ideamarket_io, the literal marketplace of ideas!`
-  } else if (transactionType === TRANSACTION_TYPES.CLAIM) {
+  } else if (transactionType === TX_TYPES.CLAIM) {
     tweetText = `Just claimed $IMO token airdrop on @ideamarket_io, the literal marketplace of ideas!`
-  } else if (transactionType === TRANSACTION_TYPES.STAKE) {
+  } else if (transactionType === TX_TYPES.STAKE) {
     tweetText = `Just staked $IMO tokens on @ideamarket_io, the literal marketplace of ideas!`
   }
 
   return encodeURIComponent(tweetText)
 }
 
-const getTweetUrl = (transactionType: TRANSACTION_TYPES, listingId: string) => {
+const getTweetUrl = (transactionType: TX_TYPES, listingId: string) => {
   let tweetUrl = 'https://ideamarket.io'
 
   if (
-    transactionType === TRANSACTION_TYPES.LIST ||
-    transactionType === TRANSACTION_TYPES.BUY ||
-    transactionType === TRANSACTION_TYPES.LOCK ||
-    transactionType === TRANSACTION_TYPES.UNLOCK ||
-    transactionType === TRANSACTION_TYPES.GIFT
+    transactionType === TX_TYPES.LIST ||
+    transactionType === TX_TYPES.BUY ||
+    transactionType === TX_TYPES.LOCK ||
+    transactionType === TX_TYPES.UNLOCK ||
+    transactionType === TX_TYPES.GIFT
   ) {
     tweetUrl = `https://ideamarket.io/i/${listingId}`
-  } else if (transactionType === TRANSACTION_TYPES.CLAIM) {
+  } else if (transactionType === TX_TYPES.CLAIM) {
     tweetUrl = `https://ideamarket.io/claim`
-  } else if (transactionType === TRANSACTION_TYPES.STAKE) {
+  } else if (transactionType === TX_TYPES.STAKE) {
     tweetUrl = `https://ideamarket.io/stake`
   }
 
@@ -87,7 +84,7 @@ export default function TradeCompleteModal({
   isSuccess: boolean
   listingId: string
   idtValue: string // Value stored onchain for this IDT
-  transactionType: TRANSACTION_TYPES
+  transactionType: TX_TYPES
 }) {
   const tweetTemplate = getTweetTemplate(transactionType, idtValue)
   const tweetUrl = getTweetUrl(transactionType, listingId)

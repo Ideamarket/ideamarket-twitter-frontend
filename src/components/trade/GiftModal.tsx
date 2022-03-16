@@ -11,7 +11,7 @@ import Tooltip from '../tooltip/Tooltip'
 import { useContractStore } from 'store/contractStore'
 import { CogIcon } from '@heroicons/react/outline'
 import ModalService from 'components/modals/ModalService'
-import TradeCompleteModal, { TRANSACTION_TYPES } from './TradeCompleteModal'
+import TradeCompleteModal, { TX_TYPES } from './TradeCompleteModal'
 import transferToken from 'actions/transferToken'
 import { useENSAddress } from './hooks/useENSAddress'
 import TxPending from './TxPending'
@@ -70,7 +70,7 @@ export default function GiftModal({
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TRANSACTION_TYPES
+    transactionType: TX_TYPES
   ) {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
@@ -98,18 +98,13 @@ export default function GiftModal({
         false,
         ideaToken?.listingId,
         ideaToken?.name,
-        TRANSACTION_TYPES.NONE
+        TX_TYPES.NONE
       )
       return
     }
 
     refetch()
-    onTradeComplete(
-      true,
-      ideaToken?.listingId,
-      ideaToken?.name,
-      TRANSACTION_TYPES.GIFT
-    )
+    onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, TX_TYPES.GIFT)
   }
 
   return (

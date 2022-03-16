@@ -26,7 +26,7 @@ import {
   web3BNToFloatString,
 } from 'utils'
 import TradeCompleteModal, {
-  TRANSACTION_TYPES,
+  TX_TYPES,
 } from 'components/trade/TradeCompleteModal'
 import useAuth from 'components/account/useAuth'
 import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
@@ -120,7 +120,7 @@ const HomeHeader = ({
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TRANSACTION_TYPES
+    transactionType: TX_TYPES
   ) => {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
@@ -184,7 +184,7 @@ const HomeHeader = ({
       true,
       ghostListResponse?.listingId,
       ghostListResponse?.value,
-      TRANSACTION_TYPES.GHOST_LIST
+      TX_TYPES.GHOST_LIST
     )
   }
 
@@ -214,12 +214,12 @@ const HomeHeader = ({
     //     )
     //   } catch (ex) {
     //     console.log(ex)
-    //     onTradeComplete(false, tokenName, TRANSACTION_TYPES.NONE)
+    //     onTradeComplete(false, tokenName, TX_TYPES.NONE)
     //     return
     //   }
 
     //   close()
-    //   onTradeComplete(true, tokenName, TRANSACTION_TYPES.BUY)
+    //   onTradeComplete(true, tokenName, TX_TYPES.BUY)
     //   mixpanel.track(
     //     `ADD_LISTING_${selectedMarket.name.toUpperCase()}_COMPLETED`
     //   )
@@ -247,7 +247,7 @@ const HomeHeader = ({
       setShowListingCards(false)
       setSelectedCategories([])
       setGhostCategories([])
-      onTradeComplete(false, null, null, TRANSACTION_TYPES.NONE)
+      onTradeComplete(false, null, null, TX_TYPES.NONE)
       return
     }
     // close()
@@ -264,7 +264,7 @@ const HomeHeader = ({
       true,
       listingResponse?.listingId,
       finalTokenValue,
-      TRANSACTION_TYPES.LIST
+      TX_TYPES.LIST
     )
 
     mixpanel.track(`LIST_ONCHAIN_${market.name.toUpperCase()}_COMPLETED`)

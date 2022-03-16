@@ -1,6 +1,6 @@
 import ModalService from 'components/modals/ModalService'
 import TradeCompleteModal, {
-  TRANSACTION_TYPES,
+  TX_TYPES,
 } from 'components/trade/TradeCompleteModal'
 import client from 'lib/axios'
 
@@ -44,7 +44,7 @@ export const ghostListToken = async (
       isSuccess: false,
       listingId: null,
       idtValue: url,
-      transactionType: TRANSACTION_TYPES.NONE,
+      transactionType: TX_TYPES.NONE,
     })
     return null
   }
