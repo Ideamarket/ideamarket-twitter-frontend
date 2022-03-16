@@ -69,7 +69,7 @@ export default function Table({
   const [markets, setMarkets] = useState<IdeaMarket[]>([])
   const observer: MutableRefObject<any> = useRef()
 
-  const marketsMap = markets.reduce(
+  const marketsMap = markets?.reduce(
     (acc, curr) => ({ ...acc, [curr.marketID]: curr }),
     {}
   )

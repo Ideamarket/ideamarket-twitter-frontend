@@ -9,9 +9,9 @@ import { FortmaticConnector } from './fortmatic-connector'
 import { PortisConnector } from './portis-connector'
 
 const CHAIN_IDS = [
-  ...(new Set(getNetworkSpecifics().map((v) => v.getChainID())) as any),
+  ...(new Set(getNetworkSpecifics()?.map((v) => v.getChainID())) as any),
 ]
-const RPC_URLS: { [chainId: number]: string } = getNetworkSpecifics().reduce(
+const RPC_URLS: { [chainId: number]: string } = getNetworkSpecifics()?.reduce(
   (a, v) => ({ ...a, [v.getChainID()]: v.getRPCURL() }),
   {}
 )
