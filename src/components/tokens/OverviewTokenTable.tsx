@@ -181,7 +181,7 @@ export default function Table({
   }, [refetchMarkets, selectedMarkets])
 
   useEffect(() => {
-    if (markets.length !== 0) {
+    if (markets && markets?.length !== 0) {
       refetch()
     }
   }, [
@@ -280,7 +280,9 @@ export default function Table({
                         onTradeClicked={onTradeClicked}
                         refetch={refetch}
                         lastElementRef={
-                          tokenData.length === index + 1 ? lastElementRef : null
+                          tokenData?.length === index + 1
+                            ? lastElementRef
+                            : null
                         }
                       />
                     )
