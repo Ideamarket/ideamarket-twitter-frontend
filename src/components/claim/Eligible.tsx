@@ -43,15 +43,13 @@ export const Eligible: React.FC<Props> = ({
 
   const onTradeComplete = (
     isSuccess: boolean,
-    tokenName: string,
-    transactionType: TRANSACTION_TYPES,
-    marketName: string
+    transactionType: TRANSACTION_TYPES
   ) => {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
-      tokenName,
+      listingId: null, // No IDT when claiming
+      idtValue: null,
       transactionType,
-      marketName,
     })
   }
 
@@ -64,12 +62,12 @@ export const Eligible: React.FC<Props> = ({
       console.log(error)
       setLoading(false)
       setTxFailed(true)
-      onTradeComplete(false, 'IMO', TRANSACTION_TYPES.NONE, 'no-market')
+      onTradeComplete(false, TRANSACTION_TYPES.NONE)
       return
     }
 
     setLoading(false)
-    // onTradeComplete(true, 'IMO', TRANSACTION_TYPES.CLAIM, 'no-market')
+    // onTradeComplete(true, TRANSACTION_TYPES.CLAIM)
     setClaimStep((c) => c + 1)
   }
 

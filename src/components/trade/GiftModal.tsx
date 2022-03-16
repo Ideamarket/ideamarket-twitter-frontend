@@ -19,13 +19,13 @@ import { isETHAddress } from 'utils/addresses'
 
 export default function GiftModal({
   close,
-  token,
+  ideaToken,
   balance,
   refetch,
   marketName,
 }: {
   close: () => void
-  token: IdeaToken
+  ideaToken: IdeaToken
   balance: string
   refetch: () => void
   marketName: string
@@ -68,15 +68,15 @@ export default function GiftModal({
 
   function onTradeComplete(
     isSuccess: boolean,
-    tokenName: string,
-    transactionType: TRANSACTION_TYPES,
-    marketName: string
+    listingId: string,
+    idtValue: string,
+    transactionType: TRANSACTION_TYPES
   ) {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
-      tokenName,
+      listingId,
+      idtValue,
       transactionType,
-      marketName,
     })
   }
 
@@ -85,8 +85,8 @@ export default function GiftModal({
   async function onGiftClicked() {
     const amount = floatToWeb3BN(amountToGift, 18, BigNumber.ROUND_DOWN)
 
-    const lockArgs = [token.address, amount, 31556952, giftAddress]
-    const transferArgs = [token.address, giftAddress, amount]
+    const lockArgs = [ideaToken.address, amount, 31556952, giftAddress]
+    const transferArgs = [ideaToken.address, giftAddress, amount]
 
     try {
       isLockChecked
@@ -94,12 +94,22 @@ export default function GiftModal({
         : await txManager.executeTx('Transfer', transferToken, ...transferArgs)
     } catch (ex) {
       console.log(ex)
-      onTradeComplete(false, token.name, TRANSACTION_TYPES.NONE, marketName)
+      onTradeComplete(
+        false,
+        ideaToken?.listingId,
+        ideaToken?.name,
+        TRANSACTION_TYPES.NONE
+      )
       return
     }
 
     refetch()
-    onTradeComplete(true, token.name, TRANSACTION_TYPES.GIFT, marketName)
+    onTradeComplete(
+      true,
+      ideaToken?.listingId,
+      ideaToken?.name,
+      TRANSACTION_TYPES.GIFT
+    )
   }
 
   return (
@@ -124,7 +134,7 @@ export default function GiftModal({
           </Tooltip>
         </div>
         <div className="flex flex-col items-center p-4 space-y-4">
-          <p>Amount of {token.name} to gift</p>
+          <p>Amount of {ideaToken?.name} to gift</p>
           <input
             className={classNames(
               'pl-2 w-60 h-10 leading-tight border-2 rounded appearance-none focus:outline-none focus:bg-white placeholder-gray-500 dark:placeholder-gray-300 placeholder-opacity-50 text-brand-gray-2 dark:text-white bg-gray-50 dark:bg-gray-600'
@@ -176,8 +186,8 @@ export default function GiftModal({
           </div>
           {isLockChecked && (
             <ApproveButton
-              tokenAddress={token.address}
-              tokenName={token.name}
+              tokenAddress={ideaToken.address}
+              tokenName={ideaToken.name}
               spenderAddress={ideaTokenVaultContractAddress}
               requiredAllowance={floatToWeb3BN(
                 amountToGift,

@@ -36,5 +36,6 @@ export const addTrigger = async (
     return response?.data?.data?.trigger
   } catch (error) {
     console.error(`Could not add trigger for ${tokenId}`, error)
+    return null
   }
 }

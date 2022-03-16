@@ -36,6 +36,7 @@ import { getValidURL } from 'actions/web2/getValidURL'
 import { addTrigger } from 'actions/web2/addTrigger'
 import ListMeContent from './ListMeContent'
 import { getCategories } from 'actions/web2/getCategories'
+import { querySingleToken } from 'store/ideaMarketsStore'
 
 const HomeHeader = ({
   setTradeOrListSuccessToggle,
@@ -117,14 +118,14 @@ const HomeHeader = ({
 
   const onTradeComplete = (
     isSuccess: boolean,
-    tokenName: string,
-    transactionType: TRANSACTION_TYPES,
-    selectedMarket: any
+    listingId: string,
+    idtValue: string,
+    transactionType: TRANSACTION_TYPES
   ) => {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
-      tokenName,
-      marketName: selectedMarket.name,
+      listingId,
+      idtValue,
       transactionType,
     })
   }
@@ -179,7 +180,12 @@ const HomeHeader = ({
     mixpanel.track(`LIST_GHOST_${market.name.toUpperCase()}_COMPLETED`)
 
     setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
-    onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.GHOST_LIST, market)
+    onTradeComplete(
+      true,
+      ghostListResponse?.listingId,
+      ghostListResponse?.value,
+      TRANSACTION_TYPES.GHOST_LIST
+    )
   }
 
   /**
@@ -241,13 +247,26 @@ const HomeHeader = ({
       setShowListingCards(false)
       setSelectedCategories([])
       setGhostCategories([])
-      onTradeComplete(false, finalTokenValue, TRANSACTION_TYPES.NONE, market)
+      onTradeComplete(false, null, null, TRANSACTION_TYPES.NONE)
       return
     }
     // close()
     // }
 
-    onTradeComplete(true, finalTokenValue, TRANSACTION_TYPES.LIST, market)
+    // TODO: eventually have addTrigger response return listingId so don't need this API call
+    const listingResponse = await querySingleToken(
+      finalURL,
+      finalTokenValue,
+      market.marketID
+    )
+
+    onTradeComplete(
+      true,
+      listingResponse?.listingId,
+      finalTokenValue,
+      TRANSACTION_TYPES.LIST
+    )
+
     mixpanel.track(`LIST_ONCHAIN_${market.name.toUpperCase()}_COMPLETED`)
 
     setIsListing(false)

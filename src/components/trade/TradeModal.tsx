@@ -16,14 +16,15 @@ export default function TradeModal({
 }) {
   function onTradeComplete(
     isSuccess: boolean,
-    tokenName: string,
+    listingId: string,
+    idtValue: string,
     transactionType: TRANSACTION_TYPES
   ) {
     close()
     ModalService.open(TradeCompleteModal, {
       isSuccess,
-      tokenName,
-      marketName: market.name,
+      listingId,
+      idtValue,
       transactionType,
     })
   }

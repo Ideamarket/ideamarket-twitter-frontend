@@ -85,15 +85,13 @@ const StakeEthIMOFlow = () => {
 
   const onTradeComplete = (
     isSuccess: boolean,
-    tokenName: string,
-    transactionType: TRANSACTION_TYPES,
-    marketName: string
+    transactionType: TRANSACTION_TYPES
   ) => {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
-      tokenName,
+      listingId: null, // No IDT when staking EthIMO
+      idtValue: null,
       transactionType,
-      marketName,
     })
   }
 
@@ -105,12 +103,12 @@ const StakeEthIMOFlow = () => {
       await txManager.executeTx('Stake', stakeEthIMO, ...args)
     } catch (ex) {
       console.log(ex)
-      onTradeComplete(false, 'IMO', TRANSACTION_TYPES.NONE, 'no-market')
+      onTradeComplete(false, TRANSACTION_TYPES.NONE)
       return
     }
 
     setBalanceToggle(!balanceToggle)
-    onTradeComplete(true, 'IMO', TRANSACTION_TYPES.STAKE, 'no-market')
+    onTradeComplete(true, TRANSACTION_TYPES.STAKE)
   }
 
   const withdrawxIMOClicked = async () => {
@@ -132,12 +130,12 @@ const StakeEthIMOFlow = () => {
       await txManager.executeTx('Withdraw', withdrawEthIMO, ...args)
     } catch (ex) {
       console.log(ex)
-      onTradeComplete(false, 'IMO', TRANSACTION_TYPES.NONE, 'no-market')
+      onTradeComplete(false, TRANSACTION_TYPES.NONE)
       return
     }
 
     setBalanceToggle(!balanceToggle)
-    onTradeComplete(true, 'xIMO', TRANSACTION_TYPES.UNSTAKE, 'no-market')
+    onTradeComplete(true, TRANSACTION_TYPES.UNSTAKE)
   }
 
   const onInputChanged = (event) => {

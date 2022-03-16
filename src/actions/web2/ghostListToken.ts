@@ -37,13 +37,13 @@ export const ghostListToken = async (
         },
       }
     )
-    return response
+    return response?.data?.data
   } catch (error) {
     console.error(`Could not list ${url} on the ghost market`, error)
     ModalService.open(TradeCompleteModal, {
       isSuccess: false,
-      tokenName: url,
-      marketName: market?.name,
+      listingId: null,
+      idtValue: url,
       transactionType: TRANSACTION_TYPES.NONE,
     })
     return null

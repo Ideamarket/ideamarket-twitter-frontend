@@ -80,7 +80,8 @@ type TradeInterfaceProps = {
   market: IdeaMarket
   onTradeComplete: (
     isSuccess: boolean,
-    tokenName: string,
+    listingId: string,
+    idtValue: string,
     transactionType: TRANSACTION_TYPES
   ) => void
   onValuesChanged: (
@@ -498,7 +499,12 @@ export default function TradeInterface({
     setTradeToggle(!tradeToggle)
     if (tradeType !== 'lock')
       // This is handled in LockInterface
-      onTradeComplete(true, ideaToken?.name, transactionType)
+      onTradeComplete(
+        true,
+        ideaToken?.listingId,
+        ideaToken?.name,
+        transactionType
+      )
 
     mixpanel.track(`${tradeType.toUpperCase()}_COMPLETED`, {
       tokenName: ideaToken.name,
@@ -553,7 +559,12 @@ export default function TradeInterface({
       await txManager.executeTx(name, func, ...args)
     } catch (ex) {
       console.log(ex)
-      onTradeComplete(false, ideaToken?.name, TRANSACTION_TYPES.NONE)
+      onTradeComplete(
+        false,
+        ideaToken?.listingId,
+        ideaToken?.name,
+        TRANSACTION_TYPES.NONE
+      )
       return
     }
 
@@ -571,7 +582,12 @@ export default function TradeInterface({
       await txManager.executeTx('Unlock', unlockIDT, ...args)
     } catch (ex) {
       console.log(ex)
-      onTradeComplete(false, ideaToken?.name, TRANSACTION_TYPES.NONE)
+      onTradeComplete(
+        false,
+        ideaToken?.listingId,
+        ideaToken?.name,
+        TRANSACTION_TYPES.NONE
+      )
       return
     }
 

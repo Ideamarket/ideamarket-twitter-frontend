@@ -72,15 +72,15 @@ const LockInterface = ({
 
   function onTradeComplete(
     isSuccess: boolean,
-    tokenName: string,
-    transactionType: TRANSACTION_TYPES,
-    marketName: string
+    listingId: string,
+    idtValue: string,
+    transactionType: TRANSACTION_TYPES
   ) {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
-      tokenName,
+      listingId,
+      idtValue,
       transactionType,
-      marketName,
     })
   }
 
@@ -101,12 +101,22 @@ const LockInterface = ({
       await txManager.executeTx('Lock', lockToken, ...args)
     } catch (ex) {
       console.log(ex)
-      onTradeComplete(false, ideaToken.name, TRANSACTION_TYPES.NONE, marketName)
+      onTradeComplete(
+        false,
+        ideaToken?.listingId,
+        ideaToken?.name,
+        TRANSACTION_TYPES.NONE
+      )
       return
     }
 
     tradeFinishUp()
-    onTradeComplete(true, ideaToken.name, TRANSACTION_TYPES.LOCK, marketName)
+    onTradeComplete(
+      true,
+      ideaToken?.listingId,
+      ideaToken?.name,
+      TRANSACTION_TYPES.LOCK
+    )
   }
 
   const togglePairVisibility = (pairsIndex: number) => {

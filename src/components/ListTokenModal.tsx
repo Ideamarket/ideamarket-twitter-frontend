@@ -150,13 +150,14 @@ export default function ListTokenModal({ close }: { close: () => void }) {
 
   function onTradeComplete(
     isSuccess: boolean,
-    tokenName: string,
+    listingId: string,
+    idtValue: string,
     transactionType: TRANSACTION_TYPES
   ) {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
-      tokenName,
-      marketName: selectedMarket.name,
+      listingId,
+      idtValue,
       transactionType,
     })
   }
@@ -181,12 +182,12 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         )
       } catch (ex) {
         console.log(ex)
-        onTradeComplete(false, tokenName, TRANSACTION_TYPES.NONE)
+        onTradeComplete(false, null, tokenName, TRANSACTION_TYPES.NONE)
         return
       }
 
       close()
-      onTradeComplete(true, tokenName, TRANSACTION_TYPES.BUY)
+      onTradeComplete(true, null, tokenName, TRANSACTION_TYPES.BUY)
       mixpanel.track(
         `ADD_LISTING_${selectedMarket.name.toUpperCase()}_COMPLETED`
       )
@@ -200,11 +201,11 @@ export default function ListTokenModal({ close }: { close: () => void }) {
         )
       } catch (ex) {
         console.log(ex)
-        onTradeComplete(false, tokenName, TRANSACTION_TYPES.NONE)
+        onTradeComplete(false, null, tokenName, TRANSACTION_TYPES.NONE)
         return
       }
       close()
-      onTradeComplete(true, tokenName, TRANSACTION_TYPES.LIST)
+      onTradeComplete(true, null, tokenName, TRANSACTION_TYPES.LIST)
       mixpanel.track(
         `ADD_LISTING_${selectedMarket.name.toUpperCase()}_COMPLETED`
       )
