@@ -107,6 +107,7 @@ type TradeInterfaceProps = {
   unlockText?: string
   newIdeaToken?: NewIdeaToken | null
   parentComponent: string
+  startingTradeType?: TX_TYPES
 }
 
 export default function TradeInterface({
@@ -120,6 +121,7 @@ export default function TradeInterface({
   unlockText,
   newIdeaToken,
   parentComponent,
+  startingTradeType = TX_TYPES.BUY,
 }: TradeInterfaceProps) {
   const { data: interestManagerTotalShares } = useQuery(
     'interest-manager-total-shares',
@@ -151,9 +153,7 @@ export default function TradeInterface({
 
   const { account } = useWeb3React()
   const [lockingAPR, setLockingAPR] = useState(undefined)
-  const [tradeType, setTradeType] = useState(
-    parentComponent === 'OwnedTokenRow' ? TX_TYPES.LOCK : TX_TYPES.BUY
-  ) // Used for smart contracts and which trade UI tab user is on
+  const [tradeType, setTradeType] = useState(startingTradeType) // Used for smart contracts and which trade UI tab user is on
   const [showLockOptions, setShowLockOptions] = useState(false)
   const [lockPeriod, setLockPeriod] = useState('3month')
   const [recipientAddress, setRecipientAddress] = useState('')
@@ -384,9 +384,7 @@ export default function TradeInterface({
   useEffect(() => {
     setSelectedToken(useTokenListStore.getState().tokens[0])
     setIdeaTokenAmount('')
-    setTradeType(
-      parentComponent === 'OwnedTokenRow' ? TX_TYPES.LOCK : TX_TYPES.BUY
-    )
+    setTradeType(startingTradeType)
     setApproveButtonKey(approveButtonKey + 1)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetOn])

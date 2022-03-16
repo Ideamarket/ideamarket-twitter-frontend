@@ -57,6 +57,7 @@ import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 import useAuth from 'components/account/useAuth'
 import { getTimeDifferenceIndays } from 'lib/utils/dateUtil'
 import { convertAccountName } from 'lib/utils/stringUtil'
+import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 
 const DetailsSkeleton = () => (
   <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
@@ -175,12 +176,12 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
-  const onTradeClicked = () => {
+  const onTradeClicked = (tradeType: TX_TYPES) => {
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
         ModalService.open(
           TradeModal,
-          { ideaToken: token, market },
+          { ideaToken: token, market, startingTradeType: tradeType },
           onTradeComplete
         )
       })
@@ -188,7 +189,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     } else {
       ModalService.open(
         TradeModal,
-        { ideaToken: token, market },
+        { ideaToken: token, market, startingTradeType: tradeType },
         onTradeComplete
       )
     }
@@ -476,17 +477,23 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                   {token?.isOnChain && (
                     <div className="flex justify-end space-x-2 items-center w-full w-1/2">
                       <button
-                        onClick={onTradeClicked}
+                        onClick={() => onTradeClicked(TX_TYPES.BUY)}
                         className="bg-blue-500 px-4 py-2 flex items-center text-white rounded-lg"
                       >
                         <ArrowSmUpIcon className="w-5" />
                         Buy
                       </button>
-                      <button className="border px-4 py-2 flex items-center text-black rounded-lg">
+                      <button
+                        onClick={() => onTradeClicked(TX_TYPES.SELL)}
+                        className="border px-4 py-2 flex items-center text-black rounded-lg"
+                      >
                         <ArrowSmDownIcon className="w-5" />
                         Sell
                       </button>
-                      <button className="border px-4 py-2 flex items-center text-black rounded-lg">
+                      <button
+                        onClick={() => onTradeClicked(TX_TYPES.LOCK)}
+                        className="border px-4 py-2 flex items-center text-black rounded-lg"
+                      >
                         <LockClosedIcon className="w-5" />
                         Lock
                       </button>

@@ -8,11 +8,13 @@ export default function TradeModal({
   ideaToken,
   market,
   parentComponent,
+  startingTradeType = TX_TYPES.BUY,
 }: {
   close: () => void
   ideaToken: IdeaToken
   market: IdeaMarket
   parentComponent?: string
+  startingTradeType: TX_TYPES
 }) {
   function onTradeComplete(
     isSuccess: boolean,
@@ -43,6 +45,7 @@ export default function TradeModal({
           showTradeButton={true}
           disabled={false}
           parentComponent={parentComponent || 'TradeModal'}
+          startingTradeType={startingTradeType}
         />
       </div>
     </Modal>

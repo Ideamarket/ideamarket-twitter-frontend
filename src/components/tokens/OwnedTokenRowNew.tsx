@@ -19,6 +19,7 @@ import Image from 'next/image'
 import GiftModal from 'components/trade/GiftModal'
 import IdeaverifyIconBlue from '../../assets/IdeaverifyIconBlue.svg'
 import { LockClosedIcon } from '@heroicons/react/solid'
+import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 
 export default function OwnedTokenRow({
   token,
@@ -224,7 +225,7 @@ export default function OwnedTokenRow({
                   {
                     ideaToken: token,
                     market,
-                    parentComponent: 'OwnedTokenRow',
+                    startingTradeType: TX_TYPES.LOCK,
                   },
                   onTradeClosed
                 )
