@@ -35,6 +35,7 @@ import {
   formatNumberInt,
   formatNumberWithCommasAsThousandsSerperator,
   web3BNToFloatString,
+  ZERO_SUPPLY_IDT,
 } from 'utils'
 import {
   ArrowSmDownIcon,
@@ -591,7 +592,10 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                     'p-5 bg-white text-black border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray')
                   }
                 >
-                  <InvestmentCalculator ideaToken={token} market={market} />
+                  <InvestmentCalculator
+                    ideaToken={token?.isOnChain ? token : ZERO_SUPPLY_IDT}
+                    market={market}
+                  />
                 </div>
               </div>
             </div>
