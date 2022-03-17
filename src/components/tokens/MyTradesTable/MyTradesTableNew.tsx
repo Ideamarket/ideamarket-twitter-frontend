@@ -14,7 +14,6 @@ type MyTradesTableProps = {
   orderBy: string
   fetchMore: () => any
   headerClicked: (value: string) => void
-  userData: any
 }
 
 export default function MyTradesTableNew({
@@ -25,7 +24,6 @@ export default function MyTradesTableNew({
   orderBy,
   fetchMore,
   headerClicked,
-  userData,
 }: MyTradesTableProps) {
   const TOKENS_PER_PAGE = 10
 
@@ -108,13 +106,12 @@ export default function MyTradesTableNew({
                 {rawPairs.map((pair: IdeaTokenTrade, index) => (
                   <MyTradesRowNew
                     key={index}
-                    token={pair.token}
+                    ideaToken={pair.token}
                     market={pair.market}
                     rawDaiAmount={pair.rawDaiAmount}
                     isBuy={pair.isBuy}
                     timestamp={pair.timestamp}
                     rawIdeaTokenAmount={pair.rawIdeaTokenAmount}
-                    userData={userData}
                     lastElementRef={
                       rawPairs.length === index + 1 ? lastElementRef : null
                     }

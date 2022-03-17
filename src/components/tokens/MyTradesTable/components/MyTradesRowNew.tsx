@@ -18,35 +18,33 @@ import IdeaverifyIconBlue from '../../../../assets/IdeaverifyIconBlue.svg'
 const tenPow18 = new BigNumber('10').pow(new BigNumber('18'))
 
 const MyTradesRowNew = ({
-  token,
+  ideaToken,
   market,
   isBuy,
   timestamp,
   rawIdeaTokenAmount,
   rawDaiAmount,
   lastElementRef,
-  userData,
 }: {
-  token: IdeaToken
+  ideaToken: IdeaToken
   market: IdeaMarket
   isBuy: boolean
   timestamp: number
   rawIdeaTokenAmount: BN
   rawDaiAmount: BN
   lastElementRef?: (node) => void
-  userData: any
 }) => {
   const router = useRouter()
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
 
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
-    tokenName: token.name,
+    tokenName: ideaToken.name,
   })
 
   const tokenSupply = isBuy
-    ? token?.rawSupply
-    : token?.rawSupply.add(rawIdeaTokenAmount)
+    ? ideaToken?.rawSupply
+    : ideaToken?.rawSupply.add(rawIdeaTokenAmount)
 
   const ideaTokenValueBN = calculateIdeaTokenDaiValue(
     tokenSupply,
@@ -69,7 +67,7 @@ const MyTradesRowNew = ({
       onClick={() => {
         router.push(
           `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
-            token.name
+            ideaToken?.name
           )}`
         )
       }}
@@ -83,7 +81,7 @@ const MyTradesRowNew = ({
               <div className="relative w-full h-full rounded-full">
                 <Image
                   src={tokenIconURL || '/gray.svg'}
-                  alt="token"
+                  alt="ideaToken icon"
                   layout="fill"
                   objectFit="cover"
                   className="rounded-full"
@@ -93,17 +91,17 @@ const MyTradesRowNew = ({
           </div>
           <div className="ml-4 text-base font-semibold leading-5">
             <A
-              href={`${marketSpecifics.getTokenURL(token.name)}`}
+              href={`${marketSpecifics.getTokenURL(ideaToken.name)}`}
               className="hover:underline"
               onClick={(e) => {
                 e.stopPropagation()
               }}
             >
-              {marketSpecifics.getTokenDisplayName(token.name)}
+              {marketSpecifics.getTokenDisplayName(ideaToken.name)}
             </A>
           </div>
           {/* Verified Badge */}
-          {token.tokenOwner !== ZERO_ADDRESS && (
+          {ideaToken.tokenOwner !== ZERO_ADDRESS && (
             <div className="w-5 h-5 ml-1.5">
               <IdeaverifyIconBlue className="w-full h-full" />
             </div>

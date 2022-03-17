@@ -22,7 +22,7 @@ import { LockClosedIcon } from '@heroicons/react/solid'
 import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 
 export default function OwnedTokenRow({
-  token,
+  ideaToken,
   market,
   balance,
   balanceBN,
@@ -30,9 +30,8 @@ export default function OwnedTokenRow({
   isL1,
   refetch,
   lastElementRef,
-  userData,
 }: {
-  token: IdeaToken
+  ideaToken: IdeaToken
   market: IdeaMarket
   balance: string
   balanceBN: BN
@@ -40,18 +39,17 @@ export default function OwnedTokenRow({
   isL1: boolean
   refetch: () => void
   lastElementRef?: (node) => void
-  userData: any
 }) {
   const router = useRouter()
 
   const marketSpecifics = getMarketSpecificsByMarketName(market.name)
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
-    tokenName: token.name,
+    tokenName: ideaToken.name,
   })
   const tokenPrice = web3BNToFloatString(
     calculateCurrentPriceBN(
-      token.rawSupply,
+      ideaToken.rawSupply,
       market.rawBaseCost,
       market.rawPriceRise,
       market.rawHatchTokens
@@ -61,7 +59,7 @@ export default function OwnedTokenRow({
   )
 
   const balanceValueBN = calculateIdeaTokenDaiValue(
-    token?.rawSupply,
+    ideaToken?.rawSupply,
     market,
     balanceBN
   )
@@ -80,7 +78,7 @@ export default function OwnedTokenRow({
       onClick={() => {
         router.push(
           `/i/${marketSpecifics.getMarketNameURLRepresentation()}/${marketSpecifics.getTokenNameURLRepresentation(
-            token.name
+            ideaToken?.name
           )}`
         )
       }}
@@ -94,7 +92,7 @@ export default function OwnedTokenRow({
               <div className="relative w-full h-full rounded-full">
                 <Image
                   src={tokenIconURL || '/gray.svg'}
-                  alt="token"
+                  alt="ideaToken icon"
                   layout="fill"
                   objectFit="cover"
                   className="rounded-full"
@@ -104,13 +102,13 @@ export default function OwnedTokenRow({
           </div>
           <div className="flex ml-4 text-base font-semibold leading-5">
             <A
-              href={`${marketSpecifics.getTokenURL(token.name)}`}
+              href={`${marketSpecifics.getTokenURL(ideaToken.name)}`}
               className="hover:underline"
               onClick={(e) => {
                 e.stopPropagation()
               }}
             >
-              {marketSpecifics.getTokenDisplayName(token.name)}
+              {marketSpecifics.getTokenDisplayName(ideaToken.name)}
             </A>
             {isL1 && (
               <div className="ml-2 text-xs py-0.5 px-2.5 text-gray-400 border border-gray-400 rounded">
@@ -119,7 +117,7 @@ export default function OwnedTokenRow({
             )}
           </div>
           {/* Verified Badge */}
-          {token.tokenOwner !== ZERO_ADDRESS && (
+          {ideaToken.tokenOwner !== ZERO_ADDRESS && (
             <div className="w-5 h-5 ml-1.5">
               <IdeaverifyIconBlue className="w-full h-full" />
             </div>
@@ -187,22 +185,22 @@ export default function OwnedTokenRow({
             'text-base leading-4 tracking-tightest-2 uppercase',
             {
               'text-brand-red dark:text-red-400':
-                parseFloat(token.dayChange) < 0.0,
+                parseFloat(ideaToken.dayChange) < 0.0,
               'text-brand-green dark:text-green-400':
-                parseFloat(token.dayChange) > 0.0,
+                parseFloat(ideaToken.dayChange) > 0.0,
               'text-very-dark-blue dark:text-gray-300':
-                parseFloat(token.dayChange) === 0.0,
+                parseFloat(ideaToken.dayChange) === 0.0,
             }
           )}
           title={
-            parseFloat(token.dayChange) >= 0.0
-              ? `+ ${token.dayChange}%`
-              : `- ${token.dayChange.slice(1)}%`
+            parseFloat(ideaToken.dayChange) >= 0.0
+              ? `+ ${ideaToken.dayChange}%`
+              : `- ${ideaToken.dayChange.slice(1)}%`
           }
         >
-          {parseFloat(token.dayChange) >= 0.0
-            ? `+ ${formatNumber(token.dayChange)}`
-            : `- ${formatNumber(token.dayChange.slice(1))}`}
+          {parseFloat(ideaToken.dayChange) >= 0.0
+            ? `+ ${formatNumber(ideaToken.dayChange)}`
+            : `- ${formatNumber(ideaToken.dayChange.slice(1))}`}
           %
         </p>
       </td>
@@ -223,7 +221,7 @@ export default function OwnedTokenRow({
               : ModalService.open(
                   TradeModal,
                   {
-                    ideaToken: token,
+                    ideaToken,
                     market,
                     startingTradeType: TX_TYPES.LOCK,
                   },
@@ -241,7 +239,7 @@ export default function OwnedTokenRow({
           onClick={(e) => {
             e.stopPropagation()
             ModalService.open(GiftModal, {
-              token,
+              token: ideaToken,
               balance: lockedAmount
                 ? parseFloat(balance) - lockedAmount
                 : balance,

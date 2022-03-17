@@ -622,7 +622,6 @@ export default function ProfileWallet({ walletState, userData }: Props) {
                 orderBy={orderBy}
                 fetchMore={fetchMoreOwned}
                 headerClicked={headerClicked}
-                userData={userData}
               />
             )}
 
@@ -637,7 +636,6 @@ export default function ProfileWallet({ walletState, userData }: Props) {
                 orderBy={orderBy}
                 fetchMore={fetchMoreTrades}
                 headerClicked={headerClicked}
-                userData={userData}
               />
             )}
         </div>

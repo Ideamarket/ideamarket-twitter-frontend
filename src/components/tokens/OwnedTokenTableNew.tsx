@@ -61,7 +61,6 @@ type OwnedTokenTableProps = {
   orderBy: string
   fetchMore: () => any
   headerClicked: (value: string) => void
-  userData: any
 }
 
 export default function OwnedTokenTableNew({
@@ -73,7 +72,6 @@ export default function OwnedTokenTableNew({
   orderBy,
   fetchMore,
   headerClicked,
-  userData,
 }: OwnedTokenTableProps) {
   const TOKENS_PER_PAGE = 10
 
@@ -200,14 +198,13 @@ export default function OwnedTokenTableNew({
                 {rawPairs.map((pair: any, index) => (
                   <OwnedTokenRowNew
                     key={index}
-                    token={pair.token}
+                    ideaToken={pair.token}
                     market={pair.market}
                     balance={pair.balance}
                     balanceBN={pair.rawBalance}
                     lockedAmount={pair?.lockedAmount}
                     isL1={pair.token.isL1}
                     refetch={refetch}
-                    userData={userData}
                     lastElementRef={
                       rawPairs.length === index + 1 ? lastElementRef : null
                     }
