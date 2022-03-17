@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import BigNumber from 'bignumber.js'
 import { useState, useEffect } from 'react'
 import numeral from 'numeral'
-import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
+import { IdeaMarket } from 'store/ideaMarketsStore'
 
 export { default as TransactionManager } from './TransactionManager'
 export { default as useTransactionManager } from './useTransactionManager'
@@ -30,51 +30,6 @@ export const DAY_SECONDS = 86400
 export const WEEK_SECONDS = 604800
 export const MONTH_SECONDS = 2628000
 export const YEAR_SECONDS = 31536000
-
-// Useful for IDT calculations needed for Ghost Tokens
-export const ZERO_SUPPLY_IDT = {
-  address: '',
-  marketID: 1,
-  marketName: 'Twitter',
-  tokenID: 1, // web3 token ID
-  listingId: '', // web2 ghost ID
-  url: '',
-  name: '',
-  isOnChain: false,
-  price: 0,
-  ghostListedBy: '',
-  ghostListedAt: '',
-  onchainListedBy: null,
-  onchainListedAt: null,
-  totalVotes: 0,
-  upVoted: false,
-  supply: undefined,
-  rawSupply: new BN('0'),
-  holders: 0,
-  marketCap: '0',
-  rawMarketCap: new BN('0'),
-  rank: 0,
-  tokenOwner: undefined,
-  daiInToken: undefined,
-  rawDaiInToken: undefined,
-  invested: undefined,
-  rawInvested: undefined,
-  tokenInterestRedeemed: undefined,
-  rawTokenInterestRedeemed: undefined,
-  latestPricePoint: undefined,
-  earliestPricePoint: undefined,
-  dayChange: undefined,
-  weeklyChange: undefined,
-  dayVolume: undefined,
-  listedAt: undefined,
-  lockedAmount: undefined,
-  rawLockedAmount: undefined,
-  lockedPercentage: '',
-  isL1: false,
-  holder: '',
-  verified: false,
-  categories: null,
-} as IdeaToken
 
 export function web3BNToFloatString(
   bn: BN,

@@ -1159,6 +1159,8 @@ export function newApiResponseToIdeaToken(
       )
 
   const onchainValue = apiResponse?.onchainValue
+    ? apiResponse?.onchainValue
+    : url
   // getMarketSpecificsByMarketName(apiResponse?.marketName).convertUserInputToTokenName(url)
 
   const ret = {
@@ -1170,30 +1172,30 @@ export function newApiResponseToIdeaToken(
     url,
     name: onchainValue,
     isOnChain,
-    price: apiResponse?.price,
+    price: apiResponse?.price || 0,
     ghostListedBy: apiResponse?.ghostListedBy,
     ghostListedAt: apiResponse?.ghostListedAt,
     onchainListedBy: apiResponse?.onchainListedBy,
     onchainListedAt: apiResponse?.onchainListedAt,
-    totalVotes: apiResponse?.totalVotes,
+    totalVotes: apiResponse?.totalVotes || 0,
     upVoted: apiResponse?.upVoted,
     supply: web3TokenData?.supply
       ? web3BNToFloatString(new BN(web3TokenData?.supply), bigNumberTenPow18, 2)
       : undefined,
     rawSupply: web3TokenData?.supply
       ? new BN(web3TokenData?.supply)
-      : undefined,
-    holders: web3TokenData?.holders,
+      : new BN('0'),
+    holders: web3TokenData?.holders || 0,
     marketCap: web3TokenData?.marketCap
       ? web3BNToFloatString(
           new BN(web3TokenData?.marketCap),
           bigNumberTenPow18,
           2
         )
-      : undefined,
+      : '0',
     rawMarketCap: web3TokenData?.marketCap
       ? new BN(web3TokenData?.marketCap)
-      : undefined,
+      : new BN('0'),
     rank: web3TokenData?.rank,
     tokenOwner: web3TokenData?.tokenOwner
       ? web3TokenData?.tokenOwner
