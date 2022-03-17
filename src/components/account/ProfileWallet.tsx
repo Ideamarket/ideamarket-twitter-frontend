@@ -15,6 +15,7 @@ import {
   calculateIdeaTokenDaiValue,
   bigNumberTenPow18,
   calculateCurrentPriceBN,
+  floatToWeb3BN,
 } from 'utils'
 import {
   queryOwnedTokensMaybeMarket,
@@ -28,6 +29,7 @@ import ModalService from 'components/modals/ModalService'
 import { sortNumberByOrder, sortStringByOrder } from 'components/tokens/utils'
 import WalletFilters from './WalletFilters'
 import { useMarketStore } from 'store/markets'
+import BigNumber from 'bignumber.js'
 
 const TOKENS_PER_PAGE = 10
 
@@ -211,7 +213,11 @@ export default function ProfileWallet({ walletState, userData }: Props) {
           0
         )
         const newBalance = parseFloat(pair.balance) + dupLockedBalance
-        const newRawBalance = new BN(newBalance)
+        const newRawBalance = floatToWeb3BN(
+          newBalance,
+          18,
+          BigNumber.ROUND_DOWN
+        )
         const newPair = {
           ...pair,
           balance: newBalance.toString(),

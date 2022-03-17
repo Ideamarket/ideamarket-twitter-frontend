@@ -149,7 +149,7 @@ const WalletFilters = ({
   const isPeopleSelected = selectedMarkets.has('Twitter')
 
   return (
-    <div className="justify-center p-3 overflow-x-scroll bg-white rounded-t-lg text-black md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start lg:overflow-x-visible">
+    <div className="justify-center p-3 bg-white rounded-t-lg text-black md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start lg:overflow-x-visible">
       {/* <div className="flex md:gap-x-2">
         {CheckboxFilters.PLATFORMS.values
           .sort((p1, p2) => {
