@@ -58,6 +58,7 @@ import useAuth from 'components/account/useAuth'
 import { getTimeDifferenceIndays } from 'lib/utils/dateUtil'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import { TX_TYPES } from 'components/trade/TradeCompleteModal'
+import { getMarketSpecificsByMarketName } from 'store/markets'
 
 const DetailsSkeleton = () => (
   <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
@@ -69,12 +70,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const { account } = useWeb3React()
   const { jwtToken } = useContext(GlobalContext)
 
-  // const marketSpecifics =
-  //   getMarketSpecificsByMarketNameInURLRepresentation(rawMarketName)
-  // const marketName = marketSpecifics?.getMarketName()
-  // const tokenName =
-  //   marketSpecifics?.getTokenNameFromURLRepresentation(rawTokenId)
-
   const {
     data: token,
     isLoading: isTokenLoading,
@@ -85,6 +80,8 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
   const marketName = token?.marketName
   const tokenName = token?.name ? token?.name : token?.url
+
+  const marketSpecifics = getMarketSpecificsByMarketName(marketName)
 
   const { data: market, isLoading: isMarketLoading } = useQuery(
     [`market-${marketName}`],
@@ -164,7 +161,10 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         )
 
   const relatedInfoProps = {
-    rawTokenName: token?.name,
+    rawTokenName:
+      marketName?.toLowerCase() === 'wikipedia'
+        ? marketSpecifics.convertUserInputToTokenName(token?.name)
+        : token?.name,
     tokenName,
     marketName,
   }
@@ -657,7 +657,11 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                     title="Pageviews"
                     rawTokenName={rawTokenId}
                   /> */}
-                  <MultiChart rawTokenName={tokenName} />
+                  <MultiChart
+                    rawTokenName={marketSpecifics?.convertUserInputToTokenName(
+                      token?.name
+                    )}
+                  />
                 </div>
                 {/* <GoogleTrendsPanel
                   title="Google Trends"
