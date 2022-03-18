@@ -161,34 +161,37 @@ export default function OwnedTokenTableNew({
                         }
                       }}
                     >
-                      {header.sortable && orderBy === header.value && (
-                        <div className="absolute w-28 h-8 z-[42] -bottom-3 -left-2 text-[.65rem] flex justify-center items-center">
-                          <span className="absolute left-3 top-3">
-                            <SortDescendingIcon
-                              className={classNames(
-                                orderDirection === 'desc' && 'text-blue-500',
-                                'w-3.5'
-                              )}
+                      {rawPairs &&
+                        rawPairs?.length > 0 &&
+                        header.sortable &&
+                        orderBy === header.value && (
+                          <div className="absolute w-28 h-8 z-[42] -bottom-3 -left-2 text-[.65rem] flex justify-center items-center">
+                            <span className="absolute left-3 top-3">
+                              <SortDescendingIcon
+                                className={classNames(
+                                  orderDirection === 'desc' && 'text-blue-500',
+                                  'w-3.5'
+                                )}
+                              />
+                              <SortAscendingIcon
+                                className={classNames(
+                                  orderDirection === 'asc' && 'text-blue-500',
+                                  'w-3.5'
+                                )}
+                              />
+                            </span>
+                            <span className="absolute top-3 right-3 text-blue-500">
+                              {orderDirection === 'asc'
+                                ? 'ascending'
+                                : 'descending'}
+                            </span>
+                            <img
+                              src="/SortingSliderBg.png"
+                              className="h-full"
+                              alt="SortingSliderBg"
                             />
-                            <SortAscendingIcon
-                              className={classNames(
-                                orderDirection === 'asc' && 'text-blue-500',
-                                'w-3.5'
-                              )}
-                            />
-                          </span>
-                          <span className="absolute top-3 right-3 text-blue-500">
-                            {orderDirection === 'asc'
-                              ? 'ascending'
-                              : 'descending'}
-                          </span>
-                          <img
-                            src="/SortingSliderBg.png"
-                            className="h-full"
-                            alt="SortingSliderBg"
-                          />
-                        </div>
-                      )}
+                          </div>
+                        )}
                       {getColumnContent(header)}
                     </th>
                   ))}
