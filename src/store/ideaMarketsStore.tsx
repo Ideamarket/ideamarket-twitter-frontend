@@ -1151,17 +1151,18 @@ export function newApiResponseToIdeaToken(
   const web3TokenData = apiResponse?.web3TokenData
   const isOnChain = apiResponse?.isOnchain
 
+  const marketSpecifics = getMarketSpecificsByMarketName(
+    apiResponse?.marketName
+  )
+
   // When marketType is 'onchain', no web2TokenData is returned
   const url = apiResponse?.value
     ? apiResponse?.value
-    : getMarketSpecificsByMarketName(apiResponse?.marketName).getTokenURL(
-        apiResponse?.onchainValue
-      )
+    : marketSpecifics?.getTokenURL(apiResponse?.onchainValue)
 
   const onchainValue = apiResponse?.onchainValue
     ? apiResponse?.onchainValue
-    : url
-  // getMarketSpecificsByMarketName(apiResponse?.marketName).convertUserInputToTokenName(url)
+    : marketSpecifics?.convertUserInputToTokenName(url)
 
   const ret = {
     address: web3TokenData?.id,

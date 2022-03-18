@@ -78,6 +78,23 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     querySingleToken(null, null, null, rawTokenId, jwtToken)
   )
 
+  const { ghostListedBy, ghostListedAt, onchainListedAt, onchainListedBy } =
+    (token || {}) as any
+
+  const timeAfterGhostListedInDays = useMemo(() => {
+    if (!ghostListedAt) return null
+    const ghostListedAtDate = new Date(ghostListedAt)
+    const currentDate = new Date()
+    return getTimeDifferenceIndays(ghostListedAtDate, currentDate)
+  }, [ghostListedAt])
+
+  const timeAfterOnChainListedInDays = useMemo(() => {
+    if (!onchainListedAt) return null
+    const onchainListedAtDate = new Date(onchainListedAt)
+    const currentDate = new Date()
+    return getTimeDifferenceIndays(onchainListedAtDate, currentDate)
+  }, [onchainListedAt])
+
   const marketName = token?.marketName
   const tokenName = token?.name ? token?.name : token?.url
 
@@ -135,6 +152,34 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   //       )
   //     : '0.00'
 
+  const { mixpanel } = useMixPanel()
+  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
+  const { loginByWallet } = useAuth()
+
+  useEffect(() => {
+    const initializeTwitterAPI = () => {
+      // You can add this as script tag in <head>, but for some reason that way stopped working. But this works fine for now
+      const s = document.createElement('script')
+      s.setAttribute('src', 'https://platform.twitter.com/widgets.js')
+      s.setAttribute('async', 'true')
+      document.head.appendChild(s)
+    }
+
+    const timeout = setTimeout(
+      () => (window as any)?.twttr?.widgets?.load(),
+      3000
+    ) // Load tweets
+
+    initializeTwitterAPI()
+
+    return () => clearTimeout(timeout)
+  }, [rawTokenId])
+
+  useEffect(() => {
+    setIsLocallyUpvoted(token?.upVoted)
+    setLocalTotalVotes(token?.totalVotes)
+  }, [token])
+
   const url = token?.url
 
   const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
@@ -164,7 +209,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     rawTokenName:
       marketName?.toLowerCase() === 'wikipedia'
         ? marketSpecifics.convertUserInputToTokenName(token?.name)
-        : token?.name,
+        : marketSpecifics?.getTokenNameURLRepresentation(token?.name),
     tokenName,
     marketName,
   }
@@ -173,8 +218,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     refetch()
     setTradeToggle(!tradeToggle)
   }
-
-  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
   const onTradeClicked = (tradeType: TX_TYPES) => {
     if (!useWalletStore.getState().web3) {
@@ -195,8 +238,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     }
   }
 
-  const { mixpanel } = useMixPanel()
-
   const onVerifyClicked = () => {
     mixpanel.track('CLAIM_INCOME_STREAM', {
       token: token?.name,
@@ -206,8 +247,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     const onClose = () => refetch()
     ModalService.open(VerifyModal, { market, token }, onClose)
   }
-
-  const { loginByWallet } = useAuth()
 
   const onLoginClicked = async () => {
     if (useWalletStore.getState().web3) {
@@ -267,36 +306,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
     refetch()
   }
-
-  useEffect(() => {
-    const timeout = setTimeout(
-      () => (window as any)?.twttr?.widgets?.load(),
-      3000
-    ) // Load tweets
-
-    return () => clearTimeout(timeout)
-  }, [rawTokenId])
-
-  useEffect(() => {
-    setIsLocallyUpvoted(token?.upVoted)
-    setLocalTotalVotes(token?.totalVotes)
-  }, [token])
-  const { ghostListedBy, ghostListedAt, onchainListedAt, onchainListedBy } =
-    (token || {}) as any
-
-  const timeAfterGhostListedInDays = useMemo(() => {
-    if (!ghostListedAt) return null
-    const ghostListedAtDate = new Date(ghostListedAt)
-    const currentDate = new Date()
-    return getTimeDifferenceIndays(ghostListedAtDate, currentDate)
-  }, [ghostListedAt])
-
-  const timeAfterOnChainListedInDays = useMemo(() => {
-    if (!onchainListedAt) return null
-    const onchainListedAtDate = new Date(onchainListedAt)
-    const currentDate = new Date()
-    return getTimeDifferenceIndays(onchainListedAtDate, currentDate)
-  }, [onchainListedAt])
 
   return (
     <>
