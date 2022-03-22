@@ -109,5 +109,12 @@ export const getNavbarConfig = (mixPanel: any) => ({
         },
       ],
     },
+    {
+      name: 'My Profile',
+      onClick: () => {
+        router.push('/account')
+        mixPanel.track('GO_TO_MY_PROFILE')
+      },
+    },
   ],
 })

@@ -8,6 +8,10 @@ import { BsFillBellFill } from 'react-icons/bs'
 import SpearkIcon from '../../assets/speaker.svg'
 import { GlobalContext } from 'lib/GlobalContext'
 import { useWeb3React } from '@web3-react/core'
+import { ClipboardCopyIcon } from '@heroicons/react/outline'
+import copy from 'copy-to-clipboard'
+import { getURL } from 'utils/seo-constants'
+import toast from 'react-hot-toast'
 
 interface Props {
   userData?: any
@@ -29,6 +33,14 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
     ModalService.open(ProfileSettingsModal)
   }
 
+  const copyProfileURL = () => {
+    const url = userData
+      ? `${getURL()}/u/${userData?.username}`
+      : `${getURL()}/u/${connectedUsername}`
+    copy(url)
+    toast.success('Copied profile URL')
+  }
+
   const isPublicProfile = userData // Is this a public profile being viewed
   const isUserSignedIn = walletAddress // If there is a user wallet address, then someone is signed in
   const username = isPublicProfile ? userData?.username : connectedUsername
@@ -39,19 +51,41 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
 
   return (
     <>
-      <div className="flex justify-between mb-6 font-sf-compact-medium">
+      <div className="md:hidden opacity-75 text-right text-xs mb-3">
+        <div>"Don't tell me what you believe — show me your portfolio."</div>
+        <div>—Nassim Nicholas Taleb</div>
+      </div>
+
+      <div className="flex justify-between mb-6">
         <span className="text-base opacity-50">My Profile</span>
-        {!isPublicProfile && isUserSignedIn && (
-          <div className="text-xs opacity-75 justify-items-end">
+
+        <div className="flex items-center justify-items-end space-x-3">
+          <div className="hidden md:block opacity-75 text-right text-sm">
+            <div>
+              "Don't tell me what you believe — show me your portfolio."
+            </div>
+            <div>—Nassim Nicholas Taleb</div>
+          </div>
+
+          <button
+            type="button"
+            onClick={copyProfileURL}
+            className="flex justify-center items-center space-x-1 h-10 px-2 font-medium hover:bg-white border-2 rounded-lg text-white hover:text-blue-600 dark:bg-gray-600 border-white dark:text-gray-300"
+          >
+            <span>Share</span>
+            <ClipboardCopyIcon className="w-6 h-6" />
+          </button>
+
+          {!isPublicProfile && isUserSignedIn && (
             <div
-              className="flex items-center cursor-pointer"
+              className="flex items-center cursor-pointer opacity-75 text-xs"
               onClick={onClickSettings}
             >
               <BiCog className="w-6 h-6" />
               <span className="ml-1">Settings</span>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <div className="flex justify-between items-center mb-10 flex-col md:flex-row">
         <div className="flex items-center w-full md:w-auto">
