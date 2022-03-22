@@ -1,17 +1,10 @@
 type Props = {
-  rawTokenName: string
-  tokenName: string
-  marketName: string
   wikiSnapshot: any
 }
 
-const WikiDesktopRelatedInfo = ({
-  wikiSnapshot,
-  tokenName,
-  marketName,
-}: Props) => {
+const WikiDesktopContent = ({ wikiSnapshot }: Props) => {
   return (
-    <div className="hidden md:flex mt-4 h-full">
+    <div className="hidden md:flex h-full">
       <div className="w-full h-full">
         {wikiSnapshot?.type === 'wikipedia' && (
           <iframe
@@ -38,4 +31,4 @@ const WikiDesktopRelatedInfo = ({
   )
 }
 
-export default WikiDesktopRelatedInfo
+export default WikiDesktopContent

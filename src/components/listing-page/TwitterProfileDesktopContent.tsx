@@ -1,20 +1,18 @@
 type Props = {
-  rawTokenName: string
-  tokenName: string
-  marketName: string
+  twitterUsername: string
 }
 
-const DesktopRelatedInfo = ({ rawTokenName, tokenName, marketName }: Props) => {
+const TwitterProfileDesktopContent = ({ twitterUsername }: Props) => {
   return (
     <div className="hidden md:flex">
       <div className="w-full">
         <div style={{ height: '450px', overflowY: 'scroll', zIndex: '-20' }}>
           <a
             className="twitter-timeline"
-            href={`https://twitter.com/${rawTokenName}`}
+            href={`https://twitter.com/${twitterUsername}`}
             data-chrome="noheader nofooter"
           >
-            No tweets found for {tokenName}
+            No tweets found for {twitterUsername}
           </a>
         </div>
       </div>
@@ -25,4 +23,4 @@ const DesktopRelatedInfo = ({ rawTokenName, tokenName, marketName }: Props) => {
   )
 }
 
-export default DesktopRelatedInfo
+export default TwitterProfileDesktopContent

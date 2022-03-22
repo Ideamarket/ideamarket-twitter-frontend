@@ -6,27 +6,13 @@ import {
   VerifyModal,
   WalletModal,
 } from 'components'
-// import { useWalletStore } from 'store/walletStore'
-// import { queryDaiBalance } from 'store/daiStore'
-// import { NETWORK } from 'store/networks'
-import {
-  queryMarket,
-  querySingleToken,
-  // queryInterestManagerTotalShares,
-} from 'store/ideaMarketsStore'
+import { queryMarket, querySingleToken } from 'store/ideaMarketsStore'
 import { GetServerSideProps } from 'next'
 import ModalService from 'components/modals/ModalService'
-// import LeftListingPanel from 'components/listing-page/LeftListingPanel'
 import ListingStats from 'components/listing-page/ListingStats'
 import ListingSEO from 'components/listing-page/ListingSEO'
-// import { bnToFloatString, bigNumberTenPow18 } from 'utils'
 import { ReactElement, useContext, useEffect, useMemo, useState } from 'react'
-import DesktopRelatedInfo from 'components/listing-page/DesktopRelatedInfo'
-import MobileRelatedInfo from 'components/listing-page/MobileRelatedInfo'
 import InvestmentCalculator from 'components/investment-calculator/InvestmentCalculator'
-// import GoogleTrendsPanel from 'components/listing-page/GoogleTrendsPanel'
-import WikiRelatedInfo from 'components/listing-page/WikiRelatedInfo'
-// import PageViewsPanel from 'components/listing-page/PageViewsPanel'
 import MultiChart from 'components/listing-page/MultiChart'
 import {
   bigNumberTenPow18,
@@ -59,6 +45,7 @@ import { getTimeDifferenceIndays } from 'lib/utils/dateUtil'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 import { getMarketSpecificsByMarketName } from 'store/markets'
+import ListingContent from 'components/tokens/ListingContent'
 
 const DetailsSkeleton = () => (
   <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
@@ -204,15 +191,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
           bigNumberTenPow18,
           2
         )
-
-  const relatedInfoProps = {
-    rawTokenName:
-      marketName?.toLowerCase() === 'wikipedia'
-        ? marketSpecifics.convertUserInputToTokenName(token?.name)
-        : marketSpecifics?.getTokenNameURLRepresentation(token?.name),
-    tokenName,
-    marketName,
-  }
 
   const onTradeComplete = () => {
     refetch()
@@ -390,42 +368,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                     </div>
                   )}
 
-                  {marketName !== 'Wikipedia' && marketName !== 'Twitter' && (
-                    // Didn't use Next image because can't do wildcard domain allow in next config file
-                    <a
-                      href={url}
-                      className="cursor-pointer"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {isURLMetaDataLoading ||
-                        (urlMetaData && urlMetaData?.ogImage && (
-                          <img
-                            className="rounded-xl mt-4"
-                            src={
-                              !isURLMetaDataLoading &&
-                              urlMetaData &&
-                              urlMetaData?.ogImage
-                                ? urlMetaData.ogImage
-                                : '/gray.svg'
-                            }
-                            alt=""
-                            referrerPolicy="no-referrer"
-                          />
-                        ))}
-                      {isURLMetaDataLoading ||
-                        (urlMetaData && urlMetaData?.ogDescription && (
-                          <div className="my-4 text-gray-300 text-sm leading-5">
-                            {!isURLMetaDataLoading &&
-                            urlMetaData &&
-                            urlMetaData?.ogDescription
-                              ? urlMetaData.ogDescription
-                              : 'Description loading'}
-                          </div>
-                        ))}
-                    </a>
-                  )}
-
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
@@ -458,19 +400,11 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                     </div>
                   </div> */}
 
-                  {(marketName === 'Wikipedia' || marketName === 'Twitter') && (
-                    <div className="mt-2" style={{ height: '400px' }}>
-                      {marketName?.toLowerCase() === 'twitter' && (
-                        <>
-                          <MobileRelatedInfo {...relatedInfoProps} />
-                          <DesktopRelatedInfo {...relatedInfoProps} />
-                        </>
-                      )}
-                      {marketName?.toLowerCase() === 'wikipedia' && (
-                        <WikiRelatedInfo {...relatedInfoProps} />
-                      )}
-                    </div>
-                  )}
+                  <ListingContent
+                    ideaToken={token}
+                    page="ListingPage"
+                    urlMetaData={urlMetaData}
+                  />
                 </div>
 
                 <div className="flex items-center bg-white w-full h-20 p-4 rounded-b-lg text-black z-50">
@@ -616,48 +550,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                 rawMarketName={rawMarketName}
                 rawTokenId={rawTokenId}
               /> */}
-              {/* <div
-                className={classNames(
-                  !web3 && 'md:overflow-hidden',
-                  'relative md:pt-5 md:px-5 mb-5 md:mr-5 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray'
-                )}
-              >
-
-                {!web3 && (
-                  <div className="absolute top-0 left-0 w-full h-full bg-gray-500 bg-opacity-60 z-40 rounded-md flex justify-center items-center">
-                    <button
-                      onClick={() => {
-                        ModalService.open(WalletModal)
-                      }}
-                      className="w-56 p-4 text-xl text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
-                    >
-                      Connect wallet
-                    </button>
-                  </div>
-                )}
-
-                {isLoading ? (
-                  <div className="h-full p-18 md:p-0">loading</div>
-                ) : (
-                  <div className={classNames(!web3 && 'md:absolute')}>
-                    <TradeInterface
-                      ideaToken={token}
-                      market={market}
-                      onTradeComplete={onTradeComplete}
-                      onValuesChanged={() => {}}
-                      resetOn={false}
-                      centerTypeSelection={false}
-                      showTypeSelection={true}
-                      showTradeButton={true}
-                      disabled={false}
-                      parentComponent="ListingPage"
-                    />
-                  </div>
-                )}
-              </div> */}
-              {/* <div className="p-5 mb-5 bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray">
-                <InvestmentCalculator ideaToken={token} market={market} />
-              </div> */}
             </div>
             {marketName?.toLowerCase() === 'wikipedia' && (
               <div className="flex flex-col">
@@ -683,16 +575,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
           </div>
 
           <div className="px-2 mx-auto max-w-88 md:max-w-304 truncate -mt-30 md:-mt-28">
-            {/* {marketName?.toLowerCase() === 'twitter' && (
-              <>
-                <MobileRelatedInfo {...relatedInfoProps} />
-                <DesktopRelatedInfo {...relatedInfoProps} />
-              </>
-            )}
-            {marketName?.toLowerCase() === 'wikipedia' && (
-              <WikiRelatedInfo {...relatedInfoProps} />
-            )} */}
-
             {marketName?.toLowerCase() !== 'wikipedia' &&
               marketName?.toLowerCase() !== 'twitter' && (
                 <MutualTokensList

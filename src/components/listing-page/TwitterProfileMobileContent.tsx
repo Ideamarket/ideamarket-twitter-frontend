@@ -1,19 +1,17 @@
 type Props = {
-  rawTokenName: string
-  tokenName: string
-  marketName: string
+  twitterUsername: string
 }
 
-const MobileRelatedInfo = ({ rawTokenName, tokenName, marketName }: Props) => {
+const TwitterProfileMobileContent = ({ twitterUsername }: Props) => {
   return (
     <>
       <div className="flex md:hidden h-full">
         <div className="w-full h-full overflow-y-auto">
           <a
             className="twitter-timeline h-full"
-            href={`https://twitter.com/${rawTokenName}`}
+            href={`https://twitter.com/${twitterUsername}`}
           >
-            No tweets found for {tokenName}
+            No tweets found for {twitterUsername}
           </a>
         </div>
         {/* <div
@@ -29,4 +27,4 @@ const MobileRelatedInfo = ({ rawTokenName, tokenName, marketName }: Props) => {
   )
 }
 
-export default MobileRelatedInfo
+export default TwitterProfileMobileContent

@@ -1,14 +1,8 @@
 type Props = {
-  tokenName: string
-  marketName: string
   wikiSnapshot: any
 }
 
-const WikiMobileRelatedInfo = ({
-  tokenName,
-  marketName,
-  wikiSnapshot,
-}: Props) => {
+const WikiMobileContent = ({ wikiSnapshot }: Props) => {
   return (
     <>
       <div className="flex md:hidden h-full">
@@ -46,4 +40,4 @@ const WikiMobileRelatedInfo = ({
   )
 }
 
-export default WikiMobileRelatedInfo
+export default WikiMobileContent

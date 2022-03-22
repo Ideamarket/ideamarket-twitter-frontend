@@ -43,6 +43,7 @@ import { getTimeDifferenceIndays } from 'lib/utils/dateUtil'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import A from 'components/A'
 import { isETHAddress } from 'utils/addresses'
+import ListingContent from './ListingContent'
 
 type Props = {
   token: any
@@ -74,9 +75,8 @@ export default function TokenRow({
   const [isLocallyUpvoted, setIsLocallyUpvoted] = useState(token?.upVoted) // Used to make upvoting display instantly and not wait on API
   const [localTotalVotes, setLocalTotalVotes] = useState(token?.totalVotes) // Used to make upvoting display instantly and not wait on API
 
-  const { data: urlMetaData, isLoading: isURLMetaDataLoading } = useQuery(
-    [token?.url],
-    () => getURLMetaData(token?.url)
+  const { data: urlMetaData } = useQuery([token?.url], () =>
+    getURLMetaData(token?.url)
   )
   const { tokenIconURL, isLoading: isTokenIconLoading } = useTokenIconURL({
     marketSpecifics,
@@ -352,31 +352,12 @@ export default function TokenRow({
                 )}
               </div>
 
-              {/* Didn't use Next image because can't do wildcard domain allow in next config file */}
-              <a
-                href={`/i/${token?.listingId}`}
-                className="px-4 md:px-0 cursor-pointer"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  className="rounded-xl mt-4 h-full md:h-56"
-                  src={
-                    !isURLMetaDataLoading && urlMetaData && urlMetaData?.ogImage
-                      ? urlMetaData.ogImage
-                      : '/gray.svg'
-                  }
-                  alt=""
-                  referrerPolicy="no-referrer"
-                />
-                <div className="w-full my-4 text-black/[.5] text-sm text-left leading-5 whitespace-normal">
-                  {!isURLMetaDataLoading &&
-                  urlMetaData &&
-                  urlMetaData?.ogDescription
-                    ? urlMetaData.ogDescription
-                    : 'No description found'}
-                </div>
-              </a>
+              <ListingContent
+                ideaToken={token}
+                page="HomePage"
+                urlMetaData={urlMetaData}
+                useMetaData={true}
+              />
             </div>
           </div>
         )}

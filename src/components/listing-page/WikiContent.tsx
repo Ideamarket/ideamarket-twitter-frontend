@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
-import WikiDesktopRelatedInfo from './WikiDesktopRelatedInfo'
-import WikiMobileRelatedInfo from './WikiMobileRelatedInfo'
+import WikiDesktopContent from './WikiDesktopContent'
+import WikiMobileContent from './WikiMobileContent'
 
-const WikiRelatedInfo = ({ rawTokenName, ...other }: any) => {
+const WikiContent = ({ wikiTitle }: any) => {
   const [wikiSnapshot, setWikiSnapshot] = useState(null)
 
   const { mutateAsync: fetchWikiSnapshot } = useMutation<{
     message: string
     data: any
   }>(() =>
-    fetch(`/api/markets/wikipedia/snapshot?title=${rawTokenName}`, {
+    fetch(`/api/markets/wikipedia/snapshot?title=${wikiTitle}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -26,20 +26,19 @@ const WikiRelatedInfo = ({ rawTokenName, ...other }: any) => {
 
   useEffect(() => {
     fetchWikiSnapshot().then(({ data }) => setWikiSnapshot(data))
-  }, [fetchWikiSnapshot, rawTokenName])
+  }, [fetchWikiSnapshot, wikiTitle])
 
   const wikiProps = {
-    ...other,
-    rawTokenName,
+    wikiTitle,
     wikiSnapshot,
   }
 
   return (
-    <>
-      <WikiMobileRelatedInfo {...wikiProps} />
-      <WikiDesktopRelatedInfo {...wikiProps} />
-    </>
+    <div style={{ height: '400px' }}>
+      <WikiMobileContent {...wikiProps} />
+      <WikiDesktopContent {...wikiProps} />
+    </div>
   )
 }
 
-export default WikiRelatedInfo
+export default WikiContent
