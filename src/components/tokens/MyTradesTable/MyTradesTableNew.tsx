@@ -59,7 +59,7 @@ export default function MyTradesTableNew({
                   {headers.map((header) => (
                     <th
                       className={classNames(
-                        'relative px-4 py-4 text-xs leading-4 text-left text-brand-gray-4 bg-gray-50 dark:bg-gray-600 dark:text-gray-300 bg-gray-50',
+                        'px-4 py-4 text-xs leading-4 text-left text-brand-gray-4 bg-gray-50 dark:bg-gray-600 dark:text-gray-300 bg-gray-50',
                         header.sortable && 'cursor-pointer'
                       )}
                       key={header.value}
@@ -69,38 +69,24 @@ export default function MyTradesTableNew({
                         }
                       }}
                     >
-                      {rawPairs &&
-                        rawPairs?.length > 0 &&
-                        header.sortable &&
-                        orderBy === header.value && (
-                          <div className="absolute w-28 h-8 z-[42] -bottom-3 -left-2 text-[.65rem] flex justify-center items-center">
-                            <span className="absolute left-3 top-3">
-                              <SortDescendingIcon
-                                className={classNames(
-                                  orderDirection === 'desc' && 'text-blue-500',
-                                  'w-3.5'
-                                )}
-                              />
-                              <SortAscendingIcon
-                                className={classNames(
-                                  orderDirection === 'asc' && 'text-blue-500',
-                                  'w-3.5'
-                                )}
-                              />
-                            </span>
-                            <span className="absolute top-3 right-3 text-blue-500">
-                              {orderDirection === 'asc'
-                                ? 'ascending'
-                                : 'descending'}
-                            </span>
-                            <img
-                              src="/SortingSliderBg.png"
-                              className="h-full"
-                              alt="SortingSliderBg"
-                            />
-                          </div>
-                        )}
-                      <div className="flex">{header.title}</div>
+                      <div className="flex items-center">
+                        <span className="uppercase mr-1">{header.title}</span>
+                        {rawPairs &&
+                          rawPairs?.length > 0 &&
+                          header.sortable &&
+                          orderBy === header.value && (
+                            <div
+                              className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
+                              title="SORT"
+                            >
+                              {orderDirection === 'desc' ? (
+                                <SortDescendingIcon className="w-3.5 text-blue-500" />
+                              ) : (
+                                <SortAscendingIcon className="w-3.5 text-blue-500" />
+                              )}
+                            </div>
+                          )}
+                      </div>
                     </th>
                   ))}
                 </tr>

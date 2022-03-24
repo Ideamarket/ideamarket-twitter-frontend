@@ -243,7 +243,7 @@ export const OverviewColumns = ({
             <th
               className={classNames(
                 getColumnStyle(column),
-                'relative py-3 text-xs font-medium leading-4 text-left text-gray-500 bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
+                'py-3 text-xs font-medium leading-4 text-left text-gray-500 bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
                 column.sortable && 'cursor-pointer',
                 column.value !== 'rank' && 'pr-6'
               )}
@@ -254,33 +254,23 @@ export const OverviewColumns = ({
                 }
               }}
             >
-              {column.sortable && currentColumn === column.value && (
-                <div className="absolute w-28 h-8 z-[42] -bottom-3 -left-2 text-[.65rem] flex justify-center items-center">
-                  <span className="absolute left-3 top-3">
-                    <SortDescendingIcon
-                      className={classNames(
-                        orderDirection === 'desc' && 'text-blue-500',
-                        'w-3.5'
-                      )}
-                    />
-                    <SortAscendingIcon
-                      className={classNames(
-                        orderDirection === 'asc' && 'text-blue-500',
-                        'w-3.5'
-                      )}
-                    />
-                  </span>
-                  <span className="absolute top-3 right-3 text-blue-500">
-                    {orderDirection === 'asc' ? 'ascending' : 'descending'}
-                  </span>
-                  <img
-                    src="/SortingSliderBg.png"
-                    className="h-full"
-                    alt="SortingSliderBg"
-                  />
-                </div>
-              )}
-              <span className="uppercase">{getColumnContent(column)}</span>
+              <div className="flex items-center">
+                <span className="uppercase mr-1">
+                  {getColumnContent(column)}
+                </span>
+                {column.sortable && currentColumn === column.value && (
+                  <div
+                    className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
+                    title="SORT"
+                  >
+                    {orderDirection === 'desc' ? (
+                      <SortDescendingIcon className="w-3.5 text-blue-500" />
+                    ) : (
+                      <SortAscendingIcon className="w-3.5 text-blue-500" />
+                    )}
+                  </div>
+                )}
+              </div>
             </th>
           )
         }
