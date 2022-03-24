@@ -3,7 +3,7 @@ import { DefaultLayout } from 'components/layouts'
 import TwitterProfileDesktopContent from 'components/listing-page/TwitterProfileDesktopContent'
 import TwitterProfileMobileContent from 'components/listing-page/TwitterProfileMobileContent'
 import WikiContent from 'components/listing-page/WikiContent'
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { IdeaToken } from 'store/ideaMarketsStore'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { getListingTypeFromIDTURL, LISTING_TYPE } from './utils/ListingUtils'
@@ -30,6 +30,26 @@ const ListingContent = ({
     ideaToken?.name
   )
 
+  // In order to load NEW tweet embed in dynamically, need to reinit twitter API when isExpanded changes
+  useEffect(() => {
+    const initializeTwitterAPI = () => {
+      // You can add this as script tag in <head>, but for some reason that way stopped working. But this works fine for now
+      const s = document.createElement('script')
+      s.setAttribute('src', 'https://platform.twitter.com/widgets.js')
+      s.setAttribute('async', 'true')
+      document.head.appendChild(s)
+    }
+
+    const timeout = setTimeout(
+      () => (window as any)?.twttr?.widgets?.load(),
+      3000
+    ) // Load tweets
+
+    if (listingType === LISTING_TYPE.TWEET) initializeTwitterAPI()
+
+    return () => clearTimeout(timeout)
+  }, [listingType])
+
   return (
     <div
       className={classNames(
@@ -48,6 +68,13 @@ const ListingContent = ({
           <TwitterProfileMobileContent twitterUsername={twitterUsername} />
           <TwitterProfileDesktopContent twitterUsername={twitterUsername} />
         </div>
+      )}
+
+      {/* Tweet listing content */}
+      {!showMetaData && listingType === LISTING_TYPE.TWEET && (
+        <blockquote className="twitter-tweet">
+          <a href={ideaToken?.url}>Loading tweet...</a>
+        </blockquote>
       )}
 
       {showMetaData && (

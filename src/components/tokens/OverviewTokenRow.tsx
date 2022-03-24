@@ -44,6 +44,7 @@ import { convertAccountName } from 'lib/utils/stringUtil'
 import A from 'components/A'
 import { isETHAddress } from 'utils/addresses'
 import ListingContent from './ListingContent'
+import { getListingTypeFromIDTURL, LISTING_TYPE } from './utils/ListingUtils'
 
 type Props = {
   token: any
@@ -352,12 +353,16 @@ export default function TokenRow({
                 )}
               </div>
 
-              <ListingContent
-                ideaToken={token}
-                page="HomePage"
-                urlMetaData={urlMetaData}
-                useMetaData={true}
-              />
+              <div className="px-4 md:px-0">
+                <ListingContent
+                  ideaToken={token}
+                  page="HomePage"
+                  urlMetaData={urlMetaData}
+                  useMetaData={
+                    getListingTypeFromIDTURL(token?.url) !== LISTING_TYPE.TWEET
+                  }
+                />
+              </div>
             </div>
           </div>
         )}
