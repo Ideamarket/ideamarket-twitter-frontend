@@ -116,6 +116,10 @@ export default function TokenRow({
   useEffect(() => {
     setIsLocallyUpvoted(token?.upVoted)
     setLocalTotalVotes(token?.totalVotes)
+
+    // This makes tweet IDT expanded by default
+    const listingType = getListingTypeFromIDTURL(token?.url)
+    setIsExpanded(listingType === LISTING_TYPE.TWEET)
   }, [token])
 
   const { data: interestManagerTotalShares } = useQuery(
