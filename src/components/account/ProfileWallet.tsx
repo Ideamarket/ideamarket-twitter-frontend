@@ -1,6 +1,5 @@
 import { flatten } from 'lodash'
 import classNames from 'classnames'
-import BN from 'bn.js'
 import { useState, useEffect } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import {
@@ -9,27 +8,15 @@ import {
   MyTradesTableNew,
 } from '../../components'
 import { useWalletStore } from '../../store/walletStore'
-import {
-  formatNumberWithCommasAsThousandsSerperator,
-  web3BNToFloatString,
-  calculateIdeaTokenDaiValue,
-  bigNumberTenPow18,
-  calculateCurrentPriceBN,
-  floatToWeb3BN,
-} from 'utils'
+import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import {
   queryOwnedTokensMaybeMarket,
-  queryLockedTokens,
   queryMyTrades,
-  IdeaTokenTrade,
-  IdeaTokenMarketPair,
   useIdeaMarketsStore,
 } from 'store/ideaMarketsStore'
 import ModalService from 'components/modals/ModalService'
-import { sortNumberByOrder, sortStringByOrder } from 'components/tokens/utils'
 import WalletFilters from './WalletFilters'
 import { useMarketStore } from 'store/markets'
-import BigNumber from 'bignumber.js'
 
 const TOKENS_PER_PAGE = 10
 
@@ -46,6 +33,7 @@ const infiniteQueryConfig = {
   refetchOnMount: false,
   refetchOnWindowFocus: false,
   enabled: false,
+  keepPreviousData: true,
 }
 
 type Props = {
@@ -78,29 +66,6 @@ export default function ProfileWallet({ walletState, userData }: Props) {
 
   const allMarkets = useMarketStore((state) => state.markets)
   const marketNames = allMarkets.map((m) => m?.market?.name)
-
-  /*
-   * @return list of tokens from all ETH addresses
-   */
-  const queryIterator = async (queryFunction) => {
-    // Addresses that will be displayed in the tables
-    const finalAddresses = getFinalAddresses()
-    const filteredMarkets = allMarkets
-      .map((m) => m?.market)
-      .filter((m) => selectedMarkets.has(m.name))
-    let result = []
-    for (let i = 0; i < finalAddresses?.length; i++) {
-      const queryResult = await queryFunction(
-        finalAddresses[i]?.address,
-        filteredMarkets,
-        filterTokens,
-        nameSearch
-      )
-      result = result.concat(queryResult)
-    }
-
-    return result
-  }
 
   const {
     data: infiniteOwnedData,
@@ -147,7 +112,10 @@ export default function ProfileWallet({ walletState, userData }: Props) {
   }, [allMarkets])
 
   useEffect(() => {
-    refetch()
+    if (selectedMarkets && selectedMarkets?.size !== 0) {
+      // Do not refetch until markets loaded because if you do, the first load of tokens does not work for some reason
+      refetch()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     address,
@@ -162,324 +130,58 @@ export default function ProfileWallet({ walletState, userData }: Props) {
     nameSearch,
   ])
 
-  /**
-   * TODO: make more efficient
-   * @param array Contains data of all user's held AND locked tokens in one array
-   * @returns new array with duplicate token pairs combined into one array object
-   */
-  const removeDuplicateRows = (pairs: IdeaTokenMarketPair[]) => {
-    const seenElements = []
-    const duplicateElements = [] // Includes duplicate tokens except the very 1st one seen
-
-    pairs.forEach((pair) => {
-      const isPairSeen = seenElements.find(
-        (ele) => ele.token.address === pair.token.address
-      )
-      if (isPairSeen) {
-        duplicateElements.push(pair)
-      } else {
-        seenElements.push(pair)
-      }
-    })
-
-    const uniqueElements = pairs.filter(
-      (pair) =>
-        !duplicateElements.find(
-          (dup) => dup.token.address === pair.token.address
-        )
-    )
-
-    const finalPairs = []
-    pairs.forEach((pair) => {
-      const isUniqueElement = uniqueElements.find(
-        (ele) => ele.token.address === pair.token.address
-      )
-      const isSeenElement = finalPairs.find(
-        (ele) => ele.token.address === pair.token.address
-      )
-      const isDuplicateElement = duplicateElements.find(
-        (ele) => ele.token.address === pair.token.address
-      )
-      if (isUniqueElement) {
-        finalPairs.push(pair)
-      } else if (isDuplicateElement && !isSeenElement) {
-        // Add new pair with newly calculated values to combine all rows into 1 row visually in table
-        const allDupsWithThisAddress = duplicateElements.filter(
-          (dup) => dup.token.address === pair.token.address
-        )
-        // Since held tokens have locked tokens appended to them, held will always come first. So these will always be locked tokens
-        const dupLockedBalance = allDupsWithThisAddress.reduce(
-          (a, b) => parseFloat(a) + parseFloat(b.balance),
-          0
-        )
-        const newBalance = parseFloat(pair.balance) + dupLockedBalance
-        const newRawBalance = floatToWeb3BN(
-          newBalance,
-          18,
-          BigNumber.ROUND_DOWN
-        )
-        const newPair = {
-          ...pair,
-          balance: newBalance.toString(),
-          rawBalance: newRawBalance,
-          lockedAmount: dupLockedBalance,
-        }
-        finalPairs.push(newPair)
-      }
-    })
-
-    return finalPairs
-  }
-
   async function ownedQueryFunction(numTokens: number, skip: number = 0) {
-    const ownedResults = await queryIterator(queryOwnedTokensMaybeMarket)
-    const lockedResults = await queryIterator(queryLockedTokens)
-    const combinedResults = ownedResults.concat(lockedResults)
-    // If there are any duplicate tokens, need to combine them into 1 ROW with different data. Balance will be added up for all dup tokens. Need to add prop for lockedAmount
-    const finalPairs = removeDuplicateRows(combinedResults)
-    const filteredResults = isLockedFilterActive
-      ? finalPairs.filter((p) => p.lockedAmount)
-      : finalPairs
-    sortOwned(filteredResults)
+    const finalAddress = getFinalAddress()
+    const filteredMarkets = allMarkets
+      .map((m) => m?.market)
+      .filter((m) => selectedMarkets.has(m.name))
 
-    // Calculate the total value of non-locked tokens
-    let ownedTotal = new BN('0')
-    for (const pair of ownedResults ?? []) {
-      ownedTotal = ownedTotal.add(
-        calculateIdeaTokenDaiValue(
-          pair.token?.rawSupply,
-          pair.market,
-          pair.rawBalance
-        )
+    const { holdings, totalOwnedTokensValue, totalLockedTokensValue } =
+      await queryOwnedTokensMaybeMarket(
+        finalAddress,
+        filteredMarkets,
+        numTokens,
+        skip,
+        orderBy,
+        orderDirection,
+        filterTokens,
+        nameSearch,
+        isLockedFilterActive
       )
-    }
-    setOwnedTokensTotalValue(
-      ownedResults
-        ? web3BNToFloatString(ownedTotal, bigNumberTenPow18, 18)
-        : '0.00'
-    )
 
-    // Calculate the total value of locked tokens
-    let lockedTotal = new BN('0')
-    for (const pair of lockedResults ?? []) {
-      lockedTotal = lockedTotal.add(
-        calculateIdeaTokenDaiValue(
-          pair.token?.rawSupply,
-          pair.market,
-          pair.rawBalance
-        )
-      )
-    }
-    setLockedTokensTotalValue(
-      lockedResults
-        ? web3BNToFloatString(lockedTotal, bigNumberTenPow18, 18)
-        : '0.00'
-    )
+    setOwnedTokensTotalValue(totalOwnedTokensValue || '0.00')
+    setLockedTokensTotalValue(totalLockedTokensValue || '0.00')
 
-    const lastIndex =
-      numTokens + skip > filteredResults?.length
-        ? filteredResults?.length
-        : numTokens + skip
-
-    return filteredResults?.slice(skip, lastIndex) || []
+    return holdings || []
   }
 
   async function tradesQueryFunction(numTokens: number, skip: number = 0) {
-    const result = await queryIterator(queryMyTrades)
-    sortTrades(result)
-    // Calculate the total purchase value
-    let purchaseTotal = new BN('0')
-    for (const pair of result ?? []) {
-      if (pair.isBuy) purchaseTotal = purchaseTotal.add(pair.rawDaiAmount)
-    }
+    const finalAddress = getFinalAddress()
+    const filteredMarkets = allMarkets
+      .map((m) => m?.market)
+      .filter((m) => selectedMarkets.has(m.name))
 
-    setPurchaseTotalValue(
-      result
-        ? web3BNToFloatString(purchaseTotal, bigNumberTenPow18, 18)
-        : '0.00'
+    const { trades, totalTradesValue } = await queryMyTrades(
+      finalAddress,
+      filteredMarkets,
+      numTokens,
+      skip,
+      orderBy,
+      orderDirection,
+      filterTokens,
+      nameSearch
     )
 
-    const lastIndex =
-      numTokens + skip > result?.length ? result?.length : numTokens + skip
+    setPurchaseTotalValue(totalTradesValue || '0.00')
 
-    return result?.slice(skip, lastIndex) || []
+    return trades || []
   }
 
-  function sortOwned(pairs: IdeaTokenMarketPair[]) {
-    if (table === 'holdings') {
-      const strCmpFunc = sortStringByOrder(orderDirection)
-      const numCmpFunc = sortNumberByOrder(orderDirection)
-
-      if (orderBy === 'name') {
-        pairs.sort((lhs, rhs) => {
-          return strCmpFunc(lhs.token.name, rhs.token.name)
-        })
-      } else if (orderBy === 'market') {
-        pairs.sort((lhs, rhs) => {
-          return strCmpFunc(lhs.market.name, rhs.market.name)
-        })
-      } else if (orderBy === 'price') {
-        pairs.sort((lhs, rhs) => {
-          return numCmpFunc(
-            parseFloat(lhs.token.supply),
-            parseFloat(rhs.token.supply)
-          )
-        })
-      } else if (orderBy === 'change') {
-        pairs.sort((lhs, rhs) => {
-          return numCmpFunc(
-            parseFloat(lhs.token.dayChange),
-            parseFloat(rhs.token.dayChange)
-          )
-        })
-      } else if (orderBy === 'balance') {
-        pairs.sort((lhs, rhs) => {
-          return numCmpFunc(parseFloat(lhs.balance), parseFloat(rhs.balance))
-        })
-      } else if (orderBy === 'value') {
-        pairs.sort((lhs, rhs) => {
-          const lhsValue =
-            parseFloat(
-              web3BNToFloatString(
-                calculateCurrentPriceBN(
-                  lhs.token.rawSupply,
-                  lhs.market.rawBaseCost,
-                  lhs.market.rawPriceRise,
-                  lhs.market.rawHatchTokens
-                ),
-                bigNumberTenPow18,
-                2
-              )
-            ) * parseFloat(lhs.balance)
-
-          const rhsValue =
-            parseFloat(
-              web3BNToFloatString(
-                calculateCurrentPriceBN(
-                  rhs.token.rawSupply,
-                  rhs.market.rawBaseCost,
-                  rhs.market.rawPriceRise,
-                  rhs.market.rawHatchTokens
-                ),
-                bigNumberTenPow18,
-                2
-              )
-            ) * parseFloat(rhs.balance)
-
-          return numCmpFunc(lhsValue, rhsValue)
-        })
-      }
-    }
-  }
-
-  function sortTrades(pairs: IdeaTokenTrade[]) {
-    if (table === 'trades') {
-      const strCmpFunc = sortStringByOrder(orderDirection)
-      const numCmpFunc = sortNumberByOrder(orderDirection)
-
-      if (orderBy === 'name') {
-        pairs.sort((lhs, rhs) => {
-          return strCmpFunc(lhs.token.name, rhs.token.name)
-        })
-      } else if (orderBy === 'type') {
-        pairs.sort((lhs: any, rhs: any) => {
-          return numCmpFunc(lhs.isBuy, rhs.isBuy)
-        })
-      } else if (orderBy === 'amount') {
-        pairs.sort((lhs, rhs) => {
-          return numCmpFunc(lhs.ideaTokenAmount, rhs.ideaTokenAmount)
-        })
-      } else if (orderBy === 'purchaseValue') {
-        pairs.sort((lhs, rhs) => {
-          return numCmpFunc(lhs.daiAmount, rhs.daiAmount)
-        })
-      } else if (orderBy === 'currentValue') {
-        pairs.sort((lhs, rhs) => {
-          const tokenSupplyLeft = lhs?.isBuy
-            ? lhs?.token.rawSupply
-            : lhs?.token.rawSupply.add(lhs?.rawIdeaTokenAmount)
-          const ideaTokenValueLeft = parseFloat(
-            web3BNToFloatString(
-              calculateIdeaTokenDaiValue(
-                tokenSupplyLeft,
-                lhs?.market,
-                lhs?.rawIdeaTokenAmount
-              ),
-              bigNumberTenPow18,
-              2
-            )
-          )
-          const tokenSupplyRight = rhs?.isBuy
-            ? rhs?.token.rawSupply
-            : rhs?.token.rawSupply.add(rhs?.rawIdeaTokenAmount)
-          const ideaTokenValueRight = parseFloat(
-            web3BNToFloatString(
-              calculateIdeaTokenDaiValue(
-                tokenSupplyRight,
-                rhs?.market,
-                rhs?.rawIdeaTokenAmount
-              ),
-              bigNumberTenPow18,
-              2
-            )
-          )
-          return numCmpFunc(ideaTokenValueLeft, ideaTokenValueRight)
-        })
-      } else if (orderBy === 'pnl') {
-        pairs.sort((lhs, rhs) => {
-          const tokenSupplyLeft = lhs?.isBuy
-            ? lhs?.token.rawSupply
-            : lhs?.token.rawSupply.add(lhs?.rawIdeaTokenAmount)
-          const ideaTokenValueLeft = parseFloat(
-            web3BNToFloatString(
-              calculateIdeaTokenDaiValue(
-                tokenSupplyLeft,
-                lhs?.market,
-                lhs?.rawIdeaTokenAmount
-              ),
-              bigNumberTenPow18,
-              2
-            )
-          )
-          const pnlNumberLeft = ideaTokenValueLeft - lhs.daiAmount
-          const pnlPercentageLeft = (pnlNumberLeft / lhs.daiAmount) * 100
-
-          const tokenSupplyRight = rhs?.isBuy
-            ? rhs?.token.rawSupply
-            : rhs?.token.rawSupply.add(rhs?.rawIdeaTokenAmount)
-          const ideaTokenValueRight = parseFloat(
-            web3BNToFloatString(
-              calculateIdeaTokenDaiValue(
-                tokenSupplyRight,
-                rhs?.market,
-                rhs?.rawIdeaTokenAmount
-              ),
-              bigNumberTenPow18,
-              2
-            )
-          )
-          const pnlNumberRight = ideaTokenValueRight - rhs.daiAmount
-          const pnlPercentageRight = (pnlNumberRight / rhs.daiAmount) * 100
-
-          return numCmpFunc(pnlPercentageLeft, pnlPercentageRight)
-        })
-      } else if (orderBy === 'date') {
-        pairs.sort((lhs, rhs) => {
-          return numCmpFunc(lhs.timestamp, rhs.timestamp)
-        })
-      }
-    }
-  }
-
-  function getFinalAddresses() {
-    switch (walletState) {
-      case 'public':
-        return [{ address: userData?.walletAddress, verified: true }]
-      case 'signedIn':
-        return userData?.ethAddresses
-      case 'signedOut':
-        return [{ address, verified: false }]
-    }
+  /**
+   * @returns connected wallet if on account page and user wallet if on a profile page
+   */
+  const getFinalAddress = () => {
+    return walletState === 'public' ? userData?.walletAddress : address
   }
 
   function headerClicked(headerValue: string) {

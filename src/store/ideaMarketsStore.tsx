@@ -2,31 +2,27 @@ import axios from 'axios'
 import create from 'zustand'
 import produce from 'immer'
 import BN from 'bn.js'
-import BigNumber from 'bignumber.js'
 import { request } from 'graphql-request'
 import { bigNumberTenPow18, web3BNToFloatString } from 'utils'
 import {
   getQueryLockedAmounts,
-  getQueryLockedTokens,
   getQueryMarket,
   getQueryMarkets,
   getQueryMyTokensMaybeMarket,
-  getQueryOwnedTokensMaybeMarket,
   getQuerySingleTokenByID,
   getQueryTokenChartData,
   getQueryTokenLockedChartData,
   getQuerySinglePricePoint,
   getQueryTokenBalances,
   getQueryBalancesOfHolders,
-  getQueryMyTrades,
 } from './queries'
 import { NETWORK, L1_NETWORK } from 'store/networks'
 import { getAllListings } from 'actions/web2/getAllListings'
 import { getMarketSpecificsByMarketName } from './markets'
 import { getSingleListing } from 'actions/web2/getSingleListing'
 import { useContractStore } from './contractStore'
-
-const tenPow2 = new BigNumber('10').pow(new BigNumber('2'))
+import { getOwnedListings } from 'actions/web2/getOwnedListings'
+import { getTrades } from 'actions/web2/getTrades'
 
 const HTTP_GRAPHQL_ENDPOINT_L1 = L1_NETWORK.getSubgraphURL()
 const HTTP_GRAPHQL_ENDPOINT = NETWORK.getSubgraphURL()
@@ -163,7 +159,9 @@ export async function queryMarkets(
       HTTP_GRAPHQL_ENDPOINT,
       await getQueryMarkets(marketNames.filter((n) => n !== 'All'))
     )
-    return result.ideaMarkets.map((market) => apiResponseToIdeaMarket(market))
+    return result.ideaMarkets.map((market) =>
+      subgraphResponseToIdeaMarket(market)
+    )
   } catch (error) {
     console.error('queryMarkets failed')
     return []
@@ -177,7 +175,7 @@ export async function queryMarket(marketName: string): Promise<IdeaMarket> {
       getQueryMarket(marketName)
     )
     return result.ideaMarkets
-      .map((market) => apiResponseToIdeaMarket(market))
+      .map((market) => subgraphResponseToIdeaMarket(market))
       .pop()
   } catch (error) {
     console.error('queryMarket failed')
@@ -185,88 +183,103 @@ export async function queryMarket(marketName: string): Promise<IdeaMarket> {
   }
 }
 
+const apiResponseToIdeaToken = (apiResponse) => {
+  return {
+    address: apiResponse.token.address,
+    marketName: apiResponse.token.marketName,
+    listingId: apiResponse.listingId,
+    tokenID: apiResponse.token.tokenID,
+    name: apiResponse.token.name,
+    supply: apiResponse.token.supply,
+    rawSupply: new BN(apiResponse.token.rawSupply, 'hex'),
+    holders: apiResponse.token.holders,
+    marketCap: apiResponse.token.marketCap,
+    rawMarketCap: new BN(apiResponse.token.rawMarketCap, 'hex'),
+    tokenOwner: apiResponse.token.tokenOwner,
+    daiInToken: apiResponse.token.daiInToken,
+    rawDaiInToken: new BN(apiResponse.token.rawDaiInToken, 'hex'),
+    invested: apiResponse.token.invested,
+    rawInvested: new BN(apiResponse.token.rawInvested, 'hex'),
+    dayChange: apiResponse.token.dayChange,
+    weeklyChange: apiResponse.token.weeklyChange,
+    listedAt: apiResponse.token.listedAt,
+    lockedPercentage: apiResponse.token.lockedPercentage,
+    isL1: apiResponse.token.isL1,
+    holder: apiResponse.token.holder,
+  }
+}
+
+const apiResponseToIdeaMarket = (apiResponse) => {
+  return {
+    name: apiResponse.market.name,
+    marketID: apiResponse.market.marketID,
+    baseCost: apiResponse.market.baseCost,
+    rawBaseCost: new BN(apiResponse.market.rawBaseCost, 'hex'),
+    priceRise: apiResponse.market.priceRise,
+    rawPriceRise: new BN(apiResponse.market.rawPriceRise, 'hex'),
+    hatchTokens: apiResponse.market.hatchTokens,
+    rawHatchTokens: new BN(apiResponse.market.rawHatchTokens, 'hex'),
+    tradingFeeRate: apiResponse.market.tradingFeeRate,
+    rawTradingFeeRate: new BN(apiResponse.market.rawTradingFeeRate, 'hex'),
+    platformFeeInvested: apiResponse.market.platformFeeInvested,
+    rawPlatformFeeInvested: new BN(
+      apiResponse.market.rawPlatformFeeInvested,
+      'hex'
+    ),
+    platformFeeRate: apiResponse.market.platformFeeRate,
+    rawPlatformFeeRate: new BN(apiResponse.market.rawPlatformFeeRate, 'hex'),
+    platformOwner: apiResponse.market.platformOwner,
+    nameVerifierAddress: apiResponse.market.nameVerifierAddress,
+  }
+}
+
 export async function queryOwnedTokensMaybeMarket(
-  owner: string,
+  ownerAddress: string,
   markets: IdeaMarket[],
+  limit: number,
+  skip = 0,
+  orderBy: string,
+  orderDirection: string,
   filterTokens: string[],
-  nameSearch: string
-): Promise<IdeaTokenMarketPair[]> {
-  if (owner === undefined || !owner || !markets) {
+  nameSearch: string,
+  isLockedFilterActive: boolean
+): Promise<any> {
+  if (ownerAddress === undefined || !ownerAddress || !markets) {
     return []
   }
 
-  const marketIds = markets ? markets.map((market) => market.marketID) : []
+  const marketIds = markets.map((market) => market.marketID).join()
 
-  let L1Result = null
-  try {
-    L1Result = await request(
-      HTTP_GRAPHQL_ENDPOINT_L1,
-      getQueryOwnedTokensMaybeMarket(owner)
-    )
-  } catch (error) {
-    console.error('getQueryOwnedTokensMaybeMarket failed for L1')
+  const {
+    holdings: ownedResponse,
+    totalOwnedTokensValue,
+    totalLockedTokensValue,
+  } = await getOwnedListings({
+    ownerAddress,
+    marketIds,
+    skip,
+    limit,
+    orderBy,
+    orderDirection,
+    filterTokens,
+    nameSearch,
+    isLockedFilterActive,
+  })
+
+  return {
+    holdings: ownedResponse.map(
+      (pair: any) =>
+        ({
+          token: apiResponseToIdeaToken(pair),
+          market: apiResponseToIdeaMarket(pair),
+          rawBalance: new BN(pair.rawBalance, 'hex'),
+          balance: pair.balance,
+          lockedAmount: pair.lockedAmount,
+        } as any)
+    ),
+    totalOwnedTokensValue,
+    totalLockedTokensValue,
   }
-
-  let L2Result = null
-  try {
-    L2Result = await request(
-      HTTP_GRAPHQL_ENDPOINT,
-      getQueryOwnedTokensMaybeMarket(owner)
-    )
-  } catch (error) {
-    console.error('getQueryOwnedTokensMaybeMarket failed for L2')
-  }
-
-  const L1IdeaTokenMarketPairs = L1Result.ideaTokenBalances.map(
-    (balance) =>
-      ({
-        token: apiResponseToIdeaToken(
-          balance.token,
-          balance.market,
-          owner,
-          true
-        ),
-        market: apiResponseToIdeaMarket(balance.market),
-        rawBalance: balance.amount ? new BN(balance.amount) : undefined,
-        balance: balance.amount
-          ? web3BNToFloatString(new BN(balance.amount), bigNumberTenPow18, 2)
-          : undefined,
-      } as IdeaTokenMarketPair)
-  )
-
-  const L2IdeaTokenMarketPairs = L2Result.ideaTokenBalances.map(
-    (balance) =>
-      ({
-        token: apiResponseToIdeaToken(
-          balance.token,
-          balance.market,
-          owner,
-          false
-        ),
-        market: apiResponseToIdeaMarket(balance.market),
-        rawBalance: balance.amount ? new BN(balance.amount) : undefined,
-        balance: balance.amount
-          ? web3BNToFloatString(new BN(balance.amount), bigNumberTenPow18, 2)
-          : undefined,
-      } as IdeaTokenMarketPair)
-  )
-
-  const combinedPairs = L1IdeaTokenMarketPairs.concat(L2IdeaTokenMarketPairs)
-
-  return combinedPairs
-    .filter((t) =>
-      marketIds.length > 0 ? marketIds.includes(t?.market?.marketID) : true
-    )
-    .filter((t) =>
-      filterTokens?.length >= 0
-        ? filterTokens?.includes(t.token.address.toString())
-        : true
-    )
-    .filter((t) =>
-      nameSearch?.length > 0
-        ? t.token.name.toLowerCase().includes(nameSearch.toLowerCase())
-        : true
-    )
 }
 
 export async function queryMyTokensMaybeMarket(
@@ -291,8 +304,8 @@ export async function queryMyTokensMaybeMarket(
   return result.ideaTokens.map(
     (token) =>
       ({
-        token: apiResponseToIdeaToken(token, token.market, owner),
-        market: apiResponseToIdeaMarket(token.market),
+        token: subgraphResponseToIdeaToken(token, token.market, owner),
+        market: subgraphResponseToIdeaMarket(token.market),
       } as IdeaTokenMarketPair)
   )
 }
@@ -454,7 +467,7 @@ export async function querySingleTokenByID(
   }
 
   if (result?.ideaMarkets?.[0]?.tokens?.[0]) {
-    return apiResponseToIdeaToken(result.ideaMarkets[0].tokens[0])
+    return subgraphResponseToIdeaToken(result.ideaMarkets[0].tokens[0])
   }
 
   return null
@@ -541,7 +554,7 @@ export async function queryTokensHeld(
     const filtered = result?.ideaTokenBalances.filter((b) => b.amount !== '0')
 
     for (let raw of filtered) {
-      const token = apiResponseToIdeaToken(raw.token)
+      const token = subgraphResponseToIdeaToken(raw.token)
       res.push({
         token: token,
         balance: web3BNToFloatString(new BN(raw.amount), bigNumberTenPow18, 2),
@@ -644,7 +657,7 @@ export async function queryMutualHoldersOfToken({
     .map((balance) => {
       return {
         ...balance,
-        token: apiResponseToIdeaToken(balance.token, balance.token.market),
+        token: subgraphResponseToIdeaToken(balance.token, balance.token.market),
       }
     })
 
@@ -846,102 +859,6 @@ export async function queryLockedAmounts(
   return lockedTokens.map((locked) => apiResponseToLockedAmount(locked))
 }
 
-export async function queryLockedTokens(
-  ownerAddress: string,
-  markets: IdeaMarket[],
-  filterTokens: string[],
-  nameSearch: string
-): Promise<LockedIdeaTokenMarketPair[]> {
-  if (!ownerAddress) {
-    return []
-  }
-
-  const marketIds = markets ? markets.map((market) => market.marketID) : []
-
-  let page = 0
-
-  type LockedIdeaTokenAmount = {
-    amount: string
-    lockedUntil: number
-    token
-  }
-  const L1TokenAmounts: LockedIdeaTokenAmount[] = []
-  const L2TokenAmounts: LockedIdeaTokenAmount[] = []
-
-  // API can return max of 100 entries. That means we need to query the API multiple times to retrieve all entries
-  while (true) {
-    let result = null
-    try {
-      result = await request(
-        HTTP_GRAPHQL_ENDPOINT_L1,
-        getQueryLockedTokens({
-          ownerAddress,
-          first: 100,
-          skip: page * 100,
-        })
-      )
-    } catch (error) {
-      console.error('getQueryLockedTokens failed', error)
-    }
-
-    const tokensInThisPage = result?.lockedIdeaTokenAmounts ?? []
-
-    L1TokenAmounts.push(...tokensInThisPage)
-    if (tokensInThisPage.length < 100) {
-      break
-    }
-    page += 1
-  }
-  page = 0
-  while (true) {
-    let result = null
-    try {
-      result = await request(
-        HTTP_GRAPHQL_ENDPOINT,
-        getQueryLockedTokens({
-          ownerAddress,
-          first: 100,
-          skip: page * 100,
-        })
-      )
-    } catch (error) {
-      console.error('getQueryLockedTokens failed', error)
-    }
-
-    const tokensInThisPage = result?.lockedIdeaTokenAmounts ?? []
-
-    L2TokenAmounts.push(...tokensInThisPage)
-    if (tokensInThisPage.length < 100) {
-      break
-    }
-    page += 1
-  }
-
-  const L1Pairs = L1TokenAmounts.map((locked) =>
-    apiResponseToLockedIdeaTokenMarketPair(locked, ownerAddress, true)
-  )
-  const L2Pairs = L2TokenAmounts.map((locked) =>
-    apiResponseToLockedIdeaTokenMarketPair(locked, ownerAddress, false)
-  )
-
-  const combinedPairs = L1Pairs.concat(L2Pairs)
-
-  return combinedPairs
-    .filter((locked) =>
-      marketIds.length > 0 ? marketIds.includes(locked?.market?.marketID) : true
-    )
-    .filter((locked) =>
-      filterTokens?.length >= 0
-        ? filterTokens?.includes(locked.token.address.toString())
-        : true
-    )
-    .filter((locked) =>
-      nameSearch?.length > 0
-        ? locked.token.name.toLowerCase().includes(nameSearch.toLowerCase())
-        : true
-    )
-}
-
 export async function queryInterestManagerTotalShares(): Promise<BN> {
   try {
     const response = await axios.get(
@@ -956,63 +873,36 @@ export async function queryInterestManagerTotalShares(): Promise<BN> {
 export async function queryMyTrades(
   ownerAddress: string,
   markets: IdeaMarket[],
+  limit: number,
+  skip = 0,
+  orderBy: string,
+  orderDirection: string,
   filterTokens: string[],
   nameSearch: string
-): Promise<IdeaTokenTrade[]> {
+): Promise<any> {
   if (ownerAddress === undefined || !ownerAddress) {
     return []
   }
 
-  const marketIds = markets ? markets.map((market) => market.marketID) : []
+  const marketIds = markets.map((market) => market.marketID).join()
 
-  let page = 0
-  const myTrades: any = []
+  const { trades: tradesResponse, totalTradesValue } = await getTrades({
+    ownerAddress,
+    marketIds,
+    skip,
+    limit,
+    orderBy,
+    orderDirection,
+    filterTokens,
+    nameSearch,
+  })
 
-  // API can return max of 100 entries. That means we need to query the API multiple times to retrieve all entries
-  while (true) {
-    let result = null
-    try {
-      result = await request(
-        HTTP_GRAPHQL_ENDPOINT,
-        getQueryMyTrades({
-          ownerAddress,
-          first: 100,
-          skip: page * 100,
-        })
-      )
-    } catch (error) {
-      console.error('getQueryMyTrades failed', error)
-    }
-
-    const tokensInThisPage = result?.ideaTokenTrades ?? []
-
-    myTrades.push(...tokensInThisPage)
-    if (tokensInThisPage.length < 100) {
-      break
-    }
-    page += 1
+  return {
+    trades: tradesResponse.map((pair) =>
+      apiResponseToIdeaTokenTrade(pair, ownerAddress)
+    ),
+    totalTradesValue,
   }
-
-  const mapTradeResponse = (trade) =>
-    apiResponseToIdeaTokenTrade(trade, ownerAddress)
-
-  return myTrades
-    .filter((trade) =>
-      marketIds.length > 0
-        ? marketIds.includes(trade?.token?.market?.marketID)
-        : true
-    )
-    .filter((t) =>
-      filterTokens?.length >= 0
-        ? filterTokens?.includes(t.token.id.toString())
-        : true
-    )
-    .filter((t) =>
-      nameSearch?.length > 0
-        ? t.token.name.toLowerCase().includes(nameSearch.toLowerCase())
-        : true
-    )
-    .map(mapTradeResponse)
 }
 
 export function setIsWatching(token: IdeaToken, watching: boolean): void {
@@ -1047,7 +937,7 @@ function getWeeklyChange(weeklyPricePoints) {
   return weeklyChange
 }
 
-function apiResponseToIdeaToken(
+function subgraphResponseToIdeaToken(
   apiResponse,
   marketApiResponse?,
   holder?,
@@ -1061,6 +951,7 @@ function apiResponseToIdeaToken(
   }
 
   const ret = {
+    listingId: apiResponse?.listingId, // web2 ghost ID
     address: apiResponse.id,
     marketID: market?.id,
     marketName: market?.name,
@@ -1069,7 +960,9 @@ function apiResponseToIdeaToken(
     supply: apiResponse.supply
       ? web3BNToFloatString(new BN(apiResponse.supply), bigNumberTenPow18, 2)
       : undefined,
-    rawSupply: apiResponse.supply ? new BN(apiResponse.supply) : undefined,
+    rawSupply: apiResponse.rawSupply
+      ? new BN(apiResponse.rawSupply)
+      : undefined,
     holders: apiResponse.holders,
     marketCap: apiResponse.marketCap
       ? web3BNToFloatString(new BN(apiResponse.marketCap), bigNumberTenPow18, 2)
@@ -1270,68 +1163,40 @@ export function newApiResponseToIdeaToken(
   return ret
 }
 
-function apiResponseToIdeaMarket(apiResponse): IdeaMarket {
+function subgraphResponseToIdeaMarket(apiResponse): IdeaMarket {
   const ret = {
     name: apiResponse.name,
     marketID: apiResponse.marketID,
-    baseCost: apiResponse.baseCost
-      ? web3BNToFloatString(new BN(apiResponse.baseCost), bigNumberTenPow18, 2)
-      : undefined,
+    baseCost: apiResponse.baseCost,
     rawBaseCost: apiResponse.baseCost
       ? new BN(apiResponse.baseCost)
       : undefined,
-    priceRise: apiResponse.priceRise
-      ? web3BNToFloatString(new BN(apiResponse.priceRise), bigNumberTenPow18, 4)
-      : undefined,
+    priceRise: apiResponse.priceRise,
     rawPriceRise: apiResponse.priceRise
       ? new BN(apiResponse.priceRise)
       : undefined,
-    hatchTokens: apiResponse.hatchTokens
-      ? web3BNToFloatString(
-          new BN(apiResponse.hatchTokens),
-          bigNumberTenPow18,
-          2
-        )
-      : undefined,
+    hatchTokens: apiResponse.hatchTokens,
     rawHatchTokens: apiResponse.hatchTokens
       ? new BN(apiResponse.hatchTokens)
       : undefined,
-    tradingFeeRate: apiResponse.tradingFeeRate
-      ? web3BNToFloatString(new BN(apiResponse.tradingFeeRate), tenPow2, 2)
-      : undefined,
+    tradingFeeRate: apiResponse.tradingFeeRate,
     rawTradingFeeRate: apiResponse.tradingFeeRate
       ? new BN(apiResponse.tradingFeeRate)
       : undefined,
-    platformFeeInvested: apiResponse.platformFeeInvested
-      ? web3BNToFloatString(
-          new BN(apiResponse.platformFeeInvested),
-          bigNumberTenPow18,
-          2
-        )
-      : undefined,
+    platformFeeInvested: apiResponse.platformFeeInvested,
     rawPlatformFeeInvested: apiResponse.platformFeeInvested
       ? new BN(apiResponse.platformFeeInvested)
       : undefined,
-    platformFeeRate: apiResponse.platformFeeRate
-      ? web3BNToFloatString(new BN(apiResponse.platformFeeRate), tenPow2, 2)
-      : undefined,
+    platformFeeRate: apiResponse.platformFeeRate,
     rawPlatformFeeRate: apiResponse.platformFeeRate
       ? new BN(apiResponse.platformFeeRate)
       : undefined,
     platformOwner: apiResponse.platformOwner,
-    platformInterestRedeemed: apiResponse.platformInterestRedeemed
-      ? web3BNToFloatString(
-          new BN(apiResponse.platformInterestRedeemed),
-          tenPow2,
-          2
-        )
-      : undefined,
+    platformInterestRedeemed: apiResponse.platformInterestRedeemed,
     rawPlatformInterestRedeemed: apiResponse.platformInterestRedeemed
       ? new BN(apiResponse.platformInterestRedeemed)
       : undefined,
-    platformFeeRedeemed: apiResponse.platformFeeRedeemed
-      ? web3BNToFloatString(new BN(apiResponse.platformFeeRedeemed), tenPow2, 2)
-      : undefined,
+    platformFeeRedeemed: apiResponse.platformFeeRedeemed,
     rawPlatformFeeRedeemed: apiResponse.platformFeeRedeemed
       ? new BN(apiResponse.platformFeeRedeemed)
       : undefined,
@@ -1362,53 +1227,15 @@ function apiResponseToLockedAmount(apiResponse): LockedAmount {
   return ret
 }
 
-function apiResponseToLockedIdeaTokenMarketPair(
-  apiResponse,
-  holder,
-  isL1
-): LockedIdeaTokenMarketPair {
-  const ret = {
-    token: apiResponseToIdeaToken(
-      apiResponse.token,
-      apiResponse.token.market,
-      holder,
-      isL1
-    ),
-    market: apiResponseToIdeaMarket(apiResponse.token.market),
-    rawBalance: apiResponse.amount ? new BN(apiResponse.amount) : undefined,
-    balance: apiResponse.amount
-      ? web3BNToFloatString(new BN(apiResponse.amount), bigNumberTenPow18, 2)
-      : undefined,
-    lockedUntil: apiResponse.lockedUntil,
-  } as LockedIdeaTokenMarketPair
-
-  return ret
-}
-
 function apiResponseToIdeaTokenTrade(apiResponse, ownerAddress) {
   return {
     isBuy: apiResponse.isBuy,
     timestamp: Number(apiResponse.timestamp),
-    rawIdeaTokenAmount: new BN(apiResponse.ideaTokenAmount),
-    ideaTokenAmount: Number(
-      web3BNToFloatString(
-        new BN(apiResponse.ideaTokenAmount),
-        bigNumberTenPow18,
-        2
-      )
-    ),
-    rawDaiAmount: new BN(apiResponse.daiAmount),
-    daiAmount: Number(
-      web3BNToFloatString(new BN(apiResponse.daiAmount), bigNumberTenPow18, 2)
-    ),
-    token: {
-      ...apiResponse.token,
-      ...apiResponseToIdeaToken(
-        apiResponse.token,
-        apiResponse.token.market,
-        ownerAddress
-      ),
-    },
-    market: apiResponseToIdeaMarket(apiResponse.token.market),
+    rawIdeaTokenAmount: new BN(apiResponse.rawIdeaTokenAmount, 'hex'),
+    ideaTokenAmount: apiResponse.ideaTokenAmount,
+    rawDaiAmount: new BN(apiResponse.rawDaiAmount, 'hex'),
+    daiAmount: apiResponse.daiAmount,
+    token: apiResponseToIdeaToken(apiResponse),
+    market: apiResponseToIdeaMarket(apiResponse),
   } as IdeaTokenTrade
 }
