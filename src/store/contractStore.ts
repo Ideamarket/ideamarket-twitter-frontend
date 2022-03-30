@@ -26,6 +26,7 @@ type State = {
   lptoken: any
   drippingIMOSourceContract: any
   twitterVerifyMerkleDistributor: any
+  opinionBase: any
 }
 
 export const useContractStore = create<State>((set) => ({
@@ -47,6 +48,7 @@ export const useContractStore = create<State>((set) => ({
   lptoken: undefined,
   drippingIMOSourceContract: undefined,
   twitterVerifyMerkleDistributor: undefined,
+  opinionBase: undefined,
 }))
 
 export function clearContracts() {
@@ -69,6 +71,7 @@ export function clearContracts() {
     lptoken: undefined,
     drippingIMOSourceContract: undefined,
     twitterVerifyMerkleDistributor: undefined,
+    opinionBase: undefined,
   })
 }
 
@@ -188,6 +191,12 @@ export function initContractsFromWeb3(web3: Web3) {
     { from: web3.eth.defaultAccount }
   )
 
+  const opinionBase = new web3.eth.Contract(
+    abis.opinionBase as any,
+    deployedAddresses.opinionBase,
+    { from: web3.eth.defaultAccount }
+  )
+
   useContractStore.setState({
     factoryContract: factoryContract,
     quoterContract: quoterContract,
@@ -207,6 +216,7 @@ export function initContractsFromWeb3(web3: Web3) {
     lptoken: lptoken,
     drippingIMOSourceContract: drippingIMOSourceContract,
     twitterVerifyMerkleDistributor: twitterVerifyMerkleDistributor,
+    opinionBase: opinionBase,
   })
 }
 
