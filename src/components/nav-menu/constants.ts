@@ -107,6 +107,10 @@ export const getNavbarConfig = (mixPanel: any) => ({
           name: 'First Month Locking Claim',
           onClick: () => router.push(`/claim/${AIRDROP_TYPES.LOCKING}`),
         },
+        {
+          name: 'Second Month Locking Claim',
+          onClick: () => router.push(`/claim/${AIRDROP_TYPES.LOCKING2}`),
+        },
       ],
     },
     {

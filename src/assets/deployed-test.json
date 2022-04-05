@@ -36,5 +36,6 @@
   "sushiStaking": "0xc63d478befc1a814Ec995Ed926587034eC7Ad46e",
   "lptoken": "0xE490A4517F1e8A1551ECb03aF5eB116C6Bbd450b",
   "communityMerkleDistributor": "0x214a14850329Bec9fa577D4cE6e00b69dfD287d4",
-  "lockingMerkleDistributor": "0x6e0D915c0d57eFAD33cA9a42bf1d8F7a3D348F7D"
+  "lockingMerkleDistributor": "0x6e0D915c0d57eFAD33cA9a42bf1d8F7a3D348F7D",
+  "locking2MerkleDistributor": "0x69F70619d67467369bc6C71597EA3d94f5aA51ED"
 }
