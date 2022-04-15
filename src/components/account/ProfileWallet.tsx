@@ -37,11 +37,10 @@ const infiniteQueryConfig = {
 }
 
 type Props = {
-  walletState: string // This stores whether wallet is on public page or account page
   userData?: any
 }
 
-export default function ProfileWallet({ walletState, userData }: Props) {
+export default function ProfileWallet({ userData }: Props) {
   const web3 = useWalletStore((state) => state)
   const address = useWalletStore((state) => state.address)
 
@@ -131,7 +130,9 @@ export default function ProfileWallet({ walletState, userData }: Props) {
   ])
 
   async function ownedQueryFunction(numTokens: number, skip: number = 0) {
-    const finalAddress = getFinalAddress()
+    if (!allMarkets || allMarkets?.length <= 0) return []
+
+    const finalAddress = userData?.walletAddress
     const filteredMarkets = allMarkets
       .map((m) => m?.market)
       .filter((m) => selectedMarkets.has(m.name))
@@ -156,7 +157,9 @@ export default function ProfileWallet({ walletState, userData }: Props) {
   }
 
   async function tradesQueryFunction(numTokens: number, skip: number = 0) {
-    const finalAddress = getFinalAddress()
+    if (!allMarkets || allMarkets?.length <= 0) return []
+
+    const finalAddress = userData?.walletAddress
     const filteredMarkets = allMarkets
       .map((m) => m?.market)
       .filter((m) => selectedMarkets.has(m.name))
@@ -175,13 +178,6 @@ export default function ProfileWallet({ walletState, userData }: Props) {
     setPurchaseTotalValue(totalTradesValue || '0.00')
 
     return trades || []
-  }
-
-  /**
-   * @returns connected wallet if on account page and user wallet if on a profile page
-   */
-  const getFinalAddress = () => {
-    return walletState === 'public' ? userData?.walletAddress : address
   }
 
   function headerClicked(headerValue: string) {
