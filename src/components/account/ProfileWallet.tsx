@@ -8,7 +8,6 @@ import {
   MyTradesTableNew,
 } from '../../components'
 import { useWalletStore } from '../../store/walletStore'
-import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import {
   queryOwnedTokensMaybeMarket,
   queryMyTrades,
@@ -49,9 +48,6 @@ export default function ProfileWallet({ userData }: Props) {
   const [isLockedFilterActive, setIsLockedFilterActive] = useState(false)
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
-  const [ownedTokenTotalValue, setOwnedTokensTotalValue] = useState('0.00')
-  const [lockedTokenTotalValue, setLockedTokensTotalValue] = useState('0.00')
-  const [purchaseTotalValue, setPurchaseTotalValue] = useState('0.00')
 
   const [table, setTable] = useState('holdings')
   const [orderBy, setOrderBy] = useState('price')
@@ -137,21 +133,17 @@ export default function ProfileWallet({ userData }: Props) {
       .map((m) => m?.market)
       .filter((m) => selectedMarkets.has(m.name))
 
-    const { holdings, totalOwnedTokensValue, totalLockedTokensValue } =
-      await queryOwnedTokensMaybeMarket(
-        finalAddress,
-        filteredMarkets,
-        numTokens,
-        skip,
-        orderBy,
-        orderDirection,
-        filterTokens,
-        nameSearch,
-        isLockedFilterActive
-      )
-
-    setOwnedTokensTotalValue(totalOwnedTokensValue || '0.00')
-    setLockedTokensTotalValue(totalLockedTokensValue || '0.00')
+    const { holdings } = await queryOwnedTokensMaybeMarket(
+      finalAddress,
+      filteredMarkets,
+      numTokens,
+      skip,
+      orderBy,
+      orderDirection,
+      filterTokens,
+      nameSearch,
+      isLockedFilterActive
+    )
 
     return holdings || []
   }
@@ -164,7 +156,7 @@ export default function ProfileWallet({ userData }: Props) {
       .map((m) => m?.market)
       .filter((m) => selectedMarkets.has(m.name))
 
-    const { trades, totalTradesValue } = await queryMyTrades(
+    const { trades } = await queryMyTrades(
       finalAddress,
       filteredMarkets,
       numTokens,
@@ -174,8 +166,6 @@ export default function ProfileWallet({ userData }: Props) {
       filterTokens,
       nameSearch
     )
-
-    setPurchaseTotalValue(totalTradesValue || '0.00')
 
     return trades || []
   }
@@ -232,52 +222,6 @@ export default function ProfileWallet({ userData }: Props) {
           >
             Trades History
           </div>
-        </div>
-        <div className="flex mb-6 md:mb-0">
-          <div className="pr-6 text-center ml-auto">
-            <div className="text-xs font-normal text-brand-gray text-opacity-60 max-w-[6rem] md:max-w-none">
-              Total Purchase Value
-            </div>
-            <div
-              className="text-lg mb-2.5 font-semibold uppercase"
-              title={'$' + +purchaseTotalValue}
-            >
-              $
-              {formatNumberWithCommasAsThousandsSerperator(
-                (+purchaseTotalValue).toFixed(2)
-              )}
-            </div>
-          </div>
-
-          <div className="pr-6 text-center">
-            <div className="text-xs font-normal text-brand-gray text-opacity-60 max-w-[6rem] md:max-w-none">
-              Total Current Value
-            </div>
-            <div
-              className="text-lg mb-2.5 font-semibold uppercase"
-              title={`$${+ownedTokenTotalValue + +lockedTokenTotalValue}`}
-            >
-              $
-              {formatNumberWithCommasAsThousandsSerperator(
-                (+ownedTokenTotalValue + +lockedTokenTotalValue).toFixed(2)
-              )}
-            </div>
-          </div>
-
-          {/* <div className="text-center mr-auto flex flex-col">
-            <div className="text-xs font-normal text-brand-gray text-opacity-60 max-w-[6rem] md:max-w-none mt-auto">
-              Profit & Loss
-            </div>
-            <div
-              className="text-lg mb-2.5 font-semibold uppercase text-green-1"
-              title={`$${+ownedTokenTotalValue + +lockedTokenTotalValue}`}
-            >
-              +$
-              {formatNumberWithCommasAsThousandsSerperator(
-                (+ownedTokenTotalValue + +lockedTokenTotalValue).toFixed(2)
-              )}
-            </div>
-          </div> */}
         </div>
       </div>
 

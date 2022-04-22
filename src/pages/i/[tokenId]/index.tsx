@@ -65,15 +65,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     querySingleToken(null, null, null, rawTokenId, jwtToken)
   )
 
-  const { ghostListedBy, ghostListedAt, onchainListedAt, onchainListedBy } =
-    (token || {}) as any
-
-  const timeAfterGhostListedInDays = useMemo(() => {
-    if (!ghostListedAt) return null
-    const ghostListedAtDate = new Date(ghostListedAt)
-    const currentDate = new Date()
-    return getTimeDifferenceIndays(ghostListedAtDate, currentDate)
-  }, [ghostListedAt])
+  const { onchainListedAt, onchainListedBy } = (token || {}) as any
 
   const timeAfterOnChainListedInDays = useMemo(() => {
     if (!onchainListedAt) return null
@@ -326,17 +318,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                   </div>
 
                   <div className="flex flex-col items-center space-y-1 my-2 text-sm items-baseline">
-                    {ghostListedBy && timeAfterGhostListedInDays ? (
-                      <div className="px-2 py-2 bg-white/[.1] rounded-lg whitespace-nowrap">
-                        Ghost Listed by{' '}
-                        <span className="font-bold">
-                          {convertAccountName(ghostListedBy)}
-                        </span>{' '}
-                        {timeAfterGhostListedInDays} days ago
-                      </div>
-                    ) : (
-                      ``
-                    )}
                     {onchainListedBy && timeAfterOnChainListedInDays ? (
                       <div className="px-2 py-2 bg-white/[.1] rounded-lg whitespace-nowrap">
                         Listed by{' '}
