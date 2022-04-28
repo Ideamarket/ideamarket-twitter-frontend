@@ -8,7 +8,7 @@ import ModalService from 'components/modals/ModalService'
 import { getLockingAPR } from 'lib/axios'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { useContractStore } from 'store/contractStore'
+import { NETWORK } from 'store/networks'
 import {
   floatToWeb3BN,
   formatNumber,
@@ -62,9 +62,12 @@ const LockInterface = ({
 
   const [pairsToggle, setPairsToggle] = useState([])
 
-  const ideaTokenVaultContractAddress = useContractStore(
-    (state) => state.ideaTokenVaultContract
-  ).options.address
+  // const ideaTokenVaultContractAddress = useContractStore(
+  //   (state) => state.ideaTokenVaultContract
+  // ).options.address
+
+  const deployedAddresses = NETWORK.getDeployedAddresses()
+  const ideaTokenVaultContractAddress = deployedAddresses?.ideaTokenVault
 
   const onLockPeriodChanged = (event) => {
     setLockPeriod(event.target.id)

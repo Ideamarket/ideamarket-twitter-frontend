@@ -254,7 +254,7 @@ export default function TradeInterface({
   )
 
   const unlockablePairs = rawLockedPairs
-    ? rawLockedPairs.filter((pair) => pair.lockedUntil * 1000 <= Date.now())
+    ? rawLockedPairs?.filter((pair) => pair.lockedUntil * 1000 <= Date.now())
     : []
   const canUnlock = unlockablePairs && unlockablePairs.length > 0 // Is Unlock tab available?
 
