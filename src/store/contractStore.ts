@@ -19,6 +19,7 @@ type State = {
   communityMerkleDistributorContract: any
   lockingMerkleDistributorContract: any
   locking2MerkleDistributorContract: any
+  locking3MerkleDistributorContract: any
   imoContract: any
   imoStakingContract: any
   sushiStakingContract: any
@@ -39,6 +40,7 @@ export const useContractStore = create<State>((set) => ({
   communityMerkleDistributorContract: undefined,
   lockingMerkleDistributorContract: undefined,
   locking2MerkleDistributorContract: undefined,
+  locking3MerkleDistributorContract: undefined,
   imoContract: undefined,
   imoStakingContract: undefined,
   sushiStakingContract: undefined,
@@ -60,6 +62,7 @@ export function clearContracts() {
     communityMerkleDistributorContract: undefined,
     lockingMerkleDistributorContract: undefined,
     locking2MerkleDistributorContract: undefined,
+    locking3MerkleDistributorContract: undefined,
     imoContract: undefined,
     imoStakingContract: undefined,
     sushiStakingContract: undefined,
@@ -143,6 +146,12 @@ export function initContractsFromWeb3(web3: Web3) {
     { from: web3.eth.defaultAccount }
   )
 
+  const locking3MerkleDistributorContract = new web3.eth.Contract(
+    abis.locking3MerkleDistributorContract as any,
+    deployedAddresses.locking3MerkleDistributor,
+    { from: web3.eth.defaultAccount }
+  )
+
   const imoContract = new web3.eth.Contract(
     abis.imo as any,
     deployedAddresses.imo,
@@ -191,6 +200,7 @@ export function initContractsFromWeb3(web3: Web3) {
     communityMerkleDistributorContract: communityMerkleDistributorContract,
     lockingMerkleDistributorContract: lockingMerkleDistributorContract,
     locking2MerkleDistributorContract: locking2MerkleDistributorContract,
+    locking3MerkleDistributorContract: locking3MerkleDistributorContract,
     imoContract: imoContract,
     imoStakingContract: imoStakingContract,
     sushiStakingContract: sushiStakingContract,
