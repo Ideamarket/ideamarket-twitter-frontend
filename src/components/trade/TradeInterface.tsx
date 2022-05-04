@@ -91,8 +91,7 @@ type TradeInterfaceProps = {
     isValid: boolean,
     recipientAddress: string,
     isENSAddressValid: boolean | string,
-    hexAddress: boolean | string,
-    isGiftChecked: boolean
+    hexAddress: boolean | string
   ) => void
   resetOn: boolean
   centerTypeSelection: boolean
@@ -148,8 +147,7 @@ export default function TradeInterface({
 
   const { account } = useWeb3React()
   const [tradeType, setTradeType] = useState(startingTradeType) // Used for smart contracts and which trade UI tab user is on
-  const [recipientAddress, setRecipientAddress] = useState('')
-  const [isENSAddressValid, hexAddress] = useENSAddress(recipientAddress)
+  const [isENSAddressValid, hexAddress] = useENSAddress(account)
 
   const [pairsToggle, setPairsToggle] = useState([])
   const togglePairVisibility = (pairsIndex: number) => {
@@ -158,7 +156,6 @@ export default function TradeInterface({
     setPairsToggle(pairs)
   }
 
-  const [isGiftChecked, setIsGiftChecked] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(false)
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(true)
 
@@ -249,7 +246,6 @@ export default function TradeInterface({
         100,
         null,
         null,
-        ideaToken?.isL1
       )
   )
 
@@ -436,10 +432,9 @@ export default function TradeInterface({
       isUnlockOnceChecked,
       isUnlockPermanentChecked,
       isValid,
-      recipientAddress,
+      account,
       isENSAddressValid,
-      hexAddress,
-      isGiftChecked
+      hexAddress
     )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -454,10 +449,9 @@ export default function TradeInterface({
     isCalculatedIdeaTokenAmountLoading,
     isCalculatedTokenAmountLoading,
     isSelectedTokenDAIValueLoading,
-    recipientAddress,
+    account,
     isENSAddressValid,
     hexAddress,
-    isGiftChecked,
     spendTokenSymbol,
   ])
 
@@ -510,8 +504,6 @@ export default function TradeInterface({
       BigNumber.ROUND_DOWN
     )
 
-    const giftAddress = isENSAddressValid ? hexAddress : recipientAddress
-
     const args =
       tradeType === TX_TYPES.BUY
         ? [
@@ -521,7 +513,7 @@ export default function TradeInterface({
             selectedTokenAmountBNLocal,
             maxSlippage,
             0,
-            isGiftChecked ? giftAddress : account,
+            account,
           ]
         : [
             ideaToken.address,
@@ -529,7 +521,7 @@ export default function TradeInterface({
             ideaTokenAmountBNLocal,
             selectedTokenAmountBNLocal,
             maxSlippage,
-            isGiftChecked ? giftAddress : account,
+            account,
           ]
 
     try {
@@ -571,24 +563,22 @@ export default function TradeInterface({
     tradeFinishUp()
   }
 
-  // Did user type a valid ENS address or hex-address?
-  const isValidAddress = !isENSAddressValid
-    ? isETHAddress(recipientAddress)
-    : true
+  // Is user's address a valid hex-address?
+  const isValidAddress = !isENSAddressValid ? isETHAddress(account) : true
 
   const isApproveButtonDisabled =
     txManager.isPending ||
     !isValid ||
     exceedsBalance ||
     !isMissingAllowance ||
-    (isGiftChecked && !isValidAddress)
+    !isValidAddress
 
   const isTradeButtonDisabled =
     txManager.isPending ||
     !isValid ||
     exceedsBalance ||
     isMissingAllowance ||
-    (isGiftChecked && !isValidAddress)
+    !isValidAddress
 
   const { tokenIconURL } = useTokenIconURL({
     marketSpecifics,
@@ -758,24 +748,6 @@ export default function TradeInterface({
                 <span>Unlock</span>
               </button>
             )}
-            {/* <button
-            className={classNames(
-              'h-10 flex justify-center items-center px-4 py-2 border rounded-md text-sm font-semibold',
-              {
-                'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                  TX_TYPES.CLAIM === tradeType,
-              },
-              { 'text-brand-black dark:text-gray-50': !(TX_TYPES.CLAIM === tradeType) }
-            )}
-            onClick={() => {
-              setIdeaTokenAmount('0')
-              setSelectedTokenAmount('0')
-              setTradeType(TX_TYPES.CLAIM)
-            }}
-          >
-            <span className="mr-1">{getIconVersion('crown', resolvedTheme)}</span>
-            <span>Claim Listing</span>
-          </button> */}
           </div>
         )}
 
@@ -869,6 +841,7 @@ export default function TradeInterface({
                     )}
               </div>
             </div>
+
             <TradeInterfaceBox
               {...commonProps}
               label="Receive"
@@ -877,74 +850,8 @@ export default function TradeInterface({
                 : { ...selectedTokenProps })}
             />
 
-            <div className={classNames('flex flex-col my-2 text-sm')}>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="border-2 border-gray-200 rounded-sm cursor-pointer"
-                  id="giftCheckbox"
-                  disabled={txManager.isPending || disabled}
-                  checked={isGiftChecked}
-                  onChange={(e) => {
-                    setIsGiftChecked(e.target.checked)
-                  }}
-                />
-                <label
-                  htmlFor="giftCheckbox"
-                  className={classNames(
-                    'ml-2 cursor-pointer',
-                    isGiftChecked
-                      ? 'text-brand-blue dark:text-blue-400'
-                      : 'text-gray-500 dark:text-white'
-                  )}
-                >
-                  Gift
-                </label>
-                <Tooltip className="ml-2">
-                  <div className="w-32 md:w-64">
-                    Send this purchase to someone else's wallet, such as the
-                    listing owner or a friend.
-                  </div>
-                </Tooltip>
-              </div>
-            </div>
-
-            {isGiftChecked && (
-              <div className="flex flex-col items-center justify-between mb-2 md:flex-row">
-                <input
-                  type="text"
-                  id="recipient-input"
-                  className={classNames(
-                    'h-full border rounded-md sm:text-sm my-1 text-black dark:text-gray-300 dark:bg-gray-600 dark:placeholder-gray-200',
-                    !ideaToken ||
-                      (ideaToken && ideaToken.tokenOwner === ZERO_ADDRESS)
-                      ? 'w-full'
-                      : 'w-full md:w-96',
-                    isETHAddress(recipientAddress) || isENSAddressValid
-                      ? 'border-gray-200 focus:ring-indigo-500 focus:border-indigo-500'
-                      : 'border-brand-red focus:border-brand-red focus:ring-red-500'
-                  )}
-                  placeholder="Recipient address or ENS"
-                  value={recipientAddress}
-                  onChange={(e) => {
-                    setRecipientAddress(e.target.value)
-                  }}
-                />
-                {ideaToken &&
-                  ideaToken.tokenOwner &&
-                  ideaToken.tokenOwner !== ZERO_ADDRESS && (
-                    <button
-                      className="p-1 mt-1 text-base font-medium bg-white border-2 rounded-lg cursor-pointer md:mt-0 dark:bg-gray-600 md:table-cell border-brand-blue text-brand-blue dark:text-gray-300 hover:text-white tracking-tightest-2 hover:bg-brand-blue"
-                      onClick={() => setRecipientAddress(ideaToken.tokenOwner)}
-                    >
-                      Listing owner
-                    </button>
-                  )}
-              </div>
-            )}
-
             {showTradeButton && (
-              <>
+              <div className="mt-4">
                 <ApproveButton
                   tokenAddress={spendTokenAddress}
                   tokenName={spendTokenSymbol}
@@ -981,7 +888,7 @@ export default function TradeInterface({
                 </div>
 
                 <TxPending txManager={txManager} />
-              </>
+              </div>
             )}
           </div>
         ) : tradeType === TX_TYPES.LOCK ? (
