@@ -88,7 +88,7 @@ export default function StakeUserUI({
   disabled,
   unlockText,
   newIdeaToken,
-  startingTradeType = TX_TYPES.BUY,
+  startingTradeType = TX_TYPES.STAKE_USER,
 }: StakeUserUIProps) {
   const { account } = useWeb3React()
   const [tradeType, setTradeType] = useState(startingTradeType) // Used for smart contracts and which trade UI tab user is on
@@ -180,7 +180,7 @@ export default function StakeUserUI({
 
   const ideaTokenValue = web3BNToFloatString(
     calculateIdeaTokenDaiValue(
-      tradeType === TX_TYPES.BUY
+      tradeType === TX_TYPES.STAKE_USER
         ? // If there is no ideaToken (when listing new IDT), then just use masterIdeaTokenAmountBN
           ideaToken?.rawSupply?.add(masterIdeaTokenAmountBN) ||
             masterIdeaTokenAmountBN
@@ -208,7 +208,7 @@ export default function StakeUserUI({
   }
 
   const slippage =
-    tradeType === TX_TYPES.BUY
+    tradeType === TX_TYPES.STAKE_USER
       ? percentDecrease(
           parseFloat(selectedTokenDAIValue),
           parseFloat(ideaTokenValue)
@@ -228,7 +228,7 @@ export default function StakeUserUI({
   )?.options?.address
 
   const spender =
-    tradeType === TX_TYPES.BUY
+    tradeType === TX_TYPES.STAKE_USER
       ? selectedToken?.address === NETWORK.getExternalAddresses().dai
         ? exchangeContractAddress
         : multiActionContractAddress
@@ -237,16 +237,18 @@ export default function StakeUserUI({
       : undefined
 
   const spendTokenAddress =
-    tradeType === TX_TYPES.BUY ? selectedToken?.address : ideaToken.address
+    tradeType === TX_TYPES.STAKE_USER
+      ? selectedToken?.address
+      : ideaToken?.address
 
   const spendTokenSymbol =
-    tradeType === TX_TYPES.BUY
+    tradeType === TX_TYPES.STAKE_USER
       ? selectedToken?.symbol
-      : marketSpecifics.getTokenDisplayName(ideaToken.name)
+      : marketSpecifics?.getTokenDisplayName(ideaToken?.name)
 
   // Amount of token that needs approval before tx
   const requiredAllowance =
-    tradeType === TX_TYPES.BUY
+    tradeType === TX_TYPES.STAKE_USER
       ? masterSelectedTokenAmount
       : masterIdeaTokenAmount
 
@@ -260,7 +262,7 @@ export default function StakeUserUI({
     : ideaTokenBalanceBN.lt(masterIdeaTokenAmountBN)
 
   const exceedsBalance =
-    tradeType === TX_TYPES.BUY || tradeType === TX_TYPES.LOCK
+    tradeType === TX_TYPES.STAKE_USER || tradeType === TX_TYPES.LOCK
       ? exceedsBalanceBuy
       : exceedsBalanceSell
 
@@ -304,7 +306,7 @@ export default function StakeUserUI({
 
     if (isValid) {
       // Make sure user has high enough balance. If not, disable buttons
-      if (tradeType === TX_TYPES.BUY) {
+      if (tradeType === TX_TYPES.STAKE_USER) {
         if (masterSelectedTokenAmountBN.gt(tokenBalanceBN)) {
           isValid = false
         }
@@ -364,7 +366,7 @@ export default function StakeUserUI({
   async function maxButtonClicked() {
     setSelectedTokenAmount('0')
 
-    if (tradeType === TX_TYPES.SELL || tradeType === TX_TYPES.LOCK) {
+    if (tradeType === TX_TYPES.UNSTAKE_USER || tradeType === TX_TYPES.LOCK) {
       const balanceBN = new BigNumber(ideaTokenBalanceBN.toString())
       setIdeaTokenAmount(
         formatBigNumber(
@@ -387,13 +389,13 @@ export default function StakeUserUI({
       onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, tradeType)
 
     mixpanel.track(`${TX_TYPES[tradeType]}_COMPLETED`, {
-      tokenName: ideaToken.name,
+      tokenName: ideaToken?.name,
     })
   }
 
   async function onTradeClicked() {
-    const name = tradeType === TX_TYPES.BUY ? 'Buy' : 'Sell'
-    const func = tradeType === TX_TYPES.BUY ? buyToken : sellToken
+    const name = tradeType === TX_TYPES.STAKE_USER ? 'Buy' : 'Sell'
+    const func = tradeType === TX_TYPES.STAKE_USER ? buyToken : sellToken
     // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
     const ideaTokenAmountBNLocal = floatToWeb3BN(
       masterIdeaTokenAmount,
@@ -407,9 +409,9 @@ export default function StakeUserUI({
     )
 
     const args =
-      tradeType === TX_TYPES.BUY
+      tradeType === TX_TYPES.STAKE_USER
         ? [
-            ideaToken.address,
+            ideaToken?.address,
             selectedToken.address,
             ideaTokenAmountBNLocal,
             selectedTokenAmountBNLocal,
@@ -418,7 +420,7 @@ export default function StakeUserUI({
             account,
           ]
         : [
-            ideaToken.address,
+            ideaToken?.address,
             selectedToken.address,
             ideaTokenAmountBNLocal,
             selectedTokenAmountBNLocal,
@@ -523,44 +525,44 @@ export default function StakeUserUI({
               'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
               {
                 'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                  TX_TYPES.BUY === tradeType,
+                  TX_TYPES.STAKE_USER === tradeType,
               },
               {
                 'text-brand-black dark:text-gray-50': !(
-                  TX_TYPES.BUY === tradeType
+                  TX_TYPES.STAKE_USER === tradeType
                 ),
               }
             )}
             onClick={() => {
               setIdeaTokenAmount('0')
               setSelectedTokenAmount('0')
-              setTradeType(TX_TYPES.BUY)
+              setTradeType(TX_TYPES.STAKE_USER)
             }}
           >
             <ArrowSmUpIcon className="w-4 h-4 mr-1" />
-            <span>Buy</span>
+            <span>Stake</span>
           </button>
           <button
             className={classNames(
               'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
               {
                 'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                  TX_TYPES.SELL === tradeType,
+                  TX_TYPES.UNSTAKE_USER === tradeType,
               },
               {
                 'text-brand-black dark:text-gray-50': !(
-                  TX_TYPES.SELL === tradeType
+                  TX_TYPES.UNSTAKE_USER === tradeType
                 ),
               }
             )}
             onClick={() => {
               setIdeaTokenAmount('0')
               setSelectedTokenAmount('0')
-              setTradeType(TX_TYPES.SELL)
+              setTradeType(TX_TYPES.UNSTAKE_USER)
             }}
           >
             <ArrowSmDownIcon className="w-4 h-4 mr-1" />
-            <span>Sell</span>
+            <span>Unstake</span>
           </button>
         </div>
 
@@ -612,11 +614,13 @@ export default function StakeUserUI({
             <div className="opacity-50">Spend</div>
             <div>
               You have:{' '}
-              {(tradeType === TX_TYPES.BUY && isTokenBalanceLoading) ||
-              (tradeType === TX_TYPES.SELL && isIdeaTokenBalanceLoading)
+              {(tradeType === TX_TYPES.STAKE_USER && isTokenBalanceLoading) ||
+              (tradeType === TX_TYPES.UNSTAKE_USER && isIdeaTokenBalanceLoading)
                 ? '...'
                 : parseFloat(
-                    tradeType === TX_TYPES.BUY ? tokenBalance : ideaTokenBalance
+                    tradeType === TX_TYPES.STAKE_USER
+                      ? tokenBalance
+                      : ideaTokenBalance
                   )}
               {!txManager.isPending && (
                 <span
@@ -632,7 +636,7 @@ export default function StakeUserUI({
           <TradeInterfaceBox
             {...commonProps}
             label="Spend"
-            {...(tradeType === TX_TYPES.SELL
+            {...(tradeType === TX_TYPES.UNSTAKE_USER
               ? { ...ideaTokenProps }
               : { ...selectedTokenProps })}
           />
@@ -641,11 +645,14 @@ export default function StakeUserUI({
             <div className="opacity-50">Receive</div>
             <div>
               You have:{' '}
-              {(tradeType === TX_TYPES.BUY && isIdeaTokenBalanceLoading) ||
-              (tradeType === TX_TYPES.SELL && isTokenBalanceLoading)
+              {(tradeType === TX_TYPES.STAKE_USER &&
+                isIdeaTokenBalanceLoading) ||
+              (tradeType === TX_TYPES.UNSTAKE_USER && isTokenBalanceLoading)
                 ? '...'
                 : parseFloat(
-                    tradeType === TX_TYPES.BUY ? ideaTokenBalance : tokenBalance
+                    tradeType === TX_TYPES.STAKE_USER
+                      ? ideaTokenBalance
+                      : tokenBalance
                   )}
             </div>
           </div>
@@ -653,7 +660,7 @@ export default function StakeUserUI({
           <TradeInterfaceBox
             {...commonProps}
             label="Receive"
-            {...(tradeType === TX_TYPES.BUY
+            {...(tradeType === TX_TYPES.STAKE_USER
               ? { ...ideaTokenProps }
               : { ...selectedTokenProps })}
           />
@@ -687,7 +694,7 @@ export default function StakeUserUI({
                   disabled={isTradeButtonDisabled}
                   onClick={onTradeClicked}
                 >
-                  {tradeType === TX_TYPES.BUY ? 'Buy' : 'Sell'}
+                  {tradeType === TX_TYPES.STAKE_USER ? 'Stake' : 'Unstake'}
                 </button>
               </div>
 

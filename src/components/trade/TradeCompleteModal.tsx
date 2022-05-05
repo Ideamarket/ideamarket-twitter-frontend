@@ -19,6 +19,8 @@ export enum TX_TYPES {
   RATE,
   TEXT_POST_LIST,
   URL_LIST,
+  STAKE_USER,
+  UNSTAKE_USER,
 }
 
 const tweetableTypes = [

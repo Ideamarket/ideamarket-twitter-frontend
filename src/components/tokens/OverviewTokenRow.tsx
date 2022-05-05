@@ -13,6 +13,8 @@ import A from 'components/A'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import { getPublicProfile } from 'lib/axios'
 import Image from 'next/image'
+import { ArrowRightIcon } from '@heroicons/react/solid'
+import { useRouter } from 'next/router'
 
 type Props = {
   token: any
@@ -29,6 +31,8 @@ export default function TokenRow({
   lastElementRef,
   refetch,
 }: Props) {
+  const router = useRouter()
+
   const { data: urlMetaData } = useQuery([token?.url], () =>
     getURLMetaData(token?.url)
   )
@@ -196,6 +200,11 @@ export default function TokenRow({
               >
                 {displayUsernameOrWallet}
               </A>
+
+              <ArrowRightIcon
+                onClick={() => router.push(`/post/${token?.tokenID}`)}
+                className="ml-auto w-5 text-blue-600"
+              />
             </div>
           )}
 

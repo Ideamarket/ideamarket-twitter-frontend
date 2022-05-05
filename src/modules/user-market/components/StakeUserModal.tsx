@@ -6,11 +6,11 @@ import TradeCompleteModal, {
 } from 'components/trade/TradeCompleteModal'
 import StakeUserUI from './StakeUserUI'
 
-export default function TradeModal({
+export default function StakeUserModal({
   close,
   ideaToken,
   market,
-  startingTradeType = TX_TYPES.BUY,
+  startingTradeType = TX_TYPES.STAKE_USER,
 }: {
   close: () => void
   ideaToken: IdeaToken

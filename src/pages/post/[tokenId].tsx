@@ -304,7 +304,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
         {/* Mobile -- top section of listing page */}
         <div className="md:hidden flex flex-col justify-center w-full mt-4">
-          <div className="flex items-start">
+          <div className="flex items-start w-full">
             {/* This wrapper div combined with object-cover keeps images in correct size */}
             {urlMetaData && urlMetaData?.ogImage && (
               <div className="aspect-[16/9] w-56">
@@ -322,7 +322,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
               </div>
             )}
 
-            <div>
+            <div className="w-full">
               {minterAddress && (
                 <div className="flex items-center pb-2 whitespace-nowrap">
                   <div className="relative rounded-full w-6 h-6">

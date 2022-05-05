@@ -13,6 +13,7 @@ import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 import useAuth from './useAuth'
 import CreateAccountModal from './CreateAccountModal'
 import { GlobalContext } from 'lib/GlobalContext'
+import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 
 interface Props {
   userData?: any
@@ -163,6 +164,19 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                 <span>Settings</span>
               </button>
             )}
+
+            <button
+              // TODO: pull user-token data from API and pass as prop to Modal
+              onClick={() =>
+                ModalService.open(StakeUserModal, {
+                  ideaToken: null,
+                  market: null,
+                })
+              }
+              className="w-full p-3 mt-2 bg-blue-600 text-white rounded-lg"
+            >
+              Stake/Unstake
+            </button>
           </div>
         </div>
       </div>

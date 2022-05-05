@@ -144,7 +144,7 @@ const OverviewFiltersMobile = ({
             RATING
           </span>
           <Tooltip>
-            <div className="w-40 md:w-64">
+            <div className="w-full md:w-64">
               Average rating, weighted by amount of IMO staked on each user (the
               more IMO staked on a user, the more their ratings impact Composite
               Rating). Ratings by users without staked IMO do not impact
@@ -155,7 +155,7 @@ const OverviewFiltersMobile = ({
 
         <div className="w-1/4">COMMENTS</div>
 
-        <div className="w-1/4">RATE</div>
+        <div className="w-1/4"></div>
       </div>
     </div>
   )
