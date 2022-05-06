@@ -6,12 +6,14 @@ import OverviewFiltersMobile from 'components/home/OverviewFiltersMobile'
 import SelectableButton from 'components/buttons/SelectableButton'
 import getAllCategories from 'actions/web3/getAllCategories'
 import { useContractStore } from 'store/contractStore'
+import { TABLE_NAMES } from 'utils/tables'
 
 type OverviewFiltersProps = {
   orderBy: string
   selectedColumns: Set<string>
   isStarredFilterActive: boolean
   selectedCategories: string[]
+  selectedTable: TABLE_NAMES
   setOrderBy: (value: string) => void
   onColumnChanged: (set: Set<string>) => void
   onNameSearchChanged: (value: string) => void
@@ -24,6 +26,7 @@ export const OverviewFilters = ({
   selectedColumns,
   isStarredFilterActive,
   selectedCategories,
+  selectedTable,
   setOrderBy,
   onColumnChanged,
   onNameSearchChanged,
@@ -56,7 +59,8 @@ export const OverviewFilters = ({
     <div>
       <div className="hidden md:flex md:justify-start justify-center h-28 md:h-16 p-3 bg-white rounded-t-lg dark:bg-gray-700 gap-x-2 gap-y-2">
         <div className="flex md:gap-x-2">
-          {categoriesData &&
+          {selectedTable === TABLE_NAMES.HOME_POSTS &&
+            categoriesData &&
             categoriesData.map((cat: any) => (
               <SelectableButton
                 label={`#${cat}`}
@@ -71,24 +75,6 @@ export const OverviewFilters = ({
         <div className="flex w-52 h-9 md:h-auto ml-auto">
           <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
         </div>
-
-        {/* <SelectableButton
-          onClick={setIsVerifiedFilterActive}
-          isSelected={isVerifiedFilterActive}
-          label={getIconVersion(
-            'verify',
-            resolvedTheme,
-            isVerifiedFilterActive
-          )}
-        /> */}
-
-        {/* <DropdownButton
-          filters={CheckboxFilters.COLUMNS.values}
-          name={<AdjustmentsIcon className="w-5 h-5" />}
-          selectedOptions={selectedColumns}
-          toggleOption={toggleColumn}
-          dropdownType="columns"
-        /> */}
       </div>
 
       <OverviewFiltersMobile
@@ -96,6 +82,7 @@ export const OverviewFilters = ({
         isStarredFilterActive={isStarredFilterActive}
         categoriesData={categoriesData}
         selectedCategories={selectedCategories}
+        selectedTable={selectedTable}
         setOrderBy={setOrderBy}
         onNameSearchChanged={onNameSearchChanged}
         setIsStarredFilterActive={setIsStarredFilterActive}

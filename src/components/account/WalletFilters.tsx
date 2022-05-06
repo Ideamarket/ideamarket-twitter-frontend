@@ -1,9 +1,4 @@
-import {
-  LockClosedIcon,
-  StarIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/solid'
-import classNames from 'classnames'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import { OverviewSearchbar } from 'components/tokens/OverviewSearchbar'
 import { CheckboxFilters } from 'components/tokens/utils/OverviewUtils'
@@ -12,42 +7,10 @@ import { useMarketStore } from 'store/markets'
 import {
   getSortOptionDisplayNameByValue,
   SortOptionsAccountOpinions,
+  SortOptionsAccountPosts,
   TABLE_NAMES,
 } from 'utils/tables'
 import useOnClickOutside from 'utils/useOnClickOutside'
-
-type FiltersButtonProps = {
-  isSelected: boolean
-  onClick: (value: any) => void
-  label: any
-  className?: string
-}
-
-const FiltersButton = ({
-  isSelected,
-  onClick,
-  label,
-  className,
-}: FiltersButtonProps) => {
-  return (
-    <button
-      className={classNames(
-        className,
-        'flex flex-grow md:flex-auto justify-center items-center md:px-3 p-2 md:rounded-md text-sm font-semibold',
-        {
-          'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
-            isSelected,
-        },
-        { 'text-brand-black dark:text-gray-50 border': !isSelected }
-      )}
-      onClick={() => {
-        onClick(!isSelected)
-      }}
-    >
-      <span>{label}</span>
-    </button>
-  )
-}
 
 type Props = {
   table: TABLE_NAMES
@@ -95,23 +58,17 @@ const WalletFilters = ({
 
   return (
     <div className="justify-center p-3 bg-white rounded-t-lg text-black md:flex dark:bg-gray-700 gap-x-2 gap-y-2 md:justify-start lg:overflow-x-visible">
-      <FiltersButton
+      {/* <FiltersButton
         className="hidden md:flex"
         onClick={setIsStarredFilterActive}
         isSelected={isStarredFilterActive}
         label={<StarIcon className="w-5 h-5" />}
-      />
-
-      <FiltersButton
-        className="hidden md:flex"
-        onClick={setIsLockedFilterActive}
-        isSelected={isLockedFilterActive}
-        label={<LockClosedIcon className="w-5 h-5" />}
-      />
+      /> */}
 
       <div className="w-full h-auto">
         {/* Start of dropdown button that only shows on mobile Account Opinion table */}
-        {table === TABLE_NAMES.ACCOUNT_OPINIONS && (
+        {(table === TABLE_NAMES.ACCOUNT_OPINIONS ||
+          table === TABLE_NAMES.ACCOUNT_POSTS) && (
           <div
             onClick={() => setIsSortingDropdownOpen(!isSortingDropdownOpen)}
             className="relative w-full flex md:hidden justify-center items-center px-2 py-1 mb-1 ml-auto border rounded-md"
@@ -130,7 +87,11 @@ const WalletFilters = ({
             {isSortingDropdownOpen && (
               <DropdownButtons
                 container={ref}
-                filters={Object.values(SortOptionsAccountOpinions)}
+                filters={Object.values(
+                  table === TABLE_NAMES.ACCOUNT_OPINIONS
+                    ? SortOptionsAccountOpinions
+                    : SortOptionsAccountPosts
+                )}
                 selectedOptions={new Set([orderBy])}
                 toggleOption={setOrderBy}
               />

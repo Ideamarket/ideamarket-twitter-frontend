@@ -1,10 +1,12 @@
 import classNames from 'classnames'
-// import { useCallback, useRef, MutableRefObject } from 'react'
+import { useCallback, useRef, MutableRefObject } from 'react'
 import { IdeaToken, IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 // import RatingsRow from './RatingsRow'
 // import RatingsRowSkeleton from './RatingsRowSkeleton'
-import { SortOptionsAccountOpinions } from 'utils/tables'
+import { SortOptionsAccountPosts } from 'utils/tables'
+import UserPostsRow from './UserPostsRow'
+import UserPostsRowSkeleton from './UserPostsRowSkeleton'
 
 type Header = {
   title: string
@@ -14,38 +16,38 @@ type Header = {
 
 const headers: Header[] = [
   {
-    title: '',
+    title: 'Name',
     value: 'name',
-    sortable: true,
+    sortable: false,
   },
   {
-    title: 'Rating By User',
-    value: SortOptionsAccountOpinions.RATING.value,
+    title: 'Composite Rating',
+    value: SortOptionsAccountPosts.COMPOSITE_RATING.value,
     sortable: true,
   },
-  // {
-  //   title: 'Composite Rating',
-  //   value: 'compositeRating',
-  //   sortable: true,
-  // },
   {
     title: 'Average Rating',
-    value: SortOptionsAccountOpinions.AVG_RATING.value,
+    value: SortOptionsAccountPosts.AVG_RATING.value,
     sortable: true,
   },
-  // {
-  //   title: 'Market Interest',
-  //   value: 'marketInterest',
-  //   sortable: true,
-  // },
+  {
+    title: 'Market Interest',
+    value: SortOptionsAccountPosts.MARKET_INTEREST.value,
+    sortable: true,
+  },
+  {
+    title: 'Comments',
+    value: SortOptionsAccountPosts.COMMENTS.value,
+    sortable: true,
+  },
   {
     title: 'Rate',
-    value: 'rateButton',
+    value: 'txButtons',
     sortable: false,
   },
 ]
 
-type RatingsTableProps = {
+type UserPostsTableProps = {
   rawPairs: IdeaTokenMarketPair[]
   isPairsDataLoading: boolean
   refetch: () => void
@@ -67,24 +69,24 @@ export default function UserPostsTable({
   fetchMore,
   headerClicked,
   onRateClicked,
-}: RatingsTableProps) {
-  // const TOKENS_PER_PAGE = 10
+}: UserPostsTableProps) {
+  const TOKENS_PER_PAGE = 10
 
-  // const observer: MutableRefObject<any> = useRef()
-  // const lastElementRef = useCallback(
-  //   (node) => {
-  //     if (observer.current) observer.current.disconnect()
+  const observer: MutableRefObject<any> = useRef()
+  const lastElementRef = useCallback(
+    (node) => {
+      if (observer.current) observer.current.disconnect()
 
-  //     observer.current = new IntersectionObserver((entries) => {
-  //       if (entries[0].isIntersecting && canFetchMore) {
-  //         fetchMore()
-  //       }
-  //     })
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && canFetchMore) {
+          fetchMore()
+        }
+      })
 
-  //     if (node) observer.current.observe(node)
-  //   },
-  //   [canFetchMore, fetchMore]
-  // )
+      if (node) observer.current.observe(node)
+    },
+    [canFetchMore, fetchMore]
+  )
 
   const getColumnContent = (column) => {
     switch (column.value) {
@@ -96,17 +98,17 @@ export default function UserPostsTable({
   const getColumnStyle = (column) => {
     switch (column.value) {
       case 'name':
-        return 'w-[40%] pl-6 pr-24'
-      case SortOptionsAccountOpinions.RATING.value:
-        return 'w-[20%]'
-      // case 'compositeRating':
-      //   return 'w-[12%]'
-      case SortOptionsAccountOpinions.AVG_RATING.value:
-        return 'w-[20%]'
-      // case 'marketInterest':
-      //   return 'w-[12%]'
-      case 'rateButton':
-        return 'w-[20%]'
+        return 'w-[45%] lg:w-[55%] pl-6 pr-24'
+      case SortOptionsAccountPosts.COMPOSITE_RATING.value:
+        return 'w-[11%] lg:w-[9%]'
+      case SortOptionsAccountPosts.AVG_RATING.value:
+        return 'w-[11%] lg:w-[9%]'
+      case SortOptionsAccountPosts.MARKET_INTEREST.value:
+        return 'w-[11%] lg:w-[9%]'
+      case SortOptionsAccountPosts.COMMENTS.value:
+        return 'w-[11%] lg:w-[9%]'
+      case 'txButtons':
+        return 'w-[11%] lg:w-[9%]'
       default:
         return ''
     }
@@ -156,12 +158,12 @@ export default function UserPostsTable({
               ))}
             </div>
             <div className="bg-white divide-y-[6px] dark:bg-gray-700">
-              {/* {!isPairsDataLoading &&
+              {!isPairsDataLoading &&
                 rawPairs &&
                 rawPairs.map((pair: any, index) => (
-                  <RatingsRow
+                  <UserPostsRow
                     key={index}
-                    opinion={pair}
+                    token={pair}
                     onRateClicked={onRateClicked}
                     refetch={refetch}
                     lastElementRef={
@@ -171,9 +173,9 @@ export default function UserPostsTable({
                 ))}
               {isPairsDataLoading
                 ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                    <RatingsRowSkeleton key={token} />
+                    <UserPostsRowSkeleton key={token} />
                   ))
-                : null} */}
+                : null}
             </div>
           </div>
         </div>

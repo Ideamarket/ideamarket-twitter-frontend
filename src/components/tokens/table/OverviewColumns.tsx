@@ -3,15 +3,20 @@ import classNames from 'classnames'
 import Tooltip from 'components/tooltip/Tooltip'
 import { A } from 'components'
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
-import { StarIcon } from '@heroicons/react/solid'
-import SelectableButton from 'components/buttons/SelectableButton'
-import { SortOptionsHomePostsTable } from 'utils/tables'
+// import { StarIcon } from '@heroicons/react/solid'
+// import SelectableButton from 'components/buttons/SelectableButton'
+import {
+  SortOptionsHomePostsTable,
+  SortOptionsHomeUsersTable,
+  TABLE_NAMES,
+} from 'utils/tables'
 
 type Props = {
   orderBy: string
   orderDirection: string
   columnData: Array<any>
   isStarredFilterActive: boolean
+  selectedTable: TABLE_NAMES
   columnClicked: (column: string) => void
   setIsStarredFilterActive: (isActive: boolean) => void
 }
@@ -43,6 +48,7 @@ export const OverviewColumns = ({
   orderBy,
   orderDirection,
   columnData,
+  selectedTable,
   isStarredFilterActive,
   columnClicked,
   setIsStarredFilterActive,
@@ -52,14 +58,14 @@ export const OverviewColumns = ({
       case 'name':
         return (
           <div className="flex items-center space-x-2">
-            <div className="-ml-2">
+            {/* <div className="-ml-2">
               <SelectableButton
                 onClick={setIsStarredFilterActive}
                 isSelected={isStarredFilterActive}
                 label={<StarIcon className="w-5 h-5" />}
                 className="w-9 h-9"
               />
-            </div>
+            </div> */}
           </div>
         )
       case 'income':
@@ -103,21 +109,38 @@ export const OverviewColumns = ({
   }
 
   const getColumnStyle = (column) => {
-    switch (column.value) {
-      case 'name':
-        return 'w-[45%] lg:w-[55%] pl-6 pr-24'
-      case SortOptionsHomePostsTable.COMPOSITE_RATING.value:
-        return 'w-[11%] lg:w-[9%]'
-      case SortOptionsHomePostsTable.AVG_RATING.value:
-        return 'w-[11%] lg:w-[9%]'
-      case SortOptionsHomePostsTable.MARKET_INTEREST.value:
-        return 'w-[11%] lg:w-[9%]'
-      case SortOptionsHomePostsTable.COMMENTS.value:
-        return 'w-[11%] lg:w-[9%]'
-      case 'txButtons':
-        return 'w-[11%] lg:w-[9%]'
-      default:
-        return ''
+    if (selectedTable === TABLE_NAMES.HOME_POSTS) {
+      switch (column.value) {
+        case 'name':
+          return 'w-[45%] lg:w-[55%] pl-6 pr-24'
+        case SortOptionsHomePostsTable.COMPOSITE_RATING.value:
+          return 'w-[11%] lg:w-[9%]'
+        case SortOptionsHomePostsTable.AVG_RATING.value:
+          return 'w-[11%] lg:w-[9%]'
+        case SortOptionsHomePostsTable.MARKET_INTEREST.value:
+          return 'w-[11%] lg:w-[9%]'
+        case SortOptionsHomePostsTable.COMMENTS.value:
+          return 'w-[11%] lg:w-[9%]'
+        case 'txButtons':
+          return 'w-[11%] lg:w-[9%]'
+        default:
+          return ''
+      }
+    } else if (selectedTable === TABLE_NAMES.HOME_USERS) {
+      switch (column.value) {
+        case 'name':
+          return 'w-[45%] lg:w-[55%] pl-6 pr-24'
+        case SortOptionsHomeUsersTable.STAKED.value:
+          return 'w-[13.75%] lg:w-[11.25%]'
+        case SortOptionsHomeUsersTable.WEEK_CHANGE.value:
+          return 'w-[13.75%] lg:w-[11.25%]'
+        case SortOptionsHomeUsersTable.HOLDERS.value:
+          return 'w-[13.75%] lg:w-[11.25%]'
+        case 'stakeButton':
+          return 'w-[13.75%] lg:w-[11.25%]'
+        default:
+          return ''
+      }
     }
   }
 
@@ -154,39 +177,6 @@ export const OverviewColumns = ({
               )}
             </div>
           </div>
-
-          // <th
-          //   className={classNames(
-          //     getColumnStyle(column),
-          //     'py-3 text-xs font-medium leading-4 text-left text-gray-500 bg-gray-50 dark:bg-gray-600 dark:text-gray-50',
-          //     column.sortable && 'cursor-pointer',
-          //     column.value !== 'rank' && 'pr-6'
-          //   )}
-          //   key={column.value}
-          //   onClick={() => {
-          //     if (column.sortable) {
-          //       columnClicked(column.value)
-          //     }
-          //   }}
-          // >
-          //   <div className="flex items-center">
-          //     <span className="uppercase mr-1">
-          //       {getColumnContent(column)}
-          //     </span>
-          //     {column.sortable && orderBy === column.value && (
-          //       <div
-          //         className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
-          //         title="SORT"
-          //       >
-          //         {orderDirection === 'desc' ? (
-          //           <SortDescendingIcon className="w-3.5 text-blue-500" />
-          //         ) : (
-          //           <SortAscendingIcon className="w-3.5 text-blue-500" />
-          //         )}
-          //       </div>
-          //     )}
-          //   </div>
-          // </th>
         )
       })}
     </>

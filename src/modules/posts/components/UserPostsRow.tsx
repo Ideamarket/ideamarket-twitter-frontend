@@ -6,8 +6,11 @@ import {
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { ChatIcon } from '@heroicons/react/outline'
-import ListingContent from './ListingContent'
-import { getListingTypeFromIDTURL, LISTING_TYPE } from './utils/ListingUtils'
+import ListingContent from 'components/tokens/ListingContent'
+import {
+  getListingTypeFromIDTURL,
+  LISTING_TYPE,
+} from 'components/tokens/utils/ListingUtils'
 import A from 'components/A'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import { getPublicProfile } from 'lib/axios'
@@ -17,15 +20,13 @@ import { useRouter } from 'next/router'
 
 type Props = {
   token: any
-  getColumn: (column: string) => any
   lastElementRef?: (node) => void
   onRateClicked: (idt: IdeaToken, urlMetaData: any) => void
   refetch: () => any
 }
 
-export default function TokenRow({
+export default function UserPostsRow({
   token,
-  getColumn,
   onRateClicked,
   lastElementRef,
   refetch,
@@ -70,7 +71,7 @@ export default function TokenRow({
         <div className="flex text-black">
           {/* Icon and Name and ListingContent */}
           <div className="w-[45%] lg:w-[55%] relative pl-6 lg:pr-10">
-            <div className="relative flex items-start w-3/4 p-3 mx-auto md:w-full text-gray-900 dark:text-gray-200 border rounded-lg bg-white z-[60]">
+            <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
               <div className="mr-4 flex flex-col items-center space-y-2">
                 <div className="relative rounded-full w-6 h-6">
                   <Image

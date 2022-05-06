@@ -16,9 +16,15 @@ import {
 import { HomeHeader } from 'components'
 import { CheckboxFilters } from 'components/tokens/utils/OverviewUtils'
 import RateModal from 'components/trade/RateModal'
-import { SortOptionsHomePostsTable, TABLE_NAMES } from 'utils/tables'
+import {
+  HomeUsersTableColumns,
+  SortOptionsHomePostsTable,
+  SortOptionsHomeUsersTable,
+  TABLE_NAMES,
+} from 'utils/tables'
 import { MenuAlt2Icon, UserIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
+import HomeUsersTable from 'modules/user-market/components/HomeUsersTable'
 
 type Props = { urlMarkets?: string[] }
 
@@ -30,7 +36,7 @@ const Home = ({ urlMarkets }: Props) => {
   const [selectedColumns, setSelectedColumns] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
   const [orderBy, setOrderBy] = useState(
-    SortOptionsHomePostsTable.AVG_RATING.value
+    SortOptionsHomePostsTable.MARKET_INTEREST.value
   )
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [selectedCategories, setSelectedCategories] = useState([])
@@ -94,6 +100,7 @@ const Home = ({ urlMarkets }: Props) => {
     selectedColumns,
     isStarredFilterActive,
     selectedCategories,
+    selectedTable,
     setOrderBy,
     onColumnChanged,
     onNameSearchChanged,
@@ -106,8 +113,12 @@ const Home = ({ urlMarkets }: Props) => {
     orderBy,
     orderDirection,
     isStarredFilterActive,
-    columnData: visibleColumns,
+    columnData:
+      selectedTable === TABLE_NAMES.HOME_POSTS
+        ? visibleColumns
+        : HomeUsersTableColumns,
     selectedCategories,
+    selectedTable,
     getColumn: (column) => selectedColumns.has(column),
     onOrderByChanged,
     onRateClicked,
@@ -124,7 +135,13 @@ const Home = ({ urlMarkets }: Props) => {
         {/* 2 buttons: Posts and Users */}
         <div className="flex items-center space-x-3 mx-2 md:mx-auto md:px-4 mb-5 pt-10 md:max-w-304 transform -translate-y-40">
           <button
-            onClick={() => setSelectedTable(TABLE_NAMES.HOME_POSTS)}
+            onClick={() => {
+              onOrderByChanged(
+                SortOptionsHomePostsTable.MARKET_INTEREST.value,
+                'desc'
+              )
+              setSelectedTable(TABLE_NAMES.HOME_POSTS)
+            }}
             className={classNames(
               selectedTable === TABLE_NAMES.HOME_POSTS
                 ? 'bg-white/[.2]'
@@ -140,7 +157,10 @@ const Home = ({ urlMarkets }: Props) => {
           </button>
 
           <button
-            onClick={() => setSelectedTable(TABLE_NAMES.HOME_USERS)}
+            onClick={() => {
+              onOrderByChanged(SortOptionsHomeUsersTable.STAKED.value, 'desc')
+              setSelectedTable(TABLE_NAMES.HOME_USERS)
+            }}
             className={classNames(
               selectedTable === TABLE_NAMES.HOME_USERS
                 ? 'bg-white/[.2]'
@@ -160,7 +180,11 @@ const Home = ({ urlMarkets }: Props) => {
         <div className="mx-auto transform md:px-4 md:max-w-304 -translate-y-40 font-inter">
           <OverviewFilters {...overviewFiltersProps} />
           <div className="bg-white border-brand-gray-3 dark:border-gray-500 rounded-b-xlg shadow-home">
-            {visibleColumns && <Table {...tableProps} />}
+            {selectedTable === TABLE_NAMES.HOME_POSTS ? (
+              <Table {...tableProps} />
+            ) : (
+              <HomeUsersTable {...tableProps} />
+            )}
           </div>
         </div>
         <ScrollToTop />

@@ -3,7 +3,7 @@ import client from 'lib/axios'
 /**
  * Get all posts (URLs and text posts)
  */
-export default async function getAllPosts({
+export default async function apiGetAllPosts({
   skip,
   limit,
   orderBy,
@@ -11,6 +11,7 @@ export default async function getAllPosts({
   categories, // array of strings representing category tags to add to this new onchain listing (OPTIONAL)
   filterTokens,
   search,
+  minterAddress,
 }) {
   try {
     const categoriesString =
@@ -26,6 +27,7 @@ export default async function getAllPosts({
         categories: categoriesString,
         filterTokens: filterTokensString,
         search,
+        minterAddress,
       },
     })
 

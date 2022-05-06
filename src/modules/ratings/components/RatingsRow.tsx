@@ -1,4 +1,4 @@
-import { A, WatchingStar } from 'components'
+import { A } from 'components'
 import { IdeaToken } from 'store/ideaMarketsStore'
 import {
   formatNumberWithCommasAsThousandsSerperator,
@@ -68,47 +68,46 @@ export default function RatingsRow({
           {/* Icon and Name */}
           <div className="w-[40%] relative pl-6 pr-10">
             <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
-              <div className="mr-4">
-                <WatchingStar token={opinion} />
-              </div>
-
-              <div className="grow text-base font-medium leading-5 truncate">
-                <div className="pr-6">
-                  {minterAddress && (
-                    <div className="flex items-center pb-2 whitespace-nowrap">
-                      <div className="relative rounded-full w-6 h-6">
-                        <Image
-                          className="rounded-full"
-                          src={
-                            userDataForMinter?.profilePhoto ||
-                            '/DefaultProfilePicture.png'
-                          }
-                          alt=""
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      </div>
-                      <A
-                        className="ml-2 font-bold hover:text-blue-600 z-50"
-                        href={`/u/${usernameOrWallet}`}
-                      >
-                        {displayUsernameOrWallet}
-                      </A>
-                    </div>
-                  )}
-
-                  <ListingContent
-                    ideaToken={opinion}
-                    page="HomePage"
-                    urlMetaData={urlMetaData}
-                    useMetaData={
-                      getListingTypeFromIDTURL(opinion?.url) !==
-                        LISTING_TYPE.TWEET &&
-                      getListingTypeFromIDTURL(opinion?.url) !==
-                        LISTING_TYPE.TEXT_POST
+              <div className="mr-4 flex flex-col items-center space-y-2">
+                <div className="relative rounded-full w-6 h-6">
+                  <Image
+                    className="rounded-full"
+                    src={
+                      userDataForMinter?.profilePhoto ||
+                      '/DefaultProfilePicture.png'
                     }
+                    alt=""
+                    layout="fill"
+                    objectFit="cover"
                   />
                 </div>
+
+                {/* <WatchingStar token={token} /> */}
+              </div>
+
+              <div className="pr-6 w-full">
+                {minterAddress && (
+                  <div className="flex items-center pb-2 whitespace-nowrap">
+                    <A
+                      className="font-bold hover:text-blue-600 z-50"
+                      href={`/u/${usernameOrWallet}`}
+                    >
+                      {displayUsernameOrWallet}
+                    </A>
+                  </div>
+                )}
+
+                <ListingContent
+                  ideaToken={opinion}
+                  page="HomePage"
+                  urlMetaData={urlMetaData}
+                  useMetaData={
+                    getListingTypeFromIDTURL(opinion?.url) !==
+                      LISTING_TYPE.TWEET &&
+                    getListingTypeFromIDTURL(opinion?.url) !==
+                      LISTING_TYPE.TEXT_POST
+                  }
+                />
               </div>
             </div>
           </div>
@@ -269,9 +268,9 @@ export default function RatingsRow({
         </div>
 
         <div className="flex justify-between items-center px-10 py-4 border-t">
-          <div className="">
+          {/* <div className="">
             <WatchingStar token={opinion} />
-          </div>
+          </div> */}
 
           <button
             onClick={(e) => {

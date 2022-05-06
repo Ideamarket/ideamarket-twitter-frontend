@@ -10,13 +10,13 @@ import { useInfiniteQuery } from 'react-query'
 
 import { IdeaToken } from 'store/ideaMarketsStore'
 import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
-import TokenRow from './OverviewTokenRow'
-import TokenRowSkeleton from './OverviewTokenRowSkeleton'
-import { OverviewColumns } from './table/OverviewColumns'
+import { OverviewColumns } from 'components/tokens/table/OverviewColumns'
 import { flatten } from 'utils/lodash'
 import { GlobalContext } from 'lib/GlobalContext'
 import { SortOptionsHomePostsTable, TABLE_NAMES } from 'utils/tables'
-import { getAllPosts } from 'modules/posts/services/PostService'
+import { getAllUsers } from '../services/UserMarketService'
+import HomeUsersRowSkeleton from './HomeUsersRowSkeleton'
+import HomeUsersRow from './HomeUsersRow'
 
 type Props = {
   isStarredFilterActive: boolean
@@ -33,7 +33,7 @@ type Props = {
   setIsStarredFilterActive: (isActive: boolean) => void
 }
 
-export default function Table({
+export default function HomeUsersTable({
   isStarredFilterActive,
   nameSearch,
   orderBy,
@@ -77,16 +77,8 @@ export default function Table({
       nameSearch,
     ],
     ({ pageParam = 0 }) =>
-      getAllPosts(
-        [
-          TOKENS_PER_PAGE,
-          orderBy,
-          orderDirection,
-          selectedCategories,
-          filterTokens,
-          nameSearch,
-          null,
-        ],
+      getAllUsers(
+        [TOKENS_PER_PAGE, orderBy, orderDirection, nameSearch],
         pageParam
       ),
     {
@@ -200,7 +192,7 @@ export default function Table({
                 }
 
                 return (
-                  <TokenRow
+                  <HomeUsersRow
                     key={index}
                     token={token}
                     getColumn={getColumn}
@@ -214,7 +206,7 @@ export default function Table({
               })}
               {isLoading
                 ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
-                    <TokenRowSkeleton key={token} getColumn={getColumn} />
+                    <HomeUsersRowSkeleton key={token} getColumn={getColumn} />
                   ))
                 : null}
             </div>

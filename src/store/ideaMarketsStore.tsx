@@ -24,7 +24,6 @@ import { getOwnedListings } from 'actions/web2/getOwnedListings'
 import { getTrades } from 'actions/web2/getTrades'
 import getQuerySingleIDTByTokenAddress from './queries/getQuerySingleIDTByTokenAddress'
 import Web3 from 'web3'
-import getAllPosts from 'actions/web2/posts/getAllPosts'
 
 const HTTP_GRAPHQL_ENDPOINT_L1 = L1_NETWORK.getSubgraphURL()
 const HTTP_GRAPHQL_ENDPOINT = NETWORK.getSubgraphURL()
@@ -422,69 +421,6 @@ export async function queryMyTokensMaybeMarket(
         token: subgraphResponseToIdeaToken(token, token.market, owner),
         market: subgraphResponseToIdeaMarket(token.market),
       } as IdeaTokenMarketPair)
-  )
-}
-
-/**
- * Format data fetched from API so that the format is consistent across entire frontend
- */
-const formatApiResponseToPost = (apiPost: any): IdeamarketPost => {
-  return {
-    contractAddress: apiPost?.contractAddress,
-    tokenID: apiPost?.tokenID,
-    minterAddress: apiPost?.minterAddress,
-    content: apiPost?.content,
-    categories: apiPost?.categories,
-    imageLink: apiPost?.imageLink,
-    isURL: apiPost?.isURL,
-    url: apiPost?.isURL ? apiPost?.content : '', // If there is a URL that was listed, it will be in content variable
-    blockHeight: apiPost?.blockHeight,
-
-    averageRating: apiPost?.averageRating,
-    totalRatingsCount: apiPost?.totalRatingsCount,
-    latestRatingsCount: apiPost?.latestRatingsCount,
-    totalCommentsCount: apiPost?.totalCommentsCount,
-    latestCommentsCount: apiPost?.latestCommentsCount,
-  }
-}
-
-type Params = [
-  limit: number,
-  orderBy: string,
-  orderDirection: string,
-  categories: string[],
-  filterTokens: string[],
-  search: string
-]
-
-/**
- * Call API to get all posts and then convert data to format consistent across entire frontend
- */
-export async function queryPosts(
-  params: Params,
-  skip = 0
-): Promise<IdeamarketPost[]> {
-  if (!params) {
-    return []
-  }
-
-  const [limit, orderBy, orderDirection, categories, filterTokens, search] =
-    params
-
-  const allPosts = await getAllPosts({
-    skip,
-    limit,
-    orderBy,
-    orderDirection,
-    categories,
-    filterTokens,
-    search,
-  })
-
-  return await Promise.all(
-    allPosts.map(async (post) => {
-      return formatApiResponseToPost(post)
-    })
   )
 }
 

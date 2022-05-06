@@ -6,6 +6,7 @@ import {
   OwnedTokenTableNew,
   WalletModal,
   MyTradesTableNew,
+  Tooltip,
 } from '../../components'
 import { useWalletStore } from '../../store/walletStore'
 import {
@@ -21,8 +22,13 @@ import RatingsTable from 'modules/ratings/components/RatingsTable'
 import { getUsersLatestOpinions } from 'modules/ratings/services/OpinionService'
 import RateModal from 'components/trade/RateModal'
 import { GlobalContext } from 'lib/GlobalContext'
-import { SortOptionsAccountOpinions, TABLE_NAMES } from 'utils/tables'
-// import UserPostsTable from 'modules/posts/components/UserPostsTable'
+import {
+  SortOptionsAccountOpinions,
+  SortOptionsAccountPosts,
+  TABLE_NAMES,
+} from 'utils/tables'
+import UserPostsTable from 'modules/posts/components/UserPostsTable'
+import { getAllPosts } from 'modules/posts/services/PostService'
 
 const TOKENS_PER_PAGE = 10
 
@@ -58,9 +64,9 @@ export default function ProfileWallet({ userData }: Props) {
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
 
-  const [table, setTable] = useState(TABLE_NAMES.ACCOUNT_OPINIONS)
+  const [table, setTable] = useState(TABLE_NAMES.ACCOUNT_POSTS)
   const [orderBy, setOrderBy] = useState(
-    SortOptionsAccountOpinions.RATING.value
+    SortOptionsAccountPosts.MARKET_INTEREST.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
 
@@ -73,19 +79,19 @@ export default function ProfileWallet({ userData }: Props) {
   const allMarkets = useMarketStore((state) => state.markets)
   const marketNames = allMarkets.map((m) => m?.market?.name)
 
-  // const {
-  //   data: infiniteUserPostData,
-  //   isFetching: isUserPostDataLoading,
-  //   fetchNextPage: fetchMoreUserPosts,
-  //   refetch: refetchUserPosts,
-  //   hasNextPage: canFetchMoreUserPosts,
-  // } = useInfiniteQuery(
-  //   ['user-posts'],
-  //   ({ pageParam = 0 }) => userPostsQueryFunction(TOKENS_PER_PAGE, pageParam),
-  //   infiniteQueryConfig
-  // )
+  const {
+    data: infiniteUserPostData,
+    isFetching: isUserPostDataLoading,
+    fetchNextPage: fetchMoreUserPosts,
+    refetch: refetchUserPosts,
+    hasNextPage: canFetchMoreUserPosts,
+  } = useInfiniteQuery(
+    ['user-posts'],
+    ({ pageParam = 0 }) => userPostsQueryFunction(TOKENS_PER_PAGE, pageParam),
+    infiniteQueryConfig
+  )
 
-  // const userPostPairs = flatten(infiniteUserPostData?.pages || [])
+  const userPostPairs = flatten(infiniteUserPostData?.pages || [])
 
   const {
     data: infiniteRatingsData,
@@ -133,6 +139,7 @@ export default function ProfileWallet({ userData }: Props) {
     refetchOwned()
     refetchMyTrades()
     refetchRatings()
+    refetchUserPosts()
   }
 
   useEffect(() => {
@@ -165,19 +172,22 @@ export default function ProfileWallet({ userData }: Props) {
     nameSearch,
   ])
 
-  // async function userPostsQueryFunction(numTokens: number, skip: number = 0) {
-  //   const latestUserOpinions = await getUsersLatestOpinions({
-  //     walletAddress: userData?.walletAddress,
-  //     skip,
-  //     limit: numTokens,
-  //     orderBy,
-  //     orderDirection,
-  //     filterTokens,
-  //     search: nameSearch,
-  //   })
+  async function userPostsQueryFunction(numTokens: number, skip: number = 0) {
+    const latestUserOpinions = await getAllPosts(
+      [
+        numTokens,
+        orderBy,
+        orderDirection,
+        null,
+        filterTokens,
+        nameSearch,
+        userData?.walletAddress,
+      ],
+      skip
+    )
 
-  //   return latestUserOpinions || []
-  // }
+    return latestUserOpinions || []
+  }
 
   async function ratingsQueryFunction(numTokens: number, skip: number = 0) {
     const latestUserOpinions = await getUsersLatestOpinions({
@@ -273,6 +283,21 @@ export default function ProfileWallet({ userData }: Props) {
         <div className="flex order-1 md:order-none mx-4">
           <div
             className={classNames(
+              table === TABLE_NAMES.ACCOUNT_POSTS
+                ? 'text-white'
+                : 'text-brand-gray text-opacity-60 cursor-pointer',
+              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6 mr-auto'
+            )}
+            onClick={() => {
+              setTable(TABLE_NAMES.ACCOUNT_POSTS)
+              setOrderBy(SortOptionsAccountPosts.MARKET_INTEREST.value)
+              setOrderDirection('desc')
+            }}
+          >
+            Posts
+          </div>
+          <div
+            className={classNames(
               table === TABLE_NAMES.ACCOUNT_OPINIONS
                 ? 'text-white'
                 : 'text-brand-gray text-opacity-60 cursor-pointer',
@@ -335,6 +360,45 @@ export default function ProfileWallet({ userData }: Props) {
           setIsLockedFilterActive={setIsLockedFilterActive}
           setOrderBy={setOrderBy}
         />
+
+        {/* Mobile header to explain columns */}
+        {table === TABLE_NAMES.ACCOUNT_POSTS && (
+          <div className="md:hidden w-full flex gap-x-3 px-3 py-3 border-t-[6px] leading-4 text-xs text-black/[.5] font-semibold">
+            <div className="w-1/4 flex items-start">
+              <span className="mr-1">
+                MARKET
+                <br />
+                INTERST
+              </span>
+              <Tooltip>
+                <div className="w-40 md:w-64">
+                  The total amount of IMO staked on all users who rated a post
+                </div>
+              </Tooltip>
+            </div>
+
+            <div className="w-1/4 flex items-start">
+              <span className="mr-1">
+                COMPOSITE
+                <br />
+                RATING
+              </span>
+              <Tooltip>
+                <div className="w-full md:w-64">
+                  Average rating, weighted by amount of IMO staked on each user
+                  (the more IMO staked on a user, the more their ratings impact
+                  Composite Rating). Ratings by users without staked IMO do not
+                  impact Composite Rating, but do impact Average Rating.
+                </div>
+              </Tooltip>
+            </div>
+
+            <div className="w-1/4">COMMENTS</div>
+
+            <div className="w-1/4"></div>
+          </div>
+        )}
+
         <div className="border-t border-brand-border-gray dark:border-gray-500 shadow-home ">
           {!web3 && (
             <div className="flex items-center justify-center">
@@ -350,21 +414,21 @@ export default function ProfileWallet({ userData }: Props) {
             </div>
           )}
 
-          {/* {table === TABLE_NAMES.ACCOUNT_POSTS &&
+          {table === TABLE_NAMES.ACCOUNT_POSTS &&
             !selectedMarkets?.has('None') &&
             web3 !== undefined && (
               <UserPostsTable
-                rawPairs={}
-                isPairsDataLoading={isRatingsDataLoading}
+                rawPairs={userPostPairs}
+                isPairsDataLoading={isUserPostDataLoading}
                 refetch={refetch}
-                canFetchMore={canFetchMoreRatings}
+                canFetchMore={canFetchMoreUserPosts}
                 orderDirection={orderDirection}
                 orderBy={orderBy}
-                fetchMore={fetchMoreRatings}
+                fetchMore={fetchMoreUserPosts}
                 headerClicked={headerClicked}
                 onRateClicked={onRateClicked}
               />
-            )} */}
+            )}
 
           {table === TABLE_NAMES.ACCOUNT_OPINIONS &&
             !selectedMarkets?.has('None') &&
