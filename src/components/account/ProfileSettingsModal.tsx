@@ -5,16 +5,16 @@ import { FaRegTrashAlt } from 'react-icons/fa'
 import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import { GlobalContext } from 'lib/GlobalContext'
 import { useEffect } from 'react'
-import {
-  sendVerificationCodeToAccountEmail,
-  updateAccount,
-  uploadAccountPhoto,
-} from 'lib/axios'
 import { CircleSpinner } from 'components'
 import { UserProfile } from 'types/customTypes'
 import ModalService from 'components/modals/ModalService'
 import EmailVerificationCode from './EmailVerificationCode'
 import classNames from 'classnames'
+import {
+  sendVerificationCodeToAccountEmail,
+  updateAccount,
+  uploadAccountPhoto,
+} from 'actions/web2/user-market/apiUserActions'
 
 const reducer = (state, action: any) => {
   switch (action.type) {

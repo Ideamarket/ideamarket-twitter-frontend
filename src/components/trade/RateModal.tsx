@@ -13,7 +13,6 @@ import ratePost from 'actions/web3/ratePost'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import A from 'components/A'
 import { useQuery } from 'react-query'
-import { getPublicProfile } from 'lib/axios'
 import Image from 'next/image'
 import { syncNFTOpinions } from 'actions/web2/opinions/syncNFTOpinions'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -22,6 +21,7 @@ import {
   getListingTypeFromIDTURL,
   LISTING_TYPE,
 } from 'components/tokens/utils/ListingUtils'
+import { getAccount } from 'actions/web2/user-market/apiUserActions'
 
 const CustomSlider = Slider.createSliderWithTooltip(Slider)
 
@@ -110,7 +110,7 @@ export default function RateModal({
   const { data: userDataForMinter } = useQuery<any>(
     [`minterAddress-${minterAddress}`],
     () =>
-      getPublicProfile({
+      getAccount({
         username: null,
         walletAddress: minterAddress,
       })

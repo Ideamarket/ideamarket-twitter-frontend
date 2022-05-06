@@ -25,9 +25,9 @@ import {
   getPostByTokenID,
   IdeamarketPost,
 } from 'modules/posts/services/PostService'
-import { getPublicProfile } from 'lib/axios'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
+import { getAccount } from 'actions/web2/user-market/apiUserActions'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DetailsSkeleton = () => (
@@ -143,7 +143,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const { data: userDataForMinter } = useQuery<any>(
     [`minterAddress-${minterAddress}`],
     () =>
-      getPublicProfile({
+      getAccount({
         username: null,
         walletAddress: minterAddress,
       })

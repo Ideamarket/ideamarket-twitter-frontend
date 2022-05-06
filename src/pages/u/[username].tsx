@@ -2,18 +2,18 @@ import { DefaultLayout } from 'components'
 import { Toaster } from 'react-hot-toast'
 import { ProfileWallet } from 'components/account'
 import ProfileGeneralInfo from 'components/account/ProfileGeneralInfo'
-import { getPublicProfile } from 'lib/axios'
 import { ReactElement } from 'react'
 import { useQuery } from 'react-query'
 import { isAddressValid } from 'lib/utils/web3-eth'
 import { useRouter } from 'next/router'
+import { getAccount } from 'actions/web2/user-market/apiUserActions'
 
 const PublicProfile = () => {
   const router = useRouter()
   const { username } = router.query // This can be DB username or onchain wallet address
 
   const { data: userData } = useQuery<any>([{ username }], () =>
-    getPublicProfile({
+    getAccount({
       username: isAddressValid(username as string) ? null : username,
       walletAddress: username,
     })

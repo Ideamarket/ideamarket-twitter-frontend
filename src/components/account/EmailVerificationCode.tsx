@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
 import Modal from '../modals/Modal'
 import { GlobalContext } from 'lib/GlobalContext'
-import { checkAccountEmailVerificationCode } from 'lib/axios'
 import { CircleSpinner } from 'components'
+import { checkAccountEmailVerificationCode } from 'actions/web2/user-market/apiUserActions'
 
 export default function EmailVerificationCode({
   close,

@@ -69,7 +69,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
     userData &&
     userData?.walletAddress &&
     account &&
-    userData?.walletAddress === account
+    userData?.walletAddress === account?.toLowerCase()
 
   return (
     <>

@@ -13,10 +13,10 @@ import {
 } from 'components/tokens/utils/ListingUtils'
 import A from 'components/A'
 import { convertAccountName } from 'lib/utils/stringUtil'
-import { getPublicProfile } from 'lib/axios'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
+import { getAccount } from 'actions/web2/user-market/apiUserActions'
 
 type Props = {
   token: any
@@ -42,7 +42,7 @@ export default function UserPostsRow({
   const { data: userDataForMinter } = useQuery<any>(
     [`minterAddress-${minterAddress}`],
     () =>
-      getPublicProfile({
+      getAccount({
         username: null,
         walletAddress: minterAddress,
       })

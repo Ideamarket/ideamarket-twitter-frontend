@@ -12,9 +12,9 @@ import {
   getListingTypeFromIDTURL,
   LISTING_TYPE,
 } from 'components/tokens/utils/ListingUtils'
-import { getPublicProfile } from 'lib/axios'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
+import { getAccount } from 'actions/web2/user-market/apiUserActions'
 
 type Props = {
   opinion: any
@@ -38,7 +38,7 @@ export default function RatingsRow({
   const { data: userDataForMinter } = useQuery<any>(
     [`minterAddress-${minterAddress}`],
     () =>
-      getPublicProfile({
+      getAccount({
         username: null,
         walletAddress: minterAddress,
       })

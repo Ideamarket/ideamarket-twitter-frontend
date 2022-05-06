@@ -1,5 +1,8 @@
 import { useWeb3React } from '@web3-react/core'
-import { getAccount, loginAccount } from 'lib/axios'
+import {
+  getAccount,
+  loginAccount,
+} from 'actions/web2/user-market/apiUserActions'
 import { GlobalContext } from 'lib/GlobalContext'
 import { useContext } from 'react'
 import { setCookie } from 'services/CookieService'
@@ -48,16 +51,12 @@ const useAuth = () => {
     setCookie('t', JSON.stringify(newJwtKeyValues), validUntilUTCDate)
   }
 
-  const setUserFromJwt = (jwt: string): void => {
+  const setUserFromJwt = async (jwt: string) => {
     if (jwt) {
-      getAccount({ jwt })
-        .then((response) => {
-          if (response?.data?.success) {
-            const { data } = response.data
-            setUser(data?.account)
-          }
-        })
-        .catch((error) => console.error('Could not get user account', error))
+      const userToken = await getAccount({ jwt })
+      if (userToken) {
+        setUser(userToken)
+      }
     }
   }
 
