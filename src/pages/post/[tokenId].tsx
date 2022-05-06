@@ -140,19 +140,10 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
   const { minterAddress } = (token || {}) as any
 
-  const { data: userDataForMinter } = useQuery<any>(
-    [`minterAddress-${minterAddress}`],
-    () =>
-      getAccount({
-        username: null,
-        walletAddress: minterAddress,
-      })
-  )
-
   const displayUsernameOrWallet = convertAccountName(
-    userDataForMinter?.username || minterAddress
+    token?.minterToken?.username || minterAddress
   )
-  const usernameOrWallet = userDataForMinter?.username || minterAddress
+  const usernameOrWallet = token?.minterToken?.username || minterAddress
 
   const url = token?.url
 
@@ -223,7 +214,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                     <Image
                       className="rounded-full"
                       src={
-                        userDataForMinter?.profilePhoto ||
+                        token?.minterToken?.profilePhoto ||
                         '/DefaultProfilePicture.png'
                       }
                       alt=""
@@ -329,7 +320,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                     <Image
                       className="rounded-full"
                       src={
-                        userDataForMinter?.profilePhoto ||
+                        token?.minterToken?.profilePhoto ||
                         '/DefaultProfilePicture.png'
                       }
                       alt=""

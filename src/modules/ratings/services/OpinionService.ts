@@ -2,6 +2,7 @@ import { getOpinionsByTokenID } from 'actions/web2/opinions/getOpinionsByTokenID
 import { getOpinionsByWallet } from 'actions/web2/opinions/getOpinionsByWallet'
 import getLatestOpinionsAboutAddress from 'actions/web3/getLatestOpinionsAboutAddress'
 import getLatestOpinionsAboutNFT from 'actions/web3/getLatestOpinionsAboutNFT'
+import { IdeamarketUser } from 'modules/user-market/services/UserMarketService'
 
 /**
  * Get the average rating of all ratings onchain for this IDT
@@ -138,6 +139,9 @@ export type IdeamarketOpinion = {
   url: string
   blockHeight: number
 
+  userToken: IdeamarketUser // User data for ratedBy (when getting opinions for Post page)
+  minterToken: IdeamarketUser // User data for the minter (when getting opinions for user page)
+
   ratedBy: string
   ratedAt: string
   rating: number
@@ -164,6 +168,9 @@ const formatApiResponseToOpinion = (apiPost: any): IdeamarketOpinion => {
     isURL: apiPost?.isURL,
     url: apiPost?.isURL ? apiPost?.content : '', // If there is a URL that was listed, it will be in content variable
     blockHeight: apiPost?.blockHeight,
+
+    userToken: apiPost?.userToken,
+    minterToken: apiPost?.minterToken,
 
     ratedBy: apiPost?.ratedBy,
     ratedAt: apiPost?.ratedAt,

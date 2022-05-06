@@ -10,7 +10,6 @@ import TradeCompleteModal, {
 } from 'components/trade/TradeCompleteModal'
 import mintPost from 'actions/web3/mintPost'
 import ModalService from 'components/modals/ModalService'
-import { getValidURL } from 'actions/web2/getValidURL'
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -18,7 +17,7 @@ import getAllCategories from 'actions/web3/getAllCategories'
 import { XIcon } from '@heroicons/react/solid'
 import { useContractStore } from 'store/contractStore'
 import { syncPosts } from 'actions/web2/posts/syncPosts'
-// import { getMarketFromURL } from 'utils/markets'
+import { verifyTokenName } from 'actions'
 
 export default function NewPostModal({ close }: { close: () => void }) {
   const txManager = useTransactionManager()
@@ -82,23 +81,19 @@ export default function NewPostModal({ close }: { close: () => void }) {
     setInputContent(typedURL)
     setSelectedCategories([]) // Set selected categories to none if any input typed
 
-    const canonical = await getValidURL(typedURL)
+    // const canonical = await getValidURL(typedURL)
 
-    // TODO: once user market is done, figure out if markets are still needed. If so, integrate. If not, remove all market logic
+    const {
+      isValid,
+      isAlreadyOnChain,
+      // finalTokenValue,
+    } = await verifyTokenName(typedURL) // TODO: make this use canonical eventually
 
-    // const market = getMarketFromURL(canonical, markets)
-
-    // const {
-    //   isValid,
-    //   isAlreadyOnChain,
-    //   finalTokenValue,
-    // } = await verifyTokenName(canonical, market, active)
-
-    setFinalURL(canonical)
+    setFinalURL(typedURL) // TODO: make this use canonical eventually
     // setFinalTokenValue(finalTokenValue)
 
-    setIsValidToken(true)
-    setIsAlreadyOnChain(false)
+    setIsValidToken(isValid)
+    setIsAlreadyOnChain(isAlreadyOnChain)
   }
 
   const onListClicked = async () => {
@@ -139,7 +134,8 @@ export default function NewPostModal({ close }: { close: () => void }) {
     setSelectedCategories([])
   }
 
-  const isListingDisabled = inputContent?.length > 10000
+  const isTextPostTooLong = inputContent?.length > 10000
+  const isListingDisabled = isTextPostTooLong || !isValidToken
 
   return (
     <Modal close={close}>
@@ -179,7 +175,7 @@ export default function NewPostModal({ close }: { close: () => void }) {
             </div>
 
             <span>
-              <span className={classNames(isListingDisabled && 'text-red-500')}>
+              <span className={classNames(isTextPostTooLong && 'text-red-500')}>
                 {inputContent?.length}
               </span>
               /10000

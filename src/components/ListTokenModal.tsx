@@ -105,7 +105,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     ).convertUserInputToTokenName(userInput)
 
     const { isValid, isAlreadyOnChain, finalTokenValue } =
-      await verifyTokenName(nameBeforeAPI, selectedMarket, Boolean(account))
+      await verifyTokenName(nameBeforeAPI)
 
     setTokenName(finalTokenValue)
 

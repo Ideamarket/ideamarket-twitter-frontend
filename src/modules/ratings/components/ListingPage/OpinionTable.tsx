@@ -11,6 +11,7 @@ import {
 } from 'utils/tables'
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
+import Image from 'next/image'
 
 type DropdownButtonProps = {
   toggleOption: (value: any) => void
@@ -89,7 +90,7 @@ const OpinionTable = ({
       <div className="hidden md:block rounded-xl w-full shadow-lg">
         {/* Table header */}
         <div className="rounded-xl bg-[#FAFAFA] flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
-          <div className="w-[26%] pl-3">
+          <div className="w-[26%] pl-6">
             <span>USER</span>
           </div>
 
@@ -102,16 +103,18 @@ const OpinionTable = ({
             <span className="mr-1 uppercase">
               {SortOptionsListingPageOpinions.STAKED.displayName}
             </span>
-            <div
-              className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
-              title="SORT"
-            >
-              {orderDirection === 'desc' ? (
-                <SortDescendingIcon className="w-3.5 text-blue-500" />
-              ) : (
-                <SortAscendingIcon className="w-3.5 text-blue-500" />
-              )}
-            </div>
+            {orderBy === SortOptionsListingPageOpinions.STAKED.value && (
+              <div
+                className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
+                title="SORT"
+              >
+                {orderDirection === 'desc' ? (
+                  <SortDescendingIcon className="w-3.5 text-blue-500" />
+                ) : (
+                  <SortAscendingIcon className="w-3.5 text-blue-500" />
+                )}
+              </div>
+            )}
           </div>
 
           <div
@@ -123,19 +126,21 @@ const OpinionTable = ({
             <span className="mr-1 uppercase">
               {SortOptionsListingPageOpinions.RATING.displayName}
             </span>
-            <div
-              className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
-              title="SORT"
-            >
-              {orderDirection === 'desc' ? (
-                <SortDescendingIcon className="w-3.5 text-blue-500" />
-              ) : (
-                <SortAscendingIcon className="w-3.5 text-blue-500" />
-              )}
-            </div>
+            {orderBy === SortOptionsListingPageOpinions.RATING.value && (
+              <div
+                className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
+                title="SORT"
+              >
+                {orderDirection === 'desc' ? (
+                  <SortDescendingIcon className="w-3.5 text-blue-500" />
+                ) : (
+                  <SortAscendingIcon className="w-3.5 text-blue-500" />
+                )}
+              </div>
+            )}
           </div>
 
-          <div className="w-[60%] flex items-center pr-3">
+          <div className="w-[60%] flex items-center pr-6">
             <span>COMMENT</span>
             <div className="flex w-2/6 h-full ml-auto">
               <OverviewSearchbar
@@ -147,29 +152,62 @@ const OpinionTable = ({
 
         <div className="divide-y-4">
           {opinionPairs?.map((opinion, oIndex) => {
+            const displayUsernameOrWallet = convertAccountName(
+              opinion?.userToken?.username || opinion?.ratedBy
+            )
+            const usernameOrWallet =
+              opinion?.userToken?.username || opinion?.ratedBy
+
             return (
               <div
                 className="bg-white h-min min-h-[5rem] py-4 flex items-start w-full text-black"
                 key={oIndex}
               >
-                <div className="w-[26%] flex items-center pl-3">
-                  <A
-                    className="underline font-bold hover:text-blue-600"
-                    href={`/u/${opinion?.ratedBy}`}
-                  >
-                    {convertAccountName(opinion?.ratedBy)}
-                  </A>
+                {/* Icon and Name */}
+                <div className="w-[26%] flex items-center pl-6">
+                  <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
+                    <div className="mr-4 flex flex-col items-center space-y-2">
+                      <div className="relative rounded-full w-6 h-6">
+                        <Image
+                          className="rounded-full"
+                          src={
+                            opinion?.userToken?.profilePhoto ||
+                            '/DefaultProfilePicture.png'
+                          }
+                          alt=""
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
+
+                      {/* <WatchingStar token={token} /> */}
+                    </div>
+
+                    <div className="pr-6 w-full">
+                      <div className="flex items-center pb-2 whitespace-nowrap">
+                        <A
+                          className="font-bold hover:text-blue-600 z-50"
+                          href={`/u/${usernameOrWallet}`}
+                        >
+                          {displayUsernameOrWallet}
+                        </A>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="w-[7%] text-blue-500 font-semibold">
-                  {formatNumberWithCommasAsThousandsSerperator(opinion?.staked)}
+                  {formatNumberWithCommasAsThousandsSerperator(
+                    opinion?.userToken?.deposits
+                  )}{' '}
+                  IMO
                 </div>
 
                 <div className="w-[7%] text-blue-500 font-semibold">
                   {opinion?.rating}
                 </div>
 
-                <div className="w-[60%] flex items-center pr-3">
+                <div className="w-[60%] flex items-center pr-6">
                   {opinion?.comment && (
                     <div className="w-full px-3 py-2 bg-[#FAFAFA] rounded-lg">
                       {opinion?.comment}
@@ -202,22 +240,42 @@ const OpinionTable = ({
 
         <div className="divide-y-[6px]">
           {opinionPairs?.map((opinion, oIndex) => {
+            const displayUsernameOrWallet = convertAccountName(
+              opinion?.userToken?.username || opinion?.ratedBy
+            )
+            const usernameOrWallet =
+              opinion?.userToken?.username || opinion?.ratedBy
+
             return (
               <div
                 className="bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
                 key={oIndex}
               >
-                <div className="mb-2 flex items-center space-x-3">
-                  <A
-                    className="underline font-bold hover:text-blue-600"
-                    href={`https://arbiscan.io/address/${opinion?.ratedBy}`}
-                  >
-                    {convertAccountName(opinion?.ratedBy)}
-                  </A>
+                <div className="mb-2 flex items-start space-x-3">
+                  <div className="flex items-center pb-2 whitespace-nowrap">
+                    <div className="relative rounded-full w-6 h-6">
+                      <Image
+                        className="rounded-full"
+                        src={
+                          opinion?.userToken?.profilePhoto ||
+                          '/DefaultProfilePicture.png'
+                        }
+                        alt=""
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
+                    <A
+                      className="ml-2 font-bold text-black hover:text-blue-600"
+                      href={`/u/${usernameOrWallet}`}
+                    >
+                      {displayUsernameOrWallet}
+                    </A>
+                  </div>
 
                   <span className="text-blue-500 font-medium">
                     {formatNumberWithCommasAsThousandsSerperator(
-                      opinion?.staked
+                      opinion?.userToken?.deposits
                     )}{' '}
                     IMO
                   </span>

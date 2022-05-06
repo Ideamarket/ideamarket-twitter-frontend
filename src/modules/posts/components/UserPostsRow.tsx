@@ -16,7 +16,6 @@ import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
-import { getAccount } from 'actions/web2/user-market/apiUserActions'
 
 type Props = {
   token: any
@@ -39,19 +38,10 @@ export default function UserPostsRow({
 
   const { minterAddress } = (token || {}) as any
 
-  const { data: userDataForMinter } = useQuery<any>(
-    [`minterAddress-${minterAddress}`],
-    () =>
-      getAccount({
-        username: null,
-        walletAddress: minterAddress,
-      })
-  )
-
   const displayUsernameOrWallet = convertAccountName(
-    userDataForMinter?.username || minterAddress
+    token?.minterToken?.username || minterAddress
   )
-  const usernameOrWallet = userDataForMinter?.username || minterAddress
+  const usernameOrWallet = token?.minterToken?.username || minterAddress
 
   return (
     <>
@@ -64,6 +54,7 @@ export default function UserPostsRow({
         <a
           href={`/post/${token?.tokenID}`}
           className="absolute top-0 left-0 w-full h-full z-40"
+          title="open in new tab"
         >
           <span className="invisible">Go to post page</span>
         </a>
@@ -71,13 +62,13 @@ export default function UserPostsRow({
         <div className="flex text-black">
           {/* Icon and Name and ListingContent */}
           <div className="w-[45%] lg:w-[55%] relative pl-6 lg:pr-10">
-            <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
+            <div className="relative flex items-start w-3/4 p-3 mx-auto md:w-full text-gray-900 dark:text-gray-200 border rounded-lg bg-white z-[60]">
               <div className="mr-4 flex flex-col items-center space-y-2">
                 <div className="relative rounded-full w-6 h-6">
                   <Image
                     className="rounded-full"
                     src={
-                      userDataForMinter?.profilePhoto ||
+                      token?.minterToken?.profilePhoto ||
                       '/DefaultProfilePicture.png'
                     }
                     alt=""
@@ -187,7 +178,7 @@ export default function UserPostsRow({
                 <Image
                   className="rounded-full"
                   src={
-                    userDataForMinter?.profilePhoto ||
+                    token?.minterToken?.profilePhoto ||
                     '/DefaultProfilePicture.png'
                   }
                   alt=""

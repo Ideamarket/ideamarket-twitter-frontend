@@ -13,7 +13,6 @@ import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
-import { getAccount } from 'actions/web2/user-market/apiUserActions'
 
 type Props = {
   token: any
@@ -38,19 +37,10 @@ export default function TokenRow({
 
   const { minterAddress } = (token || {}) as any
 
-  const { data: userDataForMinter } = useQuery<any>(
-    [`minterAddress-${minterAddress}`],
-    () =>
-      getAccount({
-        username: null,
-        walletAddress: minterAddress,
-      })
-  )
-
   const displayUsernameOrWallet = convertAccountName(
-    userDataForMinter?.username || minterAddress
+    token?.minterToken?.username || minterAddress
   )
-  const usernameOrWallet = userDataForMinter?.username || minterAddress
+  const usernameOrWallet = token?.minterToken?.username || minterAddress
 
   return (
     <>
@@ -63,6 +53,7 @@ export default function TokenRow({
         <a
           href={`/post/${token?.tokenID}`}
           className="absolute top-0 left-0 w-full h-full z-40"
+          title="open in new tab"
         >
           <span className="invisible">Go to post page</span>
         </a>
@@ -76,7 +67,7 @@ export default function TokenRow({
                   <Image
                     className="rounded-full"
                     src={
-                      userDataForMinter?.profilePhoto ||
+                      token?.minterToken?.profilePhoto ||
                       '/DefaultProfilePicture.png'
                     }
                     alt=""
@@ -186,7 +177,7 @@ export default function TokenRow({
                 <Image
                   className="rounded-full"
                   src={
-                    userDataForMinter?.profilePhoto ||
+                    token?.minterToken?.profilePhoto ||
                     '/DefaultProfilePicture.png'
                   }
                   alt=""

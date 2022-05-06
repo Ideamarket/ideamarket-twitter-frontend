@@ -173,6 +173,8 @@ export default function ProfileWallet({ userData }: Props) {
   ])
 
   async function userPostsQueryFunction(numTokens: number, skip: number = 0) {
+    if (!userData || !userData?.walletAddress) return []
+
     const latestUserOpinions = await getAllPosts(
       [
         numTokens,

@@ -1,5 +1,6 @@
 import apiGetAllPosts from 'actions/web2/posts/apiGetAllPosts'
 import { apiGetPostByTokenID } from 'actions/web2/posts/apiGetPostByTokenID'
+import { IdeamarketUser } from 'modules/user-market/services/UserMarketService'
 
 /**
  * Get post data from backend and convert to one format for frontend
@@ -75,6 +76,8 @@ export type IdeamarketPost = {
   url: string
   blockHeight: number
 
+  minterToken: IdeamarketUser
+
   averageRating: number
   totalRatingsCount: number
   latestRatingsCount: number
@@ -98,6 +101,8 @@ const formatApiResponseToPost = (apiPost: any): IdeamarketPost => {
     isURL: apiPost?.isURL,
     url: apiPost?.isURL ? apiPost?.content : '', // If there is a URL that was listed, it will be in content variable
     blockHeight: apiPost?.blockHeight,
+
+    minterToken: apiPost?.minterToken,
 
     averageRating: apiPost?.averageRating,
     totalRatingsCount: apiPost?.totalRatingsCount,

@@ -14,7 +14,6 @@ import {
 } from 'components/tokens/utils/ListingUtils'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
-import { getAccount } from 'actions/web2/user-market/apiUserActions'
 
 type Props = {
   opinion: any
@@ -35,19 +34,10 @@ export default function RatingsRow({
 
   const { minterAddress } = (opinion || {}) as any
 
-  const { data: userDataForMinter } = useQuery<any>(
-    [`minterAddress-${minterAddress}`],
-    () =>
-      getAccount({
-        username: null,
-        walletAddress: minterAddress,
-      })
-  )
-
   const displayUsernameOrWallet = convertAccountName(
-    userDataForMinter?.username || minterAddress
+    opinion?.minterToken?.username || minterAddress
   )
-  const usernameOrWallet = userDataForMinter?.username || minterAddress
+  const usernameOrWallet = opinion?.minterToken?.username || minterAddress
 
   return (
     <>
@@ -73,7 +63,7 @@ export default function RatingsRow({
                   <Image
                     className="rounded-full"
                     src={
-                      userDataForMinter?.profilePhoto ||
+                      opinion?.minterToken?.profilePhoto ||
                       '/DefaultProfilePicture.png'
                     }
                     alt=""
@@ -202,7 +192,7 @@ export default function RatingsRow({
                 <Image
                   className="rounded-full"
                   src={
-                    userDataForMinter?.profilePhoto ||
+                    opinion?.minterToken?.profilePhoto ||
                     '/DefaultProfilePicture.png'
                   }
                   alt=""
