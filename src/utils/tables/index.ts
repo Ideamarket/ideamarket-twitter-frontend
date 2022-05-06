@@ -97,6 +97,11 @@ export const SortOptionsListingPageOpinions = {
     value: orderByIndividualRating,
     displayName: 'Rating',
   },
+  STAKED: {
+    id: 2,
+    value: orderByDeposits,
+    displayName: 'Staked',
+  },
 }
 
 // Sorting options for posts table on account page

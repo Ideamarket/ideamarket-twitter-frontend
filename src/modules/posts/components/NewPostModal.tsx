@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 import classNames from 'classnames'
 import { useTransactionManager } from 'utils'
 import TxPending from 'components/trade/TxPending'
-import { MenuAlt2Icon } from '@heroicons/react/outline'
+import { GlobeAltIcon, MenuAlt2Icon } from '@heroicons/react/outline'
 import TradeCompleteModal, {
   TX_TYPES,
 } from 'components/trade/TradeCompleteModal'
@@ -18,6 +18,7 @@ import getAllCategories from 'actions/web3/getAllCategories'
 import { XIcon } from '@heroicons/react/solid'
 import { useContractStore } from 'store/contractStore'
 import { syncPosts } from 'actions/web2/posts/syncPosts'
+// import { getMarketFromURL } from 'utils/markets'
 
 export default function NewPostModal({ close }: { close: () => void }) {
   const txManager = useTransactionManager()
@@ -138,7 +139,7 @@ export default function NewPostModal({ close }: { close: () => void }) {
     setSelectedCategories([])
   }
 
-  const isListingDisabled = inputContent?.length > 360
+  const isListingDisabled = inputContent?.length > 10000
 
   return (
     <Modal close={close}>
@@ -163,7 +164,7 @@ export default function NewPostModal({ close }: { close: () => void }) {
                 <span>Text Post</span>
               </button>
 
-              {/* <button
+              <button
                 onClick={() => setInputPostType(TX_TYPES.URL_LIST)}
                 className={classNames(
                   inputPostType === TX_TYPES.URL_LIST
@@ -174,14 +175,14 @@ export default function NewPostModal({ close }: { close: () => void }) {
               >
                 <GlobeAltIcon className="w-4" />
                 <span>URL</span>
-              </button> */}
+              </button>
             </div>
 
             <span>
               <span className={classNames(isListingDisabled && 'text-red-500')}>
                 {inputContent?.length}
               </span>
-              /360
+              /10000
             </span>
           </div>
 

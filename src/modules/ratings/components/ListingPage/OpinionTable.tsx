@@ -10,6 +10,7 @@ import {
   TABLE_NAMES,
 } from 'utils/tables'
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
+import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 
 type DropdownButtonProps = {
   toggleOption: (value: any) => void
@@ -94,11 +95,34 @@ const OpinionTable = ({
 
           <div
             onClick={() =>
+              headerClicked(SortOptionsListingPageOpinions.STAKED.value)
+            }
+            className="w-[7%] flex items-center cursor-pointer"
+          >
+            <span className="mr-1 uppercase">
+              {SortOptionsListingPageOpinions.STAKED.displayName}
+            </span>
+            <div
+              className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
+              title="SORT"
+            >
+              {orderDirection === 'desc' ? (
+                <SortDescendingIcon className="w-3.5 text-blue-500" />
+              ) : (
+                <SortAscendingIcon className="w-3.5 text-blue-500" />
+              )}
+            </div>
+          </div>
+
+          <div
+            onClick={() =>
               headerClicked(SortOptionsListingPageOpinions.RATING.value)
             }
-            className="w-[14%] flex items-center cursor-pointer"
+            className="w-[7%] flex items-center cursor-pointer"
           >
-            <span className="mr-1">RATING</span>
+            <span className="mr-1 uppercase">
+              {SortOptionsListingPageOpinions.RATING.displayName}
+            </span>
             <div
               className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
               title="SORT"
@@ -137,7 +161,11 @@ const OpinionTable = ({
                   </A>
                 </div>
 
-                <div className="w-[14%] text-blue-500 font-semibold">
+                <div className="w-[7%] text-blue-500 font-semibold">
+                  {formatNumberWithCommasAsThousandsSerperator(opinion?.staked)}
+                </div>
+
+                <div className="w-[7%] text-blue-500 font-semibold">
                   {opinion?.rating}
                 </div>
 
@@ -179,13 +207,20 @@ const OpinionTable = ({
                 className="bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
                 key={oIndex}
               >
-                <div className="mb-2">
+                <div className="mb-2 flex items-center space-x-3">
                   <A
                     className="underline font-bold hover:text-blue-600"
                     href={`https://arbiscan.io/address/${opinion?.ratedBy}`}
                   >
                     {convertAccountName(opinion?.ratedBy)}
                   </A>
+
+                  <span className="text-blue-500 font-medium">
+                    {formatNumberWithCommasAsThousandsSerperator(
+                      opinion?.staked
+                    )}{' '}
+                    IMO
+                  </span>
                 </div>
 
                 <div className="flex items-start w-full p-3 bg-black/[.02] rounded-lg">
