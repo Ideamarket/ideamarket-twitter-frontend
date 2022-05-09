@@ -190,24 +190,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         {/* Desktop and tablet -- top section of listing page */}
         <div className="hidden md:flex items-start w-full mt-4">
           <div className="w-2/3 flex items-start">
-            {/* This wrapper div combined with object-cover keeps images in correct size */}
-            {urlMetaData && urlMetaData?.ogImage && (
-              <div className="aspect-[16/9] w-56">
-                {/* Didn't use Next image because can't do wildcard domain allow in next config file */}
-                <img
-                  className="rounded-xl h-full object-cover"
-                  src={
-                    urlMetaData && urlMetaData?.ogImage
-                      ? urlMetaData.ogImage
-                      : '/gray.svg'
-                  }
-                  alt=""
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            )}
-
-            <div>
+            <div className="w-full">
               {minterAddress && (
                 <div className="flex items-center pb-2 whitespace-nowrap">
                   <div className="relative rounded-full w-6 h-6">
@@ -296,23 +279,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         {/* Mobile -- top section of listing page */}
         <div className="md:hidden flex flex-col justify-center w-full mt-4">
           <div className="flex items-start w-full">
-            {/* This wrapper div combined with object-cover keeps images in correct size */}
-            {urlMetaData && urlMetaData?.ogImage && (
-              <div className="aspect-[16/9] w-56">
-                {/* Didn't use Next image because can't do wildcard domain allow in next config file */}
-                <img
-                  className="rounded-xl h-full object-cover"
-                  src={
-                    urlMetaData && urlMetaData?.ogImage
-                      ? urlMetaData.ogImage
-                      : '/gray.svg'
-                  }
-                  alt=""
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-            )}
-
             <div className="w-full">
               {minterAddress && (
                 <div className="flex items-center pb-2 whitespace-nowrap">
@@ -397,7 +363,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         className={classNames(
           isScrolled ? 'hidden' : 'flex md:hidden',
           // shadow = 1st num is horizontal shadow length. 2nd num is vertical shadow length. 3rd num is blur amount.
-          'md:hidden absolute bottom-0 left-0 right-0 flex items-center divide-x h-[12%] bg-white z-40 shadow-[0_-2px_10px_rgba(0,0,0,0.3)]'
+          'md:hidden absolute bottom-0 left-0 right-0 flex items-center divide-x h-[12%] bg-white z-[100] shadow-[0_-2px_10px_rgba(0,0,0,0.3)]'
         )}
       >
         <div className="w-[50%] px-4 py-3 h-full">

@@ -8,7 +8,7 @@ export default async function verifyTokenName(url: string) {
     }
 
   // TODO
-  const existingListing = true
+  const existingListing = false
 
   const isAlreadyOnChain = Boolean(existingListing)
 

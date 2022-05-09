@@ -18,6 +18,7 @@ import { XIcon } from '@heroicons/react/solid'
 import { useContractStore } from 'store/contractStore'
 import { syncPosts } from 'actions/web2/posts/syncPosts'
 import { verifyTokenName } from 'actions'
+import IMTextArea from 'modules/forms/components/IMTextArea'
 
 export default function NewPostModal({ close }: { close: () => void }) {
   const txManager = useTransactionManager()
@@ -75,8 +76,8 @@ export default function NewPostModal({ close }: { close: () => void }) {
     })
   }
 
-  const onURLTyped = async (event: any) => {
-    const typedURL = event.target.value
+  const onURLTyped = async (newTextInput: string) => {
+    const typedURL = newTextInput
 
     setInputContent(typedURL)
     setSelectedCategories([]) // Set selected categories to none if any input typed
@@ -182,12 +183,25 @@ export default function NewPostModal({ close }: { close: () => void }) {
             </span>
           </div>
 
-          <textarea
+          {/* <textarea
             className="px-4 py-3 w-full h-20 leading-tight border border-black/[.1] rounded-lg appearance-none focus:outline-none bg-black/[.02] focus:bg-white dark:focus:bg-gray-700 placeholder:text-black/[.5]"
             onChange={(event) => {
               if (inputPostType === TX_TYPES.TEXT_POST_LIST)
                 setInputContent(event.target.value)
               else onURLTyped(event)
+            }}
+            placeholder={
+              inputPostType === TX_TYPES.TEXT_POST_LIST
+                ? 'Create a text post...'
+                : 'Paste a URL here...'
+            }
+          /> */}
+
+          <IMTextArea
+            onChange={(newTextInput: string) => {
+              if (inputPostType === TX_TYPES.TEXT_POST_LIST)
+                setInputContent(newTextInput)
+              else onURLTyped(newTextInput)
             }}
             placeholder={
               inputPostType === TX_TYPES.TEXT_POST_LIST

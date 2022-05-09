@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import A from 'components/A'
 import { DefaultLayout } from 'components/layouts'
 import TwitterProfileDesktopContent from 'components/listing-page/TwitterProfileDesktopContent'
 import TwitterProfileMobileContent from 'components/listing-page/TwitterProfileMobileContent'
@@ -55,6 +56,12 @@ const ListingContent = ({
       ? urlMetaData?.ogTitle
       : marketSpecifics?.convertUserInputToTokenName(ideaToken?.url)
 
+  const showFullContent = page === 'ListingPage'
+  const cutOffContent = !showFullContent && ideaToken?.content?.length > 280
+  const content = !cutOffContent
+    ? ideaToken?.content
+    : ideaToken?.content.slice(0, 280) + '...'
+
   return (
     <div
       className={classNames(
@@ -68,7 +75,7 @@ const ListingContent = ({
           {generalURLDisplayName && (
             <div>
               <a
-                href={`/post/${ideaToken?.address}`}
+                href={`/post/${ideaToken?.tokenID}`}
                 onClick={(event) => event.stopPropagation()}
                 className="w-full text-xs md:text-base font-bold hover:underline"
               >
@@ -95,7 +102,7 @@ const ListingContent = ({
           </a>
 
           <a
-            href={`/post/${ideaToken?.address}`}
+            href={`/post/${ideaToken?.tokenID}`}
             className="cursor-pointer"
             target="_blank"
             rel="noopener noreferrer"
@@ -111,10 +118,23 @@ const ListingContent = ({
 
       {/* Text post listing content */}
       {!showMetaData && listingType === LISTING_TYPE.TEXT_POST && (
-        <div
-          dangerouslySetInnerHTML={{ __html: urlify(ideaToken?.content) }}
-          className="whitespace-pre-wrap break-words relative z-50 text-black font-medium"
-        />
+        <div className="relative">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: urlify(content),
+            }}
+            className="whitespace-pre-wrap break-words relative z-50 text-black font-medium"
+          />
+
+          {cutOffContent && (
+            <A
+              href={`/post/${ideaToken?.tokenID}`}
+              className="absolute bottom-0 right-0 text-blue-500 z-[60]"
+            >
+              (More...)
+            </A>
+          )}
+        </div>
       )}
 
       {/* Wikipedia listing content */}
