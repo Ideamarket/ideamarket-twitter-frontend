@@ -1,14 +1,11 @@
 import { DefaultLayout } from 'components/layouts'
 import { NextSeo } from 'next-seo'
-import { ReactElement, useEffect, useState } from 'react'
-import LockListings from 'components/stake/LockListings'
+import { ReactElement, useState } from 'react'
 import StakeIMO from 'components/stake/StakeIMO'
 import TabNamePane from 'components/stake/TabNamePane'
 import StakeEthIMOFlow from 'components/stake/StakeEthIMOFlow'
-import { getLockingAPR } from 'lib/axios'
 
 export enum STAKE_TYPES {
-  LISTING,
   IMO,
   ETH_IMO,
 }
@@ -53,35 +50,14 @@ export const accordionData = [
 ]
 
 const Stake = () => {
-  const [stakeType, setStakeType] = useState(STAKE_TYPES.LISTING)
-  const [lockingAPR, setLockingAPR] = useState(undefined)
-  useEffect(() => {
-    getLockingAPR()
-      .then((response) => {
-        const { data } = response
-        if (data.success) {
-          setLockingAPR(Number(data.data.apr))
-        } else setLockingAPR(0)
-      })
-      .catch(() => setLockingAPR(0))
-  }, [])
+  const [stakeType, setStakeType] = useState(STAKE_TYPES.IMO)
 
   return (
     <>
       <NextSeo title="Stake" />
       <div className="w-full flex pb-20 flex-col">
-        <TabNamePane
-          stakeType={stakeType}
-          onClickStakeType={setStakeType}
-          lockingAPR={lockingAPR}
-        />
-        {stakeType === STAKE_TYPES.LISTING ? (
-          <LockListings lockingAPR={lockingAPR} />
-        ) : stakeType === STAKE_TYPES.IMO ? (
-          <StakeIMO />
-        ) : (
-          <StakeEthIMOFlow />
-        )}
+        <TabNamePane stakeType={stakeType} onClickStakeType={setStakeType} />
+        {stakeType === STAKE_TYPES.IMO ? <StakeIMO /> : <StakeEthIMOFlow />}
       </div>
     </>
   )

@@ -5,13 +5,11 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { Tooltip } from 'components'
 import ModalService from 'components/modals/ModalService'
-import { getLockingAPR } from 'lib/axios'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { NETWORK } from 'store/networks'
 import {
   floatToWeb3BN,
-  formatNumber,
   formatNumberWithCommasAsThousandsSerperator,
   useTransactionManager,
 } from 'utils'
@@ -39,8 +37,6 @@ const LockInterface = ({
 }) => {
   const txManager = useTransactionManager()
   const [showInfoDD, setShowInfoDD] = useState(false) // Info dropdown
-  const [lockPeriod, setLockPeriod] = useState('3month')
-  const [lockingAPR, setLockingAPR] = useState(undefined)
 
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(false)
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(true)
@@ -62,16 +58,8 @@ const LockInterface = ({
 
   const [pairsToggle, setPairsToggle] = useState([])
 
-  // const ideaTokenVaultContractAddress = useContractStore(
-  //   (state) => state.ideaTokenVaultContract
-  // ).options.address
-
   const deployedAddresses = NETWORK.getDeployedAddresses()
   const ideaTokenVaultContractAddress = deployedAddresses?.ideaTokenVault
-
-  const onLockPeriodChanged = (event) => {
-    setLockPeriod(event.target.id)
-  }
 
   function onTradeComplete(
     isSuccess: boolean,
@@ -91,14 +79,8 @@ const LockInterface = ({
     const amount = floatToWeb3BN(inputTokenAmount, 18, BigNumber.ROUND_DOWN)
 
     const oneMonthInSecs = 2592000
-    const threeMonthsInSecs = 7776000
 
-    const args = [
-      ideaToken.address,
-      amount,
-      lockPeriod === '3month' ? threeMonthsInSecs : oneMonthInSecs,
-      recipientAddress,
-    ]
+    const args = [ideaToken.address, amount, oneMonthInSecs, recipientAddress]
 
     try {
       await txManager.executeTx('Lock', lockToken, ...args)
@@ -130,17 +112,6 @@ const LockInterface = ({
       setPairsToggle(toggleList)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    getLockingAPR()
-      .then((response) => {
-        const { data } = response
-        if (data.success) {
-          setLockingAPR(Number(data.data.apr))
-        } else setLockingAPR(0)
-      })
-      .catch(() => setLockingAPR(0))
   }, [])
 
   const [showLockMore, setShowLockMore] = useState(false) // Show UI for locking more or not. Only enabled using Lock More tokens button
@@ -190,39 +161,6 @@ const LockInterface = ({
               native token.
             </div>
           )}
-        </div>
-
-        <div className="flex space-x-2">
-          <div className="flex flex-col justify-between border border-transparent rounded-lg p-2 text-sm">
-            <div className="flex flex-col">
-              <span>Locked Period</span>
-              <span className="text-xs opacity-0">(x days)</span>
-            </div>
-            <div className="mt-4 mb-1">Estimated APR</div>
-            <div>Redemption Date</div>
-          </div>
-
-          <div className="w-52 flex flex-col justify-between items-end border rounded-lg p-2">
-            <div className="flex flex-col items-end">
-              <span className="font-bold">1 month</span>
-              <span className="text-xs">(30 days)</span>
-            </div>
-            <div className="text-green-500 font-bold">
-              {formatNumber(lockingAPR)}%
-            </div>
-            <div>{moment(new Date(Date.now() + 2629800000)).format('LL')}</div>
-          </div>
-
-          <div className="w-52 flex flex-col justify-between items-end border rounded-lg p-2">
-            <div className="flex flex-col items-end">
-              <span className="font-bold">3 months</span>
-              <span className="text-xs">(90 days)</span>
-            </div>
-            <div className="text-green-500 font-bold">
-              {formatNumber(lockingAPR * 1.2)}%
-            </div>
-            <div>{moment(new Date(Date.now() + 7889400000)).format('LL')}</div>
-          </div>
         </div>
       </div>
     )
@@ -335,58 +273,6 @@ const LockInterface = ({
                 </div>
                 <div className="my-4">Estimated APR</div>
                 <div>Redemption Date</div>
-              </div>
-
-              <div
-                className={classNames(
-                  lockPeriod === '1month' && 'bg-blue-100 border-blue-600',
-                  'relative w-52 flex flex-col justify-between items-end border rounded-lg p-2'
-                )}
-              >
-                <input
-                  onChange={onLockPeriodChanged}
-                  className="absolute -top-4 right-4 w-6 h-6"
-                  checked={lockPeriod === '1month'}
-                  type="radio"
-                  id="1month"
-                  name="lock-period"
-                />
-                <div className="flex flex-col items-end">
-                  <span className="font-bold">1 month</span>
-                  <span className="text-xs">(30 days)</span>
-                </div>
-                <div className="text-green-500 font-bold">
-                  {formatNumber(lockingAPR)}%
-                </div>
-                <div>
-                  {moment(new Date(Date.now() + 2629800000)).format('LL')}
-                </div>
-              </div>
-
-              <div
-                className={classNames(
-                  lockPeriod === '3month' && 'bg-blue-100 border-blue-600',
-                  'relative w-52 flex flex-col justify-between items-end border rounded-lg p-2'
-                )}
-              >
-                <input
-                  onChange={onLockPeriodChanged}
-                  className="absolute -top-4 right-4 w-6 h-6"
-                  checked={lockPeriod === '3month'}
-                  type="radio"
-                  id="3month"
-                  name="lock-period"
-                />
-                <div className="flex flex-col items-end">
-                  <span className="font-bold">3 months</span>
-                  <span className="text-xs">(90 days)</span>
-                </div>
-                <div className="text-green-500 font-bold">
-                  {formatNumber(lockingAPR * 1.2)}%
-                </div>
-                <div>
-                  {moment(new Date(Date.now() + 7889400000)).format('LL')}
-                </div>
               </div>
             </div>
 

@@ -46,7 +46,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
   const [buyInputAmountBN, setBuyInputAmountBN] = useState(undefined)
   const [buyOutputAmountBN, setBuyOutputAmountBN] = useState(undefined)
   const [buySlippage, setBuySlippage] = useState(undefined)
-  const [buyLock, setBuyLock] = useState(false)
   const [isBuyValid, setIsBuyValid] = useState(false)
   const [recipientAddress, setRecipientAddress] = useState('')
   const [isENSAddressValid, setIsENSAddressValid] = useState(false)
@@ -123,7 +122,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     tokenSymbol: string,
     tokenAmount: BN,
     slippage: number,
-    lock: boolean,
     isUnlockOnceChecked: boolean,
     isUnlockPermanentChecked: boolean,
     isValid: boolean,
@@ -137,7 +135,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     setBuyPayWithSymbol(tokenSymbol)
     setBuyOutputAmountBN(ideaTokenAmount)
     setBuySlippage(slippage)
-    setBuyLock(lock)
     setIsUnlockPermanentChecked(isUnlockPermanentChecked)
     setIsBuyValid(isValid)
     setRecipientAddress(recipientAddress)
@@ -175,7 +172,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
           buyOutputAmountBN,
           buyInputAmountBN,
           buySlippage,
-          buyLock ? 31556952 : 0,
+          0,
           isGiftChecked ? giftAddress : account
         )
       } catch (ex) {
@@ -215,7 +212,6 @@ export default function ListTokenModal({ close }: { close: () => void }) {
     setIsValidTokenName(false)
     setTokenName('')
     setIsWantBuyChecked(false)
-    setBuyLock(false)
   }, [])
 
   return (

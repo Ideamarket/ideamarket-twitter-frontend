@@ -38,7 +38,7 @@ export const ProfileTooltip = () => {
 
   return (
     <div className="flex flex-col w-32 md:w-64 dark:text-black">
-      {isSignedIn && !Boolean(user.email) && (
+      {isSignedIn && !Boolean(user?.email) && (
         <>
           <div
             className="cursor-pointer flex items-center py-3 px-4 hover:bg-brand-gray"

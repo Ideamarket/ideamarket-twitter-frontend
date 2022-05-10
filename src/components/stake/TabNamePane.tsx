@@ -9,7 +9,6 @@ import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 
 type Props = {
   stakeType: STAKE_TYPES
-  lockingAPR: number
   onClickStakeType: (s: STAKE_TYPES) => void
 }
 
@@ -17,11 +16,7 @@ const imoAddress = NETWORK.getDeployedAddresses().imo
 const imoStakingAddress = NETWORK.getDeployedAddresses().imoStaking
 const dripIMOSourceAddress = NETWORK.getDeployedAddresses().drippingIMOSource
 
-export default function TabNamePane({
-  stakeType,
-  lockingAPR,
-  onClickStakeType,
-}: Props) {
+export default function TabNamePane({ stakeType, onClickStakeType }: Props) {
   const [lpAPR, setLpAPR] = useState(undefined)
 
   useEffect(() => {
@@ -73,37 +68,6 @@ export default function TabNamePane({
         gridTemplateColumns: 'repeat(3, minmax(12rem, 1fr))',
       }}
     >
-      <div
-        className={classNames(
-          'flex flex-col lg:flex-row items-center m-auto pb-6 border-brand-light-green cursor-pointer px-2 min-w-[15rem]',
-          stakeType === STAKE_TYPES.LISTING ? 'border-b-4' : 'border-b-none'
-        )}
-        onClick={() => onClickStakeType(STAKE_TYPES.LISTING)}
-      >
-        <h3
-          className={classNames(
-            'text-3xl whitespace-nowrap',
-            stakeType === STAKE_TYPES.LISTING ? '' : 'opacity-50'
-          )}
-        >
-          Lock Listings
-        </h3>
-        <span
-          className={classNames(
-            'text-xl px-3 py-1 ml-2 rounded-lg',
-            stakeType === STAKE_TYPES.LISTING
-              ? 'bg-brand-light-green'
-              : 'text-brand-light-green'
-          )}
-        >
-          {lockingAPR
-            ? formatNumberWithCommasAsThousandsSerperator(
-                (lockingAPR * 1.2).toFixed(2)
-              )
-            : 0}
-          % APR
-        </span>
-      </div>
       <div
         className={classNames(
           'flex flex-col lg:flex-row items-center m-auto pb-6 border-brand-light-green cursor-pointer px-2 min-w-[15rem]',

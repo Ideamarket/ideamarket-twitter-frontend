@@ -80,5 +80,3 @@ export const getPublicProfile = async ({ username, walletAddress }) => {
     return null
   }
 }
-
-export const getLockingAPR = () => client.get(`general/apr`)
