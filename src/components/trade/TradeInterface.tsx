@@ -11,7 +11,6 @@ import { useTokenListStore } from 'store/tokenListStore'
 import {
   useBalance,
   useOutputAmount,
-  buyToken,
   sellToken,
   useTokenIconURL,
 } from 'actions'
@@ -59,6 +58,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid'
 import moment from 'moment'
 import { isETHAddress } from 'utils/addresses'
 import unlockIDT from 'actions/web3/unlockIDT'
+import buyToken from 'actions/web3/user-market/buyToken'
 
 const { publicRuntimeConfig } = getConfig()
 const { MIX_PANEL_KEY } = publicRuntimeConfig
@@ -246,6 +246,7 @@ export default function TradeInterface({
         100,
         null,
         null,
+        ideaToken?.isL1
       )
   )
 

@@ -26,6 +26,7 @@ export default class RinkebyNetworkSpecifics implements INetworkSpecifics {
 
   getExternalAddresses(): ExternalAddresses {
     return {
+      imo: '',
       dai: '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',
       cDai: '0x6D7F0754FFeb405d23C51CE938289d4835bE3b14',
       weth: '0xc778417E063141139Fce010982780140Aa0cD5Ab',

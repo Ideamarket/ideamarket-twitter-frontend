@@ -1,4 +1,5 @@
 import apiGetAllPosts from 'actions/web2/posts/apiGetAllPosts'
+import { apiGetPostByContent } from 'actions/web2/posts/apiGetPostByContent'
 import { apiGetPostByTokenID } from 'actions/web2/posts/apiGetPostByTokenID'
 import { IdeamarketUser } from 'modules/user-market/services/UserMarketService'
 
@@ -13,7 +14,21 @@ export const getPostByTokenID = async ({
     tokenID,
   })
 
-  return formatApiResponseToPost(post)
+  return post ? formatApiResponseToPost(post) : null
+}
+
+/**
+ * Get post data from backend and convert to one format for frontend
+ */
+export const getPostByContent = async ({
+  content,
+}): Promise<IdeamarketPost> => {
+  if (!content) return null
+  const post = await apiGetPostByContent({
+    content,
+  })
+
+  return post ? formatApiResponseToPost(post) : null
 }
 
 type Params = [

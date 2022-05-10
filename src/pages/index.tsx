@@ -25,6 +25,8 @@ import {
 import { MenuAlt2Icon, UserIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import HomeUsersTable from 'modules/user-market/components/HomeUsersTable'
+import StakeUserModal from 'modules/user-market/components/StakeUserModal'
+import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
 
 type Props = { urlMarkets?: string[] }
 
@@ -90,6 +92,27 @@ const Home = ({ urlMarkets }: Props) => {
     }
   }
 
+  const onStakeClicked = (token: IdeaToken) => {
+    const onClose = () => setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
+
+    if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        ModalService.open(
+          StakeUserModal,
+          { ideaToken: token, market: USER_MARKET },
+          onClose
+        )
+      })
+      ModalService.open(WalletModal)
+    } else {
+      ModalService.open(
+        StakeUserModal,
+        { ideaToken: token, market: USER_MARKET },
+        onClose
+      )
+    }
+  }
+
   const onColumnChanged = (columns) => {
     localStorage.setItem('STORED_COLUMNS', JSON.stringify([...columns]))
     setSelectedColumns(columns)
@@ -122,6 +145,7 @@ const Home = ({ urlMarkets }: Props) => {
     getColumn: (column) => selectedColumns.has(column),
     onOrderByChanged,
     onRateClicked,
+    onStakeClicked,
     tradeOrListSuccessToggle,
     setSelectedCategories,
     setIsStarredFilterActive,

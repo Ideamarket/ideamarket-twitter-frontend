@@ -26,6 +26,7 @@ export default class TestAVML2NetworkSpecifics implements INetworkSpecifics {
 
   getExternalAddresses(): ExternalAddresses {
     return {
+      imo: '0x634a0900a5F90C9F2d42BF1d49d94B84Db0A260d',
       dai: '0x5364Dc963c402aAF150700f38a8ef52C1D7D7F14',
       cDai: '0x0000000000000000000000000000000000000001',
       weth: '0xb47e6a5f8b33b3f17603c83a0535a9dcd7e32681',

@@ -1,11 +1,6 @@
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
-import {
-  listToken,
-  listAndBuyToken,
-  verifyTokenName,
-  useTokenIconURL,
-} from 'actions'
+import { listToken, verifyTokenName, useTokenIconURL } from 'actions'
 import { useTransactionManager } from 'utils'
 import { getMarketSpecificsByMarketName } from 'store/markets'
 import { Modal, MarketSelect, TradeInterface } from './'
@@ -23,6 +18,7 @@ import mixpanel from 'mixpanel-browser'
 import getConfig from 'next/config'
 import TxPending from './trade/TxPending'
 import { isETHAddress } from 'utils/addresses'
+import listAndBuyToken from 'actions/web3/user-market/listAndBuyToken'
 
 const { publicRuntimeConfig } = getConfig()
 const { MIX_PANEL_KEY } = publicRuntimeConfig

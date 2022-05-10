@@ -54,6 +54,8 @@ export default function TokenRow({
           href={`/post/${token?.tokenID}`}
           className="absolute top-0 left-0 w-full h-full z-40"
           title="open in new tab"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <span className="invisible">Go to post page</span>
         </a>

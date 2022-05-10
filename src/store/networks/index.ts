@@ -6,6 +6,7 @@ import TestAVML1NetworkSpecifics from './test-avm-l1'
 import TestAVML2NetworkSpecifics from './test-avm-l2'
 
 export type ExternalAddresses = {
+  imo: string
   dai: string
   cDai: string
   weth: string

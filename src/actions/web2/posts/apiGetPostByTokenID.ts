@@ -12,7 +12,7 @@ export const apiGetPostByTokenID = async ({ tokenID }) => {
       tokenID,
     }
 
-    const response = await client.get(`/post/${tokenID}`, {
+    const response = await client.get(`/post/single`, {
       params,
     })
 

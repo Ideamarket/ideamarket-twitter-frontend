@@ -3,8 +3,6 @@ import {
   formatNumberWithCommasAsThousandsSerperator,
   formatNumberInt,
 } from 'utils'
-import { useQuery } from 'react-query'
-import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { UsersIcon } from '@heroicons/react/outline'
 import A from 'components/A'
 import { convertAccountName } from 'lib/utils/stringUtil'
@@ -17,6 +15,7 @@ type Props = {
   getColumn: (column: string) => any
   lastElementRef?: (node) => void
   onRateClicked: (idt: IdeaToken, urlMetaData: any) => void
+  onStakeClicked: (idt: IdeaToken) => void
   refetch: () => any
 }
 
@@ -24,14 +23,11 @@ export default function HomeUsersRow({
   token,
   getColumn,
   onRateClicked,
+  onStakeClicked,
   lastElementRef,
   refetch,
 }: Props) {
   const router = useRouter()
-
-  const { data: urlMetaData } = useQuery([token?.url], () =>
-    getURLMetaData(token?.url)
-  )
 
   const displayUsernameOrWallet = convertAccountName(
     token?.username || token?.walletAddress
@@ -121,7 +117,7 @@ export default function HomeUsersRow({
               <button
                 onClick={(e) => {
                   e.stopPropagation()
-                  // onRateClicked(token, urlMetaData)
+                  onStakeClicked(token)
                 }}
                 className="flex justify-center items-center w-20 h-10 text-base rounded-lg text-white font-medium bg-black/[.8] hover:bg-blue-800 z-50"
               >
@@ -196,7 +192,7 @@ export default function HomeUsersRow({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onRateClicked(token, urlMetaData)
+              onStakeClicked(token)
             }}
             className="w-1/4 flex justify-center items-center w-20 h-10 text-base border rounded-lg text-black bg-transparent font-bold"
           >

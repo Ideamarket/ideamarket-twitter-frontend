@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import apiGetAllUsers from 'actions/web2/user-market/apiGetAllUsers'
 
 type Params = [
@@ -56,6 +57,11 @@ export type IdeamarketUser = {
   holders: number
   yearIncome: number
   claimableIncome: number
+
+  rawSupply: BN
+  rawMarketCap: BN
+  rawDaiInToken: BN
+  rawInvested: BN
 }
 
 /**
@@ -83,5 +89,11 @@ const formatApiResponseToUser = (apiUser: any): IdeamarketUser => {
     holders: apiUser?.holders,
     yearIncome: apiUser?.yearIncome,
     claimableIncome: apiUser?.claimableIncome,
+
+    // These will always be 0. If you need up-to-date web3 data, need to call querySingleIDTByTokenAddress
+    rawSupply: new BN(0),
+    rawMarketCap: new BN(0),
+    rawDaiInToken: new BN(0),
+    rawInvested: new BN(0),
   }
 }

@@ -29,6 +29,7 @@ type Props = {
   getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
   onRateClicked: (idt: IdeaToken, urlMetaData: any) => void
+  onStakeClicked: (idt: IdeaToken) => void
   tradeOrListSuccessToggle: boolean
   setIsStarredFilterActive: (isActive: boolean) => void
 }
@@ -44,6 +45,7 @@ export default function HomeUsersTable({
   getColumn,
   onOrderByChanged,
   onRateClicked,
+  onStakeClicked,
   tradeOrListSuccessToggle,
   setIsStarredFilterActive,
 }: Props) {
@@ -197,6 +199,7 @@ export default function HomeUsersTable({
                     token={token}
                     getColumn={getColumn}
                     onRateClicked={onRateClicked}
+                    onStakeClicked={onStakeClicked}
                     refetch={refetch}
                     lastElementRef={
                       tokenData?.length === index + 1 ? lastElementRef : null

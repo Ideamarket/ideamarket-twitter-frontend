@@ -3,13 +3,7 @@ import classNames from 'classnames'
 import Select from 'react-select'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { useTokenListStore } from 'store/tokenListStore'
-import {
-  useBalance,
-  useOutputAmount,
-  buyToken,
-  sellToken,
-  useTokenIconURL,
-} from 'actions'
+import { useBalance, useOutputAmount, useTokenIconURL } from 'actions'
 import {
   bigNumberTenPow18,
   calculateIdeaTokenDaiValue,
@@ -30,24 +24,26 @@ import {
   ArrowSmUpIcon,
   ArrowSmDownIcon,
 } from '@heroicons/react/outline'
-import useReversePrice from 'actions/useReversePrice'
 import useTokenToDAI from 'actions/useTokenToDAI'
 import { useWeb3React } from '@web3-react/core'
 import { useENSAddress } from 'components/trade/hooks/useENSAddress'
 import { TX_TYPES } from 'components/trade/TradeCompleteModal'
-import mixpanel from 'mixpanel-browser'
 import TxPending from 'components/trade/TxPending'
 import { isETHAddress } from 'utils/addresses'
 import AdvancedOptions from 'components/trade/AdvancedOptions'
 import ApproveButton from 'components/trade/ApproveButton'
-
-type NewIdeaToken = {
-  symbol: string
-  logoURL: string
-}
+import { IdeamarketUser } from '../services/UserMarketService'
+import { convertAccountName } from 'lib/utils/stringUtil'
+import { USER_MARKET } from '../utils/UserMarketUtils'
+import unstakeUserToken from 'actions/web3/user-market/unstakeUserToken'
+import listAndBuyToken from 'actions/web3/user-market/listAndBuyToken'
+import buyToken from 'actions/web3/user-market/buyToken'
+import useCalcIDTAmount from '../hooks/useCalcIDTAmount'
 
 type StakeUserUIProps = {
-  ideaToken: IdeaToken
+  isOnChain: boolean // Is user token on chain or only in the database?
+  web2UserToken: IdeamarketUser
+  web3UserToken: IdeaToken
   market: IdeaMarket
   onTradeComplete: (
     isSuccess: boolean,
@@ -69,17 +65,16 @@ type StakeUserUIProps = {
     hexAddress: boolean | string
   ) => void
   resetOn: boolean
-  centerTypeSelection: boolean
-  showTypeSelection: boolean
   showTradeButton: boolean
   disabled: boolean
   unlockText?: string
-  newIdeaToken?: NewIdeaToken | null
   startingTradeType?: TX_TYPES
 }
 
 export default function StakeUserUI({
-  ideaToken,
+  isOnChain,
+  web2UserToken,
+  web3UserToken,
   market,
   onTradeComplete,
   onValuesChanged,
@@ -87,7 +82,6 @@ export default function StakeUserUI({
   showTradeButton,
   disabled,
   unlockText,
-  newIdeaToken,
   startingTradeType = TX_TYPES.STAKE_USER,
 }: StakeUserUIProps) {
   const { account } = useWeb3React()
@@ -108,7 +102,7 @@ export default function StakeUserUI({
   )
   const [tradeToggle, setTradeToggle] = useState(false) // Need toggle to reload balances after trade
   const [ideaTokenBalance, ideaTokenBalanceBN, isIdeaTokenBalanceLoading] =
-    useBalance(ideaToken?.address, account, 18, tradeToggle)
+    useBalance(web3UserToken?.address, account, 18, tradeToggle)
 
   const [tokenBalance, tokenBalanceBN, isTokenBalanceLoading] = useBalance(
     selectedToken?.address,
@@ -130,7 +124,7 @@ export default function StakeUserUI({
     calculatedTokenAmountBN,
     calculatedTokenAmount,
   ] = useOutputAmount(
-    ideaToken,
+    web3UserToken,
     market,
     selectedToken?.address,
     ideaTokenAmount,
@@ -150,8 +144,8 @@ export default function StakeUserUI({
     isCalculatedIdeaTokenAmountLoading,
     calculatedIdeaTokenAmountBN,
     calculatedIdeaTokenAmount,
-  ] = useReversePrice(
-    ideaToken,
+  ] = useCalcIDTAmount(
+    web3UserToken,
     market,
     selectedToken?.address,
     selectedTokenAmount,
@@ -159,6 +153,8 @@ export default function StakeUserUI({
     tradeType,
     tokenBalanceBN
   )
+
+  console.log('calculatedIdeaTokenAmount==', calculatedIdeaTokenAmount)
 
   // Determines which token input was typed in last
   const isSelectedTokenActive = selectedTokenAmount !== '0'
@@ -182,9 +178,9 @@ export default function StakeUserUI({
     calculateIdeaTokenDaiValue(
       tradeType === TX_TYPES.STAKE_USER
         ? // If there is no ideaToken (when listing new IDT), then just use masterIdeaTokenAmountBN
-          ideaToken?.rawSupply?.add(masterIdeaTokenAmountBN) ||
+          web3UserToken?.rawSupply?.add(masterIdeaTokenAmountBN) ||
             masterIdeaTokenAmountBN
-        : ideaToken?.rawSupply,
+        : web3UserToken?.rawSupply,
       market,
       masterIdeaTokenAmountBN
     ),
@@ -221,30 +217,34 @@ export default function StakeUserUI({
   const marketSpecifics = getMarketSpecificsByMarketName(market?.name)
 
   const exchangeContractAddress = useContractStore(
-    (state) => state.exchangeContract
+    (state) => state.exchangeContractUserMarket
   )?.options?.address
   const multiActionContractAddress = useContractStore(
     (state) => state.multiActionContract
   )?.options?.address
 
+  const displayUsernameOrWallet = convertAccountName(
+    web2UserToken?.username || web2UserToken?.walletAddress
+  )
+
   const spender =
     tradeType === TX_TYPES.STAKE_USER
-      ? selectedToken?.address === NETWORK.getExternalAddresses().dai
+      ? selectedToken?.address === NETWORK.getExternalAddresses().imo
         ? exchangeContractAddress
         : multiActionContractAddress
-      : selectedToken.address !== NETWORK.getExternalAddresses().dai
+      : selectedToken.address !== NETWORK.getExternalAddresses().imo
       ? multiActionContractAddress
       : undefined
 
   const spendTokenAddress =
     tradeType === TX_TYPES.STAKE_USER
       ? selectedToken?.address
-      : ideaToken?.address
+      : web3UserToken?.address
 
   const spendTokenSymbol =
     tradeType === TX_TYPES.STAKE_USER
       ? selectedToken?.symbol
-      : marketSpecifics?.getTokenDisplayName(ideaToken?.name)
+      : displayUsernameOrWallet
 
   // Amount of token that needs approval before tx
   const requiredAllowance =
@@ -384,18 +384,23 @@ export default function StakeUserUI({
     setIdeaTokenAmount('0')
     setApproveButtonKey(approveButtonKey + 1)
     setTradeToggle(!tradeToggle)
-    if (tradeType !== TX_TYPES.LOCK)
-      // This is handled in LockInterface
-      onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, tradeType)
 
-    mixpanel.track(`${TX_TYPES[tradeType]}_COMPLETED`, {
-      tokenName: ideaToken?.name,
-    })
+    onTradeComplete(
+      true,
+      web3UserToken?.listingId,
+      web3UserToken?.name,
+      tradeType
+    )
   }
 
   async function onTradeClicked() {
-    const name = tradeType === TX_TYPES.STAKE_USER ? 'Buy' : 'Sell'
-    const func = tradeType === TX_TYPES.STAKE_USER ? buyToken : sellToken
+    const name = tradeType === TX_TYPES.STAKE_USER ? 'Stake' : 'Unstake'
+
+    // If on chain, buy using ideaTokenExchange contract (with IMO. Uses multiaction for non-IMO buy). If not on-chain, use multiaction for doing a list and buy in one tx
+    const buyMethod = isOnChain ? buyToken : listAndBuyToken
+
+    const func =
+      tradeType === TX_TYPES.STAKE_USER ? buyMethod : unstakeUserToken
     // Didn't use masterIdeaTokenAmountBN because type can be BN or BigNumber...this causes issues
     const ideaTokenAmountBNLocal = floatToWeb3BN(
       masterIdeaTokenAmount,
@@ -408,19 +413,34 @@ export default function StakeUserUI({
       BigNumber.ROUND_DOWN
     )
 
+    const regularBuyArgs = [
+      web3UserToken?.address,
+      selectedToken.address,
+      ideaTokenAmountBNLocal,
+      selectedTokenAmountBNLocal,
+      maxSlippage,
+      0,
+      account,
+    ]
+
+    const listAndBuyArgs = [
+      web2UserToken?.walletAddress, // Name of IDT will be the wallet address
+      USER_MARKET,
+      NETWORK.getExternalAddresses().imo, // Token to buy with
+      ideaTokenAmountBNLocal, // Amount of IDT user will receive
+      selectedTokenAmountBNLocal, // Amount of IMO to stake
+      maxSlippage,
+      0,
+      account,
+    ]
+
+    const buyArgs = isOnChain ? regularBuyArgs : listAndBuyArgs
+
     const args =
       tradeType === TX_TYPES.STAKE_USER
-        ? [
-            ideaToken?.address,
-            selectedToken.address,
-            ideaTokenAmountBNLocal,
-            selectedTokenAmountBNLocal,
-            maxSlippage,
-            0,
-            account,
-          ]
+        ? buyArgs
         : [
-            ideaToken?.address,
+            web3UserToken?.address,
             selectedToken.address,
             ideaTokenAmountBNLocal,
             selectedTokenAmountBNLocal,
@@ -434,8 +454,8 @@ export default function StakeUserUI({
       console.log(ex)
       onTradeComplete(
         false,
-        ideaToken?.listingId,
-        ideaToken?.name,
+        web3UserToken?.listingId,
+        web3UserToken?.name,
         TX_TYPES.NONE
       )
       return
@@ -463,7 +483,7 @@ export default function StakeUserUI({
 
   const { tokenIconURL } = useTokenIconURL({
     marketSpecifics,
-    tokenName: ideaToken?.name,
+    tokenName: web3UserToken?.name,
   })
 
   const commonProps = {
@@ -499,9 +519,7 @@ export default function StakeUserUI({
   }
 
   const selectedIdeaToken = {
-    symbol: marketSpecifics
-      ? marketSpecifics.getTokenDisplayName(ideaToken?.name)
-      : ideaToken?.name,
+    symbol: displayUsernameOrWallet,
     logoURL: tokenIconURL,
   }
 
@@ -512,7 +530,7 @@ export default function StakeUserUI({
     isIdeaToken: true,
     tokenBalance: ideaTokenBalance,
     isTokenBalanceLoading: isIdeaTokenBalanceLoading,
-    selectedIdeaToken: newIdeaToken || selectedIdeaToken,
+    selectedIdeaToken: selectedIdeaToken,
     tokenValue: ideaTokenValue,
   }
 

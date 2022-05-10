@@ -9,6 +9,7 @@ import WikipediaMarketSpecifics from './wikipedia'
 import { queryMarkets } from 'store/ideaMarketsStore'
 import { find } from 'utils/lodash'
 import UrlMarketSpecifics from './url'
+import UserMarketSpecifics from './user'
 
 export type IMarketSpecifics = {
   // Market
@@ -53,6 +54,7 @@ const specifics: IMarketSpecifics[] = [
   new MindsMarketSpecifics(),
   new WikipediaMarketSpecifics(),
   new UrlMarketSpecifics(),
+  new UserMarketSpecifics(),
 ]
 
 export function getMarketSpecifics() {

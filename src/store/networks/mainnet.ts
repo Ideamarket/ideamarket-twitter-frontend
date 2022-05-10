@@ -26,6 +26,7 @@ export default class MainnetNetworkSpecifics implements INetworkSpecifics {
 
   getExternalAddresses(): ExternalAddresses {
     return {
+      imo: '',
       dai: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
       cDai: '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643',
       weth: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',

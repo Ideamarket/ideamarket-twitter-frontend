@@ -1,11 +1,13 @@
 import { useContractStore } from 'store/contractStore'
-import { ZERO_ADDRESS } from 'utils'
+import { ZERO_ADDRESS } from '../../../utils'
 import { NETWORK } from 'store/networks'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
+import { IdeaMarket } from 'store/ideaMarketsStore'
 
-export default function buyToken(
-  ideaTokenAddress: string,
+export default function listAndBuyToken(
+  tokenName: string,
+  market: IdeaMarket,
   inputTokenAddress: string,
   amount: BN,
   cost: BN,
@@ -13,7 +15,6 @@ export default function buyToken(
   lockDuration: number,
   recipientAddress: string
 ) {
-  const exchange = useContractStore.getState().exchangeContract
   const multiAction = useContractStore.getState().multiActionContract
 
   const slippageAmount = new BN(
@@ -26,31 +27,19 @@ export default function buyToken(
   let contractCall
   let contractCallOptions = {}
 
-  if (inputTokenAddress === NETWORK.getExternalAddresses().dai) {
-    if (lockDuration > 0) {
-      contractCall = multiAction.methods.buyAndLock(
-        ideaTokenAddress,
-        amount,
-        fallbackAmount,
-        cost,
-        lockDuration,
-        recipientAddress
-      )
-    } else {
-      contractCall = exchange.methods.buyTokens(
-        ideaTokenAddress,
-        amount,
-        fallbackAmount,
-        cost,
-        recipientAddress
-      )
-
-      contractCall.estimateGas(contractCallOptions)
-    }
+  if (inputTokenAddress === NETWORK.getExternalAddresses().imo) {
+    contractCall = multiAction.methods.addAndBuy(
+      tokenName,
+      market.marketID,
+      amount,
+      lockDuration,
+      recipientAddress
+    )
   } else {
-    contractCall = multiAction.methods.convertAndBuy(
+    contractCall = multiAction.methods.convertAddAndBuy(
+      tokenName,
+      market.marketID,
       inputTokenAddress,
-      ideaTokenAddress,
       amount,
       fallbackAmount,
       cost,

@@ -97,14 +97,15 @@ export default function NewPostModal({ close }: { close: () => void }) {
     setIsAlreadyOnChain(isAlreadyOnChain)
   }
 
-  const onListClicked = async () => {
+  const onPostClicked = async () => {
     setIsTxPending(true)
     // TODO: do imageLink
     // TODO: figure out urlContent
     const isURL = inputPostType === TX_TYPES.URL_LIST
-    // content, categoryTags, imageLink, isURL, urlContent
+    // content, imageHashes, categoryTags, imageLink, isURL, urlContent
     const mintingArgs = [
       inputContent,
+      [],
       selectedCategories,
       '',
       isURL,
@@ -149,7 +150,10 @@ export default function NewPostModal({ close }: { close: () => void }) {
           <div className="flex justify-between items-end mx-1 mb-2">
             <div className="flex items-center space-x-2">
               <button
-                onClick={() => setInputPostType(TX_TYPES.TEXT_POST_LIST)}
+                onClick={() => {
+                  setIsValidToken(false)
+                  setInputPostType(TX_TYPES.TEXT_POST_LIST)
+                }}
                 className={classNames(
                   inputPostType === TX_TYPES.TEXT_POST_LIST
                     ? 'bg-blue-100 text-blue-600'
@@ -162,7 +166,10 @@ export default function NewPostModal({ close }: { close: () => void }) {
               </button>
 
               <button
-                onClick={() => setInputPostType(TX_TYPES.URL_LIST)}
+                onClick={() => {
+                  setIsValidToken(false)
+                  setInputPostType(TX_TYPES.URL_LIST)
+                }}
                 className={classNames(
                   inputPostType === TX_TYPES.URL_LIST
                     ? 'bg-blue-100 text-blue-600'
@@ -183,25 +190,12 @@ export default function NewPostModal({ close }: { close: () => void }) {
             </span>
           </div>
 
-          {/* <textarea
-            className="px-4 py-3 w-full h-20 leading-tight border border-black/[.1] rounded-lg appearance-none focus:outline-none bg-black/[.02] focus:bg-white dark:focus:bg-gray-700 placeholder:text-black/[.5]"
-            onChange={(event) => {
-              if (inputPostType === TX_TYPES.TEXT_POST_LIST)
-                setInputContent(event.target.value)
-              else onURLTyped(event)
-            }}
-            placeholder={
-              inputPostType === TX_TYPES.TEXT_POST_LIST
-                ? 'Create a text post...'
-                : 'Paste a URL here...'
-            }
-          /> */}
-
           <IMTextArea
             onChange={(newTextInput: string) => {
-              if (inputPostType === TX_TYPES.TEXT_POST_LIST)
+              if (inputPostType === TX_TYPES.TEXT_POST_LIST) {
+                setIsValidToken(newTextInput?.length > 0 ? true : false)
                 setInputContent(newTextInput)
-              else onURLTyped(newTextInput)
+              } else onURLTyped(newTextInput)
             }}
             placeholder={
               inputPostType === TX_TYPES.TEXT_POST_LIST
@@ -324,7 +318,7 @@ export default function NewPostModal({ close }: { close: () => void }) {
                 : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
             )}
             disabled={isListingDisabled}
-            onClick={onListClicked}
+            onClick={onPostClicked}
           >
             Post
           </button>

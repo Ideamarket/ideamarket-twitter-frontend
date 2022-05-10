@@ -27,6 +27,8 @@ import Web3 from 'web3'
 
 const HTTP_GRAPHQL_ENDPOINT_L1 = L1_NETWORK.getSubgraphURL()
 const HTTP_GRAPHQL_ENDPOINT = NETWORK.getSubgraphURL()
+const HTTP_GRAPHQL_ENDPOINT_USER_MARKET =
+  'https://subgraph-test-avm-l2.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTESTAVML2IMOMARKET'
 
 export type IdeaMarket = {
   name: string
@@ -441,11 +443,13 @@ export async function querySingleToken(
   return apiResponse ? newApiResponseToIdeaToken(apiResponse) : null
 }
 
+// Currently only using this for User Market
+// TODO: move this to user market module
 export async function querySingleIDTByTokenAddress(idtAddress: string) {
   let subgraphResponse = null
   try {
     subgraphResponse = await request(
-      HTTP_GRAPHQL_ENDPOINT,
+      HTTP_GRAPHQL_ENDPOINT_USER_MARKET,
       getQuerySingleIDTByTokenAddress(idtAddress)
     )
   } catch (error) {

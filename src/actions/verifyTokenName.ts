@@ -1,3 +1,5 @@
+import { getPostByContent } from 'modules/posts/services/PostService'
+
 export default async function verifyTokenName(url: string) {
   if (!url || url === '')
     return {
@@ -7,8 +9,7 @@ export default async function verifyTokenName(url: string) {
       finalTokenValue: '',
     }
 
-  // TODO
-  const existingListing = false
+  const existingListing = await getPostByContent({ content: url })
 
   const isAlreadyOnChain = Boolean(existingListing)
 

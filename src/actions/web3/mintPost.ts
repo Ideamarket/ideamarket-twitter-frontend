@@ -7,6 +7,7 @@ import { useWalletStore } from 'store/walletStore'
  */
 export default function mintPost(
   content: string,
+  imageHashes: string[],
   categoryTags: string[],
   imageLink: string,
   isURL: boolean,
@@ -24,6 +25,7 @@ export default function mintPost(
     return ideamarketPosts.methods
       .mint(
         content,
+        imageHashes,
         categoryTags,
         imageLink,
         isURL,
