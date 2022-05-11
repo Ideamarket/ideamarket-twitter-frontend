@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import Select from 'react-select'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
 import { useTokenListStore } from 'store/tokenListStore'
-import { useBalance, useOutputAmount, useTokenIconURL } from 'actions'
+import { useBalance, useTokenIconURL } from 'actions'
 import {
   bigNumberTenPow18,
   calculateIdeaTokenDaiValue,
@@ -18,7 +18,6 @@ import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
 import Tooltip from 'components/tooltip/Tooltip'
 import { getMarketSpecificsByMarketName } from 'store/markets'
-import { TradeInterfaceBox } from 'components/trade/components'
 import {
   CogIcon,
   ArrowSmUpIcon,
@@ -39,6 +38,11 @@ import unstakeUserToken from 'actions/web3/user-market/unstakeUserToken'
 import listAndBuyToken from 'actions/web3/user-market/listAndBuyToken'
 import buyToken from 'actions/web3/user-market/buyToken'
 import useCalcIDTAmount from '../hooks/useCalcIDTAmount'
+import useCalcERC20Amount from '../hooks/useCalcERC20Amount'
+import { syncUserToken } from 'actions/web2/user-market/syncUserToken'
+import StakeUserUIBox from './StakeUserUIBox'
+import { A } from 'components'
+import Image from 'next/image'
 
 type StakeUserUIProps = {
   isOnChain: boolean // Is user token on chain or only in the database?
@@ -123,7 +127,7 @@ export default function StakeUserUI({
     isCalculatedTokenAmountLoading,
     calculatedTokenAmountBN,
     calculatedTokenAmount,
-  ] = useOutputAmount(
+  ] = useCalcERC20Amount(
     web3UserToken,
     market,
     selectedToken?.address,
@@ -145,6 +149,7 @@ export default function StakeUserUI({
     calculatedIdeaTokenAmountBN,
     calculatedIdeaTokenAmount,
   ] = useCalcIDTAmount(
+    isOnChain,
     web3UserToken,
     market,
     selectedToken?.address,
@@ -153,8 +158,6 @@ export default function StakeUserUI({
     tradeType,
     tokenBalanceBN
   )
-
-  console.log('calculatedIdeaTokenAmount==', calculatedIdeaTokenAmount)
 
   // Determines which token input was typed in last
   const isSelectedTokenActive = selectedTokenAmount !== '0'
@@ -220,22 +223,26 @@ export default function StakeUserUI({
     (state) => state.exchangeContractUserMarket
   )?.options?.address
   const multiActionContractAddress = useContractStore(
-    (state) => state.multiActionContract
+    (state) => state.multiActionContractUserMarket
   )?.options?.address
 
   const displayUsernameOrWallet = convertAccountName(
     web2UserToken?.username || web2UserToken?.walletAddress
   )
+  const usernameOrWallet =
+    web2UserToken?.username || web2UserToken?.walletAddress
 
   const spender =
     tradeType === TX_TYPES.STAKE_USER
-      ? selectedToken?.address === NETWORK.getExternalAddresses().imo
+      ? selectedToken?.address === NETWORK.getExternalAddresses().imo &&
+        isOnChain // To use exchangeContract, token needs to be onchain. Otherwise multiAction is used to do list and buy tx
         ? exchangeContractAddress
         : multiActionContractAddress
       : selectedToken.address !== NETWORK.getExternalAddresses().imo
       ? multiActionContractAddress
-      : undefined
+      : undefined // I don't get why this allows user to skip "unstake" allow button, but it does
 
+  // What ERC20 is being moved around by our contract
   const spendTokenAddress =
     tradeType === TX_TYPES.STAKE_USER
       ? selectedToken?.address
@@ -449,7 +456,19 @@ export default function StakeUserUI({
           ]
 
     try {
-      await txManager.executeTx(name, func, ...args)
+      await txManager.executeTxWithCallbacks(
+        name,
+        func,
+        {
+          onReceipt: async (receipt: any) => {
+            // walletAddress stored in name field for onchain token
+            await syncUserToken(
+              isOnChain ? web3UserToken?.name : web2UserToken?.walletAddress
+            )
+          },
+        },
+        ...args
+      )
     } catch (ex) {
       console.log(ex)
       onTradeComplete(
@@ -520,7 +539,10 @@ export default function StakeUserUI({
 
   const selectedIdeaToken = {
     symbol: displayUsernameOrWallet,
-    logoURL: tokenIconURL,
+    logoURL:
+      tradeType === TX_TYPES.STAKE_USER
+        ? tokenIconURL
+        : web2UserToken?.profilePhoto || '/DefaultProfilePicture.png',
   }
 
   const ideaTokenProps = {
@@ -536,8 +558,33 @@ export default function StakeUserUI({
 
   return (
     <div>
-      <div className="w-full md:w-136 p-4 mx-auto bg-white dark:bg-gray-700 rounded-xl">
-        <div className="flex space-x-2 pb-3 overflow-x-scroll md:overflow-auto">
+      <div className="w-full md:w-136 mx-auto bg-white dark:bg-gray-700 rounded-xl">
+        <div className="px-6 py-4 bg-black/[.05] text-base font-medium leading-5 truncate">
+          {/* Display user image, username/wallet */}
+          <div className="flex items-center pb-2 whitespace-nowrap">
+            <div className="relative rounded-full w-6 h-6">
+              <Image
+                className="rounded-full"
+                src={
+                  web2UserToken?.profilePhoto || '/DefaultProfilePicture.png'
+                }
+                alt=""
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+            <A
+              className="ml-2 font-bold hover:text-blue-600"
+              href={`/u/${usernameOrWallet}`}
+            >
+              {displayUsernameOrWallet}
+            </A>
+          </div>
+
+          <div>{web2UserToken?.bio}</div>
+        </div>
+
+        <div className="flex space-x-2 p-4 pb-3 overflow-x-scroll md:overflow-auto">
           <button
             className={classNames(
               'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
@@ -584,52 +631,8 @@ export default function StakeUserUI({
           </button>
         </div>
 
-        <div>
-          <div className="flex justify-between">
-            <div />
-            <Tooltip
-              className="w-4 h-4 mb-4 ml-2 cursor-pointer text-brand-gray-2 dark:text-white"
-              placement="down"
-              IconComponent={CogIcon}
-            >
-              <div className="w-64 mb-2">
-                <AdvancedOptions
-                  disabled={txManager.isPending || disabled}
-                  setIsUnlockOnceChecked={setIsUnlockOnceChecked}
-                  isUnlockOnceChecked={isUnlockOnceChecked}
-                  isUnlockPermanentChecked={isUnlockPermanentChecked}
-                  setIsUnlockPermanentChecked={setIsUnlockPermanentChecked}
-                  unlockText={unlockText || 'for trading'}
-                />
-              </div>
-
-              <div className="flex-1 mb-3 text-base text-brand-gray-2">
-                <Select
-                  className="border-2 border-gray-200 rounded-md text-brand-gray-2 trade-select"
-                  isClearable={false}
-                  isSearchable={false}
-                  isDisabled={txManager.isPending || disabled}
-                  onChange={(option: SlippageValue) => {
-                    maxSlippage = option.value
-                  }}
-                  options={slippageValues}
-                  defaultValue={slippageValues[0]}
-                  theme={(theme) => ({
-                    ...theme,
-                    borderRadius: 2,
-                    colors: {
-                      ...theme.colors,
-                      primary25: '#d8d8d8', // brand-gray
-                      primary: '#0857e0', // brand-blue
-                    },
-                  })}
-                />
-              </div>
-            </Tooltip>
-          </div>
-
+        <div className="p-4">
           <div className="flex justify-between items-center px-2 pb-1">
-            <div className="opacity-50">Spend</div>
             <div>
               You have:{' '}
               {(tradeType === TX_TYPES.STAKE_USER && isTokenBalanceLoading) ||
@@ -650,35 +653,53 @@ export default function StakeUserUI({
                 </span>
               )}
             </div>
-          </div>
-          <TradeInterfaceBox
-            {...commonProps}
-            label="Spend"
-            {...(tradeType === TX_TYPES.UNSTAKE_USER
-              ? { ...ideaTokenProps }
-              : { ...selectedTokenProps })}
-          />
 
-          <div className="flex justify-between items-center px-2 pb-1 pt-4">
-            <div className="opacity-50">Receive</div>
-            <div>
-              You have:{' '}
-              {(tradeType === TX_TYPES.STAKE_USER &&
-                isIdeaTokenBalanceLoading) ||
-              (tradeType === TX_TYPES.UNSTAKE_USER && isTokenBalanceLoading)
-                ? '...'
-                : parseFloat(
-                    tradeType === TX_TYPES.STAKE_USER
-                      ? ideaTokenBalance
-                      : tokenBalance
-                  )}
+            <div className="flex justify-between">
+              <Tooltip
+                className="w-4 h-4 cursor-pointer text-brand-gray-2 dark:text-white"
+                IconComponent={CogIcon}
+              >
+                <div className="w-64">
+                  <AdvancedOptions
+                    disabled={txManager.isPending || disabled}
+                    setIsUnlockOnceChecked={setIsUnlockOnceChecked}
+                    isUnlockOnceChecked={isUnlockOnceChecked}
+                    isUnlockPermanentChecked={isUnlockPermanentChecked}
+                    setIsUnlockPermanentChecked={setIsUnlockPermanentChecked}
+                    unlockText={unlockText || 'for trading'}
+                  />
+                </div>
+
+                <div className="flex-1 mb-3 text-base text-brand-gray-2">
+                  <Select
+                    className="border-2 border-gray-200 rounded-md text-brand-gray-2 trade-select"
+                    isClearable={false}
+                    isSearchable={false}
+                    isDisabled={txManager.isPending || disabled}
+                    onChange={(option: SlippageValue) => {
+                      maxSlippage = option.value
+                    }}
+                    options={slippageValues}
+                    defaultValue={slippageValues[0]}
+                    theme={(theme) => ({
+                      ...theme,
+                      borderRadius: 2,
+                      colors: {
+                        ...theme.colors,
+                        primary25: '#d8d8d8', // brand-gray
+                        primary: '#0857e0', // brand-blue
+                      },
+                    })}
+                  />
+                </div>
+              </Tooltip>
             </div>
           </div>
 
-          <TradeInterfaceBox
+          <StakeUserUIBox
             {...commonProps}
-            label="Receive"
-            {...(tradeType === TX_TYPES.STAKE_USER
+            label={tradeType === TX_TYPES.STAKE_USER ? 'Stake' : 'Unstake'}
+            {...(tradeType === TX_TYPES.UNSTAKE_USER
               ? { ...ideaTokenProps }
               : { ...selectedTokenProps })}
           />
@@ -699,7 +720,7 @@ export default function StakeUserUI({
                 setIsMissingAllowance={setIsMissingAllowance}
                 disable={isApproveButtonDisabled}
                 key={approveButtonKey}
-                txType="spend"
+                txType={tradeType === TX_TYPES.STAKE_USER ? 'stake' : 'unstake'}
               />
               <div className="mt-4 ">
                 <button

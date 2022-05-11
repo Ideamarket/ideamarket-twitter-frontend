@@ -7,6 +7,7 @@ import {
   createAccount,
   getAccount,
 } from 'actions/web2/user-market/apiUserActions'
+import { syncUserToken } from 'actions/web2/user-market/syncUserToken'
 
 export const ClientWrapper: React.FC = ({ children }) => {
   const { active, account } = useWeb3React()
@@ -35,6 +36,7 @@ export const ClientWrapper: React.FC = ({ children }) => {
         // If newly connected wallet does NOT already have account, then create one for them (then their wallet will appear in home users table and other places to be bought)
         if (!response) {
           await createAccount({ walletAddress: account })
+          await syncUserToken(account)
         }
 
         let userObject = { walletAddress: account, ...response }

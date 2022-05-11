@@ -21,6 +21,11 @@ const headers: Header[] = [
     sortable: false,
   },
   {
+    title: 'Market Interest',
+    value: SortOptionsAccountPosts.MARKET_INTEREST.value,
+    sortable: true,
+  },
+  {
     title: 'Composite Rating',
     value: SortOptionsAccountPosts.COMPOSITE_RATING.value,
     sortable: true,
@@ -28,11 +33,6 @@ const headers: Header[] = [
   {
     title: 'Average Rating',
     value: SortOptionsAccountPosts.AVG_RATING.value,
-    sortable: true,
-  },
-  {
-    title: 'Market Interest',
-    value: SortOptionsAccountPosts.MARKET_INTEREST.value,
     sortable: true,
   },
   {

@@ -1,5 +1,9 @@
 import { useContractStore } from 'store/contractStore'
-import { ZERO_ADDRESS } from '../../../utils'
+import {
+  bigNumberTenPow18,
+  web3BNToFloatString,
+  ZERO_ADDRESS,
+} from '../../../utils'
 import { NETWORK } from 'store/networks'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
@@ -15,7 +19,7 @@ export default function listAndBuyToken(
   lockDuration: number,
   recipientAddress: string
 ) {
-  const multiAction = useContractStore.getState().multiActionContract
+  const multiAction = useContractStore.getState().multiActionContractUserMarket
 
   const slippageAmount = new BN(
     new BigNumber(amount.toString())
@@ -28,6 +32,10 @@ export default function listAndBuyToken(
   let contractCallOptions = {}
 
   if (inputTokenAddress === NETWORK.getExternalAddresses().imo) {
+    console.log('tokenName==', tokenName)
+    console.log('market.marketID==', market.marketID)
+    console.log('amount==', web3BNToFloatString(amount, bigNumberTenPow18, 4))
+    console.log('recipientAddress==', recipientAddress)
     contractCall = multiAction.methods.addAndBuy(
       tokenName,
       market.marketID,

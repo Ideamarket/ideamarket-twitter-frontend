@@ -36,7 +36,6 @@ import { getMarketSpecificsByMarketName } from 'store/markets'
 import { TradeInterfaceBox } from './components'
 import {
   CogIcon,
-  ArrowSmUpIcon,
   ArrowSmDownIcon,
   LockClosedIcon,
   LockOpenIcon,
@@ -659,28 +658,6 @@ export default function TradeInterface({
         )}
         {parentComponent !== 'ListTokenModal' && (
           <div className="flex space-x-2 pb-3 overflow-x-scroll md:overflow-auto">
-            <button
-              className={classNames(
-                'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
-                {
-                  'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                    TX_TYPES.BUY === tradeType,
-                },
-                {
-                  'text-brand-black dark:text-gray-50': !(
-                    TX_TYPES.BUY === tradeType
-                  ),
-                }
-              )}
-              onClick={() => {
-                setIdeaTokenAmount('0')
-                setSelectedTokenAmount('0')
-                setTradeType(TX_TYPES.BUY)
-              }}
-            >
-              <ArrowSmUpIcon className="w-4 h-4 mr-1" />
-              <span>Buy</span>
-            </button>
             <button
               className={classNames(
                 'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',

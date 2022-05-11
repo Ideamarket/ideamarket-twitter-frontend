@@ -135,14 +135,18 @@ const NavMenu = () => {
           </div>
 
           <div className="hidden md:flex items-center">
-            <A
-              href={`/u/${
-                user && user.username ? user.username : user?.walletAddress
-              }`}
-              className="text-white hover:text-gray-500"
+            {/* <button
+              className="flex items-center space-x-2 h-9 bg-white/[.1] text-white text-sm font-semibold px-3 py-1 ml-3 rounded-lg"
             >
-              My Profile
-            </A>
+              <A
+                href={`/u/${
+                  user && user.username ? user.username : user?.walletAddress
+                }`}
+                className="text-white hover:text-gray-500"
+              >
+                My Profile
+              </A>
+            </button> */}
 
             <button
               onClick={onNewPostClicked}

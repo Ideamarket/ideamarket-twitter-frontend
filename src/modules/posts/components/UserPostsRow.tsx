@@ -63,7 +63,7 @@ export default function UserPostsRow({
 
         <div className="flex text-black">
           {/* Icon and Name and ListingContent */}
-          <div className="w-[45%] lg:w-[55%] relative pl-6 lg:pr-10">
+          <div className="w-[45%] lg:w-[55%] relative pl-6 md:pr-10">
             <div className="relative flex items-start w-3/4 p-3 mx-auto md:w-full text-gray-900 dark:text-gray-200 border rounded-lg bg-white z-[60]">
               <div className="mr-4 flex flex-col items-center space-y-2">
                 <div className="relative rounded-full w-6 h-6">
@@ -109,34 +109,35 @@ export default function UserPostsRow({
             </div>
           </div>
 
+          {/* Market Interest */}
+          <div className="w-[11%] lg:w-[9%] pr-2">
+            <div className="flex flex-col justify-start font-medium leading-5">
+              {token?.marketInterest} IMO
+            </div>
+          </div>
+
           {/* Composite Rating */}
           <div className="w-[11%] lg:w-[9%] flex items-start">
-            <div className="relative w-5 h-5 mr-1">
-              <Image
-                src="/im-logo-1.png"
-                alt="IM-logo-composite-rating"
-                layout="fill"
-                objectFit="cover"
-              />
+            <div className="flex flex-col justify-start font-medium leading-5">
+              <span className="mb-1">
+                <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
+                  {token?.compositeRating}
+                </span>
+              </span>
+              {/* <span className="text-black/[.3] text-sm">
+                (
+                {formatNumberWithCommasAsThousandsSerperator(
+                  opinion?.latestRatingsCount
+                )}
+                )
+              </span> */}
             </div>
-            <span className="text-base text-blue-500 font-bold">
-              {token?.compositeRating}
-            </span>
           </div>
 
           {/* Average Rating */}
           <div className="w-[11%] lg:w-[9%]">
             <div className="text-black font-semibold">
               {formatNumberInt(token?.averageRating)}
-            </div>
-          </div>
-
-          {/* Market Interest */}
-          <div className="w-[11%] lg:w-[9%] pr-2">
-            <div className="flex flex-col justify-start font-medium leading-5">
-              {token?.marketInterest}
-              <br />
-              IMO
             </div>
           </div>
 
@@ -222,18 +223,19 @@ export default function UserPostsRow({
           </div>
 
           {/* Composite rating */}
-          <div className="flex items-center">
-            <div className="relative w-5 h-5">
-              <Image
-                src="/im-logo-1.png"
-                alt="IM-logo-composite-rating"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
-            <span className="text-base text-blue-500 font-semibold">
-              {token?.compositeRating}
+          <div className="flex flex-col justify-start font-medium leading-5">
+            <span className="mb-1">
+              <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
+                {token?.compositeRating}
+              </span>
             </span>
+            {/* <span className="text-black/[.3] text-sm">
+              (
+              {formatNumberWithCommasAsThousandsSerperator(
+                opinion?.latestRatingsCount
+              )}
+              )
+            </span> */}
           </div>
 
           {/* Latest comments count */}

@@ -20,7 +20,10 @@ export default function TooltipContent({
   return ReactDOM.createPortal(
     <div
       ref={contentRef}
-      className={classNames('fixed z-50 pb-5', show ? 'visible' : 'invisible')}
+      className={classNames(
+        'fixed z-[300] pb-5',
+        show ? 'visible' : 'invisible'
+      )}
       style={{
         bottom: bottom,
         left: left,

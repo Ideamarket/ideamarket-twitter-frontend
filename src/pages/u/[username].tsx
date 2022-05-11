@@ -19,13 +19,20 @@ const PublicProfile = () => {
     })
   )
 
+  // Create user data object for wallet that is not in DB
+  const nonDBUserData = {
+    walletAddress: isAddressValid(username as string) ? username : null,
+  }
+
+  const finalUserData = userData ? userData : nonDBUserData
+
   return (
     <div className="min-h-screen bg-brand-gray dark:bg-gray-900 font-inter">
       <div className="h-full pt-8 pb-5 text-white md:pt-16 bg-top-mobile md:bg-top-desktop md:h-[38rem]">
         <div className="mx-auto md:px-4 md:max-w-304">
           <Toaster />
-          <ProfileGeneralInfo userData={userData} />
-          <ProfileWallet userData={userData} />
+          <ProfileGeneralInfo userData={finalUserData} />
+          <ProfileWallet userData={finalUserData} />
         </div>
       </div>
     </div>

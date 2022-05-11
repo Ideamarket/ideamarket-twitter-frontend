@@ -166,10 +166,9 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
             )}
 
             <button
-              // TODO: pull user-token data from API and pass as prop to Modal
               onClick={() =>
                 ModalService.open(StakeUserModal, {
-                  ideaToken: null,
+                  ideaToken: userData,
                   market: null,
                 })
               }

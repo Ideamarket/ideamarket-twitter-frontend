@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
-import { useWalletStore } from 'store/walletStore'
-import {
-  calculateIdeaTokensInputForDaiOutput,
-  ZERO_ADDRESS,
-  web3BNToFloatString,
-} from 'utils'
-import { NETWORK } from 'store/networks'
+import { web3BNToFloatString } from 'utils'
 
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
-import { getInputForOutput } from 'utils/uniswap'
 import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 
 const nullTokenBalance = new BN('0')
@@ -19,6 +12,7 @@ const nullTokenBalance = new BN('0')
  * Calculates the ideaToken amount after the selectedToken is typed in
  */
 export default function useCalcIDTAmount(
+  isOnChain: boolean,
   ideaToken: IdeaToken,
   market: IdeaMarket,
   selectedTokenAddress: string, // The token selected. Will be IMO or ERC20 that will get converted to IMO
@@ -36,12 +30,13 @@ export default function useCalcIDTAmount(
 
     async function calculateBuyCost() {
       if (
-        !selectedTokenAddress ||
-        (!ideaToken && !market) ||
-        !market ||
-        !tokenBalanceBN ||
-        isNaN(parseFloat(selectedTokenAmount)) ||
-        parseFloat(selectedTokenAmount) <= 0.0
+        isOnChain && // This prevents issue of new tokens being listed onchain defaulting to 0 and not letting you stake due to it
+        (!selectedTokenAddress ||
+          (!ideaToken && !market) ||
+          !market ||
+          !tokenBalanceBN ||
+          isNaN(parseFloat(selectedTokenAmount)) ||
+          parseFloat(selectedTokenAmount) <= 0.0)
       ) {
         return new BN('0')
       }
@@ -87,61 +82,6 @@ export default function useCalcIDTAmount(
       return imoAmountBN
     }
 
-    async function calculateSellPrice() {
-      const selectedTokenAmountBN = new BN(
-        new BigNumber(selectedTokenAmount)
-          .multipliedBy(
-            new BigNumber('10').exponentiatedBy(decimals.toString())
-          )
-          .toFixed(0, BigNumber.ROUND_UP)
-      )
-
-      if (
-        !useWalletStore.getState().web3 ||
-        !ideaToken ||
-        !market ||
-        !selectedTokenAddress ||
-        isNaN(parseFloat(selectedTokenAmount)) ||
-        parseFloat(selectedTokenAmount) <= 0.0
-      ) {
-        return new BN('0')
-      }
-
-      let requiredDaiAmountBN = selectedTokenAmountBN
-      if (selectedTokenAddress !== NETWORK.getExternalAddresses().dai) {
-        // The user wants to receive a different currency than Dai
-        // -> perform a Uniswap trade
-
-        const inputTokenAddress = NETWORK.getExternalAddresses().dai
-        const outputTokenAddress =
-          selectedTokenAddress === ZERO_ADDRESS
-            ? NETWORK.getExternalAddresses().weth
-            : selectedTokenAddress
-
-        try {
-          // SELL: DAI -> WETH -> ERC20 (we want amount for DAI)
-          requiredDaiAmountBN = await getInputForOutput(
-            inputTokenAddress,
-            outputTokenAddress,
-            selectedTokenAmountBN,
-            tradeType
-          )
-        } catch (ex) {
-          return new BN('0')
-        }
-      }
-
-      const outputBN = new BN(
-        calculateIdeaTokensInputForDaiOutput(
-          requiredDaiAmountBN,
-          ideaToken?.rawSupply || new BN('0'),
-          market
-        ).toFixed(0, BigNumber.ROUND_UP)
-      )
-
-      return outputBN
-    }
-
     async function run(fn) {
       if (!selectedTokenAmount || selectedTokenAmount === '') {
         setOutputBN(new BN('0'))
@@ -162,9 +102,10 @@ export default function useCalcIDTAmount(
     setIsLoading(true)
     if (tradeType === TX_TYPES.STAKE_USER) {
       run(calculateBuyCost())
-    } else {
-      run(calculateSellPrice())
     }
+    // else {
+    //   run(calculateSellPrice())
+    // }
 
     return () => {
       isCancelled = true
@@ -177,6 +118,7 @@ export default function useCalcIDTAmount(
     tokenBalanceBN,
     decimals,
     market,
+    isOnChain,
   ])
 
   return [isLoading, outputBN, output]
