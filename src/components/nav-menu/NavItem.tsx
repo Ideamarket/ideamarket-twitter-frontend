@@ -7,8 +7,12 @@ import useOnClickOutside from 'utils/useOnClickOutside'
 const NavItem = ({ menuItem }) => {
   const ref = useRef()
   const [isOpen, setIsOpen] = useState(false)
+  const [subSubMenus, setSubSubMenus] = useState([]) // Indexed based on subMenu.id
 
-  useOnClickOutside(ref, () => setIsOpen(false))
+  useOnClickOutside(ref, () => {
+    setIsOpen(false)
+    setSubSubMenus([])
+  })
 
   const onMenuItemClick = () => {
     menuItem.onClick ? menuItem.onClick() : setIsOpen(!isOpen)
@@ -24,6 +28,7 @@ const NavItem = ({ menuItem }) => {
         <span>{menuItem.name}</span>
         {menuItem.subMenu && <ChevronDownIcon className="w-5 h-5" />}
       </A>
+
       {menuItem.subMenu && (
         <div
           ref={ref}
@@ -33,16 +38,38 @@ const NavItem = ({ menuItem }) => {
           )}
         >
           <div className="absolute left-0 w-48 origin-top-right bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none dark:divide-gray-600 dark:border-gray-700">
-            {menuItem.subMenu.map(({ name, onClick }) => (
+            {menuItem.subMenu.map(({ id, name, onClick, subSubMenu }) => (
               <A
-                key={name}
+                key={id}
                 onClick={() => {
                   onClick()
-                  setIsOpen(false)
+                  if (subSubMenu) {
+                    const temp = [...subSubMenus]
+                    temp[id] = true
+                    setSubSubMenus(temp)
+                  } else setIsOpen(false) // Close subMenu when clicked on
                 }}
-                className="flex flex-row items-center w-full px-2 py-4 space-x-2 leading-5 transition-colors transform hover:bg-gray-100 hover:cursor-pointer dark:text-gray-200 dark:hover:bg-gray-900 dark:bg-gray-800"
+                className="relative flex flex-row items-center w-full px-2 py-4 space-x-2 leading-5 transition-colors transform hover:bg-gray-100 hover:cursor-pointer dark:text-gray-200 dark:hover:bg-gray-900 dark:bg-gray-800"
               >
                 {name}
+
+                {subSubMenu && subSubMenus[id] && (
+                  <div className="absolute top-0 -right-full w-48 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg outline-none dark:divide-gray-600 dark:border-gray-700">
+                    {subSubMenu.map(({ name, onClick }) => (
+                      <div
+                        key={name}
+                        onClick={() => {
+                          onClick()
+                          setIsOpen(false)
+                          setSubSubMenus([])
+                        }}
+                        className="flex flex-row items-center w-full px-2 py-4 space-x-2 leading-5 transition-colors transform hover:bg-gray-100 hover:cursor-pointer dark:text-gray-200 dark:hover:bg-gray-900 dark:bg-gray-800"
+                      >
+                        {name}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </A>
             ))}
           </div>
