@@ -1,9 +1,6 @@
 import { A } from 'components'
 import { IdeaToken } from 'store/ideaMarketsStore'
-import {
-  formatNumberWithCommasAsThousandsSerperator,
-  formatNumberInt,
-} from 'utils'
+import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { ChatIcon } from '@heroicons/react/outline'
@@ -106,7 +103,7 @@ export default function RatingsRow({
           </div>
 
           <div className="w-[60%]">
-            <div className="flex w-full">
+            <div className="flex items-center w-full">
               {/* Rating By User */}
               <div className="w-[20%] grow">
                 <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
@@ -125,33 +122,12 @@ export default function RatingsRow({
                 </div>
               </div> */}
 
-              {/* Average Rating */}
+              {/* Market Interest */}
               <div className="w-[20%] grow">
                 <div className="flex flex-col justify-start font-medium leading-5">
-                  <span className="mb-1">
-                    <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
-                      {formatNumberInt(opinion?.averageRating)}
-                    </span>
-                  </span>
-                  {/* <span className="text-black/[.3] text-sm">
-                    (
-                    {formatNumberWithCommasAsThousandsSerperator(
-                      opinion?.latestRatingsCount
-                    )}
-                    )
-                  </span> */}
+                  {opinion?.marketInterest} IMO
                 </div>
               </div>
-
-              {/* Market Interest */}
-              {/* <div className="w-[12%] pt-12">
-                <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
-                  Market Interest
-                </p>
-                <div className="flex flex-col justify-start font-medium leading-5">
-                  $65,900
-                </div>
-              </div> */}
 
               {/* Rate Button */}
               <div className="w-[20%] grow">
@@ -174,9 +150,6 @@ export default function RatingsRow({
               {opinion && opinion?.comment && opinion?.comment.length > 0 && (
                 <div className="w-full mt-4">
                   <div className="bg-black/[.02] rounded-lg px-4 py-2 mr-10">
-                    <div className="text-black/[.5] text-xs font-semibold mb-1">
-                      COMMENT BY USER
-                    </div>
                     <div className="text-black text-sm">{opinion?.comment}</div>
                   </div>
                 </div>
@@ -223,21 +196,15 @@ export default function RatingsRow({
         </div>
 
         <div className="flex justify-between items-start text-center px-10 py-4 border-b border-t">
-          <div>
-            <div className="font-semibold text-black/[.5]">Average Rating</div>
+          <div className="text-left">
+            <div className="font-semibold text-black/[.5]">Hot</div>
             <div className="flex items-center">
               <span className="text-blue-600 dark:text-gray-300 mr-1 font-extrabold text-xl">
-                {formatNumberInt(opinion?.averageRating)}
+                {opinion?.marketInterest} IMO
               </span>
-              {/* <span className="text-black/[.3] text-sm">
-                (
-                {formatNumberWithCommasAsThousandsSerperator(
-                  opinion?.latestRatingsCount
-                )}
-                )
-              </span> */}
             </div>
           </div>
+
           <div>
             <div className="font-semibold text-black/[.5]">Comments</div>
             <div className="flex items-center font-medium text-lg text-black">

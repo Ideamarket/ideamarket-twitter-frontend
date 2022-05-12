@@ -7,10 +7,18 @@ import NavItem from './NavItem'
 type Props = {
   isMobileNavOpen: boolean
   user: any
+  account: string
 }
 
-const MobileNavItems = ({ isMobileNavOpen, user }: Props) => {
+const MobileNavItems = ({ isMobileNavOpen, user, account }: Props) => {
   let navbarConfig = getNavbarConfig(user)
+
+  const userNameOrWallet =
+    user && user.username
+      ? user.username
+      : user?.walletAddress
+      ? user?.walletAddress
+      : account
 
   return (
     <Transition
@@ -28,14 +36,14 @@ const MobileNavItems = ({ isMobileNavOpen, user }: Props) => {
           <NavItem menuItem={menuItem} key={i} />
         ))}
 
-        <A
-          className="inline-flex px-4 py-2 text-lg leading-5 text-white transition duration-150 ease-in-out bg-transparent rounded-md shadow-sm cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
-          href={`/u/${
-            user && user.username ? user.username : user?.walletAddress
-          }`}
-        >
-          <span>My Profile</span>
-        </A>
+        {account && (
+          <A
+            className="inline-flex px-4 py-2 text-lg leading-5 text-white transition duration-150 ease-in-out bg-transparent rounded-md shadow-sm cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
+            href={`/u/${userNameOrWallet}`}
+          >
+            <span>My Profile</span>
+          </A>
+        )}
 
         {/* <div className="flex px-1 mt-5">
           <NavThemeButton />

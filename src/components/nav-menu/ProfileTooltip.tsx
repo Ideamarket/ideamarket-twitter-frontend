@@ -13,19 +13,47 @@ import { BsFillBellFill } from 'react-icons/bs'
 import SpearkIcon from '../../assets/speaker.svg'
 import A from 'components/A'
 import { clearContracts } from 'store/contractStore'
+import CreateAccountModal from 'components/account/CreateAccountModal'
+import useAuth from 'components/account/useAuth'
+import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 
 export const ProfileTooltip = () => {
   const { user, jwtToken } = useContext(GlobalContext)
-  const { active, connector, deactivate } = useWeb3React()
-
-  const isSignedIn = active && jwtToken
+  const { active, account, library, connector, deactivate } = useWeb3React()
 
   const userNameOrWallet =
     user && user.username ? user.username : user?.walletAddress
 
-  const onClickSettings = () => {
+  const { loginByWallet } = useAuth()
+
+  const onLoginClicked = async () => {
+    if (active) {
+      const signedWalletAddress = await getSignedInWalletAddress({
+        account,
+        library,
+      })
+      return await loginByWallet(signedWalletAddress)
+    }
+
+    return null
+  }
+
+  const onClickSettings = async () => {
+    // if jwtToken is not present, then popup modal and MM popup to ask user to create account or sign in
+    if (!jwtToken) {
+      ModalService.open(CreateAccountModal, {})
+      const isLoginSuccess = await onLoginClicked()
+      ModalService.closeAll() // Get weird errors without this due to modal being closed inside CreateAccountModal in useEffect
+      if (isLoginSuccess) {
+        ModalService.open(ProfileSettingsModal)
+      }
+
+      return
+    }
+
     ModalService.open(ProfileSettingsModal)
   }
+
   const onClickDisconnectWallet = async () => {
     await disconnectWalletConnector(connector)
 
@@ -39,8 +67,8 @@ export const ProfileTooltip = () => {
   }
 
   return (
-    <div className="flex flex-col w-32 md:w-64 dark:text-black">
-      {isSignedIn && !Boolean(user?.email) && (
+    <div className="flex flex-col w-64 dark:text-black">
+      {active && !Boolean(user?.email) && (
         <>
           <div
             className="cursor-pointer flex items-center py-3 px-4 hover:bg-brand-gray"
@@ -67,7 +95,7 @@ export const ProfileTooltip = () => {
         </div>
       </A>
 
-      {isSignedIn && (
+      {active && (
         <div
           className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-brand-gray"
           onClick={onClickSettings}

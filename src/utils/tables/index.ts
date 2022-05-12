@@ -33,7 +33,7 @@ export const SortOptionsHomePostsTable = {
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
-    displayName: 'Market Interest',
+    displayName: 'HOT',
   },
   COMMENTS: {
     id: 4,
@@ -119,7 +119,7 @@ export const SortOptionsAccountPosts = {
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
-    displayName: 'Market Interest',
+    displayName: 'HOT',
   },
   COMMENTS: {
     id: 4,
@@ -130,10 +130,15 @@ export const SortOptionsAccountPosts = {
 
 // Sorting options for opinion table on account page
 export const SortOptionsAccountOpinions = {
-  AVG_RATING: {
+  // AVG_RATING: {
+  //   id: 1,
+  //   value: orderByAverageRating,
+  //   displayName: 'Average Rating',
+  // },
+  MARKET_INTEREST: {
     id: 1,
-    value: orderByAverageRating,
-    displayName: 'Average Rating',
+    value: orderByMarketInterest,
+    displayName: 'HOT',
   },
   // Individual user rating for 1 IDT
   RATING: {

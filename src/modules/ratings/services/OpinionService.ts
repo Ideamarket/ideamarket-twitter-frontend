@@ -152,6 +152,8 @@ export type IdeamarketOpinion = {
   latestRatingsCount: number
   totalCommentsCount: number
   latestCommentsCount: number
+  compositeRating: number
+  marketInterest: number
 }
 
 /**
@@ -182,5 +184,7 @@ const formatApiResponseToOpinion = (apiPost: any): IdeamarketOpinion => {
     latestRatingsCount: apiPost?.latestRatingsCount,
     totalCommentsCount: apiPost?.totalCommentsCount,
     latestCommentsCount: apiPost?.latestCommentsCount,
+    compositeRating: apiPost?.compositeRating,
+    marketInterest: apiPost?.marketInterest,
   }
 }

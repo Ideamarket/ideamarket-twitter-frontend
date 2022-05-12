@@ -84,7 +84,7 @@ const ColSize = ({ columnData, tableName }: Props) => {
           return '35%'
         case SortOptionsAccountOpinions.RATING.value:
           return '13%'
-        case SortOptionsAccountOpinions.AVG_RATING.value:
+        case SortOptionsAccountOpinions.MARKET_INTEREST.value:
           return '13%'
         case 'compositeRating':
           return '13%'

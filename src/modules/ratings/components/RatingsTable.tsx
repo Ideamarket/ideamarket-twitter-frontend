@@ -28,16 +28,16 @@ const headers: Header[] = [
   //   value: 'compositeRating',
   //   sortable: true,
   // },
-  {
-    title: 'Average Rating',
-    value: SortOptionsAccountOpinions.AVG_RATING.value,
-    sortable: true,
-  },
   // {
-  //   title: 'Market Interest',
-  //   value: 'marketInterest',
+  //   title: 'Average Rating',
+  //   value: SortOptionsAccountOpinions.AVG_RATING.value,
   //   sortable: true,
   // },
+  {
+    title: 'HOT',
+    value: SortOptionsAccountOpinions.MARKET_INTEREST.value,
+    sortable: true,
+  },
   {
     title: 'Rate',
     value: 'rateButton',
@@ -101,7 +101,7 @@ export default function RatingsTable({
         return 'w-[20%]'
       // case 'compositeRating':
       //   return 'w-[12%]'
-      case SortOptionsAccountOpinions.AVG_RATING.value:
+      case SortOptionsAccountOpinions.MARKET_INTEREST.value:
         return 'w-[20%]'
       // case 'marketInterest':
       //   return 'w-[12%]'

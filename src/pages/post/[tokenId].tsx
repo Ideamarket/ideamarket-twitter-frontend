@@ -344,9 +344,9 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
       </div>
 
       <div className="max-w-[78rem] md:mt-10 mx-0 md:mx-5 xl:mx-auto pb-20">
-        <div className="text-xl text-center text-black font-bold mb-4">
+        {/* <div className="text-xl text-center text-black font-bold mb-4">
           Ratings
-        </div>
+        </div> */}
 
         <OpinionTable
           opinionPairs={opinionPairs}

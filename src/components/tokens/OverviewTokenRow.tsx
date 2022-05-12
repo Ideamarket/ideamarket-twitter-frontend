@@ -108,60 +108,55 @@ export default function TokenRow({
             </div>
           </div>
 
-          {/* Market Interest */}
-          <div className="w-[11%] lg:w-[9%] pr-2">
-            <div className="flex flex-col justify-start font-medium leading-5">
-              {token?.marketInterest} IMO
+          <div className="w-[55%] lg:w-[45%] h-max flex items-center">
+            {/* Market Interest */}
+            <div className="w-[11%] lg:w-[9%] grow pr-2">
+              <div className="flex flex-col justify-start font-medium leading-5">
+                {token?.marketInterest} IMO
+              </div>
             </div>
-          </div>
 
-          {/* Composite Rating */}
-          <div className="w-[11%] lg:w-[9%] flex items-start">
-            <div className="flex flex-col justify-start font-medium leading-5">
-              <span className="mb-1">
-                <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
-                  {token?.compositeRating}
+            {/* Composite Rating */}
+            <div className="w-[11%] lg:w-[9%] grow flex items-start">
+              <div className="flex flex-col justify-center font-medium leading-5">
+                <span>
+                  <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
+                    {token?.compositeRating}
+                  </span>
                 </span>
-              </span>
-              {/* <span className="text-black/[.3] text-sm">
-                (
+              </div>
+            </div>
+
+            {/* Average Rating */}
+            <div className="w-[11%] lg:w-[9%] grow">
+              <div className="text-black font-semibold">
+                {formatNumberInt(token?.averageRating)}
+              </div>
+            </div>
+
+            {/* latestCommentsCount */}
+            <div className="w-[11%] lg:w-[9%] grow">
+              <div className="flex items-center font-medium text-lg text-black">
+                <ChatIcon className="w-4 mr-1" />
                 {formatNumberWithCommasAsThousandsSerperator(
-                  opinion?.latestRatingsCount
+                  token?.latestCommentsCount
                 )}
-                )
-              </span> */}
+              </div>
             </div>
-          </div>
 
-          {/* Average Rating */}
-          <div className="w-[11%] lg:w-[9%]">
-            <div className="text-black font-semibold">
-              {formatNumberInt(token?.averageRating)}
-            </div>
-          </div>
-
-          {/* latestCommentsCount */}
-          <div className="w-[11%] lg:w-[9%]">
-            <div className="flex items-center font-medium text-lg text-black">
-              <ChatIcon className="w-4 mr-1" />
-              {formatNumberWithCommasAsThousandsSerperator(
-                token?.latestCommentsCount
-              )}
-            </div>
-          </div>
-
-          {/* Rate Button */}
-          <div className="w-[11%] lg:w-[9%]">
-            <div className="flex space-x-2">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onRateClicked(token, urlMetaData)
-                }}
-                className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800 z-50"
-              >
-                <span>Rate</span>
-              </button>
+            {/* Rate Button */}
+            <div className="w-[11%] lg:w-[9%] grow">
+              <div className="flex space-x-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    onRateClicked(token, urlMetaData)
+                  }}
+                  className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800 z-50"
+                >
+                  <span>Rate</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -228,13 +223,6 @@ export default function TokenRow({
                 {token?.compositeRating}
               </span>
             </span>
-            {/* <span className="text-black/[.3] text-sm">
-              (
-              {formatNumberWithCommasAsThousandsSerperator(
-                opinion?.latestRatingsCount
-              )}
-              )
-            </span> */}
           </div>
 
           {/* Latest comments count */}

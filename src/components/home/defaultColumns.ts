@@ -13,7 +13,7 @@ const defaultColumns = [
   {
     id: 2,
     name: 'Market Interest',
-    content: 'Market Interest',
+    content: SortOptionsHomePostsTable.MARKET_INTEREST.displayName,
     value: SortOptionsHomePostsTable.MARKET_INTEREST.value,
     sortable: true,
     isOptional: false,

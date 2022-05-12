@@ -18,7 +18,7 @@ export default function BlankLayout({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <div className="min-h-screen bg-brand-gray dark:bg-gray-900">
+    <div className="min-h-screen bg-brand-gray dark:bg-gray-900 font-inter">
       <Toaster />
       <div>{children}</div>
       <div className="fixed bottom-0 z-20 w-full">

@@ -25,7 +25,7 @@ export default function DefaultLayout({ children, bgColor }: Props) {
     <div
       className={classNames(
         bgColor ? bgColor : 'bg-brand-gray dark:bg-gray-900',
-        'min-h-screen'
+        'min-h-screen font-inter'
       )}
     >
       <Toaster />

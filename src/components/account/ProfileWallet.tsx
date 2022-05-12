@@ -64,7 +64,7 @@ export default function ProfileWallet({ userData }: Props) {
   const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
 
-  const [table, setTable] = useState(TABLE_NAMES.ACCOUNT_POSTS)
+  const [table, setTable] = useState(TABLE_NAMES.ACCOUNT_OPINIONS)
   const [orderBy, setOrderBy] = useState(
     SortOptionsAccountPosts.MARKET_INTEREST.value
   )
@@ -285,21 +285,6 @@ export default function ProfileWallet({ userData }: Props) {
         <div className="flex order-1 md:order-none mx-4">
           <div
             className={classNames(
-              table === TABLE_NAMES.ACCOUNT_POSTS
-                ? 'text-white'
-                : 'text-brand-gray text-opacity-60 cursor-pointer',
-              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6 mr-auto'
-            )}
-            onClick={() => {
-              setTable(TABLE_NAMES.ACCOUNT_POSTS)
-              setOrderBy(SortOptionsAccountPosts.MARKET_INTEREST.value)
-              setOrderDirection('desc')
-            }}
-          >
-            Posts
-          </div>
-          <div
-            className={classNames(
               table === TABLE_NAMES.ACCOUNT_OPINIONS
                 ? 'text-white'
                 : 'text-brand-gray text-opacity-60 cursor-pointer',
@@ -313,6 +298,23 @@ export default function ProfileWallet({ userData }: Props) {
           >
             Ratings
           </div>
+
+          <div
+            className={classNames(
+              table === TABLE_NAMES.ACCOUNT_POSTS
+                ? 'text-white'
+                : 'text-brand-gray text-opacity-60 cursor-pointer',
+              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6 mr-auto'
+            )}
+            onClick={() => {
+              setTable(TABLE_NAMES.ACCOUNT_POSTS)
+              setOrderBy(SortOptionsAccountPosts.MARKET_INTEREST.value)
+              setOrderDirection('desc')
+            }}
+          >
+            Posts
+          </div>
+
           <div
             className={classNames(
               table === TABLE_NAMES.ACCOUNT_HOLDINGS
@@ -328,6 +330,7 @@ export default function ProfileWallet({ userData }: Props) {
           >
             Wallet
           </div>
+
           <div
             className={classNames(
               table === TABLE_NAMES.ACCOUNT_TRADES

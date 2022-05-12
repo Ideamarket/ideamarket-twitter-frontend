@@ -168,9 +168,9 @@ const Home = ({ urlMarkets }: Props) => {
             }}
             className={classNames(
               selectedTable === TABLE_NAMES.HOME_POSTS
-                ? 'bg-white/[.2]'
-                : 'hover:bg-white/[.05]',
-              'w-1/2 h-20 p-3 border border-white/[.2] rounded-xl text-white text-left'
+                ? 'bg-white/[.1]'
+                : 'hover:bg-white/[.05] opacity-50',
+              'w-1/2 h-20 px-6 py-3 border border-white/[.2] rounded-xl text-white text-left'
             )}
           >
             <div className="flex items-center">
@@ -187,9 +187,9 @@ const Home = ({ urlMarkets }: Props) => {
             }}
             className={classNames(
               selectedTable === TABLE_NAMES.HOME_USERS
-                ? 'bg-white/[.2]'
-                : 'hover:bg-white/[.05]',
-              'w-1/2 h-20 p-3 border border-white/[.2] rounded-xl text-white text-left'
+                ? 'bg-white/[.1]'
+                : 'hover:bg-white/[.05] opacity-50',
+              'w-1/2 h-20 px-6 py-3 border border-white/[.2] rounded-xl text-white text-left'
             )}
           >
             <div className="flex items-center">

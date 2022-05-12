@@ -21,7 +21,7 @@ const headers: Header[] = [
     sortable: false,
   },
   {
-    title: 'Market Interest',
+    title: SortOptionsAccountPosts.MARKET_INTEREST.displayName,
     value: SortOptionsAccountPosts.MARKET_INTEREST.value,
     sortable: true,
   },

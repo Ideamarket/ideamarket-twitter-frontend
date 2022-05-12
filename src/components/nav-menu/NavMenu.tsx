@@ -11,16 +11,16 @@ import NavItem from './NavItem'
 import { ProfileTooltip } from './ProfileTooltip'
 import { useWeb3React } from '@web3-react/core'
 import { GlobalContext } from 'lib/GlobalContext'
-import { PencilIcon } from '@heroicons/react/outline'
-import ModalService from 'components/modals/ModalService'
-import NewPostModal from 'modules/posts/components/NewPostModal'
-import WalletModal from 'components/wallet/WalletModal'
-import { useWalletStore } from 'store/walletStore'
+// import { PencilIcon } from '@heroicons/react/outline'
+// import ModalService from 'components/modals/ModalService'
+// import NewPostModal from 'modules/posts/components/NewPostModal'
+// import WalletModal from 'components/wallet/WalletModal'
+// import { useWalletStore } from 'store/walletStore'
 import A from 'components/A'
 
 const NavMenu = () => {
   const { user } = useContext(GlobalContext)
-  const { active } = useWeb3React()
+  const { active, account } = useWeb3React()
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const [visibility, setVisibility] = useState<Boolean>(false)
   const [timerId, setTimerId] = useState(null)
@@ -56,18 +56,18 @@ const NavMenu = () => {
     active && setVisibility(true)
   }
 
-  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
+  // const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
-  const onNewPostClicked = () => {
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(NewPostModal)
-      })
-      ModalService.open(WalletModal)
-    } else {
-      ModalService.open(NewPostModal)
-    }
-  }
+  // const onNewPostClicked = () => {
+  //   if (!useWalletStore.getState().web3) {
+  //     setOnWalletConnectedCallback(() => () => {
+  //       ModalService.open(NewPostModal)
+  //     })
+  //     ModalService.open(WalletModal)
+  //   } else {
+  //     ModalService.open(NewPostModal)
+  //   }
+  // }
 
   useEffect(() => {
     return () => {
@@ -77,33 +77,15 @@ const NavMenu = () => {
 
   return (
     <div className="absolute z-50 items-center w-full shadow t-0 bg-top-desktop overflow-none font-inter">
-      <div className="px-2 py-3">
+      {/* Desktop NavMenu */}
+      <div className="hidden md:block px-2 py-3">
         <nav className="relative h-10 flex flex-wrap items-center justify-center md:justify-between w-full mx-auto max-w-7xl">
-          {/* Mobile START */}
-          <div className="flex md:hidden">
-            <button
-              onClick={() => setMobileNavOpen(!isMobileNavOpen)}
-              type="button"
-              className="inline-flex p-2 mr-1 text-white bg-transparent focus:outline-none "
-              aria-controls="mobile-menu"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              {!isMobileNavOpen ? (
-                <MenuIcon className="w-6 h-6" />
-              ) : (
-                <XIcon className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-          {/* Mobile END */}
-
-          <div className="flex items-center cursor-pointer ml-auto mr-auto md:ml-0 md:mr-0">
+          <div className="hidden md:flex items-center cursor-pointer ml-auto mr-auto md:ml-0 md:mr-0">
             <A href="/" className="flex items-center">
               <div className="relative w-10 h-8">
                 <Image
-                  src="/logo.png"
-                  alt="Workflow logo"
+                  src="/im-logo-1.png"
+                  alt="IM-nav-logo"
                   layout="fill"
                   objectFit="contain"
                 />
@@ -123,38 +105,14 @@ const NavMenu = () => {
             {/* Desktop END */}
           </div>
 
-          <div className="flex md:hidden">
-            <div className="flex">
-              <WalletStatusWithConnectButton />
-            </div>
-            {visibility && (
-              <div className="absolute top-0 mt-8 right-0 p-3 mb-1 text-sm rounded-xl shadow bg-white overflow-hidden">
-                <ProfileTooltip />
-              </div>
-            )}
-          </div>
-
           <div className="hidden md:flex items-center">
             {/* <button
-              className="flex items-center space-x-2 h-9 bg-white/[.1] text-white text-sm font-semibold px-3 py-1 ml-3 rounded-lg"
-            >
-              <A
-                href={`/u/${
-                  user && user.username ? user.username : user?.walletAddress
-                }`}
-                className="text-white hover:text-gray-500"
-              >
-                My Profile
-              </A>
-            </button> */}
-
-            <button
               onClick={onNewPostClicked}
               className="flex items-center space-x-2 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-semibold px-3 py-1 ml-3 rounded-lg"
             >
               <span>New Post</span>
               <PencilIcon className="w-3" />
-            </button>
+            </button> */}
 
             {/* <NavThemeButton /> */}
 
@@ -174,7 +132,48 @@ const NavMenu = () => {
         </nav>
       </div>
 
-      <MobileNavItems isMobileNavOpen={isMobileNavOpen} user={user} />
+      {/* Mobile NavMenu */}
+      <div className="flex justify-between items-center md:hidden px-3 py-4">
+        <button
+          onClick={() => setMobileNavOpen(!isMobileNavOpen)}
+          type="button"
+          className="inline-flex pr-2 mr-1 text-white bg-transparent focus:outline-none "
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+        >
+          <span className="sr-only">Open main menu</span>
+          {!isMobileNavOpen ? (
+            <MenuIcon className="w-6 h-6" />
+          ) : (
+            <XIcon className="w-6 h-6" />
+          )}
+        </button>
+
+        <A href="/" className="flex items-center">
+          <div className="relative w-10 h-8">
+            <Image
+              src="/im-logo-1.png"
+              alt="IM-nav-logo"
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+
+          <span className="w-auto h-full mr-2 text-2xl leading-none text-white md:text-3xl">
+            Ideamarket
+          </span>
+        </A>
+
+        <div className="flex">
+          <WalletStatusWithConnectButton />
+        </div>
+      </div>
+
+      <MobileNavItems
+        isMobileNavOpen={isMobileNavOpen}
+        user={user}
+        account={account}
+      />
     </div>
   )
 }
