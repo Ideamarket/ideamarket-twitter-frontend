@@ -390,10 +390,9 @@ export default function ProfileWallet({ userData }: Props) {
               </span>
               <Tooltip>
                 <div className="w-full md:w-64">
-                  Average rating, weighted by amount of IMO staked on each user
-                  (the more IMO staked on a user, the more their ratings impact
-                  Composite Rating). Ratings by users without staked IMO do not
-                  impact Composite Rating, but do impact Average Rating.
+                  Rating weighted by IMO staked on each user. The more IMO
+                  staked on a user, the more that user’s ratings affect the
+                  Composite Rating of every post they rate.
                 </div>
               </Tooltip>
             </div>

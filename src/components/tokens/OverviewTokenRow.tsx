@@ -85,7 +85,7 @@ export default function TokenRow({
                 {minterAddress && (
                   <div className="flex items-center pb-2 whitespace-nowrap">
                     <A
-                      className="font-bold hover:text-blue-600 z-50"
+                      className="font-semibold text-blue hover:text-blue-600 text-sm z-50"
                       href={`/u/${usernameOrWallet}`}
                     >
                       {displayUsernameOrWallet}

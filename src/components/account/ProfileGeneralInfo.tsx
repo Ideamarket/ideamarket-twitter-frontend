@@ -94,7 +94,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
 
             <div className="text-xl font-bold">{userData?.username}</div>
 
-            <div className="text-xs opacity-70 max-w-[15rem] my-1">
+            <div className="whitespace-pre-wrap break-words text-sm italic opacity-70 max-w-[15rem] my-1">
               {userData?.bio || ''}
             </div>
 

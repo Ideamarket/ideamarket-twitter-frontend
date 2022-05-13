@@ -121,10 +121,9 @@ export const OverviewColumns = ({
                 iconComponentClassNames="w-3"
               >
                 <div className="w-64">
-                  Average rating, weighted by amount of IMO staked on each user
-                  (the more IMO staked on a user, the more their ratings impact
-                  Composite Rating). Ratings by users without staked IMO do not
-                  impact Composite Rating, but do impact Average Rating.
+                  Rating weighted by IMO staked on each user. The more IMO
+                  staked on a user, the more that user’s ratings affect the
+                  Composite Rating of every post they rate.
                 </div>
               </Tooltip>
             </span>
@@ -166,13 +165,13 @@ export const OverviewColumns = ({
         case 'name':
           return 'w-[45%] lg:w-[55%] pl-6 pr-24'
         case SortOptionsHomeUsersTable.STAKED.value:
-          return 'w-[13.75%] lg:w-[11.25%]'
-        case SortOptionsHomeUsersTable.WEEK_CHANGE.value:
-          return 'w-[13.75%] lg:w-[11.25%]'
+          return 'w-[18.333%] lg:w-[15%]'
+        // case SortOptionsHomeUsersTable.WEEK_CHANGE.value:
+        //   return 'w-[13.75%] lg:w-[11.25%]'
         case SortOptionsHomeUsersTable.HOLDERS.value:
-          return 'w-[13.75%] lg:w-[11.25%]'
+          return 'w-[18.333%] lg:w-[15%]'
         case 'stakeButton':
-          return 'w-[13.75%] lg:w-[11.25%]'
+          return 'w-[18.333%] lg:w-[15%]'
         default:
           return ''
       }

@@ -72,11 +72,11 @@ export const HomeUsersTableColumns = [
     value: SortOptionsHomeUsersTable.STAKED.value,
     sortable: true,
   },
-  {
-    content: SortOptionsHomeUsersTable.WEEK_CHANGE.displayName,
-    value: SortOptionsHomeUsersTable.WEEK_CHANGE.value,
-    sortable: true,
-  },
+  // {
+  //   content: SortOptionsHomeUsersTable.WEEK_CHANGE.displayName,
+  //   value: SortOptionsHomeUsersTable.WEEK_CHANGE.value,
+  //   sortable: true,
+  // },
   {
     content: SortOptionsHomeUsersTable.HOLDERS.displayName,
     value: SortOptionsHomeUsersTable.HOLDERS.value,

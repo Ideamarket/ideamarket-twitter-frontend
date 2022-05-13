@@ -5,10 +5,9 @@ import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import { useContext, useState } from 'react'
 import classNames from 'classnames'
-import { formatNumber, useTransactionManager } from 'utils'
+import { useTransactionManager } from 'utils'
 import rateIDT from 'actions/web3/rateIDT'
 import TxPending from './TxPending'
-import useOpinionsByIdentifier from 'modules/ratings/hooks/useOpinionsByIdentifier'
 import ratePost from 'actions/web3/ratePost'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import A from 'components/A'
@@ -22,6 +21,7 @@ import {
   LISTING_TYPE,
 } from 'components/tokens/utils/ListingUtils'
 import { getAccount } from 'actions/web2/user-market/apiUserActions'
+import IMTextArea from 'modules/forms/components/IMTextArea'
 
 const CustomSlider = Slider.createSliderWithTooltip(Slider)
 
@@ -44,11 +44,6 @@ export default function RateModal({
 
   const [inputRating, setInputRating] = useState(50)
   const [inputComment, setInputComment] = useState('')
-
-  const { avgRating } = useOpinionsByIdentifier({
-    idtAddress: ideaToken?.address || null,
-    tokenID: ideaToken?.tokenID || null,
-  })
 
   function onTradeComplete(
     isSuccess: boolean,
@@ -103,7 +98,7 @@ export default function RateModal({
     onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, TX_TYPES.RATE)
   }
 
-  const isRatingDisabled = inputRating === 50 || inputComment?.length > 560
+  const isRatingDisabled = inputRating === 50 || inputComment?.length > 10000
 
   const { minterAddress } = (ideaToken || {}) as any
 
@@ -164,14 +159,11 @@ export default function RateModal({
         <div className="px-6 py-4">
           <div className="flex justify-between items-center mx-2 mb-1">
             <span className="font-bold">Rating</span>
-            <div>
+            {/* <div>
               <span className="text-blue-600 font-bold mr-1">
                 {formatNumber(avgRating)}
               </span>
-              {/* <span>
-                ({formatNumberWithCommasAsThousandsSerperator(totalOpinions)})
-              </span> */}
-            </div>
+            </div> */}
           </div>
 
           <div className="px-4 py-2 border rounded-lg">
@@ -197,18 +189,18 @@ export default function RateModal({
 
           <div className="flex justify-between items-center mx-2 mb-1 mt-4">
             <span className="font-bold">
-              Comment <span className="text-black/[.3]">(Optional)</span>
+              Reasoning <span className="text-black/[.3]">(Optional)</span>
             </span>
             <span className="text-black/[.3] font-bold">
-              {inputComment?.length}/560
+              {inputComment?.length}/10,000
             </span>
           </div>
 
-          <textarea
-            className="pl-2 w-full h-20 leading-tight border border-black/[.1] rounded-lg appearance-none focus:outline-none focus:bg-white dark:focus:bg-gray-700"
-            onChange={(event) => {
-              setInputComment(event.target.value)
+          <IMTextArea
+            onChange={(newTextInput: string) => {
+              setInputComment(newTextInput)
             }}
+            defaultRows={3}
           />
 
           <button

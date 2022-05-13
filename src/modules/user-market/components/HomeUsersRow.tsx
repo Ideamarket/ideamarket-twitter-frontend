@@ -1,8 +1,5 @@
 import { IdeaToken } from 'store/ideaMarketsStore'
-import {
-  formatNumberWithCommasAsThousandsSerperator,
-  formatNumberInt,
-} from 'utils'
+import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { UsersIcon } from '@heroicons/react/outline'
 import A from 'components/A'
 import { convertAccountName } from 'lib/utils/stringUtil'
@@ -70,24 +67,26 @@ export default function HomeUsersRow({
               <div className="pr-6 w-full">
                 <div className="flex items-center pb-2 whitespace-nowrap">
                   <A
-                    className="font-bold hover:text-blue-600 z-50"
+                    className="font-semibold hover:text-blue-600 text-base z-50"
                     href={`/u/${usernameOrWallet}`}
                   >
                     {displayUsernameOrWallet}
                   </A>
                 </div>
 
-                <div>{token?.bio}</div>
+                <div className="whitespace-pre-wrap break-words text-sm italic">
+                  {token?.bio}
+                </div>
               </div>
             </div>
           </div>
 
           {/* STAKED */}
-          <div className="w-[13.75%] lg:w-[11.25%] flex items-start">
+          <div className="w-[18.333%] lg:w-[15%] flex items-start">
             <span className="text-base text-blue-500 font-bold">
               {token?.deposits}
             </span>
-            <div className="relative w-5 h-5 mr-1">
+            <div className="relative w-4 h-4 mt-0.5">
               <Image
                 src="/im-logo-1.png"
                 alt="IM-logo-composite-rating"
@@ -98,21 +97,21 @@ export default function HomeUsersRow({
           </div>
 
           {/* 7D CHANGE */}
-          <div className="w-[13.75%] lg:w-[11.25%]">
+          {/* <div className="w-[13.75%] lg:w-[11.25%]">
             <div className="text-black font-semibold">
               {formatNumberInt(token?.weekChange)}
             </div>
-          </div>
+          </div> */}
 
           {/* HOLDERS */}
-          <div className="w-[13.75%] lg:w-[11.25%] pr-2">
+          <div className="w-[18.333%] lg:w-[15%] pr-2">
             <div className="flex flex-col justify-start font-medium leading-5">
               {token?.holders}
             </div>
           </div>
 
           {/* STAKE Button */}
-          <div className="w-[13.75%] lg:w-[11.25%]">
+          <div className="w-[18.333%] lg:w-[15%]">
             <div className="flex space-x-2">
               <button
                 onClick={(e) => {
@@ -164,7 +163,7 @@ export default function HomeUsersRow({
 
         <div className="flex justify-between items-center text-center px-3 py-4">
           {/* STAKED */}
-          <div className="w-1/4 flex items-center">
+          <div className="w-1/3 flex items-center">
             <span className="text-base text-blue-600 font-semibold">
               {token?.deposits} IMO
             </span>
@@ -179,12 +178,12 @@ export default function HomeUsersRow({
           </div>
 
           {/* 7D CHANGE */}
-          <div className="w-1/4 flex items-center">
+          {/* <div className="w-1/4 flex items-center">
             <span className="">{token?.weekChange}%</span>
-          </div>
+          </div> */}
 
           {/* HOLDERS */}
-          <div className="w-1/4 flex items-center font-medium text-lg text-black">
+          <div className="w-1/3 flex items-center font-medium text-lg text-black">
             <UsersIcon className="w-4 mr-1" />
             {formatNumberWithCommasAsThousandsSerperator(token?.holders)}
           </div>
@@ -194,7 +193,7 @@ export default function HomeUsersRow({
               e.stopPropagation()
               onStakeClicked(token)
             }}
-            className="w-1/4 flex justify-center items-center w-20 h-10 text-base border rounded-lg text-black bg-transparent font-bold"
+            className="w-1/3 flex justify-center items-center w-20 h-10 text-base border rounded-lg text-black bg-transparent font-bold"
           >
             <span>Stake</span>
           </button>
