@@ -95,6 +95,41 @@ export const OverviewColumns = ({
             Change
           </>
         )
+      case SortOptionsHomePostsTable.MARKET_INTEREST.value:
+        return (
+          <div className="flex items-center">
+            <span className="mr-1">HOT</span>
+            <Tooltip
+              className="text-black/[.5] z-[200]"
+              iconComponentClassNames="w-3"
+            >
+              <div className="w-64">
+                The total amount of IMO staked on all users who rated a post
+              </div>
+            </Tooltip>
+          </div>
+        )
+      case SortOptionsHomePostsTable.COMPOSITE_RATING.value:
+        return (
+          <div className="flex items-center">
+            <span>
+              COMPOSITE
+              <br />
+              RATING
+              <Tooltip
+                className="ml-1 text-black/[.5] z-[200]"
+                iconComponentClassNames="w-3"
+              >
+                <div className="w-64">
+                  Average rating, weighted by amount of IMO staked on each user
+                  (the more IMO staked on a user, the more their ratings impact
+                  Composite Rating). Ratings by users without staked IMO do not
+                  impact Composite Rating, but do impact Average Rating.
+                </div>
+              </Tooltip>
+            </span>
+          </div>
+        )
       case SortOptionsHomePostsTable.AVG_RATING.value:
         return (
           <>
@@ -162,7 +197,6 @@ export const OverviewColumns = ({
             }}
           >
             <div className="flex items-center">
-              <span className="uppercase mr-1">{getColumnContent(column)}</span>
               {column.sortable && orderBy === column.value && (
                 <div
                   className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
@@ -175,6 +209,7 @@ export const OverviewColumns = ({
                   )}
                 </div>
               )}
+              <span className="uppercase mr-1">{getColumnContent(column)}</span>
             </div>
           </div>
         )

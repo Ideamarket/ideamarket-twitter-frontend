@@ -139,7 +139,7 @@ export default function RatingsRow({
                     }}
                     className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800 z-50"
                   >
-                    <span>Rate</span>
+                    <span>RATE</span>
                   </button>
                 </div>
               </div>
@@ -239,7 +239,7 @@ export default function RatingsRow({
             }}
             className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800"
           >
-            <span>Rate</span>
+            <span>RATE</span>
           </button>
         </div>
       </div>

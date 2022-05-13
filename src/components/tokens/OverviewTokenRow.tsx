@@ -111,20 +111,16 @@ export default function TokenRow({
           <div className="w-[55%] lg:w-[45%] h-max flex items-center">
             {/* Market Interest */}
             <div className="w-[11%] lg:w-[9%] grow pr-2">
-              <div className="flex flex-col justify-start font-medium leading-5">
+              <div className="mt-0.5 font-medium">
                 {token?.marketInterest} IMO
               </div>
             </div>
 
             {/* Composite Rating */}
-            <div className="w-[11%] lg:w-[9%] grow flex items-start">
-              <div className="flex flex-col justify-center font-medium leading-5">
-                <span>
-                  <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
-                    {token?.compositeRating}
-                  </span>
-                </span>
-              </div>
+            <div className="w-[11%] lg:w-[9%] grow">
+              <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
+                {token?.compositeRating}
+              </span>
             </div>
 
             {/* Average Rating */}
@@ -154,7 +150,7 @@ export default function TokenRow({
                   }}
                   className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800 z-50"
                 >
-                  <span>Rate</span>
+                  <span>RATE</span>
                 </button>
               </div>
             </div>
@@ -240,7 +236,7 @@ export default function TokenRow({
             }}
             className="flex justify-center items-center w-20 h-10 text-base border rounded-lg text-blue-500 bg-transparent font-bold"
           >
-            <span>Rate</span>
+            <span>RATE</span>
           </button>
         </div>
       </div>

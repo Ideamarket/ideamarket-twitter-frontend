@@ -103,10 +103,7 @@ export default function Tooltip({
         )}
         ref={ref}
       >
-        <IconComponent
-          className="w-4 h-4 cursor-pointer"
-          onClick={handleShowToolTip}
-        />
+        <IconComponent className="cursor-pointer" onClick={handleShowToolTip} />
       </div>
     </div>
   )

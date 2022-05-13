@@ -168,6 +168,16 @@ export default function Table({
         onOrderByChanged(SortOptionsHomePostsTable.AVG_RATING.value, 'desc')
       } else if (column === SortOptionsHomePostsTable.COMMENTS.value) {
         onOrderByChanged(SortOptionsHomePostsTable.COMMENTS.value, 'desc')
+      } else if (column === SortOptionsHomePostsTable.MARKET_INTEREST.value) {
+        onOrderByChanged(
+          SortOptionsHomePostsTable.MARKET_INTEREST.value,
+          'desc'
+        )
+      } else if (column === SortOptionsHomePostsTable.COMPOSITE_RATING.value) {
+        onOrderByChanged(
+          SortOptionsHomePostsTable.COMPOSITE_RATING.value,
+          'desc'
+        )
       }
     }
   }

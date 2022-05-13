@@ -74,7 +74,7 @@ export default function ProfileSettingsModal({ close }: { close: () => void }) {
     try {
       const response = await updateAccount({ requestBody, token: jwtToken })
       if (response.data?.success && response.data?.data) {
-        setUser(response.data.data.account)
+        setUser(response.data.data.userToken)
       } else {
         throw new Error('Failed to update')
       }
@@ -94,10 +94,10 @@ export default function ProfileSettingsModal({ close }: { close: () => void }) {
     setLoading(true)
     let profilePhoto
     const requestBody = {
-      name,
-      username,
-      bio,
-      profilePhoto,
+      ...(name && { name }),
+      ...(username && { username }),
+      ...(bio && { bio }),
+      ...(profilePhoto && { profilePhoto }),
     }
 
     if (fileUploadState === '') {
@@ -267,7 +267,7 @@ export default function ProfileSettingsModal({ close }: { close: () => void }) {
             dispatch({ type: 'set-email', payload: event.target.value })
           }
         />
-        {currentUser.email !== email && (
+        {currentUser?.email !== email && (
           <button
             className={classNames(
               'w-full text-base text-white font-medium p-3 rounded-xl mt-2',

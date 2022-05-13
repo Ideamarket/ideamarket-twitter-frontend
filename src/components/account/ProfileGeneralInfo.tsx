@@ -94,7 +94,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
 
             <div className="text-xl font-bold">{userData?.username}</div>
 
-            <div className="text-xs opacity-70 max-w-[15rem] mt-1">
+            <div className="text-xs opacity-70 max-w-[15rem] my-1">
               {userData?.bio || ''}
             </div>
 
@@ -113,7 +113,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               </div>
             )}
 
-            {isConnectedWalletSameAsPublicWallet && !userData?.email && (
+            {/* {isConnectedWalletSameAsPublicWallet && !userData?.email && (
               <div className="flex flex-col mt-1 w-48">
                 <div className="bg-brand-blue rounded-lg font-bold my-2">
                   <div
@@ -130,7 +130,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Right side of top section on desktop */}
@@ -172,9 +172,9 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                   market: null,
                 })
               }
-              className="w-full p-3 mt-2 bg-blue-600 text-white rounded-lg"
+              className="w-full p-3 mt-2 bg-blue-600 text-white font-bold rounded-lg"
             >
-              Stake/Unstake
+              STAKE
             </button>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { MailIcon } from '@heroicons/react/solid'
+// import { MailIcon } from '@heroicons/react/solid'
 import { IoIosWallet } from 'react-icons/io'
 import { BiCog } from 'react-icons/bi'
 import { IoMdExit } from 'react-icons/io'
@@ -9,8 +9,8 @@ import { unsetWeb3 } from 'store/walletStore'
 import { useWeb3React } from '@web3-react/core'
 import { useContext } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
-import { BsFillBellFill } from 'react-icons/bs'
-import SpearkIcon from '../../assets/speaker.svg'
+// import { BsFillBellFill } from 'react-icons/bs'
+// import SpearkIcon from '../../assets/speaker.svg'
 import A from 'components/A'
 import { clearContracts } from 'store/contractStore'
 import CreateAccountModal from 'components/account/CreateAccountModal'
@@ -68,7 +68,7 @@ export const ProfileTooltip = () => {
 
   return (
     <div className="flex flex-col w-64 dark:text-black">
-      {active && !Boolean(user?.email) && (
+      {/* {active && !Boolean(user?.email) && (
         <>
           <div
             className="cursor-pointer flex items-center py-3 px-4 hover:bg-brand-gray"
@@ -86,7 +86,7 @@ export const ProfileTooltip = () => {
             </span>
           </div>
         </>
-      )}
+      )} */}
 
       <A href={`/u/${userNameOrWallet}`}>
         <div className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-brand-gray">
@@ -101,7 +101,7 @@ export const ProfileTooltip = () => {
           onClick={onClickSettings}
         >
           <BiCog className="w-6 h-6  text-gray-400" />
-          <span className="ml-2 font-medium">Settings</span>
+          <span className="ml-2 font-medium">Edit Profile</span>
         </div>
       )}
       <div

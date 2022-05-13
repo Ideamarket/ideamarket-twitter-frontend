@@ -5,6 +5,7 @@ import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 import RatingsRow from './RatingsRow'
 import RatingsRowSkeleton from './RatingsRowSkeleton'
 import { SortOptionsAccountOpinions } from 'utils/tables'
+import { Tooltip } from 'components'
 
 type Header = {
   title: string
@@ -88,6 +89,20 @@ export default function RatingsTable({
 
   const getColumnContent = (column) => {
     switch (column.value) {
+      case SortOptionsAccountOpinions.MARKET_INTEREST.value:
+        return (
+          <div className="flex items-center">
+            <span className="mr-1">HOT</span>
+            <Tooltip
+              className="text-black/[.5] z-[200]"
+              iconComponentClassNames="w-3"
+            >
+              <div className="w-64">
+                The total amount of IMO staked on all users who rated a post
+              </div>
+            </Tooltip>
+          </div>
+        )
       default:
         return column.title
     }
@@ -133,9 +148,6 @@ export default function RatingsTable({
                   }}
                 >
                   <div className="flex items-center">
-                    <span className="uppercase mr-1">
-                      {getColumnContent(header)}
-                    </span>
                     {rawPairs &&
                       rawPairs?.length > 0 &&
                       header.sortable &&
@@ -151,6 +163,9 @@ export default function RatingsTable({
                           )}
                         </div>
                       )}
+                    <span className="uppercase mr-1">
+                      {getColumnContent(header)}
+                    </span>
                   </div>
                 </div>
               ))}

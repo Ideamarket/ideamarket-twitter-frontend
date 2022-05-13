@@ -155,7 +155,7 @@ export default function UserPostsRow({
                   }}
                   className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800 z-50"
                 >
-                  <span>Rate</span>
+                  <span>RATE</span>
                 </button>
               </div>
             </div>
@@ -241,7 +241,7 @@ export default function UserPostsRow({
             }}
             className="flex justify-center items-center w-20 h-10 text-base border rounded-lg text-blue-500 bg-transparent font-bold"
           >
-            <span>Rate</span>
+            <span>RATE</span>
           </button>
         </div>
       </div>
