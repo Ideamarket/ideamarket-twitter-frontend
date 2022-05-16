@@ -31,7 +31,7 @@ const MobileNavItems = ({ isMobileNavOpen, user, account }: Props) => {
       leaveTo="opacity-0 scale-95"
       className="md:hidden"
     >
-      <div className="px-2 pt-2 pb-3 space-y-3 sm:px-3">
+      <div className="px-2 pt-2 pb-3 space-y-3 sm:px-3 bg-gradient-to-b from-[#02194D] to-[#011032] text-white">
         {navbarConfig.menu.map((menuItem, i) => (
           <NavItem menuItem={menuItem} key={i} />
         ))}

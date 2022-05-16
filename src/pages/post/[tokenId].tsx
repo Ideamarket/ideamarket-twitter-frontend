@@ -401,7 +401,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 TokenDetails.getLayout = (page: ReactElement) => (
-  <DefaultLayout bgColor="bg-[#F6F6F6] dark:bg-gray-900">{page}</DefaultLayout>
+  <DefaultLayout
+    bgColor="bg-[#F6F6F6] dark:bg-gray-900"
+    bgHeaderColor="bg-transparent"
+    headerTextColor="text-black"
+  >
+    {page}
+  </DefaultLayout>
 )
 
 export default TokenDetails

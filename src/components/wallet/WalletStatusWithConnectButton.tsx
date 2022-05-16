@@ -61,19 +61,17 @@ export default function WalletStatusWithConnectButton() {
             >
               <button
                 onClick={active ? null : openWalletModal}
-                className="flex items-center space-x-2 h-9 bg-white/[.1] text-white hover:text-gray-500 text-sm font-semibold pl-3 py-1 ml-3 rounded-lg"
+                className="flex items-center space-x-2 h-9 bg-white/[.1] hover:text-blue-500 text-sm font-semibold pl-3 py-1 ml-3 rounded-lg"
               >
                 <span>My Profile</span>
                 <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
-                  {Boolean(user?.profilePhoto) && (
-                    <Image
-                      src={user?.profilePhoto}
-                      alt="Profile photo"
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-full"
-                    />
-                  )}
+                  <Image
+                    src={user?.profilePhoto || '/DefaultProfilePicture.png'}
+                    alt="Profile photo"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-full"
+                  />
                 </div>
               </button>
             </A>
@@ -106,15 +104,13 @@ export default function WalletStatusWithConnectButton() {
               onClick={() => setShowProfileTooltip(!showProfileTooltip)}
               className="ml-3 w-8 h-8 relative rounded-full bg-gray-400"
             >
-              {Boolean(user?.profilePhoto) && (
-                <Image
-                  src={user?.profilePhoto}
-                  alt="Profile photo"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-full"
-                />
-              )}
+              <Image
+                src={user?.profilePhoto || '/DefaultProfilePicture.png'}
+                alt="Profile photo"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full"
+              />
 
               {showProfileTooltip && (
                 <div className="absolute top-0 mt-8 right-0 p-3 mb-1 text-sm rounded-xl shadow bg-white overflow-hidden">

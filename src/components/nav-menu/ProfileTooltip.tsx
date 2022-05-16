@@ -67,7 +67,7 @@ export const ProfileTooltip = () => {
   }
 
   return (
-    <div className="flex flex-col w-64 dark:text-black">
+    <div className="flex flex-col w-64 text-black">
       {/* {active && !Boolean(user?.email) && (
         <>
           <div

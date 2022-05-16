@@ -7,6 +7,7 @@ import { useQuery } from 'react-query'
 import { isAddressValid } from 'lib/utils/web3-eth'
 import { useRouter } from 'next/router'
 import { getAccount } from 'actions/web2/user-market/apiUserActions'
+import BgBanner from 'components/BgBanner'
 
 const PublicProfile = () => {
   const router = useRouter()
@@ -27,8 +28,11 @@ const PublicProfile = () => {
   const finalUserData = userData ? userData : nonDBUserData
 
   return (
-    <div className="min-h-screen bg-brand-gray dark:bg-gray-900 font-inter">
-      <div className="h-full pt-8 pb-5 text-white md:pt-16 bg-top-mobile md:bg-top-desktop md:h-[38rem]">
+    <div className="min-h-screen font-inter">
+      <BgBanner bgColor="bg-[#0D0D0D]" />
+
+      {/* Relative and z-index important to put page above BgBanner */}
+      <div className="relative z-10 h-full pt-8 pb-5 text-white md:pt-16 md:h-[38rem]">
         <div className="mx-auto md:px-4 md:max-w-304">
           <Toaster />
           <ProfileGeneralInfo userData={finalUserData} />
@@ -40,7 +44,12 @@ const PublicProfile = () => {
 }
 
 PublicProfile.getLayout = (page: ReactElement) => (
-  <DefaultLayout>{page}</DefaultLayout>
+  <DefaultLayout
+    bgColor="bg-[#0D0D0D] md:bg-brand-gray md:dark:bg-gray-900"
+    bgHeaderColor="bg-transparent"
+  >
+    {page}
+  </DefaultLayout>
 )
 
 export default PublicProfile

@@ -10,9 +10,16 @@ import classNames from 'classnames'
 type Props = {
   children: ReactNode
   bgColor?: string // Can style background color of page different from default (needs to be Tailwind bg color)
+  bgHeaderColor?: string // Can style background color of header different from default (needs to be Tailwind bg color)
+  headerTextColor?: string
 }
 
-export default function DefaultLayout({ children, bgColor }: Props) {
+export default function DefaultLayout({
+  children,
+  bgColor,
+  bgHeaderColor,
+  headerTextColor,
+}: Props) {
   // const router = useRouter()
   // const { isEmailFooterActive } = useContext(GlobalContext)
 
@@ -29,7 +36,7 @@ export default function DefaultLayout({ children, bgColor }: Props) {
       )}
     >
       <Toaster />
-      <NavMenu />
+      <NavMenu bgColor={bgHeaderColor} textColor={headerTextColor} />
       <div className="pt-16">{children}</div>
       <div className="fixed bottom-0 z-20 w-full">
         <CookieConsent

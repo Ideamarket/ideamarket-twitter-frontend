@@ -81,15 +81,13 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
           {/* User image/name/bio/address and email prompt if haven't provided it yet */}
           <div className="mb-10">
             <div className="relative w-20 h-20 mb-4 rounded-full bg-gray-400 overflow-hidden">
-              {userData?.profilePhoto && (
-                <Image
-                  src={userData?.profilePhoto}
-                  alt="Workflow logo"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-full"
-                />
-              )}
+              <Image
+                src={userData?.profilePhoto || '/DefaultProfilePicture.png'}
+                alt="Workflow logo"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full"
+              />
             </div>
 
             <div className="text-xl font-bold">{userData?.username}</div>
@@ -188,15 +186,13 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
           {/* User image/name/bio/address and email prompt if haven't provided it yet */}
           <div className="mb-10">
             <div className="relative w-20 h-20 mb-4 mx-auto rounded-full bg-gray-400 overflow-hidden">
-              {userData?.profilePhoto && (
-                <Image
-                  src={userData?.profilePhoto}
-                  alt="Workflow logo"
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-full"
-                />
-              )}
+              <Image
+                src={userData?.profilePhoto || '/DefaultProfilePicture.png'}
+                alt="Workflow logo"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full"
+              />
             </div>
 
             <div className="text-xl font-bold text-center">

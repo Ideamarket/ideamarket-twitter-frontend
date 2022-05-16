@@ -17,8 +17,14 @@ import { GlobalContext } from 'lib/GlobalContext'
 // import WalletModal from 'components/wallet/WalletModal'
 // import { useWalletStore } from 'store/walletStore'
 import A from 'components/A'
+import classNames from 'classnames'
 
-const NavMenu = () => {
+type Props = {
+  bgColor: string
+  textColor?: string
+}
+
+const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
   const { user } = useContext(GlobalContext)
   const { active, account } = useWeb3React()
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
@@ -76,7 +82,13 @@ const NavMenu = () => {
   }, [timerId])
 
   return (
-    <div className="absolute z-50 items-center w-full shadow t-0 bg-top-desktop overflow-none font-inter">
+    <div
+      className={classNames(
+        bgColor ? bgColor : 'bg-top-desktop',
+        textColor,
+        'absolute z-[200] items-center w-full overflow-none font-inter'
+      )}
+    >
       {/* Desktop NavMenu */}
       <div className="hidden md:block px-2 py-3">
         <nav className="relative h-10 flex flex-wrap items-center justify-center md:justify-between w-full mx-auto max-w-7xl">
@@ -91,7 +103,7 @@ const NavMenu = () => {
                 />
               </div>
 
-              <span className="w-auto h-full mr-2 text-2xl leading-none text-white md:text-3xl">
+              <span className="w-auto h-full mr-2 text-2xl leading-none md:text-3xl">
                 Ideamarket
               </span>
             </A>
@@ -123,7 +135,7 @@ const NavMenu = () => {
             >
               <WalletStatusWithConnectButton />
               {visibility && (
-                <div className="absolute top-0 mt-10 right-0 mb-1 text-sm rounded-xl shadow bg-white overflow-hidden">
+                <div className="absolute top-0 mt-10 right-0 mb-1 text-sm text-black rounded-xl shadow bg-white overflow-hidden">
                   <ProfileTooltip />
                 </div>
               )}
@@ -137,7 +149,7 @@ const NavMenu = () => {
         <button
           onClick={() => setMobileNavOpen(!isMobileNavOpen)}
           type="button"
-          className="inline-flex pr-2 mr-1 text-white bg-transparent focus:outline-none "
+          className="inline-flex pr-2 mr-1 bg-transparent focus:outline-none "
           aria-controls="mobile-menu"
           aria-expanded="false"
         >
@@ -159,7 +171,7 @@ const NavMenu = () => {
             />
           </div>
 
-          <span className="w-auto h-full mr-2 text-2xl leading-none text-white md:text-3xl">
+          <span className="w-auto h-full mr-2 text-2xl leading-none md:text-3xl">
             Ideamarket
           </span>
         </A>

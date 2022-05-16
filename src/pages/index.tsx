@@ -27,6 +27,7 @@ import classNames from 'classnames'
 import HomeUsersTable from 'modules/user-market/components/HomeUsersTable'
 import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
+import BgBanner from 'components/BgBanner'
 
 type Props = { urlMarkets?: string[] }
 
@@ -153,7 +154,17 @@ const Home = ({ urlMarkets }: Props) => {
   return (
     <>
       <NextSeo title="Home" />
-      <div className="overflow-x-hidden lg:overflow-x-visible bg-brand-gray dark:bg-gray-900">
+
+      <BgBanner
+        bgColor={
+          selectedTable === TABLE_NAMES.HOME_POSTS
+            ? 'bg-gradient-to-b from-[#02194D] to-[#011032]'
+            : 'bg-gradient-to-b from-[#020D27] to-[#020A1B]'
+        }
+      />
+
+      {/* Relative and z-index important to put page above BgBanner */}
+      <div className="relative z-10">
         <HomeHeader />
 
         {/* 2 buttons: Posts and Users */}
@@ -219,4 +230,6 @@ const Home = ({ urlMarkets }: Props) => {
 
 export default Home
 
-Home.getLayout = (page: ReactElement) => <DefaultLayout>{page}</DefaultLayout>
+Home.getLayout = (page: ReactElement) => (
+  <DefaultLayout bgHeaderColor="bg-transparent">{page}</DefaultLayout>
+)

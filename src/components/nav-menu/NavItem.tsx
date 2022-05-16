@@ -19,9 +19,9 @@ const NavItem = ({ menuItem }) => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative mt-1">
       <A
-        className="inline-flex px-3 py-2 text-md leading-5 text-white transition duration-150 ease-in-out bg-transparent rounded-md shadow-sm cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
+        className="inline-flex px-3 py-2 text-md leading-5 transition duration-150 ease-in-out bg-transparent rounded-md cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
         onClick={onMenuItemClick}
         href={menuItem?.href}
       >
@@ -33,7 +33,7 @@ const NavItem = ({ menuItem }) => {
         <div
           ref={ref}
           className={classNames(
-            'relative z-20 transition-all origin-top-right transform scale-95 -translate-y-0 bg-white dropdown-menu',
+            'relative z-[300]  transition-all origin-top-right transform scale-95 text-black -translate-y-0 bg-white dropdown-menu',
             isOpen ? 'visible' : 'invisible'
           )}
         >
