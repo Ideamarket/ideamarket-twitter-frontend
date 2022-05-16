@@ -11,11 +11,11 @@ import NavItem from './NavItem'
 import { ProfileTooltip } from './ProfileTooltip'
 import { useWeb3React } from '@web3-react/core'
 import { GlobalContext } from 'lib/GlobalContext'
-// import { PencilIcon } from '@heroicons/react/outline'
-// import ModalService from 'components/modals/ModalService'
-// import NewPostModal from 'modules/posts/components/NewPostModal'
-// import WalletModal from 'components/wallet/WalletModal'
-// import { useWalletStore } from 'store/walletStore'
+import { PencilIcon } from '@heroicons/react/outline'
+import ModalService from 'components/modals/ModalService'
+import NewPostModal from 'modules/posts/components/NewPostModal'
+import WalletModal from 'components/wallet/WalletModal'
+import { useWalletStore } from 'store/walletStore'
 import A from 'components/A'
 import classNames from 'classnames'
 
@@ -62,18 +62,18 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
     active && setVisibility(true)
   }
 
-  // const { setOnWalletConnectedCallback } = useContext(GlobalContext)
+  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
-  // const onNewPostClicked = () => {
-  //   if (!useWalletStore.getState().web3) {
-  //     setOnWalletConnectedCallback(() => () => {
-  //       ModalService.open(NewPostModal)
-  //     })
-  //     ModalService.open(WalletModal)
-  //   } else {
-  //     ModalService.open(NewPostModal)
-  //   }
-  // }
+  const onNewPostClicked = () => {
+    if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        ModalService.open(NewPostModal)
+      })
+      ModalService.open(WalletModal)
+    } else {
+      ModalService.open(NewPostModal)
+    }
+  }
 
   useEffect(() => {
     return () => {
@@ -118,13 +118,19 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
           </div>
 
           <div className="hidden md:flex items-center">
-            {/* <button
-              onClick={onNewPostClicked}
-              className="flex items-center space-x-2 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-semibold px-3 py-1 ml-3 rounded-lg"
-            >
-              <span>New Post</span>
-              <PencilIcon className="w-3" />
-            </button> */}
+            {/* TODO: change eventually. currently only let ?? wallet access this */}
+            {(account?.toLowerCase() ===
+              '0x93f9707adb26d98cfc6d73c8840425010afa968b' ||
+              account?.toLowerCase() ===
+                '0x95900afdf214860740e85deef69b1b0e422b64ec') && (
+              <button
+                onClick={onNewPostClicked}
+                className="flex items-center space-x-2 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-semibold px-3 py-1 ml-3 rounded-lg"
+              >
+                <span>New Post</span>
+                <PencilIcon className="w-3" />
+              </button>
+            )}
 
             {/* <NavThemeButton /> */}
 
