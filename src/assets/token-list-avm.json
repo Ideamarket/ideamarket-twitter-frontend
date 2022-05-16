@@ -1,11 +1,9 @@
 [
-  [
-    {
-      "name": "Ideamarket",
-      "address": "0xB41bd4C99dA73510d9e081C5FADBE7A27Ac1F814",
-      "symbol": "IMO",
-      "decimals": 18,
-      "logoURI": "/imo-logo.png"
-    }
-  ]
+  {
+    "name": "Ideamarket",
+    "address": "0xB41bd4C99dA73510d9e081C5FADBE7A27Ac1F814",
+    "symbol": "IMO",
+    "decimals": 18,
+    "logoURI": "/imo-logo.png"
+  }
 ]

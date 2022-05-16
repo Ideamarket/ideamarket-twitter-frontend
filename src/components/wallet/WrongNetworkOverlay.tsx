@@ -48,7 +48,7 @@ export default function WrongNetworkOverlay() {
   }
 
   return (
-    <div className="absolute top-0 left-0 z-50 w-screen h-screen bg-gray-200 dark:bg-gray-800">
+    <div className="absolute top-0 left-0 z-[500] w-screen h-screen bg-gray-200 dark:bg-gray-800">
       <div className="flex items-center justify-center w-full h-full overflow-auto">
         <div className="flex flex-col items-center">
           <div className="relative w-full h-32 md:h-64">
