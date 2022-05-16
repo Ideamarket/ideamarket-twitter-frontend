@@ -49,7 +49,7 @@ const HomeHeader = () => {
               <A href="https://docs.ideamarket.io/contracts/audit">
                 <div className="relative h-8 opacity-50 w-36">
                   <Image
-                    src="/quantstamp.svg"
+                    src="/quantstamp1.svg"
                     alt="Quantstamp"
                     layout="fill"
                     objectFit="contain"
