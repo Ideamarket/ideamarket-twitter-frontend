@@ -159,6 +159,8 @@ export default function StakeUserUI({
     tokenBalanceBN
   )
 
+  console.log('calculatedIdeaTokenAmount==', calculatedIdeaTokenAmount)
+
   // Determines which token input was typed in last
   const isSelectedTokenActive = selectedTokenAmount !== '0'
 

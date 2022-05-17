@@ -82,6 +82,7 @@
     "react-query": "^3.34.16",
     "react-select": "5.2.1",
     "sha3": "^2.1.4",
+    "uniswapv2": "npm:@uniswap/sdk",
     "use-breakpoint": "2.0.2",
     "uuid": "8.3.2",
     "walletlink": "^2.2.8",

@@ -2,6 +2,8 @@ import create from 'zustand'
 import Web3 from 'web3'
 import IUniswapV3Pool from '@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Pool.sol/IUniswapV3Pool.json'
 import IUniswapV3Factory from '@uniswap/v3-core/artifacts/contracts/interfaces/IUniswapV3Factory.sol/IUniswapV3Factory.json'
+import UniswapFactoryABI from '../assets/abi-uniswap-factory.json'
+import UniswapPairABI from '../assets/abi-uniswap-pair.json'
 import Quoter from '@uniswap/v3-periphery/artifacts/contracts/lens/Quoter.sol/Quoter.json'
 import ERC20ABI from '../assets/abi-erc20.json'
 import { useWalletStore } from './walletStore'
@@ -16,6 +18,7 @@ type State = {
   multiActionContract: any
   multiActionContractUserMarket: any
   uniswapFactoryContract: any
+  uniswapFactoryContractV2: any
   ideaTokenVaultContract: any
   merkleDistributorContract: any
   communityMerkleDistributorContract: any
@@ -42,6 +45,7 @@ export const useContractStore = create<State>((set) => ({
   multiActionContract: undefined,
   multiActionContractUserMarket: undefined,
   uniswapFactoryContract: undefined,
+  uniswapFactoryContractV2: undefined,
   ideaTokenVaultContract: undefined,
   merkleDistributorContract: undefined,
   communityMerkleDistributorContract: undefined,
@@ -69,6 +73,7 @@ export function clearContracts() {
     multiActionContract: undefined,
     multiActionContractUserMarket: undefined,
     uniswapFactoryContract: undefined,
+    uniswapFactoryContractV2: undefined,
     ideaTokenVaultContract: undefined,
     merkleDistributorContract: undefined,
     communityMerkleDistributorContract: undefined,
@@ -134,6 +139,12 @@ export function initContractsFromWeb3(web3: Web3) {
   const uniswapFactoryContract = new web3.eth.Contract(
     IUniswapV3Factory.abi as any,
     '0x1F98431c8aD98523631AE4a59f267346ea31F984', // same on all networks
+    { from: web3.eth.defaultAccount }
+  )
+
+  const uniswapFactoryContractV2 = new web3.eth.Contract(
+    UniswapFactoryABI as any,
+    '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // same on all networks
     { from: web3.eth.defaultAccount }
   )
 
@@ -248,6 +259,7 @@ export function initContractsFromWeb3(web3: Web3) {
     multiActionContract: multiActionContract,
     multiActionContractUserMarket: multiActionContractUserMarket,
     uniswapFactoryContract: uniswapFactoryContract,
+    uniswapFactoryContractV2: uniswapFactoryContractV2,
     ideaTokenVaultContract: ideaTokenVaultContract,
     merkleDistributorContract: merkleDistributorContract,
     communityMerkleDistributorContract: communityMerkleDistributorContract,
@@ -279,6 +291,16 @@ export function getUniswapPoolContract(poolAddress: string) {
   const web3 = useWalletStore.getState().web3
   return web3
     ? new web3.eth.Contract(IUniswapV3Pool.abi as any, poolAddress, {
+        from: web3.eth.defaultAccount,
+      })
+    : null
+}
+
+// Used for Uniswap V2
+export function getUniswapPairContract(pairAddress: string) {
+  const web3 = useWalletStore.getState().web3
+  return web3
+    ? new web3.eth.Contract(UniswapPairABI as any, pairAddress, {
         from: web3.eth.defaultAccount,
       })
     : null
