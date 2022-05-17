@@ -12,6 +12,7 @@ import {
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import Image from 'next/image'
+import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
 type DropdownButtonProps = {
   toggleOption: (value: any) => void
@@ -217,6 +218,8 @@ const OpinionTable = ({
               </div>
             )
           })}
+
+          {opinionPairs && opinionPairs.length <= 0 && <EmptyTableBody />}
         </div>
       </div>
 
@@ -291,6 +294,8 @@ const OpinionTable = ({
               </div>
             )
           })}
+
+          {opinionPairs && opinionPairs.length <= 0 && <EmptyTableBody />}
         </div>
       </div>
     </>

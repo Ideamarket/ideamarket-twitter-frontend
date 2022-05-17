@@ -17,6 +17,7 @@ import { flatten } from 'utils/lodash'
 import { GlobalContext } from 'lib/GlobalContext'
 import { SortOptionsHomePostsTable, TABLE_NAMES } from 'utils/tables'
 import { getAllPosts } from 'modules/posts/services/PostService'
+import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
 type Props = {
   isStarredFilterActive: boolean
@@ -198,6 +199,7 @@ export default function Table({
                 setIsStarredFilterActive={setIsStarredFilterActive}
               />
             </div>
+
             <div className="bg-white divide-y-[6px] dark:bg-gray-700">
               {(tokenData as any[]).map((token, index) => {
                 if (
@@ -222,11 +224,14 @@ export default function Table({
                   />
                 )
               })}
+
               {isLoading
                 ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                     <TokenRowSkeleton key={token} getColumn={getColumn} />
                   ))
                 : null}
+
+              {tokenData && tokenData.length <= 0 && <EmptyTableBody />}
             </div>
           </div>
         </div>

@@ -92,7 +92,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
 
             <div className="text-xl font-bold">{userData?.username}</div>
 
-            <div className="whitespace-pre-wrap break-words text-sm italic opacity-70 max-w-[15rem] my-1">
+            <div className="whitespace-pre-wrap break-words text-sm italic opacity-70 max-w-[15rem] my-2">
               {userData?.bio || ''}
             </div>
 
@@ -199,7 +199,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               {userData?.username}
             </div>
 
-            <div className="text-xs text-center opacity-70 max-w-[15rem] mt-1">
+            <div className="whitespace-pre-wrap break-words text-sm text-center italic opacity-70 max-w-[15rem] mx-auto my-2">
               {userData?.bio || ''}
             </div>
 

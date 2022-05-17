@@ -158,7 +158,9 @@ export default function HomeUsersRow({
             />
           </div>
 
-          <div>{token?.bio}</div>
+          <div className="whitespace-pre-wrap break-words text-sm italic">
+            {token?.bio}
+          </div>
         </div>
 
         <div className="flex justify-between items-center text-center px-3 py-4">

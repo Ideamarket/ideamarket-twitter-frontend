@@ -6,6 +6,7 @@ import RatingsRow from './RatingsRow'
 import RatingsRowSkeleton from './RatingsRowSkeleton'
 import { SortOptionsAccountOpinions } from 'utils/tables'
 import { Tooltip } from 'components'
+import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
 type Header = {
   title: string
@@ -170,6 +171,7 @@ export default function RatingsTable({
                 </div>
               ))}
             </div>
+
             <div className="bg-white divide-y-[6px] dark:bg-gray-700">
               {!isPairsDataLoading &&
                 rawPairs &&
@@ -184,11 +186,14 @@ export default function RatingsTable({
                     }
                   />
                 ))}
+
               {isPairsDataLoading
                 ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                     <RatingsRowSkeleton key={token} />
                   ))
                 : null}
+
+              {rawPairs && rawPairs.length <= 0 && <EmptyTableBody />}
             </div>
           </div>
         </div>

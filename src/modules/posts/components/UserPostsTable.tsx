@@ -2,12 +2,11 @@ import classNames from 'classnames'
 import { useCallback, useRef, MutableRefObject } from 'react'
 import { IdeaToken, IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
-// import RatingsRow from './RatingsRow'
-// import RatingsRowSkeleton from './RatingsRowSkeleton'
 import { SortOptionsAccountPosts } from 'utils/tables'
 import UserPostsRow from './UserPostsRow'
 import UserPostsRowSkeleton from './UserPostsRowSkeleton'
 import { Tooltip } from 'components'
+import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
 type Header = {
   title: string
@@ -192,6 +191,7 @@ export default function UserPostsTable({
                 </div>
               ))}
             </div>
+
             <div className="bg-white divide-y-[6px] dark:bg-gray-700">
               {!isPairsDataLoading &&
                 rawPairs &&
@@ -206,11 +206,14 @@ export default function UserPostsTable({
                     }
                   />
                 ))}
+
               {isPairsDataLoading
                 ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                     <UserPostsRowSkeleton key={token} />
                   ))
                 : null}
+
+              {rawPairs && rawPairs.length <= 0 && <EmptyTableBody />}
             </div>
           </div>
         </div>

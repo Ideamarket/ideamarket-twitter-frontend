@@ -17,6 +17,7 @@ import { SortOptionsHomePostsTable, TABLE_NAMES } from 'utils/tables'
 import { getAllUsers } from '../services/UserMarketService'
 import HomeUsersRowSkeleton from './HomeUsersRowSkeleton'
 import HomeUsersRow from './HomeUsersRow'
+import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
 type Props = {
   isStarredFilterActive: boolean
@@ -207,11 +208,14 @@ export default function HomeUsersTable({
                   />
                 )
               })}
+
               {isLoading
                 ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                     <HomeUsersRowSkeleton key={token} getColumn={getColumn} />
                   ))
                 : null}
+
+              {tokenData && tokenData.length <= 0 && <EmptyTableBody />}
             </div>
           </div>
         </div>
