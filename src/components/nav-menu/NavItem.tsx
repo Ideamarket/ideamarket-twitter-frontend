@@ -14,8 +14,8 @@ const NavItem = ({ menuItem }) => {
     setSubSubMenus([])
   })
 
-  const onMenuItemClick = () => {
-    menuItem.onClick ? menuItem.onClick() : setIsOpen(!isOpen)
+  const onMenuItemClick = async () => {
+    menuItem.onClick ? await menuItem.onClick() : setIsOpen(!isOpen)
   }
 
   return (

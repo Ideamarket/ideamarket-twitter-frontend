@@ -1,5 +1,6 @@
 import { ChevronRightIcon } from '@heroicons/react/outline'
 import router from 'next/router'
+import { NETWORK } from 'store/networks'
 import { AIRDROP_TYPES } from 'types/airdropTypes'
 
 export const getNavbarConfig = (user: any) => ({
@@ -81,6 +82,32 @@ export const getNavbarConfig = (user: any) => ({
         },
         {
           id: 2,
+          name: 'Add $IMO to Metamask',
+          onClick: async () => {
+            try {
+              const { ethereum } = window as any
+              await ethereum.request({
+                method: 'wallet_watchAsset',
+                params: {
+                  type: 'ERC20',
+                  options: {
+                    address: NETWORK.getExternalAddresses().imo,
+                    symbol: `IMO`,
+                    decimals: 18,
+                    image: 'https://ideamarket.io/imo-logo.png',
+                  },
+                },
+              })
+            } catch (ex) {
+              // We don't handle that error for now
+              // Might be a different wallet than Metmask
+              // or user declined
+              console.log(ex)
+            }
+          },
+        },
+        {
+          id: 3,
           name: 'Token Address',
           onClick: () => {
             window.open(
@@ -90,7 +117,7 @@ export const getNavbarConfig = (user: any) => ({
           },
         },
         {
-          id: 3,
+          id: 4,
           onClick: () => null,
           name: (
             <div className="flex justify-between items-center w-full">
@@ -127,7 +154,7 @@ export const getNavbarConfig = (user: any) => ({
           ],
         },
         {
-          id: 4,
+          id: 5,
           name: 'Stake',
           onClick: () => router.push('/stake'),
         },
