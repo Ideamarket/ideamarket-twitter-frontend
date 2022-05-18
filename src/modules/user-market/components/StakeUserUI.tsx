@@ -159,8 +159,6 @@ export default function StakeUserUI({
     tokenBalanceBN
   )
 
-  console.log('calculatedIdeaTokenAmount==', calculatedIdeaTokenAmount)
-
   // Determines which token input was typed in last
   const isSelectedTokenActive = selectedTokenAmount !== '0'
 
@@ -706,8 +704,18 @@ export default function StakeUserUI({
               : { ...selectedTokenProps })}
           />
 
+          {tradeType === TX_TYPES.STAKE_USER &&
+          selectedToken?.address !== NETWORK.getExternalAddresses().imo ? (
+            <div className="my-4">
+              {selectedTokenAmount} {selectedToken?.symbol} converts to{' '}
+              {parseFloat(calculatedIdeaTokenAmount).toFixed(2)} IMO
+            </div>
+          ) : (
+            <div className="my-4"></div>
+          )}
+
           {showTradeButton && (
-            <div className="mt-4">
+            <div className="">
               <ApproveButton
                 tokenAddress={spendTokenAddress}
                 tokenName={spendTokenSymbol}

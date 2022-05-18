@@ -5,6 +5,7 @@ import BN from 'bn.js'
 import { useTokenAllowance, approveToken } from '../../actions'
 import { TransactionManager, web3UintMax, zeroBN } from '../../utils'
 import Tooltip from 'components/tooltip/Tooltip'
+import { NETWORK } from 'store/networks'
 
 export default function ApproveButton({
   tokenAddress,
@@ -42,6 +43,17 @@ export default function ApproveButton({
     allowance.lt(requiredAllowance)
 
   const getValuesByTxType = (txType: string) => {
+    if (
+      txType === 'stake' &&
+      tokenAddress !== NETWORK.getExternalAddresses().imo
+    ) {
+      return {
+        buttonText: 'convert & stake',
+        buttonName: 'Stake',
+        tooltipAction: 'converting and staking',
+      }
+    }
+
     if (txType === 'stake') {
       return {
         buttonText: 'stake',

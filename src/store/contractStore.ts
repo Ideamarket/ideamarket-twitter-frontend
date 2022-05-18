@@ -144,7 +144,7 @@ export function initContractsFromWeb3(web3: Web3) {
 
   const uniswapFactoryContractV2 = new web3.eth.Contract(
     UniswapFactoryABI as any,
-    '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f', // same on all networks
+    '0xc35DADB65012eC5796536bD9864eD8773aBc74C4',
     { from: web3.eth.defaultAccount }
   )
 
