@@ -172,7 +172,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               }
               className="w-full p-3 mt-2 bg-blue-600 text-white font-bold rounded-lg"
             >
-              STAKE
+              Stake
             </button>
           </div>
         </div>

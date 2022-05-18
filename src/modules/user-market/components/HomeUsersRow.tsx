@@ -118,7 +118,7 @@ export default function HomeUsersRow({
                   e.stopPropagation()
                   onStakeClicked(token)
                 }}
-                className="flex justify-center items-center w-20 h-10 text-base rounded-lg text-white font-medium bg-black/[.8] hover:bg-blue-800 z-50"
+                className="flex justify-center items-center w-20 h-10 text-base font-bold rounded-lg text-white bg-black/[.8] hover:bg-blue-800 z-50"
               >
                 <span>Stake</span>
               </button>
@@ -195,7 +195,7 @@ export default function HomeUsersRow({
               e.stopPropagation()
               onStakeClicked(token)
             }}
-            className="w-1/3 flex justify-center items-center w-20 h-10 text-base border rounded-lg text-black bg-transparent font-bold"
+            className="w-1/3 flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-black bg-transparent"
           >
             <span>Stake</span>
           </button>

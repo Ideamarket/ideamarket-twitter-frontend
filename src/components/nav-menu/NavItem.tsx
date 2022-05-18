@@ -19,7 +19,7 @@ const NavItem = ({ menuItem }) => {
   }
 
   return (
-    <div className="relative mt-1">
+    <div className="relative mt-0.5">
       <A
         className="inline-flex px-3 py-2 text-md leading-5 transition duration-150 ease-in-out bg-transparent rounded-md cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
         onClick={onMenuItemClick}

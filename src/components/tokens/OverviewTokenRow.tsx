@@ -148,9 +148,9 @@ export default function TokenRow({
                     e.stopPropagation()
                     onRateClicked(token, urlMetaData)
                   }}
-                  className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800 z-50"
+                  className="flex justify-center items-center w-20 h-10 text-base font-bold rounded-lg border-brand-blue text-white bg-brand-blue hover:bg-blue-800 z-50"
                 >
-                  <span>RATE</span>
+                  <span>Rate</span>
                 </button>
               </div>
             </div>
@@ -234,9 +234,9 @@ export default function TokenRow({
               e.stopPropagation()
               onRateClicked(token, urlMetaData)
             }}
-            className="flex justify-center items-center w-20 h-10 text-base border rounded-lg text-blue-500 bg-transparent font-bold"
+            className="flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-blue-500 bg-transparent"
           >
-            <span>RATE</span>
+            <span>Rate</span>
           </button>
         </div>
       </div>

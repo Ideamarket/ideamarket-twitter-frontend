@@ -103,7 +103,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
                 />
               </div>
 
-              <span className="w-auto h-full mr-2 text-2xl leading-none md:text-3xl">
+              <span className="w-auto h-full mr-2 text-2xl font-bold leading-none">
                 Ideamarket
               </span>
             </A>
@@ -125,7 +125,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
                 '0x95900afdf214860740e85deef69b1b0e422b64ec') && (
               <button
                 onClick={onNewPostClicked}
-                className="flex items-center space-x-2 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-semibold px-3 py-1 ml-3 rounded-lg"
+                className="flex items-center space-x-2 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-bold px-3 py-1 ml-3 rounded-lg"
               >
                 <span>New Post</span>
                 <PencilIcon className="w-3" />

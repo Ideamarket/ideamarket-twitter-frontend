@@ -164,7 +164,7 @@ export default function RatingsTable({
                           )}
                         </div>
                       )}
-                    <span className="uppercase mr-1">
+                    <span className="uppercase font-semibold mr-1">
                       {getColumnContent(header)}
                     </span>
                   </div>

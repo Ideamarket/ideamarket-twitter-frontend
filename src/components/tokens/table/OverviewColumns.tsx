@@ -208,7 +208,9 @@ export const OverviewColumns = ({
                   )}
                 </div>
               )}
-              <span className="uppercase mr-1">{getColumnContent(column)}</span>
+              <span className="uppercase font-semibold mr-1">
+                {getColumnContent(column)}
+              </span>
             </div>
           </div>
         )

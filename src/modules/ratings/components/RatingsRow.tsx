@@ -137,9 +137,9 @@ export default function RatingsRow({
                       e.stopPropagation()
                       onRateClicked(opinion, urlMetaData)
                     }}
-                    className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium hover:bg-blue-800 z-50"
+                    className="flex justify-center items-center w-full mr-10 h-10 text-base font-bold rounded-lg border-brand-blue text-white bg-brand-blue hover:bg-blue-800 z-50"
                   >
-                    <span>RATE</span>
+                    <span>Rate</span>
                   </button>
                 </div>
               </div>
@@ -237,9 +237,9 @@ export default function RatingsRow({
               e.stopPropagation()
               onRateClicked(opinion, urlMetaData)
             }}
-            className="flex justify-center items-center w-20 h-10 text-base rounded-lg border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800"
+            className="flex justify-center items-center w-20 h-10 text-base font-bold rounded-lg border-brand-blue text-white bg-brand-blue hover:bg-blue-800"
           >
-            <span>RATE</span>
+            <span>Rate</span>
           </button>
         </div>
       </div>

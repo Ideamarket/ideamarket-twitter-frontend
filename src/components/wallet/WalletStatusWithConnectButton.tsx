@@ -33,7 +33,7 @@ export default function WalletStatusWithConnectButton() {
         {!active && (
           <div
             onClick={openWalletModal}
-            className="px-4 py-2 ml-2 text-sm text-white rounded-lg bg-brand-blue"
+            className="px-4 py-2 ml-2 text-sm font-bold text-white rounded-lg bg-brand-blue"
           >
             Connect Wallet
           </div>

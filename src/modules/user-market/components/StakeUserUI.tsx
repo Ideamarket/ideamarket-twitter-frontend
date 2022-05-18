@@ -581,7 +581,7 @@ export default function StakeUserUI({
             </A>
           </div>
 
-          <div>{web2UserToken?.bio}</div>
+          <div className="italic">{web2UserToken?.bio}</div>
         </div>
 
         <div className="flex space-x-2 p-4 pb-3 overflow-x-scroll md:overflow-auto">
