@@ -33,6 +33,7 @@ export type INetworkSpecifics = {
   getExternalAddresses(): ExternalAddresses
   getTokenList(): any
   getSubgraphURL(): string
+  getUserMarketSubgraphURL(): string
   getEtherscanTxUrl(tx: string): string
   getAddNetworkParams(): AddNetworkParams | undefined
   getRPCURL(): string

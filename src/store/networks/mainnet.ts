@@ -41,6 +41,10 @@ export default class MainnetNetworkSpecifics implements INetworkSpecifics {
     return 'https://subgraph-l1.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketL1'
   }
 
+  getUserMarketSubgraphURL(): string {
+    return 'https://subgraph.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketAVMIMOMARKET'
+  }
+
   getEtherscanTxUrl(tx: string): string {
     return `https://etherscan.io/tx/${tx}`
   }

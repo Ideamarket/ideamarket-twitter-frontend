@@ -41,6 +41,10 @@ export default class AVMNetworkSpecifics implements INetworkSpecifics {
     return 'https://subgraph.backend.ideamarket.io/subgraphs/name/Ideamarket/Ideamarket'
   }
 
+  getUserMarketSubgraphURL(): string {
+    return 'https://subgraph.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketAVMIMOMARKET'
+  }
+
   getEtherscanTxUrl(tx: string): string {
     return `https://arbiscan.io/tx/${tx}`
   }

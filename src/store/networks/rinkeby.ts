@@ -41,6 +41,10 @@ export default class RinkebyNetworkSpecifics implements INetworkSpecifics {
     return 'https://subgraph-rinkeby.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketRINKEBY'
   }
 
+  getUserMarketSubgraphURL(): string {
+    return 'https://subgraph-test-avm-l2.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTESTAVML2IMOMARKET'
+  }
+
   getEtherscanTxUrl(tx: string): string {
     return `https://rinkeby.etherscan.io/tx/${tx}`
   }

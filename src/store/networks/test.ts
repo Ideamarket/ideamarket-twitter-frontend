@@ -41,6 +41,10 @@ export default class TestNetworkSpecifics implements INetworkSpecifics {
     return 'https://subgraph-test.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTEST'
   }
 
+  getUserMarketSubgraphURL(): string {
+    return 'https://subgraph-test-avm-l2.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTESTAVML2IMOMARKET'
+  }
+
   getEtherscanTxUrl(tx: string): string {
     return `https://rinkeby.etherscan.io/tx/${tx}`
   }

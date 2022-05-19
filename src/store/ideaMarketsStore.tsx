@@ -27,8 +27,7 @@ import Web3 from 'web3'
 
 const HTTP_GRAPHQL_ENDPOINT_L1 = L1_NETWORK.getSubgraphURL()
 const HTTP_GRAPHQL_ENDPOINT = NETWORK.getSubgraphURL()
-const HTTP_GRAPHQL_ENDPOINT_USER_MARKET =
-  'https://subgraph-test-avm-l2.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTESTAVML2IMOMARKET'
+const HTTP_GRAPHQL_ENDPOINT_USER_MARKET = NETWORK.getUserMarketSubgraphURL()
 
 export type IdeaMarket = {
   name: string

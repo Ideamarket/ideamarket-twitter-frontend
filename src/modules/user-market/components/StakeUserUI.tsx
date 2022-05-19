@@ -546,9 +546,7 @@ export default function StakeUserUI({
   }
 
   const ideaTokenProps = {
-    inputTokenAmount: isCalculatedIdeaTokenAmountLoading
-      ? '...'
-      : masterIdeaTokenAmount,
+    inputTokenAmount: masterIdeaTokenAmount,
     isIdeaToken: true,
     tokenBalance: ideaTokenBalance,
     isTokenBalanceLoading: isIdeaTokenBalanceLoading,

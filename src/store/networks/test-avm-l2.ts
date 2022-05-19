@@ -41,6 +41,10 @@ export default class TestAVML2NetworkSpecifics implements INetworkSpecifics {
     return 'https://subgraph-test-avm-l2.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTESTAVML2'
   }
 
+  getUserMarketSubgraphURL(): string {
+    return 'https://subgraph-test-avm-l2.backend.ideamarket.io/subgraphs/name/Ideamarket/IdeamarketTESTAVML2IMOMARKET'
+  }
+
   getEtherscanTxUrl(tx: string): string {
     return `https://rinkeby-explorer.arbitrum.io/tx/${tx}`
   }

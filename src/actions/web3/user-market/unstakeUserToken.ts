@@ -15,7 +15,7 @@ export default function unstakeUserToken(
   recipientAddress: string
 ) {
   const exchange = useContractStore.getState().exchangeContractUserMarket
-  const multiAction = useContractStore.getState().multiActionContract
+  const multiAction = useContractStore.getState().multiActionContractUserMarket
 
   const slippageAmount = new BN(
     new BigNumber(price.toString())
