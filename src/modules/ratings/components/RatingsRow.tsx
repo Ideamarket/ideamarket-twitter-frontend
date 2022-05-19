@@ -37,12 +37,9 @@ export default function RatingsRow({
   const usernameOrWallet = opinion?.minterToken?.username || minterAddress
 
   return (
-    <>
+    <div ref={lastElementRef}>
       {/* Desktop row */}
-      <div
-        ref={lastElementRef}
-        className="hidden relative md:block py-6 hover:bg-black/[.02]"
-      >
+      <div className="hidden relative md:block py-6 hover:bg-black/[.02]">
         {/* Makes so entire row can be clicked to go to Post page */}
         <a
           href={`/post/${opinion?.tokenID}`}
@@ -160,7 +157,7 @@ export default function RatingsRow({
       </div>
 
       {/* Mobile row */}
-      <div ref={lastElementRef} className="md:hidden">
+      <div className="md:hidden">
         <div className="w-full relative px-3 py-4">
           {minterAddress && (
             <div className="flex items-center pb-2 whitespace-nowrap">
@@ -243,6 +240,6 @@ export default function RatingsRow({
           </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }

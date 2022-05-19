@@ -43,12 +43,9 @@ export default function TokenRow({
   const usernameOrWallet = token?.minterToken?.username || minterAddress
 
   return (
-    <>
+    <div ref={lastElementRef}>
       {/* Desktop row */}
-      <div
-        ref={lastElementRef}
-        className="hidden relative md:block py-6 hover:bg-black/[.02]"
-      >
+      <div className="hidden relative md:block py-6 hover:bg-black/[.02]">
         {/* Makes so entire row can be clicked to go to Post page */}
         <a
           href={`/post/${token?.tokenID}`}
@@ -159,7 +156,7 @@ export default function TokenRow({
       </div>
 
       {/* Mobile row */}
-      <div ref={lastElementRef} className="md:hidden">
+      <div className="md:hidden">
         <div className="px-3 pt-4">
           {minterAddress && (
             <div className="flex items-center pb-2 whitespace-nowrap">
@@ -240,6 +237,6 @@ export default function TokenRow({
           </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }

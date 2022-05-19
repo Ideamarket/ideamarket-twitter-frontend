@@ -32,12 +32,9 @@ export default function HomeUsersRow({
   const usernameOrWallet = token?.username || token?.walletAddress
 
   return (
-    <>
+    <div ref={lastElementRef}>
       {/* Desktop row */}
-      <div
-        ref={lastElementRef}
-        className="hidden relative md:block py-6 hover:bg-black/[.02]"
-      >
+      <div className="hidden relative md:block py-6 hover:bg-black/[.02]">
         {/* Makes so entire row can be clicked to go to Post page */}
         <a
           href={`/u/${usernameOrWallet}`}
@@ -84,7 +81,7 @@ export default function HomeUsersRow({
           {/* STAKED */}
           <div className="w-[18.333%] lg:w-[15%] flex items-start">
             <span className="text-base text-blue-500 font-bold">
-              {token?.deposits}
+              {Math.round(token?.deposits)}
             </span>
             <div className="relative w-4 h-4 mt-0.5">
               <Image
@@ -128,7 +125,7 @@ export default function HomeUsersRow({
       </div>
 
       {/* Mobile row */}
-      <div ref={lastElementRef} className="md:hidden">
+      <div className="md:hidden">
         <div className="px-3 pt-4">
           <div className="flex items-center pb-2 whitespace-nowrap">
             {/* <div className="mr-3">
@@ -167,7 +164,7 @@ export default function HomeUsersRow({
           {/* STAKED */}
           <div className="w-1/3 flex items-center">
             <span className="text-base text-blue-600 font-semibold">
-              {token?.deposits} IMO
+              {Math.round(token?.deposits)} IMO
             </span>
             <div className="relative w-4 h-4 ml-1">
               <Image
@@ -201,6 +198,6 @@ export default function HomeUsersRow({
           </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
