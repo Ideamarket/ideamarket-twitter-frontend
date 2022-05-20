@@ -315,37 +315,45 @@ export default function ProfileWallet({ userData }: Props) {
             Posts
           </div>
 
-          <div
-            className={classNames(
-              table === TABLE_NAMES.ACCOUNT_HOLDINGS
-                ? 'text-white'
-                : 'text-brand-gray text-opacity-60 cursor-pointer',
-              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6 mr-auto'
+          {address?.toLowerCase() === userData?.walletAddress?.toLowerCase() &&
+            ownedPairs &&
+            ownedPairs?.length > 0 && (
+              <div
+                className={classNames(
+                  table === TABLE_NAMES.ACCOUNT_HOLDINGS
+                    ? 'text-white'
+                    : 'text-brand-gray text-opacity-60 cursor-pointer',
+                  'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6 mr-auto'
+                )}
+                onClick={() => {
+                  setTable(TABLE_NAMES.ACCOUNT_HOLDINGS)
+                  setOrderBy('price')
+                  setOrderDirection('desc')
+                }}
+              >
+                Wallet
+              </div>
             )}
-            onClick={() => {
-              setTable(TABLE_NAMES.ACCOUNT_HOLDINGS)
-              setOrderBy('price')
-              setOrderDirection('desc')
-            }}
-          >
-            Wallet
-          </div>
 
-          <div
-            className={classNames(
-              table === TABLE_NAMES.ACCOUNT_TRADES
-                ? 'text-white'
-                : 'text-brand-gray text-opacity-60 cursor-pointer',
-              'text-lg font-semibold flex flex-col justify-end mb-2.5 mr-auto'
+          {address?.toLowerCase() === userData?.walletAddress?.toLowerCase() &&
+            myTrades &&
+            myTrades?.length > 0 && (
+              <div
+                className={classNames(
+                  table === TABLE_NAMES.ACCOUNT_TRADES
+                    ? 'text-white'
+                    : 'text-brand-gray text-opacity-60 cursor-pointer',
+                  'text-lg font-semibold flex flex-col justify-end mb-2.5 mr-auto'
+                )}
+                onClick={() => {
+                  setTable(TABLE_NAMES.ACCOUNT_TRADES)
+                  setOrderBy('date')
+                  setOrderDirection('desc')
+                }}
+              >
+                Trades
+              </div>
             )}
-            onClick={() => {
-              setTable(TABLE_NAMES.ACCOUNT_TRADES)
-              setOrderBy('date')
-              setOrderDirection('desc')
-            }}
-          >
-            Trades
-          </div>
         </div>
       </div>
 
