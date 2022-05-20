@@ -23,8 +23,8 @@ export const ClientWrapper: React.FC = ({ children }) => {
 
       // If there is JWT (they are signed in), then fetch user data using JWT
       if (jwt) {
+        await setUserFromJwt(jwt)
         setJwtToken(jwt)
-        setUserFromJwt(jwt)
       } else {
         // If no JWT, fetch user data by sending connected wallet to API
         setJwtToken(null)

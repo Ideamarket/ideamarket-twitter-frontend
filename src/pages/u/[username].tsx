@@ -2,14 +2,20 @@ import { DefaultLayout } from 'components'
 import { Toaster } from 'react-hot-toast'
 import { ProfileWallet } from 'components/account'
 import ProfileGeneralInfo from 'components/account/ProfileGeneralInfo'
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { isAddressValid } from 'lib/utils/web3-eth'
 import { useRouter } from 'next/router'
 import { getAccount } from 'actions/web2/user-market/apiUserActions'
 import BgBanner from 'components/BgBanner'
+import { GetServerSideProps } from 'next'
+import { openVerifyModalAfterLogin } from 'modules/user-market/services/VerificationService'
 
-const PublicProfile = () => {
+type Props = {
+  wasVerificationSuccess: string
+}
+
+const PublicProfile = ({ wasVerificationSuccess }: Props) => {
   const router = useRouter()
   const { username } = router.query // This can be DB username or onchain wallet address
 
@@ -26,6 +32,14 @@ const PublicProfile = () => {
   }
 
   const finalUserData = userData ? userData : nonDBUserData
+
+  // This logic is for verification
+  useEffect(() => {
+    // wasVerificationSuccess mainly used to know if just came from verifying
+    if (finalUserData && wasVerificationSuccess) {
+      openVerifyModalAfterLogin(Boolean(finalUserData?.twitterUsername))
+    }
+  }, [finalUserData, finalUserData?.twitterUsername, wasVerificationSuccess])
 
   return (
     <div className="min-h-screen font-inter">
@@ -51,5 +65,17 @@ PublicProfile.getLayout = (page: ReactElement) => (
     {page}
   </DefaultLayout>
 )
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const {
+    wasVerificationSuccess = null, // Only get this value when user returning from logging into Twitter
+  } = context.query
+
+  return {
+    props: {
+      wasVerificationSuccess: wasVerificationSuccess,
+    },
+  }
+}
 
 export default PublicProfile

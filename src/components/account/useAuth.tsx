@@ -22,7 +22,7 @@ const useAuth = () => {
           data: { token, validUntil },
         } = response.data
         setJwtFromApi(token, validUntil)
-        setUserFromJwt(token)
+        await setUserFromJwt(token)
         return token
       } else {
         console.error('Failed to login')
@@ -30,7 +30,7 @@ const useAuth = () => {
       }
     } catch (error) {
       console.error('Failed to login', error)
-      setUserFromJwt(null)
+      await setUserFromJwt(null)
       return null
     }
   }

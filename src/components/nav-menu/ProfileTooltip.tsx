@@ -16,6 +16,7 @@ import { clearContracts } from 'store/contractStore'
 import CreateAccountModal from 'components/account/CreateAccountModal'
 import useAuth from 'components/account/useAuth'
 import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
+import { twitterLogin } from 'modules/user-market/services/VerificationService'
 
 export const ProfileTooltip = () => {
   const { user, jwtToken } = useContext(GlobalContext)
@@ -36,6 +37,20 @@ export const ProfileTooltip = () => {
     }
 
     return null
+  }
+
+  const onVerifyTwitterClicked = async () => {
+    let newOrOldJwt = jwtToken
+    if (!jwtToken) {
+      ModalService.open(CreateAccountModal, {})
+      newOrOldJwt = await onLoginClicked()
+      ModalService.closeAll() // Get weird errors without this due to modal being closed inside CreateAccountModal in useEffect
+    }
+
+    // That i know of, this only happens when user declines MM modal to login
+    if (!newOrOldJwt) return
+
+    await twitterLogin(newOrOldJwt)
   }
 
   const onClickSettings = async () => {
@@ -104,6 +119,17 @@ export const ProfileTooltip = () => {
           <span className="ml-2 font-medium">Edit Profile</span>
         </div>
       )}
+
+      {active && !user?.twitterUsername && (
+        <div
+          className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 bg-blue-400 hover:bg-blue-500 text-white"
+          onClick={onVerifyTwitterClicked}
+        >
+          {/* <TwitterOutlineWhite className="w-5" /> */}
+          <span className="ml-2 font-medium">Verify via Twitter</span>
+        </div>
+      )}
+
       <div
         className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-brand-gray"
         onClick={onClickDisconnectWallet}

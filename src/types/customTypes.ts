@@ -17,6 +17,7 @@ export type UserProfile = {
   email?: string
   walletAddress?: string
   visibilityOptions?: VisibilityOptions
+  twitterUsername?: string
 }
 
 export type UserPublicProfile = Partial<{ profilePhoto: string }>
