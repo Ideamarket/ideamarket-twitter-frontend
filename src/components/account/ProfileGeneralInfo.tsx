@@ -14,6 +14,7 @@ import useAuth from './useAuth'
 import CreateAccountModal from './CreateAccountModal'
 import { GlobalContext } from 'lib/GlobalContext'
 import StakeUserModal from 'modules/user-market/components/StakeUserModal'
+import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
 
 interface Props {
   userData?: any
@@ -167,7 +168,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               onClick={() =>
                 ModalService.open(StakeUserModal, {
                   ideaToken: userData,
-                  market: null,
+                  market: USER_MARKET,
                 })
               }
               className="w-full p-3 mt-2 bg-blue-600 text-white font-bold rounded-lg"

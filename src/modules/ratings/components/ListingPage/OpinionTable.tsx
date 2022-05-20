@@ -10,9 +10,9 @@ import {
   TABLE_NAMES,
 } from 'utils/tables'
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
-import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import Image from 'next/image'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
+import { urlify } from 'utils/display/DisplayUtils'
 
 type DropdownButtonProps = {
   toggleOption: (value: any) => void
@@ -198,10 +198,7 @@ const OpinionTable = ({
                 </div>
 
                 <div className="w-[7%] text-blue-500 font-semibold">
-                  {formatNumberWithCommasAsThousandsSerperator(
-                    opinion?.userToken?.deposits
-                  )}{' '}
-                  IMO
+                  {Math.round(opinion?.userToken?.deposits)} IMO
                 </div>
 
                 <div className="w-[7%] text-blue-500 font-semibold">
@@ -210,9 +207,12 @@ const OpinionTable = ({
 
                 <div className="w-[60%] flex items-center pr-6">
                   {opinion?.comment && (
-                    <div className="w-full px-3 py-2 bg-[#FAFAFA] rounded-lg">
-                      {opinion?.comment}
-                    </div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: urlify(opinion?.comment),
+                      }}
+                      className="w-full px-3 py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words "
+                    />
                   )}
                 </div>
               </div>
@@ -277,10 +277,7 @@ const OpinionTable = ({
                   </div>
 
                   <span className="text-blue-500 font-medium">
-                    {formatNumberWithCommasAsThousandsSerperator(
-                      opinion?.userToken?.deposits
-                    )}{' '}
-                    IMO
+                    {Math.round(opinion?.userToken?.deposits)} IMO
                   </span>
                 </div>
 
@@ -289,7 +286,12 @@ const OpinionTable = ({
                     {opinion?.rating}
                   </div>
 
-                  <div className="w-[85%] font-medium">{opinion?.comment}</div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: urlify(opinion?.comment),
+                    }}
+                    className="w-[85%] font-medium whitespace-pre-wrap break-words "
+                  />
                 </div>
               </div>
             )

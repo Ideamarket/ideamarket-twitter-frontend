@@ -11,6 +11,7 @@ import {
 } from 'components/tokens/utils/ListingUtils'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
+import { urlify } from 'utils/display/DisplayUtils'
 
 type Props = {
   opinion: any
@@ -122,7 +123,7 @@ export default function RatingsRow({
               {/* Market Interest */}
               <div className="w-[20%] grow">
                 <div className="flex flex-col justify-start font-medium leading-5">
-                  {opinion?.marketInterest} IMO
+                  {Math.round(opinion?.marketInterest)} IMO
                 </div>
               </div>
 
@@ -147,7 +148,12 @@ export default function RatingsRow({
               {opinion && opinion?.comment && opinion?.comment.length > 0 && (
                 <div className="w-full mt-4">
                   <div className="bg-black/[.02] rounded-lg px-4 py-2 mr-10">
-                    <div className="text-black text-sm">{opinion?.comment}</div>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: urlify(opinion?.comment),
+                      }}
+                      className="text-black text-sm whitespace-pre-wrap break-words"
+                    />
                   </div>
                 </div>
               )}
@@ -197,7 +203,7 @@ export default function RatingsRow({
             <div className="font-semibold text-black/[.5]">Hot</div>
             <div className="flex items-center">
               <span className="text-blue-600 dark:text-gray-300 mr-1 font-extrabold text-xl">
-                {opinion?.marketInterest} IMO
+                {Math.round(opinion?.marketInterest)} IMO
               </span>
             </div>
           </div>
@@ -219,9 +225,12 @@ export default function RatingsRow({
             {opinion?.rating}
           </div>
 
-          <div className="w-[85%] font-medium text-black">
-            {opinion?.comment}
-          </div>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: urlify(opinion?.comment),
+            }}
+            className="w-[85%] font-medium text-black whitespace-pre-wrap break-words"
+          />
         </div>
 
         <div className="flex justify-between items-center px-10 py-4 border-t">

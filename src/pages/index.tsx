@@ -71,7 +71,7 @@ const Home = ({ urlMarkets }: Props) => {
   }, [])
 
   const onNameSearchChanged = (nameSearch) => {
-    setOrderBy(SortOptionsHomePostsTable.AVG_RATING.value)
+    setOrderBy(SortOptionsHomePostsTable.MARKET_INTEREST.value)
     setNameSearch(nameSearch)
   }
 
@@ -186,7 +186,7 @@ const Home = ({ urlMarkets }: Props) => {
           >
             <div className="flex items-center">
               <MenuAlt2Icon className="w-5" />
-              <span className="text-lg font-bold ml-2">Posts</span>
+              <span className="text-lg font-bold ml-2">Cases</span>
             </div>
             <div className="text-xs">The most confident opinions</div>
           </button>
@@ -205,7 +205,7 @@ const Home = ({ urlMarkets }: Props) => {
           >
             <div className="flex items-center">
               <UserIcon className="w-5" />
-              <span className="text-lg font-bold ml-2">Users</span>
+              <span className="text-lg font-bold ml-2">Judges</span>
             </div>
             <div className="text-xs">The most trusted voices</div>
           </button>

@@ -165,9 +165,11 @@ export default function Table({
         onOrderByChanged('lockedAmount', 'desc')
       } else if (column === 'holders') {
         onOrderByChanged('holders', 'desc')
-      } else if (column === SortOptionsHomePostsTable.AVG_RATING.value) {
-        onOrderByChanged(SortOptionsHomePostsTable.AVG_RATING.value, 'desc')
-      } else if (column === SortOptionsHomePostsTable.COMMENTS.value) {
+      }
+      // else if (column === SortOptionsHomePostsTable.AVG_RATING.value) {
+      //   onOrderByChanged(SortOptionsHomePostsTable.AVG_RATING.value, 'desc')
+      // }
+      else if (column === SortOptionsHomePostsTable.COMMENTS.value) {
         onOrderByChanged(SortOptionsHomePostsTable.COMMENTS.value, 'desc')
       } else if (column === SortOptionsHomePostsTable.MARKET_INTEREST.value) {
         onOrderByChanged(

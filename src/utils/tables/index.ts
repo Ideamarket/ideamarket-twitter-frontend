@@ -10,7 +10,7 @@ export enum TABLE_NAMES {
 
 // To change string value being passed into orderBy to backend, you need to change "value" on SortOptions objects
 const orderByIndividualRating = 'rating'
-const orderByAverageRating = 'averageRating'
+// const orderByAverageRating = 'averageRating'
 const orderByLatestCommentsCount = 'latestCommentsCount'
 // const orderByLatestRatingsCount = 'latestRatingsCount'
 const orderByCompositeRating = 'compositeRating'
@@ -25,15 +25,15 @@ export const SortOptionsHomePostsTable = {
     value: orderByCompositeRating,
     displayName: 'Composite Rating',
   },
-  AVG_RATING: {
-    id: 2,
-    value: orderByAverageRating,
-    displayName: 'Average Rating',
-  },
+  // AVG_RATING: {
+  //   id: 2,
+  //   value: orderByAverageRating,
+  //   displayName: 'Average Rating',
+  // },
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
-    displayName: 'HOT',
+    displayName: 'SCRUTINY',
   },
   COMMENTS: {
     id: 4,
@@ -111,15 +111,15 @@ export const SortOptionsAccountPosts = {
     value: orderByCompositeRating,
     displayName: 'Composite Rating',
   },
-  AVG_RATING: {
-    id: 2,
-    value: orderByAverageRating,
-    displayName: 'Average Rating',
-  },
+  // AVG_RATING: {
+  //   id: 2,
+  //   value: orderByAverageRating,
+  //   displayName: 'Average Rating',
+  // },
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
-    displayName: 'HOT',
+    displayName: 'Scrutiny',
   },
   COMMENTS: {
     id: 4,
@@ -138,7 +138,7 @@ export const SortOptionsAccountOpinions = {
   MARKET_INTEREST: {
     id: 1,
     value: orderByMarketInterest,
-    displayName: 'HOT',
+    displayName: 'SCRUTINY',
   },
   // Individual user rating for 1 IDT
   RATING: {

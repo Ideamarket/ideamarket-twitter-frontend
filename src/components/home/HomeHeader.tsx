@@ -62,16 +62,16 @@ const HomeHeader = () => {
           </div>
 
           <h2 className="mt-8 text-3xl md:text-6xl font-gilroy-bold">
-            Make lying
-            <span className="text-brand-blue"> expensive.</span>
+            The decentralized
+            <span className="text-brand-blue"> court of public opinion</span>
           </h2>
 
           <p className="mt-8 md:px-28 text-sm md:text-lg">
             <span className="inline-block mr-1">
-              Ideamarket values the world's information,
+              Judge controversial issues,
             </span>
             <span className="inline-block mr-1">
-              creating public narratives without third parties.{' '}
+              and empower other judges by staking $IMO.{' '}
             </span>
             <A
               href="https://docs.ideamarket.io"

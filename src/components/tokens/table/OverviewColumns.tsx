@@ -98,7 +98,7 @@ export const OverviewColumns = ({
       case SortOptionsHomePostsTable.MARKET_INTEREST.value:
         return (
           <div className="flex items-center">
-            <span className="mr-1">HOT</span>
+            <span className="mr-1">SCRUTINY</span>
             <Tooltip
               className="text-black/[.5] z-[200]"
               iconComponentClassNames="w-3"
@@ -129,14 +129,14 @@ export const OverviewColumns = ({
             </span>
           </div>
         )
-      case SortOptionsHomePostsTable.AVG_RATING.value:
-        return (
-          <>
-            Average
-            <br />
-            Rating
-          </>
-        )
+      // case SortOptionsHomePostsTable.AVG_RATING.value:
+      //   return (
+      //     <>
+      //       Average
+      //       <br />
+      //       Rating
+      //     </>
+      //   )
       default:
         return column.content
     }
@@ -148,15 +148,15 @@ export const OverviewColumns = ({
         case 'name':
           return 'w-[45%] lg:w-[55%] pl-6 pr-24'
         case SortOptionsHomePostsTable.COMPOSITE_RATING.value:
-          return 'w-[11%] lg:w-[9%]'
-        case SortOptionsHomePostsTable.AVG_RATING.value:
-          return 'w-[11%] lg:w-[9%]'
+          return 'w-[13.75%] lg:w-[11.25%]'
+        // case SortOptionsHomePostsTable.AVG_RATING.value:
+        //   return 'w-[11%] lg:w-[9%]'
         case SortOptionsHomePostsTable.MARKET_INTEREST.value:
-          return 'w-[11%] lg:w-[9%]'
+          return 'w-[13.75%] lg:w-[11.25%]'
         case SortOptionsHomePostsTable.COMMENTS.value:
-          return 'w-[11%] lg:w-[9%]'
+          return 'w-[13.75%] lg:w-[11.25%]'
         case 'txButtons':
-          return 'w-[11%] lg:w-[9%]'
+          return 'w-[13.75%] lg:w-[11.25%]'
         default:
           return ''
       }

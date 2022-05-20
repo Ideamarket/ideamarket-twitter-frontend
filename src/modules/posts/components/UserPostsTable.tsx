@@ -30,11 +30,11 @@ const headers: Header[] = [
     value: SortOptionsAccountPosts.COMPOSITE_RATING.value,
     sortable: true,
   },
-  {
-    title: 'Average Rating',
-    value: SortOptionsAccountPosts.AVG_RATING.value,
-    sortable: true,
-  },
+  // {
+  //   title: 'Average Rating',
+  //   value: SortOptionsAccountPosts.AVG_RATING.value,
+  //   sortable: true,
+  // },
   {
     title: 'Comments',
     value: SortOptionsAccountPosts.COMMENTS.value,
@@ -93,7 +93,9 @@ export default function UserPostsTable({
       case SortOptionsAccountPosts.MARKET_INTEREST.value:
         return (
           <div className="flex items-center">
-            <span className="mr-1">HOT</span>
+            <span className="mr-1">
+              {SortOptionsAccountPosts.MARKET_INTEREST.displayName}
+            </span>
             <Tooltip
               className="text-black/[.5] z-[200]"
               iconComponentClassNames="w-3"
@@ -134,15 +136,15 @@ export default function UserPostsTable({
       case 'name':
         return 'w-[45%] lg:w-[55%] pl-6 pr-24'
       case SortOptionsAccountPosts.COMPOSITE_RATING.value:
-        return 'w-[11%] lg:w-[9%]'
-      case SortOptionsAccountPosts.AVG_RATING.value:
-        return 'w-[11%] lg:w-[9%]'
+        return 'w-[13.75%] lg:w-[11.25%]'
+      // case SortOptionsAccountPosts.AVG_RATING.value:
+      //   return 'w-[11%] lg:w-[9%]'
       case SortOptionsAccountPosts.MARKET_INTEREST.value:
-        return 'w-[11%] lg:w-[9%]'
+        return 'w-[13.75%] lg:w-[11.25%]'
       case SortOptionsAccountPosts.COMMENTS.value:
-        return 'w-[11%] lg:w-[9%]'
+        return 'w-[13.75%] lg:w-[11.25%]'
       case 'txButtons':
-        return 'w-[11%] lg:w-[9%]'
+        return 'w-[13.75%] lg:w-[11.25%]'
       default:
         return ''
     }

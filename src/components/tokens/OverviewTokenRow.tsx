@@ -1,8 +1,5 @@
 import { IdeaToken } from 'store/ideaMarketsStore'
-import {
-  formatNumberWithCommasAsThousandsSerperator,
-  formatNumberInt,
-} from 'utils'
+import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { ChatIcon } from '@heroicons/react/outline'
@@ -107,28 +104,28 @@ export default function TokenRow({
 
           <div className="w-[55%] lg:w-[45%] h-max flex items-center">
             {/* Market Interest */}
-            <div className="w-[11%] lg:w-[9%] grow pr-2">
+            <div className="w-[13.75%] lg:w-[11.25%] grow pr-2">
               <div className="mt-0.5 font-medium">
-                {token?.marketInterest} IMO
+                {Math.round(token?.marketInterest)}
               </div>
             </div>
 
             {/* Composite Rating */}
-            <div className="w-[11%] lg:w-[9%] grow">
+            <div className="w-[13.75%] lg:w-[11.25%] grow">
               <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
-                {token?.compositeRating}
+                {Math.round(token?.compositeRating)}
               </span>
             </div>
 
             {/* Average Rating */}
-            <div className="w-[11%] lg:w-[9%] grow">
+            {/* <div className="w-[11%] lg:w-[9%] grow">
               <div className="text-black font-semibold">
                 {formatNumberInt(token?.averageRating)}
               </div>
-            </div>
+            </div> */}
 
             {/* latestCommentsCount */}
-            <div className="w-[11%] lg:w-[9%] grow">
+            <div className="w-[13.75%] lg:w-[11.25%] grow">
               <div className="flex items-center font-medium text-lg text-black">
                 <ChatIcon className="w-4 mr-1" />
                 {formatNumberWithCommasAsThousandsSerperator(
@@ -138,7 +135,7 @@ export default function TokenRow({
             </div>
 
             {/* Rate Button */}
-            <div className="w-[11%] lg:w-[9%] grow">
+            <div className="w-[13.75%] lg:w-[11.25%] grow">
               <div className="flex space-x-2">
                 <button
                   onClick={(e) => {
@@ -205,7 +202,7 @@ export default function TokenRow({
           {/* Market interest */}
           <div className="flex items-center">
             <span className="text-base text-black/[.5] font-medium">
-              {token?.marketInterest} IMO
+              {Math.round(token?.marketInterest)}
             </span>
           </div>
 
@@ -213,7 +210,7 @@ export default function TokenRow({
           <div className="flex flex-col justify-start font-medium leading-5">
             <span className="mb-1">
               <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
-                {token?.compositeRating}
+                {Math.round(token?.compositeRating)}
               </span>
             </span>
           </div>
