@@ -8,16 +8,11 @@ import { isAddressValid } from 'lib/utils/web3-eth'
 import { useRouter } from 'next/router'
 import { getAccount } from 'actions/web2/user-market/apiUserActions'
 import BgBanner from 'components/BgBanner'
-import { GetServerSideProps } from 'next'
 import { openVerifyModalAfterLogin } from 'modules/user-market/services/VerificationService'
 
-type Props = {
-  wasVerificationSuccess: string
-}
-
-const PublicProfile = ({ wasVerificationSuccess }: Props) => {
+const PublicProfile = () => {
   const router = useRouter()
-  const { username } = router.query // This can be DB username or onchain wallet address
+  const { username, wasVerificationSuccess = null } = router.query // This can be DB username or onchain wallet address
 
   const { data: userData } = useQuery<any>([{ username }], () =>
     getAccount({
@@ -65,17 +60,5 @@ PublicProfile.getLayout = (page: ReactElement) => (
     {page}
   </DefaultLayout>
 )
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const {
-    wasVerificationSuccess = null, // Only get this value when user returning from logging into Twitter
-  } = context.query
-
-  return {
-    props: {
-      wasVerificationSuccess: wasVerificationSuccess,
-    },
-  }
-}
 
 export default PublicProfile

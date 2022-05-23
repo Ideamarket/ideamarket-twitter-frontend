@@ -96,7 +96,7 @@ const OpinionTable = ({
       <div className="hidden md:block rounded-xl w-full shadow-lg">
         {/* Table header */}
         <div className="rounded-xl bg-[#FAFAFA] flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
-          <div className="w-[26%] pl-6">
+          <div className="w-[35%] lg:w-[25%]  pl-6">
             <span>USER</span>
           </div>
 
@@ -104,7 +104,7 @@ const OpinionTable = ({
             onClick={() =>
               headerClicked(SortOptionsListingPageOpinions.STAKED.value)
             }
-            className="w-[7%] flex items-center cursor-pointer"
+            className="w-[15%] lg:w-[15%] flex items-center cursor-pointer"
           >
             <span className="mr-1 uppercase">
               {SortOptionsListingPageOpinions.STAKED.displayName}
@@ -127,7 +127,7 @@ const OpinionTable = ({
             onClick={() =>
               headerClicked(SortOptionsListingPageOpinions.RATING.value)
             }
-            className="w-[7%] flex items-center cursor-pointer"
+            className="w-[5%] lg:w-[5%] flex items-center cursor-pointer"
           >
             <span className="mr-1 uppercase">
               {SortOptionsListingPageOpinions.RATING.displayName}
@@ -146,7 +146,7 @@ const OpinionTable = ({
             )}
           </div>
 
-          <div className="w-[60%] flex items-center pr-6">
+          <div className="w-[45%] lg:w-[55%] flex items-center pr-6">
             <span>COMMENT</span>
             <div className="flex w-2/6 h-full ml-auto">
               <OverviewSearchbar
@@ -171,7 +171,7 @@ const OpinionTable = ({
                 key={oIndex}
               >
                 {/* Icon and Name */}
-                <div className="w-[26%] flex items-center pl-6">
+                <div className="w-[35%] lg:w-[25%] flex items-center pl-6">
                   <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
                     <div className="mr-4 flex flex-col items-center space-y-2">
                       <div className="relative rounded-full w-6 h-6">
@@ -220,18 +220,18 @@ const OpinionTable = ({
                   </div>
                 </div>
 
-                <div className="w-[7%] text-blue-500 font-semibold">
+                <div className="w-[15%] lg:w-[15%] text-blue-500 font-semibold pr-4">
                   {formatNumberWithCommasAsThousandsSerperator(
                     Math.round(opinion?.userToken?.deposits)
                   )}{' '}
                   IMO
                 </div>
 
-                <div className="w-[7%] text-blue-500 font-semibold">
+                <div className="w-[5%] lg:w-[5%] text-blue-500 font-semibold">
                   {opinion?.rating}
                 </div>
 
-                <div className="w-[60%] flex items-center pr-6">
+                <div className="w-[45%] lg:w-[55%] flex items-center pr-6">
                   {opinion?.comment && (
                     <div
                       dangerouslySetInnerHTML={{
