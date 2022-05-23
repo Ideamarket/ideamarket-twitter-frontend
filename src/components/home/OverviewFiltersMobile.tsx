@@ -114,15 +114,15 @@ const OverviewFiltersMobile = ({
 
           <div className="w-1/4 flex items-start">
             <span className="mr-1">
-              COMPOSITE
+              IMO
               <br />
               RATING
             </span>
             <Tooltip>
               <div className="w-full md:w-64">
                 Rating weighted by IMO staked on each user. The more IMO staked
-                on a user, the more that user’s ratings affect the Composite
-                Rating of every post they rate.
+                on a user, the more that user’s ratings affect the IMO Rating of
+                every post they rate.
               </div>
             </Tooltip>
           </div>

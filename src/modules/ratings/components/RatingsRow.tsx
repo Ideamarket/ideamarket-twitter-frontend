@@ -13,6 +13,7 @@ import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
 import { urlify } from 'utils/display/DisplayUtils'
 import Link from 'next/link'
+import { SortOptionsAccountOpinions } from 'utils/tables'
 
 type Props = {
   opinion: any
@@ -125,7 +126,9 @@ export default function RatingsRow({
               {/* Market Interest */}
               <div className="w-[20%] grow">
                 <div className="flex flex-col justify-start font-medium leading-5">
-                  {Math.round(opinion?.marketInterest)} IMO
+                  {formatNumberWithCommasAsThousandsSerperator(
+                    Math.round(opinion?.marketInterest)
+                  )}
                 </div>
               </div>
 
@@ -203,10 +206,14 @@ export default function RatingsRow({
 
         <div className="flex justify-between items-start text-center px-10 py-4 border-b border-t">
           <div className="text-left">
-            <div className="font-semibold text-black/[.5]">Hot</div>
+            <div className="font-semibold text-black/[.5]">
+              {SortOptionsAccountOpinions.MARKET_INTEREST.displayName}
+            </div>
             <div className="flex items-center">
               <span className="text-blue-600 dark:text-gray-300 mr-1 font-extrabold text-xl">
-                {Math.round(opinion?.marketInterest)} IMO
+                {formatNumberWithCommasAsThousandsSerperator(
+                  Math.round(opinion?.marketInterest)
+                )}
               </span>
             </div>
           </div>

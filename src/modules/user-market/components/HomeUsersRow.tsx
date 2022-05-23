@@ -81,16 +81,11 @@ export default function HomeUsersRow({
           {/* STAKED */}
           <div className="w-[18.333%] lg:w-[15%] flex items-start">
             <span className="text-base text-blue-500 font-bold">
-              {Math.round(token?.deposits)}
+              {formatNumberWithCommasAsThousandsSerperator(
+                Math.round(token?.deposits)
+              )}{' '}
+              IMO
             </span>
-            <div className="relative w-4 h-4 mt-0.5">
-              <Image
-                src="/im-logo-1.png"
-                alt="IM-logo-composite-rating"
-                layout="fill"
-                objectFit="cover"
-              />
-            </div>
           </div>
 
           {/* 7D CHANGE */}
@@ -103,7 +98,7 @@ export default function HomeUsersRow({
           {/* HOLDERS */}
           <div className="w-[18.333%] lg:w-[15%] pr-2">
             <div className="flex flex-col justify-start font-medium leading-5">
-              {token?.holders}
+              {formatNumberWithCommasAsThousandsSerperator(token?.holders)}
             </div>
           </div>
 
@@ -164,16 +159,11 @@ export default function HomeUsersRow({
           {/* STAKED */}
           <div className="w-1/3 flex items-center">
             <span className="text-base text-blue-600 font-semibold">
-              {Math.round(token?.deposits)} IMO
+              {formatNumberWithCommasAsThousandsSerperator(
+                Math.round(token?.deposits)
+              )}{' '}
+              IMO
             </span>
-            <div className="relative w-4 h-4 ml-1">
-              <Image
-                src={'/imo-logo.png'}
-                alt="token"
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
           </div>
 
           {/* 7D CHANGE */}

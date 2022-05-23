@@ -10,12 +10,9 @@ export const getNavbarConfig = (user: any) => ({
       subMenu: [
         {
           id: 1,
-          name: 'User Tutorial',
+          name: 'Easy Setup',
           onClick: () => {
-            window.open(
-              'https://docs.ideamarket.io/user-guide/tutorial',
-              '_blank'
-            )
+            window.open('https://docs.ideamarket.io/easy-setup', '_blank')
           },
         },
         {

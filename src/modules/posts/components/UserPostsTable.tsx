@@ -26,7 +26,7 @@ const headers: Header[] = [
     sortable: true,
   },
   {
-    title: 'Composite Rating',
+    title: 'IMO Rating',
     value: SortOptionsAccountPosts.COMPOSITE_RATING.value,
     sortable: true,
   },
@@ -93,7 +93,7 @@ export default function UserPostsTable({
       case SortOptionsAccountPosts.MARKET_INTEREST.value:
         return (
           <div className="flex items-center">
-            <span className="mr-1">
+            <span className="mr-1 uppercase">
               {SortOptionsAccountPosts.MARKET_INTEREST.displayName}
             </span>
             <Tooltip
@@ -110,7 +110,7 @@ export default function UserPostsTable({
         return (
           <div className="flex items-center">
             <span>
-              COMPOSITE
+              IMO
               <br />
               RATING
               <Tooltip
@@ -119,8 +119,8 @@ export default function UserPostsTable({
               >
                 <div className="w-64">
                   Rating weighted by IMO staked on each user. The more IMO
-                  staked on a user, the more that user’s ratings affect the
-                  Composite Rating of every post they rate.
+                  staked on a user, the more that user’s ratings affect the IMO
+                  Rating of every post they rate.
                 </div>
               </Tooltip>
             </span>

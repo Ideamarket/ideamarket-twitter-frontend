@@ -113,7 +113,7 @@ export const OverviewColumns = ({
         return (
           <div className="flex items-center">
             <span>
-              COMPOSITE
+              IMO
               <br />
               RATING
               <Tooltip
@@ -122,8 +122,8 @@ export const OverviewColumns = ({
               >
                 <div className="w-64">
                   Rating weighted by IMO staked on each user. The more IMO
-                  staked on a user, the more that user’s ratings affect the
-                  Composite Rating of every post they rate.
+                  staked on a user, the more that user’s ratings affect the IMO
+                  Rating of every post they rate.
                 </div>
               </Tooltip>
             </span>

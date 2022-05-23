@@ -21,8 +21,8 @@ const defaultColumns = [
   },
   {
     id: 3,
-    name: 'Composite Rating',
-    content: 'Composite Rating',
+    name: 'IMO Rating',
+    content: 'IMO Rating',
     value: SortOptionsHomePostsTable.COMPOSITE_RATING.value,
     sortable: true,
     isOptional: false,

@@ -109,7 +109,9 @@ export default function UserPostsRow({
             {/* Market Interest */}
             <div className="w-[13.75%] lg:w-[11.25%] grow pr-2">
               <div className="flex flex-col justify-start font-medium leading-5">
-                {Math.round(token?.marketInterest)}
+                {formatNumberWithCommasAsThousandsSerperator(
+                  Math.round(token?.marketInterest)
+                )}
               </div>
             </div>
 
@@ -209,7 +211,9 @@ export default function UserPostsRow({
           {/* Market interest */}
           <div className="flex items-center">
             <span className="text-base text-black/[.5] font-medium">
-              {Math.round(token?.marketInterest)}
+              {formatNumberWithCommasAsThousandsSerperator(
+                Math.round(token?.marketInterest)
+              )}
             </span>
           </div>
 

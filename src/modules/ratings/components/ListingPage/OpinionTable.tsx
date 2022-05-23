@@ -13,6 +13,7 @@ import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 import { urlify } from 'utils/display/DisplayUtils'
+import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 
 type DropdownButtonProps = {
   toggleOption: (value: any) => void
@@ -203,7 +204,10 @@ const OpinionTable = ({
                 </div>
 
                 <div className="w-[7%] text-blue-500 font-semibold">
-                  {Math.round(opinion?.userToken?.deposits)} IMO
+                  {formatNumberWithCommasAsThousandsSerperator(
+                    Math.round(opinion?.userToken?.deposits)
+                  )}{' '}
+                  IMO
                 </div>
 
                 <div className="w-[7%] text-blue-500 font-semibold">
@@ -284,7 +288,10 @@ const OpinionTable = ({
                   </div>
 
                   <span className="text-blue-500 font-medium">
-                    {Math.round(opinion?.userToken?.deposits)} IMO
+                    {formatNumberWithCommasAsThousandsSerperator(
+                      Math.round(opinion?.userToken?.deposits)
+                    )}{' '}
+                    IMO
                   </span>
                 </div>
 

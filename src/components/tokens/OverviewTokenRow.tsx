@@ -108,7 +108,9 @@ export default function TokenRow({
             {/* Market Interest */}
             <div className="w-[13.75%] lg:w-[11.25%] grow pr-2">
               <div className="mt-0.5 font-medium">
-                {Math.round(token?.marketInterest)}
+                {formatNumberWithCommasAsThousandsSerperator(
+                  Math.round(token?.marketInterest)
+                )}
               </div>
             </div>
 
@@ -204,7 +206,9 @@ export default function TokenRow({
           {/* Market interest */}
           <div className="flex items-center">
             <span className="text-base text-black/[.5] font-medium">
-              {Math.round(token?.marketInterest)}
+              {formatNumberWithCommasAsThousandsSerperator(
+                Math.round(token?.marketInterest)
+              )}
             </span>
           </div>
 

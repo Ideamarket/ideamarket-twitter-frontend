@@ -26,7 +26,7 @@ const headers: Header[] = [
     sortable: true,
   },
   // {
-  //   title: 'Composite Rating',
+  //   title: 'IMO Rating',
   //   value: 'compositeRating',
   //   sortable: true,
   // },
@@ -93,7 +93,9 @@ export default function RatingsTable({
       case SortOptionsAccountOpinions.MARKET_INTEREST.value:
         return (
           <div className="flex items-center">
-            <span className="mr-1">HOT</span>
+            <span className="mr-1 uppercase">
+              {SortOptionsAccountOpinions.MARKET_INTEREST.displayName}
+            </span>
             <Tooltip
               className="text-black/[.5] z-[200]"
               iconComponentClassNames="w-3"

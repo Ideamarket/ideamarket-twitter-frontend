@@ -23,7 +23,7 @@ export const SortOptionsHomePostsTable = {
   COMPOSITE_RATING: {
     id: 1,
     value: orderByCompositeRating,
-    displayName: 'Composite Rating',
+    displayName: 'IMO Rating',
   },
   // AVG_RATING: {
   //   id: 2,
@@ -33,7 +33,7 @@ export const SortOptionsHomePostsTable = {
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
-    displayName: 'SCRUTINY',
+    displayName: 'Scrutiny',
   },
   COMMENTS: {
     id: 4,
@@ -46,17 +46,17 @@ export const SortOptionsHomeUsersTable = {
   STAKED: {
     id: 1,
     value: orderByDeposits,
-    displayName: 'STAKED',
+    displayName: 'Staked',
   },
   WEEK_CHANGE: {
     id: 2,
     value: orderBy7DChange,
-    displayName: '7D CHANGE',
+    displayName: '7D Change',
   },
   HOLDERS: {
     id: 3,
     value: orderByHolderCount,
-    displayName: 'HOLDERS',
+    displayName: 'Holders',
   },
 }
 
@@ -109,7 +109,7 @@ export const SortOptionsAccountPosts = {
   COMPOSITE_RATING: {
     id: 1,
     value: orderByCompositeRating,
-    displayName: 'Composite Rating',
+    displayName: 'IMO Rating',
   },
   // AVG_RATING: {
   //   id: 2,
@@ -138,7 +138,7 @@ export const SortOptionsAccountOpinions = {
   MARKET_INTEREST: {
     id: 1,
     value: orderByMarketInterest,
-    displayName: 'SCRUTINY',
+    displayName: 'Scrutiny',
   },
   // Individual user rating for 1 IDT
   RATING: {
