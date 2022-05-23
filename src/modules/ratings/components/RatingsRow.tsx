@@ -77,16 +77,31 @@ export default function RatingsRow({
               </div>
 
               <div className="pr-6 w-full">
-                {minterAddress && (
-                  <div className="flex items-center pb-2 whitespace-nowrap">
+                <div className="flex items-center space-x-1 text-black pb-2 whitespace-nowrap">
+                  <A
+                    className="font-bold hover:text-blue-600 z-50"
+                    href={`/u/${usernameOrWallet}`}
+                  >
+                    {displayUsernameOrWallet}
+                  </A>
+                  {opinion?.minterToken?.twitterUsername && (
                     <A
-                      className="font-bold hover:text-blue-600 z-50"
-                      href={`/u/${usernameOrWallet}`}
+                      className="flex items-center space-x-1 hover:text-blue-500 z-50"
+                      href={`https://twitter.com/${opinion?.minterToken?.twitterUsername}`}
                     >
-                      {displayUsernameOrWallet}
+                      <div className="relative w-4 h-4">
+                        <Image
+                          src={'/twitter-solid-blue.svg'}
+                          alt="twitter-solid-blue-icon"
+                          layout="fill"
+                        />
+                      </div>
+                      <span className="text-sm">
+                        @{opinion?.minterToken?.twitterUsername}
+                      </span>
                     </A>
-                  </div>
-                )}
+                  )}
+                </div>
 
                 <ListingContent
                   ideaToken={opinion}
@@ -191,6 +206,24 @@ export default function RatingsRow({
               >
                 {displayUsernameOrWallet}
               </A>
+
+              {opinion?.minterToken?.twitterUsername && (
+                <A
+                  className="flex items-center space-x-1 text-black ml-1 hover:text-blue-500 z-50"
+                  href={`https://twitter.com/${opinion?.minterToken?.twitterUsername}`}
+                >
+                  <div className="relative w-4 h-4">
+                    <Image
+                      src={'/twitter-solid-blue.svg'}
+                      alt="twitter-solid-blue-icon"
+                      layout="fill"
+                    />
+                  </div>
+                  <span className="text-sm">
+                    @{opinion?.minterToken?.twitterUsername}
+                  </span>
+                </A>
+              )}
             </div>
           )}
 

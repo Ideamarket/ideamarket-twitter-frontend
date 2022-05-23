@@ -30,7 +30,7 @@ export const getSignedInWalletAddress = async ({ account, library }) => {
   const message: string = `
       Welcome to Ideamarket!
 
-      Click to login or create account.
+      Click Sign to login.
 
       This request will not trigger a blockchain transaction or cost any gas fees.
 

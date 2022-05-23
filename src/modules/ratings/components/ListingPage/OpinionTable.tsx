@@ -191,13 +191,30 @@ const OpinionTable = ({
                     </div>
 
                     <div className="pr-6 w-full">
-                      <div className="flex items-center pb-2 whitespace-nowrap">
+                      <div className="flex items-center space-x-1 pb-2 whitespace-nowrap">
                         <A
                           className="font-bold hover:text-blue-600 z-50"
                           href={`/u/${usernameOrWallet}`}
                         >
                           {displayUsernameOrWallet}
                         </A>
+                        {opinion?.userToken?.twitterUsername && (
+                          <A
+                            className="flex items-center space-x-1 text-black hover:text-blue-500 z-50"
+                            href={`https://twitter.com/${opinion?.userToken?.twitterUsername}`}
+                          >
+                            <div className="relative w-4 h-4">
+                              <Image
+                                src={'/twitter-solid-blue.svg'}
+                                alt="twitter-solid-blue-icon"
+                                layout="fill"
+                              />
+                            </div>
+                            <span className="text-sm">
+                              @{opinion?.userToken?.twitterUsername}
+                            </span>
+                          </A>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -285,6 +302,23 @@ const OpinionTable = ({
                     >
                       {displayUsernameOrWallet}
                     </A>
+                    {opinion?.userToken?.twitterUsername && (
+                      <A
+                        className="flex items-center space-x-1 text-black ml-1 hover:text-blue-500 z-50"
+                        href={`https://twitter.com/${opinion?.userToken?.twitterUsername}`}
+                      >
+                        <div className="relative w-4 h-4">
+                          <Image
+                            src={'/twitter-solid-blue.svg'}
+                            alt="twitter-solid-blue-icon"
+                            layout="fill"
+                          />
+                        </div>
+                        <span className="text-sm">
+                          @{opinion?.userToken?.twitterUsername}
+                        </span>
+                      </A>
+                    )}
                   </div>
 
                   <span className="text-blue-500 font-medium">

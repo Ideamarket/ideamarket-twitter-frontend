@@ -91,7 +91,26 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               />
             </div>
 
-            <div className="text-xl font-bold">{userData?.username}</div>
+            <div className="flex items-center space-x-1">
+              {userData?.username && (
+                <div className="text-xl font-bold">{userData?.username}</div>
+              )}
+              {userData?.twitterUsername && (
+                <A
+                  className="flex items-center space-x-1 hover:text-blue-500 z-50"
+                  href={`https://twitter.com/${userData?.twitterUsername}`}
+                >
+                  <div className="relative w-4 h-4">
+                    <Image
+                      src={'/twitter-solid-blue.svg'}
+                      alt="twitter-solid-blue-icon"
+                      layout="fill"
+                    />
+                  </div>
+                  <span className="text-sm">@{userData?.twitterUsername}</span>
+                </A>
+              )}
+            </div>
 
             <div className="whitespace-pre-wrap break-words text-sm italic opacity-70 max-w-[15rem] my-2">
               {userData?.bio || ''}
@@ -196,11 +215,27 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               />
             </div>
 
-            <div className="text-xl font-bold text-center">
+            <div className="text-xl mb-4 font-bold text-center">
               {userData?.username}
             </div>
 
-            <div className="whitespace-pre-wrap break-words text-sm text-center italic opacity-70 max-w-[15rem] mx-auto my-2">
+            {userData?.twitterUsername && (
+              <A
+                className="flex justify-center items-center mb-4 space-x-1 hover:text-blue-500 z-50"
+                href={`https://twitter.com/${userData?.twitterUsername}`}
+              >
+                <div className="relative w-4 h-4">
+                  <Image
+                    src={'/twitter-solid-blue.svg'}
+                    alt="twitter-solid-blue-icon"
+                    layout="fill"
+                  />
+                </div>
+                <span className="text-sm">@{userData?.twitterUsername}</span>
+              </A>
+            )}
+
+            <div className="whitespace-pre-wrap break-words mb-4 text-sm text-center italic opacity-70 max-w-[15rem] mx-auto my-2">
               {userData?.bio || ''}
             </div>
 
@@ -216,25 +251,6 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                     10
                   )}...${userData?.walletAddress?.slice(-8)}`}
                 </A>
-              </div>
-            )}
-
-            {isConnectedWalletSameAsPublicWallet && !userData?.email && (
-              <div className="flex flex-col mt-1 w-full">
-                <div className="bg-brand-blue rounded-lg font-bold my-2">
-                  <div
-                    onClick={onClickSettings}
-                    className="rounded-lg p-4 bg-white flex cursor-pointer"
-                  >
-                    <span className="text-brand-blue m-auto font-sf-compact-medium tracking-wider text-sm">
-                      Connect Email
-                    </span>
-                  </div>
-                  <div className="p-2 text-xs flex flex-col">
-                    Set a username, bio, and profile photo to show across
-                    Ideamarket
-                  </div>
-                </div>
               </div>
             )}
           </div>

@@ -577,6 +577,23 @@ export default function StakeUserUI({
             >
               {displayUsernameOrWallet}
             </A>
+            {web2UserToken?.twitterUsername && (
+              <A
+                className="flex items-center space-x-1 ml-1 hover:text-blue-500 z-50"
+                href={`https://twitter.com/${web2UserToken?.twitterUsername}`}
+              >
+                <div className="relative w-4 h-4">
+                  <Image
+                    src={'/twitter-solid-blue.svg'}
+                    alt="twitter-solid-blue-icon"
+                    layout="fill"
+                  />
+                </div>
+                <span className="text-sm">
+                  @{web2UserToken?.twitterUsername}
+                </span>
+              </A>
+            )}
           </div>
 
           <div className="italic">{web2UserToken?.bio}</div>

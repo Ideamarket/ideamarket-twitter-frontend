@@ -78,16 +78,31 @@ export default function TokenRow({
               </div>
 
               <div className="pr-6 w-full">
-                {minterAddress && (
-                  <div className="flex items-center pb-2 whitespace-nowrap">
+                <div className="flex items-center space-x-1 pb-2 whitespace-nowrap">
+                  <A
+                    className="font-semibold text-blue hover:text-blue-600 text-sm z-50"
+                    href={`/u/${usernameOrWallet}`}
+                  >
+                    {displayUsernameOrWallet}
+                  </A>
+                  {token?.minterToken?.twitterUsername && (
                     <A
-                      className="font-semibold text-blue hover:text-blue-600 text-sm z-50"
-                      href={`/u/${usernameOrWallet}`}
+                      className="flex items-center space-x-1 hover:text-blue-500 z-50"
+                      href={`https://twitter.com/${token?.minterToken?.twitterUsername}`}
                     >
-                      {displayUsernameOrWallet}
+                      <div className="relative w-4 h-4">
+                        <Image
+                          src={'/twitter-solid-blue.svg'}
+                          alt="twitter-solid-blue-icon"
+                          layout="fill"
+                        />
+                      </div>
+                      <span className="text-sm">
+                        @{token?.minterToken?.twitterUsername}
+                      </span>
                     </A>
-                  </div>
-                )}
+                  )}
+                </div>
 
                 <ListingContent
                   ideaToken={token}
@@ -178,12 +193,31 @@ export default function TokenRow({
                 />
               </div>
 
-              <A
-                className="ml-2 font-bold text-black hover:text-blue-600"
-                href={`/u/${usernameOrWallet}`}
-              >
-                {displayUsernameOrWallet}
-              </A>
+              <div className="flex items-center space-x-1">
+                <A
+                  className="ml-2 font-bold text-black hover:text-blue-600"
+                  href={`/u/${usernameOrWallet}`}
+                >
+                  {displayUsernameOrWallet}
+                </A>
+                {token?.minterToken?.twitterUsername && (
+                  <A
+                    className="flex items-center space-x-1 hover:text-blue-500 z-50"
+                    href={`https://twitter.com/${token?.minterToken?.twitterUsername}`}
+                  >
+                    <div className="relative w-4 h-4">
+                      <Image
+                        src={'/twitter-solid-blue.svg'}
+                        alt="twitter-solid-blue-icon"
+                        layout="fill"
+                      />
+                    </div>
+                    <span className="text-sm">
+                      @{token?.minterToken?.twitterUsername}
+                    </span>
+                  </A>
+                )}
+              </div>
 
               <ArrowRightIcon
                 onClick={() => router.push(`/post/${token?.tokenID}`)}

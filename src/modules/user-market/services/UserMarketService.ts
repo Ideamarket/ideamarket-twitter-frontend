@@ -45,6 +45,7 @@ export type IdeamarketUser = {
   bio: string
   profilePhoto: string
   role: string
+  twitterUsername: string
 
   tokenAddress: string
   marketId: number
@@ -77,6 +78,7 @@ const formatApiResponseToUser = (apiUser: any): IdeamarketUser => {
     bio: apiUser?.bio,
     profilePhoto: apiUser?.profilePhoto,
     role: apiUser?.role,
+    twitterUsername: apiUser?.twitterUsername,
 
     tokenAddress: apiUser?.tokenAddress,
     marketId: apiUser?.marketId,

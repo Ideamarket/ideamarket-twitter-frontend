@@ -1,5 +1,4 @@
 import Modal from '../modals/Modal'
-import { IoMdInformationCircleOutline } from 'react-icons/io'
 import useAuth from './useAuth'
 import { useWeb3React } from '@web3-react/core'
 import WalletGreenIcon from '../../assets/wallet-green.svg'
@@ -31,7 +30,7 @@ export default function CreateAccountModal({ close }: { close: () => void }) {
       <div className="p-6 bg-white w-96 md:w-[28rem]">
         <div className="flex justify-between items-center">
           <span className="text-2xl text-left text-black text-opacity-90 md:text-3xl font-gilroy-bold font-bold">
-            Create account or login using your wallet
+            Click SIGN in Metamask to edit your profile
           </span>
         </div>
 
@@ -51,17 +50,9 @@ export default function CreateAccountModal({ close }: { close: () => void }) {
           on the wallet dialogue box.
         </p>
 
-        <p className="text-sm font-inter text-gray-400 font-normal my-8">
-          This request will <span className="font-semibold">NOT</span> trigger a
-          blockchain transaction or cost any gas fees.
-        </p>
-
-        <p className="text-sm font-inter text-gray-400 font-normal p-3 border-brand-blue border rounded-2xl bg-brand-blue/10">
-          <span>
-            <IoMdInformationCircleOutline className="w-6 h-6 text-gray-900" />
-          </span>{' '}
-          Your authentication status will reset after{' '}
-          <span className="text-gray-900 font-semibold">30 days.</span>
+        <p className="text-sm font-inter text-gray-400 font-normal mt-8">
+          This will <span className="font-semibold">NOT</span> trigger a
+          blockchain transaction or cost gas fees.
         </p>
       </div>
     </Modal>
