@@ -71,7 +71,11 @@ const Home = ({ urlMarkets }: Props) => {
   }, [])
 
   const onNameSearchChanged = (nameSearch) => {
-    setOrderBy(SortOptionsHomePostsTable.MARKET_INTEREST.value)
+    setOrderBy(
+      selectedTable === TABLE_NAMES.HOME_POSTS
+        ? SortOptionsHomePostsTable.MARKET_INTEREST.value
+        : SortOptionsHomeUsersTable.STAKED.value
+    )
     setNameSearch(nameSearch)
   }
 

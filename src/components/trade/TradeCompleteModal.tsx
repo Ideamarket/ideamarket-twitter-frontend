@@ -32,7 +32,7 @@ const tweetableTypes = [
   TX_TYPES.GIFT,
   TX_TYPES.CLAIM,
   TX_TYPES.STAKE,
-  TX_TYPES.RATE,
+  // TX_TYPES.RATE,
 ]
 
 const getTweetTemplate = (transactionType: TX_TYPES, idtValue: string) => {

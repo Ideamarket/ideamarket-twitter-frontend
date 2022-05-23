@@ -5,7 +5,15 @@ import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { GetServerSideProps } from 'next'
 import ModalService from 'components/modals/ModalService'
 import ListingSEO from 'components/listing-page/ListingSEO'
-import { ReactElement, useContext, useEffect, useState } from 'react'
+import {
+  ReactElement,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  MutableRefObject,
+} from 'react'
 import { formatNumberInt } from 'utils'
 import { ChatIcon, ShareIcon } from '@heroicons/react/outline'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
@@ -65,7 +73,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
   const [orderBy, setOrderBy] = useState(
-    SortOptionsListingPageOpinions.RATING.value
+    SortOptionsListingPageOpinions.STAKED.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
   const [nameSearch, setNameSearch] = useState('')
@@ -148,6 +156,39 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const url = token?.url
 
   const { data: urlMetaData } = useQuery([url], () => getURLMetaData(url))
+
+  // TODO: find better solution than 2 observers for desktop vs mobile
+  const desktopObserver: MutableRefObject<any> = useRef()
+  const mobileObserver: MutableRefObject<any> = useRef()
+  const desktopLastElementRef = useCallback(
+    (node) => {
+      if (desktopObserver.current) desktopObserver.current.disconnect()
+
+      desktopObserver.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && canFetchMoreOpinions) {
+          fetchMoreOpinions()
+        }
+      })
+
+      if (node) desktopObserver.current.observe(node)
+    },
+    [canFetchMoreOpinions, fetchMoreOpinions]
+  )
+
+  const mobileLastElementRef = useCallback(
+    (node) => {
+      if (mobileObserver.current) mobileObserver.current.disconnect()
+
+      mobileObserver.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && canFetchMoreOpinions) {
+          fetchMoreOpinions()
+        }
+      })
+
+      if (node) mobileObserver.current.observe(node)
+    },
+    [canFetchMoreOpinions, fetchMoreOpinions]
+  )
 
   const copyListingPageURL = () => {
     const url = `${getURL()}/post/${token?.tokenID}`
@@ -343,12 +384,14 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         </div>
       </div>
 
-      <div className="max-w-[78rem] md:mt-10 mx-0 md:mx-5 xl:mx-auto pb-20">
+      <div className="max-w-[78rem] md:mt-10 mx-0 md:mx-5 xl:mx-auto pb-96">
         {/* <div className="text-xl text-center text-black font-bold mb-4">
           Ratings
         </div> */}
 
         <OpinionTable
+          desktopLastElementRef={desktopLastElementRef}
+          mobileLastElementRef={mobileLastElementRef}
           opinionPairs={opinionPairs}
           orderBy={orderBy}
           orderDirection={orderDirection}

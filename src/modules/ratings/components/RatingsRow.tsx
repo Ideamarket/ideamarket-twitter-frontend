@@ -12,6 +12,7 @@ import {
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
 import { urlify } from 'utils/display/DisplayUtils'
+import Link from 'next/link'
 
 type Props = {
   opinion: any
@@ -42,15 +43,16 @@ export default function RatingsRow({
       {/* Desktop row */}
       <div className="hidden relative md:block py-6 hover:bg-black/[.02]">
         {/* Makes so entire row can be clicked to go to Post page */}
-        <a
-          href={`/post/${opinion?.tokenID}`}
-          className="absolute top-0 left-0 w-full h-full z-40"
-          title="open in new tab"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className="invisible">Go to post page</span>
-        </a>
+        <Link href={`/post/${opinion?.tokenID}`}>
+          <a
+            className="absolute top-0 left-0 w-full h-full z-40"
+            // title="open in new tab"
+            // target="_blank"
+            // rel="noopener noreferrer"
+          >
+            <span className="invisible">Go to post page</span>
+          </a>
+        </Link>
 
         <div className="flex text-black">
           {/* Icon and Name */}
@@ -153,6 +155,7 @@ export default function RatingsRow({
                         __html: urlify(opinion?.comment),
                       }}
                       className="text-black text-sm whitespace-pre-wrap break-words"
+                      style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                     />
                   </div>
                 </div>
@@ -230,6 +233,7 @@ export default function RatingsRow({
               __html: urlify(opinion?.comment),
             }}
             className="w-[85%] font-medium text-black whitespace-pre-wrap break-words"
+            style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
           />
         </div>
 

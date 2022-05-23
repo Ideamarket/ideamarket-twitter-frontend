@@ -10,6 +10,7 @@ import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 type Props = {
   token: any
@@ -44,15 +45,16 @@ export default function TokenRow({
       {/* Desktop row */}
       <div className="hidden relative md:block py-6 hover:bg-black/[.02]">
         {/* Makes so entire row can be clicked to go to Post page */}
-        <a
-          href={`/post/${token?.tokenID}`}
-          className="absolute top-0 left-0 w-full h-full z-40"
-          title="open in new tab"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className="invisible">Go to post page</span>
-        </a>
+        <Link href={`/post/${token?.tokenID}`}>
+          <a
+            className="absolute top-0 left-0 w-full h-full z-40"
+            // title="open in new tab"
+            // target="_blank"
+            // rel="noopener noreferrer"
+          >
+            <span className="invisible">Go to post page</span>
+          </a>
+        </Link>
 
         <div className="flex text-black">
           {/* Icon and Name and ListingContent */}

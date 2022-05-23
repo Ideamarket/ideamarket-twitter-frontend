@@ -69,6 +69,8 @@ const DropdownButton = ({ toggleOption, orderBy }: DropdownButtonProps) => {
 }
 
 type Props = {
+  desktopLastElementRef: any
+  mobileLastElementRef: any
   opinionPairs: any[]
   orderBy: string
   orderDirection: string
@@ -78,6 +80,8 @@ type Props = {
 }
 
 const OpinionTable = ({
+  desktopLastElementRef,
+  mobileLastElementRef,
   opinionPairs,
   orderBy,
   orderDirection,
@@ -161,6 +165,7 @@ const OpinionTable = ({
 
             return (
               <div
+                ref={desktopLastElementRef}
                 className="bg-white h-min min-h-[5rem] py-4 flex items-start w-full text-black"
                 key={oIndex}
               >
@@ -211,7 +216,8 @@ const OpinionTable = ({
                       dangerouslySetInnerHTML={{
                         __html: urlify(opinion?.comment),
                       }}
-                      className="w-full px-3 py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words "
+                      className="w-full px-3 py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                      style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                     />
                   )}
                 </div>
@@ -251,6 +257,7 @@ const OpinionTable = ({
 
             return (
               <div
+                ref={mobileLastElementRef}
                 className="bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
                 key={oIndex}
               >
@@ -290,7 +297,8 @@ const OpinionTable = ({
                     dangerouslySetInnerHTML={{
                       __html: urlify(opinion?.comment),
                     }}
-                    className="w-[85%] font-medium whitespace-pre-wrap break-words "
+                    className="w-[85%] font-medium whitespace-pre-wrap break-words"
+                    style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                   />
                 </div>
               </div>
