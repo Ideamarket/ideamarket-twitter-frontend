@@ -14,6 +14,7 @@ import Image from 'next/image'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 import { urlify } from 'utils/display/DisplayUtils'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
+import classNames from 'classnames'
 
 type DropdownButtonProps = {
   toggleOption: (value: any) => void
@@ -80,9 +81,9 @@ type Props = {
   headerClicked: (value: string) => void
 }
 
-const userAndCommentColWidth = '65%'
-const stakedColWidth = '17.5%'
-const ratingColWidth = '17.5%'
+const userAndCommentColWidth = 'w-[65%]'
+const stakedColWidth = 'w-[17.5%]'
+const ratingColWidth = 'w-[17.5%]'
 
 const OpinionTable = ({
   desktopLastElementRef,
@@ -101,17 +102,21 @@ const OpinionTable = ({
         {/* Table header */}
         <div className="rounded-xl bg-[#FAFAFA] flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
           {/* User and comment column */}
-          <div className={`w-[${userAndCommentColWidth}] px-6`}>
+          <div className={classNames(userAndCommentColWidth, `px-6`)}>
             <OverviewSearchbar
               onNameSearchChanged={(value) => setNameSearch(value)}
             />
           </div>
 
+          {/* STAKED column */}
           <div
             onClick={() =>
               headerClicked(SortOptionsListingPageOpinions.STAKED.value)
             }
-            className={`w-[${stakedColWidth}] pl-14 flex items-center cursor-pointer`}
+            className={classNames(
+              stakedColWidth,
+              `pl-14 flex items-center cursor-pointer`
+            )}
           >
             <span className="mr-1 uppercase">
               {SortOptionsListingPageOpinions.STAKED.displayName}
@@ -130,11 +135,15 @@ const OpinionTable = ({
             )}
           </div>
 
+          {/* RATING column */}
           <div
             onClick={() =>
               headerClicked(SortOptionsListingPageOpinions.RATING.value)
             }
-            className={`w-[${ratingColWidth}] pl-10 flex items-center cursor-pointer`}
+            className={classNames(
+              ratingColWidth,
+              `pl-10 flex items-center cursor-pointer`
+            )}
           >
             <span className="mr-1 uppercase">
               {SortOptionsListingPageOpinions.RATING.displayName}
@@ -170,7 +179,10 @@ const OpinionTable = ({
               >
                 {/* User and comment column */}
                 <div
-                  className={`w-[${userAndCommentColWidth}] flex items-center pl-6`}
+                  className={classNames(
+                    userAndCommentColWidth,
+                    `flex items-center pl-6`
+                  )}
                 >
                   <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
                     <div className="mr-4 flex flex-col items-center space-y-2">
@@ -230,8 +242,12 @@ const OpinionTable = ({
                   </div>
                 </div>
 
+                {/* STAKED column */}
                 <div
-                  className={`w-[${stakedColWidth}] text-blue-500 font-semibold pl-14 pr-4`}
+                  className={classNames(
+                    stakedColWidth,
+                    `text-blue-500 font-semibold pl-14 pr-4`
+                  )}
                 >
                   {formatNumberWithCommasAsThousandsSerperator(
                     Math.round(opinion?.userToken?.deposits)
@@ -239,8 +255,12 @@ const OpinionTable = ({
                   IMO
                 </div>
 
+                {/* RATING column */}
                 <div
-                  className={`w-[${ratingColWidth}] pl-10 text-blue-500 font-semibold`}
+                  className={classNames(
+                    ratingColWidth,
+                    `pl-10 text-blue-500 font-semibold`
+                  )}
                 >
                   {opinion?.rating}
                 </div>
