@@ -80,6 +80,10 @@ type Props = {
   headerClicked: (value: string) => void
 }
 
+const userAndCommentColWidth = '65%'
+const stakedColWidth = '17.5%'
+const ratingColWidth = '17.5%'
+
 const OpinionTable = ({
   desktopLastElementRef,
   mobileLastElementRef,
@@ -96,15 +100,18 @@ const OpinionTable = ({
       <div className="hidden md:block rounded-xl w-full shadow-lg">
         {/* Table header */}
         <div className="rounded-xl bg-[#FAFAFA] flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
-          <div className="w-[35%] lg:w-[25%]  pl-6">
-            <span>USER</span>
+          {/* User and comment column */}
+          <div className={`w-[${userAndCommentColWidth}] px-6`}>
+            <OverviewSearchbar
+              onNameSearchChanged={(value) => setNameSearch(value)}
+            />
           </div>
 
           <div
             onClick={() =>
               headerClicked(SortOptionsListingPageOpinions.STAKED.value)
             }
-            className="w-[15%] lg:w-[15%] flex items-center cursor-pointer"
+            className={`w-[${stakedColWidth}] pl-14 flex items-center cursor-pointer`}
           >
             <span className="mr-1 uppercase">
               {SortOptionsListingPageOpinions.STAKED.displayName}
@@ -127,7 +134,7 @@ const OpinionTable = ({
             onClick={() =>
               headerClicked(SortOptionsListingPageOpinions.RATING.value)
             }
-            className="w-[5%] lg:w-[5%] flex items-center cursor-pointer"
+            className={`w-[${ratingColWidth}] pl-10 flex items-center cursor-pointer`}
           >
             <span className="mr-1 uppercase">
               {SortOptionsListingPageOpinions.RATING.displayName}
@@ -145,15 +152,6 @@ const OpinionTable = ({
               </div>
             )}
           </div>
-
-          <div className="w-[45%] lg:w-[55%] flex items-center pr-6">
-            <span>COMMENT</span>
-            <div className="flex w-2/6 h-full ml-auto">
-              <OverviewSearchbar
-                onNameSearchChanged={(value) => setNameSearch(value)}
-              />
-            </div>
-          </div>
         </div>
 
         <div className="divide-y-4">
@@ -170,8 +168,10 @@ const OpinionTable = ({
                 className="bg-white h-min min-h-[5rem] py-4 flex items-start w-full text-black"
                 key={oIndex}
               >
-                {/* Icon and Name */}
-                <div className="w-[35%] lg:w-[25%] flex items-center pl-6">
+                {/* User and comment column */}
+                <div
+                  className={`w-[${userAndCommentColWidth}] flex items-center pl-6`}
+                >
                   <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
                     <div className="mr-4 flex flex-col items-center space-y-2">
                       <div className="relative rounded-full w-6 h-6">
@@ -216,31 +216,33 @@ const OpinionTable = ({
                           </A>
                         )}
                       </div>
+
+                      {opinion?.comment && (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: urlify(opinion?.comment),
+                          }}
+                          className="w-full px-3 py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                          style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
 
-                <div className="w-[15%] lg:w-[15%] text-blue-500 font-semibold pr-4">
+                <div
+                  className={`w-[${stakedColWidth}] text-blue-500 font-semibold pl-14 pr-4`}
+                >
                   {formatNumberWithCommasAsThousandsSerperator(
                     Math.round(opinion?.userToken?.deposits)
                   )}{' '}
                   IMO
                 </div>
 
-                <div className="w-[5%] lg:w-[5%] text-blue-500 font-semibold">
+                <div
+                  className={`w-[${ratingColWidth}] pl-10 text-blue-500 font-semibold`}
+                >
                   {opinion?.rating}
-                </div>
-
-                <div className="w-[45%] lg:w-[55%] flex items-center pr-6">
-                  {opinion?.comment && (
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: urlify(opinion?.comment),
-                      }}
-                      className="w-full px-3 py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
-                      style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
-                    />
-                  )}
                 </div>
               </div>
             )
