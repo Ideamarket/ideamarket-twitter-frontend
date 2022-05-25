@@ -25,3 +25,17 @@ export const urlify = (text: string) => {
     )
   })
 }
+
+/**
+ * We color-code the composite/IMO ratings. This method gets background color based on imoRating.
+ * 0-34 (Red)
+ * 35-64 (Orange)
+ * 65-85 (Green)
+ * 86-100 (Blue)
+ */
+export const getIMORatingColors = (imoRating: number) => {
+  if (imoRating >= 86) return 'bg-blue-100 text-blue-600'
+  if (imoRating >= 65 && imoRating <= 85) return 'bg-green-100 text-green-600'
+  if (imoRating >= 35 && imoRating <= 64) return 'bg-orange-100 text-orange-600'
+  if (imoRating <= 34) return 'bg-red-100 text-red-600'
+}

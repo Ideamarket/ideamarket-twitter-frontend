@@ -11,6 +11,8 @@ import Image from 'next/image'
 import { ArrowRightIcon } from '@heroicons/react/solid'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import classNames from 'classnames'
+import { getIMORatingColors } from 'utils/display/DisplayUtils'
 
 type Props = {
   token: any
@@ -131,7 +133,12 @@ export default function TokenRow({
 
             {/* Composite Rating */}
             <div className="w-[13.75%] lg:w-[11.25%] grow">
-              <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
+              <span
+                className={classNames(
+                  getIMORatingColors(token?.compositeRating),
+                  'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                )}
+              >
                 {Math.round(token?.compositeRating)}
               </span>
             </div>
@@ -249,7 +256,12 @@ export default function TokenRow({
           {/* Composite rating */}
           <div className="flex flex-col justify-start font-medium leading-5">
             <span className="mb-1">
-              <span className="w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 dark:text-gray-300 font-extrabold text-xl">
+              <span
+                className={classNames(
+                  getIMORatingColors(token?.compositeRating),
+                  'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                )}
+              >
                 {Math.round(token?.compositeRating)}
               </span>
             </span>
