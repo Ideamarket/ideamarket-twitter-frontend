@@ -288,7 +288,7 @@ export default function ProfileWallet({ userData }: Props) {
               table === TABLE_NAMES.ACCOUNT_OPINIONS
                 ? 'text-white'
                 : 'text-brand-gray text-opacity-60 cursor-pointer',
-              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6 mr-auto'
+              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
             )}
             onClick={() => {
               setTable(TABLE_NAMES.ACCOUNT_OPINIONS)
@@ -304,7 +304,7 @@ export default function ProfileWallet({ userData }: Props) {
               table === TABLE_NAMES.ACCOUNT_POSTS
                 ? 'text-white'
                 : 'text-brand-gray text-opacity-60 cursor-pointer',
-              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6 mr-auto'
+              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
             )}
             onClick={() => {
               setTable(TABLE_NAMES.ACCOUNT_POSTS)
@@ -323,7 +323,7 @@ export default function ProfileWallet({ userData }: Props) {
                   table === TABLE_NAMES.ACCOUNT_HOLDINGS
                     ? 'text-white'
                     : 'text-brand-gray text-opacity-60 cursor-pointer',
-                  'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6 mr-auto'
+                  'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
                 )}
                 onClick={() => {
                   setTable(TABLE_NAMES.ACCOUNT_HOLDINGS)
@@ -343,7 +343,7 @@ export default function ProfileWallet({ userData }: Props) {
                   table === TABLE_NAMES.ACCOUNT_TRADES
                     ? 'text-white'
                     : 'text-brand-gray text-opacity-60 cursor-pointer',
-                  'text-lg font-semibold flex flex-col justify-end mb-2.5 mr-auto'
+                  'text-lg font-semibold flex flex-col justify-end mb-2.5'
                 )}
                 onClick={() => {
                   setTable(TABLE_NAMES.ACCOUNT_TRADES)

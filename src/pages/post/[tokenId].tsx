@@ -226,7 +226,12 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
       {/* Start of top section of listing page */}
       <div className="max-w-[50rem] mt-10 px-5 md:mx-auto">
-        <div className="text-black/[.5]">Market / Listings</div>
+        <div className="text-black/[.5]">
+          <A href="/" className="hover:text-blue-600">
+            Market
+          </A>{' '}
+          / Listings
+        </div>
 
         {/* Desktop and tablet -- top section of listing page */}
         <div className="hidden md:flex items-start w-full mt-4">

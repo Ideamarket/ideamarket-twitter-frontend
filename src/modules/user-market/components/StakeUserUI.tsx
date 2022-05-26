@@ -596,7 +596,9 @@ export default function StakeUserUI({
             )}
           </div>
 
-          <div className="italic">{web2UserToken?.bio}</div>
+          <div className="whitespace-pre-wrap break-words text-sm italic opacity-70">
+            {web2UserToken?.bio}
+          </div>
         </div>
 
         <div className="flex space-x-2 p-4 pb-3 overflow-x-scroll md:overflow-auto">

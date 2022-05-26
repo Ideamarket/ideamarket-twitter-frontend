@@ -135,7 +135,7 @@ export default function TokenRow({
             <div className="w-[13.75%] lg:w-[11.25%] grow">
               <span
                 className={classNames(
-                  getIMORatingColors(token?.compositeRating),
+                  getIMORatingColors(Math.round(token?.compositeRating)),
                   'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
@@ -258,7 +258,7 @@ export default function TokenRow({
             <span className="mb-1">
               <span
                 className={classNames(
-                  getIMORatingColors(token?.compositeRating),
+                  getIMORatingColors(Math.round(token?.compositeRating)),
                   'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >

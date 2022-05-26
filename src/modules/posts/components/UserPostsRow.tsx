@@ -140,7 +140,7 @@ export default function UserPostsRow({
                 <span>
                   <span
                     className={classNames(
-                      getIMORatingColors(token?.compositeRating),
+                      getIMORatingColors(Math.round(token?.compositeRating)),
                       'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                     )}
                   >
@@ -265,7 +265,7 @@ export default function UserPostsRow({
             <span className="mb-1">
               <span
                 className={classNames(
-                  getIMORatingColors(token?.compositeRating),
+                  getIMORatingColors(Math.round(token?.compositeRating)),
                   'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
