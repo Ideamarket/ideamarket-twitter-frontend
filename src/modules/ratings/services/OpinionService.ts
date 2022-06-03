@@ -138,6 +138,7 @@ export type IdeamarketOpinion = {
   isURL: boolean
   url: string
   blockHeight: number
+  citations: any[]
 
   userToken: IdeamarketUser // User data for ratedBy (when getting opinions for Post page)
   minterToken: IdeamarketUser // User data for the minter (when getting opinions for user page)
@@ -170,6 +171,7 @@ const formatApiResponseToOpinion = (apiPost: any): IdeamarketOpinion => {
     isURL: apiPost?.isURL,
     url: apiPost?.isURL ? apiPost?.content : '', // If there is a URL that was listed, it will be in content variable
     blockHeight: apiPost?.blockHeight,
+    citations: apiPost?.citations,
 
     userToken: apiPost?.userToken,
     minterToken: apiPost?.minterToken,

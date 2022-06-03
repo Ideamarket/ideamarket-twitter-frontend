@@ -7,11 +7,13 @@ export default function Modal({
   className = '',
   children,
   close,
+  SidePanel,
   isCloseActive = true, // This says: "is close button there by default?"
 }: {
   className?: string
   children?: ReactNode
   close: () => void
+  SidePanel?: any
   isCloseActive?: boolean
 }) {
   return (
@@ -31,26 +33,60 @@ export default function Modal({
         aria-modal="true"
         aria-labelledby="modal-headline"
       >
-        {isCloseActive && (
-          <div className="flex pb-2 pr-2 md:pr-0">
-            <button
-              type="button"
-              className="p-2 ml-auto text-white transition duration-150 ease-in-out rounded-xl w-9 h-9 bg-very-dark-blue hover:text-gray-500 focus:outline-none focus:text-gray-500"
-              aria-label="Close"
-              onClick={close}
+
+
+        <div className="flex w-full">
+
+          <div className="w-full">
+
+            {isCloseActive && (
+              <div className="flex pb-2 pr-2 md:pr-0">
+                <button
+                  type="button"
+                  className="p-2 ml-auto text-white transition duration-150 ease-in-out rounded-xl w-9 h-9 bg-very-dark-blue hover:text-gray-500 focus:outline-none focus:text-gray-500"
+                  aria-label="Close"
+                  onClick={close}
+                >
+                  <Close className="w-full h-full" />
+                </button>
+              </div>
+            )}
+
+            <div
+              className={classNames(
+                className,
+                'bg-white dark:bg-gray-700 rounded-lg overflow-hidden'
+              )}
             >
-              <Close className="w-full h-full" />
-            </button>
+              {children}
+            </div>
+
           </div>
-        )}
-        <div
-          className={classNames(
-            className,
-            'bg-white dark:bg-gray-700 rounded-lg overflow-hidden'
+
+          {SidePanel && (
+            <div>
+
+              {/* Just using this to fill space needed to be filled */}
+              {isCloseActive && (
+                <div className="invisible flex pb-2 pr-2 md:pr-0">
+                  <button
+                    type="button"
+                    className="p-2 ml-auto text-white transition duration-150 ease-in-out rounded-xl w-9 h-9 bg-very-dark-blue hover:text-gray-500 focus:outline-none focus:text-gray-500"
+                    aria-label="Close"
+                    onClick={close}
+                  >
+                    <Close className="w-full h-full" />
+                  </button>
+                </div>
+              )}
+
+              {SidePanel}
+
+            </div>
           )}
-        >
-          {children}
+
         </div>
+
       </Transition>
     </div>
   )

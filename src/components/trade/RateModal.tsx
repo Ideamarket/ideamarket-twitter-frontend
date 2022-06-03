@@ -22,6 +22,10 @@ import {
 } from 'components/tokens/utils/ListingUtils'
 import { getAccount } from 'actions/web2/user-market/apiUserActions'
 import IMTextArea from 'modules/forms/components/IMTextArea'
+import CiteSidePanel, { CITE_TYPE } from 'modules/posts/components/CiteSidePanel'
+import { PencilIcon, SearchIcon, XCircleIcon } from '@heroicons/react/outline'
+import AddCitationModal from 'modules/posts/components/AddCitationModal'
+import { IdeamarketPost } from 'modules/posts/services/PostService'
 
 const CustomSlider = Slider.createSliderWithTooltip(Slider)
 
@@ -29,6 +33,8 @@ const sliderMarks = {
   0: '0',
   100: '100',
 }
+
+
 
 export default function RateModal({
   close,
@@ -43,7 +49,26 @@ export default function RateModal({
   const { setIsTxPending } = useContext(GlobalContext)
 
   const [inputRating, setInputRating] = useState(50)
-  const [inputComment, setInputComment] = useState('')
+  const [inputTextPost, setInputTextPost] = useState('')
+
+  const [citations, setCitations] = useState([])
+  const [inFavorArray, setInFavorArray] = useState([])
+  const [selectedPosts, setSelectedPosts] = useState([])
+
+  const onCitationRemoved = (post: IdeamarketPost) => {
+    const indexOfAlreadyCited = citations.indexOf(post.tokenID)
+    const citationsWithOldCitationRemoved = citations.filter(c => c !== post.tokenID)
+    const inFavorArrayWithOldRemoved = inFavorArray.filter((ele, ind) => ind !== indexOfAlreadyCited)
+    const selectedPostsWithOldRemoved = selectedPosts.filter((ele, ind) => ind !== indexOfAlreadyCited)
+
+    const newCitations = [...citationsWithOldCitationRemoved]
+    const newInFavorArray = [...inFavorArrayWithOldRemoved ]
+    const newSelectedPosts = [...selectedPostsWithOldRemoved]
+
+    setCitations(newCitations)
+    setInFavorArray(newInFavorArray)
+    setSelectedPosts(newSelectedPosts)
+  }
 
   function onTradeComplete(
     isSuccess: boolean,
@@ -64,13 +89,17 @@ export default function RateModal({
     setIsTxPending(true)
     const isNFT = !ideaToken.address // If there is not a token address, then it is NFT
 
+    console.log('citations==', citations)
+    console.log('inFavorArray==', inFavorArray)
+
     try {
       const web3TxMethod = isNFT ? ratePost : rateIDT
-      // tokenId , rating, comment
+      // tokenId , rating, citations, inFavorArray
       const ratingArgs = [
         isNFT ? ideaToken?.tokenID : ideaToken.address,
         inputRating,
-        inputComment,
+        citations,
+        inFavorArray,
       ]
       await txManager.executeTxWithCallbacks(
         'Rate',
@@ -98,7 +127,8 @@ export default function RateModal({
     onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, TX_TYPES.RATE)
   }
 
-  const isRatingDisabled = inputRating === 50 || inputComment?.length > 10000
+  // TODO: this will be much more complex now, figure it out
+  const isRatingDisabled = inputRating === 50 || inputTextPost?.length > 10000
 
   const { minterAddress } = (ideaToken || {}) as any
 
@@ -116,8 +146,14 @@ export default function RateModal({
   )
   const usernameOrWallet = userDataForMinter?.username || minterAddress
 
+  const citationsInFavor = selectedPosts?.filter((p, pInd) => inFavorArray[pInd])
+  const citationsNotInFavor = selectedPosts?.filter((p, pInd) => !inFavorArray[pInd])
+
   return (
-    <Modal close={close}>
+    <Modal
+      close={close}
+    >
+
       <div className="w-full md:w-136 mx-auto bg-white dark:bg-gray-700 rounded-xl">
         <div className="px-6 py-4 bg-black/[.05] text-base font-medium leading-5 truncate">
           {/* Display minter image, username/wallet */}
@@ -174,8 +210,8 @@ export default function RateModal({
         </div>
 
         <div className="px-6 py-4">
-          <div className="flex justify-between items-center mx-2 mb-1">
-            <span className="font-bold">Rating</span>
+          <div className="flex justify-between items-center mb-1">
+            <span className="font-bold text-lg">Rating</span>
             {/* <div>
               <span className="text-blue-600 font-bold mr-1">
                 {formatNumber(avgRating)}
@@ -204,28 +240,120 @@ export default function RateModal({
             />
           </div>
 
-          <div className="flex justify-between items-center mx-2 mb-1 mt-4">
-            <span className="font-bold">
-              Reasoning <span className="text-black/[.3]">(Optional)</span>
-            </span>
-            <span className="text-black/[.3] font-bold">
-              {inputComment?.length}/10,000
-            </span>
+          {/* Selected posts / citations */}
+          <div className="flex justify-between items-center font-bold text-lg mt-4">
+            <span>Citations</span>
+            <span className=" text-sm">Selected <span className="font-semibold">{citations?.length}</span> <span className="text-black/[.3]">(Maximum 10)</span></span>
           </div>
 
-          <IMTextArea
-            onChange={(newTextInput: string) => {
-              setInputComment(newTextInput)
-            }}
-            defaultRows={3}
-          />
+          <div className="mt-4 text-[#0cae74] text-sm font-bold">FOR ({inFavorArray.filter(ele => ele).length})</div>
+
+          {citationsInFavor && citationsInFavor?.length > 0 && citationsInFavor.map((post, postInd) => {
+            return (
+              <div className="flex justify-between items-center w-full mt-4" key={postInd}>
+
+                <div className="w-[85%] bg-[#0cae74]/[.25] rounded-lg p-4">
+
+                  <div className="flex items-center pb-2 whitespace-nowrap">
+                    <div className="relative rounded-full w-6 h-6">
+                      <Image
+                        className="rounded-full"
+                        src={
+                          post?.minterToken?.profilePhoto ||
+                          '/DefaultProfilePicture.png'
+                        }
+                        alt=""
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
+                    <A
+                      className="ml-2 font-bold hover:text-blue-600"
+                      href={`/u/${usernameOrWallet}`}
+                    >
+                      {displayUsernameOrWallet}
+                    </A>
+                  </div>
+
+                  <div>{post.content}</div>
+
+                </div>
+
+                <div className="flex justify-end">
+                  <XCircleIcon
+                    onClick={() => onCitationRemoved(post)}
+                    className="w-8 cursor-pointer text-black/[.3] hover:text-red-600"
+                  />
+                </div>
+
+              </div>
+            )
+          })}
+
+          <div className="mt-4 text-[#e63b3b] text-sm font-bold">AGAINST ({inFavorArray.filter(ele => !ele).length})</div>
+
+          {citationsNotInFavor && citationsNotInFavor?.length > 0 && citationsNotInFavor.map((post, postInd) => {
+            return (
+              <div className="flex justify-between items-center w-full mt-4" key={postInd}>
+
+                <div className="w-[85%] bg-[#ec4a4a]/[.25] rounded-lg p-4">
+
+                  <div className="flex items-center pb-2 whitespace-nowrap">
+                    <div className="relative rounded-full w-6 h-6">
+                      <Image
+                        className="rounded-full"
+                        src={
+                          post?.minterToken?.profilePhoto ||
+                          '/DefaultProfilePicture.png'
+                        }
+                        alt=""
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
+                    <A
+                      className="ml-2 font-bold hover:text-blue-600"
+                      href={`/u/${usernameOrWallet}`}
+                    >
+                      {displayUsernameOrWallet}
+                    </A>
+                  </div>
+
+                  <div>{post.content}</div>
+
+                </div>
+
+                <div className="flex justify-end">
+                  <XCircleIcon
+                    onClick={() => onCitationRemoved(post)}
+                    className="w-8 cursor-pointer text-black/[.3] hover:text-red-600"
+                  />
+                </div>
+
+              </div>
+            )
+          })}
+
+          <button
+            onClick={() => ModalService.open(AddCitationModal, {
+              citations,
+              inFavorArray,
+              selectedPosts,
+              setCitations,
+              setInFavorArray,
+              setSelectedPosts,
+            })}
+            className="py-4 mt-4 text-lg font-bold rounded-2xl w-full bg-blue-600 hover:bg-blue-800 text-white"
+          >
+            Add Citation
+          </button>
 
           <button
             className={classNames(
-              'py-4 mt-4 mb-2 text-lg font-bold rounded-2xl w-full font-sf-compact-medium',
+              'py-4 mt-4 mb-2 text-lg font-bold rounded-2xl w-full',
               isRatingDisabled
                 ? 'text-brand-gray-2 dark:text-gray-300 bg-brand-gray dark:bg-gray-500 cursor-default border-brand-gray'
-                : 'border-brand-blue text-white bg-brand-blue font-medium  hover:bg-blue-800'
+                : 'border-brand-blue text-white bg-black font-medium hover:bg-black/[.8]'
             )}
             disabled={isRatingDisabled}
             onClick={onRateClicked}
@@ -240,6 +368,7 @@ export default function RateModal({
           <TxPending txManager={txManager} />
         </div>
       </div>
+
     </Modal>
   )
 }
