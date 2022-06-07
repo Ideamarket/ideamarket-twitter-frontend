@@ -62,7 +62,7 @@ export default function HomeUsersRow({
               </div>
 
               <div className="pr-6 w-full">
-                <div className="flex items-center space-x-1 pb-2 whitespace-nowrap">
+                <div className="flex items-center space-x-1 pb-2 flex-wrap">
                   <A
                     className="font-semibold hover:text-blue-600 text-base z-50"
                     href={`/u/${usernameOrWallet}`}
@@ -71,8 +71,8 @@ export default function HomeUsersRow({
                   </A>
                   {token?.twitterUsername && (
                     <A
-                      className="flex items-center space-x-1 hover:text-blue-500 z-50"
-                      href={`https://twitter.com/${token?.twitterUsername}`}
+                      className="flex items-center space-x-1 z-50"
+                      href={`/u/${usernameOrWallet}`}
                     >
                       <div className="relative w-4 h-4">
                         <Image
@@ -81,7 +81,9 @@ export default function HomeUsersRow({
                           layout="fill"
                         />
                       </div>
-                      <span className="text-sm">@{token?.twitterUsername}</span>
+                      <span className="text-sm opacity-50">
+                        @{token?.twitterUsername}
+                      </span>
                     </A>
                   )}
                 </div>
@@ -152,7 +154,7 @@ export default function HomeUsersRow({
               />
             </div>
 
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-1 flex-wrap">
               <A
                 className="ml-2 font-bold text-black hover:text-blue-600"
                 href={`/u/${usernameOrWallet}`}
@@ -161,8 +163,8 @@ export default function HomeUsersRow({
               </A>
               {token?.twitterUsername && (
                 <A
-                  className="flex items-center space-x-1 hover:text-blue-500 z-50"
-                  href={`https://twitter.com/${token?.twitterUsername}`}
+                  className="flex items-center space-x-1 z-50"
+                  href={`/u/${usernameOrWallet}`}
                 >
                   <div className="relative w-4 h-4">
                     <Image
@@ -171,7 +173,9 @@ export default function HomeUsersRow({
                       layout="fill"
                     />
                   </div>
-                  <span className="text-sm">@{token?.twitterUsername}</span>
+                  <span className="text-sm opacity-50">
+                    @{token?.twitterUsername}
+                  </span>
                 </A>
               )}
             </div>

@@ -12,7 +12,7 @@ import {
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
-import { urlify } from 'utils/display/DisplayUtils'
+import { getIMORatingColors, urlify } from 'utils/display/DisplayUtils'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import classNames from 'classnames'
 
@@ -81,9 +81,10 @@ type Props = {
   headerClicked: (value: string) => void
 }
 
-const userAndCommentColWidth = 'w-[65%]'
-const stakedColWidth = 'w-[17.5%]'
-const ratingColWidth = 'w-[17.5%]'
+const userAndCommentColWidth = 'w-[30%]'
+const stakedColWidth = 'w-[10%]'
+const ratingColWidth = 'w-[10%]'
+const citationColWidth = 'w-[50%]'
 
 const OpinionTable = ({
   desktopLastElementRef,
@@ -98,16 +99,9 @@ const OpinionTable = ({
   return (
     <>
       {/* Desktop and tablet table */}
-      <div className="hidden md:block rounded-xl w-full shadow-lg">
+      <div className="hidden md:block rounded-xl w-full">
         {/* Table header */}
-        <div className="rounded-xl bg-[#FAFAFA] flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
-          {/* User and comment column */}
-          <div className={classNames(userAndCommentColWidth, `px-6`)}>
-            <OverviewSearchbar
-              onNameSearchChanged={(value) => setNameSearch(value)}
-            />
-          </div>
-
+        <div className="rounded-xl flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
           {/* STAKED column */}
           <div
             onClick={() =>
@@ -115,7 +109,7 @@ const OpinionTable = ({
             }
             className={classNames(
               stakedColWidth,
-              `pl-14 flex items-center cursor-pointer`
+              `pl-6 flex items-center cursor-pointer`
             )}
           >
             <span className="mr-1 uppercase">
@@ -133,6 +127,11 @@ const OpinionTable = ({
                 )}
               </div>
             )}
+          </div>
+
+          {/* User and comment column */}
+          <div className={classNames(userAndCommentColWidth, `pl-14 pr-6`)}>
+            USER
           </div>
 
           {/* RATING column */}
@@ -161,9 +160,25 @@ const OpinionTable = ({
               </div>
             )}
           </div>
+
+          {/* Citation column */}
+          <div
+            className={classNames(
+              citationColWidth,
+              `pl-6 flex justify-between items-center`
+            )}
+          >
+            <span className="mr-1 uppercase">CITATION</span>
+
+            <div className="w-52">
+              <OverviewSearchbar
+                onNameSearchChanged={(value) => setNameSearch(value)}
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="divide-y-4">
+        <div className="">
           {opinionPairs?.map((opinion, oIndex) => {
             const displayUsernameOrWallet = convertAccountName(
               opinion?.userToken?.username || opinion?.ratedBy
@@ -171,17 +186,44 @@ const OpinionTable = ({
             const usernameOrWallet =
               opinion?.userToken?.username || opinion?.ratedBy
 
+            const cutOffContent =
+              opinion?.citations[0].citation?.content?.length > 280
+            const citationText = !cutOffContent
+              ? opinion?.citations[0].citation?.content
+              : opinion?.citations[0].citation?.content.slice(0, 280) + '...'
+
+            const displayUsernameOrWalletCitation = convertAccountName(
+              opinion?.citations[0].citation?.minter?.username ||
+                opinion?.citations[0].citation?.minter?.walletAddress
+            )
+            const usernameOrWalletCitation =
+              opinion?.citations[0].citation?.minter?.username ||
+              opinion?.citations[0].citation?.minter?.walletAddress
+
             return (
               <div
                 ref={desktopLastElementRef}
-                className="bg-white h-min min-h-[5rem] py-4 flex items-start w-full text-black"
+                className="bg-white h-min min-h-[5rem] py-4 mb-4 flex items-start w-full text-black rounded-2xl"
                 key={oIndex}
               >
+                {/* STAKED column */}
+                <div
+                  className={classNames(
+                    stakedColWidth,
+                    `text-blue-500 font-semibold pl-6 pr-4`
+                  )}
+                >
+                  {formatNumberWithCommasAsThousandsSerperator(
+                    Math.round(opinion?.userToken?.deposits)
+                  )}{' '}
+                  IMO
+                </div>
+
                 {/* User and comment column */}
                 <div
                   className={classNames(
                     userAndCommentColWidth,
-                    `flex items-center pl-6`
+                    `flex items-center pl-14`
                   )}
                 >
                   <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
@@ -203,7 +245,7 @@ const OpinionTable = ({
                     </div>
 
                     <div className="pr-6 w-full">
-                      <div className="flex items-center space-x-1 pb-2 whitespace-nowrap">
+                      <div className="flex items-center space-x-1 pb-2 flex-wrap">
                         <A
                           className="font-bold hover:text-blue-600 z-50"
                           href={`/u/${usernameOrWallet}`}
@@ -212,8 +254,8 @@ const OpinionTable = ({
                         </A>
                         {opinion?.userToken?.twitterUsername && (
                           <A
-                            className="flex items-center space-x-1 text-black hover:text-blue-500 z-50"
-                            href={`https://twitter.com/${opinion?.userToken?.twitterUsername}`}
+                            className="flex items-center space-x-1 text-black z-50"
+                            href={`/u/${usernameOrWallet}`}
                           >
                             <div className="relative w-4 h-4">
                               <Image
@@ -222,14 +264,14 @@ const OpinionTable = ({
                                 layout="fill"
                               />
                             </div>
-                            <span className="text-sm">
+                            <span className="text-sm opacity-50">
                               @{opinion?.userToken?.twitterUsername}
                             </span>
                           </A>
                         )}
                       </div>
 
-                      {opinion?.comment && (
+                      {/* {opinion?.comment && (
                         <div
                           dangerouslySetInnerHTML={{
                             __html: urlify(opinion?.comment),
@@ -237,22 +279,9 @@ const OpinionTable = ({
                           className="w-full px-3 py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
                           style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                         />
-                      )}
+                      )} */}
                     </div>
                   </div>
-                </div>
-
-                {/* STAKED column */}
-                <div
-                  className={classNames(
-                    stakedColWidth,
-                    `text-blue-500 font-semibold pl-14 pr-4`
-                  )}
-                >
-                  {formatNumberWithCommasAsThousandsSerperator(
-                    Math.round(opinion?.userToken?.deposits)
-                  )}{' '}
-                  IMO
                 </div>
 
                 {/* RATING column */}
@@ -263,6 +292,113 @@ const OpinionTable = ({
                   )}
                 >
                   {opinion?.rating}
+                </div>
+
+                {/* CITATION column */}
+                <div
+                  className={classNames(
+                    citationColWidth,
+                    `text-blue-500 font-semibold pl-6 pr-4`
+                  )}
+                >
+                  <div className="relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
+                    <A
+                      href={`/post/${opinion?.citations[0].citation?.tokenID}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span
+                        className={classNames(
+                          getIMORatingColors(
+                            Math.round(
+                              opinion?.citations[0].citation?.compositeRating
+                            )
+                          ),
+                          'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                        )}
+                      >
+                        {Math.round(
+                          opinion?.citations[0].citation?.compositeRating
+                        )}
+                      </span>
+
+                      <div className="text-sm text-black/[.5] mb-4">
+                        {opinion?.citations[0].citation?.inFavor
+                          ? 'FOR'
+                          : 'AGAINST'}
+                      </div>
+
+                      <div className="flex items-start">
+                        {/* The citation minter profile image */}
+                        <div className="mr-4 flex flex-col items-center space-y-2">
+                          <div className="relative rounded-full w-6 h-6">
+                            <Image
+                              className="rounded-full"
+                              src={
+                                opinion?.citations[0].citation?.minter
+                                  ?.profilePhoto || '/DefaultProfilePicture.png'
+                              }
+                              alt=""
+                              layout="fill"
+                              objectFit="cover"
+                            />
+                          </div>
+
+                          {/* <WatchingStar token={token} /> */}
+                        </div>
+
+                        {/* The citation minter username and content */}
+                        <div className="pr-6 w-full">
+                          <div className="flex items-center space-x-1 pb-2 flex-wrap">
+                            <A className="font-bold">
+                              {displayUsernameOrWalletCitation}
+                            </A>
+                            {opinion?.citations[0].citation?.minter
+                              ?.twitterUsername && (
+                              <A
+                                className="flex items-center space-x-1 text-black z-50"
+                                href={`/u/${usernameOrWalletCitation}`}
+                              >
+                                <div className="relative w-4 h-4">
+                                  <Image
+                                    src={'/twitter-solid-blue.svg'}
+                                    alt="twitter-solid-blue-icon"
+                                    layout="fill"
+                                  />
+                                </div>
+                                <span className="text-sm opacity-50">
+                                  @
+                                  {
+                                    opinion?.citations[0].citation?.minter
+                                      ?.twitterUsername
+                                  }
+                                </span>
+                              </A>
+                            )}
+                          </div>
+
+                          <div className="relative">
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: urlify(citationText),
+                              }}
+                              className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                              style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
+                            />
+
+                            {cutOffContent && (
+                              <A
+                                href={`/post/${opinion?.citations[0].citation?.tokenID}`}
+                                className="absolute bottom-0 right-0 text-blue-500 z-[60]"
+                              >
+                                (More...)
+                              </A>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </A>
+                  </div>
                 </div>
               </div>
             )
@@ -298,14 +434,32 @@ const OpinionTable = ({
             const usernameOrWallet =
               opinion?.userToken?.username || opinion?.ratedBy
 
+            const cutOffContent =
+              opinion?.citations[0].citation?.content?.length > 280
+            const citationText = !cutOffContent
+              ? opinion?.citations[0].citation?.content
+              : opinion?.citations[0].citation?.content.slice(0, 280) + '...'
+
+            const displayUsernameOrWalletCitation = convertAccountName(
+              opinion?.citations[0].citation?.minter?.username ||
+                opinion?.citations[0].citation?.minter?.walletAddress
+            )
+            const usernameOrWalletCitation =
+              opinion?.citations[0].citation?.minter?.username ||
+              opinion?.citations[0].citation?.minter?.walletAddress
+
             return (
               <div
                 ref={mobileLastElementRef}
-                className="bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
+                className="relative bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
                 key={oIndex}
               >
+                <div className="absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 font-semibold">
+                  {opinion?.rating}
+                </div>
+
                 <div className="mb-2 flex items-start space-x-3">
-                  <div className="flex items-center pb-2 whitespace-nowrap">
+                  <div className="flex items-center pb-2 flex-wrap">
                     <div className="relative rounded-full w-6 h-6">
                       <Image
                         className="rounded-full"
@@ -326,8 +480,8 @@ const OpinionTable = ({
                     </A>
                     {opinion?.userToken?.twitterUsername && (
                       <A
-                        className="flex items-center space-x-1 text-black ml-1 hover:text-blue-500 z-50"
-                        href={`https://twitter.com/${opinion?.userToken?.twitterUsername}`}
+                        className="flex items-center space-x-1 text-black ml-1 z-50"
+                        href={`/u/${usernameOrWallet}`}
                       >
                         <div className="relative w-4 h-4">
                           <Image
@@ -336,7 +490,7 @@ const OpinionTable = ({
                             layout="fill"
                           />
                         </div>
-                        <span className="text-sm">
+                        <span className="text-sm opacity-50">
                           @{opinion?.userToken?.twitterUsername}
                         </span>
                       </A>
@@ -351,18 +505,103 @@ const OpinionTable = ({
                   </span>
                 </div>
 
-                <div className="flex items-start w-full p-3 bg-black/[.02] rounded-lg">
-                  <div className="w-10 h-8 mr-3 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 font-semibold">
-                    {opinion?.rating}
-                  </div>
+                <div className="relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full mx-auto md:w-full text-gray-900 dark:text-gray-200">
+                  <A
+                    href={`/post/${opinion?.citations[0].citation?.tokenID}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span
+                      className={classNames(
+                        getIMORatingColors(
+                          Math.round(
+                            opinion?.citations[0].citation?.compositeRating
+                          )
+                        ),
+                        'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                      )}
+                    >
+                      {Math.round(
+                        opinion?.citations[0].citation?.compositeRating
+                      )}
+                    </span>
 
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: urlify(opinion?.comment),
-                    }}
-                    className="w-[85%] font-medium whitespace-pre-wrap break-words"
-                    style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
-                  />
+                    <div className="text-sm text-black/[.5] mb-4">
+                      {opinion?.citations[0].citation?.inFavor
+                        ? 'FOR'
+                        : 'AGAINST'}
+                    </div>
+
+                    <div className="flex items-start">
+                      {/* The citation minter profile image */}
+                      <div className="mr-4 flex flex-col items-center space-y-2">
+                        <div className="relative rounded-full w-6 h-6">
+                          <Image
+                            className="rounded-full"
+                            src={
+                              opinion?.citations[0].citation?.minter
+                                ?.profilePhoto || '/DefaultProfilePicture.png'
+                            }
+                            alt=""
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                        </div>
+
+                        {/* <WatchingStar token={token} /> */}
+                      </div>
+
+                      {/* The citation minter username and content */}
+                      <div className="pr-6 w-full">
+                        <div className="flex items-center space-x-1 pb-2 flex-wrap">
+                          <A className="font-bold">
+                            {displayUsernameOrWalletCitation}
+                          </A>
+                          {opinion?.citations[0].citation?.minter
+                            ?.twitterUsername && (
+                            <A
+                              className="flex items-center space-x-1 text-black z-50"
+                              href={`/u/${usernameOrWalletCitation}`}
+                            >
+                              <div className="relative w-4 h-4">
+                                <Image
+                                  src={'/twitter-solid-blue.svg'}
+                                  alt="twitter-solid-blue-icon"
+                                  layout="fill"
+                                />
+                              </div>
+                              <span className="text-sm opacity-50">
+                                @
+                                {
+                                  opinion?.citations[0].citation?.minter
+                                    ?.twitterUsername
+                                }
+                              </span>
+                            </A>
+                          )}
+                        </div>
+
+                        <div className="relative">
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: urlify(citationText),
+                            }}
+                            className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                            style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
+                          />
+
+                          {cutOffContent && (
+                            <A
+                              href={`/post/${opinion?.citations[0].citation?.tokenID}`}
+                              className="absolute bottom-0 right-0 text-blue-500 z-[60]"
+                            >
+                              (More...)
+                            </A>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </A>
                 </div>
               </div>
             )

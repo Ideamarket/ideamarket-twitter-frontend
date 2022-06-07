@@ -25,15 +25,13 @@ type NewPostUIProps = {
     transactionType: TX_TYPES
   ) => void
   // Method used to pass input values from this file to parent file
-  onInputChanged?: (
-    inputContent: string,
-  ) => void
+  onInputChanged?: (inputContent: string) => void
 }
 
 export default function NewPostUI({
   isTxButtonActive = true,
   onTradeComplete,
-  onInputChanged = () => null
+  onInputChanged = () => null,
 }: NewPostUIProps) {
   const txManager = useTransactionManager()
   const ideamarketPosts = useContractStore.getState().ideamarketPosts

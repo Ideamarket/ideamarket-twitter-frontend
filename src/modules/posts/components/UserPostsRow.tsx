@@ -82,7 +82,7 @@ export default function UserPostsRow({
 
               <div className="pr-6 w-full">
                 {minterAddress && (
-                  <div className="flex items-center pb-2 whitespace-nowrap space-x-1">
+                  <div className="flex items-center pb-2 flex-wrap space-x-1">
                     <A
                       className="font-bold text-black hover:text-blue-600 z-50"
                       href={`/u/${usernameOrWallet}`}
@@ -91,8 +91,8 @@ export default function UserPostsRow({
                     </A>
                     {token?.minterToken?.twitterUsername && (
                       <A
-                        className="flex items-center space-x-1 hover:text-blue-500 z-50"
-                        href={`https://twitter.com/${token?.minterToken?.twitterUsername}`}
+                        className="flex items-center space-x-1 z-50"
+                        href={`/u/${usernameOrWallet}`}
                       >
                         <div className="relative w-4 h-4">
                           <Image
@@ -101,7 +101,7 @@ export default function UserPostsRow({
                             layout="fill"
                           />
                         </div>
-                        <span className="text-sm">
+                        <span className="text-sm opacity-50">
                           @{token?.minterToken?.twitterUsername}
                         </span>
                       </A>
@@ -207,7 +207,7 @@ export default function UserPostsRow({
                 />
               </div>
 
-              <div className="flex items-center space-x-1 text-black">
+              <div className="flex items-center flex-wrap space-x-1 text-black">
                 <A
                   className="ml-2 font-bold hover:text-blue-600"
                   href={`/u/${usernameOrWallet}`}
@@ -216,8 +216,8 @@ export default function UserPostsRow({
                 </A>
                 {token?.minterToken?.twitterUsername && (
                   <A
-                    className="flex items-center space-x-1 hover:text-blue-500 z-50"
-                    href={`https://twitter.com/${token?.minterToken?.twitterUsername}`}
+                    className="flex items-center space-x-1 z-50"
+                    href={`/u/${usernameOrWallet}`}
                   >
                     <div className="relative w-4 h-4">
                       <Image
@@ -226,7 +226,7 @@ export default function UserPostsRow({
                         layout="fill"
                       />
                     </div>
-                    <span className="text-sm">
+                    <span className="text-sm opacity-50">
                       @{token?.minterToken?.twitterUsername}
                     </span>
                   </A>

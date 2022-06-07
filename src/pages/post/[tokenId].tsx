@@ -14,8 +14,11 @@ import {
   useRef,
   MutableRefObject,
 } from 'react'
-import { formatNumberInt } from 'utils'
-import { ChatIcon, ShareIcon } from '@heroicons/react/outline'
+import {
+  formatNumberInt,
+  formatNumberWithCommasAsThousandsSerperator,
+} from 'utils'
+import { ChatIcon, ExternalLinkIcon, ShareIcon } from '@heroicons/react/outline'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { useWalletStore } from 'store/walletStore'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -35,7 +38,9 @@ import {
 } from 'modules/posts/services/PostService'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
-import { getAccount } from 'actions/web2/user-market/apiUserActions'
+import WalletIcon from '../../assets/wallet.svg'
+import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
+import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DetailsSkeleton = () => (
@@ -224,15 +229,15 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     <div className=" mx-auto">
       <ListingSEO tokenName={rawTokenId} rawTokenName={rawTokenId} />
 
+      <div className="max-w-[78rem] px-5 md:px-0 mt-10 mx-0 md:mx-5 xl:mx-auto text-black/[.5]">
+        <A href="/" className="hover:text-blue-600">
+          Market
+        </A>{' '}
+        / Listings
+      </div>
+
       {/* Start of top section of listing page */}
       <div className="max-w-[50rem] mt-10 px-5 md:mx-auto">
-        <div className="text-black/[.5]">
-          <A href="/" className="hover:text-blue-600">
-            Market
-          </A>{' '}
-          / Listings
-        </div>
-
         {/* Desktop and tablet -- top section of listing page */}
         <div className="hidden md:flex items-start w-full mt-4">
           <div className="w-2/3 flex items-start">
@@ -344,7 +349,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
           <div className="flex items-start w-full">
             <div className="w-full">
               {minterAddress && (
-                <div className="flex items-center pb-2 whitespace-nowrap">
+                <div className="flex items-center pb-2 flex-wrap">
                   <div className="relative rounded-full w-6 h-6">
                     <Image
                       className="rounded-full"
@@ -365,8 +370,8 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                   </A>
                   {token?.minterToken?.twitterUsername && (
                     <A
-                      className="flex items-center space-x-1 ml-1 hover:text-blue-500 z-50"
-                      href={`https://twitter.com/${token?.minterToken?.twitterUsername}`}
+                      className="flex items-center space-x-1 ml-1 z-50"
+                      href={`/u/${usernameOrWallet}`}
                     >
                       <div className="relative w-4 h-4">
                         <Image
@@ -375,7 +380,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                           layout="fill"
                         />
                       </div>
-                      <span className="text-sm">
+                      <span className="text-sm opacity-50">
                         @{token?.minterToken?.twitterUsername}
                       </span>
                     </A>
@@ -423,7 +428,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         </div>
       </div>
 
-      <div className="max-w-[78rem] md:mt-10 mx-0 md:mx-5 xl:mx-auto pb-96">
+      <div className="max-w-[78rem] md:mt-20 mx-0 md:mx-5 xl:mx-auto pb-96">
         {/* <div className="text-xl text-center text-black font-bold mb-4">
           Ratings
         </div> */}

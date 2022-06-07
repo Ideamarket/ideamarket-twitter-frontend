@@ -123,7 +123,7 @@ const ListingContent = ({
             dangerouslySetInnerHTML={{
               __html: urlify(content),
             }}
-            className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
+            className="md:max-w-[30rem] whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
           />
 
           {cutOffContent && (

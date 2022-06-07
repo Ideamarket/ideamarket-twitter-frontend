@@ -33,12 +33,8 @@ export default function Modal({
         aria-modal="true"
         aria-labelledby="modal-headline"
       >
-
-
         <div className="flex w-full">
-
           <div className="w-full">
-
             {isCloseActive && (
               <div className="flex pb-2 pr-2 md:pr-0">
                 <button
@@ -60,12 +56,10 @@ export default function Modal({
             >
               {children}
             </div>
-
           </div>
 
           {SidePanel && (
             <div>
-
               {/* Just using this to fill space needed to be filled */}
               {isCloseActive && (
                 <div className="invisible flex pb-2 pr-2 md:pr-0">
@@ -81,12 +75,9 @@ export default function Modal({
               )}
 
               {SidePanel}
-
             </div>
           )}
-
         </div>
-
       </Transition>
     </div>
   )

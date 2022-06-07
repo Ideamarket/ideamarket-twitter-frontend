@@ -13,7 +13,7 @@ export default function ratePost(
   tokenId: number,
   rating: number,
   citations: number[] = [],
-  inFavorArray: boolean[] = [],
+  inFavorArray: boolean[] = []
 ) {
   if (!tokenId) {
     console.error(`tokenId ${tokenId} is not valid`)

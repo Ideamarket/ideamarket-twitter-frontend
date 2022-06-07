@@ -77,7 +77,7 @@ export default function RatingsRow({
               </div>
 
               <div className="pr-6 w-full">
-                <div className="flex items-center space-x-1 text-black pb-2 whitespace-nowrap">
+                <div className="flex items-center space-x-1 text-black pb-2 flex-wrap">
                   <A
                     className="font-bold hover:text-blue-600 z-50"
                     href={`/u/${usernameOrWallet}`}
@@ -86,8 +86,8 @@ export default function RatingsRow({
                   </A>
                   {opinion?.minterToken?.twitterUsername && (
                     <A
-                      className="flex items-center space-x-1 hover:text-blue-500 z-50"
-                      href={`https://twitter.com/${opinion?.minterToken?.twitterUsername}`}
+                      className="flex items-center space-x-1 z-50"
+                      href={`/u/${usernameOrWallet}`}
                     >
                       <div className="relative w-4 h-4">
                         <Image
@@ -96,7 +96,7 @@ export default function RatingsRow({
                           layout="fill"
                         />
                       </div>
-                      <span className="text-sm">
+                      <span className="text-sm opacity-50">
                         @{opinion?.minterToken?.twitterUsername}
                       </span>
                     </A>
@@ -187,7 +187,7 @@ export default function RatingsRow({
       <div className="md:hidden">
         <div className="w-full relative px-3 py-4">
           {minterAddress && (
-            <div className="flex items-center pb-2 whitespace-nowrap">
+            <div className="flex items-center pb-2 flex-wrap">
               <div className="relative rounded-full w-6 h-6">
                 <Image
                   className="rounded-full"
@@ -209,8 +209,8 @@ export default function RatingsRow({
 
               {opinion?.minterToken?.twitterUsername && (
                 <A
-                  className="flex items-center space-x-1 text-black ml-1 hover:text-blue-500 z-50"
-                  href={`https://twitter.com/${opinion?.minterToken?.twitterUsername}`}
+                  className="flex items-center space-x-1 text-black ml-1 z-50"
+                  href={`/u/${usernameOrWallet}`}
                 >
                   <div className="relative w-4 h-4">
                     <Image
@@ -219,7 +219,7 @@ export default function RatingsRow({
                       layout="fill"
                     />
                   </div>
-                  <span className="text-sm">
+                  <span className="text-sm opacity-50">
                     @{opinion?.minterToken?.twitterUsername}
                   </span>
                 </A>

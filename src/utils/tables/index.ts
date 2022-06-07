@@ -6,6 +6,7 @@ export enum TABLE_NAMES {
   ACCOUNT_OPINIONS,
   ACCOUNT_POSTS,
   LISTING_PAGE_OPINIONS,
+  ADD_CITATION_MODAL, // Not a table, but needed to sort data in add citation modal
 }
 
 // To change string value being passed into orderBy to backend, you need to change "value" on SortOptions objects
@@ -39,6 +40,24 @@ export const SortOptionsHomePostsTable = {
     id: 4,
     value: orderByLatestCommentsCount,
     displayName: 'Comments',
+  },
+}
+
+export const SortOptionsAddCitationsModal = {
+  COMPOSITE_RATING: {
+    id: 1,
+    value: orderByCompositeRating,
+    displayName: 'IMO Rating',
+  },
+  // AVG_RATING: {
+  //   id: 2,
+  //   value: orderByAverageRating,
+  //   displayName: 'Average Rating',
+  // },
+  MARKET_INTEREST: {
+    id: 3,
+    value: orderByMarketInterest,
+    displayName: 'Scrutiny',
   },
 }
 
@@ -165,6 +184,8 @@ const getSortOptionsByTable = (tableName: TABLE_NAMES) => {
       return SortOptionsAccountPosts
     case TABLE_NAMES.LISTING_PAGE_OPINIONS:
       return SortOptionsListingPageOpinions
+    case TABLE_NAMES.ADD_CITATION_MODAL:
+      return SortOptionsAddCitationsModal
   }
 }
 

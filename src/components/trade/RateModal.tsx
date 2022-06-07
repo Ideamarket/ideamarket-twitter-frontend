@@ -21,9 +21,7 @@ import {
   LISTING_TYPE,
 } from 'components/tokens/utils/ListingUtils'
 import { getAccount } from 'actions/web2/user-market/apiUserActions'
-import IMTextArea from 'modules/forms/components/IMTextArea'
-import CiteSidePanel, { CITE_TYPE } from 'modules/posts/components/CiteSidePanel'
-import { PencilIcon, SearchIcon, XCircleIcon } from '@heroicons/react/outline'
+import { XCircleIcon } from '@heroicons/react/outline'
 import AddCitationModal from 'modules/posts/components/AddCitationModal'
 import { IdeamarketPost } from 'modules/posts/services/PostService'
 
@@ -33,8 +31,6 @@ const sliderMarks = {
   0: '0',
   100: '100',
 }
-
-
 
 export default function RateModal({
   close,
@@ -49,7 +45,6 @@ export default function RateModal({
   const { setIsTxPending } = useContext(GlobalContext)
 
   const [inputRating, setInputRating] = useState(50)
-  const [inputTextPost, setInputTextPost] = useState('')
 
   const [citations, setCitations] = useState([])
   const [inFavorArray, setInFavorArray] = useState([])
@@ -57,12 +52,18 @@ export default function RateModal({
 
   const onCitationRemoved = (post: IdeamarketPost) => {
     const indexOfAlreadyCited = citations.indexOf(post.tokenID)
-    const citationsWithOldCitationRemoved = citations.filter(c => c !== post.tokenID)
-    const inFavorArrayWithOldRemoved = inFavorArray.filter((ele, ind) => ind !== indexOfAlreadyCited)
-    const selectedPostsWithOldRemoved = selectedPosts.filter((ele, ind) => ind !== indexOfAlreadyCited)
+    const citationsWithOldCitationRemoved = citations.filter(
+      (c) => c !== post.tokenID
+    )
+    const inFavorArrayWithOldRemoved = inFavorArray.filter(
+      (ele, ind) => ind !== indexOfAlreadyCited
+    )
+    const selectedPostsWithOldRemoved = selectedPosts.filter(
+      (ele, ind) => ind !== indexOfAlreadyCited
+    )
 
     const newCitations = [...citationsWithOldCitationRemoved]
-    const newInFavorArray = [...inFavorArrayWithOldRemoved ]
+    const newInFavorArray = [...inFavorArrayWithOldRemoved]
     const newSelectedPosts = [...selectedPostsWithOldRemoved]
 
     setCitations(newCitations)
@@ -88,9 +89,6 @@ export default function RateModal({
   const onRateClicked = async () => {
     setIsTxPending(true)
     const isNFT = !ideaToken.address // If there is not a token address, then it is NFT
-
-    console.log('citations==', citations)
-    console.log('inFavorArray==', inFavorArray)
 
     try {
       const web3TxMethod = isNFT ? ratePost : rateIDT
@@ -127,8 +125,7 @@ export default function RateModal({
     onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, TX_TYPES.RATE)
   }
 
-  // TODO: this will be much more complex now, figure it out
-  const isRatingDisabled = inputRating === 50 || inputTextPost?.length > 10000
+  const isRatingDisabled = inputRating === 50
 
   const { minterAddress } = (ideaToken || {}) as any
 
@@ -146,14 +143,15 @@ export default function RateModal({
   )
   const usernameOrWallet = userDataForMinter?.username || minterAddress
 
-  const citationsInFavor = selectedPosts?.filter((p, pInd) => inFavorArray[pInd])
-  const citationsNotInFavor = selectedPosts?.filter((p, pInd) => !inFavorArray[pInd])
+  const citationsInFavor = selectedPosts?.filter(
+    (p, pInd) => inFavorArray[pInd]
+  )
+  const citationsNotInFavor = selectedPosts?.filter(
+    (p, pInd) => !inFavorArray[pInd]
+  )
 
   return (
-    <Modal
-      close={close}
-    >
-
+    <Modal close={close}>
       <div className="w-full md:w-136 mx-auto bg-white dark:bg-gray-700 rounded-xl">
         <div className="px-6 py-4 bg-black/[.05] text-base font-medium leading-5 truncate">
           {/* Display minter image, username/wallet */}
@@ -179,8 +177,8 @@ export default function RateModal({
               </A>
               {userDataForMinter?.twitterUsername && (
                 <A
-                  className="flex items-center space-x-1 ml-1 hover:text-blue-500 z-50"
-                  href={`https://twitter.com/${userDataForMinter?.twitterUsername}`}
+                  className="flex items-center space-x-1 ml-1 z-50"
+                  href={`/u/${usernameOrWallet}`}
                 >
                   <div className="relative w-4 h-4">
                     <Image
@@ -189,7 +187,7 @@ export default function RateModal({
                       layout="fill"
                     />
                   </div>
-                  <span className="text-sm">
+                  <span className="text-sm opacity-50">
                     @{userDataForMinter?.twitterUsername}
                   </span>
                 </A>
@@ -241,112 +239,121 @@ export default function RateModal({
           </div>
 
           {/* Selected posts / citations */}
-          <div className="flex justify-between items-center font-bold text-lg mt-4">
-            <span>Citations</span>
-            <span className=" text-sm">Selected <span className="font-semibold">{citations?.length}</span> <span className="text-black/[.3]">(Maximum 10)</span></span>
-          </div>
+          {citations && citations.length > 0 && (
+            <div className="flex justify-between items-center font-bold text-lg mt-4">
+              <span>Citations</span>
+              {inFavorArray[0] ? (
+                <span className="text-sm text-[#0cae74]">FOR</span>
+              ) : (
+                <span className="text-sm text-[#e63b3b]">AGAINST</span>
+              )}
+            </div>
+          )}
 
-          <div className="mt-4 text-[#0cae74] text-sm font-bold">FOR ({inFavorArray.filter(ele => ele).length})</div>
-
-          {citationsInFavor && citationsInFavor?.length > 0 && citationsInFavor.map((post, postInd) => {
-            return (
-              <div className="flex justify-between items-center w-full mt-4" key={postInd}>
-
-                <div className="w-[85%] bg-[#0cae74]/[.25] rounded-lg p-4">
-
-                  <div className="flex items-center pb-2 whitespace-nowrap">
-                    <div className="relative rounded-full w-6 h-6">
-                      <Image
-                        className="rounded-full"
-                        src={
-                          post?.minterToken?.profilePhoto ||
-                          '/DefaultProfilePicture.png'
-                        }
-                        alt=""
-                        layout="fill"
-                        objectFit="cover"
-                      />
+          {citationsInFavor &&
+            citationsInFavor?.length > 0 &&
+            citationsInFavor.map((post, postInd) => {
+              return (
+                <div
+                  className="flex justify-between items-center w-full mt-4"
+                  key={postInd}
+                >
+                  <div className="w-[85%] bg-[#0cae74]/[.25] rounded-lg p-4">
+                    <div className="flex items-center pb-2 whitespace-nowrap">
+                      <div className="relative rounded-full w-6 h-6">
+                        <Image
+                          className="rounded-full"
+                          src={
+                            post?.minterToken?.profilePhoto ||
+                            '/DefaultProfilePicture.png'
+                          }
+                          alt=""
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
+                      <A
+                        className="ml-2 font-bold hover:text-blue-600"
+                        href={`/u/${usernameOrWallet}`}
+                      >
+                        {displayUsernameOrWallet}
+                      </A>
                     </div>
-                    <A
-                      className="ml-2 font-bold hover:text-blue-600"
-                      href={`/u/${usernameOrWallet}`}
-                    >
-                      {displayUsernameOrWallet}
-                    </A>
+
+                    <div>{post.content}</div>
                   </div>
 
-                  <div>{post.content}</div>
-
-                </div>
-
-                <div className="flex justify-end">
-                  <XCircleIcon
-                    onClick={() => onCitationRemoved(post)}
-                    className="w-8 cursor-pointer text-black/[.3] hover:text-red-600"
-                  />
-                </div>
-
-              </div>
-            )
-          })}
-
-          <div className="mt-4 text-[#e63b3b] text-sm font-bold">AGAINST ({inFavorArray.filter(ele => !ele).length})</div>
-
-          {citationsNotInFavor && citationsNotInFavor?.length > 0 && citationsNotInFavor.map((post, postInd) => {
-            return (
-              <div className="flex justify-between items-center w-full mt-4" key={postInd}>
-
-                <div className="w-[85%] bg-[#ec4a4a]/[.25] rounded-lg p-4">
-
-                  <div className="flex items-center pb-2 whitespace-nowrap">
-                    <div className="relative rounded-full w-6 h-6">
-                      <Image
-                        className="rounded-full"
-                        src={
-                          post?.minterToken?.profilePhoto ||
-                          '/DefaultProfilePicture.png'
-                        }
-                        alt=""
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    </div>
-                    <A
-                      className="ml-2 font-bold hover:text-blue-600"
-                      href={`/u/${usernameOrWallet}`}
-                    >
-                      {displayUsernameOrWallet}
-                    </A>
+                  <div className="flex justify-end">
+                    <XCircleIcon
+                      onClick={() => onCitationRemoved(post)}
+                      className="w-8 cursor-pointer text-black/[.3] hover:text-red-600"
+                    />
                   </div>
-
-                  <div>{post.content}</div>
-
                 </div>
-
-                <div className="flex justify-end">
-                  <XCircleIcon
-                    onClick={() => onCitationRemoved(post)}
-                    className="w-8 cursor-pointer text-black/[.3] hover:text-red-600"
-                  />
-                </div>
-
-              </div>
-            )
-          })}
-
-          <button
-            onClick={() => ModalService.open(AddCitationModal, {
-              citations,
-              inFavorArray,
-              selectedPosts,
-              setCitations,
-              setInFavorArray,
-              setSelectedPosts,
+              )
             })}
-            className="py-4 mt-4 text-lg font-bold rounded-2xl w-full bg-blue-600 hover:bg-blue-800 text-white"
-          >
-            Add Citation
-          </button>
+
+          {citationsNotInFavor &&
+            citationsNotInFavor?.length > 0 &&
+            citationsNotInFavor.map((post, postInd) => {
+              return (
+                <div
+                  className="flex justify-between items-center w-full mt-4"
+                  key={postInd}
+                >
+                  <div className="w-[85%] bg-[#ec4a4a]/[.25] rounded-lg p-4">
+                    <div className="flex items-center pb-2 whitespace-nowrap">
+                      <div className="relative rounded-full w-6 h-6">
+                        <Image
+                          className="rounded-full"
+                          src={
+                            post?.minterToken?.profilePhoto ||
+                            '/DefaultProfilePicture.png'
+                          }
+                          alt=""
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
+                      <A
+                        className="ml-2 font-bold hover:text-blue-600"
+                        href={`/u/${usernameOrWallet}`}
+                      >
+                        {displayUsernameOrWallet}
+                      </A>
+                    </div>
+
+                    <div>{post.content}</div>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <XCircleIcon
+                      onClick={() => onCitationRemoved(post)}
+                      className="w-8 cursor-pointer text-black/[.3] hover:text-red-600"
+                    />
+                  </div>
+                </div>
+              )
+            })}
+
+          {citations && citations.length <= 0 && (
+            <button
+              onClick={() =>
+                ModalService.open(AddCitationModal, {
+                  citations,
+                  inFavorArray,
+                  selectedPosts,
+                  setCitations,
+                  setInFavorArray,
+                  setSelectedPosts,
+                })
+              }
+              className="py-4 mt-4 text-lg font-bold rounded-2xl w-full bg-blue-600 hover:bg-blue-800 text-white"
+            >
+              <span>Add Citation</span>
+              <div className="text-xs font-normal">(recommended)</div>
+            </button>
+          )}
 
           <button
             className={classNames(
@@ -368,7 +375,6 @@ export default function RateModal({
           <TxPending txManager={txManager} />
         </div>
       </div>
-
     </Modal>
   )
 }
