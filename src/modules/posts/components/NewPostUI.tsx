@@ -149,7 +149,7 @@ export default function NewPostUI({
       <div className="px-6 py-4">
         {/* Tab buttons */}
         <div className="flex justify-between items-end mx-1 mb-2">
-          <div className="flex items-center space-x-2">
+          <div className="invisible flex items-center space-x-2">
             <button
               onClick={() => {
                 setIsValidToken(false)

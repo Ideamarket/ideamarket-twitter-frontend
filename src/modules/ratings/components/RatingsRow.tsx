@@ -11,9 +11,10 @@ import {
 } from 'components/tokens/utils/ListingUtils'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
-import { urlify } from 'utils/display/DisplayUtils'
+import { getIMORatingColors, urlify } from 'utils/display/DisplayUtils'
 import Link from 'next/link'
 import { SortOptionsAccountOpinions } from 'utils/tables'
+import classNames from 'classnames'
 
 type Props = {
   opinion: any
@@ -38,6 +39,19 @@ export default function RatingsRow({
     opinion?.minterToken?.username || minterAddress
   )
   const usernameOrWallet = opinion?.minterToken?.username || minterAddress
+
+  const cutOffContent = opinion?.citations[0]?.citation?.content?.length > 280
+  const citationText = !cutOffContent
+    ? opinion?.citations[0]?.citation?.content
+    : opinion?.citations[0]?.citation?.content.slice(0, 280) + '...'
+
+  const displayUsernameOrWalletCitation = convertAccountName(
+    opinion?.citations[0]?.citation?.minter?.username ||
+      opinion?.citations[0]?.citation?.minter?.walletAddress
+  )
+  const usernameOrWalletCitation =
+    opinion?.citations[0]?.citation?.minter?.username ||
+    opinion?.citations[0]?.citation?.minter?.walletAddress
 
   return (
     <div ref={lastElementRef}>
@@ -164,18 +178,104 @@ export default function RatingsRow({
             </div>
 
             <div className="flex w-full">
-              {/* The user comment for this opinion */}
-              {opinion && opinion?.comment && opinion?.comment.length > 0 && (
-                <div className="w-full mt-4">
-                  <div className="bg-black/[.02] rounded-lg px-4 py-2 mr-10">
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: urlify(opinion?.comment),
-                      }}
-                      className="text-black text-sm whitespace-pre-wrap break-words"
-                      style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
-                    />
-                  </div>
+              {opinion?.citations && opinion?.citations.length > 0 && (
+                <div className="relative px-3 py-2 mr-10 mt-6 bg-[#FAFAFA] rounded-lg w-full mx-auto md:w-full text-gray-900 dark:text-gray-200">
+                  <A
+                    href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span
+                      className={classNames(
+                        getIMORatingColors(
+                          Math.round(
+                            opinion?.citations[0]?.citation?.compositeRating
+                          )
+                        ),
+                        'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                      )}
+                    >
+                      {Math.round(
+                        opinion?.citations[0]?.citation?.compositeRating
+                      )}
+                    </span>
+
+                    <div className="text-sm text-black/[.5] mb-4">
+                      {opinion?.citations[0]?.citation?.inFavor
+                        ? 'FOR'
+                        : 'AGAINST'}
+                    </div>
+
+                    <div className="flex items-start">
+                      {/* The citation minter profile image */}
+                      <div className="mr-4 flex flex-col items-center space-y-2">
+                        <div className="relative rounded-full w-6 h-6">
+                          <Image
+                            className="rounded-full"
+                            src={
+                              opinion?.citations[0]?.citation?.minter
+                                ?.profilePhoto || '/DefaultProfilePicture.png'
+                            }
+                            alt=""
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                        </div>
+
+                        {/* <WatchingStar token={token} /> */}
+                      </div>
+
+                      {/* The citation minter username and content */}
+                      <div className="pr-6 w-full">
+                        <div className="flex items-center space-x-1 pb-2 flex-wrap">
+                          <A className="font-bold">
+                            {displayUsernameOrWalletCitation}
+                          </A>
+                          {opinion?.citations[0]?.citation?.minter
+                            ?.twitterUsername && (
+                            <A
+                              className="flex items-center space-x-1 text-black z-50"
+                              href={`/u/${usernameOrWalletCitation}`}
+                            >
+                              <div className="relative w-4 h-4">
+                                <Image
+                                  src={'/twitter-solid-blue.svg'}
+                                  alt="twitter-solid-blue-icon"
+                                  layout="fill"
+                                />
+                              </div>
+                              <span className="text-sm opacity-50">
+                                @
+                                {
+                                  opinion?.citations[0]?.citation?.minter
+                                    ?.twitterUsername
+                                }
+                              </span>
+                            </A>
+                          )}
+                        </div>
+
+                        <div className="relative">
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: urlify(citationText),
+                            }}
+                            className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                            style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
+                          />
+
+                          {cutOffContent && (
+                            <A
+                              href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
+                              className="absolute bottom-0 right-0 text-blue-500 z-[60]"
+                            >
+                              (More...)
+                            </A>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </A>
                 </div>
               )}
             </div>
