@@ -33,6 +33,7 @@ type Props = {
   onStakeClicked: (idt: IdeaToken) => void
   tradeOrListSuccessToggle: boolean
   setIsStarredFilterActive: (isActive: boolean) => void
+  onNameSearchChanged: (value: string) => void
 }
 
 export default function HomeUsersTable({
@@ -49,6 +50,7 @@ export default function HomeUsersTable({
   onStakeClicked,
   tradeOrListSuccessToggle,
   setIsStarredFilterActive,
+  onNameSearchChanged,
 }: Props) {
   const TOKENS_PER_PAGE = 10
 
@@ -183,6 +185,7 @@ export default function HomeUsersTable({
                 isStarredFilterActive={isStarredFilterActive}
                 columnClicked={columnClicked}
                 setIsStarredFilterActive={setIsStarredFilterActive}
+                onNameSearchChanged={onNameSearchChanged}
               />
             </div>
             <div className="bg-white divide-y-[6px] dark:bg-gray-700">

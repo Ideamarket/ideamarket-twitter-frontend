@@ -118,19 +118,13 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
           </div>
 
           <div className="hidden md:flex items-center">
-            {/* TODO: change eventually. currently only let ?? wallet access this */}
-            {(account?.toLowerCase() ===
-              '0x93f9707adb26d98cfc6d73c8840425010afa968b' ||
-              account?.toLowerCase() ===
-                '0x95900afdf214860740e85deef69b1b0e422b64ec') && (
-              <button
-                onClick={onNewPostClicked}
-                className="flex items-center space-x-2 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-bold px-3 py-1 ml-3 rounded-lg"
-              >
-                <span>New Post</span>
-                <PencilIcon className="w-3" />
-              </button>
-            )}
+            <button
+              onClick={onNewPostClicked}
+              className="flex items-center space-x-2 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-bold px-3 py-1 ml-3 rounded-lg"
+            >
+              <span>New Post</span>
+              <PencilIcon className="w-3" />
+            </button>
 
             {/* <NavThemeButton /> */}
 

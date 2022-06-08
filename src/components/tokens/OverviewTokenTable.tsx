@@ -32,6 +32,7 @@ type Props = {
   onRateClicked: (idt: IdeaToken, urlMetaData: any) => void
   tradeOrListSuccessToggle: boolean
   setIsStarredFilterActive: (isActive: boolean) => void
+  onNameSearchChanged: (value: string) => void
 }
 
 export default function Table({
@@ -47,6 +48,7 @@ export default function Table({
   onRateClicked,
   tradeOrListSuccessToggle,
   setIsStarredFilterActive,
+  onNameSearchChanged,
 }: Props) {
   const TOKENS_PER_PAGE = 10
 
@@ -199,6 +201,7 @@ export default function Table({
                 isStarredFilterActive={isStarredFilterActive}
                 columnClicked={columnClicked}
                 setIsStarredFilterActive={setIsStarredFilterActive}
+                onNameSearchChanged={onNameSearchChanged}
               />
             </div>
 

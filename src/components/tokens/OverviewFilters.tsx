@@ -1,5 +1,4 @@
 import React from 'react'
-import { OverviewSearchbar } from './OverviewSearchbar'
 // import { getIconVersion } from 'utils/icons'
 import { useQuery } from 'react-query'
 import OverviewFiltersMobile from 'components/home/OverviewFiltersMobile'
@@ -72,9 +71,9 @@ export const OverviewFilters = ({
             ))}
         </div>
 
-        <div className="flex w-52 h-9 md:h-auto ml-auto">
+        {/* <div className="flex w-52 h-9 md:h-auto ml-auto">
           <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
-        </div>
+        </div> */}
       </div>
 
       <OverviewFiltersMobile

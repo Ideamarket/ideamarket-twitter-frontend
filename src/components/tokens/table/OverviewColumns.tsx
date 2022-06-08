@@ -10,6 +10,7 @@ import {
   SortOptionsHomeUsersTable,
   TABLE_NAMES,
 } from 'utils/tables'
+import { OverviewSearchbar } from '../OverviewSearchbar'
 
 type Props = {
   orderBy: string
@@ -19,6 +20,7 @@ type Props = {
   selectedTable: TABLE_NAMES
   columnClicked: (column: string) => void
   setIsStarredFilterActive: (isActive: boolean) => void
+  onNameSearchChanged: (value: string) => void
 }
 
 function IncomeColumn() {
@@ -52,6 +54,7 @@ export const OverviewColumns = ({
   isStarredFilterActive,
   columnClicked,
   setIsStarredFilterActive,
+  onNameSearchChanged,
 }: Props) => {
   function getColumnContent(column) {
     switch (column.value) {
@@ -66,6 +69,9 @@ export const OverviewColumns = ({
                 className="w-9 h-9"
               />
             </div> */}
+            <div className="flex w-52">
+              <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
+            </div>
           </div>
         )
       case 'income':
