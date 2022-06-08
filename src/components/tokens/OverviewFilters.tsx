@@ -56,13 +56,13 @@ export const OverviewFilters = ({
 
   return (
     <div>
-      <div className="hidden md:flex md:justify-start justify-center h-28 md:h-20 overflow-x-auto p-3 bg-white rounded-t-lg dark:bg-gray-700 gap-x-2 gap-y-2">
+      <div className="hidden md:flex md:justify-start justify-center h-28 md:h-16 overflow-x-auto p-3 bg-white rounded-t-lg dark:bg-gray-700 gap-x-2 gap-y-2">
         <div className="flex md:gap-x-2">
           {selectedTable === TABLE_NAMES.HOME_POSTS &&
             categoriesData &&
             categoriesData.map((cat: any) => (
               <SelectableButton
-                label={`#${cat}`}
+                label={`${cat}`}
                 isSelected={selectedCategories.includes(cat)}
                 onClick={() => onCategoryClicked(cat)}
                 roundedSize="3xl"

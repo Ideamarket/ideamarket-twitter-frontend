@@ -48,7 +48,7 @@ const SelectableButton = ({
       className={classNames(
         roundedStyle(),
         className,
-        'flex justify-center items-center md:px-3 p-2 text-sm font-semibold',
+        'w-max flex justify-center items-center md:px-3 p-2 text-sm font-semibold',
         {
           'text-brand-blue dark:text-white bg-blue-100 dark:bg-very-dark-blue':
             isSelected,
@@ -59,7 +59,7 @@ const SelectableButton = ({
         onClick(!isSelected)
       }}
     >
-      <span>{label}</span>
+      <span className="w-max">{label}</span>
     </button>
   )
 }

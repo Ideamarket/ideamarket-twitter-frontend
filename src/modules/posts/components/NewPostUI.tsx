@@ -221,7 +221,7 @@ export default function NewPostUI({
                     )}
                     key={category}
                   >
-                    <span>#{category}</span>
+                    <span>{category}</span>
                     {selectedCategories.includes(category) && (
                       <XIcon className="w-5 h-5 ml-1" />
                     )}

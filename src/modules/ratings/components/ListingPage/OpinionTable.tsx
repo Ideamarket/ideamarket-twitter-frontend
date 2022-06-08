@@ -81,9 +81,9 @@ type Props = {
   headerClicked: (value: string) => void
 }
 
-const userAndCommentColWidth = 'w-[30%]'
+const userAndCommentColWidth = 'w-[25%]'
 const stakedColWidth = 'w-[10%]'
-const ratingColWidth = 'w-[10%]'
+const ratingColWidth = 'w-[15%]'
 const citationColWidth = 'w-[50%]'
 
 const OpinionTable = ({
@@ -130,7 +130,7 @@ const OpinionTable = ({
           </div>
 
           {/* User and comment column */}
-          <div className={classNames(userAndCommentColWidth, `pl-14 pr-6`)}>
+          <div className={classNames(userAndCommentColWidth, `pl-6 pr-6`)}>
             USER
           </div>
 
@@ -223,7 +223,7 @@ const OpinionTable = ({
                 <div
                   className={classNames(
                     userAndCommentColWidth,
-                    `flex items-center pl-14`
+                    `flex items-center pl-6`
                   )}
                 >
                   <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
@@ -292,6 +292,11 @@ const OpinionTable = ({
                   )}
                 >
                   {opinion?.rating}
+                  {/* <div className="relative h-6 w-full bg-black/[.1]">
+                    <div className={classNames(
+                      `absolute h-full bg-blue-200`
+                    )} style={{ width: `${opinion?.rating}%` }}></div>
+                  </div> */}
                 </div>
 
                 {/* CITATION column */}
@@ -457,7 +462,7 @@ const OpinionTable = ({
                 className="relative bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
                 key={oIndex}
               >
-                <div className="absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 font-semibold">
+                <div className="absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 font-semibold text-xl">
                   {opinion?.rating}
                 </div>
 
@@ -522,7 +527,7 @@ const OpinionTable = ({
                               opinion?.citations[0]?.citation?.compositeRating
                             )
                           ),
-                          'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                          'absolute top-2 right-2 w-8 h-7 flex justify-center items-center rounded-lg font-extrabold'
                         )}
                       >
                         {Math.round(

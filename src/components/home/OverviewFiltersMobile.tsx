@@ -91,7 +91,7 @@ const OverviewFiltersMobile = ({
           {categoriesData &&
             categoriesData.map((cat: any) => (
               <SelectableButton
-                label={`#${cat}`}
+                label={`${cat}`}
                 isSelected={selectedCategories.includes(cat)}
                 onClick={() => onCategoryClicked(cat)}
                 roundedSize="3xl"
