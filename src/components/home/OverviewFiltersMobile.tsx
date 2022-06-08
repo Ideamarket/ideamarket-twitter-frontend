@@ -4,7 +4,7 @@ import SelectableButton from 'components/buttons/SelectableButton'
 // import { getIconVersion } from 'utils/icons'
 import { OverviewSearchbar } from 'components/tokens/OverviewSearchbar'
 import DropdownButtons from 'components/dropdowns/DropdownButtons'
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import {
   getSortOptionDisplayNameByValue,
   SortOptionsHomePostsTable,
@@ -12,6 +12,12 @@ import {
   TABLE_NAMES,
 } from 'utils/tables'
 import Tooltip from 'components/tooltip/Tooltip'
+import { PencilIcon } from '@heroicons/react/outline'
+import { useWalletStore } from 'store/walletStore'
+import ModalService from 'components/modals/ModalService'
+import NewPostModal from 'modules/posts/components/NewPostModal'
+import WalletModal from 'components/wallet/WalletModal'
+import { GlobalContext } from 'lib/GlobalContext'
 
 type Props = {
   orderBy: string
@@ -40,9 +46,30 @@ const OverviewFiltersMobile = ({
   const ref = useRef()
   useOnClickOutside(ref, () => setIsSortingDropdownOpen(false))
 
+  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
+
+  const onNewPostClicked = () => {
+    if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        ModalService.open(NewPostModal)
+      })
+      ModalService.open(WalletModal)
+    } else {
+      ModalService.open(NewPostModal)
+    }
+  }
+
   return (
     <div className="md:hidden bg-white dark:bg-gray-700 rounded-t-xl">
       <div className="p-3 border-b-[6px]">
+        <button
+          onClick={onNewPostClicked}
+          className="flex justify-center items-center space-x-2 h-10 w-full px-3 py-1 mb-2 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-bold rounded-lg"
+        >
+          <span>New Post</span>
+          <PencilIcon className="w-3" />
+        </button>
+
         <div className="flex justify-between space-x-2 w-full h-10 mb-2">
           {/* <SelectableButton
             onClick={setIsStarredFilterActive}

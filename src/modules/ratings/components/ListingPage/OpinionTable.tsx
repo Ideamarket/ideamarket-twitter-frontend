@@ -292,10 +292,18 @@ const OpinionTable = ({
                   )}
                 >
                   {opinion?.rating}
-                  {/* <div className="relative h-6 w-full bg-black/[.1]">
+                  {/* <div className="relative h-4 w-full bg-black/[.1] rounded-lg">
                     <div className={classNames(
-                      `absolute h-full bg-blue-200`
-                    )} style={{ width: `${opinion?.rating}%` }}></div>
+                        `absolute h-full bg-blue-200 rounded-lg`
+                      )} style={{ width: `${opinion?.rating}%` }}
+                    >
+                      <div className={classNames(
+                          `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
+                        )}
+                      >
+                        {opinion?.rating}
+                      </div>
+                    </div>
                   </div> */}
                 </div>
 
@@ -329,9 +337,7 @@ const OpinionTable = ({
                         </span>
 
                         <div className="text-sm text-black/[.5] mb-4">
-                          {opinion?.citations[0]?.citation?.inFavor
-                            ? 'FOR'
-                            : 'AGAINST'}
+                          {opinion?.citations[0]?.inFavor ? 'FOR' : 'AGAINST'}
                         </div>
 
                         <div className="flex items-start">
@@ -536,9 +542,7 @@ const OpinionTable = ({
                       </span>
 
                       <div className="text-sm text-black/[.5] mb-4">
-                        {opinion?.citations[0]?.citation?.inFavor
-                          ? 'FOR'
-                          : 'AGAINST'}
+                        {opinion?.citations[0]?.inFavor ? 'FOR' : 'AGAINST'}
                       </div>
 
                       <div className="flex items-start">

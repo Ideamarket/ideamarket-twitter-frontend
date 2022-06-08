@@ -201,9 +201,7 @@ export default function RatingsRow({
                     </span>
 
                     <div className="text-sm text-black/[.5] mb-4">
-                      {opinion?.citations[0]?.citation?.inFavor
-                        ? 'FOR'
-                        : 'AGAINST'}
+                      {opinion?.citations[0]?.inFavor ? 'FOR' : 'AGAINST'}
                     </div>
 
                     <div className="flex items-start">
@@ -389,7 +387,7 @@ export default function RatingsRow({
                 </span>
 
                 <div className="text-sm text-black/[.5] mb-4">
-                  {opinion?.citations[0]?.citation?.inFavor ? 'FOR' : 'AGAINST'}
+                  {opinion?.citations[0]?.inFavor ? 'FOR' : 'AGAINST'}
                 </div>
 
                 <div className="flex items-start">
