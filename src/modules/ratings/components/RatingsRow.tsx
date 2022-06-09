@@ -135,11 +135,24 @@ export default function RatingsRow({
           <div className="w-[60%]">
             <div className="flex items-center w-full">
               {/* Rating By User */}
-              <div className="w-[20%] grow">
-                <p className="text-sm font-medium md:hidden tracking-tightest text-brand-gray-4 dark:text-gray-300">
-                  Rating By User
-                </p>
-                <div className="font-medium leading-5">{opinion?.rating}</div>
+              <div className="w-[20%] grow pr-14">
+                {/* <div className="font-medium leading-5">{opinion?.rating}</div> */}
+                <div className="relative h-4 w-full bg-black/[.1] rounded-lg">
+                  <div
+                    className={classNames(
+                      `absolute h-full bg-blue-200 rounded-lg`
+                    )}
+                    style={{ width: `${opinion?.rating}%` }}
+                  >
+                    <div
+                      className={classNames(
+                        `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
+                      )}
+                    >
+                      {opinion?.rating}
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Composite Rating */}
@@ -333,6 +346,21 @@ export default function RatingsRow({
               getListingTypeFromIDTURL(opinion?.url) !== LISTING_TYPE.TWEET
             }
           />
+
+          <div className="relative h-4 mt-4 mb-2 w-full bg-black/[.1] rounded-lg">
+            <div
+              className={classNames(`absolute h-full bg-blue-200 rounded-lg`)}
+              style={{ width: `${opinion?.rating}%` }}
+            >
+              <div
+                className={classNames(
+                  `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
+                )}
+              >
+                {opinion?.rating}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="flex justify-between items-start text-center px-10 py-4 border-b border-t">
@@ -360,13 +388,9 @@ export default function RatingsRow({
           </div>
         </div>
 
-        <div className="w-10 h-10 my-4 ml-2 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 font-semibold text-xl">
-          {opinion?.rating}
-        </div>
-
         {/* Citation box */}
-        <div className="w-full flex">
-          {opinion?.citations && opinion?.citations.length > 0 && (
+        {opinion?.citations && opinion?.citations.length > 0 && (
+          <div className="w-full mt-4 flex">
             <div className="relative px-3 py-2 mb-6 mx-3 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200">
               <A
                 href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
@@ -461,8 +485,8 @@ export default function RatingsRow({
                 </div>
               </A>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         <div className="flex justify-between items-center px-10 py-4 border-t">
           {/* <div className="">

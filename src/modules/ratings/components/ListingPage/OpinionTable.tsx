@@ -291,20 +291,22 @@ const OpinionTable = ({
                     `pl-10 text-blue-500 font-semibold`
                   )}
                 >
-                  {opinion?.rating}
-                  {/* <div className="relative h-4 w-full bg-black/[.1] rounded-lg">
-                    <div className={classNames(
+                  <div className="relative h-4 w-full bg-black/[.1] rounded-lg">
+                    <div
+                      className={classNames(
                         `absolute h-full bg-blue-200 rounded-lg`
-                      )} style={{ width: `${opinion?.rating}%` }}
+                      )}
+                      style={{ width: `${opinion?.rating}%` }}
                     >
-                      <div className={classNames(
+                      <div
+                        className={classNames(
                           `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
                         )}
                       >
                         {opinion?.rating}
                       </div>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
 
                 {/* CITATION column */}
@@ -468,10 +470,6 @@ const OpinionTable = ({
                 className="relative bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
                 key={oIndex}
               >
-                <div className="absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg bg-blue-100 text-blue-600 font-semibold text-xl">
-                  {opinion?.rating}
-                </div>
-
                 <div className="mb-2 flex items-start space-x-3">
                   <div className="flex items-center pb-2 flex-wrap">
                     <div className="relative rounded-full w-6 h-6">
@@ -517,6 +515,23 @@ const OpinionTable = ({
                     )}{' '}
                     IMO
                   </span>
+                </div>
+
+                <div className="relative h-4 mb-4 w-full bg-black/[.1] rounded-lg">
+                  <div
+                    className={classNames(
+                      `absolute h-full bg-blue-200 rounded-lg`
+                    )}
+                    style={{ width: `${opinion?.rating}%` }}
+                  >
+                    <div
+                      className={classNames(
+                        `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
+                      )}
+                    >
+                      {opinion?.rating}
+                    </div>
+                  </div>
                 </div>
 
                 {opinion?.citations && opinion?.citations.length > 0 && (

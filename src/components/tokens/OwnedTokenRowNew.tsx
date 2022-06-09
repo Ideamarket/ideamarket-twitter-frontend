@@ -224,9 +224,9 @@ export default function OwnedTokenRow({
                   onTradeClosed
                 )
           }}
-          className="w-16 h-10 mr-4 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300"
+          className="w-auto h-10 mr-4 px-2 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300"
         >
-          <span>{isL1 ? 'Bridge' : 'Lock'}</span>
+          <span>{isL1 ? 'Bridge' : 'Unlock/Sell'}</span>
         </button>
       </td>
       <td className="px-4 md:pl-0 md:pr-5 py-4 whitespace-nowrap">
