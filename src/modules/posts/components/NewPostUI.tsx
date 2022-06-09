@@ -138,7 +138,7 @@ export default function NewPostUI({
     onInputChanged(inputContent)
   }, [inputContent, onInputChanged])
 
-  const isTextPostTooLong = inputContent?.length > 10000
+  const isTextPostTooLong = inputContent?.length > 360
   const isListingDisabled = isTextPostTooLong || !isValidToken
 
   return (
@@ -187,7 +187,7 @@ export default function NewPostUI({
             <span className={classNames(isTextPostTooLong && 'text-red-500')}>
               {inputContent?.length}
             </span>
-            /10000
+            /360
           </span>
         </div>
 
