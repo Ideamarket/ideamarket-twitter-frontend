@@ -277,9 +277,9 @@ export default function AddCitationModal({
 
           <div className="mb-4 flex justify-between items-center font-bold">
             {/* <span className="text-[#0cae74] text-sm">FOR ({localInFavorArray.filter(ele => ele).length})</span> */}
-            <span className="text-[#0cae74] text-sm">
+            <span className="text-[#e63b3b] text-sm">
               <ArrowCircleLeftIcon className="w-5 cursor-pointer mr-1" />
-              <span>FOR</span>
+              <span>AGAINST</span>
             </span>
 
             <span className=" text-sm">
@@ -289,8 +289,8 @@ export default function AddCitationModal({
             </span>
             {/* <span className="text-[#e63b3b] text-sm">({localInFavorArray.filter(ele => !ele).length}) AGAINST</span> */}
 
-            <span className="text-[#e63b3b] text-sm flex items-center">
-              <span>AGAINST</span>
+            <span className="text-[#0cae74] text-sm flex items-center">
+              <span>FOR</span>
               <ArrowCircleRightIcon className="w-5 cursor-pointer ml-1" />
             </span>
           </div>
@@ -321,14 +321,14 @@ export default function AddCitationModal({
                     ? post?.content
                     : post?.content.slice(0, 280) + '...'
 
-                  if (isCitationAlreadyCited && isInFavor) {
+                  if (isCitationAlreadyCited && !isInFavor) {
                     return (
                       <div
                         ref={lastElementRef}
                         className="flex items-center w-full mb-2"
                         key={postInd}
                       >
-                        <div className="relative w-[85%] bg-[#0cae74]/[.25] rounded-lg p-4 cursor-pointer">
+                        <div className="relative w-[85%] bg-[#ec4a4a]/[.25] rounded-lg p-4 cursor-pointer">
                           <A
                             href={`/post/${post?.tokenID}`}
                             target="_blank"
@@ -388,7 +388,7 @@ export default function AddCitationModal({
 
                         <div className="w-[15%] flex justify-end">
                           <ArrowCircleRightIcon
-                            onClick={() => onLocalCitationChanged(post, false)}
+                            onClick={() => onLocalCitationChanged(post, true)}
                             className="w-5 cursor-pointer"
                           />
                         </div>
@@ -396,7 +396,7 @@ export default function AddCitationModal({
                     )
                   }
 
-                  if (isCitationAlreadyCited && !isInFavor) {
+                  if (isCitationAlreadyCited && isInFavor) {
                     return (
                       <div
                         ref={lastElementRef}
@@ -405,12 +405,12 @@ export default function AddCitationModal({
                       >
                         <div className="w-[15%]">
                           <ArrowCircleLeftIcon
-                            onClick={() => onLocalCitationChanged(post, true)}
+                            onClick={() => onLocalCitationChanged(post, false)}
                             className="w-5 cursor-pointer"
                           />
                         </div>
 
-                        <div className="relative w-[85%] bg-[#ec4a4a]/[.25] rounded-lg p-4 cursor-pointer">
+                        <div className="relative w-[85%] bg-[#0cae74]/[.25] rounded-lg p-4 cursor-pointer">
                           <A
                             href={`/post/${post?.tokenID}`}
                             target="_blank"
@@ -480,7 +480,7 @@ export default function AddCitationModal({
                     >
                       <div className="w-[15%]">
                         <ArrowCircleLeftIcon
-                          onClick={() => onLocalCitationChanged(post, true)}
+                          onClick={() => onLocalCitationChanged(post, false)}
                           className="w-5 cursor-pointer"
                         />
                       </div>
@@ -545,7 +545,7 @@ export default function AddCitationModal({
 
                       <div className="w-[15%] flex justify-end">
                         <ArrowCircleRightIcon
-                          onClick={() => onLocalCitationChanged(post, false)}
+                          onClick={() => onLocalCitationChanged(post, true)}
                           className="w-5 cursor-pointer"
                         />
                       </div>
@@ -580,14 +580,14 @@ export default function AddCitationModal({
                     ? opinion?.content
                     : opinion?.content.slice(0, 280) + '...'
 
-                  if (isCitationAlreadyCited && isInFavor) {
+                  if (isCitationAlreadyCited && !isInFavor) {
                     return (
                       <div
                         ref={lastElementRef}
                         className="flex items-center w-full mb-2"
                         key={oInd}
                       >
-                        <div className="relative w-[85%] bg-[#0cae74]/[.25] rounded-lg p-4 cursor-pointer">
+                        <div className="relative w-[85%] bg-[#ec4a4a]/[.25] rounded-lg p-4 cursor-pointer">
                           <A
                             href={`/post/${opinion?.tokenID}`}
                             target="_blank"
@@ -648,7 +648,7 @@ export default function AddCitationModal({
                         <div className="w-[15%] flex justify-end">
                           <ArrowCircleRightIcon
                             onClick={() =>
-                              onLocalCitationChanged(opinion, false)
+                              onLocalCitationChanged(opinion, true)
                             }
                             className="w-5 cursor-pointer"
                           />
@@ -657,7 +657,7 @@ export default function AddCitationModal({
                     )
                   }
 
-                  if (isCitationAlreadyCited && !isInFavor) {
+                  if (isCitationAlreadyCited && isInFavor) {
                     return (
                       <div
                         ref={lastElementRef}
@@ -667,13 +667,13 @@ export default function AddCitationModal({
                         <div className="w-[15%]">
                           <ArrowCircleLeftIcon
                             onClick={() =>
-                              onLocalCitationChanged(opinion, true)
+                              onLocalCitationChanged(opinion, false)
                             }
                             className="w-5 cursor-pointer"
                           />
                         </div>
 
-                        <div className="relative w-[85%] bg-[#ec4a4a]/[.25] rounded-lg p-4 cursor-pointer">
+                        <div className="relative w-[85%] bg-[#0cae74]/[.25] rounded-lg p-4 cursor-pointer">
                           <A
                             href={`/post/${opinion?.tokenID}`}
                             target="_blank"
@@ -743,7 +743,7 @@ export default function AddCitationModal({
                     >
                       <div className="w-[15%]">
                         <ArrowCircleLeftIcon
-                          onClick={() => onLocalCitationChanged(opinion, true)}
+                          onClick={() => onLocalCitationChanged(opinion, false)}
                           className="w-5 cursor-pointer"
                         />
                       </div>
@@ -808,7 +808,7 @@ export default function AddCitationModal({
 
                       <div className="w-[15%] flex justify-end">
                         <ArrowCircleRightIcon
-                          onClick={() => onLocalCitationChanged(opinion, false)}
+                          onClick={() => onLocalCitationChanged(opinion, true)}
                           className="w-5 cursor-pointer"
                         />
                       </div>
