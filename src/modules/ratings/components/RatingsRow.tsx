@@ -270,7 +270,19 @@ export default function RatingsRow({
                     </span>
 
                     <div className="text-sm text-black/[.5] mb-4">
-                      {selectedCitationForRow?.inFavor ? 'FOR' : 'AGAINST'}
+                      <span>
+                        {selectedCitationForRow?.inFavor ? 'FOR' : 'AGAINST'}
+                      </span>
+                      <span>
+                        {' '}
+                        (
+                        {opinion?.citations.findIndex(
+                          (citation) =>
+                            citation.citation.tokenID ===
+                            selectedCitationForRow.citation.tokenID
+                        ) + 1}
+                        /{opinion?.citations?.length})
+                      </span>
                     </div>
 
                     <div className="flex items-start">
@@ -295,7 +307,7 @@ export default function RatingsRow({
                       {/* The citation minter username and content */}
                       <div className="pr-6 w-full">
                         <div className="flex items-center space-x-1 pb-2 flex-wrap">
-                          <A className="font-bold">
+                          <A className="font-bold text-sm">
                             {displayUsernameOrWalletCitation}
                           </A>
                           {selectedCitationForRow?.citation?.minter
@@ -499,7 +511,19 @@ export default function RatingsRow({
                 </span>
 
                 <div className="text-sm text-black/[.5] mb-4">
-                  {selectedCitationForRow?.inFavor ? 'FOR' : 'AGAINST'}
+                  <span>
+                    {selectedCitationForRow?.inFavor ? 'FOR' : 'AGAINST'}
+                  </span>
+                  <span>
+                    {' '}
+                    (
+                    {opinion?.citations.findIndex(
+                      (citation) =>
+                        citation.citation.tokenID ===
+                        selectedCitationForRow.citation.tokenID
+                    ) + 1}
+                    /{opinion?.citations?.length})
+                  </span>
                 </div>
 
                 <div className="flex items-start">
@@ -524,7 +548,7 @@ export default function RatingsRow({
                   {/* The citation minter username and content */}
                   <div className="pr-6 w-full">
                     <div className="flex items-center space-x-1 pb-2 flex-wrap">
-                      <A className="font-bold">
+                      <A className="font-bold text-sm">
                         {displayUsernameOrWalletCitation}
                       </A>
                       {selectedCitationForRow?.citation?.minter

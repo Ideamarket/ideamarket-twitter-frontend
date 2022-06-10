@@ -415,9 +415,22 @@ const OpinionTable = ({
                           </span>
 
                           <div className="text-sm text-black/[.5] mb-4">
-                            {selectedCitationForRows[oIndex].inFavor
-                              ? 'FOR'
-                              : 'AGAINST'}
+                            <span>
+                              {selectedCitationForRows[oIndex].inFavor
+                                ? 'FOR'
+                                : 'AGAINST'}
+                            </span>
+                            <span>
+                              {' '}
+                              (
+                              {opinion?.citations.findIndex(
+                                (citation) =>
+                                  citation.citation.tokenID ===
+                                  selectedCitationForRows[oIndex].citation
+                                    .tokenID
+                              ) + 1}
+                              /{opinion?.citations?.length})
+                            </span>
                           </div>
 
                           <div className="flex items-start">
@@ -443,7 +456,7 @@ const OpinionTable = ({
                             {/* The citation minter username and content */}
                             <div className="pr-6 w-full">
                               <div className="flex items-center space-x-1 pb-2 flex-wrap">
-                                <A className="font-bold">
+                                <A className="font-bold text-sm">
                                   {displayUsernameOrWalletCitation}
                                 </A>
                                 {selectedCitationForRows[oIndex].minter
@@ -475,7 +488,7 @@ const OpinionTable = ({
                                   dangerouslySetInnerHTML={{
                                     __html: urlify(citationText),
                                   }}
-                                  className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                                  className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words font-normal"
                                   style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                                 />
 
@@ -672,9 +685,21 @@ const OpinionTable = ({
                         </span>
 
                         <div className="text-sm text-black/[.5] mb-4">
-                          {selectedCitationForRows[oIndex]?.inFavor
-                            ? 'FOR'
-                            : 'AGAINST'}
+                          <span>
+                            {selectedCitationForRows[oIndex]?.inFavor
+                              ? 'FOR'
+                              : 'AGAINST'}
+                          </span>
+                          <span>
+                            {' '}
+                            (
+                            {opinion?.citations.findIndex(
+                              (citation) =>
+                                citation.citation.tokenID ===
+                                selectedCitationForRows[oIndex].citation.tokenID
+                            ) + 1}
+                            /{opinion?.citations?.length})
+                          </span>
                         </div>
 
                         <div className="flex items-start">
@@ -700,7 +725,7 @@ const OpinionTable = ({
                           {/* The citation minter username and content */}
                           <div className="pr-6 w-full">
                             <div className="flex items-center space-x-1 pb-2 flex-wrap">
-                              <A className="font-bold">
+                              <A className="font-bold text-sm">
                                 {displayUsernameOrWalletCitation}
                               </A>
                               {selectedCitationForRows[oIndex]?.citation?.minter
@@ -732,7 +757,7 @@ const OpinionTable = ({
                                 dangerouslySetInnerHTML={{
                                   __html: urlify(citationText),
                                 }}
-                                className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                                className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words font-normal"
                                 style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                               />
 
