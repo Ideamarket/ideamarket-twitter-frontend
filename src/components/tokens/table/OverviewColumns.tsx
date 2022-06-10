@@ -159,7 +159,7 @@ export const OverviewColumns = ({
         //   return 'w-[11%] lg:w-[9%]'
         case SortOptionsHomePostsTable.MARKET_INTEREST.value:
           return 'w-[13.75%] lg:w-[11.25%]'
-        case SortOptionsHomePostsTable.COMMENTS.value:
+        case SortOptionsHomePostsTable.RATINGS.value:
           return 'w-[13.75%] lg:w-[11.25%]'
         case 'txButtons':
           return 'w-[13.75%] lg:w-[11.25%]'

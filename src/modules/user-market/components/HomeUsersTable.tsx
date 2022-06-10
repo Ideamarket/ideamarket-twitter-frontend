@@ -165,8 +165,8 @@ export default function HomeUsersTable({
       // else if (column === SortOptionsHomePostsTable.AVG_RATING.value) {
       //   onOrderByChanged(SortOptionsHomePostsTable.AVG_RATING.value, 'desc')
       // }
-      else if (column === SortOptionsHomePostsTable.COMMENTS.value) {
-        onOrderByChanged(SortOptionsHomePostsTable.COMMENTS.value, 'desc')
+      else if (column === SortOptionsHomePostsTable.RATINGS.value) {
+        onOrderByChanged(SortOptionsHomePostsTable.RATINGS.value, 'desc')
       }
     }
   }

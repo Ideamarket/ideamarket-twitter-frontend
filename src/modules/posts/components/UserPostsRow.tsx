@@ -2,7 +2,6 @@ import { IdeaToken } from 'store/ideaMarketsStore'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
-import { ChatIcon } from '@heroicons/react/outline'
 import ListingContent from 'components/tokens/ListingContent'
 import {
   getListingTypeFromIDTURL,
@@ -157,12 +156,11 @@ export default function UserPostsRow({
               </div>
             </div> */}
 
-            {/* latestCommentsCount */}
+            {/* latestRatingsCount */}
             <div className="w-[13.75%] lg:w-[11.25%] grow">
               <div className="flex items-center font-medium text-lg text-black">
-                <ChatIcon className="w-4 mr-1" />
                 {formatNumberWithCommasAsThousandsSerperator(
-                  token?.latestCommentsCount
+                  token?.latestRatingsCount
                 )}
               </div>
             </div>
@@ -186,7 +184,10 @@ export default function UserPostsRow({
       </div>
 
       {/* Mobile row */}
-      <div className="md:hidden">
+      <div
+        onClick={() => router.push(`/post/${token?.tokenID}`)}
+        className="md:hidden"
+      >
         <div className="px-3 pt-4">
           {minterAddress && (
             <div className="flex items-center pb-2 whitespace-nowrap">
@@ -274,11 +275,10 @@ export default function UserPostsRow({
             </span>
           </div>
 
-          {/* Latest comments count */}
+          {/* latestRatingsCount */}
           <div className="flex items-center font-medium text-lg text-black">
-            <ChatIcon className="w-4 mr-1" />
             {formatNumberWithCommasAsThousandsSerperator(
-              token?.latestCommentsCount
+              token?.latestRatingsCount
             )}
           </div>
 
@@ -287,7 +287,7 @@ export default function UserPostsRow({
               e.stopPropagation()
               onRateClicked(token, urlMetaData)
             }}
-            className="flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-blue-500 bg-transparent"
+            className="flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-blue-500 bg-transparent z-[500]"
           >
             <span>Rate</span>
           </button>

@@ -12,8 +12,7 @@ export enum TABLE_NAMES {
 // To change string value being passed into orderBy to backend, you need to change "value" on SortOptions objects
 const orderByIndividualRating = 'rating'
 // const orderByAverageRating = 'averageRating'
-const orderByLatestCommentsCount = 'latestCommentsCount'
-// const orderByLatestRatingsCount = 'latestRatingsCount'
+const orderByLatestRatingsCount = 'latestRatingsCount'
 const orderByCompositeRating = 'compositeRating'
 const orderByMarketInterest = 'marketInterest'
 const orderByDeposits = 'deposits'
@@ -36,10 +35,10 @@ export const SortOptionsHomePostsTable = {
     value: orderByMarketInterest,
     displayName: 'Scrutiny',
   },
-  COMMENTS: {
+  RATINGS: {
     id: 4,
-    value: orderByLatestCommentsCount,
-    displayName: 'Comments',
+    value: orderByLatestRatingsCount,
+    displayName: 'Ratings',
   },
 }
 
@@ -140,10 +139,10 @@ export const SortOptionsAccountPosts = {
     value: orderByMarketInterest,
     displayName: 'Scrutiny',
   },
-  COMMENTS: {
+  RATINGS: {
     id: 4,
-    value: orderByLatestCommentsCount,
-    displayName: 'Comments',
+    value: orderByLatestRatingsCount,
+    displayName: 'Ratings',
   },
 }
 
@@ -165,10 +164,10 @@ export const SortOptionsAccountOpinions = {
     value: orderByIndividualRating,
     displayName: 'Rating',
   },
-  COMMENTS: {
+  RATINGS: {
     id: 3,
-    value: orderByLatestCommentsCount,
-    displayName: 'Comments',
+    value: orderByLatestRatingsCount,
+    displayName: 'Ratings',
   },
 }
 

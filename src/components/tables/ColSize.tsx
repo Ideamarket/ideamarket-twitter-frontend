@@ -1,10 +1,6 @@
 import useBreakpoint from 'use-breakpoint'
 import { BREAKPOINTS } from 'utils/constants'
-import {
-  SortOptionsAccountOpinions,
-  SortOptionsHomePostsTable,
-  TABLE_NAMES,
-} from 'utils/tables'
+import { SortOptionsAccountOpinions, TABLE_NAMES } from 'utils/tables'
 
 type Props = {
   columnData: Array<any>
@@ -34,8 +30,6 @@ const ColSize = ({ columnData, tableName }: Props) => {
         case 'deposits':
           return '8%'
         case 'claimable':
-          return '8%'
-        case SortOptionsHomePostsTable.COMMENTS.value:
           return '8%'
         // case SortOptionsHomePostsTable.AVG_RATING.value:
         //   return '8%'

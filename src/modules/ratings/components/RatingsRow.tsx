@@ -3,7 +3,6 @@ import { IdeaToken } from 'store/ideaMarketsStore'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
-import { ChatIcon } from '@heroicons/react/outline'
 import ListingContent from 'components/tokens/ListingContent'
 import {
   getListingTypeFromIDTURL,
@@ -459,11 +458,10 @@ export default function RatingsRow({
           </div>
 
           <div>
-            <div className="font-semibold text-black/[.5]">Comments</div>
+            <div className="font-semibold text-black/[.5]">Ratings</div>
             <div className="flex items-center font-medium text-lg text-black">
-              <ChatIcon className="w-4 mr-1" />
               {formatNumberWithCommasAsThousandsSerperator(
-                opinion?.latestCommentsCount
+                opinion?.latestRatingsCount
               )}
             </div>
           </div>

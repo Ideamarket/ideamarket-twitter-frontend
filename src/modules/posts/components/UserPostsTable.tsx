@@ -36,8 +36,8 @@ const headers: Header[] = [
   //   sortable: true,
   // },
   {
-    title: 'Comments',
-    value: SortOptionsAccountPosts.COMMENTS.value,
+    title: 'Ratings',
+    value: SortOptionsAccountPosts.RATINGS.value,
     sortable: true,
   },
   {
@@ -141,7 +141,7 @@ export default function UserPostsTable({
       //   return 'w-[11%] lg:w-[9%]'
       case SortOptionsAccountPosts.MARKET_INTEREST.value:
         return 'w-[13.75%] lg:w-[11.25%]'
-      case SortOptionsAccountPosts.COMMENTS.value:
+      case SortOptionsAccountPosts.RATINGS.value:
         return 'w-[13.75%] lg:w-[11.25%]'
       case 'txButtons':
         return 'w-[13.75%] lg:w-[11.25%]'

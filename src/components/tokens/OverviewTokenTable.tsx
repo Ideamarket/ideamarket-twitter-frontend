@@ -171,8 +171,8 @@ export default function Table({
       // else if (column === SortOptionsHomePostsTable.AVG_RATING.value) {
       //   onOrderByChanged(SortOptionsHomePostsTable.AVG_RATING.value, 'desc')
       // }
-      else if (column === SortOptionsHomePostsTable.COMMENTS.value) {
-        onOrderByChanged(SortOptionsHomePostsTable.COMMENTS.value, 'desc')
+      else if (column === SortOptionsHomePostsTable.RATINGS.value) {
+        onOrderByChanged(SortOptionsHomePostsTable.RATINGS.value, 'desc')
       } else if (column === SortOptionsHomePostsTable.MARKET_INTEREST.value) {
         onOrderByChanged(
           SortOptionsHomePostsTable.MARKET_INTEREST.value,

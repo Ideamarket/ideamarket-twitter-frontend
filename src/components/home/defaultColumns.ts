@@ -39,9 +39,9 @@ const defaultColumns = [
   // },
   {
     id: 5,
-    name: 'Comments',
-    content: 'Comments',
-    value: SortOptionsHomePostsTable.COMMENTS.value,
+    name: 'Ratings',
+    content: 'Ratings',
+    value: SortOptionsHomePostsTable.RATINGS.value,
     sortable: true,
     isOptional: false,
     isSelectedAtStart: true,
