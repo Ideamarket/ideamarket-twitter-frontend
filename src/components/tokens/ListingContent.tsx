@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import A from 'components/A'
 import { DefaultLayout } from 'components/layouts'
 import TwitterProfileDesktopContent from 'components/listing-page/TwitterProfileDesktopContent'
 import TwitterProfileMobileContent from 'components/listing-page/TwitterProfileMobileContent'
@@ -56,9 +55,9 @@ const ListingContent = ({
       ? urlMetaData?.ogTitle
       : marketSpecifics?.convertUserInputToTokenName(ideaToken?.url)
 
-  const showFullContent = page === 'ListingPage'
-  const cutOffContent = !showFullContent && ideaToken?.content?.length > 280
-  const content = !cutOffContent
+  // const showFullContent = page === 'ListingPage'
+  // const cutOffContent = !showFullContent && ideaToken?.content?.length > 280
+  const content = true
     ? ideaToken?.content
     : ideaToken?.content.slice(0, 280) + '...'
 
@@ -123,17 +122,17 @@ const ListingContent = ({
             dangerouslySetInnerHTML={{
               __html: urlify(content),
             }}
-            className="md:max-w-[30rem] whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
+            className="md:max-w-[30rem] pr-2 whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
           />
 
-          {cutOffContent && (
+          {/* {cutOffContent && (
             <A
               href={`/post/${ideaToken?.tokenID}`}
               className="absolute bottom-0 right-0 text-blue-500 z-[60]"
             >
               (More...)
             </A>
-          )}
+          )} */}
         </div>
       )}
 

@@ -15,6 +15,10 @@ import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 import { getIMORatingColors, urlify } from 'utils/display/DisplayUtils'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import classNames from 'classnames'
+import {
+  ArrowCircleLeftIcon,
+  ArrowCircleRightIcon,
+} from '@heroicons/react/outline'
 
 type DropdownButtonProps = {
   toggleOption: (value: any) => void
@@ -96,6 +100,59 @@ const OpinionTable = ({
   setNameSearch,
   headerClicked,
 }: Props) => {
+  // Key == opinionIndex, value = selected citation object
+  const [selectedCitationForRows, setSelectedCitationForRows] = useState({})
+
+  useEffect(() => {
+    const initialSelectCitationForRows = {}
+    opinionPairs?.forEach((opinion, oInd) => {
+      initialSelectCitationForRows[oInd] =
+        opinion?.citations[0] && opinion?.citations?.length > 0
+          ? opinion?.citations[0]
+          : null
+    })
+    setSelectedCitationForRows(initialSelectCitationForRows)
+  }, [opinionPairs])
+
+  /**
+   * An arrow was clicked to show a different citation in that row (if there are > 1 citations)
+   * @parm isLeft -- Did user click the left arrow? If not, they clicked the right arrow
+   */
+  const onRowCitationChanged = (opinionIndex: number, isLeft: boolean) => {
+    const opinionToChange = opinionPairs?.find(
+      (opinion, oInd) => oInd === opinionIndex
+    )
+    const oldCitationIndex = opinionToChange?.citations.findIndex(
+      (citation) =>
+        citation.citation.tokenID ===
+        selectedCitationForRows[opinionIndex].citation.tokenID
+    )
+
+    let newCitationIndex = null
+
+    if (isLeft) {
+      if (oldCitationIndex - 1 < 0) {
+        newCitationIndex = opinionToChange?.citations.length - 1
+      } else {
+        newCitationIndex = oldCitationIndex - 1
+      }
+    } else {
+      if (oldCitationIndex + 1 >= opinionToChange?.citations.length) {
+        newCitationIndex = 0
+      } else {
+        newCitationIndex = oldCitationIndex + 1
+      }
+    }
+
+    const newCitation = opinionToChange?.citations[newCitationIndex]
+
+    const newSelectedCitationForRows = {
+      ...selectedCitationForRows,
+      [opinionIndex]: newCitation,
+    }
+    setSelectedCitationForRows(newSelectedCitationForRows)
+  }
+
   return (
     <>
       {/* Desktop and tablet table */}
@@ -186,19 +243,22 @@ const OpinionTable = ({
             const usernameOrWallet =
               opinion?.userToken?.username || opinion?.ratedBy
 
-            const cutOffContent =
-              opinion?.citations[0]?.citation?.content?.length > 280
-            const citationText = !cutOffContent
-              ? opinion?.citations[0]?.citation?.content
-              : opinion?.citations[0]?.citation?.content.slice(0, 280) + '...'
+            // const cutOffContent =
+            //   selectedCitationForRows[oIndex]?.citation?.content?.length > 280
+            const citationText = true
+              ? selectedCitationForRows[oIndex]?.citation?.content
+              : selectedCitationForRows[oIndex]?.citation?.content.slice(
+                  0,
+                  280
+                ) + '...'
 
             const displayUsernameOrWalletCitation = convertAccountName(
-              opinion?.citations[0]?.citation?.minter?.username ||
-                opinion?.citations[0]?.citation?.minter?.walletAddress
+              selectedCitationForRows[oIndex]?.citation?.minter?.username ||
+                selectedCitationForRows[oIndex]?.citation?.minter?.walletAddress
             )
             const usernameOrWalletCitation =
-              opinion?.citations[0]?.citation?.minter?.username ||
-              opinion?.citations[0]?.citation?.minter?.walletAddress
+              selectedCitationForRows[oIndex]?.citation?.minter?.username ||
+              selectedCitationForRows[oIndex]?.citation?.minter?.walletAddress
 
             return (
               <div
@@ -316,103 +376,123 @@ const OpinionTable = ({
                     `text-blue-500 font-semibold pl-6 pr-4`
                   )}
                 >
-                  {opinion?.citations && opinion?.citations.length > 0 && (
-                    <div className="relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
-                      <A
-                        href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <span
-                          className={classNames(
-                            getIMORatingColors(
-                              Math.round(
-                                opinion?.citations[0]?.citation?.compositeRating
-                              )
-                            ),
-                            'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
-                          )}
+                  {selectedCitationForRows[oIndex] && (
+                    <div className="flex justify-between items-center space-x-4">
+                      {opinion?.citations && opinion?.citations.length > 1 && (
+                        <ArrowCircleLeftIcon
+                          onClick={() => onRowCitationChanged(oIndex, true)}
+                          className="w-10 cursor-pointer text-black"
+                        />
+                      )}
+
+                      <div className="relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
+                        <A
+                          href={`/post/${selectedCitationForRows[oIndex].citation.tokenID}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          {Math.round(
-                            opinion?.citations[0]?.citation?.compositeRating
-                          )}
-                        </span>
+                          <span
+                            className={classNames(
+                              getIMORatingColors(
+                                Math.round(
+                                  selectedCitationForRows[oIndex].citation
+                                    .compositeRating
+                                )
+                              ),
+                              'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                            )}
+                          >
+                            {Math.round(
+                              selectedCitationForRows[oIndex].citation
+                                .compositeRating
+                            )}
+                          </span>
 
-                        <div className="text-sm text-black/[.5] mb-4">
-                          {opinion?.citations[0]?.inFavor ? 'FOR' : 'AGAINST'}
-                        </div>
-
-                        <div className="flex items-start">
-                          {/* The citation minter profile image */}
-                          <div className="mr-4 flex flex-col items-center space-y-2">
-                            <div className="relative rounded-full w-6 h-6">
-                              <Image
-                                className="rounded-full"
-                                src={
-                                  opinion?.citations[0]?.citation?.minter
-                                    ?.profilePhoto ||
-                                  '/DefaultProfilePicture.png'
-                                }
-                                alt=""
-                                layout="fill"
-                                objectFit="cover"
-                              />
-                            </div>
-
-                            {/* <WatchingStar token={token} /> */}
+                          <div className="text-sm text-black/[.5] mb-4">
+                            {selectedCitationForRows[oIndex].inFavor
+                              ? 'FOR'
+                              : 'AGAINST'}
                           </div>
 
-                          {/* The citation minter username and content */}
-                          <div className="pr-6 w-full">
-                            <div className="flex items-center space-x-1 pb-2 flex-wrap">
-                              <A className="font-bold">
-                                {displayUsernameOrWalletCitation}
-                              </A>
-                              {opinion?.citations[0]?.citation?.minter
-                                ?.twitterUsername && (
-                                <A
-                                  className="flex items-center space-x-1 text-black z-50"
-                                  href={`/u/${usernameOrWalletCitation}`}
-                                >
-                                  <div className="relative w-4 h-4">
-                                    <Image
-                                      src={'/twitter-solid-blue.svg'}
-                                      alt="twitter-solid-blue-icon"
-                                      layout="fill"
-                                    />
-                                  </div>
-                                  <span className="text-sm opacity-50">
-                                    @
-                                    {
-                                      opinion?.citations[0]?.citation?.minter
-                                        ?.twitterUsername
-                                    }
-                                  </span>
-                                </A>
-                              )}
+                          <div className="flex items-start">
+                            {/* The citation minter profile image */}
+                            <div className="mr-4 flex flex-col items-center space-y-2">
+                              <div className="relative rounded-full w-6 h-6">
+                                <Image
+                                  className="rounded-full"
+                                  src={
+                                    selectedCitationForRows[oIndex]?.citation
+                                      ?.minter?.profilePhoto ||
+                                    '/DefaultProfilePicture.png'
+                                  }
+                                  alt=""
+                                  layout="fill"
+                                  objectFit="cover"
+                                />
+                              </div>
+
+                              {/* <WatchingStar token={token} /> */}
                             </div>
 
-                            <div className="relative">
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: urlify(citationText),
-                                }}
-                                className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
-                                style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
-                              />
-
-                              {cutOffContent && (
-                                <A
-                                  href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
-                                  className="absolute bottom-0 right-0 text-blue-500 z-[60]"
-                                >
-                                  (More...)
+                            {/* The citation minter username and content */}
+                            <div className="pr-6 w-full">
+                              <div className="flex items-center space-x-1 pb-2 flex-wrap">
+                                <A className="font-bold">
+                                  {displayUsernameOrWalletCitation}
                                 </A>
-                              )}
+                                {selectedCitationForRows[oIndex].minter
+                                  ?.twitterUsername && (
+                                  <A
+                                    className="flex items-center space-x-1 text-black z-50"
+                                    href={`/u/${usernameOrWalletCitation}`}
+                                  >
+                                    <div className="relative w-4 h-4">
+                                      <Image
+                                        src={'/twitter-solid-blue.svg'}
+                                        alt="twitter-solid-blue-icon"
+                                        layout="fill"
+                                      />
+                                    </div>
+                                    <span className="text-sm opacity-50">
+                                      @
+                                      {
+                                        selectedCitationForRows[oIndex].minter
+                                          ?.twitterUsername
+                                      }
+                                    </span>
+                                  </A>
+                                )}
+                              </div>
+
+                              <div className="relative">
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: urlify(citationText),
+                                  }}
+                                  className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                                  style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
+                                />
+
+                                {/* {cutOffContent && (
+                                  <A
+                                    href={`/post/${selectedCitationForRows[oIndex].tokenID}`}
+                                    className="absolute bottom-0 right-0 text-blue-500 z-[60]"
+                                  >
+                                    (More...)
+                                  </A>
+                                )} */}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </A>
+                        </A>
+                      </div>
+
+                      {opinion?.citations && opinion?.citations.length > 1 && (
+                        <ArrowCircleRightIcon
+                          onClick={() => onRowCitationChanged(oIndex, false)}
+                          className="w-10 cursor-pointer text-black"
+                        />
+                      )}
                     </div>
                   )}
                 </div>
@@ -450,19 +530,22 @@ const OpinionTable = ({
             const usernameOrWallet =
               opinion?.userToken?.username || opinion?.ratedBy
 
-            const cutOffContent =
-              opinion?.citations[0]?.citation?.content?.length > 280
-            const citationText = !cutOffContent
-              ? opinion?.citations[0]?.citation?.content
-              : opinion?.citations[0]?.citation?.content.slice(0, 280) + '...'
+            // const cutOffContent =
+            //   selectedCitationForRows[oIndex]?.citation?.content?.length > 280
+            const citationText = true
+              ? selectedCitationForRows[oIndex]?.citation?.content
+              : selectedCitationForRows[oIndex]?.citation?.content.slice(
+                  0,
+                  280
+                ) + '...'
 
             const displayUsernameOrWalletCitation = convertAccountName(
-              opinion?.citations[0]?.citation?.minter?.username ||
-                opinion?.citations[0]?.citation?.minter?.walletAddress
+              selectedCitationForRows[oIndex]?.citation?.minter?.username ||
+                selectedCitationForRows[oIndex]?.citation?.minter?.walletAddress
             )
             const usernameOrWalletCitation =
-              opinion?.citations[0]?.citation?.minter?.username ||
-              opinion?.citations[0]?.citation?.minter?.walletAddress
+              selectedCitationForRows[oIndex]?.citation?.minter?.username ||
+              selectedCitationForRows[oIndex]?.citation?.minter?.walletAddress
 
             return (
               <div
@@ -534,102 +617,123 @@ const OpinionTable = ({
                   </div>
                 </div>
 
-                {opinion?.citations && opinion?.citations.length > 0 && (
-                  <div className="relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full mx-auto md:w-full text-gray-900 dark:text-gray-200">
-                    <A
-                      href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <span
-                        className={classNames(
-                          getIMORatingColors(
-                            Math.round(
-                              opinion?.citations[0]?.citation?.compositeRating
-                            )
-                          ),
-                          'absolute top-2 right-2 w-8 h-7 flex justify-center items-center rounded-lg font-extrabold'
-                        )}
+                {selectedCitationForRows[oIndex] && (
+                  <div className="flex justify-between items-center">
+                    {opinion?.citations && opinion?.citations.length > 1 && (
+                      <ArrowCircleLeftIcon
+                        onClick={() => onRowCitationChanged(oIndex, true)}
+                        className="w-10 cursor-pointer"
+                      />
+                    )}
+
+                    <div className="relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full mx-auto md:w-full text-gray-900 dark:text-gray-200">
+                      <A
+                        href={`/post/${selectedCitationForRows[oIndex]?.citation?.tokenID}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        {Math.round(
-                          opinion?.citations[0]?.citation?.compositeRating
-                        )}
-                      </span>
+                        <span
+                          className={classNames(
+                            getIMORatingColors(
+                              Math.round(
+                                selectedCitationForRows[oIndex]?.citation
+                                  ?.compositeRating
+                              )
+                            ),
+                            'absolute top-2 right-2 w-8 h-7 flex justify-center items-center rounded-lg font-extrabold'
+                          )}
+                        >
+                          {Math.round(
+                            selectedCitationForRows[oIndex]?.citation
+                              ?.compositeRating
+                          )}
+                        </span>
 
-                      <div className="text-sm text-black/[.5] mb-4">
-                        {opinion?.citations[0]?.inFavor ? 'FOR' : 'AGAINST'}
-                      </div>
-
-                      <div className="flex items-start">
-                        {/* The citation minter profile image */}
-                        <div className="mr-4 flex flex-col items-center space-y-2">
-                          <div className="relative rounded-full w-6 h-6">
-                            <Image
-                              className="rounded-full"
-                              src={
-                                opinion?.citations[0]?.citation?.minter
-                                  ?.profilePhoto || '/DefaultProfilePicture.png'
-                              }
-                              alt=""
-                              layout="fill"
-                              objectFit="cover"
-                            />
-                          </div>
-
-                          {/* <WatchingStar token={token} /> */}
+                        <div className="text-sm text-black/[.5] mb-4">
+                          {selectedCitationForRows[oIndex]?.inFavor
+                            ? 'FOR'
+                            : 'AGAINST'}
                         </div>
 
-                        {/* The citation minter username and content */}
-                        <div className="pr-6 w-full">
-                          <div className="flex items-center space-x-1 pb-2 flex-wrap">
-                            <A className="font-bold">
-                              {displayUsernameOrWalletCitation}
-                            </A>
-                            {opinion?.citations[0]?.citation?.minter
-                              ?.twitterUsername && (
-                              <A
-                                className="flex items-center space-x-1 text-black z-50"
-                                href={`/u/${usernameOrWalletCitation}`}
-                              >
-                                <div className="relative w-4 h-4">
-                                  <Image
-                                    src={'/twitter-solid-blue.svg'}
-                                    alt="twitter-solid-blue-icon"
-                                    layout="fill"
-                                  />
-                                </div>
-                                <span className="text-sm opacity-50">
-                                  @
-                                  {
-                                    opinion?.citations[0]?.citation?.minter
-                                      ?.twitterUsername
-                                  }
-                                </span>
-                              </A>
-                            )}
+                        <div className="flex items-start">
+                          {/* The citation minter profile image */}
+                          <div className="mr-4 flex flex-col items-center space-y-2">
+                            <div className="relative rounded-full w-6 h-6">
+                              <Image
+                                className="rounded-full"
+                                src={
+                                  selectedCitationForRows[oIndex]?.citation
+                                    ?.minter?.profilePhoto ||
+                                  '/DefaultProfilePicture.png'
+                                }
+                                alt=""
+                                layout="fill"
+                                objectFit="cover"
+                              />
+                            </div>
+
+                            {/* <WatchingStar token={token} /> */}
                           </div>
 
-                          <div className="relative">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: urlify(citationText),
-                              }}
-                              className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
-                              style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
-                            />
-
-                            {cutOffContent && (
-                              <A
-                                href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
-                                className="absolute bottom-0 right-0 text-blue-500 z-[60]"
-                              >
-                                (More...)
+                          {/* The citation minter username and content */}
+                          <div className="pr-6 w-full">
+                            <div className="flex items-center space-x-1 pb-2 flex-wrap">
+                              <A className="font-bold">
+                                {displayUsernameOrWalletCitation}
                               </A>
-                            )}
+                              {selectedCitationForRows[oIndex]?.citation?.minter
+                                ?.twitterUsername && (
+                                <A
+                                  className="flex items-center space-x-1 text-black z-50"
+                                  href={`/u/${usernameOrWalletCitation}`}
+                                >
+                                  <div className="relative w-4 h-4">
+                                    <Image
+                                      src={'/twitter-solid-blue.svg'}
+                                      alt="twitter-solid-blue-icon"
+                                      layout="fill"
+                                    />
+                                  </div>
+                                  <span className="text-sm opacity-50">
+                                    @
+                                    {
+                                      selectedCitationForRows[oIndex]?.citation
+                                        ?.minter?.twitterUsername
+                                    }
+                                  </span>
+                                </A>
+                              )}
+                            </div>
+
+                            <div className="relative">
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: urlify(citationText),
+                                }}
+                                className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                                style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
+                              />
+
+                              {/* {cutOffContent && (
+                                <A
+                                  href={`/post/${selectedCitationForRows[oIndex]?.citation?.tokenID}`}
+                                  className="absolute bottom-0 right-0 text-blue-500 z-[60]"
+                                >
+                                  (More...)
+                                </A>
+                              )} */}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </A>
+                      </A>
+                    </div>
+
+                    {opinion?.citations && opinion?.citations.length > 1 && (
+                      <ArrowCircleRightIcon
+                        onClick={() => onRowCitationChanged(oIndex, false)}
+                        className="w-10 cursor-pointer"
+                      />
+                    )}
                   </div>
                 )}
               </div>

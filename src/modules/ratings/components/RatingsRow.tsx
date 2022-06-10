@@ -3,7 +3,11 @@ import { IdeaToken } from 'store/ideaMarketsStore'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
-import { ChatIcon } from '@heroicons/react/outline'
+import {
+  ArrowCircleLeftIcon,
+  ArrowCircleRightIcon,
+  ChatIcon,
+} from '@heroicons/react/outline'
 import ListingContent from 'components/tokens/ListingContent'
 import {
   getListingTypeFromIDTURL,
@@ -15,6 +19,7 @@ import { getIMORatingColors, urlify } from 'utils/display/DisplayUtils'
 import Link from 'next/link'
 import { SortOptionsAccountOpinions } from 'utils/tables'
 import classNames from 'classnames'
+import { useState } from 'react'
 
 type Props = {
   opinion: any
@@ -33,6 +38,13 @@ export default function RatingsRow({
     getURLMetaData(opinion?.url)
   )
 
+  // selected citation object
+  const [selectedCitationForRow, setSelectedCitationForRow] = useState(
+    opinion?.citations[0] && opinion?.citations?.length > 0
+      ? opinion?.citations[0]
+      : null
+  )
+
   const { minterAddress } = (opinion || {}) as any
 
   const displayUsernameOrWallet = convertAccountName(
@@ -40,23 +52,55 @@ export default function RatingsRow({
   )
   const usernameOrWallet = opinion?.minterToken?.username || minterAddress
 
-  const cutOffContent = opinion?.citations[0]?.citation?.content?.length > 280
-  const citationText = !cutOffContent
-    ? opinion?.citations[0]?.citation?.content
-    : opinion?.citations[0]?.citation?.content.slice(0, 280) + '...'
+  // const cutOffContent = selectedCitationForRow?.citation?.content?.length > 280
+  const citationText = true
+    ? selectedCitationForRow?.citation?.content
+    : selectedCitationForRow?.citation?.content.slice(0, 280) + '...'
 
   const displayUsernameOrWalletCitation = convertAccountName(
-    opinion?.citations[0]?.citation?.minter?.username ||
-      opinion?.citations[0]?.citation?.minter?.walletAddress
+    selectedCitationForRow?.citation?.minter?.username ||
+      selectedCitationForRow?.citation?.minter?.walletAddress
   )
   const usernameOrWalletCitation =
-    opinion?.citations[0]?.citation?.minter?.username ||
-    opinion?.citations[0]?.citation?.minter?.walletAddress
+    selectedCitationForRow?.citation?.minter?.username ||
+    selectedCitationForRow?.citation?.minter?.walletAddress
+
+  /**
+   * An arrow was clicked to show a different citation in that row (if there are > 1 citations)
+   * @parm isLeft -- Did user click the left arrow? If not, they clicked the right arrow
+   */
+  const onRowCitationChanged = (isLeft: boolean) => {
+    const oldCitationIndex = opinion?.citations.findIndex(
+      (citation) =>
+        citation.citation.tokenID === selectedCitationForRow.citation.tokenID
+    )
+
+    let newCitationIndex = null
+
+    if (isLeft) {
+      if (oldCitationIndex - 1 < 0) {
+        newCitationIndex = opinion?.citations.length - 1
+      } else {
+        newCitationIndex = oldCitationIndex - 1
+      }
+    } else {
+      if (oldCitationIndex + 1 >= opinion?.citations.length) {
+        newCitationIndex = 0
+      } else {
+        newCitationIndex = oldCitationIndex + 1
+      }
+    }
+
+    const newCitation = opinion?.citations[newCitationIndex]
+
+    const newSelectedCitationForRows = newCitation
+    setSelectedCitationForRow(newSelectedCitationForRows)
+  }
 
   return (
     <div ref={lastElementRef}>
       {/* Desktop row */}
-      <div className="hidden relative md:block py-6 hover:bg-black/[.02]">
+      <div className="hidden relative md:block py-6">
         {/* Makes so entire row can be clicked to go to Post page */}
         <Link href={`/post/${opinion?.tokenID}`}>
           <a
@@ -190,11 +234,18 @@ export default function RatingsRow({
               </div>
             </div>
 
-            <div className="flex w-full">
-              {opinion?.citations && opinion?.citations.length > 0 && (
-                <div className="relative px-3 py-2 mr-10 mt-6 bg-[#FAFAFA] rounded-lg w-full mx-auto md:w-full text-gray-900 dark:text-gray-200">
+            {selectedCitationForRow && (
+              <div className="flex justify-between items-center space-x-4 w-full pr-10 ">
+                {opinion?.citations && opinion?.citations.length > 1 && (
+                  <ArrowCircleLeftIcon
+                    onClick={() => onRowCitationChanged(true)}
+                    className="w-10 cursor-pointer z-[500]"
+                  />
+                )}
+
+                <div className="relative px-3 py-2 mt-6 bg-[#FAFAFA] rounded-lg w-full mx-auto md:w-full text-gray-900 dark:text-gray-200">
                   <A
-                    href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
+                    href={`/post/${selectedCitationForRow?.citation?.tokenID}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -202,19 +253,19 @@ export default function RatingsRow({
                       className={classNames(
                         getIMORatingColors(
                           Math.round(
-                            opinion?.citations[0]?.citation?.compositeRating
+                            selectedCitationForRow?.citation?.compositeRating
                           )
                         ),
                         'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                       )}
                     >
                       {Math.round(
-                        opinion?.citations[0]?.citation?.compositeRating
+                        selectedCitationForRow?.citation?.compositeRating
                       )}
                     </span>
 
                     <div className="text-sm text-black/[.5] mb-4">
-                      {opinion?.citations[0]?.inFavor ? 'FOR' : 'AGAINST'}
+                      {selectedCitationForRow?.inFavor ? 'FOR' : 'AGAINST'}
                     </div>
 
                     <div className="flex items-start">
@@ -224,7 +275,7 @@ export default function RatingsRow({
                           <Image
                             className="rounded-full"
                             src={
-                              opinion?.citations[0]?.citation?.minter
+                              selectedCitationForRow?.citation?.minter
                                 ?.profilePhoto || '/DefaultProfilePicture.png'
                             }
                             alt=""
@@ -242,7 +293,7 @@ export default function RatingsRow({
                           <A className="font-bold">
                             {displayUsernameOrWalletCitation}
                           </A>
-                          {opinion?.citations[0]?.citation?.minter
+                          {selectedCitationForRow?.citation?.minter
                             ?.twitterUsername && (
                             <A
                               className="flex items-center space-x-1 text-black z-50"
@@ -258,7 +309,7 @@ export default function RatingsRow({
                               <span className="text-sm opacity-50">
                                 @
                                 {
-                                  opinion?.citations[0]?.citation?.minter
+                                  selectedCitationForRow?.citation?.minter
                                     ?.twitterUsername
                                 }
                               </span>
@@ -275,21 +326,28 @@ export default function RatingsRow({
                             style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                           />
 
-                          {cutOffContent && (
+                          {/* {cutOffContent && (
                             <A
-                              href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
+                              href={`/post/${selectedCitationForRow?.citation?.tokenID}`}
                               className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                             >
                               (More...)
                             </A>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </div>
                   </A>
                 </div>
-              )}
-            </div>
+
+                {opinion?.citations && opinion?.citations.length > 1 && (
+                  <ArrowCircleRightIcon
+                    onClick={() => onRowCitationChanged(false)}
+                    className="w-10 cursor-pointer z-[500]"
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -389,11 +447,18 @@ export default function RatingsRow({
         </div>
 
         {/* Citation box */}
-        {opinion?.citations && opinion?.citations.length > 0 && (
-          <div className="w-full mt-4 flex">
-            <div className="relative px-3 py-2 mb-6 mx-3 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200">
+        {selectedCitationForRow && (
+          <div className="w-full mt-4 flex justify-between items-center px-1">
+            {opinion?.citations && opinion?.citations.length > 1 && (
+              <ArrowCircleLeftIcon
+                onClick={() => onRowCitationChanged(true)}
+                className="w-10 cursor-pointer text-black"
+              />
+            )}
+
+            <div className="relative px-3 py-2 mb-6 mx-1 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200">
               <A
-                href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
+                href={`/post/${selectedCitationForRow?.citation?.tokenID}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -401,17 +466,19 @@ export default function RatingsRow({
                   className={classNames(
                     getIMORatingColors(
                       Math.round(
-                        opinion?.citations[0]?.citation?.compositeRating
+                        selectedCitationForRow?.citation?.compositeRating
                       )
                     ),
                     'absolute top-2 right-2 w-8 h-7 flex justify-center items-center rounded-lg font-extrabold'
                   )}
                 >
-                  {Math.round(opinion?.citations[0]?.citation?.compositeRating)}
+                  {Math.round(
+                    selectedCitationForRow?.citation?.compositeRating
+                  )}
                 </span>
 
                 <div className="text-sm text-black/[.5] mb-4">
-                  {opinion?.citations[0]?.inFavor ? 'FOR' : 'AGAINST'}
+                  {selectedCitationForRow?.inFavor ? 'FOR' : 'AGAINST'}
                 </div>
 
                 <div className="flex items-start">
@@ -421,7 +488,7 @@ export default function RatingsRow({
                       <Image
                         className="rounded-full"
                         src={
-                          opinion?.citations[0]?.citation?.minter
+                          selectedCitationForRow?.citation?.minter
                             ?.profilePhoto || '/DefaultProfilePicture.png'
                         }
                         alt=""
@@ -439,7 +506,7 @@ export default function RatingsRow({
                       <A className="font-bold">
                         {displayUsernameOrWalletCitation}
                       </A>
-                      {opinion?.citations[0]?.citation?.minter
+                      {selectedCitationForRow?.citation?.minter
                         ?.twitterUsername && (
                         <A
                           className="flex items-center space-x-1 text-black z-50"
@@ -455,7 +522,7 @@ export default function RatingsRow({
                           <span className="text-sm opacity-50">
                             @
                             {
-                              opinion?.citations[0]?.citation?.minter
+                              selectedCitationForRow?.citation?.minter
                                 ?.twitterUsername
                             }
                           </span>
@@ -472,19 +539,26 @@ export default function RatingsRow({
                         style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                       />
 
-                      {cutOffContent && (
+                      {/* {cutOffContent && (
                         <A
-                          href={`/post/${opinion?.citations[0]?.citation?.tokenID}`}
+                          href={`/post/${selectedCitationForRow?.citation?.tokenID}`}
                           className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                         >
                           (More...)
                         </A>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
               </A>
             </div>
+
+            {opinion?.citations && opinion?.citations.length > 1 && (
+              <ArrowCircleRightIcon
+                onClick={() => onRowCitationChanged(false)}
+                className="w-10 cursor-pointer text-black"
+              />
+            )}
           </div>
         )}
 

@@ -153,16 +153,27 @@ export default function AddCitationModal({
     post: IdeamarketPost,
     isForReasoning: boolean
   ) => {
-    const isCitationAlreadCited = localCitations.includes(post.tokenID)
-    if (isCitationAlreadCited) {
-      setLocalCitations([])
-      setLocalInFavorArray([])
-      setLocalSelectedPosts([])
-      return
-    }
-    const newLocalCitations = [post.tokenID]
-    const newLocalInFavorArray = [isForReasoning]
-    const newLocalSelectedPosts = [post]
+    const isCitationAlreadyCited = localCitations.includes(post.tokenID)
+    const indexOfAlreadyCited = localCitations.indexOf(post.tokenID)
+    const citationsWithOldCitationRemoved = localCitations.filter(
+      (c) => c !== post.tokenID
+    )
+    const inFavorArrayWithOldRemoved = isCitationAlreadyCited
+      ? localInFavorArray.filter((ele, ind) => ind !== indexOfAlreadyCited)
+      : localInFavorArray
+    const selectedPostsWithOldRemoved = isCitationAlreadyCited
+      ? localSelectedPosts.filter((ele, ind) => ind !== indexOfAlreadyCited)
+      : localSelectedPosts
+
+    const newLocalCitations = isCitationAlreadyCited
+      ? [...citationsWithOldCitationRemoved]
+      : [...citationsWithOldCitationRemoved, post.tokenID]
+    const newLocalInFavorArray = isCitationAlreadyCited
+      ? [...inFavorArrayWithOldRemoved]
+      : [...inFavorArrayWithOldRemoved, isForReasoning]
+    const newLocalSelectedPosts = isCitationAlreadyCited
+      ? [...selectedPostsWithOldRemoved]
+      : [...selectedPostsWithOldRemoved, post]
 
     setLocalCitations(newLocalCitations)
     setLocalInFavorArray(newLocalInFavorArray)
@@ -276,20 +287,24 @@ export default function AddCitationModal({
           </div>
 
           <div className="mb-4 flex justify-between items-center font-bold">
-            {/* <span className="text-[#0cae74] text-sm">FOR ({localInFavorArray.filter(ele => ele).length})</span> */}
             <span className="text-[#e63b3b] text-sm">
               <ArrowCircleLeftIcon className="w-5 cursor-pointer mr-1" />
               <span>AGAINST</span>
+              <span className="ml-1">
+                ({localInFavorArray.filter((ele) => !ele).length})
+              </span>
             </span>
 
             <span className=" text-sm">
               Selected{' '}
               <span className="font-semibold">{localCitations?.length}</span>{' '}
-              <span className="text-black/[.3]">(Maximum 1)</span>
+              <span className="text-black/[.3]">(Maximum 10)</span>
             </span>
-            {/* <span className="text-[#e63b3b] text-sm">({localInFavorArray.filter(ele => !ele).length}) AGAINST</span> */}
 
             <span className="text-[#0cae74] text-sm flex items-center">
+              <span className="mr-1">
+                ({localInFavorArray.filter((ele) => ele).length})
+              </span>
               <span>FOR</span>
               <ArrowCircleRightIcon className="w-5 cursor-pointer ml-1" />
             </span>
@@ -316,8 +331,8 @@ export default function AddCitationModal({
                   )
                   const isInFavor = localInFavorArray[indexOfAlreadyCited]
 
-                  const cutOffContent = post?.content?.length > 280
-                  const postText = !cutOffContent
+                  // const cutOffContent = post?.content?.length > 280
+                  const postText = true
                     ? post?.content
                     : post?.content.slice(0, 280) + '...'
 
@@ -374,14 +389,14 @@ export default function AddCitationModal({
                                 className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
                               />
 
-                              {cutOffContent && (
+                              {/* {cutOffContent && (
                                 <A
                                   href={`/post/${post?.tokenID}`}
                                   className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                                 >
                                   (More...)
                                 </A>
-                              )}
+                              )} */}
                             </div>
                           </A>
                         </div>
@@ -456,14 +471,14 @@ export default function AddCitationModal({
                                 className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
                               />
 
-                              {cutOffContent && (
+                              {/* {cutOffContent && (
                                 <A
                                   href={`/post/${post?.tokenID}`}
                                   className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                                 >
                                   (More...)
                                 </A>
-                              )}
+                              )} */}
                             </div>
                           </A>
                         </div>
@@ -531,14 +546,14 @@ export default function AddCitationModal({
                               className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
                             />
 
-                            {cutOffContent && (
+                            {/* {cutOffContent && (
                               <A
                                 href={`/post/${post?.tokenID}`}
                                 className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                               >
                                 (More...)
                               </A>
-                            )}
+                            )} */}
                           </div>
                         </A>
                       </div>
@@ -575,8 +590,8 @@ export default function AddCitationModal({
                   )
                   const isInFavor = localInFavorArray[indexOfAlreadyCited]
 
-                  const cutOffContent = opinion?.content?.length > 280
-                  const postText = !cutOffContent
+                  // const cutOffContent = opinion?.content?.length > 280
+                  const postText = true
                     ? opinion?.content
                     : opinion?.content.slice(0, 280) + '...'
 
@@ -633,14 +648,14 @@ export default function AddCitationModal({
                                 className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
                               />
 
-                              {cutOffContent && (
+                              {/* {cutOffContent && (
                                 <A
                                   href={`/post/${opinion?.tokenID}`}
                                   className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                                 >
                                   (More...)
                                 </A>
-                              )}
+                              )} */}
                             </div>
                           </A>
                         </div>
@@ -719,14 +734,14 @@ export default function AddCitationModal({
                                 className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
                               />
 
-                              {cutOffContent && (
+                              {/* {cutOffContent && (
                                 <A
                                   href={`/post/${opinion?.tokenID}`}
                                   className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                                 >
                                   (More...)
                                 </A>
-                              )}
+                              )} */}
                             </div>
                           </A>
                         </div>
@@ -794,14 +809,14 @@ export default function AddCitationModal({
                               className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
                             />
 
-                            {cutOffContent && (
+                            {/* {cutOffContent && (
                               <A
                                 href={`/post/${opinion?.tokenID}`}
                                 className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                               >
                                 (More...)
                               </A>
-                            )}
+                            )} */}
                           </div>
                         </A>
                       </div>

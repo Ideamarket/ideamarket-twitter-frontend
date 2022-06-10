@@ -239,16 +239,18 @@ export default function RateModal({
           </div>
 
           {/* Selected posts / citations */}
-          {citations && citations.length > 0 && (
-            <div className="flex justify-between items-center font-bold text-lg mt-4">
-              <span>Citations</span>
-              {inFavorArray[0] ? (
-                <span className="text-sm text-[#0cae74]">FOR</span>
-              ) : (
-                <span className="text-sm text-[#e63b3b]">AGAINST</span>
-              )}
-            </div>
-          )}
+          <div className="flex justify-between items-center font-bold text-lg mt-4">
+            <span>Citations</span>
+            <span className=" text-sm">
+              Selected{' '}
+              <span className="font-semibold">{citations?.length}</span>{' '}
+              <span className="text-black/[.3]">(Maximum 10)</span>
+            </span>
+          </div>
+
+          <div className="mt-4 text-[#0cae74] text-sm font-bold">
+            FOR ({inFavorArray.filter((ele) => ele).length})
+          </div>
 
           {citationsInFavor &&
             citationsInFavor?.length > 0 &&
@@ -293,6 +295,10 @@ export default function RateModal({
               )
             })}
 
+          <div className="mt-4 text-[#e63b3b] text-sm font-bold">
+            AGAINST ({inFavorArray.filter((ele) => !ele).length})
+          </div>
+
           {citationsNotInFavor &&
             citationsNotInFavor?.length > 0 &&
             citationsNotInFavor.map((post, postInd) => {
@@ -336,24 +342,22 @@ export default function RateModal({
               )
             })}
 
-          {citations && citations.length <= 0 && (
-            <button
-              onClick={() =>
-                ModalService.open(AddCitationModal, {
-                  citations,
-                  inFavorArray,
-                  selectedPosts,
-                  setCitations,
-                  setInFavorArray,
-                  setSelectedPosts,
-                })
-              }
-              className="py-4 mt-4 text-lg font-bold rounded-2xl w-full bg-blue-600 hover:bg-blue-800 text-white"
-            >
-              <span>Add Citation</span>
-              <div className="text-xs font-normal">(recommended)</div>
-            </button>
-          )}
+          <button
+            onClick={() =>
+              ModalService.open(AddCitationModal, {
+                citations,
+                inFavorArray,
+                selectedPosts,
+                setCitations,
+                setInFavorArray,
+                setSelectedPosts,
+              })
+            }
+            className="py-4 mt-4 text-lg font-bold rounded-2xl w-full bg-blue-600 hover:bg-blue-800 text-white"
+          >
+            <span>Add Citation</span>
+            <div className="text-xs font-normal">(recommended)</div>
+          </button>
 
           <button
             className={classNames(
