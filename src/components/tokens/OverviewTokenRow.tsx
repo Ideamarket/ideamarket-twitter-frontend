@@ -61,7 +61,7 @@ export default function TokenRow({
         <div className="flex text-black">
           {/* Icon and Name and ListingContent */}
           <div className="w-[45%] lg:w-[55%] relative pl-6 md:pr-10">
-            <div className="relative flex items-start w-3/4 p-3 mx-auto md:w-full text-gray-900 dark:text-gray-200 border rounded-lg bg-white z-[60]">
+            <div className="relative flex items-start w-3/4 p-3 mx-auto md:w-full text-gray-900 dark:text-gray-200 border rounded-lg bg-white">
               <div className="mr-4 flex flex-col items-center space-y-2">
                 <div className="relative rounded-full w-6 h-6">
                   <Image

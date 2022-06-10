@@ -142,3 +142,7 @@ select:-webkit-autofill:focus {
 .toggle-switch input[type="checkbox"]:checked + .switch {
   background-color: rgb(8, 87, 224);
 }
+
+.hyperlink:hover {
+  text-decoration: underline;
+}

@@ -14,12 +14,11 @@ export const urlify = (text: string) => {
     }
     return DOMPurify.sanitize(
       `<a
-        style="color: rgb(8 87 224);"
+        style="color: rgb(8 87 224);z-index:500;position:relative;"
+        class="hyperlink"
         href="${url}"
         rel="noopener" noreferrer
         target="_blank"
-        onmouseover='this.style.textDecoration="underline"'
-        onmouseout='this.style.textDecoration="none"'
       >${url}</a>`,
       { ADD_ATTR: ['target'] } // This makes it so sanitize does not remove target attribute
     )
