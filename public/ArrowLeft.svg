@@ -1,0 +1,7 @@
+<svg width="80" height="81" viewBox="0 0 80 81" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="80" height="80" rx="40" transform="matrix(-1 0 0 1 80 0.5)" fill="white"/>
+<g opacity="0.5">
+<path d="M45 50.5L35 40.5L45 30.5" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<rect x="-1" y="1" width="78" height="78" rx="39" transform="matrix(-1 0 0 1 78 0.5)" stroke="black" stroke-opacity="0.1" stroke-width="2"/>
+</svg>

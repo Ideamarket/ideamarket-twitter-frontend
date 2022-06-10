@@ -15,10 +15,6 @@ import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 import { getIMORatingColors, urlify } from 'utils/display/DisplayUtils'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import classNames from 'classnames'
-import {
-  ArrowCircleLeftIcon,
-  ArrowCircleRightIcon,
-} from '@heroicons/react/outline'
 
 type DropdownButtonProps = {
   toggleOption: (value: any) => void
@@ -351,16 +347,14 @@ const OpinionTable = ({
                     `pl-10 text-blue-500 font-semibold`
                   )}
                 >
-                  <div className="relative h-4 w-full bg-black/[.1] rounded-lg">
+                  <div className="relative h-4 w-full bg-black/[.1]">
                     <div
-                      className={classNames(
-                        `absolute h-full bg-blue-200 rounded-lg`
-                      )}
+                      className={classNames(`absolute h-full bg-blue-200`)}
                       style={{ width: `${opinion?.rating}%` }}
                     >
                       <div
                         className={classNames(
-                          `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
+                          `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-blue-600 text-white font-bold flex justify-center items-center`
                         )}
                       >
                         {opinion?.rating}
@@ -379,10 +373,16 @@ const OpinionTable = ({
                   {selectedCitationForRows[oIndex] && (
                     <div className="flex justify-between items-center space-x-4">
                       {opinion?.citations && opinion?.citations.length > 1 && (
-                        <ArrowCircleLeftIcon
+                        <div
                           onClick={() => onRowCitationChanged(oIndex, true)}
-                          className="w-10 cursor-pointer text-black"
-                        />
+                          className="relative w-10 h-10 cursor-pointer"
+                        >
+                          <Image
+                            src={'/ArrowLeft.svg'}
+                            alt="arrow-left-icon"
+                            layout="fill"
+                          />
+                        </div>
                       )}
 
                       <div className="relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
@@ -394,18 +394,24 @@ const OpinionTable = ({
                           <span
                             className={classNames(
                               getIMORatingColors(
-                                Math.round(
-                                  selectedCitationForRows[oIndex].citation
-                                    .compositeRating
-                                )
+                                selectedCitationForRows[oIndex].citation
+                                  ?.totalRatingsCount > 0
+                                  ? Math.round(
+                                      selectedCitationForRows[oIndex].citation
+                                        .compositeRating
+                                    )
+                                  : -1
                               ),
                               'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                             )}
                           >
-                            {Math.round(
-                              selectedCitationForRows[oIndex].citation
-                                .compositeRating
-                            )}
+                            {selectedCitationForRows[oIndex].citation
+                              ?.totalRatingsCount > 0
+                              ? Math.round(
+                                  selectedCitationForRows[oIndex].citation
+                                    .compositeRating
+                                )
+                              : '—'}
                           </span>
 
                           <div className="text-sm text-black/[.5] mb-4">
@@ -488,10 +494,16 @@ const OpinionTable = ({
                       </div>
 
                       {opinion?.citations && opinion?.citations.length > 1 && (
-                        <ArrowCircleRightIcon
+                        <div
                           onClick={() => onRowCitationChanged(oIndex, false)}
-                          className="w-10 cursor-pointer text-black"
-                        />
+                          className="relative w-10 h-10 cursor-pointer"
+                        >
+                          <Image
+                            src={'/ArrowRight.svg'}
+                            alt="arrow-right-icon"
+                            layout="fill"
+                          />
+                        </div>
                       )}
                     </div>
                   )}
@@ -600,16 +612,14 @@ const OpinionTable = ({
                   </span>
                 </div>
 
-                <div className="relative h-4 mb-4 w-full bg-black/[.1] rounded-lg">
+                <div className="relative h-4 mb-4 w-full bg-black/[.1]">
                   <div
-                    className={classNames(
-                      `absolute h-full bg-blue-200 rounded-lg`
-                    )}
+                    className={classNames(`absolute h-full bg-blue-200`)}
                     style={{ width: `${opinion?.rating}%` }}
                   >
                     <div
                       className={classNames(
-                        `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
+                        `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-blue-600 text-white font-bold flex justify-center items-center`
                       )}
                     >
                       {opinion?.rating}
@@ -618,12 +628,18 @@ const OpinionTable = ({
                 </div>
 
                 {selectedCitationForRows[oIndex] && (
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center space-x-2">
                     {opinion?.citations && opinion?.citations.length > 1 && (
-                      <ArrowCircleLeftIcon
+                      <div
                         onClick={() => onRowCitationChanged(oIndex, true)}
-                        className="w-10 cursor-pointer"
-                      />
+                        className="relative w-10 h-10 cursor-pointer"
+                      >
+                        <Image
+                          src={'/ArrowLeft.svg'}
+                          alt="arrow-left-icon"
+                          layout="fill"
+                        />
+                      </div>
                     )}
 
                     <div className="relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full mx-auto md:w-full text-gray-900 dark:text-gray-200">
@@ -635,18 +651,24 @@ const OpinionTable = ({
                         <span
                           className={classNames(
                             getIMORatingColors(
-                              Math.round(
-                                selectedCitationForRows[oIndex]?.citation
-                                  ?.compositeRating
-                              )
+                              selectedCitationForRows[oIndex].citation
+                                ?.totalRatingsCount > 0
+                                ? Math.round(
+                                    selectedCitationForRows[oIndex]?.citation
+                                      ?.compositeRating
+                                  )
+                                : -1
                             ),
                             'absolute top-2 right-2 w-8 h-7 flex justify-center items-center rounded-lg font-extrabold'
                           )}
                         >
-                          {Math.round(
-                            selectedCitationForRows[oIndex]?.citation
-                              ?.compositeRating
-                          )}
+                          {selectedCitationForRows[oIndex].citation
+                            ?.totalRatingsCount > 0
+                            ? Math.round(
+                                selectedCitationForRows[oIndex]?.citation
+                                  ?.compositeRating
+                              )
+                            : '—'}
                         </span>
 
                         <div className="text-sm text-black/[.5] mb-4">
@@ -729,10 +751,16 @@ const OpinionTable = ({
                     </div>
 
                     {opinion?.citations && opinion?.citations.length > 1 && (
-                      <ArrowCircleRightIcon
+                      <div
                         onClick={() => onRowCitationChanged(oIndex, false)}
-                        className="w-10 cursor-pointer"
-                      />
+                        className="relative w-10 h-10 cursor-pointer"
+                      >
+                        <Image
+                          src={'/ArrowRight.svg'}
+                          alt="arrow-right-icon"
+                          layout="fill"
+                        />
+                      </div>
                     )}
                   </div>
                 )}

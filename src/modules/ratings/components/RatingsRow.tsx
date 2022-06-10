@@ -3,11 +3,7 @@ import { IdeaToken } from 'store/ideaMarketsStore'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
-import {
-  ArrowCircleLeftIcon,
-  ArrowCircleRightIcon,
-  ChatIcon,
-} from '@heroicons/react/outline'
+import { ChatIcon } from '@heroicons/react/outline'
 import ListingContent from 'components/tokens/ListingContent'
 import {
   getListingTypeFromIDTURL,
@@ -181,16 +177,14 @@ export default function RatingsRow({
               {/* Rating By User */}
               <div className="w-[20%] grow pr-14">
                 {/* <div className="font-medium leading-5">{opinion?.rating}</div> */}
-                <div className="relative h-4 w-full bg-black/[.1] rounded-lg">
+                <div className="relative h-4 w-full bg-black/[.1]">
                   <div
-                    className={classNames(
-                      `absolute h-full bg-blue-200 rounded-lg`
-                    )}
+                    className={classNames(`absolute h-full bg-blue-200`)}
                     style={{ width: `${opinion?.rating}%` }}
                   >
                     <div
                       className={classNames(
-                        `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
+                        `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-blue-600 text-white font-bold flex justify-center items-center`
                       )}
                     >
                       {opinion?.rating}
@@ -237,10 +231,16 @@ export default function RatingsRow({
             {selectedCitationForRow && (
               <div className="flex justify-between items-center space-x-4 w-full pr-10 ">
                 {opinion?.citations && opinion?.citations.length > 1 && (
-                  <ArrowCircleLeftIcon
+                  <div
                     onClick={() => onRowCitationChanged(true)}
-                    className="w-10 cursor-pointer z-[500]"
-                  />
+                    className="relative w-10 h-10 cursor-pointer z-[500]"
+                  >
+                    <Image
+                      src={'/ArrowLeft.svg'}
+                      alt="arrow-left-icon"
+                      layout="fill"
+                    />
+                  </div>
                 )}
 
                 <div className="relative px-3 py-2 mt-6 bg-[#FAFAFA] rounded-lg w-full mx-auto md:w-full text-gray-900 dark:text-gray-200">
@@ -252,16 +252,21 @@ export default function RatingsRow({
                     <span
                       className={classNames(
                         getIMORatingColors(
-                          Math.round(
-                            selectedCitationForRow?.citation?.compositeRating
-                          )
+                          selectedCitationForRow.citation?.totalRatingsCount > 0
+                            ? Math.round(
+                                selectedCitationForRow?.citation
+                                  ?.compositeRating
+                              )
+                            : -1
                         ),
                         'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                       )}
                     >
-                      {Math.round(
-                        selectedCitationForRow?.citation?.compositeRating
-                      )}
+                      {selectedCitationForRow.citation?.totalRatingsCount > 0
+                        ? Math.round(
+                            selectedCitationForRow?.citation?.compositeRating
+                          )
+                        : '—'}
                     </span>
 
                     <div className="text-sm text-black/[.5] mb-4">
@@ -341,10 +346,16 @@ export default function RatingsRow({
                 </div>
 
                 {opinion?.citations && opinion?.citations.length > 1 && (
-                  <ArrowCircleRightIcon
+                  <div
                     onClick={() => onRowCitationChanged(false)}
-                    className="w-10 cursor-pointer z-[500]"
-                  />
+                    className="relative w-10 h-10 cursor-pointer z-[500]"
+                  >
+                    <Image
+                      src={'/ArrowRight.svg'}
+                      alt="arrow-right-icon"
+                      layout="fill"
+                    />
+                  </div>
                 )}
               </div>
             )}
@@ -405,14 +416,14 @@ export default function RatingsRow({
             }
           />
 
-          <div className="relative h-4 mt-4 mb-2 w-full bg-black/[.1] rounded-lg">
+          <div className="relative h-4 mt-4 mb-2 w-full bg-black/[.1]">
             <div
-              className={classNames(`absolute h-full bg-blue-200 rounded-lg`)}
+              className={classNames(`absolute h-full bg-blue-200`)}
               style={{ width: `${opinion?.rating}%` }}
             >
               <div
                 className={classNames(
-                  `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 h-full bg-white border text-blue-600 font-bold flex justify-center items-center`
+                  `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-blue-600 text-white font-bold flex justify-center items-center`
                 )}
               >
                 {opinion?.rating}
@@ -450,10 +461,16 @@ export default function RatingsRow({
         {selectedCitationForRow && (
           <div className="w-full mt-4 flex justify-between items-center px-1">
             {opinion?.citations && opinion?.citations.length > 1 && (
-              <ArrowCircleLeftIcon
+              <div
                 onClick={() => onRowCitationChanged(true)}
-                className="w-10 cursor-pointer text-black"
-              />
+                className="relative w-10 h-10 cursor-pointer z-[500]"
+              >
+                <Image
+                  src={'/ArrowLeft.svg'}
+                  alt="arrow-left-icon"
+                  layout="fill"
+                />
+              </div>
             )}
 
             <div className="relative px-3 py-2 mb-6 mx-1 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200">
@@ -465,16 +482,20 @@ export default function RatingsRow({
                 <span
                   className={classNames(
                     getIMORatingColors(
-                      Math.round(
-                        selectedCitationForRow?.citation?.compositeRating
-                      )
+                      selectedCitationForRow.citation?.totalRatingsCount > 0
+                        ? Math.round(
+                            selectedCitationForRow?.citation?.compositeRating
+                          )
+                        : -1
                     ),
                     'absolute top-2 right-2 w-8 h-7 flex justify-center items-center rounded-lg font-extrabold'
                   )}
                 >
-                  {Math.round(
-                    selectedCitationForRow?.citation?.compositeRating
-                  )}
+                  {selectedCitationForRow.citation?.totalRatingsCount > 0
+                    ? Math.round(
+                        selectedCitationForRow?.citation?.compositeRating
+                      )
+                    : '—'}
                 </span>
 
                 <div className="text-sm text-black/[.5] mb-4">
@@ -554,10 +575,16 @@ export default function RatingsRow({
             </div>
 
             {opinion?.citations && opinion?.citations.length > 1 && (
-              <ArrowCircleRightIcon
+              <div
                 onClick={() => onRowCitationChanged(false)}
-                className="w-10 cursor-pointer text-black"
-              />
+                className="relative w-10 h-10 cursor-pointer z-[500]"
+              >
+                <Image
+                  src={'/ArrowRight.svg'}
+                  alt="arrow-right-icon"
+                  layout="fill"
+                />
+              </div>
             )}
           </div>
         )}
