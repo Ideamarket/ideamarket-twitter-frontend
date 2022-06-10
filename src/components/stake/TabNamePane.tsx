@@ -1,20 +1,11 @@
-import { useBalance, useTotalSupply } from 'actions'
-import useIMOPayoutAmount from 'actions/useIMOPayoutAmount'
-import useStakingAPR from 'actions/useStakingAPR'
 import classNames from 'classnames'
 import { STAKE_TYPES } from 'pages/stake'
 import { useEffect, useState } from 'react'
-import { NETWORK } from 'store/networks'
-import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 
 type Props = {
   stakeType: STAKE_TYPES
   onClickStakeType: (s: STAKE_TYPES) => void
 }
-
-const imoAddress = NETWORK.getDeployedAddresses().imo
-const imoStakingAddress = NETWORK.getDeployedAddresses().imoStaking
-const dripIMOSourceAddress = NETWORK.getDeployedAddresses().drippingIMOSource
 
 export default function TabNamePane({ stakeType, onClickStakeType }: Props) {
   const [lpAPR, setLpAPR] = useState(undefined)
@@ -29,36 +20,6 @@ export default function TabNamePane({ stakeType, onClickStakeType }: Props) {
       })
       .catch(() => setLpAPR(0))
   }, [])
-
-  const [balanceToggle] = useState(false) // Need toggle to reload balance after stake/unstake
-  const [, stakingContractIMOBalanceBN] = useBalance(
-    imoAddress,
-    imoStakingAddress,
-    18,
-    balanceToggle
-  )
-  const [, xIMOTotalSupplyBN] = useTotalSupply(
-    imoStakingAddress,
-    18,
-    balanceToggle
-  )
-  const [, dripSourceIMOBalanceBN] = useBalance(
-    imoAddress,
-    dripIMOSourceAddress,
-    18,
-    balanceToggle
-  )
-  const [ratioImoAmount] = useIMOPayoutAmount(
-    '1',
-    stakingContractIMOBalanceBN,
-    xIMOTotalSupplyBN,
-    dripSourceIMOBalanceBN
-  )
-  const [apr] = useStakingAPR(
-    ratioImoAmount,
-    stakingContractIMOBalanceBN,
-    xIMOTotalSupplyBN
-  )
 
   return (
     <div
@@ -81,21 +42,8 @@ export default function TabNamePane({ stakeType, onClickStakeType }: Props) {
             stakeType === STAKE_TYPES.IMO ? '' : 'opacity-50'
           )}
         >
-          Stake IMO
+          Unstake IMO
         </h3>
-        <span
-          className={classNames(
-            'text-xl px-3 py-1 ml-2 rounded-lg',
-            stakeType === STAKE_TYPES.IMO
-              ? 'bg-brand-light-green'
-              : 'text-brand-light-green'
-          )}
-        >
-          {apr
-            ? formatNumberWithCommasAsThousandsSerperator(apr.toFixed(2))
-            : 0}
-          % APR
-        </span>
       </div>
       <div
         className={classNames(

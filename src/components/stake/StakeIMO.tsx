@@ -1,5 +1,4 @@
 import { CogIcon } from '@heroicons/react/outline'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/solid'
 import { useWeb3React } from '@web3-react/core'
 import { useBalance, useTotalSupply } from 'actions'
 import stakeIMO from 'actions/stakeIMO'
@@ -14,7 +13,6 @@ import TradeCompleteModal, {
   TX_TYPES,
 } from 'components/trade/TradeCompleteModal'
 import { useState } from 'react'
-import { IoMdExit } from 'react-icons/io'
 import { NETWORK } from 'store/networks'
 import {
   floatToWeb3BN,
@@ -22,10 +20,8 @@ import {
   oneBigNumber,
   useTransactionManager,
 } from 'utils'
-import { LockingAccordion } from './LockingAccordion'
 import StakePriceItem from './StakePriceItem'
 import Image from 'next/image'
-import { accordionData } from 'pages/stake'
 import useIMOPayoutAmount from 'actions/useIMOPayoutAmount'
 
 const imoAddress = NETWORK.getDeployedAddresses().imo
@@ -33,9 +29,8 @@ const imoStakingAddress = NETWORK.getDeployedAddresses().imoStaking
 const dripIMOSourceAddress = NETWORK.getDeployedAddresses().drippingIMOSource
 
 const StakeIMO = () => {
-  const [showLockInfo, setShowLockInfo] = useState(true)
   const txManager = useTransactionManager()
-  const [isStakeSelected, setIsStakeSelected] = useState(true)
+  const [isStakeSelected, setIsStakeSelected] = useState(false)
   const [isUnlockOnceChecked, setIsUnlockOnceChecked] = useState(false)
   const [isUnlockPermanentChecked, setIsUnlockPermanentChecked] = useState(true)
   const [isMissingAllowance, setIsMissingAllowance] = useState(false)
@@ -167,89 +162,11 @@ const StakeIMO = () => {
   return (
     <div className="w-11/12 flex flex-col md:flex-row justify-center space-x-4 mt-8 mx-auto">
       <div className="w-full md:w-1/2">
-        <span className="text-5xl text-blue-600 font-gilroy-bold">
-          STAKE $IMO
-        </span>
-
-        <div className="mt-8">
-          <div
-            onClick={() => setShowLockInfo(!showLockInfo)}
-            className="flex justify-between items-center cursor-pointer font-bold"
-          >
-            <span>How does it work?</span>
-            {showLockInfo ? (
-              <ChevronUpIcon className="w-5 h-5" />
-            ) : (
-              <ChevronDownIcon className="w-5 h-5" />
-            )}
-          </div>
-
-          {showLockInfo && (
-            <div className="text-gray-500 text-sm mt-1">
-              Staking allows you to earn more $IMO by locking up $IMO you
-              already have. When you stake $IMO, you will receive xIMO (staked
-              $IMO) in proportion to the amount of $IMO you staked. This
-              represents your claim to the $IMO you have staked. You can stake
-              and unstake $IMO at any time. If you claimed an airdrop, you
-              should have some $IMO already. If you don’t have $IMO yet, you can
-              buy some on Sushiswap, or earn some by Locking Listings. 3 million
-              $IMO will be awarded for staking rewards over a period of 6
-              months.
-            </div>
-          )}
-
-          <div className="flex w-full space-x-6">
-            <A href="/claim" className="w-1/2">
-              <button className="py-4 mt-2 rounded-2xl w-full text-white bg-brand-blue hover:bg-blue-800">
-                <p className="text-md">Elegible for the airdrop?</p>
-                <p className="font-bold text-lg flex items-center text-center place-content-center">
-                  <span className="mr-1">CLAIM IMO </span>
-                  <IoMdExit className="w-6 h-6" />
-                </p>
-              </button>
-            </A>
-            <A href="https://app.sushi.com/swap" className="w-1/2">
-              <button className="py-4 mt-2 rounded-2xl w-full text-white bg-gray-900 hover:bg-gray-600">
-                <p className="text-md">Don’t have any $IMO?</p>
-                <p className="font-bold text-lg flex items-center text-center place-content-center">
-                  <span className="mr-1">BUY ON SUSHISWAP </span>
-                  <IoMdExit className="w-6 h-6" />
-                </p>
-              </button>
-            </A>
-          </div>
-        </div>
-
-        <div className="mt-8">
-          <span className="text-2xl font-bold">FAQ</span>
-          {accordionData.map((data) => (
-            <LockingAccordion
-              title={data.title}
-              body={data.body}
-              key={data.title}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className="w-full md:w-1/2">
         <div className="relative w-full h-2/3 pt-10 my-8">
           <div className="absolute top-0 left-0 bg-white/20 rounded-2xl w-full h-40 z-0"></div>
 
           <div className="bg-white rounded-2xl w-full h-full p-4 relative z-10">
             <div className="flex items-center font-gilroy-bold text-3xl">
-              <div
-                className={classNames(
-                  'mr-4',
-                  !isStakeSelected
-                    ? 'text-gray-400 hover:text-gray-500 dark:text-gray-300 cursor-pointer'
-                    : 'cursor-default'
-                )}
-                onClick={toggleIsStake}
-              >
-                Stake
-              </div>
-
               <div
                 className={classNames(
                   '',
