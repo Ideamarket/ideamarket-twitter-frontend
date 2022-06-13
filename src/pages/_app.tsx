@@ -24,7 +24,6 @@ import Web3 from 'web3'
 import Web3ReactManager from 'components/wallet/Web3ReactManager'
 import ModalRoot from 'components/modals/ModalRoot'
 import { WrongNetworkOverlay } from 'components'
-import { initUseMarketStore } from 'store/markets'
 //import ModalService from 'components/modals/ModalService'
 //import MigrationDoneModal from 'components/MigrationDoneModal'
 import { NextPage } from 'next'
@@ -65,7 +64,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     }
   }, [active])
 
-  initUseMarketStore()
+  // initUseMarketStore()
 
   return (
     <>

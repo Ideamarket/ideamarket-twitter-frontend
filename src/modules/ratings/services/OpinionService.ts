@@ -128,6 +128,21 @@ export const getLatestOpinionsAboutNFTForTable = async ({
   )
 }
 
+export type CitationData = {
+  postId: string
+  tokenID: number
+  content: string
+  compositeRating: number
+  totalRatingsCount: number
+  latestRatingsCount: number
+  minter: any
+}
+
+export type Citation = {
+  citation: CitationData
+  inFavor: boolean
+}
+
 export type IdeamarketOpinion = {
   contractAddress: string // Contract address the NFT is stored in
   tokenID: number // tokenID of this NFT
@@ -138,7 +153,7 @@ export type IdeamarketOpinion = {
   isURL: boolean
   url: string
   blockHeight: number
-  citations: any[]
+  citations: Citation[]
 
   userToken: IdeamarketUser // User data for ratedBy (when getting opinions for Post page)
   minterToken: IdeamarketUser // User data for the minter (when getting opinions for user page)
