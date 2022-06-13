@@ -109,7 +109,7 @@ export default function UserPostsRow({
                 )}
 
                 <ListingContent
-                  ideaToken={token}
+                  imPost={token}
                   page="HomePage"
                   urlMetaData={urlMetaData}
                   useMetaData={
@@ -248,7 +248,7 @@ export default function UserPostsRow({
           )}
 
           <ListingContent
-            ideaToken={token}
+            imPost={token}
             page="HomePage"
             urlMetaData={urlMetaData}
             useMetaData={
