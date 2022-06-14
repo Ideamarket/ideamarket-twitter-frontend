@@ -15,7 +15,6 @@ import { useContractStore } from 'store/contractStore'
 import { syncPosts } from 'actions/web2/posts/syncPosts'
 import { verifyTokenName } from 'actions'
 import IMTextArea from 'modules/forms/components/IMTextArea'
-import { getValidURL } from 'actions/web2/getValidURL'
 
 type NewPostUIProps = {
   isTxButtonActive?: boolean
@@ -80,11 +79,16 @@ export default function NewPostUI({
     setInputContent(typedURL)
     setSelectedCategories([]) // Set selected categories to none if any input typed
 
-    const canonical = await getValidURL(typedURL)
+    // const canonical = await getValidURL(typedURL)
 
-    const { isValid, isAlreadyOnChain } = await verifyTokenName(canonical)
+    const {
+      isValid,
+      isAlreadyOnChain,
+      // finalTokenValue,
+    } = await verifyTokenName(typedURL) // TODO: make this use canonical eventually
 
-    setFinalURL(canonical)
+    setFinalURL(typedURL) // TODO: make this use canonical eventually
+    // setFinalTokenValue(finalTokenValue)
 
     setIsValidToken(isValid)
     setIsAlreadyOnChain(isAlreadyOnChain)
@@ -92,16 +96,17 @@ export default function NewPostUI({
 
   const onPostClicked = async () => {
     setIsTxPending(true)
-    // TODO: do imageLink and imageHashes
+    // TODO: do imageLink
+    // TODO: figure out urlContent
     const isURL = inputPostType === TX_TYPES.URL_LIST
     // content, imageHashes, categoryTags, imageLink, isURL, urlContent
     const mintingArgs = [
-      isURL ? finalURL : inputContent,
+      inputContent,
       [],
       selectedCategories,
       '',
       isURL,
-      isURL ? 'Currently not fetching urlContent' : '', // TODO: tweet text will go here. Sai needs to pull this and send to me
+      isURL ? '' : '',
     ]
 
     try {
@@ -144,13 +149,11 @@ export default function NewPostUI({
       <div className="px-6 py-4">
         {/* Tab buttons */}
         <div className="flex justify-between items-end mx-1 mb-2">
-          <div className="flex items-center space-x-2">
+          <div className="invisible flex items-center space-x-2">
             <button
               onClick={() => {
                 setIsValidToken(false)
                 setInputPostType(TX_TYPES.TEXT_POST_LIST)
-                setInputContent('')
-                setFinalURL('')
               }}
               className={classNames(
                 inputPostType === TX_TYPES.TEXT_POST_LIST
@@ -167,8 +170,6 @@ export default function NewPostUI({
               onClick={() => {
                 setIsValidToken(false)
                 setInputPostType(TX_TYPES.URL_LIST)
-                setInputContent('')
-                setFinalURL('')
               }}
               className={classNames(
                 inputPostType === TX_TYPES.URL_LIST
@@ -178,7 +179,7 @@ export default function NewPostUI({
               )}
             >
               <GlobeAltIcon className="w-4" />
-              <span>Tweet</span>
+              <span>URL</span>
             </button>
           </div>
 

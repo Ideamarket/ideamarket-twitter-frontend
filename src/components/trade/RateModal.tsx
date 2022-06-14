@@ -196,7 +196,7 @@ export default function RateModal({
           )}
 
           <ListingContent
-            imPost={ideaToken}
+            ideaToken={ideaToken}
             page="RateModal"
             urlMetaData={urlMetaData}
             useMetaData={

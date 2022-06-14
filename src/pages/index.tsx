@@ -28,7 +28,6 @@ import HomeUsersTable from 'modules/user-market/components/HomeUsersTable'
 import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
 import BgBanner from 'components/BgBanner'
-import { IdeamarketPost } from 'modules/posts/services/PostService'
 
 type Props = { urlMarkets?: string[] }
 
@@ -85,7 +84,7 @@ const Home = ({ urlMarkets }: Props) => {
     setOrderDirection(direction as any)
   }
 
-  const onRateClicked = (token: IdeamarketPost, urlMetaData: any) => {
+  const onRateClicked = (token: IdeaToken, urlMetaData: any) => {
     const onClose = () => setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
 
     if (!useWalletStore.getState().web3) {
