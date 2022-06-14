@@ -369,12 +369,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  Math.round(post?.compositeRating)
+                                  post?.totalRatingsCount > 0
+                                    ? Math.round(post?.compositeRating)
+                                    : -1
                                 ),
                                 'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                               )}
                             >
-                              {Math.round(post?.compositeRating)}
+                              {post?.totalRatingsCount > 0
+                                ? Math.round(post?.compositeRating)
+                                : '—'}
                             </span>
 
                             <div className="flex items-center pb-2 whitespace-nowrap">
@@ -451,12 +455,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  Math.round(post?.compositeRating)
+                                  post?.totalRatingsCount > 0
+                                    ? Math.round(post?.compositeRating)
+                                    : -1
                                 ),
                                 'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                               )}
                             >
-                              {Math.round(post?.compositeRating)}
+                              {post?.totalRatingsCount > 0
+                                ? Math.round(post?.compositeRating)
+                                : '—'}
                             </span>
 
                             <div className="flex items-center pb-2 whitespace-nowrap">
@@ -526,12 +534,16 @@ export default function AddCitationModal({
                           <span
                             className={classNames(
                               getIMORatingColors(
-                                Math.round(post?.compositeRating)
+                                post?.totalRatingsCount > 0
+                                  ? Math.round(post?.compositeRating)
+                                  : -1
                               ),
                               'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                             )}
                           >
-                            {Math.round(post?.compositeRating)}
+                            {post?.totalRatingsCount > 0
+                              ? Math.round(post?.compositeRating)
+                              : '—'}
                           </span>
 
                           <div className="flex items-center pb-2 whitespace-nowrap">
@@ -628,12 +640,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  Math.round(opinion?.compositeRating)
+                                  opinion?.totalRatingsCount > 0
+                                    ? Math.round(opinion?.compositeRating)
+                                    : -1
                                 ),
                                 'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                               )}
                             >
-                              {Math.round(opinion?.compositeRating)}
+                              {opinion?.totalRatingsCount > 0
+                                ? Math.round(opinion?.compositeRating)
+                                : '—'}
                             </span>
 
                             <div className="flex items-center pb-2 whitespace-nowrap">
@@ -714,12 +730,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  Math.round(opinion?.compositeRating)
+                                  opinion?.totalRatingsCount > 0
+                                    ? Math.round(opinion?.compositeRating)
+                                    : -1
                                 ),
                                 'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                               )}
                             >
-                              {Math.round(opinion?.compositeRating)}
+                              {opinion?.totalRatingsCount > 0
+                                ? Math.round(opinion?.compositeRating)
+                                : '—'}
                             </span>
 
                             <div className="flex items-center pb-2 whitespace-nowrap">
@@ -789,12 +809,16 @@ export default function AddCitationModal({
                           <span
                             className={classNames(
                               getIMORatingColors(
-                                Math.round(opinion?.compositeRating)
+                                opinion?.totalRatingsCount > 0
+                                  ? Math.round(opinion?.compositeRating)
+                                  : -1
                               ),
                               'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                             )}
                           >
-                            {Math.round(opinion?.compositeRating)}
+                            {opinion?.totalRatingsCount > 0
+                              ? Math.round(opinion?.compositeRating)
+                              : '—'}
                           </span>
 
                           <div className="flex items-center pb-2 whitespace-nowrap">

@@ -139,11 +139,17 @@ export default function UserPostsRow({
                 <span>
                   <span
                     className={classNames(
-                      getIMORatingColors(Math.round(token?.compositeRating)),
+                      getIMORatingColors(
+                        token?.totalRatingsCount > 0
+                          ? Math.round(token?.compositeRating)
+                          : -1
+                      ),
                       'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                     )}
                   >
-                    {Math.round(token?.compositeRating)}
+                    {token?.totalRatingsCount > 0
+                      ? Math.round(token?.compositeRating)
+                      : '—'}
                   </span>
                 </span>
               </div>
@@ -266,11 +272,17 @@ export default function UserPostsRow({
             <span className="mb-1">
               <span
                 className={classNames(
-                  getIMORatingColors(Math.round(token?.compositeRating)),
+                  getIMORatingColors(
+                    token?.totalRatingsCount > 0
+                      ? Math.round(token?.compositeRating)
+                      : -1
+                  ),
                   'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
-                {Math.round(token?.compositeRating)}
+                {token?.totalRatingsCount > 0
+                  ? Math.round(token?.compositeRating)
+                  : '—'}
               </span>
             </span>
           </div>
