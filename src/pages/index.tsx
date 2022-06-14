@@ -198,10 +198,7 @@ const Home = ({ urlMarkets }: Props) => {
 
           <button
             onClick={() => {
-              onOrderByChanged(
-                SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.value,
-                'desc'
-              )
+              onOrderByChanged(SortOptionsHomeUsersTable.STAKED.value, 'desc')
               setSelectedTable(TABLE_NAMES.HOME_USERS)
             }}
             className={classNames(

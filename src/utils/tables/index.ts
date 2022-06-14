@@ -92,11 +92,6 @@ export const HomeUsersTableColumns = [
     sortable: false,
   },
   {
-    content: SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.displayName,
-    value: SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.value,
-    sortable: true,
-  },
-  {
     content: SortOptionsHomeUsersTable.STAKED.displayName,
     value: SortOptionsHomeUsersTable.STAKED.value,
     sortable: true,
@@ -109,6 +104,11 @@ export const HomeUsersTableColumns = [
   {
     content: SortOptionsHomeUsersTable.HOLDERS.displayName,
     value: SortOptionsHomeUsersTable.HOLDERS.value,
+    sortable: true,
+  },
+  {
+    content: SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.displayName,
+    value: SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.value,
     sortable: true,
   },
   {

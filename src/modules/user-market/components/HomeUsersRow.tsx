@@ -95,15 +95,6 @@ export default function HomeUsersRow({
             </div>
           </div>
 
-          {/* TOTAL RATINGS COUNT */}
-          <div className="w-[13.75%] lg:w-[11.25%]">
-            <div className="flex flex-col justify-start">
-              {formatNumberWithCommasAsThousandsSerperator(
-                token?.totalRatingsCount
-              )}
-            </div>
-          </div>
-
           {/* STAKED */}
           <div className="w-[13.75%] lg:w-[11.25%] flex items-start">
             <span className="text-base text-blue-500 font-bold">
@@ -125,6 +116,15 @@ export default function HomeUsersRow({
           <div className="w-[13.75%] lg:w-[11.25%] pr-2">
             <div className="flex flex-col justify-start font-medium leading-5">
               {formatNumberWithCommasAsThousandsSerperator(token?.holders)}
+            </div>
+          </div>
+
+          {/* TOTAL RATINGS COUNT */}
+          <div className="w-[13.75%] lg:w-[11.25%]">
+            <div className="flex flex-col justify-start">
+              {formatNumberWithCommasAsThousandsSerperator(
+                token?.totalRatingsCount
+              )}
             </div>
           </div>
 
