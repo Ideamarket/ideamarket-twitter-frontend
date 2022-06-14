@@ -48,16 +48,25 @@ const CitationCard = ({ citation, opinion }: Props) => {
               : '—'}
           </span>
 
-          <div className="text-sm text-black/[.5] mb-4">
-            <span>{citation?.inFavor ? 'FOR' : 'AGAINST'}</span>
-            <span>
-              {' '}
-              (
-              {opinion?.citations.findIndex(
-                (c) => c.citation.tokenID === citation.citation.tokenID
-              ) + 1}
-              /{opinion?.citations?.length})
+          <div className="flex items-center text-sm text-black/[.5] mb-4">
+            <span className="mr-2">
+              {citation?.inFavor ? 'FOR' : 'AGAINST'}
             </span>
+
+            <div className="flex items-center">
+              {opinion?.citations?.length > 1 &&
+                opinion?.citations?.map((c) => {
+                  if (c.citation.tokenID === citation.citation.tokenID) {
+                    return (
+                      <div className="w-2.5 h-2.5 mr-1 rounded-3xl bg-blue-600"></div>
+                    )
+                  } else {
+                    return (
+                      <div className="w-2.5 h-2.5 mr-1 rounded-3xl border"></div>
+                    )
+                  }
+                })}
+            </div>
           </div>
 
           <div className="flex items-start">
@@ -149,16 +158,24 @@ const CitationCard = ({ citation, opinion }: Props) => {
               : '—'}
           </span>
 
-          <div className="text-sm text-black/[.5] mb-4">
-            <span>{citation?.inFavor ? 'FOR' : 'AGAINST'}</span>
-            <span>
-              {' '}
-              (
-              {opinion?.citations.findIndex(
-                (c) => c.citation.tokenID === citation.citation.tokenID
-              ) + 1}
-              /{opinion?.citations?.length})
+          <div className="flex items-center text-sm text-black/[.5] mb-4">
+            <span className="mr-2">
+              {citation?.inFavor ? 'FOR' : 'AGAINST'}
             </span>
+            <div className="flex items-center">
+              {opinion?.citations?.length > 1 &&
+                opinion?.citations?.map((c) => {
+                  if (c.citation.tokenID === citation.citation.tokenID) {
+                    return (
+                      <div className="w-2.5 h-2.5 mr-1 rounded-3xl bg-blue-600"></div>
+                    )
+                  } else {
+                    return (
+                      <div className="w-2.5 h-2.5 mr-1 rounded-3xl border"></div>
+                    )
+                  }
+                })}
+            </div>
           </div>
 
           <div className="flex items-start">
