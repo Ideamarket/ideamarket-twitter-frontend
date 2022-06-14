@@ -170,14 +170,16 @@ export const OverviewColumns = ({
       switch (column.value) {
         case 'name':
           return 'w-[45%] lg:w-[55%] pl-6 pr-24'
+        case SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.value:
+          return 'w-[13.75%] lg:w-[11.25%]'
         case SortOptionsHomeUsersTable.STAKED.value:
-          return 'w-[18.333%] lg:w-[15%]'
+          return 'w-[13.75%] lg:w-[11.25%]'
         // case SortOptionsHomeUsersTable.WEEK_CHANGE.value:
         //   return 'w-[13.75%] lg:w-[11.25%]'
         case SortOptionsHomeUsersTable.HOLDERS.value:
-          return 'w-[18.333%] lg:w-[15%]'
+          return 'w-[13.75%] lg:w-[11.25%]'
         case 'stakeButton':
-          return 'w-[18.333%] lg:w-[15%]'
+          return 'w-[13.75%] lg:w-[11.25%]'
         default:
           return ''
       }

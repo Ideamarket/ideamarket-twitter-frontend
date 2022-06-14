@@ -13,10 +13,11 @@ export enum TABLE_NAMES {
 const orderByIndividualRating = 'rating'
 // const orderByAverageRating = 'averageRating'
 const orderByLatestRatingsCount = 'latestRatingsCount'
+const orderByTotalRatingsCount = 'totalRatingsCount'
 const orderByCompositeRating = 'compositeRating'
 const orderByMarketInterest = 'marketInterest'
 const orderByDeposits = 'deposits'
-const orderBy7DChange = 'weekChange'
+// const orderBy7DChange = 'weekChange'
 const orderByHolderCount = 'holders'
 
 export const SortOptionsHomePostsTable = {
@@ -61,16 +62,21 @@ export const SortOptionsAddCitationsModal = {
 }
 
 export const SortOptionsHomeUsersTable = {
-  STAKED: {
+  TOTAL_RATINGS_COUNT: {
     id: 1,
+    value: orderByTotalRatingsCount,
+    displayName: 'Ratings',
+  },
+  STAKED: {
+    id: 2,
     value: orderByDeposits,
     displayName: 'Staked',
   },
-  WEEK_CHANGE: {
-    id: 2,
-    value: orderBy7DChange,
-    displayName: '7D Change',
-  },
+  // WEEK_CHANGE: {
+  //   id: 3,
+  //   value: orderBy7DChange,
+  //   displayName: '7D Change',
+  // },
   HOLDERS: {
     id: 3,
     value: orderByHolderCount,
@@ -84,6 +90,11 @@ export const HomeUsersTableColumns = [
     content: '',
     value: 'name',
     sortable: false,
+  },
+  {
+    content: SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.displayName,
+    value: SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.value,
+    sortable: true,
   },
   {
     content: SortOptionsHomeUsersTable.STAKED.displayName,

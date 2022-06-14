@@ -47,6 +47,9 @@ export type IdeamarketUser = {
   role: string
   twitterUsername: string
 
+  totalRatingsCount: number
+  latestRatingsCount: number
+
   tokenAddress: string
   marketId: number
   marketName: string
@@ -79,6 +82,9 @@ const formatApiResponseToUser = (apiUser: any): IdeamarketUser => {
     profilePhoto: apiUser?.profilePhoto,
     role: apiUser?.role,
     twitterUsername: apiUser?.twitterUsername,
+
+    totalRatingsCount: apiUser?.totalRatingsCount,
+    latestRatingsCount: apiUser?.latestRatingsCount,
 
     tokenAddress: apiUser?.tokenAddress,
     marketId: apiUser?.marketId,

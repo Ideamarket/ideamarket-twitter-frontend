@@ -13,7 +13,7 @@ import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { OverviewColumns } from 'components/tokens/table/OverviewColumns'
 import { flatten } from 'utils/lodash'
 import { GlobalContext } from 'lib/GlobalContext'
-import { SortOptionsHomePostsTable, TABLE_NAMES } from 'utils/tables'
+import { SortOptionsHomeUsersTable, TABLE_NAMES } from 'utils/tables'
 import { getAllUsers } from '../services/UserMarketService'
 import HomeUsersRowSkeleton from './HomeUsersRowSkeleton'
 import HomeUsersRow from './HomeUsersRow'
@@ -161,12 +161,13 @@ export default function HomeUsersTable({
         onOrderByChanged('lockedAmount', 'desc')
       } else if (column === 'holders') {
         onOrderByChanged('holders', 'desc')
-      }
-      // else if (column === SortOptionsHomePostsTable.AVG_RATING.value) {
-      //   onOrderByChanged(SortOptionsHomePostsTable.AVG_RATING.value, 'desc')
-      // }
-      else if (column === SortOptionsHomePostsTable.RATINGS.value) {
-        onOrderByChanged(SortOptionsHomePostsTable.RATINGS.value, 'desc')
+      } else if (
+        column === SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.value
+      ) {
+        onOrderByChanged(
+          SortOptionsHomeUsersTable.TOTAL_RATINGS_COUNT.value,
+          'desc'
+        )
       }
     }
   }

@@ -95,8 +95,17 @@ export default function HomeUsersRow({
             </div>
           </div>
 
+          {/* TOTAL RATINGS COUNT */}
+          <div className="w-[13.75%] lg:w-[11.25%]">
+            <div className="flex flex-col justify-start">
+              {formatNumberWithCommasAsThousandsSerperator(
+                token?.totalRatingsCount
+              )}
+            </div>
+          </div>
+
           {/* STAKED */}
-          <div className="w-[18.333%] lg:w-[15%] flex items-start">
+          <div className="w-[13.75%] lg:w-[11.25%] flex items-start">
             <span className="text-base text-blue-500 font-bold">
               {formatNumberWithCommasAsThousandsSerperator(
                 Math.round(token?.deposits)
@@ -113,14 +122,14 @@ export default function HomeUsersRow({
           </div> */}
 
           {/* HOLDERS */}
-          <div className="w-[18.333%] lg:w-[15%] pr-2">
+          <div className="w-[13.75%] lg:w-[11.25%] pr-2">
             <div className="flex flex-col justify-start font-medium leading-5">
               {formatNumberWithCommasAsThousandsSerperator(token?.holders)}
             </div>
           </div>
 
           {/* STAKE Button */}
-          <div className="w-[18.333%] lg:w-[15%]">
+          <div className="w-[13.75%] lg:w-[11.25%]">
             <div className="flex space-x-2">
               <button
                 onClick={(e) => {
@@ -193,7 +202,7 @@ export default function HomeUsersRow({
 
         <div className="flex justify-between items-center text-center px-3 py-4">
           {/* STAKED */}
-          <div className="w-1/3 flex items-center">
+          <div className="w-1/4 flex items-center">
             <span className="text-base text-blue-600 font-semibold">
               {formatNumberWithCommasAsThousandsSerperator(
                 Math.round(token?.deposits)
@@ -208,9 +217,16 @@ export default function HomeUsersRow({
           </div> */}
 
           {/* HOLDERS */}
-          <div className="w-1/3 flex items-center font-medium text-lg text-black">
+          <div className="w-1/4 flex items-center font-medium text-lg text-black">
             <UsersIcon className="w-4 mr-1" />
             {formatNumberWithCommasAsThousandsSerperator(token?.holders)}
+          </div>
+
+          {/* TOTAL RATINGS COUNT */}
+          <div className="w-1/4 flex items-center font-medium text-lg text-black">
+            {formatNumberWithCommasAsThousandsSerperator(
+              token?.totalRatingsCount
+            )}
           </div>
 
           <button
@@ -218,7 +234,7 @@ export default function HomeUsersRow({
               e.stopPropagation()
               onStakeClicked(token)
             }}
-            className="w-1/3 flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-black bg-transparent"
+            className="w-1/4 flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-black bg-transparent"
           >
             <span>Stake</span>
           </button>
