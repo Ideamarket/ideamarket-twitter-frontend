@@ -373,7 +373,7 @@ export default function AddCitationModal({
                                     ? Math.round(post?.compositeRating)
                                     : -1
                                 ),
-                                'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                                'absolute top-0 right-0 w-12 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
                               {post?.totalRatingsCount > 0
@@ -459,7 +459,7 @@ export default function AddCitationModal({
                                     ? Math.round(post?.compositeRating)
                                     : -1
                                 ),
-                                'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                                'absolute top-0 right-0 w-12 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
                               {post?.totalRatingsCount > 0
@@ -538,7 +538,7 @@ export default function AddCitationModal({
                                   ? Math.round(post?.compositeRating)
                                   : -1
                               ),
-                              'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                              'absolute top-0 right-0 w-12 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                             )}
                           >
                             {post?.totalRatingsCount > 0
@@ -644,7 +644,7 @@ export default function AddCitationModal({
                                     ? Math.round(opinion?.compositeRating)
                                     : -1
                                 ),
-                                'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                                'absolute top-0 right-0 w-12 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
                               {opinion?.totalRatingsCount > 0
@@ -734,7 +734,7 @@ export default function AddCitationModal({
                                     ? Math.round(opinion?.compositeRating)
                                     : -1
                                 ),
-                                'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                                'absolute top-0 right-0 w-12 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
                               {opinion?.totalRatingsCount > 0
@@ -813,7 +813,7 @@ export default function AddCitationModal({
                                   ? Math.round(opinion?.compositeRating)
                                   : -1
                               ),
-                              'absolute top-2 right-2 w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                              'absolute top-0 right-0 w-12 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                             )}
                           >
                             {opinion?.totalRatingsCount > 0
