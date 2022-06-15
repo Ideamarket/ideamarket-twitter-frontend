@@ -202,7 +202,7 @@ export default function HomeUsersRow({
 
         <div className="flex justify-between items-center text-center px-3 py-4">
           {/* STAKED */}
-          <div className="w-1/4 flex items-center">
+          <div className="w-[30%] flex items-center">
             <span className="text-base text-blue-600 font-semibold">
               {formatNumberWithCommasAsThousandsSerperator(
                 Math.round(token?.deposits)
@@ -217,13 +217,13 @@ export default function HomeUsersRow({
           </div> */}
 
           {/* HOLDERS */}
-          <div className="w-1/4 flex items-center font-medium text-lg text-black">
+          <div className="w-[20%] ml-8 flex items-center font-medium text-lg text-black">
             <UsersIcon className="w-4 mr-1" />
             {formatNumberWithCommasAsThousandsSerperator(token?.holders)}
           </div>
 
           {/* TOTAL RATINGS COUNT */}
-          <div className="w-1/4 flex items-center font-medium text-lg text-black">
+          <div className="w-[20%] ml-4 flex items-center font-medium text-lg text-black">
             {formatNumberWithCommasAsThousandsSerperator(
               token?.totalRatingsCount
             )}
@@ -234,7 +234,7 @@ export default function HomeUsersRow({
               e.stopPropagation()
               onStakeClicked(token)
             }}
-            className="w-1/4 flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-black bg-transparent"
+            className="w-[25%] flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-black bg-transparent"
           >
             <span>Stake</span>
           </button>

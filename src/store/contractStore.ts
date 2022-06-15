@@ -34,6 +34,7 @@ type State = {
   addressOpinionBase: any
   nftOpinionBase: any
   ideamarketPosts: any
+  citationMultiAction: any
 }
 
 export const useContractStore = create<State>((set) => ({
@@ -61,6 +62,7 @@ export const useContractStore = create<State>((set) => ({
   addressOpinionBase: undefined,
   nftOpinionBase: undefined,
   ideamarketPosts: undefined,
+  citationMultiAction: undefined,
 }))
 
 export function clearContracts() {
@@ -89,6 +91,7 @@ export function clearContracts() {
     addressOpinionBase: undefined,
     nftOpinionBase: undefined,
     ideamarketPosts: undefined,
+    citationMultiAction: undefined,
   })
 }
 
@@ -250,6 +253,14 @@ export function initContractsFromWeb3(web3: Web3) {
       )
     : null
 
+  const citationMultiAction = deployedAddresses.citationMultiAction
+    ? new web3.eth.Contract(
+        abis.citationMultiAction as any,
+        deployedAddresses.citationMultiAction,
+        { from: web3.eth.defaultAccount }
+      )
+    : null
+
   useContractStore.setState({
     factoryContract: factoryContract,
     quoterContract: quoterContract,
@@ -275,6 +286,7 @@ export function initContractsFromWeb3(web3: Web3) {
     addressOpinionBase: addressOpinionBase,
     nftOpinionBase: nftOpinionBase,
     ideamarketPosts: ideamarketPosts,
+    citationMultiAction: citationMultiAction,
   })
 }
 

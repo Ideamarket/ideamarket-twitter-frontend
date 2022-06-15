@@ -160,7 +160,7 @@ const OverviewFiltersMobile = ({
         </div>
       ) : (
         <div className="w-full flex px-3 py-3 leading-4 text-xs text-black/[.5] font-semibold">
-          <div className="w-1/4 flex items-start">
+          <div className="w-[30%] flex items-start">
             <span className="mr-1">STAKED</span>
             <Tooltip>
               <div className="w-40 md:w-64">
@@ -173,11 +173,11 @@ const OverviewFiltersMobile = ({
             <span className="mr-1">7D CHANGE</span>
           </div> */}
 
-          <div className="w-1/4">HOLDERS</div>
+          <div className="w-[20%] ml-8">HOLDERS</div>
 
-          <div className="w-1/4">RATINGS</div>
+          <div className="w-[20%] ml-4">RATINGS</div>
 
-          <div className="w-1/4"></div>
+          <div className="w-[25%]"></div>
         </div>
       )}
     </div>
