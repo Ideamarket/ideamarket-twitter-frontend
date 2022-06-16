@@ -1,7 +1,6 @@
 import {
   ArrowCircleLeftIcon,
   ArrowCircleRightIcon,
-  ArrowSmRightIcon,
   ChevronDownIcon,
   PencilIcon,
 } from '@heroicons/react/outline'
@@ -9,7 +8,6 @@ import { useWeb3React } from '@web3-react/core'
 import classNames from 'classnames'
 import { A, Modal } from 'components'
 import DropdownButtons from 'components/dropdowns/DropdownButtons'
-import ModalService from 'components/modals/ModalService'
 import { GlobalContext } from 'lib/GlobalContext'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import { flatten } from 'lodash'
@@ -32,7 +30,6 @@ import {
 } from 'utils/tables'
 import useOnClickOutside from 'utils/useOnClickOutside'
 import { getAllPosts, IdeamarketPost } from '../services/PostService'
-import NewPostModal from './NewPostModal'
 
 const TOKENS_PER_PAGE = 5
 
@@ -237,7 +234,7 @@ export default function AddCitationModal({
         </div>
 
         <div className="px-6 py-4">
-          <div className="flex justify-center items-center space-x-1 text-sm">
+          {/* <div className="flex justify-center items-center space-x-1 text-sm">
             <span>Can't find a good post to cite?</span>
             <span
               onClick={() => ModalService.open(NewPostModal)}
@@ -246,7 +243,7 @@ export default function AddCitationModal({
               <span>Create your own post</span>
               <ArrowSmRightIcon className="w-5" />
             </span>
-          </div>
+          </div> */}
 
           <div className="pb-6">
             <button
