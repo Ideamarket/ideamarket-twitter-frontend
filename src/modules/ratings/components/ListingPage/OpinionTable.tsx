@@ -81,8 +81,8 @@ type Props = {
   headerClicked: (value: string) => void
 }
 
-const userAndCommentColWidth = 'w-[25%]'
-const stakedColWidth = 'w-[10%]'
+const stakedColWidth = 'w-[15%]'
+const userColWidth = 'w-[20%]'
 const ratingColWidth = 'w-[15%]'
 const citationColWidth = 'w-[50%]'
 
@@ -183,9 +183,7 @@ const OpinionTable = ({
           </div>
 
           {/* User and comment column */}
-          <div className={classNames(userAndCommentColWidth, `pl-6 pr-6`)}>
-            USER
-          </div>
+          <div className={classNames(userColWidth, `pl-6 pr-6`)}>USER</div>
 
           {/* RATING column */}
           <div
@@ -249,7 +247,7 @@ const OpinionTable = ({
                 <div
                   className={classNames(
                     stakedColWidth,
-                    `text-blue-500 font-semibold pl-6 pr-4`
+                    `text-blue-500 font-semibold pl-6`
                   )}
                 >
                   {formatNumberWithCommasAsThousandsSerperator(
@@ -260,10 +258,7 @@ const OpinionTable = ({
 
                 {/* User and comment column */}
                 <div
-                  className={classNames(
-                    userAndCommentColWidth,
-                    `flex items-center pl-6`
-                  )}
+                  className={classNames(userColWidth, `flex items-center pl-6`)}
                 >
                   <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
                     <div className="mr-4 flex flex-col items-center space-y-2">
