@@ -70,7 +70,10 @@ export const OverviewColumns = ({
               />
             </div> */}
             <div className="flex w-52">
-              <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
+              <OverviewSearchbar
+                onNameSearchChanged={onNameSearchChanged}
+                bgColor="bg-white"
+              />
             </div>
           </div>
         )
