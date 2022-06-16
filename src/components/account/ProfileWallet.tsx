@@ -17,7 +17,6 @@ import {
 } from 'store/ideaMarketsStore'
 import ModalService from 'components/modals/ModalService'
 import WalletFilters from './WalletFilters'
-import { useMarketStore } from 'store/markets'
 import RatingsTable from 'modules/ratings/components/RatingsTable'
 import { getUsersLatestOpinions } from 'modules/ratings/services/OpinionService'
 import RateModal from 'components/trade/RateModal'
@@ -44,7 +43,7 @@ const infiniteQueryConfig = {
   },
   refetchOnMount: false,
   refetchOnWindowFocus: false,
-  enabled: false,
+  enabled: true,
   keepPreviousData: true,
 }
 
@@ -61,7 +60,6 @@ export default function ProfileWallet({ userData }: Props) {
   const [isVerifiedFilterActive, setIsVerifiedFilterActive] = useState(false)
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
   const [isLockedFilterActive, setIsLockedFilterActive] = useState(false)
-  const [selectedMarkets, setSelectedMarkets] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
 
   const [table, setTable] = useState(TABLE_NAMES.ACCOUNT_OPINIONS)
@@ -75,9 +73,6 @@ export default function ProfileWallet({ userData }: Props) {
   )
 
   const filterTokens = isStarredFilterActive ? watchingTokens : undefined
-
-  const allMarkets = useMarketStore((state) => state.markets)
-  const marketNames = allMarkets.map((m) => m?.market?.name)
 
   const {
     data: infiniteUserPostData,
@@ -114,7 +109,7 @@ export default function ProfileWallet({ userData }: Props) {
     refetch: refetchOwned,
     hasNextPage: canFetchMoreOwned,
   } = useInfiniteQuery(
-    ['owned-tokens'],
+    ['owned-tokens', address, userData?.walletAddress],
     ({ pageParam = 0 }) => ownedQueryFunction(TOKENS_PER_PAGE, pageParam),
     infiniteQueryConfig
   )
@@ -143,21 +138,7 @@ export default function ProfileWallet({ userData }: Props) {
   }
 
   useEffect(() => {
-    const storedMarkets = JSON.parse(localStorage.getItem('STORED_MARKETS'))
-
-    const initialMarkets = storedMarkets
-      ? [...storedMarkets]
-      : ['All', ...marketNames]
-
-    setSelectedMarkets(new Set(initialMarkets))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allMarkets])
-
-  useEffect(() => {
-    if (selectedMarkets && selectedMarkets?.size !== 0) {
-      // Do not refetch until markets loaded because if you do, the first load of tokens does not work for some reason
-      refetch()
-    }
+    refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     address,
@@ -165,8 +146,6 @@ export default function ProfileWallet({ userData }: Props) {
     orderBy,
     orderDirection,
     userData,
-    selectedMarkets,
-    allMarkets,
     isStarredFilterActive,
     isLockedFilterActive,
     nameSearch,
@@ -206,16 +185,11 @@ export default function ProfileWallet({ userData }: Props) {
   }
 
   async function ownedQueryFunction(numTokens: number, skip: number = 0) {
-    if (!allMarkets || allMarkets?.length <= 0) return []
-
     const finalAddress = userData?.walletAddress
-    const filteredMarkets = allMarkets
-      .map((m) => m?.market)
-      .filter((m) => selectedMarkets.has(m.name))
 
     const { holdings } = await queryOwnedTokensMaybeMarket(
       finalAddress,
-      filteredMarkets,
+      null,
       numTokens,
       skip,
       orderBy,
@@ -229,16 +203,11 @@ export default function ProfileWallet({ userData }: Props) {
   }
 
   async function tradesQueryFunction(numTokens: number, skip: number = 0) {
-    if (!allMarkets || allMarkets?.length <= 0) return []
-
     const finalAddress = userData?.walletAddress
-    const filteredMarkets = allMarkets
-      .map((m) => m?.market)
-      .filter((m) => selectedMarkets.has(m.name))
 
     const { trades } = await queryMyTrades(
       finalAddress,
-      filteredMarkets,
+      null,
       numTokens,
       skip,
       orderBy,
@@ -261,11 +230,6 @@ export default function ProfileWallet({ userData }: Props) {
       setOrderBy(headerValue)
       setOrderDirection('desc')
     }
-  }
-
-  const onMarketChanged = (markets) => {
-    localStorage.setItem('STORED_MARKETS', JSON.stringify([...markets]))
-    setSelectedMarkets(markets)
   }
 
   const onRateClicked = (token: IdeaToken, urlMetaData: any) => {
@@ -360,13 +324,12 @@ export default function ProfileWallet({ userData }: Props) {
       <div className="bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray ">
         <WalletFilters
           table={table}
-          selectedMarkets={selectedMarkets}
           isVerifiedFilterActive={isVerifiedFilterActive}
           isStarredFilterActive={isStarredFilterActive}
           isLockedFilterActive={isLockedFilterActive}
           nameSearch={nameSearch}
           orderBy={orderBy}
-          onMarketChanged={onMarketChanged}
+          onMarketChanged={() => null}
           onNameSearchChanged={setNameSearch}
           setIsVerifiedFilterActive={setIsVerifiedFilterActive}
           setIsStarredFilterActive={setIsStarredFilterActive}
@@ -422,66 +385,58 @@ export default function ProfileWallet({ userData }: Props) {
             </div>
           )}
 
-          {table === TABLE_NAMES.ACCOUNT_POSTS &&
-            !selectedMarkets?.has('None') &&
-            web3 !== undefined && (
-              <UserPostsTable
-                rawPairs={userPostPairs}
-                isPairsDataLoading={isUserPostDataLoading}
-                refetch={refetch}
-                canFetchMore={canFetchMoreUserPosts}
-                orderDirection={orderDirection}
-                orderBy={orderBy}
-                fetchMore={fetchMoreUserPosts}
-                headerClicked={headerClicked}
-                onRateClicked={onRateClicked}
-              />
-            )}
+          {table === TABLE_NAMES.ACCOUNT_POSTS && web3 !== undefined && (
+            <UserPostsTable
+              rawPairs={userPostPairs}
+              isPairsDataLoading={isUserPostDataLoading}
+              refetch={refetch}
+              canFetchMore={canFetchMoreUserPosts}
+              orderDirection={orderDirection}
+              orderBy={orderBy}
+              fetchMore={fetchMoreUserPosts}
+              headerClicked={headerClicked}
+              onRateClicked={onRateClicked}
+            />
+          )}
 
-          {table === TABLE_NAMES.ACCOUNT_OPINIONS &&
-            !selectedMarkets?.has('None') &&
-            web3 !== undefined && (
-              <RatingsTable
-                rawPairs={ratingPairs}
-                isPairsDataLoading={isRatingsDataLoading}
-                refetch={refetch}
-                canFetchMore={canFetchMoreRatings}
-                orderDirection={orderDirection}
-                orderBy={orderBy}
-                fetchMore={fetchMoreRatings}
-                headerClicked={headerClicked}
-                onRateClicked={onRateClicked}
-              />
-            )}
+          {table === TABLE_NAMES.ACCOUNT_OPINIONS && web3 !== undefined && (
+            <RatingsTable
+              rawPairs={ratingPairs}
+              isPairsDataLoading={isRatingsDataLoading}
+              refetch={refetch}
+              canFetchMore={canFetchMoreRatings}
+              orderDirection={orderDirection}
+              orderBy={orderBy}
+              fetchMore={fetchMoreRatings}
+              headerClicked={headerClicked}
+              onRateClicked={onRateClicked}
+            />
+          )}
 
-          {table === TABLE_NAMES.ACCOUNT_HOLDINGS &&
-            !selectedMarkets?.has('None') &&
-            web3 !== undefined && (
-              <OwnedTokenTableNew
-                rawPairs={ownedPairs}
-                isPairsDataLoading={isOwnedPairsDataLoading}
-                refetch={refetch}
-                canFetchMore={canFetchMoreOwned}
-                orderDirection={orderDirection}
-                orderBy={orderBy}
-                fetchMore={fetchMoreOwned}
-                headerClicked={headerClicked}
-              />
-            )}
+          {table === TABLE_NAMES.ACCOUNT_HOLDINGS && web3 !== undefined && (
+            <OwnedTokenTableNew
+              rawPairs={ownedPairs}
+              isPairsDataLoading={isOwnedPairsDataLoading}
+              refetch={refetch}
+              canFetchMore={canFetchMoreOwned}
+              orderDirection={orderDirection}
+              orderBy={orderBy}
+              fetchMore={fetchMoreOwned}
+              headerClicked={headerClicked}
+            />
+          )}
 
-          {table === TABLE_NAMES.ACCOUNT_TRADES &&
-            !selectedMarkets?.has('None') &&
-            web3 !== undefined && (
-              <MyTradesTableNew
-                rawPairs={myTrades}
-                isPairsDataLoading={isTradesPairsDataLoading}
-                canFetchMore={canFetchMoreTrades}
-                orderDirection={orderDirection}
-                orderBy={orderBy}
-                fetchMore={fetchMoreTrades}
-                headerClicked={headerClicked}
-              />
-            )}
+          {table === TABLE_NAMES.ACCOUNT_TRADES && web3 !== undefined && (
+            <MyTradesTableNew
+              rawPairs={myTrades}
+              isPairsDataLoading={isTradesPairsDataLoading}
+              canFetchMore={canFetchMoreTrades}
+              orderDirection={orderDirection}
+              orderBy={orderBy}
+              fetchMore={fetchMoreTrades}
+              headerClicked={headerClicked}
+            />
+          )}
         </div>
       </div>
     </div>

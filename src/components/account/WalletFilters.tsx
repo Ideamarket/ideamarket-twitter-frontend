@@ -14,7 +14,6 @@ import useOnClickOutside from 'utils/useOnClickOutside'
 
 type Props = {
   table: TABLE_NAMES
-  selectedMarkets: Set<string>
   isVerifiedFilterActive: boolean
   isStarredFilterActive: boolean
   isLockedFilterActive: boolean
@@ -30,7 +29,6 @@ type Props = {
 
 const WalletFilters = ({
   table,
-  selectedMarkets,
   isVerifiedFilterActive,
   isStarredFilterActive,
   isLockedFilterActive,

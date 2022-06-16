@@ -359,11 +359,13 @@ export async function queryOwnedTokensMaybeMarket(
   nameSearch: string,
   isLockedFilterActive: boolean
 ): Promise<any> {
-  if (ownerAddress === undefined || !ownerAddress || !markets) {
+  if (ownerAddress === undefined || !ownerAddress) {
     return []
   }
 
-  const marketIds = markets.map((market) => market.marketID).join()
+  const marketIds = markets
+    ? markets?.map((market) => market.marketID).join()
+    : '1,2,3,4,5,6'
 
   const {
     holdings: ownedResponse,
@@ -917,7 +919,9 @@ export async function queryMyTrades(
     return []
   }
 
-  const marketIds = markets.map((market) => market.marketID).join()
+  const marketIds = markets
+    ? markets?.map((market) => market.marketID).join()
+    : '1,2,3,4,5,6'
 
   const { trades: tradesResponse, totalTradesValue } = await getTrades({
     ownerAddress,
