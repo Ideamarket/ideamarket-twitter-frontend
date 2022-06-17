@@ -24,7 +24,7 @@ export const SortOptionsHomePostsTable = {
   COMPOSITE_RATING: {
     id: 1,
     value: orderByCompositeRating,
-    displayName: 'IMO Rating',
+    displayName: 'Rating',
   },
   // AVG_RATING: {
   //   id: 2,
@@ -36,18 +36,18 @@ export const SortOptionsHomePostsTable = {
     value: orderByMarketInterest,
     displayName: 'Scrutiny',
   },
-  RATINGS: {
-    id: 4,
-    value: orderByLatestRatingsCount,
-    displayName: 'Ratings',
-  },
+  // RATINGS: {
+  //   id: 4,
+  //   value: orderByLatestRatingsCount,
+  //   displayName: 'Ratings',
+  // },
 }
 
 export const SortOptionsAddCitationsModal = {
   COMPOSITE_RATING: {
     id: 1,
     value: orderByCompositeRating,
-    displayName: 'IMO Rating',
+    displayName: 'Rating',
   },
   // AVG_RATING: {
   //   id: 2,
@@ -138,7 +138,7 @@ export const SortOptionsAccountPosts = {
   COMPOSITE_RATING: {
     id: 1,
     value: orderByCompositeRating,
-    displayName: 'IMO Rating',
+    displayName: 'Rating',
   },
   // AVG_RATING: {
   //   id: 2,
@@ -220,6 +220,46 @@ export const getSortOptionDisplayNameByValue = (
   const sortOptions = getSortOptionsByTable(tableName)
   const displayName = Object.values(sortOptions).find(
     (option) => option.value === sortOptionValue
+  )?.displayName
+  return displayName
+}
+
+export enum TIME_FILTER {
+  ONE_DAY,
+  ONE_WEEK,
+  ONE_MONTH,
+  ONE_YEAR,
+  ALL_TIME,
+}
+
+export const TimeFilterOptions = {
+  ONE_DAY: {
+    value: TIME_FILTER.ONE_DAY,
+    displayName: 'Past Day',
+  },
+  ONE_WEEK: {
+    value: TIME_FILTER.ONE_WEEK,
+    displayName: 'Past Week',
+  },
+  ONE_MONTH: {
+    value: TIME_FILTER.ONE_MONTH,
+    displayName: 'Past Month',
+  },
+  ONE_YEAR: {
+    value: TIME_FILTER.ONE_YEAR,
+    displayName: 'Past Year',
+  },
+  ALL_TIME: {
+    value: TIME_FILTER.ALL_TIME,
+    displayName: 'All Time',
+  },
+}
+
+export const getTimeFilterDisplayNameByValue = (
+  timeFilterValue: TIME_FILTER
+) => {
+  const displayName = Object.values(TimeFilterOptions).find(
+    (option) => option.value === timeFilterValue
   )?.displayName
   return displayName
 }

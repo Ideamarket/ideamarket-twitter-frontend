@@ -15,7 +15,11 @@ import TokenRowSkeleton from './OverviewTokenRowSkeleton'
 import { OverviewColumns } from './table/OverviewColumns'
 import { flatten } from 'utils/lodash'
 import { GlobalContext } from 'lib/GlobalContext'
-import { SortOptionsHomePostsTable, TABLE_NAMES } from 'utils/tables'
+import {
+  SortOptionsHomePostsTable,
+  TABLE_NAMES,
+  TIME_FILTER,
+} from 'utils/tables'
 import { getAllPosts } from 'modules/posts/services/PostService'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
@@ -27,12 +31,14 @@ type Props = {
   columnData: Array<any>
   selectedCategories: string[]
   selectedTable: TABLE_NAMES
+  timeFilter: TIME_FILTER
   getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
   onRateClicked: (idt: IdeaToken, urlMetaData: any) => void
   tradeOrListSuccessToggle: boolean
   setIsStarredFilterActive: (isActive: boolean) => void
   onNameSearchChanged: (value: string) => void
+  setTimeFilter: (value: TIME_FILTER) => void
 }
 
 export default function Table({
@@ -43,12 +49,14 @@ export default function Table({
   columnData,
   selectedCategories,
   selectedTable,
+  timeFilter,
   getColumn,
   onOrderByChanged,
   onRateClicked,
   tradeOrListSuccessToggle,
   setIsStarredFilterActive,
   onNameSearchChanged,
+  setTimeFilter,
 }: Props) {
   const TOKENS_PER_PAGE = 10
 
@@ -89,6 +97,7 @@ export default function Table({
           filterTokens,
           nameSearch,
           null,
+          timeFilter,
         ],
         pageParam
       ),
@@ -138,6 +147,7 @@ export default function Table({
     refetch,
     jwtToken,
     selectedCategories,
+    timeFilter,
     isTxPending, // If any transaction starts or stop, refresh home table data
   ])
 
@@ -171,9 +181,10 @@ export default function Table({
       // else if (column === SortOptionsHomePostsTable.AVG_RATING.value) {
       //   onOrderByChanged(SortOptionsHomePostsTable.AVG_RATING.value, 'desc')
       // }
-      else if (column === SortOptionsHomePostsTable.RATINGS.value) {
-        onOrderByChanged(SortOptionsHomePostsTable.RATINGS.value, 'desc')
-      } else if (column === SortOptionsHomePostsTable.MARKET_INTEREST.value) {
+      // else if (column === SortOptionsHomePostsTable.RATINGS.value) {
+      //   onOrderByChanged(SortOptionsHomePostsTable.RATINGS.value, 'desc')
+      // }
+      else if (column === SortOptionsHomePostsTable.MARKET_INTEREST.value) {
         onOrderByChanged(
           SortOptionsHomePostsTable.MARKET_INTEREST.value,
           'desc'
@@ -189,9 +200,9 @@ export default function Table({
 
   return (
     <div className="flex flex-col">
-      <div className="-my-2 overflow-x-auto">
+      <div className="-my-2">
         <div className="inline-block w-full py-2 align-middle">
-          <div className="overflow-hidden dark:border-gray-500">
+          <div className="dark:border-gray-500">
             <div className="hidden md:flex h-24">
               <OverviewColumns
                 orderBy={orderBy}
@@ -199,9 +210,11 @@ export default function Table({
                 columnData={columnData}
                 selectedTable={selectedTable}
                 isStarredFilterActive={isStarredFilterActive}
+                timeFilter={timeFilter}
                 columnClicked={columnClicked}
                 setIsStarredFilterActive={setIsStarredFilterActive}
                 onNameSearchChanged={onNameSearchChanged}
+                setTimeFilter={setTimeFilter}
               />
             </div>
 

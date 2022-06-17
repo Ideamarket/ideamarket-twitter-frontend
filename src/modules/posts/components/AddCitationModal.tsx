@@ -133,7 +133,7 @@ export default function AddCitationModal({
     ],
     ({ pageParam = 0 }) =>
       getAllPosts(
-        [TOKENS_PER_PAGE, orderBy, 'desc', [], [], postSearchText, null],
+        [TOKENS_PER_PAGE, orderBy, 'desc', [], [], postSearchText, null, null],
         pageParam
       ),
     infiniteQueryConfig

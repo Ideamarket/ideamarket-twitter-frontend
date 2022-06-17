@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import classNames from 'classnames'
 import Tooltip from 'components/tooltip/Tooltip'
 import { A } from 'components'
@@ -6,11 +6,18 @@ import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 // import { StarIcon } from '@heroicons/react/solid'
 // import SelectableButton from 'components/buttons/SelectableButton'
 import {
+  getSortOptionDisplayNameByValue,
+  getTimeFilterDisplayNameByValue,
   SortOptionsHomePostsTable,
   SortOptionsHomeUsersTable,
   TABLE_NAMES,
+  TimeFilterOptions,
+  TIME_FILTER,
 } from 'utils/tables'
 import { OverviewSearchbar } from '../OverviewSearchbar'
+import { ChevronDownIcon } from '@heroicons/react/outline'
+import DropdownButtons from 'components/dropdowns/DropdownButtons'
+import useOnClickOutside from 'utils/useOnClickOutside'
 
 type Props = {
   orderBy: string
@@ -18,9 +25,11 @@ type Props = {
   columnData: Array<any>
   isStarredFilterActive: boolean
   selectedTable: TABLE_NAMES
+  timeFilter?: TIME_FILTER
   columnClicked: (column: string) => void
   setIsStarredFilterActive: (isActive: boolean) => void
   onNameSearchChanged: (value: string) => void
+  setTimeFilter?: (value: TIME_FILTER) => void
 }
 
 function IncomeColumn() {
@@ -52,29 +61,86 @@ export const OverviewColumns = ({
   columnData,
   selectedTable,
   isStarredFilterActive,
+  timeFilter,
   columnClicked,
   setIsStarredFilterActive,
   onNameSearchChanged,
+  setTimeFilter,
 }: Props) => {
+  const [isTimeFilterDropdownOpen, setIsTimeFilterDropdownOpen] =
+    useState(false)
+  const [isSortingDropdownOpen, setIsSortingDropdownOpen] = useState(false)
+  const ref = useRef()
+  useOnClickOutside(ref, () => {
+    setIsTimeFilterDropdownOpen(false)
+    setIsSortingDropdownOpen(false)
+  })
+
   function getColumnContent(column) {
     switch (column.value) {
       case 'name':
         return (
           <div className="flex items-center space-x-2">
-            {/* <div className="-ml-2">
-              <SelectableButton
-                onClick={setIsStarredFilterActive}
-                isSelected={isStarredFilterActive}
-                label={<StarIcon className="w-5 h-5" />}
-                className="w-9 h-9"
-              />
-            </div> */}
             <div className="flex w-52">
               <OverviewSearchbar
                 onNameSearchChanged={onNameSearchChanged}
                 bgColor="bg-white"
               />
             </div>
+
+            <div
+              onClick={() => setIsSortingDropdownOpen(!isSortingDropdownOpen)}
+              className="relative w-32 h-9 flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
+            >
+              <span className="text-xs mr-1 text-sm text-black/[.5] font-semibold dark:text-white whitespace-nowrap">
+                Sort by:
+              </span>
+              <span className="text-xs text-blue-500 font-semibold flex items-center">
+                {getSortOptionDisplayNameByValue(orderBy, selectedTable)}
+              </span>
+              <span>
+                <ChevronDownIcon className="h-4" />
+              </span>
+
+              {isSortingDropdownOpen && (
+                <DropdownButtons
+                  container={ref}
+                  filters={Object.values(
+                    selectedTable === TABLE_NAMES.HOME_POSTS
+                      ? SortOptionsHomePostsTable
+                      : SortOptionsHomeUsersTable
+                  )}
+                  selectedOptions={new Set([orderBy])}
+                  toggleOption={columnClicked}
+                />
+              )}
+            </div>
+
+            {selectedTable === TABLE_NAMES.HOME_POSTS && (
+              <div
+                onClick={() =>
+                  setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
+                }
+                className="relative w-28 h-9 flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
+              >
+                <span className="text-xs text-blue-500 font-semibold flex items-center">
+                  {getTimeFilterDisplayNameByValue(timeFilter)}
+                </span>
+                <span>
+                  <ChevronDownIcon className="h-4" />
+                </span>
+
+                {isTimeFilterDropdownOpen && (
+                  <DropdownButtons
+                    container={ref}
+                    filters={Object.values(TimeFilterOptions)}
+                    selectedOptions={new Set([timeFilter])}
+                    toggleOption={setTimeFilter}
+                    width="w-[10rem]"
+                  />
+                )}
+              </div>
+            )}
           </div>
         )
       case 'income':
@@ -106,7 +172,7 @@ export const OverviewColumns = ({
         )
       case SortOptionsHomePostsTable.MARKET_INTEREST.value:
         return (
-          <div className="flex items-center">
+          <div className="invisible flex items-center">
             <span className="mr-1">SCRUTINY</span>
             <Tooltip
               className="text-black/[.5] z-[200]"
@@ -122,8 +188,6 @@ export const OverviewColumns = ({
         return (
           <div className="flex items-center">
             <span>
-              IMO
-              <br />
               RATING
               <Tooltip
                 className="ml-1 text-black/[.5] z-[200]"
@@ -157,15 +221,15 @@ export const OverviewColumns = ({
         case 'name':
           return 'w-[45%] lg:w-[55%] pl-6 pr-24'
         case SortOptionsHomePostsTable.COMPOSITE_RATING.value:
-          return 'w-[13.75%] lg:w-[11.25%]'
+          return 'w-[18.3%] lg:w-[15%] pl-12 lg:pl-0'
         // case SortOptionsHomePostsTable.AVG_RATING.value:
         //   return 'w-[11%] lg:w-[9%]'
         case SortOptionsHomePostsTable.MARKET_INTEREST.value:
-          return 'w-[13.75%] lg:w-[11.25%]'
-        case SortOptionsHomePostsTable.RATINGS.value:
-          return 'w-[13.75%] lg:w-[11.25%]'
+          return 'w-[18.3%] lg:w-[15%]'
+        // case SortOptionsHomePostsTable.RATINGS.value:
+        //   return 'w-[13.75%] lg:w-[11.25%]'
         case 'txButtons':
-          return 'w-[13.75%] lg:w-[11.25%]'
+          return 'w-[18.3%] lg:w-[15%]'
         default:
           return ''
       }
@@ -207,18 +271,20 @@ export const OverviewColumns = ({
             }}
           >
             <div className="flex items-center">
-              {column.sortable && orderBy === column.value && (
-                <div
-                  className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
-                  title="SORT"
-                >
-                  {orderDirection === 'desc' ? (
-                    <SortDescendingIcon className="w-3.5 text-blue-500" />
-                  ) : (
-                    <SortAscendingIcon className="w-3.5 text-blue-500" />
-                  )}
-                </div>
-              )}
+              {column.sortable &&
+                orderBy === column.value &&
+                orderBy !== SortOptionsHomePostsTable.MARKET_INTEREST.value && (
+                  <div
+                    className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
+                    title="SORT"
+                  >
+                    {orderDirection === 'desc' ? (
+                      <SortDescendingIcon className="w-3.5 text-blue-500" />
+                    ) : (
+                      <SortAscendingIcon className="w-3.5 text-blue-500" />
+                    )}
+                  </div>
+                )}
               <span className="uppercase font-semibold mr-1">
                 {getColumnContent(column)}
               </span>

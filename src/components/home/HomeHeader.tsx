@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 import A from 'components/A'
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 
@@ -8,7 +7,7 @@ const HomeHeader = () => {
     <div className="pb-48">
       <div className="px-6 pt-10 text-center text-white font-inter dark:text-gray-200">
         <div>
-          <div className="flex flex-wrap justify-center mt-4">
+          {/* <div className="flex flex-wrap justify-center mt-4">
             <div
               className="flex justify-center flex-grow-0 flex-shrink-0 mt-4"
               data-aos="zoom-y-out"
@@ -59,7 +58,7 @@ const HomeHeader = () => {
                 </div>
               </A>
             </div>
-          </div>
+          </div> */}
 
           <h2 className="mt-8 text-3xl md:text-6xl font-gilroy-bold">
             The decentralized

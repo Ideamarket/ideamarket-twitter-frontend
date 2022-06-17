@@ -21,6 +21,7 @@ import {
   SortOptionsHomePostsTable,
   SortOptionsHomeUsersTable,
   TABLE_NAMES,
+  TIME_FILTER,
 } from 'utils/tables'
 import { MenuAlt2Icon, UserIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
@@ -44,6 +45,7 @@ const Home = ({ urlMarkets }: Props) => {
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [selectedCategories, setSelectedCategories] = useState([])
   const [selectedTable, setSelectedTable] = useState(TABLE_NAMES.HOME_POSTS)
+  const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ALL_TIME)
 
   const visibleColumns = getVisibleColumns(selectedColumns)
 
@@ -147,6 +149,7 @@ const Home = ({ urlMarkets }: Props) => {
         : HomeUsersTableColumns,
     selectedCategories,
     selectedTable,
+    timeFilter,
     getColumn: (column) => selectedColumns.has(column),
     onOrderByChanged,
     onRateClicked,
@@ -155,6 +158,7 @@ const Home = ({ urlMarkets }: Props) => {
     setSelectedCategories,
     setIsStarredFilterActive,
     onNameSearchChanged,
+    setTimeFilter,
   }
   return (
     <>
@@ -191,7 +195,7 @@ const Home = ({ urlMarkets }: Props) => {
           >
             <div className="flex items-center">
               <MenuAlt2Icon className="w-5" />
-              <span className="text-lg font-bold ml-2">Cases</span>
+              <span className="text-lg font-bold ml-2">Posts</span>
             </div>
             <div className="text-xs">The most confident opinions</div>
           </button>
@@ -210,7 +214,7 @@ const Home = ({ urlMarkets }: Props) => {
           >
             <div className="flex items-center">
               <UserIcon className="w-5" />
-              <span className="text-lg font-bold ml-2">Judges</span>
+              <span className="text-lg font-bold ml-2">Users</span>
             </div>
             <div className="text-xs">The most trusted voices</div>
           </button>

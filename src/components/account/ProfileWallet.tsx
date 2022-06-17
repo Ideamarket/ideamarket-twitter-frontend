@@ -25,6 +25,7 @@ import {
   SortOptionsAccountOpinions,
   SortOptionsAccountPosts,
   TABLE_NAMES,
+  TIME_FILTER,
 } from 'utils/tables'
 import UserPostsTable from 'modules/posts/components/UserPostsTable'
 import { getAllPosts } from 'modules/posts/services/PostService'
@@ -163,6 +164,7 @@ export default function ProfileWallet({ userData }: Props) {
         filterTokens,
         nameSearch,
         userData?.walletAddress,
+        TIME_FILTER.ALL_TIME,
       ],
       skip
     )

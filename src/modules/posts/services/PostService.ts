@@ -2,6 +2,7 @@ import apiGetAllPosts from 'actions/web2/posts/apiGetAllPosts'
 import { apiGetPostByContent } from 'actions/web2/posts/apiGetPostByContent'
 import { apiGetPostByTokenID } from 'actions/web2/posts/apiGetPostByTokenID'
 import { IdeamarketUser } from 'modules/user-market/services/UserMarketService'
+import { TIME_FILTER } from 'utils/tables'
 
 /**
  * Get post data from backend and convert to one format for frontend
@@ -38,7 +39,8 @@ type Params = [
   categories: string[],
   filterTokens: string[],
   search: string,
-  minterAddress: string
+  minterAddress: string,
+  timeFilter: TIME_FILTER
 ]
 
 /**
@@ -60,6 +62,7 @@ export async function getAllPosts(
     filterTokens,
     search,
     minterAddress,
+    timeFilter,
   ] = params
 
   const allPosts = await apiGetAllPosts({
@@ -71,6 +74,7 @@ export async function getAllPosts(
     filterTokens,
     search,
     minterAddress,
+    timeFilter,
   })
 
   return await Promise.all(

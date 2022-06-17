@@ -26,7 +26,7 @@ const headers: Header[] = [
     sortable: true,
   },
   // {
-  //   title: 'IMO Rating',
+  //   title: 'Rating',
   //   value: 'compositeRating',
   //   sortable: true,
   // },
