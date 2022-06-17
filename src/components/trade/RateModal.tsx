@@ -27,7 +27,8 @@ import IMTextArea from 'modules/forms/components/IMTextArea'
 import { useContractStore } from 'store/contractStore'
 import getAllCategories from 'actions/web3/getAllCategories'
 import { XIcon } from '@heroicons/react/solid'
-import postAndCite from 'actions/web3/postAndCite'
+import { syncPosts } from 'actions/web2/posts/syncPosts'
+import mintPost from 'actions/web3/mintPost'
 
 const CustomSlider = Slider.createSliderWithTooltip(Slider)
 
@@ -94,30 +95,60 @@ export default function RateModal({
     })
   }
 
-  const onRateClicked = async () => {
+  const onPostClicked = async () => {
     setIsTxPending(true)
-
-    const isCreatingNewPost = isCreateNewPost && inputText?.length > 0
+    // TODO: do imageLink
+    // TODO: figure out urlContent
+    // content, imageHashes, categoryTags, imageLink, isURL, urlContent
+    const mintingArgs = [inputText, [], selectedCategories, '', false, '']
 
     try {
-      const web3TxMethod = isCreatingNewPost ? postAndCite : ratePost
-      // content, rating, categoryTags, isURL, urlContent, tokenId
-      const ratingArgs = isCreatingNewPost
-        ? [
-            inputText,
-            inputRating,
-            selectedCategories,
-            false,
-            '',
-            ideaToken?.tokenID,
-          ]
-        : [
-            // tokenId , rating, citations, inFavorArray
-            ideaToken?.tokenID,
-            inputRating,
-            citations,
-            inFavorArray,
-          ]
+      await txManager.executeTxWithCallbacks(
+        'New Post',
+        mintPost,
+        {
+          onReceipt: async (receipt: any) => {
+            await syncPosts(receipt?.events?.Transfer?.returnValues?.tokenId)
+            setCitations([receipt?.events?.Transfer?.returnValues?.tokenId])
+            const newPostCitations = [
+              receipt?.events?.Transfer?.returnValues?.tokenId,
+            ]
+            const newPostInFavor = [inputRating > 50]
+            setIsTxPending(false)
+            await onRateClicked(newPostCitations, newPostInFavor)
+          },
+        },
+        ...mintingArgs
+      )
+    } catch (ex) {
+      console.log(ex)
+      onTradeComplete(false, 'error', 'error', TX_TYPES.NONE)
+      setIsTxPending(false)
+      setSelectedCategories([])
+      return
+    }
+
+    // onTradeComplete(true, 'success', 'success', TX_TYPES.RATE)
+    setSelectedCategories([])
+  }
+
+  // If creating new post, need to pass citations and inFavor in since setting local state is not sync
+  const onRateClicked = async (
+    newPostCitations?: number[],
+    newPostInFavor?: boolean[]
+  ) => {
+    setIsTxPending(true)
+
+    try {
+      const web3TxMethod = ratePost
+
+      const ratingArgs = [
+        // tokenId , rating, citations, inFavorArray
+        ideaToken?.tokenID,
+        inputRating,
+        newPostCitations ? newPostCitations : citations,
+        newPostInFavor ? newPostInFavor : inFavorArray,
+      ]
 
       await txManager.executeTxWithCallbacks(
         'Rate',
@@ -145,6 +176,7 @@ export default function RateModal({
     onTradeComplete(true, ideaToken?.listingId, ideaToken?.name, TX_TYPES.RATE)
   }
 
+  const isCreatingNewPost = isCreateNewPost && inputText?.length > 0
   const isRatingDisabled = inputRating === 50
 
   const isTextPostTooLong = inputText?.length > 360
@@ -191,7 +223,7 @@ export default function RateModal({
     ) {
       return 'Rate without Citation'
     } else if (isCreateNewPost && inputText?.length > 0) {
-      return 'Create New Post + Rate with Citation'
+      return 'Create New Post + Rate with Citation (2 transactions)'
     } else if (!isCreateNewPost) {
       return `Rate with ${citations?.length} citations`
     }
@@ -539,7 +571,13 @@ export default function RateModal({
                 : 'border-brand-blue text-white bg-black font-medium hover:bg-black/[.8]'
             )}
             disabled={isRatingDisabled}
-            onClick={onRateClicked}
+            onClick={async () => {
+              if (isCreatingNewPost) {
+                await onPostClicked()
+              } else {
+                await onRateClicked()
+              }
+            }}
           >
             <span>Rate</span>
             <div className="text-sm font-normal opacity-50">
