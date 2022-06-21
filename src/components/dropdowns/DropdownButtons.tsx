@@ -9,7 +9,7 @@ const DropdownButtons = ({
 }) => {
   return (
     // Needed wrapper div so hover-over container doesn't disappear when moving from button to container. Used random height, this can change if needed
-    <div className={classNames(width, 'absolute top-full left-0 h-36 z-[100]')}>
+    <div className={classNames(width, 'absolute top-full left-0 h-36 z-[600]')}>
       <div
         ref={container}
         className="absolute flex flex-col w-full h-auto md:w-auto p-4 mt-1 bg-white border rounded-lg shadow-xl cursor-default dark:bg-gray-800"

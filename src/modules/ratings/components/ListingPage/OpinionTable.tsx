@@ -332,7 +332,7 @@ const OpinionTable = ({
                     >
                       <div
                         className={classNames(
-                          `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-blue-600 text-white font-bold flex justify-center items-center`
+                          `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-white text-blue-600 border font-bold flex justify-center items-center`
                         )}
                       >
                         {opinion?.rating}
@@ -477,7 +477,7 @@ const OpinionTable = ({
                   >
                     <div
                       className={classNames(
-                        `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-blue-600 text-white font-bold flex justify-center items-center`
+                        `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-white text-blue-600 border font-bold flex justify-center items-center`
                       )}
                     >
                       {opinion?.rating}

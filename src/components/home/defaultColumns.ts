@@ -21,8 +21,8 @@ const defaultColumns = [
   },
   {
     id: 3,
-    name: 'Rating',
-    content: 'Rating',
+    name: 'Confidence',
+    content: 'Confidence',
     value: SortOptionsHomePostsTable.COMPOSITE_RATING.value,
     sortable: true,
     isOptional: false,

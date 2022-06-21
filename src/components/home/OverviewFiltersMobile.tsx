@@ -97,7 +97,7 @@ const OverviewFiltersMobile = ({
             <span className="mr-1 text-sm text-black/[.5] font-semibold dark:text-white whitespace-nowrap">
               Sort by:
             </span>
-            <span className="text-xs text-blue-500 font-semibold flex items-center">
+            <span className="text-xs text-blue-500 font-semibold flex items-center whitespace-nowrap">
               <span>
                 {getSortOptionDisplayNameByValue(orderBy, selectedTable)}
               </span>
@@ -177,7 +177,7 @@ const OverviewFiltersMobile = ({
           </div>
 
           <div className="w-1/4 flex items-start">
-            <span className="mr-1">RATING</span>
+            <span className="whitespace-nowrap">Confidence</span>
             <Tooltip>
               <div className="w-full md:w-64">
                 Rating weighted by IMO staked on each user. The more IMO staked

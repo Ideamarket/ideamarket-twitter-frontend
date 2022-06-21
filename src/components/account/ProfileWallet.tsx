@@ -352,11 +352,7 @@ export default function ProfileWallet({ userData }: Props) {
             </div>
 
             <div className="w-1/4 flex items-start">
-              <span className="mr-1">
-                IMO
-                <br />
-                RATING
-              </span>
+              <span className="mr-1">Confidence</span>
               <Tooltip>
                 <div className="w-full md:w-64">
                   Rating weighted by IMO staked on each user. The more IMO

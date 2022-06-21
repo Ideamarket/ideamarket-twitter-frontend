@@ -26,7 +26,7 @@ const headers: Header[] = [
     sortable: true,
   },
   {
-    title: 'Rating',
+    title: 'Confidence',
     value: SortOptionsAccountPosts.COMPOSITE_RATING.value,
     sortable: true,
   },
@@ -110,9 +110,7 @@ export default function UserPostsTable({
         return (
           <div className="flex items-center">
             <span>
-              IMO
-              <br />
-              RATING
+              Confidence
               <Tooltip
                 className="ml-1 text-black/[.5] z-[200]"
                 iconComponentClassNames="w-3"

@@ -40,11 +40,11 @@ const CitationCard = ({ citation, opinion }: Props) => {
                   ? Math.round(citation?.citation?.compositeRating)
                   : -1
               ),
-              'absolute top-0 right-0 w-12 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
+              'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
             )}
           >
             {citation.citation?.totalRatingsCount > 0
-              ? Math.round(citation?.citation?.compositeRating)
+              ? Math.round(citation?.citation?.compositeRating) + '%'
               : '—'}
           </span>
 
@@ -150,11 +150,11 @@ const CitationCard = ({ citation, opinion }: Props) => {
                   ? Math.round(citation?.citation?.compositeRating)
                   : -1
               ),
-              'absolute top-0 right-0 w-12 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
+              'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
             )}
           >
             {citation.citation?.totalRatingsCount > 0
-              ? Math.round(citation?.citation?.compositeRating)
+              ? Math.round(citation?.citation?.compositeRating) + '%'
               : '—'}
           </span>
 

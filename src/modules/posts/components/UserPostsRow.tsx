@@ -144,11 +144,11 @@ export default function UserPostsRow({
                           ? Math.round(token?.compositeRating)
                           : -1
                       ),
-                      'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                      'w-14 h-12 flex justify-center items-center rounded-lg font-extrabold text-xl'
                     )}
                   >
                     {token?.totalRatingsCount > 0
-                      ? Math.round(token?.compositeRating)
+                      ? Math.round(token?.compositeRating) + '%'
                       : '—'}
                   </span>
                 </span>
@@ -277,11 +277,11 @@ export default function UserPostsRow({
                       ? Math.round(token?.compositeRating)
                       : -1
                   ),
-                  'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                  'w-14 h-12 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
                 {token?.totalRatingsCount > 0
-                  ? Math.round(token?.compositeRating)
+                  ? Math.round(token?.compositeRating) + '%'
                   : '—'}
               </span>
             </span>

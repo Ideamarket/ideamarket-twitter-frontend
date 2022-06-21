@@ -25,7 +25,7 @@ export const SortOptionsHomePostsTable = {
   COMPOSITE_RATING: {
     id: 1,
     value: orderByCompositeRating,
-    displayName: 'Rating',
+    displayName: 'Confidence',
   },
   // AVG_RATING: {
   //   id: 2,
@@ -53,7 +53,7 @@ export const SortOptionsAddCitationsModal = {
   COMPOSITE_RATING: {
     id: 1,
     value: orderByCompositeRating,
-    displayName: 'Rating',
+    displayName: 'Confidence',
   },
   // AVG_RATING: {
   //   id: 2,
@@ -144,7 +144,7 @@ export const SortOptionsAccountPosts = {
   COMPOSITE_RATING: {
     id: 1,
     value: orderByCompositeRating,
-    displayName: 'Rating',
+    displayName: 'Confidence',
   },
   // AVG_RATING: {
   //   id: 2,

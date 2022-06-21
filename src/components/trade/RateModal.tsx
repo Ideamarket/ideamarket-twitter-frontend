@@ -371,7 +371,7 @@ export default function RateModal({
 
               <IMTextArea
                 onChange={(newTextInput) => setInputText(newTextInput)}
-                placeholder="Cite your reasons..."
+                placeholder="Cite your reasons... (optional)"
               />
 
               {categoriesData && categoriesData?.length > 0 && (

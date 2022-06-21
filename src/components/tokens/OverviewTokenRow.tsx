@@ -139,11 +139,11 @@ export default function TokenRow({
                       ? Math.round(token?.compositeRating)
                       : -1
                   ),
-                  'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                  'w-14 h-12 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
                 {token?.totalRatingsCount > 0
-                  ? Math.round(token?.compositeRating)
+                  ? Math.round(token?.compositeRating) + '%'
                   : '—'}
               </span>
             </div>
@@ -270,11 +270,11 @@ export default function TokenRow({
                       ? Math.round(token?.compositeRating)
                       : -1
                   ),
-                  'w-10 h-8 flex justify-center items-center rounded-lg font-extrabold text-xl'
+                  'w-14 h-12 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
                 {token?.totalRatingsCount > 0
-                  ? Math.round(token?.compositeRating)
+                  ? Math.round(token?.compositeRating) + '%'
                   : '—'}
               </span>
             </span>

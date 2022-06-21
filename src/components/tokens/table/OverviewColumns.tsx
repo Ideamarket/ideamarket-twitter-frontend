@@ -90,12 +90,12 @@ export const OverviewColumns = ({
 
             <div
               onClick={() => setIsSortingDropdownOpen(!isSortingDropdownOpen)}
-              className="relative w-32 h-9 flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
+              className="relative w-auto h-9 flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
             >
               <span className="text-xs mr-1 text-sm text-black/[.5] font-semibold dark:text-white whitespace-nowrap">
                 Sort by:
               </span>
-              <span className="text-xs text-blue-500 font-semibold flex items-center">
+              <span className="text-xs text-blue-500 font-semibold flex items-center whitespace-nowrap">
                 {getSortOptionDisplayNameByValue(orderBy, selectedTable)}
               </span>
               <span>
@@ -112,6 +112,7 @@ export const OverviewColumns = ({
                   )}
                   selectedOptions={new Set([orderBy])}
                   toggleOption={columnClicked}
+                  width="w-[10rem]"
                 />
               )}
             </div>
@@ -188,7 +189,7 @@ export const OverviewColumns = ({
         return (
           <div className="flex items-center">
             <span>
-              RATING
+              Confidence
               <Tooltip
                 className="ml-1 text-black/[.5] z-[200]"
                 iconComponentClassNames="w-3"
