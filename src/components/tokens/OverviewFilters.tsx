@@ -5,7 +5,7 @@ import OverviewFiltersMobile from 'components/home/OverviewFiltersMobile'
 import SelectableButton from 'components/buttons/SelectableButton'
 import getAllCategories from 'actions/web3/getAllCategories'
 import { useContractStore } from 'store/contractStore'
-import { TABLE_NAMES } from 'utils/tables'
+import { TABLE_NAMES, TIME_FILTER } from 'utils/tables'
 
 type OverviewFiltersProps = {
   orderBy: string
@@ -13,11 +13,13 @@ type OverviewFiltersProps = {
   isStarredFilterActive: boolean
   selectedCategories: string[]
   selectedTable: TABLE_NAMES
+  timeFilter?: TIME_FILTER
   setOrderBy: (value: string) => void
   onColumnChanged: (set: Set<string>) => void
   onNameSearchChanged: (value: string) => void
   setIsStarredFilterActive: (isActive: boolean) => void
   setSelectedCategories: (selectedCategories: string[]) => void
+  setTimeFilter?: (value: TIME_FILTER) => void
 }
 
 export const OverviewFilters = ({
@@ -26,11 +28,13 @@ export const OverviewFilters = ({
   isStarredFilterActive,
   selectedCategories,
   selectedTable,
+  timeFilter,
   setOrderBy,
   onColumnChanged,
   onNameSearchChanged,
   setIsStarredFilterActive,
   setSelectedCategories,
+  setTimeFilter,
 }: OverviewFiltersProps) => {
   const ideamarketPosts = useContractStore.getState().ideamarketPosts
 
@@ -82,10 +86,12 @@ export const OverviewFilters = ({
         categoriesData={categoriesData}
         selectedCategories={selectedCategories}
         selectedTable={selectedTable}
+        timeFilter={timeFilter}
         setOrderBy={setOrderBy}
         onNameSearchChanged={onNameSearchChanged}
         setIsStarredFilterActive={setIsStarredFilterActive}
         onCategoryClicked={onCategoryClicked}
+        setTimeFilter={setTimeFilter}
       />
     </div>
   )

@@ -131,11 +131,13 @@ const Home = ({ urlMarkets }: Props) => {
     isStarredFilterActive,
     selectedCategories,
     selectedTable,
+    timeFilter,
     setOrderBy,
     onColumnChanged,
     onNameSearchChanged,
     setIsStarredFilterActive,
     setSelectedCategories,
+    setTimeFilter,
   }
 
   const tableProps = {

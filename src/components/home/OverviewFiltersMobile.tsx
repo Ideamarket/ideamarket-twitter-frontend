@@ -7,9 +7,12 @@ import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import { useContext, useRef, useState } from 'react'
 import {
   getSortOptionDisplayNameByValue,
+  getTimeFilterDisplayNameByValue,
   SortOptionsHomePostsTable,
   SortOptionsHomeUsersTable,
   TABLE_NAMES,
+  TimeFilterOptions,
+  TIME_FILTER,
 } from 'utils/tables'
 import Tooltip from 'components/tooltip/Tooltip'
 import { PencilIcon } from '@heroicons/react/outline'
@@ -25,10 +28,12 @@ type Props = {
   categoriesData: any[]
   selectedCategories: string[]
   selectedTable: TABLE_NAMES
+  timeFilter?: TIME_FILTER
   setOrderBy: (value: string) => void
   onNameSearchChanged: (value: string) => void
   setIsStarredFilterActive: (isActive: boolean) => void
   onCategoryClicked: (newClickedCategoryId: string) => void
+  setTimeFilter?: (value: TIME_FILTER) => void
 }
 
 const OverviewFiltersMobile = ({
@@ -37,14 +42,21 @@ const OverviewFiltersMobile = ({
   categoriesData,
   selectedCategories,
   selectedTable,
+  timeFilter,
   setOrderBy,
   onNameSearchChanged,
   setIsStarredFilterActive,
   onCategoryClicked,
+  setTimeFilter,
 }: Props) => {
+  const [isTimeFilterDropdownOpen, setIsTimeFilterDropdownOpen] =
+    useState(false)
   const [isSortingDropdownOpen, setIsSortingDropdownOpen] = useState(false)
   const ref = useRef()
-  useOnClickOutside(ref, () => setIsSortingDropdownOpen(false))
+  useOnClickOutside(ref, () => {
+    setIsTimeFilterDropdownOpen(false)
+    setIsSortingDropdownOpen(false)
+  })
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
@@ -80,13 +92,12 @@ const OverviewFiltersMobile = ({
           /> */}
           <div
             onClick={() => setIsSortingDropdownOpen(!isSortingDropdownOpen)}
-            className="relative w-full flex justify-center items-center px-2 py-1 ml-auto border rounded-md"
+            className="relative w-1/2 flex justify-center items-center px-2 py-1 border rounded-md"
           >
             <span className="mr-1 text-sm text-black/[.5] font-semibold dark:text-white whitespace-nowrap">
               Sort by:
             </span>
-            <span className="text-sm text-blue-500 font-semibold flex items-center">
-              {/* <span>{getSortByIcon(selectedSortOptionID)}</span> */}
+            <span className="text-xs text-blue-500 font-semibold flex items-center">
               <span>
                 {getSortOptionDisplayNameByValue(orderBy, selectedTable)}
               </span>
@@ -108,6 +119,32 @@ const OverviewFiltersMobile = ({
               />
             )}
           </div>
+
+          {selectedTable === TABLE_NAMES.HOME_POSTS && (
+            <div
+              onClick={() =>
+                setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
+              }
+              className="relative w-1/2 h-full flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
+            >
+              <span className="text-xs text-blue-500 font-semibold flex items-center">
+                {getTimeFilterDisplayNameByValue(timeFilter)}
+              </span>
+              <span>
+                <ChevronDownIcon className="h-4" />
+              </span>
+
+              {isTimeFilterDropdownOpen && (
+                <DropdownButtons
+                  container={ref}
+                  filters={Object.values(TimeFilterOptions)}
+                  selectedOptions={new Set([timeFilter])}
+                  toggleOption={setTimeFilter}
+                  width="w-[10rem]"
+                />
+              )}
+            </div>
+          )}
         </div>
 
         <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
