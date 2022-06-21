@@ -194,6 +194,8 @@ export default function Table({
           SortOptionsHomePostsTable.COMPOSITE_RATING.value,
           'desc'
         )
+      } else if (column === SortOptionsHomePostsTable.NEW.value) {
+        onOrderByChanged(SortOptionsHomePostsTable.NEW.value, 'desc')
       }
     }
   }

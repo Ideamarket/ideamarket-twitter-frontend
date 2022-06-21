@@ -19,6 +19,7 @@ const orderByMarketInterest = 'marketInterest'
 const orderByDeposits = 'deposits'
 // const orderBy7DChange = 'weekChange'
 const orderByHolderCount = 'holders'
+const orderByPostedAt = 'postedAt'
 
 export const SortOptionsHomePostsTable = {
   COMPOSITE_RATING: {
@@ -35,6 +36,11 @@ export const SortOptionsHomePostsTable = {
     id: 3,
     value: orderByMarketInterest,
     displayName: 'Scrutiny',
+  },
+  NEW: {
+    id: 4,
+    value: orderByPostedAt,
+    displayName: 'New',
   },
   // RATINGS: {
   //   id: 4,
