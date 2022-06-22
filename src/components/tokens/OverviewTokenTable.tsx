@@ -220,7 +220,7 @@ export default function Table({
               />
             </div>
 
-            <div className="bg-white divide-y-[6px] dark:bg-gray-700">
+            <div className="dark:bg-gray-700">
               {(tokenData as any[]).map((token, index) => {
                 if (
                   isStarredFilterActive &&

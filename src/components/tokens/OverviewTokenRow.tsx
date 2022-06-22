@@ -42,9 +42,9 @@ export default function TokenRow({
   const usernameOrWallet = token?.minterToken?.username || minterAddress
 
   return (
-    <div ref={lastElementRef}>
+    <div ref={lastElementRef} className="bg-white rounded-2xl mb-4">
       {/* Desktop row */}
-      <div className="hidden relative md:block py-6 hover:bg-black/[.02]">
+      <div className="hidden relative md:block py-6 hover:bg-black/[.02] rounded-2xl">
         {/* Makes so entire row can be clicked to go to Post page */}
         <Link href={`/post/${token?.tokenID}`}>
           <a
@@ -61,7 +61,7 @@ export default function TokenRow({
           {/* Icon and Name and ListingContent */}
           <div className="w-[45%] lg:w-[55%] relative pl-6 md:pr-10">
             <div className="relative flex items-start w-3/4 p-3 mx-auto md:w-full text-gray-900 dark:text-gray-200 border rounded-lg bg-white">
-              <div className="mr-4 flex flex-col items-center space-y-2">
+              {/* <div className="mr-4 flex flex-col items-center space-y-2">
                 <div className="relative rounded-full w-6 h-6">
                   <Image
                     className="rounded-full"
@@ -74,12 +74,11 @@ export default function TokenRow({
                     objectFit="cover"
                   />
                 </div>
-
-                {/* <WatchingStar token={token} /> */}
-              </div>
+              </div> */}
 
               <div className="pr-6 w-full">
-                <div className="flex items-center space-x-1 pb-2 flex-wrap">
+                {/* Post minter IM name/wallet and twitter name */}
+                {/* <div className="flex items-center space-x-1 pb-2 flex-wrap">
                   <A
                     className="font-semibold text-blue hover:text-blue-600 text-sm z-50"
                     href={`/u/${usernameOrWallet}`}
@@ -103,7 +102,7 @@ export default function TokenRow({
                       </span>
                     </A>
                   )}
-                </div>
+                </div> */}
 
                 <ListingContent
                   ideaToken={token}
@@ -116,6 +115,54 @@ export default function TokenRow({
                       LISTING_TYPE.TEXT_POST
                   }
                 />
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2 text-xs mt-2">
+              <span className="italic text-black/[.25] font-semibold">
+                NFT minted by
+              </span>
+
+              <div className="flex items-center whitespace-nowrap">
+                <div className="relative rounded-full w-5 h-5">
+                  <Image
+                    className="rounded-full"
+                    src={
+                      token?.minterToken?.profilePhoto ||
+                      '/DefaultProfilePicture.png'
+                    }
+                    alt=""
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+
+                {/* Post minter IM name/wallet and twitter name */}
+                <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
+                  <A
+                    className="ml-2 font-bold hover:text-blue-500"
+                    href={`/u/${usernameOrWallet}`}
+                  >
+                    {displayUsernameOrWallet}
+                  </A>
+                  {token?.minterToken?.twitterUsername && (
+                    <A
+                      className="flex items-center space-x-1 hover:text-blue-500"
+                      href={`/u/${usernameOrWallet}`}
+                    >
+                      <div className="relative w-4 h-4">
+                        <Image
+                          src={'/twitter-solid-blue.svg'}
+                          alt="twitter-solid-blue-icon"
+                          layout="fill"
+                        />
+                      </div>
+                      <span className="text-xs">
+                        @{token?.minterToken?.twitterUsername}
+                      </span>
+                    </A>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -207,6 +254,7 @@ export default function TokenRow({
                 />
               </div>
 
+              {/* Post minter IM name/wallet and twitter name */}
               <div className="flex items-center space-x-1 flex-wrap">
                 <A
                   className="ml-2 font-bold text-black hover:text-blue-600"
@@ -226,7 +274,7 @@ export default function TokenRow({
                         layout="fill"
                       />
                     </div>
-                    <span className="text-sm">
+                    <span className="text-xs">
                       @{token?.minterToken?.twitterUsername}
                     </span>
                   </A>

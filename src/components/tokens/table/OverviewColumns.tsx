@@ -261,7 +261,7 @@ export const OverviewColumns = ({
           <div
             className={classNames(
               getColumnStyle(column),
-              'flex items-center pr-5 py-5 text-xs leading-4 text-left text-brand-gray-4 dark:text-gray-200 bg-gray-50 dark:bg-gray-600',
+              'flex items-center pr-5 py-5 text-xs leading-4 text-left text-brand-gray-4 dark:text-gray-200 bg-brand-gray dark:bg-gray-600',
               column.sortable && 'cursor-pointer'
             )}
             key={column.value}

@@ -172,6 +172,7 @@ const Home = ({ urlMarkets }: Props) => {
             ? 'bg-gradient-to-b from-[#02194D] to-[#011032]'
             : 'bg-gradient-to-b from-[#020D27] to-[#020A1B]'
         }
+        height="h-[36rem]"
       />
 
       {/* Relative and z-index important to put page above BgBanner */}
@@ -225,7 +226,7 @@ const Home = ({ urlMarkets }: Props) => {
         {/* Transform and translate place table on top of background image defined in HomeHeader */}
         <div className="mx-auto transform md:px-4 md:max-w-304 -translate-y-40 font-inter">
           <OverviewFilters {...overviewFiltersProps} />
-          <div className="bg-white border-brand-gray-3 dark:border-gray-500 rounded-b-xlg shadow-home">
+          <div className="border-brand-gray-3 dark:border-gray-500 rounded-b-xlg">
             {selectedTable === TABLE_NAMES.HOME_POSTS ? (
               <Table {...tableProps} />
             ) : (

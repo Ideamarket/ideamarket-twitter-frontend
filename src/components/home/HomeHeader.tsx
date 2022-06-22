@@ -61,16 +61,16 @@ const HomeHeader = () => {
           </div> */}
 
           <h2 className="mt-8 text-3xl md:text-6xl font-gilroy-bold">
-            The decentralized
-            <span className="text-brand-blue"> court of public opinion</span>
+            Crowdsource
+            <span className="text-brand-blue"> credibility</span>
           </h2>
 
           <p className="mt-8 md:px-28 text-sm md:text-lg">
             <span className="inline-block mr-1">
-              Judge controversial issues,
+              Express your opinion on-chain
             </span>
             <span className="inline-block mr-1">
-              and empower other judges by staking $IMO.{' '}
+              and give overlooked information the credibility it deserves.{' '}
             </span>
             <A
               href="https://docs.ideamarket.io"
