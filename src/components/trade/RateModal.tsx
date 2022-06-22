@@ -374,34 +374,36 @@ export default function RateModal({
                 placeholder="Cite your reasons... (optional)"
               />
 
-              {categoriesData && categoriesData?.length > 0 && (
-                <div className="my-4 text-sm">
-                  <div className="text-black/[.5] font-semibold">
-                    CATEGORY TAGS
+              {inputText?.length > 0 &&
+                categoriesData &&
+                categoriesData?.length > 0 && (
+                  <div className="my-4 text-sm">
+                    <div className="text-black/[.5] font-semibold">
+                      CATEGORY TAGS
+                    </div>
+                    <div className="flex flex-wrap">
+                      {categoriesData.map((category) => {
+                        return (
+                          <div
+                            onClick={() => onSelectCategory(category)}
+                            className={classNames(
+                              selectedCategories.includes(category)
+                                ? 'text-blue-500 bg-blue-100'
+                                : 'text-black',
+                              'flex items-center border rounded-2xl px-2 py-1 cursor-pointer mr-2 mt-2'
+                            )}
+                            key={category}
+                          >
+                            <span>{category}</span>
+                            {selectedCategories.includes(category) && (
+                              <XIcon className="w-5 h-5 ml-1" />
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
                   </div>
-                  <div className="flex flex-wrap">
-                    {categoriesData.map((category) => {
-                      return (
-                        <div
-                          onClick={() => onSelectCategory(category)}
-                          className={classNames(
-                            selectedCategories.includes(category)
-                              ? 'text-blue-500 bg-blue-100'
-                              : 'text-black',
-                            'flex items-center border rounded-2xl px-2 py-1 cursor-pointer mr-2 mt-2'
-                          )}
-                          key={category}
-                        >
-                          <span>{category}</span>
-                          {selectedCategories.includes(category) && (
-                            <XIcon className="w-5 h-5 ml-1" />
-                          )}
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
+                )}
             </>
           ) : (
             <>

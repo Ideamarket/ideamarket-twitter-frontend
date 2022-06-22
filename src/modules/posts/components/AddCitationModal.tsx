@@ -405,6 +405,7 @@ export default function AddCitationModal({
                                   __html: urlify(postText),
                                 }}
                                 className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
+                                style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                               />
 
                               {/* {cutOffContent && (
@@ -491,6 +492,7 @@ export default function AddCitationModal({
                                   __html: urlify(postText),
                                 }}
                                 className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
+                                style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                               />
 
                               {/* {cutOffContent && (
@@ -570,6 +572,7 @@ export default function AddCitationModal({
                                 __html: urlify(postText),
                               }}
                               className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
+                              style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                             />
 
                             {/* {cutOffContent && (
@@ -676,6 +679,7 @@ export default function AddCitationModal({
                                   __html: urlify(postText),
                                 }}
                                 className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
+                                style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                               />
 
                               {/* {cutOffContent && (
@@ -766,6 +770,7 @@ export default function AddCitationModal({
                                   __html: urlify(postText),
                                 }}
                                 className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
+                                style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                               />
 
                               {/* {cutOffContent && (
@@ -845,6 +850,7 @@ export default function AddCitationModal({
                                 __html: urlify(postText),
                               }}
                               className="whitespace-pre-wrap break-words relative z-50 text-base text-black font-medium"
+                              style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                             />
 
                             {/* {cutOffContent && (

@@ -123,6 +123,7 @@ const ListingContent = ({
               __html: urlify(content),
             }}
             className="md:max-w-[30rem] pr-2 whitespace-pre-wrap break-words relative text-base text-black font-medium"
+            style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
           />
 
           {/* {cutOffContent && (
