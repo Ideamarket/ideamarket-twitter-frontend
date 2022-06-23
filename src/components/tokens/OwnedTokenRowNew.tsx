@@ -219,7 +219,7 @@ export default function OwnedTokenRow({
                   {
                     ideaToken,
                     market,
-                    startingTradeType: TX_TYPES.LOCK,
+                    startingTradeType: TX_TYPES.SELL,
                   },
                   onTradeClosed
                 )

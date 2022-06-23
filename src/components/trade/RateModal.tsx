@@ -360,13 +360,22 @@ export default function RateModal({
 
           {isCreateNewPost ? (
             <>
-              <div className="flex justify-end">
-                <span
-                  className={classNames(isTextPostTooLong && 'text-red-500')}
+              <div className="flex justify-between items-center">
+                <A
+                  href="https://docs.ideamarket.io/how-to-make-a-good-post"
+                  className="text-xs text-blue-600 hover:underline"
                 >
-                  {inputText?.length}
+                  How to make a good post —{'>'}
+                </A>
+
+                <span>
+                  <span
+                    className={classNames(isTextPostTooLong && 'text-red-500')}
+                  >
+                    {inputText?.length}
+                  </span>
+                  /360
                 </span>
-                /360
               </div>
 
               <IMTextArea

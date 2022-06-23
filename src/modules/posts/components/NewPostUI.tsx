@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { useTransactionManager } from 'utils'
 import TxPending from 'components/trade/TxPending'
-import { GlobeAltIcon, MenuAlt2Icon } from '@heroicons/react/outline'
+// import { GlobeAltIcon, MenuAlt2Icon } from '@heroicons/react/outline'
 import { TX_TYPES } from 'components/trade/TradeCompleteModal'
 import mintPost from 'actions/web3/mintPost'
 import { useQuery } from 'react-query'
@@ -15,6 +15,7 @@ import { useContractStore } from 'store/contractStore'
 import { syncPosts } from 'actions/web2/posts/syncPosts'
 import { verifyTokenName } from 'actions'
 import IMTextArea from 'modules/forms/components/IMTextArea'
+import { A } from 'components'
 
 type NewPostUIProps = {
   isTxButtonActive?: boolean
@@ -39,7 +40,7 @@ export default function NewPostUI({
   const { setIsTxPending } = useContext(GlobalContext)
 
   const [inputContent, setInputContent] = useState('')
-  const [inputPostType, setInputPostType] = useState(TX_TYPES.TEXT_POST_LIST)
+  const [inputPostType /*setInputPostType*/] = useState(TX_TYPES.TEXT_POST_LIST)
   const [finalURL, setFinalURL] = useState('')
   // const [finalTokenValue, setFinalTokenValue] = useState('')
   // const [isWantBuyChecked, setIsWantBuyChecked] = useState(false)
@@ -148,8 +149,8 @@ export default function NewPostUI({
       {/* Tab buttons and text area */}
       <div className="px-6 py-4">
         {/* Tab buttons */}
-        <div className="flex justify-between items-end mx-1 mb-2">
-          <div className="invisible flex items-center space-x-2">
+        <div className="flex justify-between items-center mx-1 mb-2">
+          {/* <div className="invisible flex items-center space-x-2">
             <button
               onClick={() => {
                 setIsValidToken(false)
@@ -181,7 +182,14 @@ export default function NewPostUI({
               <GlobeAltIcon className="w-4" />
               <span>URL</span>
             </button>
-          </div>
+          </div> */}
+
+          <A
+            href="https://docs.ideamarket.io/how-to-make-a-good-post"
+            className="text-xs text-blue-600 hover:underline"
+          >
+            How to make a good post —{'>'}
+          </A>
 
           <span>
             <span className={classNames(isTextPostTooLong && 'text-red-500')}>

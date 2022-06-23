@@ -1,24 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQuery, useInfiniteQuery } from 'react-query'
 import { A, DefaultLayout, WalletModal, WatchingStar } from 'components'
 import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { GetServerSideProps } from 'next'
 import ModalService from 'components/modals/ModalService'
 import ListingSEO from 'components/listing-page/ListingSEO'
-import {
-  ReactElement,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-  useRef,
-  MutableRefObject,
-} from 'react'
-import {
-  formatNumberInt,
-  formatNumberWithCommasAsThousandsSerperator,
-} from 'utils'
-import { ChatIcon, ExternalLinkIcon, ShareIcon } from '@heroicons/react/outline'
+import { ReactElement, useContext, useEffect, useState } from 'react'
+import { formatNumberInt } from 'utils'
+import { ChatIcon, ShareIcon } from '@heroicons/react/outline'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { useWalletStore } from 'store/walletStore'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -31,7 +19,6 @@ import { flatten } from 'lodash'
 import OpinionTable from 'modules/ratings/components/ListingPage/OpinionTable'
 import classNames from 'classnames'
 import {
-  SortOptionsAddCitationsModal,
   SortOptionsHomePostsTable,
   SortOptionsListingPageOpinions,
 } from 'utils/tables'
@@ -42,11 +29,7 @@ import {
 } from 'modules/posts/services/PostService'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
-import WalletIcon from '../../assets/wallet.svg'
-import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
-import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 import { getAllCitationsByTokenID } from 'modules/citations/services/CitationService'
-import CitationCard from 'modules/ratings/components/CitationCard'
 import ArgumentsView from 'modules/citations/components/ArgumentsView'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -80,17 +63,13 @@ enum POST_PAGE_VIEWS {
 }
 
 const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
-  const {
-    data: token,
-    isLoading: isTokenLoading,
-    refetch,
-  } = useQuery(['single-post', rawTokenId], () =>
+  const { data: token, refetch } = useQuery(['single-post', rawTokenId], () =>
     getPostByTokenID({ tokenID: rawTokenId })
   )
 
   const [viewSelected, setViewSelected] = useState(POST_PAGE_VIEWS.CITATIONS)
 
-  const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
+  const [isStarredFilterActive] = useState(false)
   const [orderBy, setOrderBy] = useState(
     SortOptionsHomePostsTable.MARKET_INTEREST.value
   )
@@ -138,7 +117,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     data: infiniteOpinionsData,
     isFetching: isOpinionsDataLoading,
     fetchNextPage: fetchMoreOpinions,
-    refetch: refetchOpinions,
+    // refetch: refetchOpinions,
     hasNextPage: canFetchMoreOpinions,
   } = useInfiniteQuery(
     ['opinions', token, orderBy, orderDirection, nameSearch],
@@ -150,9 +129,9 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
   const {
     data: infiniteCitationsData,
-    isFetching: isCitationsDataLoading,
+    // isFetching: isCitationsDataLoading,
     fetchNextPage: fetchMoreCitations,
-    refetch: refetchCitations,
+    // refetch: refetchCitations,
     hasNextPage: canFetchMoreCitations,
   } = useInfiniteQuery(
     ['citations', token, orderBy, orderDirection, nameSearch],
