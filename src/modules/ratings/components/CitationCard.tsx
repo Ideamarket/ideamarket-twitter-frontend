@@ -3,71 +3,78 @@ import { A } from 'components'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
 import { getIMORatingColors, urlify } from 'utils/display/DisplayUtils'
-import { Citation, IdeamarketOpinion } from '../services/OpinionService'
+import { IdeamarketOpinion } from '../services/OpinionService'
 
 type Props = {
-  citation: Citation
-  opinion: IdeamarketOpinion
+  citation: any // Citation | CitationData
+  opinion?: IdeamarketOpinion
 }
 
 const CitationCard = ({ citation, opinion }: Props) => {
-  // const cutOffContent = citation?.citation?.content?.length > 280
+  // Mainly deals with how citation fetched. If citation fetched with opinion, then data is different than when fetched as a solo citation
+  const isCitationOnOpinion = Boolean(opinion)
+
+  const citationData = isCitationOnOpinion ? citation?.citation : citation
+
+  // const cutOffContent = citationData?.content?.length > 280
   const citationText = true
-    ? citation?.citation?.content
-    : citation?.citation?.content.slice(0, 280) + '...'
+    ? citationData?.content
+    : citationData?.content.slice(0, 280) + '...'
 
   const displayUsernameOrWalletCitation = convertAccountName(
-    citation?.citation?.minter?.username ||
-      citation?.citation?.minter?.walletAddress
+    citationData?.minterToken?.username ||
+      citationData?.minterToken?.walletAddress
   )
   const usernameOrWalletCitation =
-    citation?.citation?.minter?.username ||
-    citation?.citation?.minter?.walletAddress
+    citationData?.minterToken?.username ||
+    citationData?.minterToken?.walletAddress
 
   return (
     <>
       {/* Desktop */}
-      <div className="hidden md:block relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal">
+      <div className="hidden md:block relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal shadow-[0_-1px_7px_rgba(0,0,0,0.3)]">
         <A
-          href={`/post/${citation?.citation?.tokenID}`}
+          href={`/post/${citationData?.tokenID}`}
           target="_blank"
           rel="noopener noreferrer"
         >
           <span
             className={classNames(
               getIMORatingColors(
-                citation.citation?.totalRatingsCount > 0
-                  ? Math.round(citation?.citation?.compositeRating)
+                citationData?.totalRatingsCount > 0
+                  ? Math.round(citationData?.compositeRating)
                   : -1
               ),
-              'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
+              'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl z-[100]'
             )}
           >
-            {citation.citation?.totalRatingsCount > 0
-              ? Math.round(citation?.citation?.compositeRating) + '%'
+            {citationData?.totalRatingsCount > 0
+              ? Math.round(citationData?.compositeRating) + '%'
               : '—'}
           </span>
 
-          <div className="flex items-center text-sm text-black/[.5] mb-4">
-            <span className="mr-2">
-              {citation?.inFavor ? 'FOR' : 'AGAINST'}
-            </span>
+          {isCitationOnOpinion && (
+            <div className="flex items-center text-sm text-black/[.5] mb-4">
+              <span className="mr-2">
+                {citation?.inFavor ? 'FOR' : 'AGAINST'}
+              </span>
 
-            <div className="flex items-center">
-              {opinion?.citations?.length > 1 &&
-                opinion?.citations?.map((c) => {
-                  if (c.citation.tokenID === citation.citation.tokenID) {
-                    return (
-                      <div className="w-2.5 h-2.5 mr-1 rounded-3xl bg-blue-600"></div>
-                    )
-                  } else {
-                    return (
-                      <div className="w-2.5 h-2.5 mr-1 rounded-3xl border"></div>
-                    )
-                  }
-                })}
+              <div className="flex items-center">
+                {opinion?.citations?.length > 1 &&
+                  opinion?.citations?.map((c) => {
+                    if (c.citation.tokenID === citation.citation.tokenID) {
+                      return (
+                        <div className="w-2.5 h-2.5 mr-1 rounded-3xl bg-blue-600"></div>
+                      )
+                    } else {
+                      return (
+                        <div className="w-2.5 h-2.5 mr-1 rounded-3xl border"></div>
+                      )
+                    }
+                  })}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex items-start">
             {/* The citation minter profile image */}
@@ -76,7 +83,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
                 <Image
                   className="rounded-full"
                   src={
-                    citation?.citation?.minter?.profilePhoto ||
+                    citationData?.minterToken?.profilePhoto ||
                     '/DefaultProfilePicture.png'
                   }
                   alt=""
@@ -94,7 +101,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
                 <A className="font-bold text-sm">
                   {displayUsernameOrWalletCitation}
                 </A>
-                {citation?.citation?.minter?.twitterUsername && (
+                {citationData?.minterToken?.twitterUsername && (
                   <A
                     className="flex items-center space-x-1 text-black z-50"
                     href={`/u/${usernameOrWalletCitation}`}
@@ -107,7 +114,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
                       />
                     </div>
                     <span className="text-sm opacity-50">
-                      @{citation?.citation?.minter?.twitterUsername}
+                      @{citationData?.minterToken?.twitterUsername}
                     </span>
                   </A>
                 )}
@@ -124,7 +131,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
 
                 {/* {cutOffContent && (
                   <A
-                    href={`/post/${citation?.citation?.tokenID}`}
+                    href={`/post/${citationData?.tokenID}`}
                     className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                   >
                     (More...)
@@ -137,46 +144,48 @@ const CitationCard = ({ citation, opinion }: Props) => {
       </div>
 
       {/* Mobile (really don't need separate mobile version right now, but keeping just in case) */}
-      <div className="md:hidden relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal">
+      <div className="md:hidden relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal shadow-[0_-1px_7px_rgba(0,0,0,0.3)]">
         <A
-          href={`/post/${citation?.citation?.tokenID}`}
+          href={`/post/${citationData?.tokenID}`}
           target="_blank"
           rel="noopener noreferrer"
         >
           <span
             className={classNames(
               getIMORatingColors(
-                citation.citation?.totalRatingsCount > 0
-                  ? Math.round(citation?.citation?.compositeRating)
+                citationData?.totalRatingsCount > 0
+                  ? Math.round(citationData?.compositeRating)
                   : -1
               ),
-              'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
+              'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl z-[100]'
             )}
           >
-            {citation.citation?.totalRatingsCount > 0
-              ? Math.round(citation?.citation?.compositeRating) + '%'
+            {citationData?.totalRatingsCount > 0
+              ? Math.round(citationData?.compositeRating) + '%'
               : '—'}
           </span>
 
-          <div className="flex items-center text-sm text-black/[.5] mb-4">
-            <span className="mr-2">
-              {citation?.inFavor ? 'FOR' : 'AGAINST'}
-            </span>
-            <div className="flex items-center">
-              {opinion?.citations?.length > 1 &&
-                opinion?.citations?.map((c) => {
-                  if (c.citation.tokenID === citation.citation.tokenID) {
-                    return (
-                      <div className="w-2.5 h-2.5 mr-1 rounded-3xl bg-blue-600"></div>
-                    )
-                  } else {
-                    return (
-                      <div className="w-2.5 h-2.5 mr-1 rounded-3xl border"></div>
-                    )
-                  }
-                })}
+          {isCitationOnOpinion && (
+            <div className="flex items-center text-sm text-black/[.5] mb-4">
+              <span className="mr-2">
+                {citation?.inFavor ? 'FOR' : 'AGAINST'}
+              </span>
+              <div className="flex items-center">
+                {opinion?.citations?.length > 1 &&
+                  opinion?.citations?.map((c) => {
+                    if (c.citation.tokenID === citation.citation.tokenID) {
+                      return (
+                        <div className="w-2.5 h-2.5 mr-1 rounded-3xl bg-blue-600"></div>
+                      )
+                    } else {
+                      return (
+                        <div className="w-2.5 h-2.5 mr-1 rounded-3xl border"></div>
+                      )
+                    }
+                  })}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="flex items-start">
             {/* The citation minter profile image */}
@@ -185,7 +194,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
                 <Image
                   className="rounded-full"
                   src={
-                    citation?.citation?.minter?.profilePhoto ||
+                    citationData?.minterToken?.profilePhoto ||
                     '/DefaultProfilePicture.png'
                   }
                   alt=""
@@ -203,7 +212,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
                 <A className="font-bold text-sm">
                   {displayUsernameOrWalletCitation}
                 </A>
-                {citation?.citation?.minter?.twitterUsername && (
+                {citationData?.minterToken?.twitterUsername && (
                   <A
                     className="flex items-center space-x-1 text-black z-50"
                     href={`/u/${usernameOrWalletCitation}`}
@@ -216,7 +225,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
                       />
                     </div>
                     <span className="text-sm opacity-50">
-                      @{citation?.citation?.minter?.twitterUsername}
+                      @{citationData?.minterToken?.twitterUsername}
                     </span>
                   </A>
                 )}
@@ -233,7 +242,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
 
                 {/* {cutOffContent && (
                   <A
-                    href={`/post/${citation?.citation?.tokenID}`}
+                    href={`/post/${citationData?.tokenID}`}
                     className="absolute bottom-0 right-0 text-blue-500 z-[60]"
                   >
                     (More...)

@@ -135,7 +135,7 @@ export type CitationData = {
   compositeRating: number
   totalRatingsCount: number
   latestRatingsCount: number
-  minter: any
+  minterToken: any
 }
 
 export type Citation = {

@@ -109,7 +109,7 @@ export type IdeamarketPost = {
 /**
  * Format data fetched from API so that the format is consistent across entire frontend
  */
-const formatApiResponseToPost = (apiPost: any): IdeamarketPost => {
+export const formatApiResponseToPost = (apiPost: any): IdeamarketPost => {
   return {
     contractAddress: apiPost?.contractAddress,
     tokenID: apiPost?.tokenID,

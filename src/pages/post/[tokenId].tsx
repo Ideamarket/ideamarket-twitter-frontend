@@ -30,7 +30,11 @@ import toast from 'react-hot-toast'
 import { flatten } from 'lodash'
 import OpinionTable from 'modules/ratings/components/ListingPage/OpinionTable'
 import classNames from 'classnames'
-import { SortOptionsListingPageOpinions } from 'utils/tables'
+import {
+  SortOptionsAddCitationsModal,
+  SortOptionsHomePostsTable,
+  SortOptionsListingPageOpinions,
+} from 'utils/tables'
 import { getLatestOpinionsAboutNFTForTable } from 'modules/ratings/services/OpinionService'
 import {
   getPostByTokenID,
@@ -41,6 +45,9 @@ import Image from 'next/image'
 import WalletIcon from '../../assets/wallet.svg'
 import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
 import StakeUserModal from 'modules/user-market/components/StakeUserModal'
+import { getAllCitationsByTokenID } from 'modules/citations/services/CitationService'
+import CitationCard from 'modules/ratings/components/CitationCard'
+import ArgumentsView from 'modules/citations/components/ArgumentsView'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DetailsSkeleton = () => (
@@ -67,6 +74,11 @@ const infiniteQueryConfig = {
   keepPreviousData: true,
 }
 
+enum POST_PAGE_VIEWS {
+  CITATIONS,
+  OPINIONS,
+}
+
 const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const {
     data: token,
@@ -76,9 +88,11 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     getPostByTokenID({ tokenID: rawTokenId })
   )
 
+  const [viewSelected, setViewSelected] = useState(POST_PAGE_VIEWS.CITATIONS)
+
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
   const [orderBy, setOrderBy] = useState(
-    SortOptionsListingPageOpinions.STAKED.value
+    SortOptionsHomePostsTable.MARKET_INTEREST.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
   const [nameSearch, setNameSearch] = useState('')
@@ -94,12 +108,30 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
       tokenID: rawTokenId,
       skip,
       limit: numTokens,
-      orderBy,
+      orderBy:
+        viewSelected === POST_PAGE_VIEWS.CITATIONS
+          ? SortOptionsListingPageOpinions.STAKED.value
+          : orderBy,
       orderDirection,
       filterTokens,
       search: nameSearch,
     })
     return latestOpinions || []
+  }
+
+  async function citationsQueryFunction(numTokens: number, skip: number = 0) {
+    const latestCitations = await getAllCitationsByTokenID({
+      tokenID: rawTokenId,
+      latest: true,
+      skip,
+      limit: numTokens,
+      orderBy:
+        viewSelected === POST_PAGE_VIEWS.CITATIONS
+          ? orderBy
+          : SortOptionsHomePostsTable.MARKET_INTEREST.value,
+      orderDirection,
+    })
+    return latestCitations || null
   }
 
   const {
@@ -115,6 +147,23 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   )
 
   const opinionPairs = flatten(infiniteOpinionsData?.pages || [])
+
+  const {
+    data: infiniteCitationsData,
+    isFetching: isCitationsDataLoading,
+    fetchNextPage: fetchMoreCitations,
+    refetch: refetchCitations,
+    hasNextPage: canFetchMoreCitations,
+  } = useInfiniteQuery(
+    ['citations', token, orderBy, orderDirection, nameSearch],
+    ({ pageParam = 0 }) => citationsQueryFunction(TOKENS_PER_PAGE, pageParam),
+    infiniteQueryConfig
+  )
+
+  const citationsObject = infiniteCitationsData?.pages[0]
+
+  const forCitationsPairs = citationsObject?.forCitations
+  const againstCitationsPairs = citationsObject?.againstCitations
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
@@ -161,39 +210,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const url = token?.url
 
   const { data: urlMetaData } = useQuery([url], () => getURLMetaData(url))
-
-  // TODO: find better solution than 2 observers for desktop vs mobile
-  const desktopObserver: MutableRefObject<any> = useRef()
-  const mobileObserver: MutableRefObject<any> = useRef()
-  const desktopLastElementRef = useCallback(
-    (node) => {
-      if (desktopObserver.current) desktopObserver.current.disconnect()
-
-      desktopObserver.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && canFetchMoreOpinions) {
-          fetchMoreOpinions()
-        }
-      })
-
-      if (node) desktopObserver.current.observe(node)
-    },
-    [canFetchMoreOpinions, fetchMoreOpinions]
-  )
-
-  const mobileLastElementRef = useCallback(
-    (node) => {
-      if (mobileObserver.current) mobileObserver.current.disconnect()
-
-      mobileObserver.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && canFetchMoreOpinions) {
-          fetchMoreOpinions()
-        }
-      })
-
-      if (node) mobileObserver.current.observe(node)
-    },
-    [canFetchMoreOpinions, fetchMoreOpinions]
-  )
 
   const copyListingPageURL = () => {
     const url = `${getURL()}/post/${token?.tokenID}`
@@ -429,20 +445,57 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
       </div>
 
       <div className="max-w-[78rem] md:mt-20 mx-0 md:mx-5 xl:mx-auto pb-96">
-        {/* <div className="text-xl text-center text-black font-bold mb-4">
-          Ratings
-        </div> */}
+        <div className="mb-4 flex justify-center items-center space-x-3">
+          <button
+            onClick={() => {
+              headerClicked(SortOptionsHomePostsTable.MARKET_INTEREST.value)
+              setViewSelected(POST_PAGE_VIEWS.CITATIONS)
+            }}
+            className={classNames(
+              viewSelected === POST_PAGE_VIEWS.CITATIONS
+                ? 'text-blue-600 bg-blue-100'
+                : 'text-black/[.25] hover:bg-gray-200',
+              'px-4 py-2 border rounded-lg font-bold'
+            )}
+          >
+            Arguments View
+          </button>
+          <button
+            onClick={() => {
+              headerClicked(SortOptionsListingPageOpinions.STAKED.value)
+              setViewSelected(POST_PAGE_VIEWS.OPINIONS)
+            }}
+            className={classNames(
+              viewSelected === POST_PAGE_VIEWS.OPINIONS
+                ? 'text-blue-600 bg-blue-100'
+                : 'text-black/[.25] hover:bg-gray-200',
+              'px-4 py-2 border rounded-lg font-bold'
+            )}
+          >
+            Ratings View
+          </button>
+        </div>
 
-        <OpinionTable
-          desktopLastElementRef={desktopLastElementRef}
-          mobileLastElementRef={mobileLastElementRef}
-          opinionPairs={opinionPairs}
-          orderBy={orderBy}
-          orderDirection={orderDirection}
-          setOrderBy={setOrderBy}
-          setNameSearch={setNameSearch}
-          headerClicked={headerClicked}
-        />
+        {viewSelected === POST_PAGE_VIEWS.CITATIONS ? (
+          <ArgumentsView
+            forCitationsPairs={forCitationsPairs}
+            againstCitationsPairs={againstCitationsPairs}
+            canFetchMoreCitations={canFetchMoreCitations}
+            fetchMoreCitations={fetchMoreCitations}
+          />
+        ) : (
+          <OpinionTable
+            opinionPairs={opinionPairs}
+            orderBy={orderBy}
+            orderDirection={orderDirection}
+            canFetchMoreOpinions={canFetchMoreOpinions}
+            isOpinionsDataLoading={isOpinionsDataLoading}
+            setOrderBy={setOrderBy}
+            setNameSearch={setNameSearch}
+            headerClicked={headerClicked}
+            fetchMoreOpinions={fetchMoreOpinions}
+          />
+        )}
       </div>
 
       {/* Block at bottom of mobile screen before scroll */}

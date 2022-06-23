@@ -2,7 +2,13 @@ import { OverviewSearchbar } from 'components/tokens/OverviewSearchbar'
 import { A } from 'components'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import DropdownButtons from 'components/dropdowns/DropdownButtons'
-import { useEffect, useRef, useState } from 'react'
+import {
+  MutableRefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import {
   getSortOptionDisplayNameByValue,
@@ -71,14 +77,15 @@ const DropdownButton = ({ toggleOption, orderBy }: DropdownButtonProps) => {
 }
 
 type Props = {
-  desktopLastElementRef: any
-  mobileLastElementRef: any
   opinionPairs: any[]
   orderBy: string
   orderDirection: string
+  canFetchMoreOpinions: boolean
+  isOpinionsDataLoading: boolean
   setOrderBy: (value: string) => void
   setNameSearch: (value: string) => void
   headerClicked: (value: string) => void
+  fetchMoreOpinions: () => void
 }
 
 const stakedColWidth = 'w-[15%]'
@@ -87,15 +94,48 @@ const ratingColWidth = 'w-[15%]'
 const citationColWidth = 'w-[50%]'
 
 const OpinionTable = ({
-  desktopLastElementRef,
-  mobileLastElementRef,
   opinionPairs,
   orderBy,
   orderDirection,
+  canFetchMoreOpinions,
   setOrderBy,
   setNameSearch,
   headerClicked,
+  fetchMoreOpinions,
 }: Props) => {
+  // TODO: find better solution than 2 observers for desktop vs mobile
+  const desktopObserver: MutableRefObject<any> = useRef()
+  const mobileObserver: MutableRefObject<any> = useRef()
+  const desktopLastElementRef = useCallback(
+    (node) => {
+      if (desktopObserver.current) desktopObserver.current.disconnect()
+
+      desktopObserver.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && canFetchMoreOpinions) {
+          fetchMoreOpinions()
+        }
+      })
+
+      if (node) desktopObserver.current.observe(node)
+    },
+    [canFetchMoreOpinions, fetchMoreOpinions]
+  )
+
+  const mobileLastElementRef = useCallback(
+    (node) => {
+      if (mobileObserver.current) mobileObserver.current.disconnect()
+
+      mobileObserver.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && canFetchMoreOpinions) {
+          fetchMoreOpinions()
+        }
+      })
+
+      if (node) mobileObserver.current.observe(node)
+    },
+    [canFetchMoreOpinions, fetchMoreOpinions]
+  )
+
   // Key == opinionIndex, value = selected citation object
   const [selectedCitationForRows, setSelectedCitationForRows] = useState({})
 
