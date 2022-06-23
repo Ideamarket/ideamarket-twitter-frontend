@@ -58,9 +58,11 @@ const ArgumentsView = ({
   return (
     <>
       {/* Desktop and tablet */}
-      <div className="hidden md:flex justify-between space-x-10">
+      <div className="hidden md:flex justify-between space-x-28">
         <div className="w-1/2 flex flex-col">
-          <div className="font-bold text-xl mb-6 self-end">For</div>
+          <div className="font-black text-black/[.2] text-3xl mb-6 self-end">
+            For
+          </div>
 
           <div className="">
             {forCitationsPairs &&
@@ -68,7 +70,12 @@ const ArgumentsView = ({
               forCitationsPairs.map((forCitation, fcInd) => {
                 return (
                   <div ref={desktopLastElementRef} className="mb-4" key={fcInd}>
-                    <CitationCard citation={forCitation} />
+                    {/* shadow = 1st num is horizontal shadow length. 2nd num is vertical shadow length (- and + tell which side to go). 3rd num is blur amount. 4th num is spread */}
+                    <CitationCard
+                      citation={forCitation}
+                      bgCardColor="bg-white"
+                      shadow="shadow-[0_2px_7px_2px_rgba(0,0,0,0.15)]"
+                    />
                   </div>
                 )
               })}
@@ -80,7 +87,9 @@ const ArgumentsView = ({
         </div>
 
         <div className="w-1/2">
-          <div className="font-bold text-xl mb-6">Against</div>
+          <div className="font-black text-black/[.2] text-3xl mb-6">
+            Against
+          </div>
 
           <div className="">
             {againstCitationsPairs &&
@@ -88,7 +97,11 @@ const ArgumentsView = ({
               againstCitationsPairs.map((againstCitation, acInd) => {
                 return (
                   <div className="mb-4" key={acInd}>
-                    <CitationCard citation={againstCitation} />
+                    <CitationCard
+                      citation={againstCitation}
+                      bgCardColor="bg-white"
+                      shadow="shadow-[0_2px_7px_2px_rgba(0,0,0,0.15)]"
+                    />
                   </div>
                 )
               })}
@@ -107,7 +120,7 @@ const ArgumentsView = ({
             onClick={() => setMobileIsForSelected(true)}
             className={classNames(
               mobileIsForSelected ? 'text-black' : 'text-black/[.25]',
-              'font-bold text-xl'
+              'font-black text-3xl'
             )}
           >
             For
@@ -116,7 +129,7 @@ const ArgumentsView = ({
             onClick={() => setMobileIsForSelected(false)}
             className={classNames(
               !mobileIsForSelected ? 'text-black' : 'text-black/[.25]',
-              'font-bold text-xl'
+              'font-black text-3xl'
             )}
           >
             Against
@@ -129,7 +142,11 @@ const ArgumentsView = ({
             mobileCitationPairs.map((citation, cInd) => {
               return (
                 <div ref={mobileLastElementRef} className="mb-4" key={cInd}>
-                  <CitationCard citation={citation} />
+                  <CitationCard
+                    citation={citation}
+                    bgCardColor="bg-white"
+                    shadow="shadow-[0_2px_7px_2px_rgba(0,0,0,0.15)]"
+                  />
                 </div>
               )
             })}

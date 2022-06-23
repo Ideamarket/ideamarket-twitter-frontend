@@ -8,9 +8,16 @@ import { IdeamarketOpinion } from '../services/OpinionService'
 type Props = {
   citation: any // Citation | CitationData
   opinion?: IdeamarketOpinion
+  bgCardColor?: string
+  shadow?: string
 }
 
-const CitationCard = ({ citation, opinion }: Props) => {
+const CitationCard = ({
+  citation,
+  opinion,
+  bgCardColor = 'bg-[#FAFAFA]',
+  shadow = '',
+}: Props) => {
   // Mainly deals with how citation fetched. If citation fetched with opinion, then data is different than when fetched as a solo citation
   const isCitationOnOpinion = Boolean(opinion)
 
@@ -32,7 +39,13 @@ const CitationCard = ({ citation, opinion }: Props) => {
   return (
     <>
       {/* Desktop */}
-      <div className="hidden md:block relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal shadow-[0_-1px_7px_rgba(0,0,0,0.3)]">
+      <div
+        className={classNames(
+          bgCardColor,
+          shadow,
+          'hidden md:block relative px-3 py-2 rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal'
+        )}
+      >
         <A
           href={`/post/${citationData?.tokenID}`}
           target="_blank"
@@ -125,7 +138,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
                   dangerouslySetInnerHTML={{
                     __html: urlify(citationText),
                   }}
-                  className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                  className="w-full py-2 rounded-lg whitespace-pre-wrap break-words"
                   style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                 />
 
@@ -144,7 +157,13 @@ const CitationCard = ({ citation, opinion }: Props) => {
       </div>
 
       {/* Mobile (really don't need separate mobile version right now, but keeping just in case) */}
-      <div className="md:hidden relative px-3 py-2 bg-[#FAFAFA] rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal shadow-[0_-1px_7px_rgba(0,0,0,0.3)]">
+      <div
+        className={classNames(
+          bgCardColor,
+          shadow,
+          'md:hidden relative px-3 py-2 rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal'
+        )}
+      >
         <A
           href={`/post/${citationData?.tokenID}`}
           target="_blank"
@@ -236,7 +255,7 @@ const CitationCard = ({ citation, opinion }: Props) => {
                   dangerouslySetInnerHTML={{
                     __html: urlify(citationText),
                   }}
-                  className="w-full py-2 bg-[#FAFAFA] rounded-lg whitespace-pre-wrap break-words"
+                  className="w-full py-2 rounded-lg whitespace-pre-wrap break-words"
                   style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                 />
 
