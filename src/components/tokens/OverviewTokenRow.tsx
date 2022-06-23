@@ -60,7 +60,7 @@ export default function TokenRow({
         <div className="flex text-black">
           {/* Icon and Name and ListingContent */}
           <div className="w-[45%] lg:w-[55%] relative pl-6 md:pr-10">
-            <div className="relative flex items-start w-3/4 p-3 mx-auto md:w-full text-gray-900 dark:text-gray-200 border rounded-lg bg-white">
+            <div className="relative flex items-start w-3/4 px-5 py-4 mx-auto md:w-full text-gray-900 dark:text-gray-200 border rounded-lg bg-white">
               {/* <div className="mr-4 flex flex-col items-center space-y-2">
                 <div className="relative rounded-full w-6 h-6">
                   <Image
@@ -76,7 +76,7 @@ export default function TokenRow({
                 </div>
               </div> */}
 
-              <div className="pr-6 w-full">
+              <div className="w-full">
                 {/* Post minter IM name/wallet and twitter name */}
                 {/* <div className="flex items-center space-x-1 pb-2 flex-wrap">
                   <A
@@ -115,53 +115,53 @@ export default function TokenRow({
                       LISTING_TYPE.TEXT_POST
                   }
                 />
-              </div>
-            </div>
 
-            <div className="flex items-center space-x-2 text-xs mt-2">
-              <span className="italic text-black/[.25] font-semibold">
-                NFT minted by
-              </span>
+                <div className="flex justify-end items-center space-x-2 text-xs mt-2">
+                  <span className="italic text-black/[.25] font-semibold">
+                    NFT minted by
+                  </span>
 
-              <div className="flex items-center whitespace-nowrap">
-                <div className="relative rounded-full w-5 h-5">
-                  <Image
-                    className="rounded-full"
-                    src={
-                      token?.minterToken?.profilePhoto ||
-                      '/DefaultProfilePicture.png'
-                    }
-                    alt=""
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
+                  <div className="flex items-center whitespace-nowrap">
+                    <div className="relative rounded-full w-5 h-5">
+                      <Image
+                        className="rounded-full"
+                        src={
+                          token?.minterToken?.profilePhoto ||
+                          '/DefaultProfilePicture.png'
+                        }
+                        alt=""
+                        layout="fill"
+                        objectFit="cover"
+                      />
+                    </div>
 
-                {/* Post minter IM name/wallet and twitter name */}
-                <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                  <A
-                    className="ml-2 font-bold hover:text-blue-500"
-                    href={`/u/${usernameOrWallet}`}
-                  >
-                    {displayUsernameOrWallet}
-                  </A>
-                  {token?.minterToken?.twitterUsername && (
-                    <A
-                      className="flex items-center space-x-1 hover:text-blue-500"
-                      href={`/u/${usernameOrWallet}`}
-                    >
-                      <div className="relative w-4 h-4">
-                        <Image
-                          src={'/twitter-solid-blue.svg'}
-                          alt="twitter-solid-blue-icon"
-                          layout="fill"
-                        />
-                      </div>
-                      <span className="text-xs">
-                        @{token?.minterToken?.twitterUsername}
-                      </span>
-                    </A>
-                  )}
+                    {/* Post minter IM name/wallet and twitter name */}
+                    <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
+                      <A
+                        className="ml-1 font-bold hover:text-blue-500"
+                        href={`/u/${usernameOrWallet}`}
+                      >
+                        {displayUsernameOrWallet}
+                      </A>
+                      {token?.minterToken?.twitterUsername && (
+                        <A
+                          className="flex items-center space-x-1 hover:text-blue-500"
+                          href={`/u/${usernameOrWallet}`}
+                        >
+                          <div className="relative w-4 h-4">
+                            <Image
+                              src={'/twitter-solid-blue.svg'}
+                              alt="twitter-solid-blue-icon"
+                              layout="fill"
+                            />
+                          </div>
+                          <span className="text-xs opacity-50">
+                            @{token?.minterToken?.twitterUsername}
+                          </span>
+                        </A>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
