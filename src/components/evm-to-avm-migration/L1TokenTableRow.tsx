@@ -75,12 +75,12 @@ export default function L1TokenTableRow({
                 ModalService.open(TradeModal, {
                   ideaToken: token,
                   market,
-                  startingTradeType: TX_TYPES.LOCK,
+                  startingTradeType: TX_TYPES.UNLOCK,
                 })
               }}
               className="w-16 h-10 ml-4 text-base font-medium text-white border-2 rounded-lg bg-brand-blue dark:bg-gray-600 border-brand-blue dark:text-gray-300"
             >
-              <span>Lock</span>
+              <span>Unlock</span>
             </button>
           )}
         </td>

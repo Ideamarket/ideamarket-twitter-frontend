@@ -37,7 +37,6 @@ import { TradeInterfaceBox } from './components'
 import {
   CogIcon,
   ArrowSmDownIcon,
-  LockClosedIcon,
   LockOpenIcon,
 } from '@heroicons/react/outline'
 import useReversePrice from 'actions/useReversePrice'
@@ -114,7 +113,7 @@ export default function TradeInterface({
   unlockText,
   newIdeaToken,
   parentComponent,
-  startingTradeType = TX_TYPES.BUY,
+  startingTradeType = TX_TYPES.SELL,
 }: TradeInterfaceProps) {
   const { data: interestManagerTotalShares } = useQuery(
     'interest-manager-total-shares',
@@ -679,28 +678,6 @@ export default function TradeInterface({
             >
               <ArrowSmDownIcon className="w-4 h-4 mr-1" />
               <span>Sell</span>
-            </button>
-            <button
-              className={classNames(
-                'h-10 flex justify-center items-center pl-3 pr-4 py-2 border rounded-md text-sm font-semibold',
-                {
-                  'text-brand-blue dark:text-white bg-gray-100 dark:bg-very-dark-blue':
-                    TX_TYPES.LOCK === tradeType,
-                },
-                {
-                  'text-brand-black dark:text-gray-50': !(
-                    TX_TYPES.LOCK === tradeType
-                  ),
-                }
-              )}
-              onClick={() => {
-                setIdeaTokenAmount('0')
-                setSelectedTokenAmount('0')
-                setTradeType(TX_TYPES.LOCK)
-              }}
-            >
-              <LockClosedIcon className="w-4 h-4 mr-1" />
-              <span>Lock</span>
             </button>
             {canUnlock && (
               <button

@@ -4,7 +4,6 @@ import {
   IdeaTokenMarketPair,
   queryOwnedTokensMaybeMarket,
 } from 'store/ideaMarketsStore'
-import { useMarketStore } from 'store/markets'
 import { formatNumber } from 'utils'
 import L1TokenTableRow from './L1TokenTableRow'
 
@@ -35,15 +34,12 @@ export default function L1TokenTable({
   l2Recipient: string
   setSelectedPair: (pair: IdeaTokenMarketPair) => void
 }) {
-  const allMarkets = useMarketStore((state) => state.markets)
-  const filteredMarkets = allMarkets.map((m) => m?.market)
-
   const { data: rawPairs, isLoading } = useQuery(
-    ['l1-tokens', l2Recipient, allMarkets],
+    ['l1-tokens', l2Recipient],
     () =>
       queryOwnedTokensMaybeMarket(
         l2Recipient,
-        filteredMarkets,
+        null,
         100,
         0,
         'price',
