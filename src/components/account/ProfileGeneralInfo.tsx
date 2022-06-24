@@ -97,7 +97,9 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
     <>
       {/* Desktop top section of account page */}
       <div className="hidden lg:block">
-        <div className="text-base opacity-50 mb-4">My Profile</div>
+        <div className="text-base opacity-50 mb-4">
+          {isConnectedWalletSameAsPublicWallet ? 'My Profile' : 'Profile'}
+        </div>
 
         <div className="flex justify-between">
           {/* Left container */}

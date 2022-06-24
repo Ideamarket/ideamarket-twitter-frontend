@@ -1,4 +1,5 @@
 import { apiGetCitationsByTokenID } from 'actions/web2/citations/apiGetCitationsByTokenID'
+import { apiGetCitedOnByTokenID } from 'actions/web2/citations/apiGetCitedOnByTokenID'
 import {
   formatApiResponseToPost,
   IdeamarketPost,
@@ -47,4 +48,31 @@ export async function getAllCitationsByTokenID({
     forCitations,
     againstCitations,
   }
+}
+
+/**
+ * Call API to get all "cited by" and then convert data to format consistent across entire frontend
+ */
+export async function getAllCitedOnByTokenID({
+  tokenID,
+  skip,
+  limit,
+  orderBy,
+  orderDirection,
+}): Promise<IdeamarketPost[]> {
+  if (!tokenID) return null
+
+  const allCitedBy = await apiGetCitedOnByTokenID({
+    tokenID,
+    skip,
+    limit,
+    orderBy,
+    orderDirection,
+  })
+
+  return await Promise.all(
+    allCitedBy?.map(async (post) => {
+      return formatApiResponseToPost(post)
+    })
+  )
 }

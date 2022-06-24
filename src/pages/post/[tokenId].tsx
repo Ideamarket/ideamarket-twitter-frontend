@@ -29,8 +29,12 @@ import {
 } from 'modules/posts/services/PostService'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
-import { getAllCitationsByTokenID } from 'modules/citations/services/CitationService'
+import {
+  getAllCitationsByTokenID,
+  getAllCitedOnByTokenID,
+} from 'modules/citations/services/CitationService'
 import ArgumentsView from 'modules/citations/components/ArgumentsView'
+import CitedOnView from 'modules/citations/components/CitedOnView'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DetailsSkeleton = () => (
@@ -59,6 +63,7 @@ const infiniteQueryConfig = {
 
 enum POST_PAGE_VIEWS {
   CITATIONS,
+  CITED_BY,
   OPINIONS,
 }
 
@@ -113,6 +118,20 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     return latestCitations || null
   }
 
+  async function citedByQueryFunction(numTokens: number, skip: number = 0) {
+    const citedByList = await getAllCitedOnByTokenID({
+      tokenID: rawTokenId,
+      skip,
+      limit: numTokens,
+      orderBy:
+        viewSelected === POST_PAGE_VIEWS.CITATIONS
+          ? orderBy
+          : SortOptionsHomePostsTable.MARKET_INTEREST.value,
+      orderDirection,
+    })
+    return citedByList || []
+  }
+
   const {
     data: infiniteOpinionsData,
     isFetching: isOpinionsDataLoading,
@@ -143,6 +162,20 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
   const forCitationsPairs = citationsObject?.forCitations
   const againstCitationsPairs = citationsObject?.againstCitations
+
+  const {
+    data: infiniteCitedByData,
+    // isFetching: isCitedByDataLoading,
+    fetchNextPage: fetchMoreCitedBy,
+    // refetch: refetchCitedBy,
+    hasNextPage: canFetchMoreCitedBy,
+  } = useInfiniteQuery(
+    ['cited-by', token, orderBy, orderDirection, nameSearch],
+    ({ pageParam = 0 }) => citedByQueryFunction(TOKENS_PER_PAGE, pageParam),
+    infiniteQueryConfig
+  )
+
+  const citedByPairs = flatten(infiniteCitedByData?.pages || [])
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
@@ -437,8 +470,9 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
               'px-4 py-2 border rounded-lg font-bold'
             )}
           >
-            Arguments View
+            Arguments
           </button>
+
           <button
             onClick={() => {
               headerClicked(SortOptionsListingPageOpinions.STAKED.value)
@@ -451,18 +485,35 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
               'px-4 py-2 border rounded-lg font-bold'
             )}
           >
-            Ratings View
+            Ratings
+          </button>
+
+          <button
+            onClick={() => {
+              headerClicked(SortOptionsHomePostsTable.MARKET_INTEREST.value)
+              setViewSelected(POST_PAGE_VIEWS.CITED_BY)
+            }}
+            className={classNames(
+              viewSelected === POST_PAGE_VIEWS.CITED_BY
+                ? 'text-blue-600 bg-blue-100'
+                : 'text-black/[.25] hover:bg-gray-200',
+              'px-4 py-2 border rounded-lg font-bold'
+            )}
+          >
+            Cited By
           </button>
         </div>
 
-        {viewSelected === POST_PAGE_VIEWS.CITATIONS ? (
+        {viewSelected === POST_PAGE_VIEWS.CITATIONS && (
           <ArgumentsView
             forCitationsPairs={forCitationsPairs}
             againstCitationsPairs={againstCitationsPairs}
             canFetchMoreCitations={canFetchMoreCitations}
             fetchMoreCitations={fetchMoreCitations}
           />
-        ) : (
+        )}
+
+        {viewSelected === POST_PAGE_VIEWS.OPINIONS && (
           <OpinionTable
             opinionPairs={opinionPairs}
             orderBy={orderBy}
@@ -473,6 +524,14 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
             setNameSearch={setNameSearch}
             headerClicked={headerClicked}
             fetchMoreOpinions={fetchMoreOpinions}
+          />
+        )}
+
+        {viewSelected === POST_PAGE_VIEWS.CITED_BY && (
+          <CitedOnView
+            citedByPairs={citedByPairs}
+            canFetchMoreCitedBy={canFetchMoreCitedBy}
+            fetchMoreCitedBy={fetchMoreCitedBy}
           />
         )}
       </div>
