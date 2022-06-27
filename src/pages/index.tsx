@@ -44,7 +44,7 @@ const Home = ({ urlMarkets }: Props) => {
   )
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [selectedCategories, setSelectedCategories] = useState([])
-  const [selectedTable, setSelectedTable] = useState(TABLE_NAMES.HOME_POSTS)
+  const [selectedView, setSelectedView] = useState(TABLE_NAMES.HOME_POSTS)
   const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ALL_TIME)
 
   const visibleColumns = getVisibleColumns(selectedColumns)
@@ -74,7 +74,7 @@ const Home = ({ urlMarkets }: Props) => {
 
   const onNameSearchChanged = (nameSearch) => {
     setOrderBy(
-      selectedTable === TABLE_NAMES.HOME_POSTS
+      selectedView === TABLE_NAMES.HOME_POSTS
         ? SortOptionsHomePostsTable.MARKET_INTEREST.value
         : SortOptionsHomeUsersTable.STAKED.value
     )
@@ -130,7 +130,7 @@ const Home = ({ urlMarkets }: Props) => {
     selectedColumns,
     isStarredFilterActive,
     selectedCategories,
-    selectedTable,
+    selectedView,
     timeFilter,
     setOrderBy,
     onColumnChanged,
@@ -146,11 +146,11 @@ const Home = ({ urlMarkets }: Props) => {
     orderDirection,
     isStarredFilterActive,
     columnData:
-      selectedTable === TABLE_NAMES.HOME_POSTS
+      selectedView === TABLE_NAMES.HOME_POSTS
         ? visibleColumns
         : HomeUsersTableColumns,
     selectedCategories,
-    selectedTable,
+    selectedView,
     timeFilter,
     getColumn: (column) => selectedColumns.has(column),
     onOrderByChanged,
@@ -168,7 +168,7 @@ const Home = ({ urlMarkets }: Props) => {
 
       <BgBanner
         bgColor={
-          selectedTable === TABLE_NAMES.HOME_POSTS
+          selectedView === TABLE_NAMES.HOME_POSTS
             ? 'bg-gradient-to-b from-[#02194D] to-[#011032]'
             : 'bg-gradient-to-b from-[#020D27] to-[#020A1B]'
         }
@@ -187,10 +187,10 @@ const Home = ({ urlMarkets }: Props) => {
                 SortOptionsHomePostsTable.MARKET_INTEREST.value,
                 'desc'
               )
-              setSelectedTable(TABLE_NAMES.HOME_POSTS)
+              setSelectedView(TABLE_NAMES.HOME_POSTS)
             }}
             className={classNames(
-              selectedTable === TABLE_NAMES.HOME_POSTS
+              selectedView === TABLE_NAMES.HOME_POSTS
                 ? 'bg-white/[.1]'
                 : 'hover:bg-white/[.05] opacity-50',
               'w-1/2 h-20 px-6 py-3 border border-white/[.2] rounded-xl text-white text-left'
@@ -206,10 +206,10 @@ const Home = ({ urlMarkets }: Props) => {
           <button
             onClick={() => {
               onOrderByChanged(SortOptionsHomeUsersTable.STAKED.value, 'desc')
-              setSelectedTable(TABLE_NAMES.HOME_USERS)
+              setSelectedView(TABLE_NAMES.HOME_USERS)
             }}
             className={classNames(
-              selectedTable === TABLE_NAMES.HOME_USERS
+              selectedView === TABLE_NAMES.HOME_USERS
                 ? 'bg-white/[.1]'
                 : 'hover:bg-white/[.05] opacity-50',
               'w-1/2 h-20 px-6 py-3 border border-white/[.2] rounded-xl text-white text-left'
@@ -227,7 +227,7 @@ const Home = ({ urlMarkets }: Props) => {
         <div className="mx-auto transform md:px-4 md:max-w-304 -translate-y-40 font-inter">
           <OverviewFilters {...overviewFiltersProps} />
           <div className="border-brand-gray-3 dark:border-gray-500 rounded-b-xlg">
-            {selectedTable === TABLE_NAMES.HOME_POSTS ? (
+            {selectedView === TABLE_NAMES.HOME_POSTS ? (
               <Table {...tableProps} />
             ) : (
               <HomeUsersTable {...tableProps} />

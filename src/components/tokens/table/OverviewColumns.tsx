@@ -24,7 +24,7 @@ type Props = {
   orderDirection: string
   columnData: Array<any>
   isStarredFilterActive: boolean
-  selectedTable: TABLE_NAMES
+  selectedView: TABLE_NAMES
   timeFilter?: TIME_FILTER
   columnClicked: (column: string) => void
   setIsStarredFilterActive: (isActive: boolean) => void
@@ -59,7 +59,7 @@ export const OverviewColumns = ({
   orderBy,
   orderDirection,
   columnData,
-  selectedTable,
+  selectedView,
   isStarredFilterActive,
   timeFilter,
   columnClicked,
@@ -96,7 +96,7 @@ export const OverviewColumns = ({
                 Sort by:
               </span>
               <span className="text-xs text-blue-500 font-semibold flex items-center whitespace-nowrap">
-                {getSortOptionDisplayNameByValue(orderBy, selectedTable)}
+                {getSortOptionDisplayNameByValue(orderBy, selectedView)}
               </span>
               <span>
                 <ChevronDownIcon className="h-4" />
@@ -106,7 +106,7 @@ export const OverviewColumns = ({
                 <DropdownButtons
                   container={ref}
                   filters={Object.values(
-                    selectedTable === TABLE_NAMES.HOME_POSTS
+                    selectedView === TABLE_NAMES.HOME_POSTS
                       ? SortOptionsHomePostsTable
                       : SortOptionsHomeUsersTable
                   )}
@@ -117,7 +117,7 @@ export const OverviewColumns = ({
               )}
             </div>
 
-            {selectedTable === TABLE_NAMES.HOME_POSTS && (
+            {selectedView === TABLE_NAMES.HOME_POSTS && (
               <div
                 onClick={() =>
                   setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
@@ -217,7 +217,7 @@ export const OverviewColumns = ({
   }
 
   const getColumnStyle = (column) => {
-    if (selectedTable === TABLE_NAMES.HOME_POSTS) {
+    if (selectedView === TABLE_NAMES.HOME_POSTS) {
       switch (column.value) {
         case 'name':
           return 'w-[45%] lg:w-[55%] pl-6 pr-24'
@@ -234,7 +234,7 @@ export const OverviewColumns = ({
         default:
           return ''
       }
-    } else if (selectedTable === TABLE_NAMES.HOME_USERS) {
+    } else if (selectedView === TABLE_NAMES.HOME_USERS) {
       switch (column.value) {
         case 'name':
           return 'w-[45%] lg:w-[55%] pl-6 pr-24'

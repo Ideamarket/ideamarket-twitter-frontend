@@ -27,7 +27,7 @@ type Props = {
   isStarredFilterActive: boolean
   categoriesData: any[]
   selectedCategories: string[]
-  selectedTable: TABLE_NAMES
+  selectedView: TABLE_NAMES
   timeFilter?: TIME_FILTER
   setOrderBy: (value: string) => void
   onNameSearchChanged: (value: string) => void
@@ -41,7 +41,7 @@ const OverviewFiltersMobile = ({
   isStarredFilterActive,
   categoriesData,
   selectedCategories,
-  selectedTable,
+  selectedView,
   timeFilter,
   setOrderBy,
   onNameSearchChanged,
@@ -99,7 +99,7 @@ const OverviewFiltersMobile = ({
             </span>
             <span className="text-xs text-blue-500 font-semibold flex items-center whitespace-nowrap">
               <span>
-                {getSortOptionDisplayNameByValue(orderBy, selectedTable)}
+                {getSortOptionDisplayNameByValue(orderBy, selectedView)}
               </span>
             </span>
             <span>
@@ -110,7 +110,7 @@ const OverviewFiltersMobile = ({
               <DropdownButtons
                 container={ref}
                 filters={Object.values(
-                  selectedTable === TABLE_NAMES.HOME_POSTS
+                  selectedView === TABLE_NAMES.HOME_POSTS
                     ? SortOptionsHomePostsTable
                     : SortOptionsHomeUsersTable
                 )}
@@ -120,7 +120,7 @@ const OverviewFiltersMobile = ({
             )}
           </div>
 
-          {selectedTable === TABLE_NAMES.HOME_POSTS && (
+          {selectedView === TABLE_NAMES.HOME_POSTS && (
             <div
               onClick={() =>
                 setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
@@ -150,7 +150,7 @@ const OverviewFiltersMobile = ({
         <OverviewSearchbar onNameSearchChanged={onNameSearchChanged} />
       </div>
 
-      {selectedTable === TABLE_NAMES.HOME_POSTS && (
+      {selectedView === TABLE_NAMES.HOME_POSTS && (
         <div className="flex gap-x-2 pl-2 py-3 overflow-x-scroll border-b-[6px]">
           {categoriesData &&
             categoriesData.map((cat: any) => (
@@ -165,7 +165,7 @@ const OverviewFiltersMobile = ({
         </div>
       )}
 
-      {selectedTable === TABLE_NAMES.HOME_POSTS ? (
+      {selectedView === TABLE_NAMES.HOME_POSTS ? (
         <div className="w-full flex gap-x-3 px-3 py-3 leading-4 text-xs text-black/[.5] font-semibold">
           <div className="w-1/4 flex items-start">
             <span className="mr-1">SCRUTINY</span>

@@ -1,6 +1,5 @@
-import { useQuery, useInfiniteQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { A, DefaultLayout, WalletModal, WatchingStar } from 'components'
-import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { GetServerSideProps } from 'next'
 import ModalService from 'components/modals/ModalService'
 import ListingSEO from 'components/listing-page/ListingSEO'
@@ -15,167 +14,19 @@ import RateModal from 'components/trade/RateModal'
 import copy from 'copy-to-clipboard'
 import { getURL } from 'utils/seo-constants'
 import toast from 'react-hot-toast'
-import { flatten } from 'lodash'
-import OpinionTable from 'modules/ratings/components/ListingPage/OpinionTable'
 import classNames from 'classnames'
-import {
-  SortOptionsHomePostsTable,
-  SortOptionsListingPageOpinions,
-} from 'utils/tables'
-import { getLatestOpinionsAboutNFTForTable } from 'modules/ratings/services/OpinionService'
 import {
   getPostByTokenID,
   IdeamarketPost,
 } from 'modules/posts/services/PostService'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
-import {
-  getAllCitationsByTokenID,
-  getAllCitedOnByTokenID,
-} from 'modules/citations/services/CitationService'
-import ArgumentsView from 'modules/citations/components/ArgumentsView'
-import CitedOnView from 'modules/citations/components/CitedOnView'
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const DetailsSkeleton = () => (
-  <div className="w-12 mx-auto bg-gray-400 rounded animate animate-pulse">
-    <span className="invisible">A</span>
-  </div>
-)
-
-const TOKENS_PER_PAGE = 10
-
-const infiniteQueryConfig = {
-  getNextPageParam: (lastGroup, allGroups) => {
-    const morePagesExist = lastGroup?.length === TOKENS_PER_PAGE
-
-    if (!morePagesExist) {
-      return false
-    }
-
-    return allGroups.length * TOKENS_PER_PAGE
-  },
-  refetchOnMount: false,
-  refetchOnWindowFocus: false,
-  enabled: true, // This apparently decides if data is loaded on page load or not
-  keepPreviousData: true,
-}
-
-enum POST_PAGE_VIEWS {
-  CITATIONS,
-  CITED_BY,
-  OPINIONS,
-}
+import CitationsDataOfPost from 'modules/citations/components/CitationsDataOfPost'
 
 const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const { data: token, refetch } = useQuery(['single-post', rawTokenId], () =>
     getPostByTokenID({ tokenID: rawTokenId })
   )
-
-  const [viewSelected, setViewSelected] = useState(POST_PAGE_VIEWS.CITATIONS)
-
-  const [isStarredFilterActive] = useState(false)
-  const [orderBy, setOrderBy] = useState(
-    SortOptionsHomePostsTable.MARKET_INTEREST.value
-  )
-  const [orderDirection, setOrderDirection] = useState('desc')
-  const [nameSearch, setNameSearch] = useState('')
-
-  const watchingTokens = Object.keys(
-    useIdeaMarketsStore((store) => store.watching)
-  )
-
-  const filterTokens = isStarredFilterActive ? watchingTokens : undefined
-
-  async function opinionsQueryFunction(numTokens: number, skip: number = 0) {
-    const latestOpinions = await getLatestOpinionsAboutNFTForTable({
-      tokenID: rawTokenId,
-      skip,
-      limit: numTokens,
-      orderBy:
-        viewSelected === POST_PAGE_VIEWS.CITATIONS
-          ? SortOptionsListingPageOpinions.STAKED.value
-          : orderBy,
-      orderDirection,
-      filterTokens,
-      search: nameSearch,
-    })
-    return latestOpinions || []
-  }
-
-  async function citationsQueryFunction(numTokens: number, skip: number = 0) {
-    const latestCitations = await getAllCitationsByTokenID({
-      tokenID: rawTokenId,
-      latest: true,
-      skip,
-      limit: numTokens,
-      orderBy:
-        viewSelected === POST_PAGE_VIEWS.CITATIONS
-          ? orderBy
-          : SortOptionsHomePostsTable.MARKET_INTEREST.value,
-      orderDirection,
-    })
-    return latestCitations || null
-  }
-
-  async function citedByQueryFunction(numTokens: number, skip: number = 0) {
-    const citedByList = await getAllCitedOnByTokenID({
-      tokenID: rawTokenId,
-      skip,
-      limit: numTokens,
-      orderBy:
-        viewSelected === POST_PAGE_VIEWS.CITATIONS
-          ? orderBy
-          : SortOptionsHomePostsTable.MARKET_INTEREST.value,
-      orderDirection,
-    })
-    return citedByList || []
-  }
-
-  const {
-    data: infiniteOpinionsData,
-    isFetching: isOpinionsDataLoading,
-    fetchNextPage: fetchMoreOpinions,
-    // refetch: refetchOpinions,
-    hasNextPage: canFetchMoreOpinions,
-  } = useInfiniteQuery(
-    ['opinions', token, orderBy, orderDirection, nameSearch],
-    ({ pageParam = 0 }) => opinionsQueryFunction(TOKENS_PER_PAGE, pageParam),
-    infiniteQueryConfig
-  )
-
-  const opinionPairs = flatten(infiniteOpinionsData?.pages || [])
-
-  const {
-    data: infiniteCitationsData,
-    // isFetching: isCitationsDataLoading,
-    fetchNextPage: fetchMoreCitations,
-    // refetch: refetchCitations,
-    hasNextPage: canFetchMoreCitations,
-  } = useInfiniteQuery(
-    ['citations', token, orderBy, orderDirection, nameSearch],
-    ({ pageParam = 0 }) => citationsQueryFunction(TOKENS_PER_PAGE, pageParam),
-    infiniteQueryConfig
-  )
-
-  const citationsObject = infiniteCitationsData?.pages[0]
-
-  const forCitationsPairs = citationsObject?.forCitations
-  const againstCitationsPairs = citationsObject?.againstCitations
-
-  const {
-    data: infiniteCitedByData,
-    // isFetching: isCitedByDataLoading,
-    fetchNextPage: fetchMoreCitedBy,
-    // refetch: refetchCitedBy,
-    hasNextPage: canFetchMoreCitedBy,
-  } = useInfiniteQuery(
-    ['cited-by', token, orderBy, orderDirection, nameSearch],
-    ({ pageParam = 0 }) => citedByQueryFunction(TOKENS_PER_PAGE, pageParam),
-    infiniteQueryConfig
-  )
-
-  const citedByPairs = flatten(infiniteCitedByData?.pages || [])
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
@@ -227,19 +78,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     const url = `${getURL()}/post/${token?.tokenID}`
     copy(url)
     toast.success('Copied listing page URL')
-  }
-
-  function headerClicked(headerValue: string) {
-    if (orderBy === headerValue) {
-      if (orderDirection === 'asc') {
-        setOrderDirection('desc')
-      } else {
-        setOrderDirection('asc')
-      }
-    } else {
-      setOrderBy(headerValue)
-      setOrderDirection('desc')
-    }
   }
 
   const onRateClicked = (token: IdeamarketPost, urlMetaData: any) => {
@@ -456,85 +294,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         </div>
       </div>
 
-      <div className="max-w-[78rem] md:mt-20 mx-0 md:mx-5 xl:mx-auto pb-96">
-        <div className="mb-4 flex justify-center items-center space-x-3">
-          <button
-            onClick={() => {
-              headerClicked(SortOptionsHomePostsTable.MARKET_INTEREST.value)
-              setViewSelected(POST_PAGE_VIEWS.CITATIONS)
-            }}
-            className={classNames(
-              viewSelected === POST_PAGE_VIEWS.CITATIONS
-                ? 'text-blue-600 bg-blue-100'
-                : 'text-black/[.25] hover:bg-gray-200',
-              'px-4 py-2 border rounded-lg font-bold'
-            )}
-          >
-            Arguments
-          </button>
-
-          <button
-            onClick={() => {
-              headerClicked(SortOptionsListingPageOpinions.STAKED.value)
-              setViewSelected(POST_PAGE_VIEWS.OPINIONS)
-            }}
-            className={classNames(
-              viewSelected === POST_PAGE_VIEWS.OPINIONS
-                ? 'text-blue-600 bg-blue-100'
-                : 'text-black/[.25] hover:bg-gray-200',
-              'px-4 py-2 border rounded-lg font-bold'
-            )}
-          >
-            Ratings
-          </button>
-
-          <button
-            onClick={() => {
-              headerClicked(SortOptionsHomePostsTable.MARKET_INTEREST.value)
-              setViewSelected(POST_PAGE_VIEWS.CITED_BY)
-            }}
-            className={classNames(
-              viewSelected === POST_PAGE_VIEWS.CITED_BY
-                ? 'text-blue-600 bg-blue-100'
-                : 'text-black/[.25] hover:bg-gray-200',
-              'px-4 py-2 border rounded-lg font-bold'
-            )}
-          >
-            Cited By
-          </button>
-        </div>
-
-        {viewSelected === POST_PAGE_VIEWS.CITATIONS && (
-          <ArgumentsView
-            forCitationsPairs={forCitationsPairs}
-            againstCitationsPairs={againstCitationsPairs}
-            canFetchMoreCitations={canFetchMoreCitations}
-            fetchMoreCitations={fetchMoreCitations}
-          />
-        )}
-
-        {viewSelected === POST_PAGE_VIEWS.OPINIONS && (
-          <OpinionTable
-            opinionPairs={opinionPairs}
-            orderBy={orderBy}
-            orderDirection={orderDirection}
-            canFetchMoreOpinions={canFetchMoreOpinions}
-            isOpinionsDataLoading={isOpinionsDataLoading}
-            setOrderBy={setOrderBy}
-            setNameSearch={setNameSearch}
-            headerClicked={headerClicked}
-            fetchMoreOpinions={fetchMoreOpinions}
-          />
-        )}
-
-        {viewSelected === POST_PAGE_VIEWS.CITED_BY && (
-          <CitedOnView
-            citedByPairs={citedByPairs}
-            canFetchMoreCitedBy={canFetchMoreCitedBy}
-            fetchMoreCitedBy={fetchMoreCitedBy}
-          />
-        )}
-      </div>
+      <CitationsDataOfPost postID={rawTokenId} />
 
       {/* Block at bottom of mobile screen before scroll */}
       <div

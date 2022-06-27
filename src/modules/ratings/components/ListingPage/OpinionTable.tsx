@@ -77,6 +77,7 @@ const DropdownButton = ({ toggleOption, orderBy }: DropdownButtonProps) => {
 }
 
 type Props = {
+  isMobile: boolean
   opinionPairs: any[]
   orderBy: string
   orderDirection: string
@@ -94,6 +95,7 @@ const ratingColWidth = 'w-[15%]'
 const citationColWidth = 'w-[50%]'
 
 const OpinionTable = ({
+  isMobile,
   opinionPairs,
   orderBy,
   orderDirection,
@@ -192,160 +194,164 @@ const OpinionTable = ({
   return (
     <>
       {/* Desktop and tablet table */}
-      <div className="hidden md:block rounded-xl w-full">
-        {/* Table header */}
-        <div className="rounded-xl flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
-          {/* STAKED column */}
-          <div
-            onClick={() =>
-              headerClicked(SortOptionsListingPageOpinions.STAKED.value)
-            }
-            className={classNames(
-              stakedColWidth,
-              `pl-6 flex items-center cursor-pointer`
-            )}
-          >
-            <span className="mr-1 uppercase">
-              {SortOptionsListingPageOpinions.STAKED.displayName}
-            </span>
-            {orderBy === SortOptionsListingPageOpinions.STAKED.value && (
-              <div
-                className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
-                title="SORT"
-              >
-                {orderDirection === 'desc' ? (
-                  <SortDescendingIcon className="w-3.5 text-blue-500" />
-                ) : (
-                  <SortAscendingIcon className="w-3.5 text-blue-500" />
-                )}
+      {!isMobile && (
+        <div className="hidden md:block rounded-xl w-full">
+          {/* Table header */}
+          <div className="rounded-xl flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
+            {/* STAKED column */}
+            <div
+              onClick={() =>
+                headerClicked(SortOptionsListingPageOpinions.STAKED.value)
+              }
+              className={classNames(
+                stakedColWidth,
+                `pl-6 flex items-center cursor-pointer`
+              )}
+            >
+              <span className="mr-1 uppercase">
+                {SortOptionsListingPageOpinions.STAKED.displayName}
+              </span>
+              {orderBy === SortOptionsListingPageOpinions.STAKED.value && (
+                <div
+                  className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
+                  title="SORT"
+                >
+                  {orderDirection === 'desc' ? (
+                    <SortDescendingIcon className="w-3.5 text-blue-500" />
+                  ) : (
+                    <SortAscendingIcon className="w-3.5 text-blue-500" />
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* User and comment column */}
+            <div className={classNames(userColWidth, `pl-6 pr-6`)}>USER</div>
+
+            {/* RATING column */}
+            <div
+              onClick={() =>
+                headerClicked(SortOptionsListingPageOpinions.RATING.value)
+              }
+              className={classNames(
+                ratingColWidth,
+                `pl-10 flex items-center cursor-pointer`
+              )}
+            >
+              <span className="mr-1 uppercase">
+                {SortOptionsListingPageOpinions.RATING.displayName}
+              </span>
+              {orderBy === SortOptionsListingPageOpinions.RATING.value && (
+                <div
+                  className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
+                  title="SORT"
+                >
+                  {orderDirection === 'desc' ? (
+                    <SortDescendingIcon className="w-3.5 text-blue-500" />
+                  ) : (
+                    <SortAscendingIcon className="w-3.5 text-blue-500" />
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Citation column */}
+            <div
+              className={classNames(
+                citationColWidth,
+                `pl-6 flex justify-between items-center`
+              )}
+            >
+              <span className="mr-1 uppercase">CITATION</span>
+
+              <div className="w-52">
+                <OverviewSearchbar
+                  onNameSearchChanged={(value) => setNameSearch(value)}
+                />
               </div>
-            )}
-          </div>
-
-          {/* User and comment column */}
-          <div className={classNames(userColWidth, `pl-6 pr-6`)}>USER</div>
-
-          {/* RATING column */}
-          <div
-            onClick={() =>
-              headerClicked(SortOptionsListingPageOpinions.RATING.value)
-            }
-            className={classNames(
-              ratingColWidth,
-              `pl-10 flex items-center cursor-pointer`
-            )}
-          >
-            <span className="mr-1 uppercase">
-              {SortOptionsListingPageOpinions.RATING.displayName}
-            </span>
-            {orderBy === SortOptionsListingPageOpinions.RATING.value && (
-              <div
-                className="h-8 z-[42] text-[.65rem] flex justify-center items-center"
-                title="SORT"
-              >
-                {orderDirection === 'desc' ? (
-                  <SortDescendingIcon className="w-3.5 text-blue-500" />
-                ) : (
-                  <SortAscendingIcon className="w-3.5 text-blue-500" />
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Citation column */}
-          <div
-            className={classNames(
-              citationColWidth,
-              `pl-6 flex justify-between items-center`
-            )}
-          >
-            <span className="mr-1 uppercase">CITATION</span>
-
-            <div className="w-52">
-              <OverviewSearchbar
-                onNameSearchChanged={(value) => setNameSearch(value)}
-              />
             </div>
           </div>
-        </div>
 
-        <div className="">
-          {opinionPairs?.map((opinion, oIndex) => {
-            const displayUsernameOrWallet = convertAccountName(
-              opinion?.userToken?.username || opinion?.ratedBy
-            )
-            const usernameOrWallet =
-              opinion?.userToken?.username || opinion?.ratedBy
+          <div className="">
+            {opinionPairs?.map((opinion, oIndex) => {
+              const displayUsernameOrWallet = convertAccountName(
+                opinion?.userToken?.username || opinion?.ratedBy
+              )
+              const usernameOrWallet =
+                opinion?.userToken?.username || opinion?.ratedBy
 
-            return (
-              <div
-                ref={desktopLastElementRef}
-                className="bg-white h-min min-h-[5rem] py-4 mb-4 flex items-start w-full text-black rounded-2xl"
-                key={oIndex}
-              >
-                {/* STAKED column */}
+              return (
                 <div
-                  className={classNames(
-                    stakedColWidth,
-                    `text-blue-500 font-semibold pl-6`
-                  )}
+                  ref={desktopLastElementRef}
+                  className="bg-white h-min min-h-[5rem] py-4 mb-4 flex items-start w-full text-black rounded-2xl"
+                  key={oIndex}
                 >
-                  {formatNumberWithCommasAsThousandsSerperator(
-                    Math.round(opinion?.userToken?.deposits)
-                  )}{' '}
-                  IMO
-                </div>
+                  {/* STAKED column */}
+                  <div
+                    className={classNames(
+                      stakedColWidth,
+                      `text-blue-500 font-semibold pl-6`
+                    )}
+                  >
+                    {formatNumberWithCommasAsThousandsSerperator(
+                      Math.round(opinion?.userToken?.deposits)
+                    )}{' '}
+                    IMO
+                  </div>
 
-                {/* User and comment column */}
-                <div
-                  className={classNames(userColWidth, `flex items-center pl-6`)}
-                >
-                  <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
-                    <div className="mr-4 flex flex-col items-center space-y-2">
-                      <div className="relative rounded-full w-6 h-6">
-                        <Image
-                          className="rounded-full"
-                          src={
-                            opinion?.userToken?.profilePhoto ||
-                            '/DefaultProfilePicture.png'
-                          }
-                          alt=""
-                          layout="fill"
-                          objectFit="cover"
-                        />
+                  {/* User and comment column */}
+                  <div
+                    className={classNames(
+                      userColWidth,
+                      `flex items-center pl-6`
+                    )}
+                  >
+                    <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
+                      <div className="mr-4 flex flex-col items-center space-y-2">
+                        <div className="relative rounded-full w-6 h-6">
+                          <Image
+                            className="rounded-full"
+                            src={
+                              opinion?.userToken?.profilePhoto ||
+                              '/DefaultProfilePicture.png'
+                            }
+                            alt=""
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                        </div>
+
+                        {/* <WatchingStar token={token} /> */}
                       </div>
 
-                      {/* <WatchingStar token={token} /> */}
-                    </div>
-
-                    <div className="pr-6 w-full">
-                      <div className="flex items-center space-x-1 pb-2 flex-wrap">
-                        <A
-                          className="font-bold hover:text-blue-600 z-50"
-                          href={`/u/${usernameOrWallet}`}
-                        >
-                          {displayUsernameOrWallet}
-                        </A>
-                        {opinion?.userToken?.twitterUsername && (
+                      <div className="pr-6 w-full">
+                        <div className="flex items-center space-x-1 pb-2 flex-wrap">
                           <A
-                            className="flex items-center space-x-1 text-black z-50"
+                            className="font-bold hover:text-blue-600 z-50"
                             href={`/u/${usernameOrWallet}`}
                           >
-                            <div className="relative w-4 h-4">
-                              <Image
-                                src={'/twitter-solid-blue.svg'}
-                                alt="twitter-solid-blue-icon"
-                                layout="fill"
-                              />
-                            </div>
-                            <span className="text-sm opacity-50">
-                              @{opinion?.userToken?.twitterUsername}
-                            </span>
+                            {displayUsernameOrWallet}
                           </A>
-                        )}
-                      </div>
+                          {opinion?.userToken?.twitterUsername && (
+                            <A
+                              className="flex items-center space-x-1 text-black z-50"
+                              href={`/u/${usernameOrWallet}`}
+                            >
+                              <div className="relative w-4 h-4">
+                                <Image
+                                  src={'/twitter-solid-blue.svg'}
+                                  alt="twitter-solid-blue-icon"
+                                  layout="fill"
+                                />
+                              </div>
+                              <span className="text-sm opacity-50">
+                                @{opinion?.userToken?.twitterUsername}
+                              </span>
+                            </A>
+                          )}
+                        </div>
 
-                      {/* {opinion?.comment && (
+                        {/* {opinion?.comment && (
                         <div
                           dangerouslySetInnerHTML={{
                             __html: urlify(opinion?.comment),
@@ -354,85 +360,91 @@ const OpinionTable = ({
                           style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
                         />
                       )} */}
-                    </div>
-                  </div>
-                </div>
-
-                {/* RATING column */}
-                <div
-                  className={classNames(
-                    ratingColWidth,
-                    `pl-10 text-blue-500 font-semibold`
-                  )}
-                >
-                  <div className="relative h-4 w-full bg-black/[.1]">
-                    <div
-                      className={classNames(`absolute h-full bg-blue-200`)}
-                      style={{ width: `${opinion?.rating}%` }}
-                    >
-                      <div
-                        className={classNames(
-                          `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-white text-blue-600 border font-bold flex justify-center items-center`
-                        )}
-                      >
-                        {opinion?.rating}
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* CITATION column */}
-                <div
-                  className={classNames(
-                    citationColWidth,
-                    `text-blue-500 font-semibold pl-6 pr-4`
-                  )}
-                >
-                  {selectedCitationForRows[oIndex] && (
-                    <div className="flex justify-between items-start space-x-4">
-                      {opinion?.citations && opinion?.citations.length > 1 && (
+                  {/* RATING column */}
+                  <div
+                    className={classNames(
+                      ratingColWidth,
+                      `pl-10 text-blue-500 font-semibold`
+                    )}
+                  >
+                    <div className="relative h-4 w-full bg-black/[.1]">
+                      <div
+                        className={classNames(`absolute h-full bg-blue-200`)}
+                        style={{ width: `${opinion?.rating}%` }}
+                      >
                         <div
-                          onClick={() => onRowCitationChanged(oIndex, true)}
-                          className="relative w-10 h-10 cursor-pointer"
+                          className={classNames(
+                            `absolute rounded-3xl w-8 h-7 -right-4 -top-1/2 mt-0.5 h-full bg-white text-blue-600 border font-bold flex justify-center items-center`
+                          )}
                         >
-                          <Image
-                            src={'/ArrowLeft.svg'}
-                            alt="arrow-left-icon"
-                            layout="fill"
-                          />
+                          {opinion?.rating}
                         </div>
-                      )}
-
-                      <CitationCard
-                        citation={selectedCitationForRows[oIndex]}
-                        opinion={opinion}
-                      />
-
-                      {opinion?.citations && opinion?.citations.length > 1 && (
-                        <div
-                          onClick={() => onRowCitationChanged(oIndex, false)}
-                          className="relative w-10 h-10 cursor-pointer"
-                        >
-                          <Image
-                            src={'/ArrowRight.svg'}
-                            alt="arrow-right-icon"
-                            layout="fill"
-                          />
-                        </div>
-                      )}
+                      </div>
                     </div>
-                  )}
-                </div>
-              </div>
-            )
-          })}
+                  </div>
 
-          {opinionPairs && opinionPairs.length <= 0 && <EmptyTableBody />}
+                  {/* CITATION column */}
+                  <div
+                    className={classNames(
+                      citationColWidth,
+                      `text-blue-500 font-semibold pl-6 pr-4`
+                    )}
+                  >
+                    {selectedCitationForRows[oIndex] && (
+                      <div className="flex justify-between items-start space-x-4">
+                        {opinion?.citations && opinion?.citations.length > 1 && (
+                          <div
+                            onClick={() => onRowCitationChanged(oIndex, true)}
+                            className="relative w-10 h-10 cursor-pointer"
+                          >
+                            <Image
+                              src={'/ArrowLeft.svg'}
+                              alt="arrow-left-icon"
+                              layout="fill"
+                            />
+                          </div>
+                        )}
+
+                        <CitationCard
+                          citation={selectedCitationForRows[oIndex]}
+                          opinion={opinion}
+                        />
+
+                        {opinion?.citations && opinion?.citations.length > 1 && (
+                          <div
+                            onClick={() => onRowCitationChanged(oIndex, false)}
+                            className="relative w-10 h-10 cursor-pointer"
+                          >
+                            <Image
+                              src={'/ArrowRight.svg'}
+                              alt="arrow-right-icon"
+                              layout="fill"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+
+            {opinionPairs && opinionPairs.length <= 0 && <EmptyTableBody />}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Mobile table */}
-      <div className="rounded-t-2xl md:hidden w-full bg-white shadow-lg">
+      <div
+        className={classNames(
+          isMobile ? '' : 'md:hidden',
+          'rounded-t-2xl w-full bg-white shadow-lg'
+        )}
+      >
         {/* Table header */}
         <div className="flex items-center w-full h-16 p-3 border-b-[6px]">
           <DropdownButton

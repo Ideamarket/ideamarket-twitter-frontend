@@ -9,47 +9,42 @@ import React, {
 import { useInfiniteQuery } from 'react-query'
 
 import { IdeaToken } from 'store/ideaMarketsStore'
-import { useIdeaMarketsStore } from 'store/ideaMarketsStore'
 import { OverviewColumns } from 'components/tokens/table/OverviewColumns'
 import { flatten } from 'utils/lodash'
 import { GlobalContext } from 'lib/GlobalContext'
-import { SortOptionsHomeUsersTable, TABLE_NAMES } from 'utils/tables'
+import { SortOptionsHomeUsersTable } from 'utils/tables'
 import { getAllUsers } from '../services/UserMarketService'
 import HomeUsersRowSkeleton from './HomeUsersRowSkeleton'
 import HomeUsersRow from './HomeUsersRow'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
 type Props = {
-  isStarredFilterActive: boolean
   nameSearch: string
   orderBy: string
   orderDirection: string
   columnData: Array<any>
   selectedCategories: string[]
-  selectedTable: TABLE_NAMES
+  selectedView: any
   getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
   onRateClicked: (idt: IdeaToken, urlMetaData: any) => void
   onStakeClicked: (idt: IdeaToken) => void
   tradeOrListSuccessToggle: boolean
-  setIsStarredFilterActive: (isActive: boolean) => void
   onNameSearchChanged: (value: string) => void
 }
 
 export default function HomeUsersTable({
-  isStarredFilterActive,
   nameSearch,
   orderBy,
   orderDirection,
   columnData,
   selectedCategories,
-  selectedTable,
+  selectedView,
   getColumn,
   onOrderByChanged,
   onRateClicked,
   onStakeClicked,
   tradeOrListSuccessToggle,
-  setIsStarredFilterActive,
   onNameSearchChanged,
 }: Props) {
   const TOKENS_PER_PAGE = 10
@@ -60,12 +55,6 @@ export default function HomeUsersTable({
 
   const observer: MutableRefObject<any> = useRef()
 
-  const watchingTokens = Object.keys(
-    useIdeaMarketsStore((store) => store.watching)
-  )
-
-  const filterTokens = isStarredFilterActive ? watchingTokens : undefined
-
   const {
     data: infiniteData,
     isFetching: isTokenDataLoading,
@@ -73,14 +62,7 @@ export default function HomeUsersTable({
     refetch,
     hasNextPage: canFetchMore,
   } = useInfiniteQuery(
-    [
-      TOKENS_PER_PAGE,
-      orderBy,
-      orderDirection,
-      selectedCategories,
-      filterTokens,
-      nameSearch,
-    ],
+    [TOKENS_PER_PAGE, orderBy, orderDirection, selectedCategories, nameSearch],
     ({ pageParam = 0 }) =>
       getAllUsers(
         [TOKENS_PER_PAGE, orderBy, orderDirection, nameSearch],
@@ -98,7 +80,7 @@ export default function HomeUsersTable({
       },
       refetchOnMount: false,
       refetchOnWindowFocus: false,
-      enabled: false,
+      enabled: true,
       keepPreviousData: true,
     }
   )
@@ -123,8 +105,6 @@ export default function HomeUsersTable({
   useEffect(() => {
     refetch()
   }, [
-    isStarredFilterActive,
-    filterTokens?.length, // Need this to detect change in starred tokens. Otherwise, you click a star and it shows no tokens if starred filter is on
     orderBy,
     orderDirection,
     nameSearch,
@@ -182,24 +162,15 @@ export default function HomeUsersTable({
                 orderBy={orderBy}
                 orderDirection={orderDirection}
                 columnData={columnData}
-                selectedTable={selectedTable}
-                isStarredFilterActive={isStarredFilterActive}
+                selectedView={selectedView}
+                isStarredFilterActive={false}
                 columnClicked={columnClicked}
-                setIsStarredFilterActive={setIsStarredFilterActive}
+                setIsStarredFilterActive={() => null}
                 onNameSearchChanged={onNameSearchChanged}
               />
             </div>
             <div className="bg-white divide-y-[6px] dark:bg-gray-700">
               {(tokenData as any[]).map((token, index) => {
-                if (
-                  isStarredFilterActive &&
-                  filterTokens &&
-                  filterTokens?.length <= 0
-                ) {
-                  // If starred filter is active, but no starred tokens, then show none. Have to do this because passing nothing to API causes it to fetch all tokens
-                  return null
-                }
-
                 return (
                   <HomeUsersRow
                     key={index}

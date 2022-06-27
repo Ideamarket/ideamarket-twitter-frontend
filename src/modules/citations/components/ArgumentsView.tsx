@@ -4,6 +4,7 @@ import CitationCard from 'modules/ratings/components/CitationCard'
 import { MutableRefObject, useCallback, useRef, useState } from 'react'
 
 type Props = {
+  isMobile: boolean
   forCitationsPairs: IdeamarketPost[]
   againstCitationsPairs: IdeamarketPost[]
   canFetchMoreCitations: boolean
@@ -11,6 +12,7 @@ type Props = {
 }
 
 const ArgumentsView = ({
+  isMobile,
   forCitationsPairs,
   againstCitationsPairs,
   canFetchMoreCitations,
@@ -58,69 +60,80 @@ const ArgumentsView = ({
   return (
     <>
       {/* Desktop and tablet */}
-      <div className="hidden md:flex justify-between space-x-28">
-        <div className="w-1/2 flex flex-col">
-          <div className="font-black text-black/[.2] text-3xl mb-6 self-end">
-            For
+      {!isMobile && (
+        <div className="hidden md:flex justify-between space-x-28">
+          <div className="w-1/2 flex flex-col">
+            <div className="font-black text-black/[.2] text-3xl mb-6 self-end">
+              For
+            </div>
+
+            <div className="">
+              {forCitationsPairs &&
+                forCitationsPairs?.length > 0 &&
+                forCitationsPairs.map((forCitation, fcInd) => {
+                  return (
+                    <div
+                      ref={desktopLastElementRef}
+                      className="mb-4"
+                      key={fcInd}
+                    >
+                      {/* shadow = 1st num is horizontal shadow length. 2nd num is vertical shadow length (- and + tell which side to go). 3rd num is blur amount. 4th num is spread */}
+                      <CitationCard
+                        citation={forCitation}
+                        bgCardColor="bg-white"
+                        shadow="shadow-[0_2px_7px_2px_rgba(0,0,0,0.15)]"
+                      />
+                    </div>
+                  )
+                })}
+
+              {forCitationsPairs && forCitationsPairs?.length <= 0 && (
+                <div className="opacity-25">No citations FOR this post</div>
+              )}
+            </div>
           </div>
 
-          <div className="">
-            {forCitationsPairs &&
-              forCitationsPairs?.length > 0 &&
-              forCitationsPairs.map((forCitation, fcInd) => {
-                return (
-                  <div ref={desktopLastElementRef} className="mb-4" key={fcInd}>
-                    {/* shadow = 1st num is horizontal shadow length. 2nd num is vertical shadow length (- and + tell which side to go). 3rd num is blur amount. 4th num is spread */}
-                    <CitationCard
-                      citation={forCitation}
-                      bgCardColor="bg-white"
-                      shadow="shadow-[0_2px_7px_2px_rgba(0,0,0,0.15)]"
-                    />
-                  </div>
-                )
-              })}
+          <div className="w-1/2">
+            <div className="font-black text-black/[.2] text-3xl mb-6">
+              Against
+            </div>
 
-            {forCitationsPairs && forCitationsPairs?.length <= 0 && (
-              <div className="opacity-25">No citations FOR this post</div>
-            )}
+            <div className="">
+              {againstCitationsPairs &&
+                againstCitationsPairs?.length > 0 &&
+                againstCitationsPairs.map((againstCitation, acInd) => {
+                  return (
+                    <div className="mb-4" key={acInd}>
+                      <CitationCard
+                        citation={againstCitation}
+                        bgCardColor="bg-white"
+                        shadow="shadow-[0_2px_7px_2px_rgba(0,0,0,0.15)]"
+                      />
+                    </div>
+                  )
+                })}
+
+              {againstCitationsPairs && againstCitationsPairs?.length <= 0 && (
+                <div className="opacity-25">No citations AGAINST this post</div>
+              )}
+            </div>
           </div>
         </div>
-
-        <div className="w-1/2">
-          <div className="font-black text-black/[.2] text-3xl mb-6">
-            Against
-          </div>
-
-          <div className="">
-            {againstCitationsPairs &&
-              againstCitationsPairs?.length > 0 &&
-              againstCitationsPairs.map((againstCitation, acInd) => {
-                return (
-                  <div className="mb-4" key={acInd}>
-                    <CitationCard
-                      citation={againstCitation}
-                      bgCardColor="bg-white"
-                      shadow="shadow-[0_2px_7px_2px_rgba(0,0,0,0.15)]"
-                    />
-                  </div>
-                )
-              })}
-
-            {againstCitationsPairs && againstCitationsPairs?.length <= 0 && (
-              <div className="opacity-25">No citations AGAINST this post</div>
-            )}
-          </div>
-        </div>
-      </div>
+      )}
 
       {/* Mobile */}
-      <div className="md:hidden w-full flex flex-col">
+      <div
+        className={classNames(
+          isMobile ? '' : 'md:hidden',
+          'w-full flex flex-col'
+        )}
+      >
         <div className="flex justify-between mb-6 mx-10">
           <div
             onClick={() => setMobileIsForSelected(true)}
             className={classNames(
               mobileIsForSelected ? 'text-black' : 'text-black/[.25]',
-              'font-black text-3xl'
+              'font-black text-3xl cursor-pointer'
             )}
           >
             For
@@ -129,7 +142,7 @@ const ArgumentsView = ({
             onClick={() => setMobileIsForSelected(false)}
             className={classNames(
               !mobileIsForSelected ? 'text-black' : 'text-black/[.25]',
-              'font-black text-3xl'
+              'font-black text-3xl cursor-pointer'
             )}
           >
             Against

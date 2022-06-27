@@ -30,7 +30,7 @@ type Props = {
   orderDirection: string
   columnData: Array<any>
   selectedCategories: string[]
-  selectedTable: TABLE_NAMES
+  selectedView: TABLE_NAMES
   timeFilter: TIME_FILTER
   getColumn: (column: string) => boolean
   onOrderByChanged: (o: string, d: string) => void
@@ -48,7 +48,7 @@ export default function Table({
   orderDirection,
   columnData,
   selectedCategories,
-  selectedTable,
+  selectedView,
   timeFilter,
   getColumn,
   onOrderByChanged,
@@ -210,7 +210,7 @@ export default function Table({
                 orderBy={orderBy}
                 orderDirection={orderDirection}
                 columnData={columnData}
-                selectedTable={selectedTable}
+                selectedView={selectedView}
                 isStarredFilterActive={isStarredFilterActive}
                 timeFilter={timeFilter}
                 columnClicked={columnClicked}

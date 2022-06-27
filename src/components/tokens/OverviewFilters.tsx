@@ -12,7 +12,7 @@ type OverviewFiltersProps = {
   selectedColumns: Set<string>
   isStarredFilterActive: boolean
   selectedCategories: string[]
-  selectedTable: TABLE_NAMES
+  selectedView: TABLE_NAMES
   timeFilter?: TIME_FILTER
   setOrderBy: (value: string) => void
   onColumnChanged: (set: Set<string>) => void
@@ -27,7 +27,7 @@ export const OverviewFilters = ({
   selectedColumns,
   isStarredFilterActive,
   selectedCategories,
-  selectedTable,
+  selectedView,
   timeFilter,
   setOrderBy,
   onColumnChanged,
@@ -62,7 +62,7 @@ export const OverviewFilters = ({
     <div>
       <div className="hidden md:flex md:justify-start justify-center h-28 md:h-16 overflow-x-auto p-3 bg-white rounded-t-lg dark:bg-gray-700 gap-x-2 gap-y-2">
         <div className="flex md:gap-x-2">
-          {selectedTable === TABLE_NAMES.HOME_POSTS &&
+          {selectedView === TABLE_NAMES.HOME_POSTS &&
             categoriesData &&
             categoriesData.map((cat: any) => (
               <SelectableButton
@@ -85,7 +85,7 @@ export const OverviewFilters = ({
         isStarredFilterActive={isStarredFilterActive}
         categoriesData={categoriesData}
         selectedCategories={selectedCategories}
-        selectedTable={selectedTable}
+        selectedView={selectedView}
         timeFilter={timeFilter}
         setOrderBy={setOrderBy}
         onNameSearchChanged={onNameSearchChanged}
