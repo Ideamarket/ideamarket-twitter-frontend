@@ -343,7 +343,7 @@ export default function ProfileWallet({ userData }: Props) {
         {table === TABLE_NAMES.ACCOUNT_POSTS && (
           <div className="md:hidden w-full flex gap-x-3 px-3 py-3 border-t-[6px] leading-4 text-xs text-black/[.5] font-semibold">
             <div className="w-1/4 flex items-start">
-              <span className="mr-1">SCRUTINY</span>
+              <span className="mr-1 break-all">CONTROVERSIAL</span>
               <Tooltip>
                 <div className="w-40 md:w-64">
                   The total amount of IMO staked on all users who rated a post
@@ -352,7 +352,7 @@ export default function ProfileWallet({ userData }: Props) {
             </div>
 
             <div className="w-1/4 flex items-start">
-              <span className="mr-1">Confidence</span>
+              <span className="mr-1 break-all">CONFIDENCE</span>
               <Tooltip>
                 <div className="w-full md:w-64">
                   Rating weighted by IMO staked on each user. The more IMO
@@ -362,7 +362,7 @@ export default function ProfileWallet({ userData }: Props) {
               </Tooltip>
             </div>
 
-            <div className="w-1/4">RATINGS</div>
+            <div className="w-1/4 break-all">RATINGS</div>
 
             <div className="w-1/4"></div>
           </div>

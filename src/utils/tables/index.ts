@@ -35,7 +35,7 @@ export const SortOptionsHomePostsTable = {
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
-    displayName: 'Scrutiny',
+    displayName: 'Controversial',
   },
   NEW: {
     id: 4,
@@ -63,7 +63,7 @@ export const SortOptionsAddCitationsModal = {
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
-    displayName: 'Scrutiny',
+    displayName: 'Controversial',
   },
 }
 
@@ -154,7 +154,7 @@ export const SortOptionsAccountPosts = {
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
-    displayName: 'Scrutiny',
+    displayName: 'Controversial',
   },
   RATINGS: {
     id: 4,
@@ -173,7 +173,7 @@ export const SortOptionsAccountOpinions = {
   MARKET_INTEREST: {
     id: 1,
     value: orderByMarketInterest,
-    displayName: 'Scrutiny',
+    displayName: 'Controversial',
   },
   // Individual user rating for 1 IDT
   RATING: {

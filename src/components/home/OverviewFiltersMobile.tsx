@@ -168,7 +168,7 @@ const OverviewFiltersMobile = ({
       {selectedView === TABLE_NAMES.HOME_POSTS ? (
         <div className="w-full flex gap-x-3 px-3 py-3 leading-4 text-xs text-black/[.5] font-semibold">
           <div className="w-1/4 flex items-start">
-            <span className="mr-1">SCRUTINY</span>
+            <span className="mr-1 break-all">CONTROVERSIAL</span>
             <Tooltip>
               <div className="w-40 md:w-64">
                 The total amount of IMO staked on all users who rated a post
@@ -177,7 +177,7 @@ const OverviewFiltersMobile = ({
           </div>
 
           <div className="w-1/4 flex items-start">
-            <span className="whitespace-nowrap">Confidence</span>
+            <span className="whitespace-nowrap break-all">CONFIDENCE</span>
             <Tooltip>
               <div className="w-full md:w-64">
                 Rating weighted by IMO staked on each user. The more IMO staked
@@ -187,7 +187,7 @@ const OverviewFiltersMobile = ({
             </Tooltip>
           </div>
 
-          <div className="w-1/4">RATINGS</div>
+          <div className="w-1/4 break-all">RATINGS</div>
 
           <div className="w-1/4"></div>
         </div>

@@ -93,7 +93,7 @@ export default function UserPostsTable({
       case SortOptionsAccountPosts.MARKET_INTEREST.value:
         return (
           <div className="flex items-center">
-            <span className="mr-1 uppercase">
+            <span className="mr-1 uppercase break-all">
               {SortOptionsAccountPosts.MARKET_INTEREST.displayName}
             </span>
             <Tooltip
@@ -108,7 +108,7 @@ export default function UserPostsTable({
         )
       case SortOptionsAccountPosts.COMPOSITE_RATING.value:
         return (
-          <div className="flex items-center">
+          <div className="flex items-center break-all">
             <span>
               Confidence
               <Tooltip

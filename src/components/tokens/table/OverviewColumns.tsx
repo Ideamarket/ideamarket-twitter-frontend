@@ -174,7 +174,7 @@ export const OverviewColumns = ({
       case SortOptionsHomePostsTable.MARKET_INTEREST.value:
         return (
           <div className="invisible flex items-center">
-            <span className="mr-1">SCRUTINY</span>
+            <span className="mr-1">CONTROVERSIAL</span>
             <Tooltip
               className="text-black/[.5] z-[200]"
               iconComponentClassNames="w-3"
