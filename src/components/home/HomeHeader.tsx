@@ -61,8 +61,8 @@ const HomeHeader = () => {
           </div> */}
 
           <h2 className="mt-8 text-3xl md:text-6xl font-gilroy-bold">
-            Crowdsource
-            <span className="text-brand-blue"> credibility</span>
+            The world's opinions,
+            <span className="text-brand-blue"> on chain.</span>
           </h2>
 
           <p className="mt-8 md:px-28 text-sm md:text-lg">
