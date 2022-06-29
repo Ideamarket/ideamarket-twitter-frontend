@@ -21,7 +21,7 @@ export default function TooltipContent({
     <div
       ref={contentRef}
       className={classNames(
-        'fixed z-[300] pb-5',
+        'fixed z-[800] pb-5',
         show ? 'visible' : 'invisible'
       )}
       style={{

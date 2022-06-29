@@ -13,7 +13,7 @@ import {
 import useOnClickOutside from 'utils/useOnClickOutside'
 
 type Props = {
-  table: TABLE_NAMES
+  selectedView: TABLE_NAMES
   isVerifiedFilterActive: boolean
   isStarredFilterActive: boolean
   isLockedFilterActive: boolean
@@ -28,7 +28,7 @@ type Props = {
 }
 
 const WalletFilters = ({
-  table,
+  selectedView,
   isVerifiedFilterActive,
   isStarredFilterActive,
   isLockedFilterActive,
@@ -65,8 +65,8 @@ const WalletFilters = ({
 
       <div className="w-full h-auto">
         {/* Start of dropdown button that only shows on mobile Account Opinion table */}
-        {(table === TABLE_NAMES.ACCOUNT_OPINIONS ||
-          table === TABLE_NAMES.ACCOUNT_POSTS) && (
+        {(selectedView === TABLE_NAMES.ACCOUNT_OPINIONS ||
+          selectedView === TABLE_NAMES.ACCOUNT_POSTS) && (
           <div
             onClick={() => setIsSortingDropdownOpen(!isSortingDropdownOpen)}
             className="relative w-full flex md:hidden justify-center items-center px-2 py-1 mb-1 ml-auto border rounded-md"
@@ -76,7 +76,9 @@ const WalletFilters = ({
             </span>
             <span className="text-sm text-blue-500 font-semibold flex items-center">
               {/* <span>{getSortByIcon(selectedSortOptionID)}</span> */}
-              <span>{getSortOptionDisplayNameByValue(orderBy, table)}</span>
+              <span>
+                {getSortOptionDisplayNameByValue(orderBy, selectedView)}
+              </span>
             </span>
             <span>
               <ChevronDownIcon className="h-5" />
@@ -86,7 +88,7 @@ const WalletFilters = ({
               <DropdownButtons
                 container={ref}
                 filters={Object.values(
-                  table === TABLE_NAMES.ACCOUNT_OPINIONS
+                  selectedView === TABLE_NAMES.ACCOUNT_OPINIONS
                     ? SortOptionsAccountOpinions
                     : SortOptionsAccountPosts
                 )}

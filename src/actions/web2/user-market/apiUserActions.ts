@@ -83,3 +83,63 @@ export const getAccount = async ({
     return null
   }
 }
+
+/**
+ * Get holders of a certain wallet address
+ */
+export const getUserHolders = async ({
+  walletAddress,
+  skip,
+  limit,
+  orderBy,
+  orderDirection,
+}) => {
+  if (!walletAddress) return null
+
+  try {
+    const response = await client.get(`/user-token/holders`, {
+      params: {
+        walletAddress,
+        skip,
+        limit,
+        orderBy,
+        orderDirection,
+      },
+    })
+
+    return response?.data?.data?.holders
+  } catch (error) {
+    console.error(`getting holders of wallet address ${walletAddress} failed`)
+    return null
+  }
+}
+
+/**
+ * Get holdings of a certain wallet address (the users they are staked on)
+ */
+export const getUserHoldings = async ({
+  walletAddress,
+  skip,
+  limit,
+  orderBy,
+  orderDirection,
+}) => {
+  if (!walletAddress) return null
+
+  try {
+    const response = await client.get(`/user-token/holdings`, {
+      params: {
+        walletAddress,
+        skip,
+        limit,
+        orderBy,
+        orderDirection,
+      },
+    })
+
+    return response?.data?.data?.holdings
+  } catch (error) {
+    console.error(`getting holdings of wallet address ${walletAddress} failed`)
+    return null
+  }
+}

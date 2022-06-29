@@ -24,11 +24,14 @@ import { GlobalContext } from 'lib/GlobalContext'
 import {
   SortOptionsAccountOpinions,
   SortOptionsAccountPosts,
+  SortOptionsHomeUsersTable,
   TABLE_NAMES,
   TIME_FILTER,
 } from 'utils/tables'
 import UserPostsTable from 'modules/posts/components/UserPostsTable'
 import { getAllPosts } from 'modules/posts/services/PostService'
+import HoldersView from 'modules/user-market/components/HoldersView'
+import HoldingsView from 'modules/user-market/components/HoldingsView'
 
 const TOKENS_PER_PAGE = 10
 
@@ -63,7 +66,7 @@ export default function ProfileWallet({ userData }: Props) {
   const [isLockedFilterActive, setIsLockedFilterActive] = useState(false)
   const [nameSearch, setNameSearch] = useState('')
 
-  const [table, setTable] = useState(TABLE_NAMES.ACCOUNT_OPINIONS)
+  const [selectedView, setSelectedView] = useState(TABLE_NAMES.ACCOUNT_OPINIONS)
   const [orderBy, setOrderBy] = useState(
     SortOptionsAccountOpinions.RATING.value
   )
@@ -153,6 +156,7 @@ export default function ProfileWallet({ userData }: Props) {
   ])
 
   async function userPostsQueryFunction(numTokens: number, skip: number = 0) {
+    if (selectedView !== TABLE_NAMES.ACCOUNT_POSTS) return []
     if (!userData || !userData?.walletAddress) return []
 
     const latestUserOpinions = await getAllPosts(
@@ -173,6 +177,8 @@ export default function ProfileWallet({ userData }: Props) {
   }
 
   async function ratingsQueryFunction(numTokens: number, skip: number = 0) {
+    if (selectedView !== TABLE_NAMES.ACCOUNT_OPINIONS) return []
+
     const latestUserOpinions = await getUsersLatestOpinions({
       walletAddress: userData?.walletAddress,
       skip,
@@ -187,6 +193,7 @@ export default function ProfileWallet({ userData }: Props) {
   }
 
   async function ownedQueryFunction(numTokens: number, skip: number = 0) {
+    if (selectedView !== TABLE_NAMES.ACCOUNT_HOLDINGS) return []
     const finalAddress = userData?.walletAddress
 
     const { holdings } = await queryOwnedTokensMaybeMarket(
@@ -205,6 +212,7 @@ export default function ProfileWallet({ userData }: Props) {
   }
 
   async function tradesQueryFunction(numTokens: number, skip: number = 0) {
+    if (selectedView !== TABLE_NAMES.ACCOUNT_TRADES) return []
     const finalAddress = userData?.walletAddress
 
     const { trades } = await queryMyTrades(
@@ -251,13 +259,13 @@ export default function ProfileWallet({ userData }: Props) {
         <div className="flex order-1 md:order-none mx-4">
           <div
             className={classNames(
-              table === TABLE_NAMES.ACCOUNT_OPINIONS
+              selectedView === TABLE_NAMES.ACCOUNT_OPINIONS
                 ? 'text-white'
                 : 'text-brand-gray text-opacity-60 cursor-pointer',
               'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
             )}
             onClick={() => {
-              setTable(TABLE_NAMES.ACCOUNT_OPINIONS)
+              setSelectedView(TABLE_NAMES.ACCOUNT_OPINIONS)
               setOrderBy(SortOptionsAccountOpinions.RATING.value)
               setOrderDirection('desc')
             }}
@@ -267,13 +275,13 @@ export default function ProfileWallet({ userData }: Props) {
 
           <div
             className={classNames(
-              table === TABLE_NAMES.ACCOUNT_POSTS
+              selectedView === TABLE_NAMES.ACCOUNT_POSTS
                 ? 'text-white'
                 : 'text-brand-gray text-opacity-60 cursor-pointer',
               'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
             )}
             onClick={() => {
-              setTable(TABLE_NAMES.ACCOUNT_POSTS)
+              setSelectedView(TABLE_NAMES.ACCOUNT_POSTS)
               setOrderBy(SortOptionsAccountPosts.MARKET_INTEREST.value)
               setOrderDirection('desc')
             }}
@@ -281,18 +289,52 @@ export default function ProfileWallet({ userData }: Props) {
             Posts
           </div>
 
+          <div
+            className={classNames(
+              selectedView === TABLE_NAMES.ACCOUNT_HOLDERS
+                ? 'text-white'
+                : 'text-brand-gray text-opacity-60 cursor-pointer',
+              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
+            )}
+            onClick={() => {
+              setSelectedView(TABLE_NAMES.ACCOUNT_HOLDERS)
+              // TODO:
+              setOrderBy(SortOptionsHomeUsersTable.STAKED.value)
+              setOrderDirection('desc')
+            }}
+          >
+            Holders
+          </div>
+
+          <div
+            className={classNames(
+              selectedView === TABLE_NAMES.ACCOUNT_STAKED_ON
+                ? 'text-white'
+                : 'text-brand-gray text-opacity-60 cursor-pointer',
+              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
+            )}
+            onClick={() => {
+              setSelectedView(TABLE_NAMES.ACCOUNT_STAKED_ON)
+              // TODO:
+              setOrderBy(SortOptionsHomeUsersTable.STAKED.value)
+              setOrderDirection('desc')
+            }}
+          >
+            Holdings
+          </div>
+
           {address?.toLowerCase() === userData?.walletAddress?.toLowerCase() &&
             ownedPairs &&
             ownedPairs?.length > 0 && (
               <div
                 className={classNames(
-                  table === TABLE_NAMES.ACCOUNT_HOLDINGS
+                  selectedView === TABLE_NAMES.ACCOUNT_HOLDINGS
                     ? 'text-white'
                     : 'text-brand-gray text-opacity-60 cursor-pointer',
                   'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
                 )}
                 onClick={() => {
-                  setTable(TABLE_NAMES.ACCOUNT_HOLDINGS)
+                  setSelectedView(TABLE_NAMES.ACCOUNT_HOLDINGS)
                   setOrderBy('price')
                   setOrderDirection('desc')
                 }}
@@ -306,13 +348,13 @@ export default function ProfileWallet({ userData }: Props) {
             myTrades?.length > 0 && (
               <div
                 className={classNames(
-                  table === TABLE_NAMES.ACCOUNT_TRADES
+                  selectedView === TABLE_NAMES.ACCOUNT_TRADES
                     ? 'text-white'
                     : 'text-brand-gray text-opacity-60 cursor-pointer',
                   'text-lg font-semibold flex flex-col justify-end mb-2.5'
                 )}
                 onClick={() => {
-                  setTable(TABLE_NAMES.ACCOUNT_TRADES)
+                  setSelectedView(TABLE_NAMES.ACCOUNT_TRADES)
                   setOrderBy('date')
                   setOrderDirection('desc')
                 }}
@@ -323,120 +365,122 @@ export default function ProfileWallet({ userData }: Props) {
         </div>
       </div>
 
-      <div className="bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray ">
-        <WalletFilters
-          table={table}
-          isVerifiedFilterActive={isVerifiedFilterActive}
-          isStarredFilterActive={isStarredFilterActive}
-          isLockedFilterActive={isLockedFilterActive}
-          nameSearch={nameSearch}
-          orderBy={orderBy}
-          onMarketChanged={() => null}
-          onNameSearchChanged={setNameSearch}
-          setIsVerifiedFilterActive={setIsVerifiedFilterActive}
-          setIsStarredFilterActive={setIsStarredFilterActive}
-          setIsLockedFilterActive={setIsLockedFilterActive}
-          setOrderBy={setOrderBy}
-        />
+      {/* Don't show table HTML if selected view is not table */}
+      {selectedView !== TABLE_NAMES.ACCOUNT_HOLDERS &&
+        selectedView !== TABLE_NAMES.ACCOUNT_STAKED_ON && (
+          <div className="bg-white border rounded-md dark:bg-gray-700 dark:border-gray-500 border-brand-border-gray ">
+            <WalletFilters
+              selectedView={selectedView}
+              isVerifiedFilterActive={isVerifiedFilterActive}
+              isStarredFilterActive={isStarredFilterActive}
+              isLockedFilterActive={isLockedFilterActive}
+              nameSearch={nameSearch}
+              orderBy={orderBy}
+              onMarketChanged={() => null}
+              onNameSearchChanged={setNameSearch}
+              setIsVerifiedFilterActive={setIsVerifiedFilterActive}
+              setIsStarredFilterActive={setIsStarredFilterActive}
+              setIsLockedFilterActive={setIsLockedFilterActive}
+              setOrderBy={setOrderBy}
+            />
 
-        {/* Mobile header to explain columns */}
-        {table === TABLE_NAMES.ACCOUNT_POSTS && (
-          <div className="md:hidden w-full flex gap-x-3 px-3 py-3 border-t-[6px] leading-4 text-xs text-black/[.5] font-semibold">
-            <div className="w-1/4 flex items-start">
-              <span className="mr-1 break-all">CONTROVERSIAL</span>
-              <Tooltip>
-                <div className="w-40 md:w-64">
-                  The total amount of IMO staked on all users who rated a post
+            {/* Mobile header to explain columns */}
+            {selectedView === TABLE_NAMES.ACCOUNT_POSTS && (
+              <div className="md:hidden w-full flex gap-x-3 px-3 py-3 border-t-[6px] leading-4 text-xs text-black/[.5] font-semibold">
+                <div className="w-1/4 flex items-start">
+                  <span className="mr-1 break-all">CONTROVERSIAL</span>
+                  <Tooltip>
+                    <div className="w-40 md:w-64">
+                      The total amount of IMO staked on all users who rated a
+                      post
+                    </div>
+                  </Tooltip>
                 </div>
-              </Tooltip>
-            </div>
 
-            <div className="w-1/4 flex items-start">
-              <span className="mr-1 break-all">CONFIDENCE</span>
-              <Tooltip>
-                <div className="w-full md:w-64">
-                  Rating weighted by IMO staked on each user. The more IMO
-                  staked on a user, the more that user’s ratings affect the IMO
-                  Rating of every post they rate.
+                <div className="w-1/4 flex items-start">
+                  <span className="mr-1 break-all">CONFIDENCE</span>
+                  <Tooltip>
+                    <div className="w-full md:w-64">
+                      Rating weighted by IMO staked on each user. The more IMO
+                      staked on a user, the more that user’s ratings affect the
+                      IMO Rating of every post they rate.
+                    </div>
+                  </Tooltip>
                 </div>
-              </Tooltip>
+
+                <div className="w-1/4 break-all">RATINGS</div>
+
+                <div className="w-1/4"></div>
+              </div>
+            )}
+
+            <div className="border-t border-brand-border-gray dark:border-gray-500 shadow-home ">
+              {selectedView === TABLE_NAMES.ACCOUNT_POSTS &&
+                web3 !== undefined && (
+                  <UserPostsTable
+                    rawPairs={userPostPairs}
+                    isPairsDataLoading={isUserPostDataLoading}
+                    refetch={refetch}
+                    canFetchMore={canFetchMoreUserPosts}
+                    orderDirection={orderDirection}
+                    orderBy={orderBy}
+                    fetchMore={fetchMoreUserPosts}
+                    headerClicked={headerClicked}
+                    onRateClicked={onRateClicked}
+                  />
+                )}
+
+              {selectedView === TABLE_NAMES.ACCOUNT_OPINIONS &&
+                web3 !== undefined && (
+                  <RatingsTable
+                    rawPairs={ratingPairs}
+                    isPairsDataLoading={isRatingsDataLoading}
+                    refetch={refetch}
+                    canFetchMore={canFetchMoreRatings}
+                    orderDirection={orderDirection}
+                    orderBy={orderBy}
+                    fetchMore={fetchMoreRatings}
+                    headerClicked={headerClicked}
+                    onRateClicked={onRateClicked}
+                  />
+                )}
+
+              {selectedView === TABLE_NAMES.ACCOUNT_HOLDINGS && (
+                <OwnedTokenTableNew
+                  rawPairs={ownedPairs}
+                  isPairsDataLoading={isOwnedPairsDataLoading}
+                  refetch={refetch}
+                  canFetchMore={canFetchMoreOwned}
+                  orderDirection={orderDirection}
+                  orderBy={orderBy}
+                  fetchMore={fetchMoreOwned}
+                  headerClicked={headerClicked}
+                />
+              )}
+
+              {selectedView === TABLE_NAMES.ACCOUNT_TRADES &&
+                web3 !== undefined && (
+                  <MyTradesTableNew
+                    rawPairs={myTrades}
+                    isPairsDataLoading={isTradesPairsDataLoading}
+                    canFetchMore={canFetchMoreTrades}
+                    orderDirection={orderDirection}
+                    orderBy={orderBy}
+                    fetchMore={fetchMoreTrades}
+                    headerClicked={headerClicked}
+                  />
+                )}
             </div>
-
-            <div className="w-1/4 break-all">RATINGS</div>
-
-            <div className="w-1/4"></div>
           </div>
         )}
 
-        <div className="border-t border-brand-border-gray dark:border-gray-500 shadow-home ">
-          {!web3 && (
-            <div className="flex items-center justify-center">
-              <button
-                type="button"
-                onClick={() => {
-                  ModalService.open(WalletModal)
-                }}
-                className="my-40 p-2.5 text-base font-medium text-white border-2 rounded-lg border-brand-blue tracking-tightest-2 font-sf-compact-medium bg-brand-blue"
-              >
-                Connect Wallet to View
-              </button>
-            </div>
-          )}
+      {selectedView === TABLE_NAMES.ACCOUNT_HOLDERS && web3 !== undefined && (
+        <HoldersView selectedView={selectedView} userData={userData} />
+      )}
 
-          {table === TABLE_NAMES.ACCOUNT_POSTS && web3 !== undefined && (
-            <UserPostsTable
-              rawPairs={userPostPairs}
-              isPairsDataLoading={isUserPostDataLoading}
-              refetch={refetch}
-              canFetchMore={canFetchMoreUserPosts}
-              orderDirection={orderDirection}
-              orderBy={orderBy}
-              fetchMore={fetchMoreUserPosts}
-              headerClicked={headerClicked}
-              onRateClicked={onRateClicked}
-            />
-          )}
-
-          {table === TABLE_NAMES.ACCOUNT_OPINIONS && web3 !== undefined && (
-            <RatingsTable
-              rawPairs={ratingPairs}
-              isPairsDataLoading={isRatingsDataLoading}
-              refetch={refetch}
-              canFetchMore={canFetchMoreRatings}
-              orderDirection={orderDirection}
-              orderBy={orderBy}
-              fetchMore={fetchMoreRatings}
-              headerClicked={headerClicked}
-              onRateClicked={onRateClicked}
-            />
-          )}
-
-          {table === TABLE_NAMES.ACCOUNT_HOLDINGS && web3 !== undefined && (
-            <OwnedTokenTableNew
-              rawPairs={ownedPairs}
-              isPairsDataLoading={isOwnedPairsDataLoading}
-              refetch={refetch}
-              canFetchMore={canFetchMoreOwned}
-              orderDirection={orderDirection}
-              orderBy={orderBy}
-              fetchMore={fetchMoreOwned}
-              headerClicked={headerClicked}
-            />
-          )}
-
-          {table === TABLE_NAMES.ACCOUNT_TRADES && web3 !== undefined && (
-            <MyTradesTableNew
-              rawPairs={myTrades}
-              isPairsDataLoading={isTradesPairsDataLoading}
-              canFetchMore={canFetchMoreTrades}
-              orderDirection={orderDirection}
-              orderBy={orderBy}
-              fetchMore={fetchMoreTrades}
-              headerClicked={headerClicked}
-            />
-          )}
-        </div>
-      </div>
+      {selectedView === TABLE_NAMES.ACCOUNT_STAKED_ON && web3 !== undefined && (
+        <HoldingsView selectedView={selectedView} userData={userData} />
+      )}
     </div>
   )
 }

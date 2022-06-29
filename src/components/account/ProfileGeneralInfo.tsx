@@ -19,6 +19,10 @@ import WalletIcon from '../../assets/wallet.svg'
 import WalletModal from 'components/wallet/WalletModal'
 import { useWalletStore } from 'store/walletStore'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
+import { useQuery } from 'react-query'
+import { getUserHolders } from 'actions/web2/user-market/apiUserActions'
+import HoldersSummary from './HoldersSummary'
+import { SortOptionsHomeUsersTable } from 'utils/tables'
 
 interface Props {
   userData?: any
@@ -30,6 +34,18 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
   const { jwtToken, setOnWalletConnectedCallback } = useContext(GlobalContext)
 
   const { loginByWallet } = useAuth()
+
+  const { data: userHolders } = useQuery<any>(
+    ['holders', userData?.walletAddress],
+    () =>
+      getUserHolders({
+        walletAddress: userData?.walletAddress,
+        skip: 0,
+        limit: 10,
+        orderBy: SortOptionsHomeUsersTable.STAKED.value,
+        orderDirection: 'desc',
+      })
+  )
 
   const onLoginClicked = async () => {
     if (active) {
@@ -121,10 +137,12 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               )}
 
               {userData?.bio && (
-                <div className="whitespace-pre-wrap break-words text-sm italic opacity-70 mt-1">
+                <div className="whitespace-pre-wrap break-words text-sm italic opacity-70 my-1">
                   {userData?.bio || ''}
                 </div>
               )}
+
+              <HoldersSummary holders={userHolders} userData={userData} />
             </div>
 
             {/* Links */}
@@ -393,7 +411,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               )}
 
               {/* Links */}
-              <div className="flex flex-col space-y-2 mt-8">
+              <div className="flex flex-col space-y-2 mt-8 mb-4">
                 {userData?.twitterUsername && (
                   <div className="flex items-center">
                     <div className="w-5 mr-3">
@@ -439,6 +457,8 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                   </div>
                 </div>
               </div>
+
+              <HoldersSummary holders={userHolders} userData={userData} />
             </div>
           </div>
 

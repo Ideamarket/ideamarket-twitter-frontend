@@ -5,6 +5,8 @@ export enum TABLE_NAMES {
   ACCOUNT_TRADES,
   ACCOUNT_OPINIONS,
   ACCOUNT_POSTS,
+  ACCOUNT_HOLDERS, // The wallets/users that are staked on this account
+  ACCOUNT_STAKED_ON, // The wallets/users that this account is staked on
   LISTING_PAGE_OPINIONS,
   ADD_CITATION_MODAL, // Not a table, but needed to sort data in add citation modal
 }
@@ -139,6 +141,30 @@ export const SortOptionsListingPageOpinions = {
   },
 }
 
+// Sorting options for Holders View on listing page
+export const SortOptionsAccountHolders = {
+  TOTAL_RATINGS_COUNT: {
+    id: 1,
+    value: orderByTotalRatingsCount,
+    displayName: 'Ratings',
+  },
+  STAKED: {
+    id: 2,
+    value: orderByDeposits,
+    displayName: 'Staked',
+  },
+  // WEEK_CHANGE: {
+  //   id: 3,
+  //   value: orderBy7DChange,
+  //   displayName: '7D Change',
+  // },
+  HOLDERS: {
+    id: 3,
+    value: orderByHolderCount,
+    displayName: 'Holders',
+  },
+}
+
 // Sorting options for posts table on account page
 export const SortOptionsAccountPosts = {
   COMPOSITE_RATING: {
@@ -202,6 +228,8 @@ const getSortOptionsByTable = (tableName: TABLE_NAMES) => {
       return SortOptionsListingPageOpinions
     case TABLE_NAMES.ADD_CITATION_MODAL:
       return SortOptionsAddCitationsModal
+    case TABLE_NAMES.ACCOUNT_HOLDERS:
+      return SortOptionsAccountHolders
   }
 }
 

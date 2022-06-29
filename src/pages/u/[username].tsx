@@ -37,11 +37,11 @@ const PublicProfile = () => {
   }, [finalUserData, finalUserData?.twitterUsername, wasVerificationSuccess])
 
   return (
-    <div className="min-h-screen font-inter">
+    <div className="font-inter">
       <BgBanner bgColor="bg-[#0D0D0D]" />
 
       {/* Relative and z-index important to put page above BgBanner */}
-      <div className="relative z-10 h-full pt-8 pb-5 text-white md:pt-16 md:h-[38rem]">
+      <div className="relative z-10 h-full pt-8 pb-5 text-white md:pt-16">
         <div className="mx-auto md:px-4 md:max-w-304">
           <Toaster />
           <ProfileGeneralInfo userData={finalUserData} />
