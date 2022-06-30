@@ -193,7 +193,6 @@ export default function ProfileWallet({ userData }: Props) {
   }
 
   async function ownedQueryFunction(numTokens: number, skip: number = 0) {
-    if (selectedView !== TABLE_NAMES.ACCOUNT_HOLDINGS) return []
     const finalAddress = userData?.walletAddress
 
     const { holdings } = await queryOwnedTokensMaybeMarket(
@@ -212,7 +211,6 @@ export default function ProfileWallet({ userData }: Props) {
   }
 
   async function tradesQueryFunction(numTokens: number, skip: number = 0) {
-    if (selectedView !== TABLE_NAMES.ACCOUNT_TRADES) return []
     const finalAddress = userData?.walletAddress
 
     const { trades } = await queryMyTrades(
