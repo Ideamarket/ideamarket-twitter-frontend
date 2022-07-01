@@ -45,7 +45,7 @@ export const SortOptionsHomePostsTable = {
     displayName: 'New',
   },
   LATEST_RATINGS_COUNT: {
-    id: 4,
+    id: 5,
     value: orderByLatestRatingsCount,
     displayName: '# of Ratings',
   },

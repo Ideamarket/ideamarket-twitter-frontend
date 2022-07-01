@@ -300,13 +300,13 @@ export default function TokenRow({
 
         <div className="flex justify-between items-center text-center px-3 py-4">
           {/* Market interest */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <span className="text-base text-black/[.5] font-medium">
               {formatNumberWithCommasAsThousandsSerperator(
                 Math.round(token?.marketInterest)
               )}
             </span>
-          </div>
+          </div> */}
 
           {/* Composite rating */}
           <div className="flex flex-col justify-start font-medium leading-5">

@@ -181,9 +181,6 @@ export default function Table({
       // else if (column === SortOptionsHomePostsTable.AVG_RATING.value) {
       //   onOrderByChanged(SortOptionsHomePostsTable.AVG_RATING.value, 'desc')
       // }
-      // else if (column === SortOptionsHomePostsTable.RATINGS.value) {
-      //   onOrderByChanged(SortOptionsHomePostsTable.RATINGS.value, 'desc')
-      // }
       else if (column === SortOptionsHomePostsTable.MARKET_INTEREST.value) {
         onOrderByChanged(
           SortOptionsHomePostsTable.MARKET_INTEREST.value,
@@ -196,6 +193,13 @@ export default function Table({
         )
       } else if (column === SortOptionsHomePostsTable.NEW.value) {
         onOrderByChanged(SortOptionsHomePostsTable.NEW.value, 'desc')
+      } else if (
+        column === SortOptionsHomePostsTable.LATEST_RATINGS_COUNT.value
+      ) {
+        onOrderByChanged(
+          SortOptionsHomePostsTable.LATEST_RATINGS_COUNT.value,
+          'desc'
+        )
       }
     }
   }
