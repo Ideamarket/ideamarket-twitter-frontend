@@ -169,16 +169,16 @@ export default function TokenRow({
 
           <div className="w-[55%] lg:w-[45%] h-max flex items-center">
             {/* Market Interest */}
-            <div className="invisible w-[18.3%] lg:w-[15%] grow pr-2">
+            {/* <div className="invisible w-[5%] lg:w-[5%] grow pr-2">
               <div className="mt-0.5 font-medium">
                 {formatNumberWithCommasAsThousandsSerperator(
                   Math.round(token?.marketInterest)
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* Composite Rating */}
-            <div className="w-[18.3%] lg:w-[15%] pl-12 lg:pl-0 grow">
+            <div className="w-[18.3%] lg:w-[15%] pl-10 grow">
               <span
                 className={classNames(
                   getIMORatingColors(
@@ -203,13 +203,13 @@ export default function TokenRow({
             </div> */}
 
             {/* latestRatingsCount */}
-            {/* <div className="w-[13.75%] lg:w-[11.25%] grow">
+            <div className="w-[18.3%] lg:w-[15%] grow">
               <div className="flex items-center font-medium text-lg text-black">
                 {formatNumberWithCommasAsThousandsSerperator(
                   token?.latestRatingsCount
                 )}
               </div>
-            </div> */}
+            </div>
 
             {/* Rate Button */}
             <div className="w-[18.3%] lg:w-[15%] grow">

@@ -187,7 +187,7 @@ const OverviewFiltersMobile = ({
             </Tooltip>
           </div>
 
-          <div className="w-1/4 break-all">RATINGS</div>
+          <div className="w-1/4 break-all"># of RATINGS</div>
 
           <div className="w-1/4"></div>
         </div>

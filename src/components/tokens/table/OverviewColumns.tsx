@@ -80,68 +80,70 @@ export const OverviewColumns = ({
     switch (column.value) {
       case 'name':
         return (
-          <div className="flex items-center space-x-2">
-            <div className="flex w-52">
+          <div className="flex items-center flex-wrap">
+            <div className="flex w-52 mr-2">
               <OverviewSearchbar
                 onNameSearchChanged={onNameSearchChanged}
                 bgColor="bg-white"
               />
             </div>
 
-            <div
-              onClick={() => setIsSortingDropdownOpen(!isSortingDropdownOpen)}
-              className="relative w-auto h-9 flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
-            >
-              <span className="text-xs mr-1 text-sm text-black/[.5] font-semibold dark:text-white whitespace-nowrap">
-                Sort by:
-              </span>
-              <span className="text-xs text-blue-500 font-semibold flex items-center whitespace-nowrap">
-                {getSortOptionDisplayNameByValue(orderBy, selectedView)}
-              </span>
-              <span>
-                <ChevronDownIcon className="h-4" />
-              </span>
-
-              {isSortingDropdownOpen && (
-                <DropdownButtons
-                  container={ref}
-                  filters={Object.values(
-                    selectedView === TABLE_NAMES.HOME_POSTS
-                      ? SortOptionsHomePostsTable
-                      : SortOptionsHomeUsersTable
-                  )}
-                  selectedOptions={new Set([orderBy])}
-                  toggleOption={columnClicked}
-                  width="w-[10rem]"
-                />
-              )}
-            </div>
-
-            {selectedView === TABLE_NAMES.HOME_POSTS && (
+            <div className="flex items-center space-x-2">
               <div
-                onClick={() =>
-                  setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
-                }
-                className="relative w-28 h-9 flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
+                onClick={() => setIsSortingDropdownOpen(!isSortingDropdownOpen)}
+                className="relative w-auto h-9 flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
               >
-                <span className="text-xs text-blue-500 font-semibold flex items-center">
-                  {getTimeFilterDisplayNameByValue(timeFilter)}
+                <span className="text-xs mr-1 text-sm text-black/[.5] font-semibold dark:text-white whitespace-nowrap">
+                  Sort by:
+                </span>
+                <span className="text-xs text-blue-500 font-semibold flex items-center whitespace-nowrap">
+                  {getSortOptionDisplayNameByValue(orderBy, selectedView)}
                 </span>
                 <span>
                   <ChevronDownIcon className="h-4" />
                 </span>
 
-                {isTimeFilterDropdownOpen && (
+                {isSortingDropdownOpen && (
                   <DropdownButtons
                     container={ref}
-                    filters={Object.values(TimeFilterOptions)}
-                    selectedOptions={new Set([timeFilter])}
-                    toggleOption={setTimeFilter}
+                    filters={Object.values(
+                      selectedView === TABLE_NAMES.HOME_POSTS
+                        ? SortOptionsHomePostsTable
+                        : SortOptionsHomeUsersTable
+                    )}
+                    selectedOptions={new Set([orderBy])}
+                    toggleOption={columnClicked}
                     width="w-[10rem]"
                   />
                 )}
               </div>
-            )}
+
+              {selectedView === TABLE_NAMES.HOME_POSTS && (
+                <div
+                  onClick={() =>
+                    setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
+                  }
+                  className="relative w-28 h-9 flex justify-center items-center px-2 py-1 border rounded-md normal-case cursor-pointer"
+                >
+                  <span className="text-xs text-blue-500 font-semibold flex items-center">
+                    {getTimeFilterDisplayNameByValue(timeFilter)}
+                  </span>
+                  <span>
+                    <ChevronDownIcon className="h-4" />
+                  </span>
+
+                  {isTimeFilterDropdownOpen && (
+                    <DropdownButtons
+                      container={ref}
+                      filters={Object.values(TimeFilterOptions)}
+                      selectedOptions={new Set([timeFilter])}
+                      toggleOption={setTimeFilter}
+                      width="w-[10rem]"
+                    />
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )
       case 'income':
@@ -220,15 +222,15 @@ export const OverviewColumns = ({
     if (selectedView === TABLE_NAMES.HOME_POSTS) {
       switch (column.value) {
         case 'name':
-          return 'w-[45%] lg:w-[55%] pl-6 pr-24'
+          return 'w-[45%] lg:w-[55%] pl-6 pr-32'
         case SortOptionsHomePostsTable.COMPOSITE_RATING.value:
-          return 'w-[18.3%] lg:w-[15%] pl-12 lg:pl-0'
+          return 'w-[18.3%] lg:w-[15%] pl-10'
         // case SortOptionsHomePostsTable.AVG_RATING.value:
         //   return 'w-[11%] lg:w-[9%]'
-        case SortOptionsHomePostsTable.MARKET_INTEREST.value:
+        // case SortOptionsHomePostsTable.MARKET_INTEREST.value:
+        //   return 'w-[5%] lg:w-[5%]'
+        case SortOptionsHomePostsTable.LATEST_RATINGS_COUNT.value:
           return 'w-[18.3%] lg:w-[15%]'
-        // case SortOptionsHomePostsTable.RATINGS.value:
-        //   return 'w-[13.75%] lg:w-[11.25%]'
         case 'txButtons':
           return 'w-[18.3%] lg:w-[15%]'
         default:

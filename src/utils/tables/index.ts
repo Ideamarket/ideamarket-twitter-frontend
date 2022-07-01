@@ -44,11 +44,11 @@ export const SortOptionsHomePostsTable = {
     value: orderByPostedAt,
     displayName: 'New',
   },
-  // RATINGS: {
-  //   id: 4,
-  //   value: orderByLatestRatingsCount,
-  //   displayName: 'Ratings',
-  // },
+  LATEST_RATINGS_COUNT: {
+    id: 4,
+    value: orderByLatestRatingsCount,
+    displayName: '# of Ratings',
+  },
 }
 
 export const SortOptionsAddCitationsModal = {
