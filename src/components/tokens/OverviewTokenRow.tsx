@@ -105,7 +105,7 @@ export default function TokenRow({
                 </div> */}
 
                 <ListingContent
-                  ideaToken={token}
+                  imPost={token}
                   page="HomePage"
                   urlMetaData={urlMetaData}
                   useMetaData={
@@ -289,7 +289,7 @@ export default function TokenRow({
           )}
 
           <ListingContent
-            ideaToken={token}
+            imPost={token}
             page="HomePage"
             urlMetaData={urlMetaData}
             useMetaData={

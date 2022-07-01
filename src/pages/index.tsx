@@ -91,11 +91,11 @@ const Home = ({ urlMarkets }: Props) => {
 
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, { ideaToken: token, urlMetaData }, onClose)
+        ModalService.open(RateModal, { imPost: token, urlMetaData }, onClose)
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(RateModal, { ideaToken: token, urlMetaData }, onClose)
+      ModalService.open(RateModal, { imPost: token, urlMetaData }, onClose)
     }
   }
 
@@ -180,7 +180,7 @@ const Home = ({ urlMarkets }: Props) => {
         <HomeHeader />
 
         {/* 2 buttons: Posts and Users */}
-        <div className="flex items-center space-x-3 mx-2 md:mx-auto md:px-4 mb-5 pt-10 md:max-w-304 transform -translate-y-40">
+        <div className="flex items-center space-x-3 mx-2 md:mx-auto md:px-4 mb-5 pt-6 md:max-w-304 transform -translate-y-40">
           <button
             onClick={() => {
               onOrderByChanged(

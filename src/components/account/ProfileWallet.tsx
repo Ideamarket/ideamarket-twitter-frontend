@@ -243,11 +243,11 @@ export default function ProfileWallet({ userData }: Props) {
   const onRateClicked = (token: IdeaToken, urlMetaData: any) => {
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, { ideaToken: token, urlMetaData })
+        ModalService.open(RateModal, { imPost: token, urlMetaData })
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(RateModal, { ideaToken: token, urlMetaData })
+      ModalService.open(RateModal, { imPost: token, urlMetaData })
     }
   }
 

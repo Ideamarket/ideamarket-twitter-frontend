@@ -72,11 +72,11 @@ const HomeCards = () => {
 
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, { ideaToken: token, urlMetaData }, onClose)
+        ModalService.open(RateModal, { imPost: token, urlMetaData }, onClose)
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(RateModal, { ideaToken: token, urlMetaData }, onClose)
+      ModalService.open(RateModal, { imPost: token, urlMetaData }, onClose)
     }
   }
 

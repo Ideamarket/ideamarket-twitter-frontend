@@ -9,25 +9,25 @@ import { urlify } from 'utils/display/DisplayUtils'
 import { getListingTypeFromIDTURL, LISTING_TYPE } from './utils/ListingUtils'
 
 const ListingContent = ({
-  ideaToken,
+  imPost,
   page,
   urlMetaData,
   useMetaData = false,
 }: {
-  ideaToken: any
+  imPost: any
   page: string // The page this component is being used on
   urlMetaData?: any
   useMetaData?: boolean // Show meta data from URL instead of anything else
 }) => {
-  const listingType = getListingTypeFromIDTURL(ideaToken?.url)
+  const listingType = getListingTypeFromIDTURL(imPost?.url)
   const showMetaData =
     (useMetaData || listingType === LISTING_TYPE.GENERAL_URL) &&
     urlMetaData &&
     urlMetaData?.ogImage
 
-  const marketSpecifics = getMarketSpecificsByMarketName(ideaToken?.marketName)
+  const marketSpecifics = getMarketSpecificsByMarketName(imPost?.marketName)
   const twitterUsername = marketSpecifics?.getTokenNameURLRepresentation(
-    ideaToken?.name
+    imPost?.name
   )
 
   // In order to load NEW tweet embed in dynamically, need to reinit twitter API when isExpanded changes
@@ -53,13 +53,11 @@ const ListingContent = ({
   const generalURLDisplayName =
     urlMetaData && urlMetaData?.ogTitle
       ? urlMetaData?.ogTitle
-      : marketSpecifics?.convertUserInputToTokenName(ideaToken?.url)
+      : marketSpecifics?.convertUserInputToTokenName(imPost?.url)
 
   // const showFullContent = page === 'ListingPage'
-  // const cutOffContent = !showFullContent && ideaToken?.content?.length > 280
-  const content = true
-    ? ideaToken?.content
-    : ideaToken?.content.slice(0, 280) + '...'
+  // const cutOffContent = !showFullContent && imPost?.content?.length > 280
+  const content = true ? imPost?.content : imPost?.content.slice(0, 280) + '...'
 
   return (
     <div
@@ -74,7 +72,7 @@ const ListingContent = ({
           {generalURLDisplayName && (
             <div>
               <a
-                href={`/post/${ideaToken?.tokenID}`}
+                href={`/post/${imPost?.tokenID}`}
                 onClick={(event) => event.stopPropagation()}
                 className="w-full text-xs md:text-base font-bold hover:underline"
               >
@@ -89,19 +87,19 @@ const ListingContent = ({
           )}
           {/* Display the URL */}
           <a
-            href={ideaToken?.url}
+            href={imPost?.url}
             className="text-xs md:text-sm text-brand-blue hover:underline relative z-50"
             target="_blank"
             rel="noopener noreferrer"
           >
-            {ideaToken?.url.substr(
+            {imPost?.url.substr(
               0,
-              ideaToken?.url.length > 50 ? 50 : ideaToken?.url.length
-            ) + (ideaToken?.url.length > 50 ? '...' : '')}
+              imPost?.url.length > 50 ? 50 : imPost?.url.length
+            ) + (imPost?.url.length > 50 ? '...' : '')}
           </a>
 
           <a
-            href={`/post/${ideaToken?.tokenID}`}
+            href={`/post/${imPost?.tokenID}`}
             className="cursor-pointer"
             target="_blank"
             rel="noopener noreferrer"
@@ -128,7 +126,7 @@ const ListingContent = ({
 
           {/* {cutOffContent && (
             <A
-              href={`/post/${ideaToken?.tokenID}`}
+              href={`/post/${imPost?.tokenID}`}
               className="absolute bottom-0 right-0 text-blue-500 z-[60]"
             >
               (More...)
@@ -139,7 +137,7 @@ const ListingContent = ({
 
       {/* Wikipedia listing content */}
       {!showMetaData && listingType === LISTING_TYPE.WIKI && (
-        <WikiContent wikiTitle={ideaToken?.name} />
+        <WikiContent wikiTitle={imPost?.name} />
       )}
 
       {/* Twitter profile listing content */}
@@ -154,7 +152,7 @@ const ListingContent = ({
       {!showMetaData && listingType === LISTING_TYPE.TWEET && (
         <div className="w-full -mt-3">
           <blockquote className="twitter-tweet">
-            <a href={ideaToken?.url}>Loading tweet...</a>
+            <a href={imPost?.url}>Loading tweet...</a>
           </blockquote>
         </div>
       )}
@@ -178,15 +176,15 @@ const ListingContent = ({
           )}
           {/* Display the URL */}
           <a
-            href={ideaToken?.url}
+            href={imPost?.url}
             className="text-xs md:text-sm text-brand-blue hover:underline relative z-50"
             target="_blank"
             rel="noopener noreferrer"
           >
-            {ideaToken?.url.substr(
+            {imPost?.url.substr(
               0,
-              ideaToken?.url.length > 50 ? 50 : ideaToken?.url.length
-            ) + (ideaToken?.url.length > 50 ? '...' : '')}
+              imPost?.url.length > 50 ? 50 : imPost?.url.length
+            ) + (imPost?.url.length > 50 ? '...' : '')}
           </a>
           <a
             className="cursor-pointer"

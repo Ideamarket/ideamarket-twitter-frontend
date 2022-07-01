@@ -83,11 +83,11 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const onRateClicked = (token: IdeamarketPost, urlMetaData: any) => {
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, { ideaToken: token, urlMetaData }, refetch)
+        ModalService.open(RateModal, { imPost: token, urlMetaData }, refetch)
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(RateModal, { ideaToken: token, urlMetaData }, refetch)
+      ModalService.open(RateModal, { imPost: token, urlMetaData }, refetch)
     }
   }
 
@@ -149,7 +149,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
               )}
 
               <ListingContent
-                ideaToken={token}
+                imPost={token}
                 page="ListingPage"
                 urlMetaData={urlMetaData}
                 useMetaData={false}
@@ -255,7 +255,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
               )}
 
               <ListingContent
-                ideaToken={token}
+                imPost={token}
                 page="ListingPage"
                 urlMetaData={urlMetaData}
                 useMetaData={false}

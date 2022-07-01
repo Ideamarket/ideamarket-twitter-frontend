@@ -136,7 +136,7 @@ const IMPostCardView = ({
             <div className="rounded-xl border p-4 w-[30rem]" key={pInd}>
               <div className="w-full">
                 <ListingContent
-                  ideaToken={imPost}
+                  imPost={imPost}
                   page="HomePage"
                   urlMetaData={null}
                   useMetaData={false}
