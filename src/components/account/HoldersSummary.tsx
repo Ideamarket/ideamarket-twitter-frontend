@@ -45,7 +45,7 @@ const HoldersSummary = ({ holders, userData }: Props) => {
             )}`}</A>
           )}
           {isMoreThan3Holders && (
-            <A className="hover:underline opacity-90 cursor-pointer">{`and ${
+            <A className="opacity-90 cursor-pointer">{`and ${
               userData?.holders - 3
             } others...`}</A>
           )}

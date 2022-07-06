@@ -20,12 +20,15 @@ const HomeHeader = () => {
             <span className="inline-block text-brand-blue"> on chain.</span>
           </h2>
 
-          <p className="mt-8 text-sm md:text-lg">
+          <p className="mt-8 text-sm">
             <span className="inline-block mr-1">
-              Express your opinion on-chain
+              Rate and cite posts to build a
             </span>
             <span className="inline-block mr-1">
-              and give overlooked information the credibility it deserves.{' '}
+              network of credible opinions on every topic.
+            </span>
+            <span className="inline-block mr-1">
+              Posts are NFTs the author can sell.{' '}
             </span>
             <A
               href="https://docs.ideamarket.io"
@@ -52,10 +55,11 @@ const HomeHeader = () => {
 
           <p className="mt-8 md:px-28 text-sm md:text-lg">
             <span className="inline-block mr-1">
-              Express your opinion on-chain
+              Rate and cite posts to build a network of credible opinions on
+              every topic.
             </span>
             <span className="inline-block mr-1">
-              and give overlooked information the credibility it deserves.{' '}
+              Posts are NFTs the author can sell.{' '}
             </span>
             <A
               href="https://docs.ideamarket.io"
