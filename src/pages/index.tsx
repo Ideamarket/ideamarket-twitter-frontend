@@ -45,7 +45,7 @@ const Home = ({ urlMarkets }: Props) => {
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [selectedCategories, setSelectedCategories] = useState([])
   const [selectedView, setSelectedView] = useState(TABLE_NAMES.HOME_POSTS)
-  const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ALL_TIME)
+  const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ONE_WEEK)
 
   const visibleColumns = getVisibleColumns(selectedColumns)
 

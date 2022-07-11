@@ -6,7 +6,7 @@ import { AIRDROP_TYPES } from 'types/airdropTypes'
 export const getNavbarConfig = (user: any) => ({
   menu: [
     {
-      name: 'Start',
+      name: 'About',
       subMenu: [
         {
           id: 1,
