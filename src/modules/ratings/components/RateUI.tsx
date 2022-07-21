@@ -463,6 +463,7 @@ export default function RateUI({
                     <div
                       onClick={() =>
                         ModalService.open(AddCitationModal, {
+                          rootPost: imPost,
                           citations,
                           inFavorArray,
                           selectedPosts,
@@ -586,6 +587,7 @@ export default function RateUI({
                   <div
                     onClick={() =>
                       ModalService.open(AddCitationModal, {
+                        rootPost: imPost,
                         citations,
                         inFavorArray,
                         selectedPosts,
@@ -599,22 +601,6 @@ export default function RateUI({
                     <PlusCircleIcon className="text-black/[.4] w-6 h-6" />
                   </div>
                 )}
-
-                {/* <button
-                onClick={() =>
-                  ModalService.open(AddCitationModal, {
-                    citations,
-                    inFavorArray,
-                    selectedPosts,
-                    setCitations,
-                    setInFavorArray,
-                    setSelectedPosts,
-                  })
-                }
-                className="py-4 mt-4 text-lg font-bold rounded-2xl w-full bg-blue-600 hover:bg-blue-800 text-white"
-              >
-                <span>Add Citation</span>
-              </button> */}
               </>
             )}
 
