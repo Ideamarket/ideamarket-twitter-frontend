@@ -14,7 +14,7 @@ const HomeHeader = () => {
     <div className="pb-48">
       {/* Desktop and tablet */}
       <div className="hidden md:flex space-x-10 max-w-304 md:mx-auto md:px-4">
-        <div className="w-[55%] pt-14 text-center text-white text-right font-inter dark:text-gray-200">
+        <div className="w-[50%] pt-14 text-center text-white text-right font-inter dark:text-gray-200">
           <h2 className="text-3xl lg:text-6xl font-gilroy-bold">
             The internet's{' '}
             <span className="inline-block text-brand-blue"> crazyboard</span>
@@ -40,7 +40,7 @@ const HomeHeader = () => {
           </p>
         </div>
 
-        <div className="w-[45%] pt-14 justify-self-end">
+        <div className="w-[50%] pt-14 justify-self-start">
           <RateUI imPost={imPost} isFullyFunctional={false} />
         </div>
       </div>
