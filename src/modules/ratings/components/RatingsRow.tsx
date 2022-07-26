@@ -105,7 +105,7 @@ export default function RatingsRow({
                     className="rounded-full"
                     src={
                       opinion?.minterToken?.profilePhoto ||
-                      '/DefaultProfilePicture.png'
+                      '/default-profile-pic.png'
                     }
                     alt=""
                     layout="fill"
@@ -262,7 +262,7 @@ export default function RatingsRow({
                   className="rounded-full"
                   src={
                     opinion?.minterToken?.profilePhoto ||
-                    '/DefaultProfilePicture.png'
+                    '/default-profile-pic.png'
                   }
                   alt=""
                   layout="fill"

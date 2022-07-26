@@ -51,7 +51,7 @@ export default function HomeUsersRow({
                 <div className="relative rounded-full w-6 h-6">
                   <Image
                     className="rounded-full"
-                    src={token?.profilePhoto || '/DefaultProfilePicture.png'}
+                    src={token?.profilePhoto || '/default-profile-pic.png'}
                     alt=""
                     layout="fill"
                     objectFit="cover"
@@ -156,7 +156,7 @@ export default function HomeUsersRow({
             <div className="relative rounded-full w-6 h-6">
               <Image
                 className="rounded-full"
-                src={token?.profilePhoto || '/DefaultProfilePicture.png'}
+                src={token?.profilePhoto || '/default-profile-pic.png'}
                 alt=""
                 layout="fill"
                 objectFit="cover"

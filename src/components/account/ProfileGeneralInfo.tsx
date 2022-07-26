@@ -122,7 +122,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
           <div className="w-3/4 bg-black border border-[#1d1d1d] flex items-center p-4 rounded-lg">
             <div className="relative w-20 h-20 rounded-full bg-gray-400 overflow-hidden">
               <Image
-                src={userData?.profilePhoto || '/DefaultProfilePicture.png'}
+                src={userData?.profilePhoto || '/default-profile-pic.png'}
                 alt="Profile photo"
                 layout="fill"
                 objectFit="cover"
@@ -257,7 +257,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
           <div className="w-3/4 bg-black border border-[#1d1d1d] flex items-start p-4 rounded-lg">
             <div className="relative w-20 h-20 rounded-full bg-gray-400 overflow-hidden">
               <Image
-                src={userData?.profilePhoto || '/DefaultProfilePicture.png'}
+                src={userData?.profilePhoto || '/default-profile-pic.png'}
                 alt="Profile photo"
                 layout="fill"
                 objectFit="cover"
@@ -390,7 +390,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
           <div className="w-full bg-black border border-[#1d1d1d] flex flex-col items-start p-4 rounded-lg">
             <div className="relative w-20 h-20 mx-auto rounded-full bg-gray-400 overflow-hidden">
               <Image
-                src={userData?.profilePhoto || '/DefaultProfilePicture.png'}
+                src={userData?.profilePhoto || '/default-profile-pic.png'}
                 alt="Profile photo"
                 layout="fill"
                 objectFit="cover"

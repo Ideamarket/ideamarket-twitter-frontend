@@ -481,7 +481,7 @@ export default function AddCitationModal({
                                   className="rounded-full"
                                   src={
                                     post?.minterToken?.profilePhoto ||
-                                    '/DefaultProfilePicture.png'
+                                    '/default-profile-pic.png'
                                   }
                                   alt=""
                                   layout="fill"
@@ -568,7 +568,7 @@ export default function AddCitationModal({
                                   className="rounded-full"
                                   src={
                                     post?.minterToken?.profilePhoto ||
-                                    '/DefaultProfilePicture.png'
+                                    '/default-profile-pic.png'
                                   }
                                   alt=""
                                   layout="fill"
@@ -648,7 +648,7 @@ export default function AddCitationModal({
                                 className="rounded-full"
                                 src={
                                   post?.minterToken?.profilePhoto ||
-                                  '/DefaultProfilePicture.png'
+                                  '/default-profile-pic.png'
                                 }
                                 alt=""
                                 layout="fill"
@@ -757,7 +757,7 @@ export default function AddCitationModal({
                                   className="rounded-full"
                                   src={
                                     post?.minterToken?.profilePhoto ||
-                                    '/DefaultProfilePicture.png'
+                                    '/default-profile-pic.png'
                                   }
                                   alt=""
                                   layout="fill"
@@ -844,7 +844,7 @@ export default function AddCitationModal({
                                   className="rounded-full"
                                   src={
                                     post?.minterToken?.profilePhoto ||
-                                    '/DefaultProfilePicture.png'
+                                    '/default-profile-pic.png'
                                   }
                                   alt=""
                                   layout="fill"
@@ -924,7 +924,7 @@ export default function AddCitationModal({
                                 className="rounded-full"
                                 src={
                                   post?.minterToken?.profilePhoto ||
-                                  '/DefaultProfilePicture.png'
+                                  '/default-profile-pic.png'
                                 }
                                 alt=""
                                 layout="fill"
@@ -1031,7 +1031,7 @@ export default function AddCitationModal({
                                   className="rounded-full"
                                   src={
                                     opinion?.minterToken?.profilePhoto ||
-                                    '/DefaultProfilePicture.png'
+                                    '/default-profile-pic.png'
                                   }
                                   alt=""
                                   layout="fill"
@@ -1122,7 +1122,7 @@ export default function AddCitationModal({
                                   className="rounded-full"
                                   src={
                                     opinion?.minterToken?.profilePhoto ||
-                                    '/DefaultProfilePicture.png'
+                                    '/default-profile-pic.png'
                                   }
                                   alt=""
                                   layout="fill"
@@ -1202,7 +1202,7 @@ export default function AddCitationModal({
                                 className="rounded-full"
                                 src={
                                   opinion?.minterToken?.profilePhoto ||
-                                  '/DefaultProfilePicture.png'
+                                  '/default-profile-pic.png'
                                 }
                                 alt=""
                                 layout="fill"
@@ -1309,7 +1309,7 @@ export default function AddCitationModal({
                                   className="rounded-full"
                                   src={
                                     opinion?.minterToken?.profilePhoto ||
-                                    '/DefaultProfilePicture.png'
+                                    '/default-profile-pic.png'
                                   }
                                   alt=""
                                   layout="fill"
@@ -1400,7 +1400,7 @@ export default function AddCitationModal({
                                   className="rounded-full"
                                   src={
                                     opinion?.minterToken?.profilePhoto ||
-                                    '/DefaultProfilePicture.png'
+                                    '/default-profile-pic.png'
                                   }
                                   alt=""
                                   layout="fill"
@@ -1480,7 +1480,7 @@ export default function AddCitationModal({
                                 className="rounded-full"
                                 src={
                                   opinion?.minterToken?.profilePhoto ||
-                                  '/DefaultProfilePicture.png'
+                                  '/default-profile-pic.png'
                                 }
                                 alt=""
                                 layout="fill"

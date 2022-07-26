@@ -1,53 +1,71 @@
-import { DefaultLayout } from 'components'
-import React, { ReactElement, useContext, useEffect, useState } from 'react'
+import { DefaultLayout, Tooltip } from 'components'
+import React, { ReactElement, useContext, useRef, useState } from 'react'
 import { IdeaToken } from 'store/ideaMarketsStore'
-import { Table, WalletModal } from 'components'
+import { WalletModal } from 'components'
 import ModalService from 'components/modals/ModalService'
 
 import { useWalletStore } from 'store/walletStore'
-import { ScrollToTop } from 'components/tokens/ScrollToTop'
 import { NextSeo } from 'next-seo'
-import { OverviewFilters } from 'components/tokens/OverviewFilters'
 import { GlobalContext } from 'pages/_app'
-import {
-  getVisibleColumns,
-  startingOptionalColumns,
-} from 'components/home/utils'
-import { HomeHeader } from 'components'
+import { startingOptionalColumns } from 'components/home/utils'
 import { CheckboxFilters } from 'components/tokens/utils/OverviewUtils'
 import RateModal from 'components/trade/RateModal'
 import {
+  getTimeFilterDisplayNameByValue,
   HomeUsersTableColumns,
   SortOptionsHomePostsTable,
   SortOptionsHomeUsersTable,
-  TABLE_NAMES,
+  TimeFilterOptions,
   TIME_FILTER,
 } from 'utils/tables'
-import { MenuAlt2Icon, UserIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
 import HomeUsersTable from 'modules/user-market/components/HomeUsersTable'
 import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
-import BgBanner from 'components/BgBanner'
+import IMPostsView from 'modules/posts/components/HomePage/IMPostsView'
+import ToggleSwitch from 'components/ToggleSwitch'
+import IMPostsViewMobile from 'modules/posts/components/HomePage/IMPostsViewMobile'
+import useOnClickOutside from 'utils/useOnClickOutside'
+import { ChevronDownIcon } from '@heroicons/react/outline'
+import DropdownButtons from 'components/dropdowns/DropdownButtons'
+import { OverviewSearchbar } from 'components/tokens/OverviewSearchbar'
+import SelectCategoriesModal from 'modules/posts/components/SelectCategoriesModal'
+import Image from 'next/image'
 
-type Props = { urlMarkets?: string[] }
+export enum HOME_PAGE_VIEWS {
+  POSTS,
+  USERS,
+}
 
-const Home = ({ urlMarkets }: Props) => {
+const Home = () => {
   // After trade or list success, the token data needs to be refetched. This toggle does that.
   const [tradeOrListSuccessToggle, setTradeOrListSuccessToggle] =
     useState(false)
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
-  const [selectedColumns, setSelectedColumns] = useState(new Set([]))
   const [nameSearch, setNameSearch] = useState('')
   const [orderBy, setOrderBy] = useState(
     SortOptionsHomePostsTable.MARKET_INTEREST.value
   )
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [selectedCategories, setSelectedCategories] = useState([])
-  const [selectedView, setSelectedView] = useState(TABLE_NAMES.HOME_POSTS)
-  const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ALL_TIME)
+  const [selectedView, setSelectedView] = useState(HOME_PAGE_VIEWS.POSTS)
+  const [isAdvancedView, setIsAdvancedView] = useState(true)
+  const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ONE_WEEK)
 
-  const visibleColumns = getVisibleColumns(selectedColumns)
+  const [isTimeFilterDropdownOpen, setIsTimeFilterDropdownOpen] =
+    useState(false)
+  const [isMobileTimeFilterDropdownOpen, setIsMobileTimeFilterDropdownOpen] =
+    useState(false)
+  const desktopRef = useRef()
+  const mobileRef = useRef()
+  useOnClickOutside(desktopRef, () => {
+    setIsTimeFilterDropdownOpen(false)
+  })
+  useOnClickOutside(mobileRef, () => {
+    setIsMobileTimeFilterDropdownOpen(false)
+  })
+
+  const [activeOverlayPostID, setActiveOverlayPostID] = useState(null)
 
   if (
     startingOptionalColumns.length ===
@@ -58,23 +76,9 @@ const Home = ({ urlMarkets }: Props) => {
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
-  useEffect(() => {
-    // TODO: remove this once WIKI and MINDS no longer only default selected
-    if (localStorage.getItem('clearStorage') !== '8') {
-      localStorage.clear()
-      localStorage.setItem('clearStorage', '8')
-    }
-
-    const storedColumns = JSON.parse(localStorage.getItem('STORED_COLUMNS'))
-
-    const initialColumns = storedColumns || startingOptionalColumns
-    setSelectedColumns(new Set(initialColumns))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   const onNameSearchChanged = (nameSearch) => {
     setOrderBy(
-      selectedView === TABLE_NAMES.HOME_POSTS
+      selectedView === HOME_PAGE_VIEWS.POSTS
         ? SortOptionsHomePostsTable.MARKET_INTEREST.value
         : SortOptionsHomeUsersTable.STAKED.value
     )
@@ -120,39 +124,17 @@ const Home = ({ urlMarkets }: Props) => {
     }
   }
 
-  const onColumnChanged = (columns) => {
-    localStorage.setItem('STORED_COLUMNS', JSON.stringify([...columns]))
-    setSelectedColumns(columns)
-  }
-
-  const overviewFiltersProps = {
-    orderBy,
-    selectedColumns,
-    isStarredFilterActive,
-    selectedCategories,
-    selectedView,
-    timeFilter,
-    setOrderBy,
-    onColumnChanged,
-    onNameSearchChanged,
-    setIsStarredFilterActive,
-    setSelectedCategories,
-    setTimeFilter,
-  }
-
   const tableProps = {
     nameSearch,
     orderBy,
     orderDirection,
     isStarredFilterActive,
     columnData:
-      selectedView === TABLE_NAMES.HOME_POSTS
-        ? visibleColumns
-        : HomeUsersTableColumns,
+      selectedView === HOME_PAGE_VIEWS.POSTS ? null : HomeUsersTableColumns,
     selectedCategories,
     selectedView,
     timeFilter,
-    getColumn: (column) => selectedColumns.has(column),
+    getColumn: (column) => null,
     onOrderByChanged,
     onRateClicked,
     onStakeClicked,
@@ -162,79 +144,358 @@ const Home = ({ urlMarkets }: Props) => {
     onNameSearchChanged,
     setTimeFilter,
   }
+
   return (
     <>
       <NextSeo title="Home" />
 
-      <BgBanner
-        bgColor={
-          selectedView === TABLE_NAMES.HOME_POSTS
-            ? 'bg-gradient-to-b from-[#02194D] to-[#011032]'
-            : 'bg-gradient-to-b from-[#020D27] to-[#020A1B]'
-        }
-        height="h-[36rem]"
-      />
+      {/* {activeOverlayPostID && <IMPostOverlay postID={activeOverlayPostID} />} */}
 
-      {/* Relative and z-index important to put page above BgBanner */}
-      <div className="relative z-10">
-        <HomeHeader />
+      {/* Desktop and tablet */}
+      <div className="hidden md:block w-full mt-10">
+        {/* Top section with buttons */}
+        <div className="flex flex-wrap items-center mx-20 pb-6">
+          {/* Posts and Users buttons */}
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => {
+                onOrderByChanged(
+                  SortOptionsHomePostsTable.MARKET_INTEREST.value,
+                  'desc'
+                )
+                setSelectedView(HOME_PAGE_VIEWS.POSTS)
+              }}
+              className={classNames(
+                selectedView === HOME_PAGE_VIEWS.POSTS
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-black/[.05] text-black/[.25]',
+                'px-4 py-2 font-bold text-2xl rounded-lg flex items-center space-x-2'
+              )}
+            >
+              <div>Posts</div>
+              <div className="relative w-8 h-8">
+                <Image src={'/PostsIcon.svg'} alt="posts-icon" layout="fill" />
+              </div>
+            </button>
 
-        {/* 2 buttons: Posts and Users */}
-        <div className="flex items-center space-x-3 mx-2 md:mx-auto md:px-4 mb-5 pt-6 md:max-w-304 transform -translate-y-40">
-          <button
-            onClick={() => {
-              onOrderByChanged(
-                SortOptionsHomePostsTable.MARKET_INTEREST.value,
-                'desc'
-              )
-              setSelectedView(TABLE_NAMES.HOME_POSTS)
-            }}
-            className={classNames(
-              selectedView === TABLE_NAMES.HOME_POSTS
-                ? 'bg-white/[.1]'
-                : 'hover:bg-white/[.05] opacity-50',
-              'w-1/2 h-20 px-6 py-3 border border-white/[.2] rounded-xl text-white text-left'
+            <button
+              onClick={() => {
+                onOrderByChanged(SortOptionsHomeUsersTable.STAKED.value, 'desc')
+                setSelectedView(HOME_PAGE_VIEWS.USERS)
+              }}
+              className={classNames(
+                selectedView === HOME_PAGE_VIEWS.USERS
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-black/[.05] text-black/[.25]',
+                'px-4 py-2 font-bold text-2xl rounded-lg flex items-center space-x-2'
+              )}
+            >
+              <div>Users</div>
+              <div className="relative w-8 h-8">
+                <Image src={'/UsersIcon.svg'} alt="users-icon" layout="fill" />
+              </div>
+            </button>
+          </div>
+
+          <div className="flex items-center ml-auto">
+            {/* Desktop view of 2 elements below */}
+            {selectedView === HOME_PAGE_VIEWS.POSTS && (
+              <div className="flex items-center mx-4">
+                {/* Left */}
+                <div className="flex items-center space-x-3 pr-2 text-xs">
+                  <button
+                    onClick={() =>
+                      setOrderBy(
+                        SortOptionsHomePostsTable.MARKET_INTEREST.value
+                      )
+                    }
+                    className={classNames(
+                      orderBy ===
+                        SortOptionsHomePostsTable.MARKET_INTEREST.value
+                        ? 'bg-blue-100 text-blue-600'
+                        : 'text-black',
+                      'px-3 py-2 font-bold rounded-2xl border'
+                    )}
+                  >
+                    Controversial
+                  </button>
+                  <button
+                    onClick={() =>
+                      setOrderBy(SortOptionsHomePostsTable.NEW.value)
+                    }
+                    className={classNames(
+                      orderBy === SortOptionsHomePostsTable.NEW.value
+                        ? 'bg-blue-100 text-blue-600'
+                        : 'text-black',
+                      'px-3 py-2 font-bold rounded-2xl border'
+                    )}
+                  >
+                    New
+                  </button>
+                </div>
+
+                {/* Right */}
+                <div className="flex justify-between items-center space-x-3 pl-2 border-l text-xs">
+                  <button
+                    onClick={(e) => {
+                      setIsAdvancedView(!isAdvancedView)
+                      e.preventDefault()
+                    }}
+                    className={classNames(
+                      isAdvancedView
+                        ? 'bg-blue-100 text-blue-600'
+                        : 'text-black',
+                      'flex items-center px-3 py-2 font-bold rounded-2xl border z-50'
+                    )}
+                  >
+                    <div>Advanced View</div>
+                    <ToggleSwitch
+                      isOn={isAdvancedView}
+                      handleChange={(e) => setIsAdvancedView(!isAdvancedView)}
+                      className="ml-2"
+                    />
+                  </button>
+
+                  <div
+                    onClick={() => {
+                      setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
+                    }}
+                    className="relative w-28 h-9 flex justify-center items-center p-2 border rounded-2xl normal-case cursor-pointer"
+                  >
+                    <span className="text-xs text-blue-500 font-semibold flex items-center">
+                      {getTimeFilterDisplayNameByValue(timeFilter)}
+                    </span>
+                    <span>
+                      <ChevronDownIcon className="h-4" />
+                    </span>
+
+                    {isTimeFilterDropdownOpen && (
+                      <DropdownButtons
+                        container={desktopRef}
+                        filters={Object.values(TimeFilterOptions)}
+                        selectedOptions={new Set([timeFilter])}
+                        toggleOption={setTimeFilter}
+                        width="w-[10rem]"
+                      />
+                    )}
+                  </div>
+
+                  <div
+                    onClick={() =>
+                      ModalService.open(SelectCategoriesModal, {
+                        selectedCategories,
+                        setSelectedCategories,
+                      })
+                    }
+                    className="relative w-28 h-9 flex justify-center items-center p-2 border rounded-2xl normal-case cursor-pointer"
+                  >
+                    <span className="text-xs text-blue-500 font-semibold flex items-center">
+                      Categories
+                    </span>
+                    <span>
+                      <ChevronDownIcon className="h-4" />
+                    </span>
+                  </div>
+                </div>
+              </div>
             )}
-          >
-            <div className="flex items-center">
-              <MenuAlt2Icon className="w-5" />
-              <span className="text-lg font-bold ml-2">Posts</span>
+            <div className="flex w-48 ml-auto">
+              <OverviewSearchbar
+                onNameSearchChanged={onNameSearchChanged}
+                bgColor="bg-white"
+              />
             </div>
-            <div className="text-xs">The most confident opinions</div>
-          </button>
-
-          <button
-            onClick={() => {
-              onOrderByChanged(SortOptionsHomeUsersTable.STAKED.value, 'desc')
-              setSelectedView(TABLE_NAMES.HOME_USERS)
-            }}
-            className={classNames(
-              selectedView === TABLE_NAMES.HOME_USERS
-                ? 'bg-white/[.1]'
-                : 'hover:bg-white/[.05] opacity-50',
-              'w-1/2 h-20 px-6 py-3 border border-white/[.2] rounded-xl text-white text-left'
-            )}
-          >
-            <div className="flex items-center">
-              <UserIcon className="w-5" />
-              <span className="text-lg font-bold ml-2">Users</span>
-            </div>
-            <div className="text-xs">The most trusted voices</div>
-          </button>
-        </div>
-
-        {/* Transform and translate place table on top of background image defined in HomeHeader */}
-        <div className="mx-auto transform md:px-4 md:max-w-304 -translate-y-40 font-inter">
-          <OverviewFilters {...overviewFiltersProps} />
-          <div className="border-brand-gray-3 dark:border-gray-500 rounded-b-xlg">
-            {selectedView === TABLE_NAMES.HOME_POSTS ? (
-              <Table {...tableProps} />
-            ) : (
-              <HomeUsersTable {...tableProps} />
-            )}
           </div>
         </div>
-        <ScrollToTop />
+
+        {/* Bottom section with columns of post/citation/rating data */}
+        {selectedView === HOME_PAGE_VIEWS.POSTS && (
+          <IMPostsView
+            activeOverlayPostID={activeOverlayPostID}
+            nameSearch={nameSearch}
+            orderBy={orderBy}
+            orderDirection={orderDirection}
+            selectedCategories={selectedCategories}
+            selectedView={selectedView}
+            timeFilter={timeFilter}
+            isAdvancedView={isAdvancedView}
+            setActiveOverlayPostID={setActiveOverlayPostID}
+          />
+        )}
+
+        {selectedView === HOME_PAGE_VIEWS.USERS && (
+          <div className="mx-auto px-20 font-inter">
+            <div className="border-brand-gray-3 dark:border-gray-500 rounded-b-xlg">
+              <HomeUsersTable {...tableProps} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Mobile */}
+      <div className="md:hidden w-full mt-6">
+        {/* Top section with buttons */}
+        <div className="pb-6 border-b">
+          {/* Posts and Users buttons */}
+          <div className="px-4 flex justify-center items-center space-x-4">
+            <button
+              onClick={() => {
+                onOrderByChanged(
+                  SortOptionsHomePostsTable.MARKET_INTEREST.value,
+                  'desc'
+                )
+                setSelectedView(HOME_PAGE_VIEWS.POSTS)
+              }}
+              className={classNames(
+                selectedView === HOME_PAGE_VIEWS.POSTS
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-black/[.05] text-black/[.25]',
+                'px-4 py-2 font-bold text-2xl rounded-lg'
+              )}
+            >
+              Posts
+            </button>
+
+            <button
+              onClick={() => {
+                onOrderByChanged(SortOptionsHomeUsersTable.STAKED.value, 'desc')
+                setSelectedView(HOME_PAGE_VIEWS.USERS)
+              }}
+              className={classNames(
+                selectedView === HOME_PAGE_VIEWS.USERS
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-black/[.05] text-black/[.25]',
+                'px-4 py-2 font-bold text-2xl rounded-lg'
+              )}
+            >
+              Users
+            </button>
+          </div>
+
+          {selectedView === HOME_PAGE_VIEWS.POSTS && (
+            <div className="px-4 mt-2 flex justify-center items-center">
+              {/* Left */}
+              <div className="flex items-center space-x-3 pr-2 text-xs">
+                <button
+                  onClick={() =>
+                    setOrderBy(SortOptionsHomePostsTable.MARKET_INTEREST.value)
+                  }
+                  className={classNames(
+                    orderBy === SortOptionsHomePostsTable.MARKET_INTEREST.value
+                      ? 'bg-blue-100 text-blue-600'
+                      : 'text-black',
+                    'p-2 font-bold rounded-2xl border'
+                  )}
+                >
+                  Controversial
+                </button>
+                <button
+                  onClick={() =>
+                    setOrderBy(SortOptionsHomePostsTable.NEW.value)
+                  }
+                  className={classNames(
+                    orderBy === SortOptionsHomePostsTable.NEW.value
+                      ? 'bg-blue-100 text-blue-600'
+                      : 'text-black',
+                    'p-2 font-bold rounded-2xl border'
+                  )}
+                >
+                  New
+                </button>
+              </div>
+
+              {/* Right */}
+              <div className="flex justify-between items-center space-x-3 pl-2 border-l text-xs">
+                <div
+                  onClick={() =>
+                    setIsMobileTimeFilterDropdownOpen(
+                      !isMobileTimeFilterDropdownOpen
+                    )
+                  }
+                  className="relative w-28 h-9 flex justify-center items-center p-2 border rounded-2xl normal-case cursor-pointer"
+                >
+                  <span className="text-xs text-blue-500 font-semibold flex items-center">
+                    {getTimeFilterDisplayNameByValue(timeFilter)}
+                  </span>
+                  <span>
+                    <ChevronDownIcon className="h-4" />
+                  </span>
+
+                  {isMobileTimeFilterDropdownOpen && (
+                    <DropdownButtons
+                      container={mobileRef}
+                      filters={Object.values(TimeFilterOptions)}
+                      selectedOptions={new Set([timeFilter])}
+                      toggleOption={setTimeFilter}
+                      width="w-[10rem]"
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-2 flex justify-center mx-auto w-60">
+            <OverviewSearchbar
+              onNameSearchChanged={onNameSearchChanged}
+              bgColor="bg-white"
+            />
+          </div>
+        </div>
+
+        {/* Bottom section with post data */}
+        {selectedView === HOME_PAGE_VIEWS.POSTS && (
+          <>
+            <IMPostsView
+              activeOverlayPostID={activeOverlayPostID}
+              nameSearch={nameSearch}
+              orderBy={orderBy}
+              orderDirection={orderDirection}
+              selectedCategories={selectedCategories}
+              selectedView={selectedView}
+              timeFilter={timeFilter}
+              isAdvancedView={isAdvancedView}
+              setActiveOverlayPostID={setActiveOverlayPostID}
+            />
+
+            <IMPostsViewMobile
+              activeOverlayPostID={activeOverlayPostID}
+              nameSearch={nameSearch}
+              orderBy={orderBy}
+              orderDirection={orderDirection}
+              selectedCategories={selectedCategories}
+              selectedView={selectedView}
+              timeFilter={timeFilter}
+              isAdvancedView={isAdvancedView}
+              setActiveOverlayPostID={setActiveOverlayPostID}
+            />
+          </>
+        )}
+
+        {selectedView === HOME_PAGE_VIEWS.USERS && (
+          <div className="mx-auto md:px-4 md:max-w-304 font-inter">
+            <div className="border-brand-gray-3 dark:border-gray-500 rounded-b-xlg">
+              {/* Lil mobile col header */}
+              <div className="w-full flex px-3 py-3 leading-4 text-xs text-black/[.5] font-semibold">
+                <div className="w-[30%] flex items-start">
+                  <span className="mr-1">STAKED</span>
+                  <Tooltip>
+                    <div className="w-40 md:w-64">
+                      The total amount of IMO staked on a user
+                    </div>
+                  </Tooltip>
+                </div>
+
+                <div className="w-[20%] ml-8">HOLDERS</div>
+
+                <div className="w-[20%] ml-4">RATINGS</div>
+
+                <div className="w-[25%]"></div>
+              </div>
+              <HomeUsersTable {...tableProps} />
+            </div>
+          </div>
+        )}
       </div>
     </>
   )
@@ -243,5 +504,11 @@ const Home = ({ urlMarkets }: Props) => {
 export default Home
 
 Home.getLayout = (page: ReactElement) => (
-  <DefaultLayout bgHeaderColor="bg-transparent">{page}</DefaultLayout>
+  <DefaultLayout
+    bgColor="bg-white"
+    bgHeaderColor="bg-white"
+    headerTextColor="text-black"
+  >
+    {page}
+  </DefaultLayout>
 )

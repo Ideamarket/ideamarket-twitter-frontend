@@ -68,7 +68,7 @@ export default function UserPostsRow({
                     className="rounded-full"
                     src={
                       token?.minterToken?.profilePhoto ||
-                      '/DefaultProfilePicture.png'
+                      '/default-profile-pic.png'
                     }
                     alt=""
                     layout="fill"
@@ -206,7 +206,7 @@ export default function UserPostsRow({
                   className="rounded-full"
                   src={
                     token?.minterToken?.profilePhoto ||
-                    '/DefaultProfilePicture.png'
+                    '/default-profile-pic.png'
                   }
                   alt=""
                   layout="fill"

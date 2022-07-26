@@ -27,13 +27,13 @@ export default function WalletStatusWithConnectButton() {
   }
 
   return (
-    <React.Fragment>
+    <>
       {/* Desktop */}
-      <div className="hidden md:flex flex-row items-center px-2 cursor-pointer justify-self-end">
+      <div className="hidden h-full md:flex flex-row items-center px-2 cursor-pointer justify-self-end">
         {!active && (
           <div
             onClick={openWalletModal}
-            className="px-4 py-2 ml-2 text-sm font-bold text-white rounded-lg bg-brand-blue"
+            className="h-full flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-brand-blue rounded-xl"
           >
             Connect Wallet
           </div>
@@ -66,7 +66,7 @@ export default function WalletStatusWithConnectButton() {
                 <span>My Profile</span>
                 <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
                   <Image
-                    src={user?.profilePhoto || '/DefaultProfilePicture.png'}
+                    src={user?.profilePhoto || '/default-profile-pic.png'}
                     alt="Profile photo"
                     layout="fill"
                     objectFit="cover"
@@ -105,7 +105,7 @@ export default function WalletStatusWithConnectButton() {
               className="ml-3 w-8 h-8 relative rounded-full bg-gray-400"
             >
               <Image
-                src={user?.profilePhoto || '/DefaultProfilePicture.png'}
+                src={user?.profilePhoto || '/default-profile-pic.png'}
                 alt="Profile photo"
                 layout="fill"
                 objectFit="cover"
@@ -121,6 +121,6 @@ export default function WalletStatusWithConnectButton() {
           </>
         )}
       </div>
-    </React.Fragment>
+    </>
   )
 }

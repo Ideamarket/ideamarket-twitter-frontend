@@ -273,8 +273,7 @@ export default function RateUI({
               <Image
                 className="rounded-full"
                 src={
-                  userDataForMinter?.profilePhoto ||
-                  '/DefaultProfilePicture.png'
+                  userDataForMinter?.profilePhoto || '/default-profile-pic.png'
                 }
                 alt=""
                 layout="fill"
@@ -508,7 +507,7 @@ export default function RateUI({
                                     className="rounded-full"
                                     src={
                                       post?.minterToken?.profilePhoto ||
-                                      '/DefaultProfilePicture.png'
+                                      '/default-profile-pic.png'
                                     }
                                     alt=""
                                     layout="fill"
@@ -555,7 +554,7 @@ export default function RateUI({
                                     className="rounded-full"
                                     src={
                                       post?.minterToken?.profilePhoto ||
-                                      '/DefaultProfilePicture.png'
+                                      '/default-profile-pic.png'
                                     }
                                     alt=""
                                     layout="fill"

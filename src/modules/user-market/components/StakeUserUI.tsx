@@ -542,7 +542,7 @@ export default function StakeUserUI({
     logoURL:
       tradeType === TX_TYPES.STAKE_USER
         ? tokenIconURL
-        : web2UserToken?.profilePhoto || '/DefaultProfilePicture.png',
+        : web2UserToken?.profilePhoto || '/default-profile-pic.png',
   }
 
   const ideaTokenProps = {
@@ -563,9 +563,7 @@ export default function StakeUserUI({
             <div className="relative rounded-full w-6 h-6">
               <Image
                 className="rounded-full"
-                src={
-                  web2UserToken?.profilePhoto || '/DefaultProfilePicture.png'
-                }
+                src={web2UserToken?.profilePhoto || '/default-profile-pic.png'}
                 alt=""
                 layout="fill"
                 objectFit="cover"

@@ -115,7 +115,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                       className="rounded-full"
                       src={
                         token?.minterToken?.profilePhoto ||
-                        '/DefaultProfilePicture.png'
+                        '/default-profile-pic.png'
                       }
                       alt=""
                       layout="fill"
@@ -221,7 +221,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                       className="rounded-full"
                       src={
                         token?.minterToken?.profilePhoto ||
-                        '/DefaultProfilePicture.png'
+                        '/default-profile-pic.png'
                       }
                       alt=""
                       layout="fill"

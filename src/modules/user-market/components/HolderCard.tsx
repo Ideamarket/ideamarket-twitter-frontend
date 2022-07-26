@@ -40,7 +40,7 @@ const HolderCard = ({
             <div className="relative rounded-full w-6 h-6">
               <Image
                 className="rounded-full"
-                src={holder?.profilePhoto || '/DefaultProfilePicture.png'}
+                src={holder?.profilePhoto || '/default-profile-pic.png'}
                 alt=""
                 layout="fill"
                 objectFit="cover"

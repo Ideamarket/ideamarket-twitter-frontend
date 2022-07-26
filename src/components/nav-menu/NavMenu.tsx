@@ -11,7 +11,8 @@ import NavItem from './NavItem'
 import { ProfileTooltip } from './ProfileTooltip'
 import { useWeb3React } from '@web3-react/core'
 import { GlobalContext } from 'lib/GlobalContext'
-import { PencilIcon } from '@heroicons/react/outline'
+import { PencilIcon as OutlinePencilIcon } from '@heroicons/react/outline'
+import { PencilIcon as SolidPencilIcon } from '@heroicons/react/solid'
 import ModalService from 'components/modals/ModalService'
 import NewPostModal from 'modules/posts/components/NewPostModal'
 import WalletModal from 'components/wallet/WalletModal'
@@ -86,13 +87,13 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
       className={classNames(
         bgColor ? bgColor : 'bg-top-desktop',
         textColor,
-        'absolute z-[200] items-center w-full overflow-none font-inter'
+        'absolute z-[200] items-center w-full overflow-none font-inter md:px-20'
       )}
     >
       {/* Desktop NavMenu */}
-      <div className="hidden md:block px-2 py-3">
+      <div className="hidden md:block px-2 py-3 border-b border-black/[0.05]">
         <nav className="relative h-10 flex flex-wrap items-center justify-center md:justify-between w-full mx-auto max-w-7xl">
-          <div className="hidden md:flex items-center cursor-pointer ml-auto mr-auto md:ml-0 md:mr-0">
+          <div className="hidden md:flex space-x-3 items-center cursor-pointer ml-auto mr-auto md:ml-0 md:mr-0">
             <A href="/" className="flex items-center">
               <div className="relative w-10 h-8">
                 <Image
@@ -103,13 +104,13 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
                 />
               </div>
 
-              <span className="w-auto h-full mr-2 text-2xl font-bold leading-none">
+              <span className="w-auto h-full mr-2 text-lg font-bold leading-none">
                 Ideamarket
               </span>
             </A>
 
             {/* Desktop START */}
-            <div className="relative items-center justify-center hidden lg:flex">
+            <div className="relative items-center justify-center hidden lg:flex space-x-3">
               {navbarConfig.menu.map((menuItem, i) => (
                 <NavItem menuItem={menuItem} key={i} />
               ))}
@@ -117,19 +118,19 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
             {/* Desktop END */}
           </div>
 
-          <div className="hidden md:flex items-center">
+          <div className="h-9 hidden md:flex items-center">
             <button
               onClick={onNewPostClicked}
-              className="flex items-center space-x-2 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-sm font-bold px-3 py-1 ml-3 rounded-lg"
+              className="flex items-center space-x-2 h-full bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-xs font-bold px-3 py-1 ml-3 rounded-xl"
             >
               <span>New Post</span>
-              <PencilIcon className="w-3" />
+              <OutlinePencilIcon className="w-3" />
             </button>
 
             {/* <NavThemeButton /> */}
 
             <div
-              className="flex"
+              className="flex h-full"
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}
             >
@@ -179,6 +180,13 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
         <div className="flex">
           <WalletStatusWithConnectButton />
         </div>
+
+        <button
+          onClick={onNewPostClicked}
+          className="w-8 h-8 flex justify-center items-center text-white bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 rounded-2xl"
+        >
+          <SolidPencilIcon className="w-5 h-5" />
+        </button>
       </div>
 
       <MobileNavItems

@@ -313,7 +313,7 @@ const OpinionTable = ({
                             className="rounded-full"
                             src={
                               opinion?.userToken?.profilePhoto ||
-                              '/DefaultProfilePicture.png'
+                              '/default-profile-pic.png'
                             }
                             alt=""
                             layout="fill"
@@ -482,7 +482,7 @@ const OpinionTable = ({
                         className="rounded-full"
                         src={
                           opinion?.userToken?.profilePhoto ||
-                          '/DefaultProfilePicture.png'
+                          '/default-profile-pic.png'
                         }
                         alt=""
                         layout="fill"

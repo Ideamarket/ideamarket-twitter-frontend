@@ -14,7 +14,6 @@ import {
   TimeFilterOptions,
   TIME_FILTER,
 } from 'utils/tables'
-import { OverviewSearchbar } from '../OverviewSearchbar'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import useOnClickOutside from 'utils/useOnClickOutside'
@@ -81,12 +80,12 @@ export const OverviewColumns = ({
       case 'name':
         return (
           <div className="flex items-center flex-wrap">
-            <div className="flex w-52 mr-2">
+            {/* <div className="flex w-52 mr-2">
               <OverviewSearchbar
                 onNameSearchChanged={onNameSearchChanged}
                 bgColor="bg-white"
               />
-            </div>
+            </div> */}
 
             <div className="flex items-center space-x-2">
               <div

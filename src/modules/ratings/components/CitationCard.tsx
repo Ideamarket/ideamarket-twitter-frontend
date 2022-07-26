@@ -97,7 +97,7 @@ const CitationCard = ({
                   className="rounded-full"
                   src={
                     citationData?.minterToken?.profilePhoto ||
-                    '/DefaultProfilePicture.png'
+                    '/default-profile-pic.png'
                   }
                   alt=""
                   layout="fill"
@@ -214,7 +214,7 @@ const CitationCard = ({
                   className="rounded-full"
                   src={
                     citationData?.minterToken?.profilePhoto ||
-                    '/DefaultProfilePicture.png'
+                    '/default-profile-pic.png'
                   }
                   alt=""
                   layout="fill"

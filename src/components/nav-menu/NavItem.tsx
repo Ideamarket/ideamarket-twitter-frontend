@@ -1,4 +1,3 @@
-import { ChevronDownIcon } from '@heroicons/react/solid'
 import classNames from 'classnames'
 import { A } from 'components'
 import { useRef, useState } from 'react'
@@ -21,12 +20,12 @@ const NavItem = ({ menuItem }) => {
   return (
     <div className="relative mt-0.5">
       <A
-        className="inline-flex px-3 py-2 text-md leading-5 transition duration-150 ease-in-out bg-transparent rounded-md cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
+        className="inline-flex px-3 py-2 text-sm font-bold leading-5 transition duration-150 ease-in-out bg-transparent rounded-md cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
         onClick={onMenuItemClick}
         href={menuItem?.href}
       >
         <span>{menuItem.name}</span>
-        {menuItem.subMenu && <ChevronDownIcon className="w-5 h-5" />}
+        {/* {menuItem.subMenu && <ChevronDownIcon className="w-5 h-5" />} */}
       </A>
 
       {menuItem.subMenu && (
