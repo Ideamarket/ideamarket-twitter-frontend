@@ -126,7 +126,9 @@ export const ProfileTooltip = () => {
           onClick={onVerifyTwitterClicked}
         >
           {/* <TwitterOutlineWhite className="w-5" /> */}
-          <span className="ml-2 font-medium">Verify via Twitter</span>
+          <b className="ml-2 font-medium">
+            Connect Twitter & attract like-minded followers
+          </b>
         </div>
       )}
 
