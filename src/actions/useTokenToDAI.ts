@@ -15,27 +15,18 @@ export default function useTokenToDAI(
   const [outputBN, setOutputBN] = useState(undefined)
   const [output, setOutput] = useState(undefined)
 
+  // Need walletAddress to detect when user changes wallet accounts
+  const { web3, walletAddress, chainID } = useWalletStore((state) => ({
+    web3: state.web3,
+    walletAddress: state.address,
+    chainID: state.chainID,
+  }))
+
   useEffect(() => {
     let isCancelled = false
 
     async function calculateTokenToDAI() {
-      const amountBN = new BN(
-        new BigNumber(amount)
-          .multipliedBy(
-            new BigNumber('10').exponentiatedBy(decimals.toString())
-          )
-          .toFixed()
-      )
-
-      if (
-        !useWalletStore.getState().web3 ||
-        !token ||
-        !token.address ||
-        !amount ||
-        !amountBN ||
-        !BN.isBN(amountBN) ||
-        amountBN.lte(new BN('0'))
-      ) {
+      if (!web3 || !token || !token.address || !amount) {
         return new BN('0')
       }
 
@@ -77,7 +68,7 @@ export default function useTokenToDAI(
     return () => {
       isCancelled = true
     }
-  }, [token, token.address, amount, decimals])
+  }, [token, token.address, amount, decimals, web3, walletAddress, chainID])
 
   return [isLoading, outputBN, output]
 }

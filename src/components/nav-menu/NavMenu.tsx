@@ -3,7 +3,7 @@ import Image from 'next/image'
 import NProgress from 'nprogress'
 import { getNavbarConfig } from './constants'
 import { Router } from 'next/dist/client/router'
-import { MenuIcon, XIcon } from '@heroicons/react/solid'
+import { InboxInIcon, MenuIcon, XIcon } from '@heroicons/react/solid'
 import { WalletStatusWithConnectButton } from 'components'
 import MobileNavItems from './MobileNavItems'
 import NavItem from './NavItem'
@@ -19,10 +19,19 @@ import WalletModal from 'components/wallet/WalletModal'
 import { useWalletStore } from 'store/walletStore'
 import A from 'components/A'
 import classNames from 'classnames'
+import useUserFeesClaimable from 'modules/user-market/hooks/useUserFeesClaimable'
+import useTokenToDAI from 'actions/useTokenToDAI'
 
 type Props = {
   bgColor: string
   textColor?: string
+}
+
+const ETH_TOKEN = {
+  name: 'Ethereum',
+  address: '0x0000000000000000000000000000000000000000',
+  symbol: 'ETH',
+  decimals: 18,
 }
 
 const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
@@ -33,6 +42,13 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
   const [timerId, setTimerId] = useState(null)
 
   const navbarConfig = getNavbarConfig(user)
+
+  const [, ethClaimable] = useUserFeesClaimable()
+  const [, , selectedTokenDAIValue] = useTokenToDAI(
+    ETH_TOKEN as any,
+    ethClaimable,
+    18
+  )
 
   useEffect(() => {
     NProgress.configure({ trickleSpeed: 100 })
@@ -119,6 +135,28 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
           </div>
 
           <div className="h-9 hidden md:flex items-center">
+            {ethClaimable && ethClaimable > 0 && (
+              <button className="bg-white border-l border-t border-r-4 border-b-4 border-blue-600 rounded-3xl px-2 py-1 leading-[.5rem]">
+                <div className="flex items-center space-x-2">
+                  <InboxInIcon className="w-5 h-5 text-black" />
+                  <div>
+                    <div className="text-xs text-black/[.5]">
+                      Available to Withdraw
+                    </div>
+                    <div>
+                      <span className="text-black font-bold text-xs">
+                        {ethClaimable} ETH
+                      </span>
+                      <span className="text-black/[.5] font-bold text-xs">
+                        {' '}
+                        (${parseFloat(selectedTokenDAIValue).toFixed(2)})
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            )}
+
             <button
               onClick={onNewPostClicked}
               className="flex items-center space-x-2 h-full bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-xs font-bold px-3 py-1 ml-3 rounded-xl"

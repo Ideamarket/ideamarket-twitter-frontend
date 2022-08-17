@@ -33,6 +33,8 @@ import TxPending from 'components/trade/TxPending'
 import RateModal from 'components/trade/RateModal'
 import { WalletModal } from 'components'
 import { useWalletStore } from 'store/walletStore'
+import { useWeb3React } from '@web3-react/core'
+import { updatePostMetadata } from 'actions/web2/posts/updatePostMetadata'
 
 const sliderMarks = {
   0: 'Disagree',
@@ -55,6 +57,7 @@ export default function RateUI({
   const txManager = useTransactionManager()
   const { setIsTxPending, setOnWalletConnectedCallback } =
     useContext(GlobalContext)
+  const { account } = useWeb3React()
 
   // local state for tabs. Create new post (true) or cite existing (false)
   const [isCreateNewPost, setIsCreateNewPost] = useState(true)
@@ -104,10 +107,8 @@ export default function RateUI({
 
   const onPostClicked = async () => {
     setIsTxPending(true)
-    // TODO: do imageLink
-    // TODO: figure out urlContent
-    // content, imageHashes, categoryTags, imageLink, isURL, urlContent
-    const mintingArgs = [inputText, [], selectedCategories, '', false, '']
+    // content
+    const mintingArgs = [inputText]
 
     try {
       await txManager.executeTxWithCallbacks(
@@ -115,7 +116,15 @@ export default function RateUI({
         mintPost,
         {
           onReceipt: async (receipt: any) => {
+            await updatePostMetadata({
+              tokenID: receipt?.events?.Transfer?.returnValues?.tokenId,
+              minterAddress: account,
+              content: inputText,
+              categories: selectedCategories,
+            })
+
             await syncPosts(receipt?.events?.Transfer?.returnValues?.tokenId)
+
             setCitations([receipt?.events?.Transfer?.returnValues?.tokenId])
             const newPostCitations = [
               receipt?.events?.Transfer?.returnValues?.tokenId,
@@ -150,11 +159,12 @@ export default function RateUI({
       const web3TxMethod = ratePost
 
       const ratingArgs = [
-        // tokenId , rating, citations, inFavorArray
+        // tokenId , rating, citations, inFavorArray, opinionWriter
         imPost?.tokenID,
         inputRating,
         newPostCitations ? newPostCitations : citations,
         newPostInFavor ? newPostInFavor : inFavorArray,
+        account,
       ]
 
       await txManager.executeTxWithCallbacks(

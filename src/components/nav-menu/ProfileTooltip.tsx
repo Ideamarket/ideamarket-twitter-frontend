@@ -1,4 +1,4 @@
-// import { MailIcon } from '@heroicons/react/solid'
+import { MailIcon } from '@heroicons/react/solid'
 import { IoIosWallet } from 'react-icons/io'
 import { BiCog } from 'react-icons/bi'
 import { IoMdExit } from 'react-icons/io'
@@ -9,8 +9,9 @@ import { unsetWeb3 } from 'store/walletStore'
 import { useWeb3React } from '@web3-react/core'
 import { useContext } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
-// import { BsFillBellFill } from 'react-icons/bs'
-// import SpearkIcon from '../../assets/speaker.svg'
+import { BsFillBellFill } from 'react-icons/bs'
+import SpearkIcon from '../../assets/speaker.svg'
+import TwitterOutlineWhite from '../../assets/twitter-outline-white.svg'
 import A from 'components/A'
 import { clearContracts } from 'store/contractStore'
 import CreateAccountModal from 'components/account/CreateAccountModal'
@@ -83,25 +84,41 @@ export const ProfileTooltip = () => {
 
   return (
     <div className="flex flex-col w-64 text-black">
-      {/* {active && !Boolean(user?.email) && (
-        <>
-          <div
-            className="cursor-pointer flex items-center py-3 px-4 hover:bg-brand-gray"
-            onClick={onClickSettings}
-          >
-            <MailIcon className="w-6 h-6  text-gray-400" />
-            <span className="ml-2 font-medium">Connect Email</span>
+      {active && !user?.twitterUsername && (
+        <div
+          className="py-3 px-4 bg-blue-400 hover:bg-blue-500 text-white cursor-pointer "
+          onClick={onVerifyTwitterClicked}
+        >
+          <div className="mb-2 flex items-center text-white">
+            <TwitterOutlineWhite className="w-5" />
+            <b className="ml-2 font-bold text-base">Connect Twitter</b>
           </div>
 
-          <div className="py-2 px-4 bg-brand-blue text-center">
-            <span className="text-white">
-              <BsFillBellFill className="w-4 h-4 text-yellow-1" /> receive
+          <div className="text-white text-xs">
+            Attract like-minded followers
+          </div>
+        </div>
+      )}
+
+      {active && !Boolean(user?.email) && (
+        <>
+          <div
+            onClick={onClickSettings}
+            className="py-3 px-4 bg-brand-blue hover:bg-brand-blue/[.8] cursor-pointer"
+          >
+            <div className="mb-2 flex items-center text-white">
+              <MailIcon className="w-5 h-5" />
+              <span className="ml-2 font-bold text-base">Connect Email</span>
+            </div>
+
+            <span className="text-white text-xs">
+              <BsFillBellFill className="w-3 h-3 text-yellow-1" /> receive
               notificaions, updates <br />
-              and announcements <SpearkIcon className="w-4 h-4" />
+              and announcements <SpearkIcon className="w-3 h-3" />
             </span>
           </div>
         </>
-      )} */}
+      )}
 
       <A href={`/u/${userNameOrWallet}`}>
         <div className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 hover:bg-brand-gray">
@@ -117,18 +134,6 @@ export const ProfileTooltip = () => {
         >
           <BiCog className="w-6 h-6  text-gray-400" />
           <span className="ml-2 font-medium">Edit Profile</span>
-        </div>
-      )}
-
-      {active && !user?.twitterUsername && (
-        <div
-          className="cursor-pointer flex items-center py-3 px-4 border-t border-gray-100 bg-blue-400 hover:bg-blue-500 text-white"
-          onClick={onVerifyTwitterClicked}
-        >
-          {/* <TwitterOutlineWhite className="w-5" /> */}
-          <b className="ml-2 font-medium">
-            Connect Twitter & attract like-minded followers
-          </b>
         </div>
       )}
 

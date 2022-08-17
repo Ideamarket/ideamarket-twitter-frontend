@@ -20,6 +20,7 @@ import { HOME_PAGE_VIEWS } from 'pages'
 import OpenRateModal from 'modules/ratings/components/OpenRateModal'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { getIMORatingColors } from 'utils/display/DisplayUtils'
+import { ExternalLinkIcon } from '@heroicons/react/outline'
 
 const AdvancedPostColWidth = 'w-[45%]'
 const AdvancedCitationsColWidth = 'w-[35%]'
@@ -161,9 +162,234 @@ const IMPostsView = ({
                       )}
                     >
                       {/* The actual Post card */}
+                      <div className="relative">
+                        <span
+                          className={classNames(
+                            'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200]'
+                          )}
+                        >
+                          Buy this NFT
+                          <ExternalLinkIcon className="w-3 h-3 ml-2" />
+                        </span>
+                        <A
+                          href={`/post/${imPost?.tokenID}`}
+                          className="w-full relative block p-8 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
+                        >
+                          <span
+                            className={classNames(
+                              getIMORatingColors(
+                                imPost?.totalRatingsCount > 0
+                                  ? Math.round(imPost?.compositeRating)
+                                  : -1
+                              ),
+                              'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
+                            )}
+                          >
+                            {imPost?.totalRatingsCount > 0
+                              ? Math.round(imPost?.compositeRating) + '%'
+                              : '—'}
+                          </span>
+
+                          <div className="flex items-center whitespace-nowrap text-xs">
+                            <div className="relative rounded-full w-5 h-5">
+                              <Image
+                                className="rounded-full"
+                                src={
+                                  imPost?.minterToken?.profilePhoto ||
+                                  '/default-profile-pic.png'
+                                }
+                                alt=""
+                                layout="fill"
+                                objectFit="cover"
+                              />
+                            </div>
+
+                            {/* Post minter IM name/wallet and twitter name */}
+                            <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
+                              <A
+                                className="ml-1 font-medium hover:text-blue-500"
+                                href={`/u/${usernameOrWallet}`}
+                              >
+                                {displayUsernameOrWallet}
+                              </A>
+                              {imPost?.minterToken?.twitterUsername && (
+                                <A
+                                  className="flex items-center space-x-1 hover:text-blue-500"
+                                  href={`/u/${usernameOrWallet}`}
+                                >
+                                  <div className="relative w-4 h-4">
+                                    <Image
+                                      src={'/twitter-solid-blue.svg'}
+                                      alt="twitter-solid-blue-icon"
+                                      layout="fill"
+                                    />
+                                  </div>
+                                  <span className="text-xs opacity-50">
+                                    @{imPost?.minterToken?.twitterUsername}
+                                  </span>
+                                </A>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="py-4 border-b font-bold">
+                            <ListingContent
+                              imPost={imPost}
+                              page="HomePage"
+                              urlMetaData={null}
+                              useMetaData={false}
+                            />
+                          </div>
+
+                          <div className="flex items-center pt-4">
+                            <div className="w-1/3">
+                              <div className="flex justify-start items-center space-x-2">
+                                <div className="relative w-6 h-6">
+                                  <Image
+                                    src={'/people-icon.svg'}
+                                    alt="people-icon"
+                                    layout="fill"
+                                  />
+                                </div>
+
+                                <div>
+                                  <div className="text-xs text-black/[.5] font-medium">
+                                    Ratings
+                                  </div>
+                                  <div className="font-bold">
+                                    {formatNumberWithCommasAsThousandsSerperator(
+                                      imPost.totalRatingsCount
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="w-1/3">
+                              <div className="flex justify-start items-center space-x-2">
+                                <div className="relative w-6 h-6">
+                                  <Image
+                                    src={'/eye-icon.svg'}
+                                    alt="eye-icon"
+                                    layout="fill"
+                                  />
+                                </div>
+
+                                <div>
+                                  <div className="flex items-center space-x-2">
+                                    <div className="text-xs text-black/[.5] font-medium">
+                                      Controversial
+                                    </div>
+                                    <Tooltip
+                                      className="text-black/[.5] z-[200]"
+                                      iconComponentClassNames="w-3"
+                                    >
+                                      <div className="w-64">
+                                        The total amount of IMO staked on all
+                                        users who rated a post
+                                      </div>
+                                    </Tooltip>
+                                  </div>
+
+                                  <div className="font-bold">
+                                    {formatNumberWithCommasAsThousandsSerperator(
+                                      Math.round(imPost.marketInterest)
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="w-1/3">
+                              <div className="flex justify-start items-center space-x-2">
+                                <div className="relative w-6 h-6">
+                                  <Image
+                                    src={'/income-icon.svg'}
+                                    alt="eye-icon"
+                                    layout="fill"
+                                  />
+                                </div>
+
+                                <div>
+                                  <div className="text-xs text-black/[.5] font-medium">
+                                    Income
+                                  </div>
+                                  <div className="font-bold">0.274 ETH</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </A>
+                      </div>
+
+                      <OpenRateModal imPost={imPost} />
+                    </div>
+                  </div>
+                )
+              })}
+          </div>
+        </div>
+      )}
+
+      {isAdvancedView && (
+        <div className="flex flex-col px-20 pb-40">
+          <div className="py-3 mt-5 mb-8 flex space-x-10 text-sm text-black/[.5] border-y-2 border-black/[0.05]">
+            <div className={classNames(AdvancedPostColWidth, '')}>
+              <div className="font-semibold">Post</div>
+              <div className="text-xs italic">A collectible belief NFT.</div>
+            </div>
+
+            <div className={classNames(AdvancedCitationsColWidth, '')}>
+              <div className="font-semibold">Top citations</div>
+              <div className="text-xs italic">
+                Top posts in favor (green) or against (red) the post.
+              </div>
+            </div>
+
+            <div className={classNames(AdvancedRatingsColWidth, '')}>
+              <div className="font-semibold">Top raters</div>
+              <div className="text-xs italic">
+                Top users who rated the post.
+              </div>
+            </div>
+          </div>
+
+          {imPostPairs &&
+            imPostPairs.length > 0 &&
+            imPostPairs.map((imPost, pInd) => {
+              const { minterAddress } = (imPost || {}) as any
+
+              const displayUsernameOrWallet = convertAccountName(
+                imPost?.minterToken?.username || minterAddress
+              )
+              const usernameOrWallet =
+                imPost?.minterToken?.username || minterAddress
+
+              // const isThisPostOverlaySelected =
+              //   activeOverlayPostID &&
+              //   activeOverlayPostID === imPost.tokenID.toString()
+
+              return (
+                <div
+                  ref={lastElementRef}
+                  className="flex space-x-10 pb-8 mb-8 border-b border-black/[0.05]"
+                  key={pInd}
+                >
+                  <div className={classNames(AdvancedPostColWidth, '')}>
+                    {/* The actual Post card */}
+                    <div className="relative">
+                      <span
+                        className={classNames(
+                          'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200]'
+                        )}
+                      >
+                        Buy this NFT
+                        <ExternalLinkIcon className="w-3 h-3 ml-2" />
+                      </span>
+
                       <A
                         href={`/post/${imPost?.tokenID}`}
-                        className="w-full relative block p-8 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
+                        className="relative block p-8 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
                       >
                         <span
                           className={classNames(
@@ -232,7 +458,7 @@ const IMPostsView = ({
                         </div>
 
                         <div className="flex items-center pt-4">
-                          <div className="w-1/2">
+                          <div className="w-1/3">
                             <div className="flex justify-start items-center space-x-2">
                               <div className="relative w-6 h-6">
                                 <Image
@@ -242,18 +468,20 @@ const IMPostsView = ({
                                 />
                               </div>
 
-                              <div className="text-xs text-black/[.5] font-medium">
-                                Ratings
-                              </div>
-                              <div className="font-bold">
-                                {formatNumberWithCommasAsThousandsSerperator(
-                                  imPost.totalRatingsCount
-                                )}
+                              <div>
+                                <div className="text-xs text-black/[.5] font-medium">
+                                  Ratings
+                                </div>
+                                <div className="font-bold">
+                                  {formatNumberWithCommasAsThousandsSerperator(
+                                    imPost.totalRatingsCount
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
 
-                          <div className="w-1/2">
+                          <div className="w-1/3">
                             <div className="flex justify-start items-center space-x-2">
                               <div className="relative w-6 h-6">
                                 <Image
@@ -263,211 +491,51 @@ const IMPostsView = ({
                                 />
                               </div>
 
-                              <div className="flex items-center space-x-2">
-                                <div className="text-xs text-black/[.5] font-medium">
-                                  Controversial
-                                </div>
-                                <Tooltip
-                                  className="text-black/[.5] z-[200]"
-                                  iconComponentClassNames="w-3"
-                                >
-                                  <div className="w-64">
-                                    The total amount of IMO staked on all users
-                                    who rated a post
+                              <div>
+                                <div className="flex items-center space-x-2">
+                                  <div className="text-xs text-black/[.5] font-medium">
+                                    Controversial
                                   </div>
-                                </Tooltip>
+                                  <Tooltip
+                                    className="text-black/[.5] z-[200]"
+                                    iconComponentClassNames="w-3"
+                                  >
+                                    <div className="w-64">
+                                      The total amount of IMO staked on all
+                                      users who rated a post
+                                    </div>
+                                  </Tooltip>
+                                </div>
+                                <div className="font-bold">
+                                  {formatNumberWithCommasAsThousandsSerperator(
+                                    Math.round(imPost.marketInterest)
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="w-1/3">
+                            <div className="flex justify-start items-center space-x-2">
+                              <div className="relative w-6 h-6">
+                                <Image
+                                  src={'/income-icon.svg'}
+                                  alt="eye-icon"
+                                  layout="fill"
+                                />
                               </div>
 
-                              <div className="font-bold">
-                                {formatNumberWithCommasAsThousandsSerperator(
-                                  Math.round(imPost.marketInterest)
-                                )}
+                              <div>
+                                <div className="text-xs text-black/[.5] font-medium">
+                                  Income
+                                </div>
+                                <div className="font-bold">0.274 ETH</div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </A>
-
-                      <OpenRateModal imPost={imPost} />
                     </div>
-                  </div>
-                )
-              })}
-          </div>
-        </div>
-      )}
-
-      {isAdvancedView && (
-        <div className="flex flex-col px-20 pb-40">
-          <div className="py-3 mt-5 mb-8 flex space-x-10 text-sm text-black/[.5] border-y-2 border-black/[0.05]">
-            <div className={classNames(AdvancedPostColWidth, '')}>
-              <div className="font-semibold">Post</div>
-              <div className="text-xs italic">A collectible belief NFT.</div>
-            </div>
-
-            <div className={classNames(AdvancedCitationsColWidth, '')}>
-              <div className="font-semibold">Top citations</div>
-              <div className="text-xs italic">
-                Top posts in favor (green) or against (red) the post.
-              </div>
-            </div>
-
-            <div className={classNames(AdvancedRatingsColWidth, '')}>
-              <div className="font-semibold">Top raters</div>
-              <div className="text-xs italic">
-                Top users who rated the post.
-              </div>
-            </div>
-          </div>
-
-          {imPostPairs &&
-            imPostPairs.length > 0 &&
-            imPostPairs.map((imPost, pInd) => {
-              const { minterAddress } = (imPost || {}) as any
-
-              const displayUsernameOrWallet = convertAccountName(
-                imPost?.minterToken?.username || minterAddress
-              )
-              const usernameOrWallet =
-                imPost?.minterToken?.username || minterAddress
-
-              // const isThisPostOverlaySelected =
-              //   activeOverlayPostID &&
-              //   activeOverlayPostID === imPost.tokenID.toString()
-
-              return (
-                <div
-                  ref={lastElementRef}
-                  className="flex space-x-10 pb-8 mb-8 border-b border-black/[0.05]"
-                  key={pInd}
-                >
-                  <div className={classNames(AdvancedPostColWidth, '')}>
-                    {/* The actual Post card */}
-                    <A
-                      href={`/post/${imPost?.tokenID}`}
-                      className="relative block p-8 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
-                    >
-                      <span
-                        className={classNames(
-                          getIMORatingColors(
-                            imPost?.totalRatingsCount > 0
-                              ? Math.round(imPost?.compositeRating)
-                              : -1
-                          ),
-                          'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
-                        )}
-                      >
-                        {imPost?.totalRatingsCount > 0
-                          ? Math.round(imPost?.compositeRating) + '%'
-                          : '—'}
-                      </span>
-
-                      <div className="flex items-center whitespace-nowrap text-xs">
-                        <div className="relative rounded-full w-5 h-5">
-                          <Image
-                            className="rounded-full"
-                            src={
-                              imPost?.minterToken?.profilePhoto ||
-                              '/default-profile-pic.png'
-                            }
-                            alt=""
-                            layout="fill"
-                            objectFit="cover"
-                          />
-                        </div>
-
-                        {/* Post minter IM name/wallet and twitter name */}
-                        <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                          <A
-                            className="ml-1 font-medium hover:text-blue-500"
-                            href={`/u/${usernameOrWallet}`}
-                          >
-                            {displayUsernameOrWallet}
-                          </A>
-                          {imPost?.minterToken?.twitterUsername && (
-                            <A
-                              className="flex items-center space-x-1 hover:text-blue-500"
-                              href={`/u/${usernameOrWallet}`}
-                            >
-                              <div className="relative w-4 h-4">
-                                <Image
-                                  src={'/twitter-solid-blue.svg'}
-                                  alt="twitter-solid-blue-icon"
-                                  layout="fill"
-                                />
-                              </div>
-                              <span className="text-xs opacity-50">
-                                @{imPost?.minterToken?.twitterUsername}
-                              </span>
-                            </A>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="py-4 border-b font-bold">
-                        <ListingContent
-                          imPost={imPost}
-                          page="HomePage"
-                          urlMetaData={null}
-                          useMetaData={false}
-                        />
-                      </div>
-
-                      <div className="flex items-center pt-4">
-                        <div className="w-1/2">
-                          <div className="flex justify-start items-center space-x-2">
-                            <div className="relative w-6 h-6">
-                              <Image
-                                src={'/people-icon.svg'}
-                                alt="people-icon"
-                                layout="fill"
-                              />
-                            </div>
-
-                            <div className="text-xs text-black/[.5] font-medium">
-                              Ratings
-                            </div>
-                            <div className="font-bold">
-                              {formatNumberWithCommasAsThousandsSerperator(
-                                imPost.totalRatingsCount
-                              )}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="w-1/2">
-                          <div className="flex justify-start items-center space-x-2">
-                            <div className="relative w-6 h-6">
-                              <Image
-                                src={'/eye-icon.svg'}
-                                alt="eye-icon"
-                                layout="fill"
-                              />
-                            </div>
-
-                            <div className="flex items-center space-x-2">
-                              <div className="text-xs text-black/[.5] font-medium">
-                                Controversial
-                              </div>
-                              <Tooltip
-                                className="text-black/[.5] z-[200]"
-                                iconComponentClassNames="w-3"
-                              >
-                                <div className="w-64">
-                                  The total amount of IMO staked on all users
-                                  who rated a post
-                                </div>
-                              </Tooltip>
-                            </div>
-                            <div className="font-bold">
-                              {formatNumberWithCommasAsThousandsSerperator(
-                                Math.round(imPost.marketInterest)
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </A>
 
                     <div className="mt-2">
                       <OpenRateModal imPost={imPost} />

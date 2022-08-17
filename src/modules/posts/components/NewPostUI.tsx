@@ -16,6 +16,8 @@ import { syncPosts } from 'actions/web2/posts/syncPosts'
 import { verifyTokenName } from 'actions'
 import IMTextArea from 'modules/forms/components/IMTextArea'
 import { A } from 'components'
+import { updatePostMetadata } from 'actions/web2/posts/updatePostMetadata'
+import { useWeb3React } from '@web3-react/core'
 
 type NewPostUIProps = {
   isTxButtonActive?: boolean
@@ -38,6 +40,8 @@ export default function NewPostUI({
   const ideamarketPosts = useContractStore.getState().ideamarketPosts
 
   const { setIsTxPending } = useContext(GlobalContext)
+
+  const { account } = useWeb3React()
 
   const [inputContent, setInputContent] = useState('')
   const [inputPostType /*setInputPostType*/] = useState(TX_TYPES.TEXT_POST_LIST)
@@ -97,18 +101,9 @@ export default function NewPostUI({
 
   const onPostClicked = async () => {
     setIsTxPending(true)
-    // TODO: do imageLink
-    // TODO: figure out urlContent
-    const isURL = inputPostType === TX_TYPES.URL_LIST
-    // content, imageHashes, categoryTags, imageLink, isURL, urlContent
-    const mintingArgs = [
-      inputContent,
-      [],
-      selectedCategories,
-      '',
-      isURL,
-      isURL ? '' : '',
-    ]
+    // const isURL = inputPostType === TX_TYPES.URL_LIST
+    // content
+    const mintingArgs = [inputContent]
 
     try {
       await txManager.executeTxWithCallbacks(
@@ -116,7 +111,15 @@ export default function NewPostUI({
         mintPost,
         {
           onReceipt: async (receipt: any) => {
+            await updatePostMetadata({
+              tokenID: receipt?.events?.Transfer?.returnValues?.tokenId,
+              minterAddress: account,
+              content: inputContent,
+              categories: selectedCategories,
+            })
+
             await syncPosts(receipt?.events?.Transfer?.returnValues?.tokenId)
+
             setIsTxPending(false)
           },
         },

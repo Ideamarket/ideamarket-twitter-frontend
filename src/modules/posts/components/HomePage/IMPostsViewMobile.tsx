@@ -24,7 +24,11 @@ import { HOME_PAGE_VIEWS } from 'pages'
 import OpenRateModal from 'modules/ratings/components/OpenRateModal'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { getIMORatingColors } from 'utils/display/DisplayUtils'
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ExternalLinkIcon,
+} from '@heroicons/react/outline'
 
 type Props = {
   activeOverlayPostID: string
@@ -140,7 +144,7 @@ const IMPostsViewMobile = ({
       </div>
       <div
         id="scrolling-cards"
-        className="w-full overflow-x-auto mt-6 flex items-start snap-x snap-mandatory"
+        className="w-full overflow-x-auto mt-6 mb-10 flex items-start snap-x snap-mandatory"
       >
         {imPostPairs &&
           imPostPairs.length > 0 &&
@@ -164,116 +168,126 @@ const IMPostsViewMobile = ({
                 key={pInd}
               >
                 {/* The actual Post card */}
-                <A
-                  href={`/post/${imPost?.tokenID}`}
-                  className="w-full relative block p-4 bg-[#0857E0]/[0.05] rounded-2xl"
-                >
+                <div className="relative">
                   <span
                     className={classNames(
-                      getIMORatingColors(
-                        imPost?.totalRatingsCount > 0
-                          ? Math.round(imPost?.compositeRating)
-                          : -1
-                      ),
-                      'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
+                      'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200]'
                     )}
                   >
-                    {imPost?.totalRatingsCount > 0
-                      ? Math.round(imPost?.compositeRating) + '%'
-                      : '—'}
+                    Buy this NFT
+                    <ExternalLinkIcon className="w-3 h-3 ml-2" />
                   </span>
+                  <A
+                    href={`/post/${imPost?.tokenID}`}
+                    className="w-full relative block p-4 bg-[#0857E0]/[0.05] rounded-2xl"
+                  >
+                    <span
+                      className={classNames(
+                        getIMORatingColors(
+                          imPost?.totalRatingsCount > 0
+                            ? Math.round(imPost?.compositeRating)
+                            : -1
+                        ),
+                        'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
+                      )}
+                    >
+                      {imPost?.totalRatingsCount > 0
+                        ? Math.round(imPost?.compositeRating) + '%'
+                        : '—'}
+                    </span>
 
-                  <div className="flex items-center whitespace-nowrap text-xs">
-                    <div className="relative rounded-full w-5 h-5">
-                      <Image
-                        className="rounded-full"
-                        src={
-                          imPost?.minterToken?.profilePhoto ||
-                          '/default-profile-pic.png'
-                        }
-                        alt=""
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    </div>
+                    <div className="flex items-center whitespace-nowrap text-xs">
+                      <div className="relative rounded-full w-5 h-5">
+                        <Image
+                          className="rounded-full"
+                          src={
+                            imPost?.minterToken?.profilePhoto ||
+                            '/default-profile-pic.png'
+                          }
+                          alt=""
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
 
-                    {/* Post minter IM name/wallet and twitter name */}
-                    <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                      <A
-                        className="ml-1 font-medium hover:text-blue-500"
-                        href={`/u/${usernameOrWallet}`}
-                      >
-                        {displayUsernameOrWallet}
-                      </A>
-                      {imPost?.minterToken?.twitterUsername && (
+                      {/* Post minter IM name/wallet and twitter name */}
+                      <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
                         <A
-                          className="flex items-center space-x-1 hover:text-blue-500"
+                          className="ml-1 font-medium hover:text-blue-500"
                           href={`/u/${usernameOrWallet}`}
                         >
-                          <div className="relative w-4 h-4">
-                            <Image
-                              src={'/twitter-solid-blue.svg'}
-                              alt="twitter-solid-blue-icon"
-                              layout="fill"
-                            />
-                          </div>
-                          <span className="text-xs opacity-50">
-                            @{imPost?.minterToken?.twitterUsername}
-                          </span>
+                          {displayUsernameOrWallet}
                         </A>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="py-4 border-b font-bold">
-                    <ListingContent
-                      imPost={imPost}
-                      page="HomePage"
-                      urlMetaData={null}
-                      useMetaData={false}
-                    />
-                  </div>
-
-                  {/* Stats */}
-                  <div className="flex items-center pt-4">
-                    <div className="w-1/2">
-                      <div className="flex justify-start items-center space-x-2">
-                        <div className="relative w-6 h-6">
-                          <Image
-                            src={'/people-icon.svg'}
-                            alt="people-icon"
-                            layout="fill"
-                          />
-                        </div>
-
-                        <div>
-                          <div className="text-xs text-black/[.5] font-semibold">
-                            Ratings
-                          </div>
-                          <div className="font-bold">
-                            {formatNumberWithCommasAsThousandsSerperator(
-                              imPost.totalRatingsCount
-                            )}
-                          </div>
-                        </div>
+                        {imPost?.minterToken?.twitterUsername && (
+                          <A
+                            className="flex items-center space-x-1 hover:text-blue-500"
+                            href={`/u/${usernameOrWallet}`}
+                          >
+                            <div className="relative w-4 h-4">
+                              <Image
+                                src={'/twitter-solid-blue.svg'}
+                                alt="twitter-solid-blue-icon"
+                                layout="fill"
+                              />
+                            </div>
+                            <span className="text-xs opacity-50">
+                              @{imPost?.minterToken?.twitterUsername}
+                            </span>
+                          </A>
+                        )}
                       </div>
                     </div>
 
-                    <div className="w-1/2">
-                      <div className="flex justify-start items-center space-x-2">
-                        <div className="relative w-6 h-6">
-                          <Image
-                            src={'/eye-icon.svg'}
-                            alt="eye-icon"
-                            layout="fill"
-                          />
+                    <div className="py-4 border-b font-bold">
+                      <ListingContent
+                        imPost={imPost}
+                        page="HomePage"
+                        urlMetaData={null}
+                        useMetaData={false}
+                      />
+                    </div>
+
+                    {/* Stats */}
+                    <div className="py-6">
+                      {/* Ratings */}
+                      <div className="flex justify-between items-center">
+                        <div className="flex justify-start items-center space-x-2">
+                          <div className="relative w-6 h-6">
+                            <Image
+                              src={'/people-icon.svg'}
+                              alt="people-icon"
+                              layout="fill"
+                            />
+                          </div>
+
+                          <div className="text-xs text-black/[.5] font-semibold">
+                            Ratings
+                          </div>
                         </div>
 
-                        <div>
+                        <div className="font-bold">
+                          {formatNumberWithCommasAsThousandsSerperator(
+                            imPost.totalRatingsCount
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Controversial */}
+                      <div className="flex justify-between items-center">
+                        <div className="flex justify-start items-center space-x-2">
+                          <div className="relative w-6 h-6">
+                            <Image
+                              src={'/eye-icon.svg'}
+                              alt="eye-icon"
+                              layout="fill"
+                            />
+                          </div>
+
                           <div className="flex items-center space-x-2">
                             <div className="text-xs text-black/[.5] font-medium">
                               Controversial
                             </div>
+                            {/* Removing tooltip on mobile because card clicks to Post page */}
                             {/* <Tooltip
                               className="text-black/[.5] z-[200]"
                               iconComponentClassNames="w-3"
@@ -283,60 +297,151 @@ const IMPostsViewMobile = ({
                               </div>
                             </Tooltip> */}
                           </div>
-                          <div className="font-bold">
-                            {formatNumberWithCommasAsThousandsSerperator(
-                              Math.round(imPost.marketInterest)
-                            )}
-                          </div>
+                        </div>
+
+                        <div className="font-bold">
+                          {formatNumberWithCommasAsThousandsSerperator(
+                            Math.round(imPost.marketInterest)
+                          )}
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-                  {imPost?.topCitations?.length > 0 && (
-                    <div className={classNames('text-xs mt-6')}>
-                      <div className="text-black/[.5] mb-2 font-semibold">
-                        Top Citations
+                      {/* Income */}
+                      <div className="flex justify-between items-center">
+                        <div className="flex justify-start items-center space-x-2">
+                          <div className="relative w-6 h-6">
+                            <Image
+                              src={'/people-icon.svg'}
+                              alt="people-icon"
+                              layout="fill"
+                            />
+                          </div>
+
+                          <div className="text-xs text-black/[.5] font-semibold">
+                            Income
+                          </div>
+                        </div>
+
+                        <div className="font-bold">0.274 ETH</div>
                       </div>
+                    </div>
 
-                      {imPost?.topCitations.map((citation, cInd) => {
-                        const { minterAddress } = (citation || {}) as any
+                    {imPost?.topCitations?.length > 0 && (
+                      <div className={classNames('text-xs mt-6')}>
+                        <div className="text-black/[.5] mb-2 font-semibold">
+                          Top Citations
+                        </div>
 
-                        const displayUsernameOrWalletCitation =
-                          convertAccountName(
+                        {imPost?.topCitations.map((citation, cInd) => {
+                          const { minterAddress } = (citation || {}) as any
+
+                          const displayUsernameOrWalletCitation =
+                            convertAccountName(
+                              citation?.minterToken?.username || minterAddress
+                            )
+                          const usernameOrWalletCitation =
                             citation?.minterToken?.username || minterAddress
-                          )
-                        const usernameOrWalletCitation =
-                          citation?.minterToken?.username || minterAddress
 
-                        return (
-                          <A
-                            href={`/post/${citation?.tokenID}`}
-                            className="relative block p-4 bg-gradient-to-b from-[#0cae741a] to-[#1fbfbf1a] rounded-2xl font-bold mb-2"
-                            key={cInd}
-                          >
-                            <span
-                              className={classNames(
-                                getIMORatingColors(
-                                  citation?.totalRatingsCount > 0
-                                    ? Math.round(citation?.compositeRating)
-                                    : -1
-                                ),
-                                'absolute top-0 right-0 w-10 h-10 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-base border-l-2 border-b-2 border-white'
-                              )}
+                          return (
+                            <A
+                              href={`/post/${citation?.tokenID}`}
+                              className="relative block p-4 bg-gradient-to-b from-[#0cae741a] to-[#1fbfbf1a] rounded-2xl font-bold mb-2"
+                              key={cInd}
                             >
-                              {citation?.totalRatingsCount > 0
-                                ? Math.round(citation?.compositeRating) + '%'
-                                : '—'}
-                            </span>
+                              <span
+                                className={classNames(
+                                  getIMORatingColors(
+                                    citation?.totalRatingsCount > 0
+                                      ? Math.round(citation?.compositeRating)
+                                      : -1
+                                  ),
+                                  'absolute top-0 right-0 w-10 h-10 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-base border-l-2 border-b-2 border-white'
+                                )}
+                              >
+                                {citation?.totalRatingsCount > 0
+                                  ? Math.round(citation?.compositeRating) + '%'
+                                  : '—'}
+                              </span>
 
-                            {/* Citation username/wallet/pic */}
-                            <div className="flex items-center whitespace-nowrap text-xs mb-2">
+                              {/* Citation username/wallet/pic */}
+                              <div className="flex items-center whitespace-nowrap text-xs mb-2">
+                                <div className="relative rounded-full w-5 h-5">
+                                  <Image
+                                    className="rounded-full"
+                                    src={
+                                      citation?.minterToken?.profilePhoto ||
+                                      '/default-profile-pic.png'
+                                    }
+                                    alt=""
+                                    layout="fill"
+                                    objectFit="cover"
+                                  />
+                                </div>
+
+                                {/* Post minter IM name/wallet and twitter name */}
+                                <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
+                                  <A
+                                    className="ml-1 font-medium hover:text-blue-500"
+                                    href={`/u/${usernameOrWalletCitation}`}
+                                  >
+                                    {displayUsernameOrWalletCitation}
+                                  </A>
+                                  {citation?.minterToken?.twitterUsername && (
+                                    <A
+                                      className="flex items-center space-x-1 hover:text-blue-500"
+                                      href={`/u/${usernameOrWalletCitation}`}
+                                    >
+                                      <div className="relative w-4 h-4">
+                                        <Image
+                                          src={'/twitter-solid-blue.svg'}
+                                          alt="twitter-solid-blue-icon"
+                                          layout="fill"
+                                        />
+                                      </div>
+                                      <span className="text-xs opacity-50">
+                                        @
+                                        {citation?.minterToken?.twitterUsername}
+                                      </span>
+                                    </A>
+                                  )}
+                                </div>
+                              </div>
+
+                              <ListingContent
+                                imPost={citation}
+                                page="HomePage"
+                                urlMetaData={null}
+                                useMetaData={false}
+                              />
+                            </A>
+                          )
+                        })}
+                      </div>
+                    )}
+
+                    {imPost?.topRatings?.length > 0 && (
+                      <div className={classNames('text-xs mt-6 mb-6')}>
+                        <div className="text-black/[.5] mb-2 font-semibold">
+                          Top Raters
+                        </div>
+
+                        {imPost?.topRatings.map((rating, rInd) => {
+                          const displayUsernameOrWallet = convertAccountName(
+                            rating?.userToken?.username || rating?.ratedBy
+                          )
+                          const usernameOrWallet =
+                            rating?.userToken?.username || rating?.ratedBy
+
+                          return (
+                            <div
+                              className="flex items-center whitespace-nowrap text-xs mb-2"
+                              key={rInd}
+                            >
                               <div className="relative rounded-full w-5 h-5">
                                 <Image
                                   className="rounded-full"
                                   src={
-                                    citation?.minterToken?.profilePhoto ||
+                                    rating?.userToken?.profilePhoto ||
                                     '/default-profile-pic.png'
                                   }
                                   alt=""
@@ -349,92 +454,22 @@ const IMPostsViewMobile = ({
                               <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
                                 <A
                                   className="ml-1 font-medium hover:text-blue-500"
-                                  href={`/u/${usernameOrWalletCitation}`}
+                                  href={`/u/${usernameOrWallet}`}
                                 >
-                                  {displayUsernameOrWalletCitation}
+                                  {displayUsernameOrWallet}
                                 </A>
-                                {citation?.minterToken?.twitterUsername && (
-                                  <A
-                                    className="flex items-center space-x-1 hover:text-blue-500"
-                                    href={`/u/${usernameOrWalletCitation}`}
-                                  >
-                                    <div className="relative w-4 h-4">
-                                      <Image
-                                        src={'/twitter-solid-blue.svg'}
-                                        alt="twitter-solid-blue-icon"
-                                        layout="fill"
-                                      />
-                                    </div>
-                                    <span className="text-xs opacity-50">
-                                      @{citation?.minterToken?.twitterUsername}
-                                    </span>
-                                  </A>
-                                )}
+                              </div>
+
+                              <div className="ml-auto text-sm font-bold">
+                                {rating.rating}
                               </div>
                             </div>
-
-                            <ListingContent
-                              imPost={citation}
-                              page="HomePage"
-                              urlMetaData={null}
-                              useMetaData={false}
-                            />
-                          </A>
-                        )
-                      })}
-                    </div>
-                  )}
-
-                  {imPost?.topRatings?.length > 0 && (
-                    <div className={classNames('text-xs mt-6 mb-6')}>
-                      <div className="text-black/[.5] mb-2 font-semibold">
-                        Top Raters
+                          )
+                        })}
                       </div>
-
-                      {imPost?.topRatings.map((rating, rInd) => {
-                        const displayUsernameOrWallet = convertAccountName(
-                          rating?.userToken?.username || rating?.ratedBy
-                        )
-                        const usernameOrWallet =
-                          rating?.userToken?.username || rating?.ratedBy
-
-                        return (
-                          <div
-                            className="flex items-center whitespace-nowrap text-xs mb-2"
-                            key={rInd}
-                          >
-                            <div className="relative rounded-full w-5 h-5">
-                              <Image
-                                className="rounded-full"
-                                src={
-                                  rating?.userToken?.profilePhoto ||
-                                  '/default-profile-pic.png'
-                                }
-                                alt=""
-                                layout="fill"
-                                objectFit="cover"
-                              />
-                            </div>
-
-                            {/* Post minter IM name/wallet and twitter name */}
-                            <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                              <A
-                                className="ml-1 font-medium hover:text-blue-500"
-                                href={`/u/${usernameOrWallet}`}
-                              >
-                                {displayUsernameOrWallet}
-                              </A>
-                            </div>
-
-                            <div className="ml-auto text-sm font-bold">
-                              {rating.rating}
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </A>
+                    )}
+                  </A>
+                </div>
 
                 <div className={classNames('mt-2')}>
                   <OpenRateModal imPost={imPost} />

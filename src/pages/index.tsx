@@ -31,10 +31,20 @@ import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import { OverviewSearchbar } from 'components/tokens/OverviewSearchbar'
 import SelectCategoriesModal from 'modules/posts/components/SelectCategoriesModal'
 import Image from 'next/image'
+import { InboxInIcon } from '@heroicons/react/solid'
+import useUserFeesClaimable from 'modules/user-market/hooks/useUserFeesClaimable'
+import useTokenToDAI from 'actions/useTokenToDAI'
 
 export enum HOME_PAGE_VIEWS {
   POSTS,
   USERS,
+}
+
+const ETH_TOKEN = {
+  name: 'Ethereum',
+  address: '0x0000000000000000000000000000000000000000',
+  symbol: 'ETH',
+  decimals: 18,
 }
 
 const Home = () => {
@@ -64,6 +74,13 @@ const Home = () => {
   useOnClickOutside(mobileRef, () => {
     setIsMobileTimeFilterDropdownOpen(false)
   })
+
+  const [, ethClaimable] = useUserFeesClaimable()
+  const [, , selectedTokenDAIValue] = useTokenToDAI(
+    ETH_TOKEN as any,
+    ethClaimable,
+    18
+  )
 
   const [activeOverlayPostID, setActiveOverlayPostID] = useState(null)
 
@@ -152,7 +169,45 @@ const Home = () => {
       {/* {activeOverlayPostID && <IMPostOverlay postID={activeOverlayPostID} />} */}
 
       {/* Desktop and tablet */}
-      <div className="hidden md:block w-full mt-10">
+      <div className="hidden md:block w-full">
+        {/* Carousel section */}
+        <div className="bg-blue-100 px-20 py-8 mb-10">
+          <div className="">
+            <div className="text-sm text-blue-400 font-semibold mb-6">
+              HOW DOES IT WORK?
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <div className="rounded-lg bg-white w-[20rem] h-36 p-4">
+                <div className="font-bold text-lg mb-2">Make Money</div>
+                <div className="text-black/[.5] text-sm mb-4">
+                  Create new posts, and earn money when people rate them
+                </div>
+                <div className="text-blue-600 text-xs">learn more</div>
+              </div>
+
+              <div className="rounded-lg bg-white w-[20rem] h-36 p-4">
+                <div className="font-bold text-lg mb-2">
+                  Make new Twitter friends
+                </div>
+                <div className="text-black/[.5] text-sm mb-4">
+                  Rate posts, and find Twitter users who agree with your ratings
+                </div>
+                <div className="text-blue-600 text-xs">learn more</div>
+              </div>
+
+              <div className="rounded-lg bg-white w-[20rem] h-36 p-4">
+                <div className="font-bold text-lg mb-2">Connect Twitter</div>
+                <div className="text-black/[.5] text-sm mb-4">
+                  Connect Twitter to your profile to attract new followers based
+                  on your ratings
+                </div>
+                <div className="text-blue-600 text-xs">learn more</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Top section with buttons */}
         <div className="flex flex-wrap items-center mx-20 pb-6">
           {/* Posts and Users buttons */}
@@ -333,7 +388,31 @@ const Home = () => {
       </div>
 
       {/* Mobile */}
-      <div className="md:hidden w-full mt-6">
+      <div className="md:hidden w-full">
+        {/* Available to withdraw button */}
+        <div className="px-4 my-4">
+          <button className="w-full bg-white border-l border-t border-r-4 border-b-4 border-blue-600 rounded-3xl px-7 py-3 leading-[.5rem]">
+            <div className="flex justify-between items-center space-x-2">
+              <div className="flex items-center">
+                <InboxInIcon className="w-5 h-5 text-black mr-4" />
+                <div className="text-xs text-black/[.5]">
+                  Available to Withdraw
+                </div>
+              </div>
+
+              <div>
+                <span className="text-black font-bold text-xs">
+                  {ethClaimable} ETH
+                </span>
+                <span className="text-black/[.5] font-bold text-xs">
+                  {' '}
+                  (${parseFloat(selectedTokenDAIValue).toFixed(2)})
+                </span>
+              </div>
+            </div>
+          </button>
+        </div>
+
         {/* Top section with buttons */}
         <div className="pb-6 border-b">
           {/* Posts and Users buttons */}

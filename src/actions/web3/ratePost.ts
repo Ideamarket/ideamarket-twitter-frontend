@@ -8,12 +8,14 @@ import { NETWORK } from 'store/networks'
  * @param rating -- 0-100 inclusive, except 50
  * @param citations -- array of tokenIds of NFTs used as citations
  * @param inFavorArray -- array where each element corresponds based on index to citations array saying if each citation is in favor of post it is rating or not
+ * @param opinionWriter -- Wallet address writing the opinion
  */
 export default function ratePost(
   tokenId: number,
   rating: number,
   citations: number[] = [],
-  inFavorArray: boolean[] = []
+  inFavorArray: boolean[] = [],
+  opinionWriter: string
 ) {
   if (!tokenId) {
     console.error(`tokenId ${tokenId} is not valid`)
@@ -28,10 +30,12 @@ export default function ratePost(
     return null
   }
 
+  const fee = '1000000000000000' // 0.001 ETH
+
   try {
     return nftOpinionBase.methods
-      .writeOpinion(tokenId, rating, citations, inFavorArray)
-      .send()
+      .writeOpinion(tokenId, rating, citations, inFavorArray, opinionWriter)
+      .send({ value: fee })
   } catch (error) {
     console.error('nftOpinionBase.methods.writeOpinion failed')
     return null
