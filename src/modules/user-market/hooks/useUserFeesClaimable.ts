@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useWalletStore } from 'store/walletStore'
 import getClaimableFees from 'actions/web3/user-market/getClaimableFees'
 import BigNumber from 'bignumber.js'
 import { bigNumberTenPow18, web3BNToFloatString } from 'utils'
+import { GlobalContext } from 'lib/GlobalContext'
 
 // Get the fees claimable by the connected user
 export default function useUserFeesClaimable() {
@@ -16,6 +17,8 @@ export default function useUserFeesClaimable() {
     walletAddress: state.address,
     chainID: state.chainID,
   }))
+
+  const { isTxPending } = useContext(GlobalContext)
 
   useEffect(() => {
     let isCancelled = false
@@ -44,7 +47,7 @@ export default function useUserFeesClaimable() {
     return () => {
       isCancelled = true
     }
-  }, [web3, walletAddress, chainID])
+  }, [web3, walletAddress, chainID, isTxPending])
 
   return [ethClaimableBN, ethClaimable, isLoading]
 }

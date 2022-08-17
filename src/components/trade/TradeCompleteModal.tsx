@@ -21,6 +21,7 @@ export enum TX_TYPES {
   URL_LIST,
   STAKE_USER,
   UNSTAKE_USER,
+  WITHDRAW_CLAIMABLE_FEE,
 }
 
 const tweetableTypes = [

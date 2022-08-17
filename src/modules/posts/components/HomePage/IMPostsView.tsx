@@ -21,6 +21,7 @@ import OpenRateModal from 'modules/ratings/components/OpenRateModal'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { getIMORatingColors } from 'utils/display/DisplayUtils'
 import { ExternalLinkIcon } from '@heroicons/react/outline'
+import { NETWORK } from 'store/networks'
 
 const AdvancedPostColWidth = 'w-[45%]'
 const AdvancedCitationsColWidth = 'w-[35%]'
@@ -133,7 +134,7 @@ const IMPostsView = ({
   return (
     <div className="hidden md:block mx-auto">
       {!isAdvancedView && (
-        <div className="w-full px-20 pb-40">
+        <div className="w-full pb-40">
           <div className="flex flex-col w-[36rem] mx-auto mt-6">
             {imPostPairs &&
               imPostPairs.length > 0 &&
@@ -150,6 +151,8 @@ const IMPostsView = ({
                 //   activeOverlayPostID &&
                 //   activeOverlayPostID === imPost.tokenID.toString()
 
+                const postIncome = imPost.totalRatingsCount * 0.001
+
                 return (
                   <div
                     ref={lastElementRef}
@@ -165,11 +168,17 @@ const IMPostsView = ({
                       <div className="relative">
                         <span
                           className={classNames(
-                            'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200]'
+                            'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200] cursor-pointer hover:text-blue-800'
                           )}
                         >
-                          Buy this NFT
-                          <ExternalLinkIcon className="w-3 h-3 ml-2" />
+                          <A
+                            href={`https://stratosnft.io/asset/${
+                              NETWORK.getDeployedAddresses().ideamarketPosts
+                            }/${imPost.tokenID}`}
+                          >
+                            Buy this NFT
+                            <ExternalLinkIcon className="w-3 h-3 ml-2" />
+                          </A>
                         </span>
                         <A
                           href={`/post/${imPost?.tokenID}`}
@@ -314,7 +323,15 @@ const IMPostsView = ({
                                   <div className="text-xs text-black/[.5] font-medium">
                                     Income
                                   </div>
-                                  <div className="font-bold">0.274 ETH</div>
+                                  <div>
+                                    <span className="font-bold">
+                                      {postIncome} ETH
+                                    </span>
+                                    <span className="text-black/[.5] font-bold text-xs">
+                                      {' '}
+                                      (${imPost?.incomeInDAI?.toFixed(2)})
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -332,7 +349,7 @@ const IMPostsView = ({
       )}
 
       {isAdvancedView && (
-        <div className="flex flex-col px-20 pb-40">
+        <div className="flex flex-col pb-40">
           <div className="py-3 mt-5 mb-8 flex space-x-10 text-sm text-black/[.5] border-y-2 border-black/[0.05]">
             <div className={classNames(AdvancedPostColWidth, '')}>
               <div className="font-semibold">Post</div>
@@ -369,6 +386,8 @@ const IMPostsView = ({
               //   activeOverlayPostID &&
               //   activeOverlayPostID === imPost.tokenID.toString()
 
+              const postIncome = imPost.totalRatingsCount * 0.001
+
               return (
                 <div
                   ref={lastElementRef}
@@ -380,11 +399,17 @@ const IMPostsView = ({
                     <div className="relative">
                       <span
                         className={classNames(
-                          'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200]'
+                          'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200] cursor-pointer hover:text-blue-800'
                         )}
                       >
-                        Buy this NFT
-                        <ExternalLinkIcon className="w-3 h-3 ml-2" />
+                        <A
+                          href={`https://stratosnft.io/asset/${
+                            NETWORK.getDeployedAddresses().ideamarketPosts
+                          }/${imPost.tokenID}`}
+                        >
+                          Buy this NFT
+                          <ExternalLinkIcon className="w-3 h-3 ml-2" />
+                        </A>
                       </span>
 
                       <A
@@ -529,7 +554,15 @@ const IMPostsView = ({
                                 <div className="text-xs text-black/[.5] font-medium">
                                   Income
                                 </div>
-                                <div className="font-bold">0.274 ETH</div>
+                                <div>
+                                  <span className="font-bold">
+                                    {postIncome} ETH
+                                  </span>
+                                  <span className="text-black/[.5] font-bold text-xs">
+                                    {' '}
+                                    (${imPost?.incomeInDAI?.toFixed(2)})
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>

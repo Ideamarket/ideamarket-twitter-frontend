@@ -21,6 +21,11 @@ import A from 'components/A'
 import classNames from 'classnames'
 import useUserFeesClaimable from 'modules/user-market/hooks/useUserFeesClaimable'
 import useTokenToDAI from 'actions/useTokenToDAI'
+import withdrawClaimableFees from 'actions/web3/user-market/withdrawClaimableFees'
+import { useTransactionManager } from 'utils'
+import TradeCompleteModal, {
+  TX_TYPES,
+} from 'components/trade/TradeCompleteModal'
 
 type Props = {
   bgColor: string
@@ -35,8 +40,9 @@ const ETH_TOKEN = {
 }
 
 const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
-  const { user } = useContext(GlobalContext)
+  const { setIsTxPending, user } = useContext(GlobalContext)
   const { active, account } = useWeb3React()
+  const txManager = useTransactionManager()
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   const [visibility, setVisibility] = useState<Boolean>(false)
   const [timerId, setTimerId] = useState(null)
@@ -92,6 +98,46 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
     }
   }
 
+  function onTradeComplete(
+    isSuccess: boolean,
+    listingId: string,
+    idtValue: string,
+    transactionType: TX_TYPES
+  ) {
+    ModalService.open(TradeCompleteModal, {
+      isSuccess,
+      listingId,
+      idtValue,
+      transactionType,
+    })
+  }
+
+  const onWithdrawUserFeeClicked = async () => {
+    if (ethClaimable && ethClaimable > 0) {
+      setIsTxPending(true)
+
+      try {
+        await txManager.executeTx(
+          'Withdraw claimable fees',
+          withdrawClaimableFees
+        )
+      } catch (ex) {
+        console.log(ex)
+        onTradeComplete(false, 'error', 'error', TX_TYPES.NONE)
+        setIsTxPending(false)
+        return
+      }
+
+      setIsTxPending(false)
+      onTradeComplete(
+        true,
+        'success',
+        'success',
+        TX_TYPES.WITHDRAW_CLAIMABLE_FEE
+      )
+    }
+  }
+
   useEffect(() => {
     return () => {
       timerId && clearTimeout(timerId)
@@ -135,27 +181,28 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
           </div>
 
           <div className="h-9 hidden md:flex items-center">
-            {ethClaimable && ethClaimable > 0 && (
-              <button className="bg-white border-l border-t border-r-4 border-b-4 border-blue-600 rounded-3xl px-2 py-1 leading-[.5rem]">
-                <div className="flex items-center space-x-2">
-                  <InboxInIcon className="w-5 h-5 text-black" />
+            <button
+              onClick={onWithdrawUserFeeClicked}
+              className="bg-white border-l border-t border-r-4 border-b-4 border-blue-600 rounded-3xl px-2 py-1 leading-[.5rem]"
+            >
+              <div className="flex items-center space-x-2">
+                <InboxInIcon className="w-5 h-5 text-black" />
+                <div>
+                  <div className="text-xs text-black/[.5]">
+                    Available to Withdraw
+                  </div>
                   <div>
-                    <div className="text-xs text-black/[.5]">
-                      Available to Withdraw
-                    </div>
-                    <div>
-                      <span className="text-black font-bold text-xs">
-                        {ethClaimable} ETH
-                      </span>
-                      <span className="text-black/[.5] font-bold text-xs">
-                        {' '}
-                        (${parseFloat(selectedTokenDAIValue).toFixed(2)})
-                      </span>
-                    </div>
+                    <span className="text-black font-bold text-xs">
+                      {ethClaimable} ETH
+                    </span>
+                    <span className="text-black/[.5] font-bold text-xs">
+                      {' '}
+                      (${parseFloat(selectedTokenDAIValue).toFixed(2)})
+                    </span>
                   </div>
                 </div>
-              </button>
-            )}
+              </div>
+            </button>
 
             <button
               onClick={onNewPostClicked}
