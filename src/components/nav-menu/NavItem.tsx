@@ -17,8 +17,20 @@ const NavItem = ({ menuItem }) => {
     menuItem.onClick ? await menuItem.onClick() : setIsOpen(!isOpen)
   }
 
+  const onMouseLeave = () => {
+    if (!menuItem.onClick) setIsOpen(false)
+  }
+
+  const onMouseEnter = () => {
+    if (!menuItem.onClick) setIsOpen(true)
+  }
+
   return (
-    <div className="relative mt-0.5">
+    <div
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className="relative mt-0.5"
+    >
       <A
         className="inline-flex px-3 py-2 text-sm font-bold leading-5 transition duration-150 ease-in-out bg-transparent rounded-md cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
         onClick={onMenuItemClick}
