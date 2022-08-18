@@ -31,14 +31,14 @@ const MobileNavItems = ({ isMobileNavOpen, user, account }: Props) => {
       leaveTo="opacity-0 scale-95"
       className="md:hidden"
     >
-      <div className="px-2 pt-2 pb-3 space-y-3 sm:px-3 bg-gradient-to-b from-[#02194D] to-[#011032] text-white">
+      <div className="px-2 pt-2 pb-4 space-y-3 sm:px-3 text-black text-right">
         {navbarConfig.menu.map((menuItem, i) => (
           <NavItem menuItem={menuItem} key={i} />
         ))}
 
         {account && (
           <A
-            className="inline-flex px-4 py-2 text-lg leading-5 text-white transition duration-150 ease-in-out bg-transparent rounded-md shadow-sm cursor-pointer md:justify-center hover:text-gray-500 active:text-gray-800"
+            className="inline-flex px-4 py-2 text-sm font-bold cursor-pointer hover:text-gray-500 active:text-gray-800"
             href={`/u/${userNameOrWallet}`}
           >
             <span>My Profile</span>

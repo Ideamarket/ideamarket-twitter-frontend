@@ -224,8 +224,8 @@ const Home = () => {
               HOW DOES IT WORK?
             </div>
 
-            <div className="flex items-center space-x-2">
-              <div className="rounded-lg bg-white w-[20rem] h-36 p-4">
+            <div className="flex items-center space-x-6">
+              <div className="rounded-lg bg-white w-1/3 h-36 p-4">
                 <div className="font-bold text-lg mb-2">Make Money</div>
                 <div className="text-black/[.5] text-sm mb-4">
                   Create new posts, and earn money when people rate them
@@ -233,7 +233,7 @@ const Home = () => {
                 <div className="text-blue-600 text-xs">learn more</div>
               </div>
 
-              <div className="rounded-lg bg-white w-[20rem] h-36 p-4">
+              <div className="rounded-lg bg-white w-1/3 h-36 p-4">
                 <div className="font-bold text-lg mb-2">
                   Make new Twitter friends
                 </div>
@@ -243,7 +243,7 @@ const Home = () => {
                 <div className="text-blue-600 text-xs">learn more</div>
               </div>
 
-              <div className="rounded-lg bg-white w-[20rem] h-36 p-4">
+              <div className="rounded-lg bg-white w-1/3 h-36 p-4">
                 <div className="font-bold text-lg mb-2">Connect Twitter</div>
                 <div className="text-black/[.5] text-sm mb-4">
                   Connect Twitter to your profile to attract new followers based
@@ -450,7 +450,7 @@ const Home = () => {
       {/* Mobile */}
       <div className="md:hidden w-full">
         {/* Available to withdraw button */}
-        <div className="px-4 my-4">
+        <div className="px-4 mb-4 mt-8">
           <button
             onClick={onWithdrawUserFeeClicked}
             className="w-full bg-white border-l border-t border-r-4 border-b-4 border-blue-600 rounded-3xl px-7 py-3 leading-[.5rem]"

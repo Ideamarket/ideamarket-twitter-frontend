@@ -56,10 +56,13 @@ const OpenRateModal = ({ imPost }: Props) => {
         railStyle={{
           height: '20px',
           borderRadius: 0,
+          color: 'red',
+          backgroundColor: 'rgb(8 87 224 / 0.05)',
         }}
         trackStyle={{
           height: '20px',
           borderRadius: 0,
+          background: 'transparent',
         }}
         style={{ padding: 0, left: '0px' }}
       />

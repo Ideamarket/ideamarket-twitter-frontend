@@ -3,7 +3,7 @@ import Image from 'next/image'
 import NProgress from 'nprogress'
 import { getNavbarConfig } from './constants'
 import { Router } from 'next/dist/client/router'
-import { InboxInIcon, MenuIcon, XIcon } from '@heroicons/react/solid'
+import { MenuIcon, XIcon } from '@heroicons/react/solid'
 import { WalletStatusWithConnectButton } from 'components'
 import MobileNavItems from './MobileNavItems'
 import NavItem from './NavItem'
@@ -186,9 +186,15 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
               className="bg-white border-l border-t border-r-4 border-b-4 border-blue-600 rounded-3xl px-2 py-1 leading-[.5rem]"
             >
               <div className="flex items-center space-x-2">
-                <InboxInIcon className="w-5 h-5 text-black" />
+                <div className="relative w-5 h-5">
+                  <Image
+                    src={'/withdraw-icon.svg'}
+                    alt="withdraw-icon"
+                    layout="fill"
+                  />
+                </div>
                 <div>
-                  <div className="text-xs text-black/[.5]">
+                  <div className="mt-1 text-[0.6rem] text-black/[.5]">
                     Available to Withdraw
                   </div>
                   <div>
@@ -231,22 +237,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
       </div>
 
       {/* Mobile NavMenu */}
-      <div className="flex justify-between items-center md:hidden px-3 py-4">
-        <button
-          onClick={() => setMobileNavOpen(!isMobileNavOpen)}
-          type="button"
-          className="inline-flex pr-2 mr-1 bg-transparent focus:outline-none "
-          aria-controls="mobile-menu"
-          aria-expanded="false"
-        >
-          <span className="sr-only">Open main menu</span>
-          {!isMobileNavOpen ? (
-            <MenuIcon className="w-6 h-6" />
-          ) : (
-            <XIcon className="w-6 h-6" />
-          )}
-        </button>
-
+      <div className="flex justify-between items-center md:hidden px-3 py-4 border-b">
         <A href="/" className="flex items-center">
           <div className="relative w-10 h-8">
             <Image
@@ -257,21 +248,38 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
             />
           </div>
 
-          <span className="w-auto h-full mr-2 text-2xl leading-none md:text-3xl">
+          {/* <span className="w-auto h-full mr-2 text-2xl leading-none md:text-3xl">
             Ideamarket
-          </span>
+          </span> */}
         </A>
 
-        <div className="flex">
-          <WalletStatusWithConnectButton />
-        </div>
+        <div className="flex justify-between items-center space-x-4">
+          <div className="flex">
+            <WalletStatusWithConnectButton />
+          </div>
 
-        <button
-          onClick={onNewPostClicked}
-          className="w-8 h-8 flex justify-center items-center text-white bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 rounded-2xl"
-        >
-          <SolidPencilIcon className="w-5 h-5" />
-        </button>
+          <button
+            onClick={onNewPostClicked}
+            className="w-8 h-8 flex justify-center items-center text-white bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 rounded-2xl"
+          >
+            <SolidPencilIcon className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={() => setMobileNavOpen(!isMobileNavOpen)}
+            type="button"
+            className="inline-flex p-2 mr-2 mr-1 bg-transparent focus:outline-none border rounded-3xl"
+            aria-controls="mobile-menu"
+            aria-expanded="false"
+          >
+            <span className="sr-only">Open main menu</span>
+            {!isMobileNavOpen ? (
+              <MenuIcon className="w-5 h-5" />
+            ) : (
+              <XIcon className="w-5 h-5" />
+            )}
+          </button>
+        </div>
       </div>
 
       <MobileNavItems

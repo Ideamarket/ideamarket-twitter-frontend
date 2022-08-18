@@ -21,13 +21,14 @@ export default function BlankLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-brand-gray dark:bg-gray-900 font-inter">
       <Toaster />
       <div>{children}</div>
-      <div className="fixed bottom-0 z-20 w-full">
+      <div className="fixed bottom-0 z-[900] w-full">
         <CookieConsent
           style={{ position: 'relative', background: '#708090' }}
           buttonStyle={{
             background: '#0857e0',
             color: 'white',
             fontSize: '13px',
+            zIndex: 900,
           }}
         >
           This website uses cookies to enhance the user experience.

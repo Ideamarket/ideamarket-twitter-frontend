@@ -182,7 +182,7 @@ const IMPostsView = ({
                         </span>
                         <A
                           href={`/post/${imPost?.tokenID}`}
-                          className="w-full relative block p-8 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
+                          className="w-full relative block px-8 pt-8 pb-10 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
                         >
                           <span
                             className={classNames(
@@ -241,7 +241,7 @@ const IMPostsView = ({
                             </div>
                           </div>
 
-                          <div className="py-4 border-b font-bold">
+                          <div className="py-6 border-b font-bold">
                             <ListingContent
                               imPost={imPost}
                               page="HomePage"
@@ -250,7 +250,7 @@ const IMPostsView = ({
                             />
                           </div>
 
-                          <div className="flex items-center pt-4">
+                          <div className="flex items-center pt-6">
                             <div className="w-1/3">
                               <div className="flex justify-start items-center space-x-2">
                                 <div className="relative w-6 h-6">
@@ -414,7 +414,7 @@ const IMPostsView = ({
 
                       <A
                         href={`/post/${imPost?.tokenID}`}
-                        className="relative block p-8 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
+                        className="relative block px-8 pt-8 pb-10 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
                       >
                         <span
                           className={classNames(
@@ -473,7 +473,7 @@ const IMPostsView = ({
                           </div>
                         </div>
 
-                        <div className="py-4 border-b font-bold">
+                        <div className="py-6 border-b font-bold">
                           <ListingContent
                             imPost={imPost}
                             page="HomePage"
@@ -482,7 +482,7 @@ const IMPostsView = ({
                           />
                         </div>
 
-                        <div className="flex items-center pt-4">
+                        <div className="flex items-center pt-6">
                           <div className="w-1/3">
                             <div className="flex justify-start items-center space-x-2">
                               <div className="relative w-6 h-6">

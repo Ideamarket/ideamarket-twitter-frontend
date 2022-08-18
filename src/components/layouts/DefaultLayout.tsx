@@ -38,7 +38,7 @@ export default function DefaultLayout({
       <Toaster />
       <NavMenu bgColor={bgHeaderColor} textColor={headerTextColor} />
       <div className="pt-16">{children}</div>
-      <div className="fixed bottom-0 z-20 w-full">
+      <div className="fixed bottom-0 z-[900] w-full">
         <CookieConsent
           style={{ position: 'relative', background: '#708090' }}
           buttonStyle={{

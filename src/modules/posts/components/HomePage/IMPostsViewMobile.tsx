@@ -164,7 +164,7 @@ const IMPostsViewMobile = ({
             return (
               <div
                 ref={lastElementRef}
-                className="snap-start snap-always shrink-0 grow-0 basis-[90%] w-full pl-4 mb-10"
+                className="snap-start snap-always shrink-0 grow-0 basis-[95%] w-full pl-2 mb-10"
                 key={pInd}
               >
                 {/* The actual Post card */}
@@ -238,7 +238,7 @@ const IMPostsViewMobile = ({
                       </div>
                     </div>
 
-                    <div className="py-4 border-b font-bold">
+                    <div className="py-6 border-b font-bold text-xl">
                       <ListingContent
                         imPost={imPost}
                         page="HomePage"
@@ -248,7 +248,7 @@ const IMPostsViewMobile = ({
                     </div>
 
                     {/* Stats */}
-                    <div className="py-6">
+                    <div className="py-8">
                       {/* Ratings */}
                       <div className="flex justify-between items-center">
                         <div className="flex justify-start items-center space-x-2">
@@ -284,7 +284,7 @@ const IMPostsViewMobile = ({
                           </div>
 
                           <div className="flex items-center space-x-2">
-                            <div className="text-xs text-black/[.5] font-medium">
+                            <div className="text-xs text-black/[.5] font-semibold">
                               Controversial
                             </div>
                             {/* Removing tooltip on mobile because card clicks to Post page */}
@@ -311,8 +311,8 @@ const IMPostsViewMobile = ({
                         <div className="flex justify-start items-center space-x-2">
                           <div className="relative w-6 h-6">
                             <Image
-                              src={'/people-icon.svg'}
-                              alt="people-icon"
+                              src={'/income-icon.svg'}
+                              alt="eye-icon"
                               layout="fill"
                             />
                           </div>

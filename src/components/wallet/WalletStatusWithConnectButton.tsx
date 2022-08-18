@@ -41,7 +41,10 @@ export default function WalletStatusWithConnectButton() {
 
         {active && (
           <>
-            <div onClick={openWalletModal} className="flex items-center">
+            <div
+              onClick={openWalletModal}
+              className="flex items-center border rounded-3xl px-3 py-2"
+            >
               <WalletGreenIcon className="w-6 h-6" />
               <div className="ml-3 text-gray-400 align-middle whitespace-nowrap hidden md:flex">
                 {account.slice(0, 6)}...{account.slice(-4)}
@@ -61,7 +64,7 @@ export default function WalletStatusWithConnectButton() {
             >
               <button
                 onClick={active ? null : openWalletModal}
-                className="flex items-center space-x-2 h-9 bg-white/[.1] hover:text-blue-500 text-sm font-semibold pl-3 py-1 ml-3 rounded-lg"
+                className="flex items-center space-x-2 h-9 bg-white/[.1] hover:text-blue-500 text-sm font-semibold pl-3 py-1 ml-2 rounded-lg"
               >
                 <span>My Profile</span>
                 <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
@@ -93,7 +96,7 @@ export default function WalletStatusWithConnectButton() {
         {active && (
           <>
             <div onClick={openWalletModal} className="flex items-center">
-              <WalletGreenIcon className="w-6 h-6" />
+              {/* <WalletGreenIcon className="w-6 h-6" /> */}
               <div className="ml-3 text-gray-400 align-middle whitespace-nowrap hidden md:flex">
                 {account.slice(0, 6)}...{account.slice(-4)}
               </div>
