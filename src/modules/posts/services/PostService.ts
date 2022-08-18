@@ -1,10 +1,9 @@
 import apiGetAllPosts from 'actions/web2/posts/apiGetAllPosts'
 import { apiGetPostByContent } from 'actions/web2/posts/apiGetPostByContent'
 import { apiGetPostByTokenID } from 'actions/web2/posts/apiGetPostByTokenID'
+import { getETHPrice } from 'modules/external-web3/services/EtherscanService'
 import { IdeamarketUser } from 'modules/user-market/services/UserMarketService'
-import { ZERO_ADDRESS } from 'utils'
 import { TIME_FILTER } from 'utils/tables'
-import { getExchangeRate } from 'utils/uniswap'
 
 /**
  * Get post data from backend and convert to one format for frontend
@@ -79,12 +78,13 @@ export async function getAllPosts(
     timeFilter,
   })
 
+  const exchangeRate = await getETHPrice()
+
   return await Promise.all(
     allPosts.map(async (post) => {
       const postIncome = post.totalRatingsCount * 0.001
-      const exchangeRate = await getExchangeRate(ZERO_ADDRESS)
       // Caclulate the DAI worth of the input tokens by finding this product
-      const product = postIncome * parseFloat(exchangeRate)
+      const product = postIncome * exchangeRate
       post.incomeInDAI = product
       return formatApiResponseToPost(post)
     })
