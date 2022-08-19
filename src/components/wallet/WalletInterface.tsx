@@ -104,10 +104,6 @@ export default function WalletInterface({
       console.log(ex)
       return
     }
-
-    mixpanel.track('ADD_WALLET_COMPLETED', {
-      walletId: wallet,
-    })
   }
 
   async function onDisconnectClicked() {

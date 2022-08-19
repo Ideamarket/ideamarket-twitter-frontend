@@ -10,6 +10,7 @@ import A from 'components/A'
 import WalletIcon from '../../assets/wallet.svg'
 import { ProfileTooltip } from 'components/nav-menu/ProfileTooltip'
 import useOnClickOutside from 'utils/useOnClickOutside'
+import ConnectWalletTooltip from 'components/nav-menu/ConnectWalletTooltip'
 
 export default function WalletStatusWithConnectButton() {
   const { active, account } = useWeb3React()
@@ -26,21 +27,75 @@ export default function WalletStatusWithConnectButton() {
     ModalService.open(WalletModal)
   }
 
+  const [connectWalletVisibility, setConnectWalletVisibility] =
+    useState<Boolean>(false)
+  const [timerId, setTimerId] = useState(null)
+
+  const onMouseLeaveConnectWallet = () => {
+    setTimerId(
+      setTimeout(() => {
+        setConnectWalletVisibility(false)
+      }, 200)
+    )
+  }
+
+  const onMouseEnterConnectWallet = () => {
+    timerId && clearTimeout(timerId)
+    setConnectWalletVisibility(true)
+  }
+
+  const [profileTooltipVisibility, setProfileTooltipVisibility] =
+    useState<Boolean>(false)
+
+  const onMouseLeaveProfileTooltip = () => {
+    setTimerId(
+      setTimeout(() => {
+        setProfileTooltipVisibility(false)
+      }, 200)
+    )
+  }
+
+  const onMouseEnterProfileTooltip = () => {
+    timerId && clearTimeout(timerId)
+    active && setProfileTooltipVisibility(true)
+  }
+
   return (
     <>
       {/* Desktop */}
       <div className="hidden h-full md:flex flex-row items-center px-2 cursor-pointer justify-self-end">
         {!active && (
-          <div
-            onClick={openWalletModal}
-            className="h-full flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-brand-blue rounded-xl"
-          >
-            Connect Wallet
-          </div>
+          <>
+            {connectWalletVisibility && (
+              <div className="fixed h-screen z-[300] inset-0 bg-gray-500 bg-opacity-75"></div>
+            )}
+            <div
+              // onClick={openWalletModal}
+              onMouseEnter={onMouseEnterConnectWallet}
+              onMouseLeave={onMouseLeaveConnectWallet}
+              className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-brand-blue rounded-xl"
+            >
+              Connect Wallet
+              {connectWalletVisibility && (
+                <div className="absolute top-0 mt-12 right-0 mb-1 text-sm text-black overflow-hidden cursor-default">
+                  <ConnectWalletTooltip />
+                </div>
+              )}
+            </div>
+          </>
         )}
 
         {active && (
-          <>
+          <div
+            onMouseEnter={onMouseEnterProfileTooltip}
+            onMouseLeave={onMouseLeaveProfileTooltip}
+            className="flex items-center"
+          >
+            {profileTooltipVisibility && (
+              <div className="absolute top-0 mt-10 right-0 mb-1 text-sm text-black rounded-xl shadow bg-white overflow-hidden">
+                <ProfileTooltip />
+              </div>
+            )}
             <div
               onClick={openWalletModal}
               className="flex items-center border rounded-3xl px-3 py-2"
@@ -64,7 +119,7 @@ export default function WalletStatusWithConnectButton() {
             >
               <button
                 onClick={active ? null : openWalletModal}
-                className="flex items-center space-x-2 h-9 bg-white/[.1] hover:text-blue-500 text-sm font-semibold pl-3 py-1 ml-2 rounded-lg"
+                className="flex items-center space-x-2 h-9 bg-white/[.1] hover:text-blue-500 text-sm font-semibold py-1 ml-2 rounded-lg"
               >
                 <span>My Profile</span>
                 <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
@@ -78,7 +133,7 @@ export default function WalletStatusWithConnectButton() {
                 </div>
               </button>
             </A>
-          </>
+          </div>
         )}
       </div>
 

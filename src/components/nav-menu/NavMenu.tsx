@@ -7,8 +7,6 @@ import { MenuIcon, XIcon } from '@heroicons/react/solid'
 import { WalletStatusWithConnectButton } from 'components'
 import MobileNavItems from './MobileNavItems'
 import NavItem from './NavItem'
-// import NavThemeButton from './NavThemeButton'
-import { ProfileTooltip } from './ProfileTooltip'
 import { useWeb3React } from '@web3-react/core'
 import { GlobalContext } from 'lib/GlobalContext'
 import { PencilIcon as OutlinePencilIcon } from '@heroicons/react/outline'
@@ -41,11 +39,9 @@ const ETH_TOKEN = {
 
 const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
   const { setIsTxPending, user } = useContext(GlobalContext)
-  const { active, account } = useWeb3React()
+  const { account } = useWeb3React()
   const txManager = useTransactionManager()
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
-  const [visibility, setVisibility] = useState<Boolean>(false)
-  const [timerId, setTimerId] = useState(null)
 
   const navbarConfig = getNavbarConfig(user)
 
@@ -71,19 +67,6 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
       Router.events.on('routeChangeError', () => NProgress.done())
     }
   }, [])
-
-  const onMouseLeave = () => {
-    setTimerId(
-      setTimeout(() => {
-        setVisibility(false)
-      }, 200)
-    )
-  }
-
-  const onMouseEnter = () => {
-    timerId && clearTimeout(timerId)
-    active && setVisibility(true)
-  }
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
@@ -138,18 +121,12 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
     }
   }
 
-  useEffect(() => {
-    return () => {
-      timerId && clearTimeout(timerId)
-    }
-  }, [timerId])
-
   return (
     <div
       className={classNames(
         bgColor ? bgColor : 'bg-top-desktop',
         textColor,
-        'absolute z-[200] items-center w-full overflow-none font-inter md:px-20'
+        'absolute items-center w-full overflow-none font-inter md:px-20'
       )}
     >
       {/* Desktop NavMenu */}
@@ -220,18 +197,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
 
             {/* <NavThemeButton /> */}
 
-            <div
-              className="flex h-full"
-              onMouseEnter={onMouseEnter}
-              onMouseLeave={onMouseLeave}
-            >
-              <WalletStatusWithConnectButton />
-              {visibility && (
-                <div className="absolute top-0 mt-10 right-0 mb-1 text-sm text-black rounded-xl shadow bg-white overflow-hidden">
-                  <ProfileTooltip />
-                </div>
-              )}
-            </div>
+            <WalletStatusWithConnectButton />
           </div>
         </nav>
       </div>
