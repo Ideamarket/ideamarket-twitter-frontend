@@ -1,4 +1,4 @@
-import { DefaultLayout, Tooltip } from 'components'
+import { A, DefaultLayout, Tooltip } from 'components'
 import React, { ReactElement, useContext, useRef, useState } from 'react'
 import { IdeaToken } from 'store/ideaMarketsStore'
 import { WalletModal } from 'components'
@@ -224,32 +224,36 @@ const Home = () => {
               HOW DOES IT WORK?
             </div>
 
-            <div className="flex items-center space-x-6">
-              <div className="rounded-lg bg-white w-1/3 h-36 p-4">
-                <div className="font-bold text-lg mb-2">Make Money</div>
+            <div className="md:h-auto lg:h-44 flex items-start space-x-6">
+              <div className="rounded-lg bg-white w-1/3 h-full p-4">
+                <div className="font-bold text-lg mb-2">Post-to-Earn</div>
                 <div className="text-black/[.5] text-sm mb-4">
-                  Create new posts, and earn money when people rate them
+                  Create posts and earn 0.001 ETH per rating on posts you
+                  created (or bought)
                 </div>
-                <div className="text-blue-600 text-xs">learn more</div>
               </div>
 
-              <div className="rounded-lg bg-white w-1/3 h-36 p-4">
+              <div className="rounded-lg bg-white w-1/3 h-full p-4">
                 <div className="font-bold text-lg mb-2">
-                  Make new Twitter friends
+                  Qualify for airdrops (coming soon)
                 </div>
                 <div className="text-black/[.5] text-sm mb-4">
-                  Rate posts, and find Twitter users who agree with your ratings
+                  The more posts you rate, the more airdrop-targeting tools like{' '}
+                  <A href="https://karatdao.com/" className="text-blue-600">
+                    KaratDAO
+                  </A>{' '}
+                  can qualify you for airdrops based on your beliefs
                 </div>
-                <div className="text-blue-600 text-xs">learn more</div>
               </div>
 
-              <div className="rounded-lg bg-white w-1/3 h-36 p-4">
-                <div className="font-bold text-lg mb-2">Connect Twitter</div>
-                <div className="text-black/[.5] text-sm mb-4">
-                  Connect Twitter to your profile to attract new followers based
-                  on your ratings
+              <div className="rounded-lg bg-white w-1/3 h-full p-4">
+                <div className="font-bold text-lg mb-2">
+                  Grow your Twitter audience
                 </div>
-                <div className="text-blue-600 text-xs">learn more</div>
+                <div className="text-black/[.5] text-sm mb-4">
+                  Connect Twitter to attract new followers based on your
+                  Ideamarket ratings
+                </div>
               </div>
             </div>
           </div>
