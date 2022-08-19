@@ -253,7 +253,7 @@ export default function ProfileWallet({ userData }: Props) {
 
   return (
     <div className="w-full h-full mt-8 pb-20">
-      <div className="flex flex-col justify-between sm:flex-row mb-0 md:mb-4">
+      <div className="flex flex-col overflow-auto justify-between sm:flex-row mb-0 md:mb-4">
         <div className="flex order-1 md:order-none mx-4">
           <div
             className={classNames(

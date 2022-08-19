@@ -126,7 +126,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
       className={classNames(
         bgColor ? bgColor : 'bg-top-desktop',
         textColor,
-        'absolute items-center w-full overflow-none font-inter md:px-20'
+        'absolute z-[900] top-0 left-0 items-center w-full font-inter md:px-20'
       )}
     >
       {/* Desktop NavMenu */}
@@ -203,7 +203,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
       </div>
 
       {/* Mobile NavMenu */}
-      <div className="flex justify-between items-center md:hidden px-3 py-4 border-b">
+      <div className="relative flex justify-between items-center md:hidden px-3 py-4 border-b">
         <A href="/" className="flex items-center">
           <div className="relative w-10 h-8">
             <Image
@@ -213,10 +213,6 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
               objectFit="contain"
             />
           </div>
-
-          {/* <span className="w-auto h-full mr-2 text-2xl leading-none md:text-3xl">
-            Ideamarket
-          </span> */}
         </A>
 
         <div className="flex justify-between items-center space-x-4">
