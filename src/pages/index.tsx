@@ -332,7 +332,7 @@ const Home = () => {
                           'px-3 py-2 font-bold rounded-2xl border'
                         )}
                       >
-                        Controversial
+                        Hot
                       </button>
                       <button
                         onClick={() =>
@@ -346,31 +346,6 @@ const Home = () => {
                         )}
                       >
                         New
-                      </button>
-                    </div>
-
-                    {/* Right */}
-                    <div className="flex justify-between items-center space-x-3 pl-2 border-l text-xs">
-                      <button
-                        onClick={(e) => {
-                          setIsAdvancedView(!isAdvancedView)
-                          e.preventDefault()
-                        }}
-                        className={classNames(
-                          isAdvancedView
-                            ? 'bg-blue-100 text-blue-600'
-                            : 'text-black',
-                          'flex items-center px-3 py-2 font-bold rounded-2xl border z-50'
-                        )}
-                      >
-                        <div>Advanced View</div>
-                        <ToggleSwitch
-                          isOn={isAdvancedView}
-                          handleChange={(e) =>
-                            setIsAdvancedView(!isAdvancedView)
-                          }
-                          className="ml-2"
-                        />
                       </button>
 
                       <div
@@ -413,6 +388,31 @@ const Home = () => {
                           <ChevronDownIcon className="h-4" />
                         </span>
                       </div>
+                    </div>
+
+                    {/* Right */}
+                    <div className="flex justify-between items-center space-x-3 pl-2 border-l text-xs">
+                      <button
+                        onClick={(e) => {
+                          setIsAdvancedView(!isAdvancedView)
+                          e.preventDefault()
+                        }}
+                        className={classNames(
+                          isAdvancedView
+                            ? 'bg-blue-100 text-blue-600'
+                            : 'text-black',
+                          'flex items-center px-3 py-2 font-bold rounded-2xl border z-50'
+                        )}
+                      >
+                        <div>Advanced View</div>
+                        <ToggleSwitch
+                          isOn={isAdvancedView}
+                          handleChange={(e) =>
+                            setIsAdvancedView(!isAdvancedView)
+                          }
+                          className="ml-2"
+                        />
+                      </button>
                     </div>
                   </div>
                 )}
@@ -533,7 +533,7 @@ const Home = () => {
                     'p-2 font-bold rounded-2xl border'
                   )}
                 >
-                  Controversial
+                  Hot
                 </button>
                 <button
                   onClick={() =>

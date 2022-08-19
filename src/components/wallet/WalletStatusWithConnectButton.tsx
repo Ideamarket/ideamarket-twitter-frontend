@@ -121,7 +121,6 @@ export default function WalletStatusWithConnectButton() {
                 onClick={active ? null : openWalletModal}
                 className="flex items-center space-x-2 h-9 bg-white/[.1] hover:text-blue-500 text-sm font-semibold py-1 ml-2 rounded-lg"
               >
-                <span>My Profile</span>
                 <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
                   <Image
                     src={user?.profilePhoto || '/default-profile-pic.png'}

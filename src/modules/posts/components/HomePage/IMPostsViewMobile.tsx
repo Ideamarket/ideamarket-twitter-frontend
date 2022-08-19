@@ -184,14 +184,16 @@ const IMPostsViewMobile = ({
                     <span
                       className={classNames(
                         getIMORatingColors(
-                          imPost?.totalRatingsCount > 0
+                          imPost?.totalRatingsCount > 0 &&
+                            imPost?.marketInterest > 0
                             ? Math.round(imPost?.compositeRating)
                             : -1
                         ),
                         'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
                       )}
                     >
-                      {imPost?.totalRatingsCount > 0
+                      {imPost?.totalRatingsCount > 0 &&
+                      imPost?.marketInterest > 0
                         ? Math.round(imPost?.compositeRating) + '%'
                         : '—'}
                     </span>
@@ -272,7 +274,7 @@ const IMPostsViewMobile = ({
                         </div>
                       </div>
 
-                      {/* Controversial */}
+                      {/* Hot */}
                       <div className="flex justify-between items-center">
                         <div className="flex justify-start items-center space-x-2">
                           <div className="relative w-6 h-6">
@@ -285,7 +287,7 @@ const IMPostsViewMobile = ({
 
                           <div className="flex items-center space-x-2">
                             <div className="text-xs text-black/[.5] font-semibold">
-                              Controversial
+                              Hot
                             </div>
                             {/* Removing tooltip on mobile because card clicks to Post page */}
                             {/* <Tooltip
@@ -306,7 +308,7 @@ const IMPostsViewMobile = ({
                         </div>
                       </div>
 
-                      {/* Income */}
+                      {/* Earned */}
                       <div className="flex justify-between items-center">
                         <div className="flex justify-start items-center space-x-2">
                           <div className="relative w-6 h-6">
@@ -318,7 +320,7 @@ const IMPostsViewMobile = ({
                           </div>
 
                           <div className="text-xs text-black/[.5] font-semibold">
-                            Income
+                            Earned
                           </div>
                         </div>
 
@@ -351,14 +353,16 @@ const IMPostsViewMobile = ({
                               <span
                                 className={classNames(
                                   getIMORatingColors(
-                                    citation?.totalRatingsCount > 0
+                                    citation?.totalRatingsCount > 0 &&
+                                      citation?.marketInterest > 0
                                       ? Math.round(citation?.compositeRating)
                                       : -1
                                   ),
                                   'absolute top-0 right-0 w-10 h-10 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-base border-l-2 border-b-2 border-white'
                                 )}
                               >
-                                {citation?.totalRatingsCount > 0
+                                {citation?.totalRatingsCount > 0 &&
+                                citation?.marketInterest > 0
                                   ? Math.round(citation?.compositeRating) + '%'
                                   : '—'}
                               </span>

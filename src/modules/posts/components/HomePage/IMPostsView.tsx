@@ -187,14 +187,16 @@ const IMPostsView = ({
                           <span
                             className={classNames(
                               getIMORatingColors(
-                                imPost?.totalRatingsCount > 0
+                                imPost?.totalRatingsCount > 0 &&
+                                  imPost?.marketInterest > 0
                                   ? Math.round(imPost?.compositeRating)
                                   : -1
                               ),
                               'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
                             )}
                           >
-                            {imPost?.totalRatingsCount > 0
+                            {imPost?.totalRatingsCount > 0 &&
+                            imPost?.marketInterest > 0
                               ? Math.round(imPost?.compositeRating) + '%'
                               : '—'}
                           </span>
@@ -287,7 +289,7 @@ const IMPostsView = ({
                                 <div>
                                   <div className="flex items-center space-x-2">
                                     <div className="text-xs text-black/[.5] font-medium">
-                                      Controversial
+                                      Hot
                                     </div>
                                     <Tooltip
                                       className="text-black/[.5] z-[200]"
@@ -321,7 +323,7 @@ const IMPostsView = ({
 
                                 <div>
                                   <div className="text-xs text-black/[.5] font-medium">
-                                    Income
+                                    Earned
                                   </div>
                                   <div>
                                     <span className="font-bold">
@@ -353,7 +355,11 @@ const IMPostsView = ({
           <div className="py-3 mt-5 mb-8 flex space-x-10 text-sm text-black/[.5] border-y-2 border-black/[0.05]">
             <div className={classNames(AdvancedPostColWidth, '')}>
               <div className="font-semibold">Post</div>
-              <div className="text-xs italic">A collectible belief NFT.</div>
+              <div className="text-xs italic">
+                A collectible belief NFT.
+                <br />
+                Sorted by amount of $IMO staked on all users who rated.
+              </div>
             </div>
 
             <div className={classNames(AdvancedCitationsColWidth, '')}>
@@ -419,14 +425,16 @@ const IMPostsView = ({
                         <span
                           className={classNames(
                             getIMORatingColors(
-                              imPost?.totalRatingsCount > 0
+                              imPost?.totalRatingsCount > 0 &&
+                                imPost?.marketInterest > 0
                                 ? Math.round(imPost?.compositeRating)
                                 : -1
                             ),
                             'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
                           )}
                         >
-                          {imPost?.totalRatingsCount > 0
+                          {imPost?.totalRatingsCount > 0 &&
+                          imPost?.marketInterest > 0
                             ? Math.round(imPost?.compositeRating) + '%'
                             : '—'}
                         </span>
@@ -519,7 +527,7 @@ const IMPostsView = ({
                               <div>
                                 <div className="flex items-center space-x-2">
                                   <div className="text-xs text-black/[.5] font-medium">
-                                    Controversial
+                                    Hot
                                   </div>
                                   <Tooltip
                                     className="text-black/[.5] z-[200]"
@@ -552,7 +560,7 @@ const IMPostsView = ({
 
                               <div>
                                 <div className="text-xs text-black/[.5] font-medium">
-                                  Income
+                                  Earned
                                 </div>
                                 <div>
                                   <span className="font-bold">
@@ -598,14 +606,16 @@ const IMPostsView = ({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  citation?.totalRatingsCount > 0
+                                  citation?.totalRatingsCount > 0 &&
+                                    citation?.marketInterest > 0
                                     ? Math.round(citation?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-10 h-10 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-base border-l-2 border-b-2 border-white'
                               )}
                             >
-                              {citation?.totalRatingsCount > 0
+                              {citation?.totalRatingsCount > 0 &&
+                              citation?.marketInterest > 0
                                 ? Math.round(citation?.compositeRating) + '%'
                                 : '—'}
                             </span>

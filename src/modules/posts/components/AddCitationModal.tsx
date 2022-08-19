@@ -463,14 +463,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  post?.totalRatingsCount > 0
+                                  post?.totalRatingsCount > 0 &&
+                                    post?.marketInterest > 0
                                     ? Math.round(post?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
-                              {post?.totalRatingsCount > 0
+                              {post?.totalRatingsCount > 0 &&
+                              post?.marketInterest > 0
                                 ? Math.round(post?.compositeRating) + '%'
                                 : '—'}
                             </span>
@@ -550,14 +552,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  post?.totalRatingsCount > 0
+                                  post?.totalRatingsCount > 0 &&
+                                    post?.marketInterest > 0
                                     ? Math.round(post?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
-                              {post?.totalRatingsCount > 0
+                              {post?.totalRatingsCount > 0 &&
+                              post?.marketInterest > 0
                                 ? Math.round(post?.compositeRating) + '%'
                                 : '—'}
                             </span>
@@ -630,14 +634,16 @@ export default function AddCitationModal({
                           <span
                             className={classNames(
                               getIMORatingColors(
-                                post?.totalRatingsCount > 0
+                                post?.totalRatingsCount > 0 &&
+                                  post?.marketInterest > 0
                                   ? Math.round(post?.compositeRating)
                                   : -1
                               ),
                               'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                             )}
                           >
-                            {post?.totalRatingsCount > 0
+                            {post?.totalRatingsCount > 0 &&
+                            post?.marketInterest > 0
                               ? Math.round(post?.compositeRating) + '%'
                               : '—'}
                           </span>
@@ -739,14 +745,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  post?.totalRatingsCount > 0
+                                  post?.totalRatingsCount > 0 &&
+                                    post?.marketInterest > 0
                                     ? Math.round(post?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
-                              {post?.totalRatingsCount > 0
+                              {post?.totalRatingsCount > 0 &&
+                              post?.marketInterest > 0
                                 ? Math.round(post?.compositeRating) + '%'
                                 : '—'}
                             </span>
@@ -826,14 +834,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  post?.totalRatingsCount > 0
+                                  post?.totalRatingsCount > 0 &&
+                                    post?.marketInterest > 0
                                     ? Math.round(post?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
-                              {post?.totalRatingsCount > 0
+                              {post?.totalRatingsCount > 0 &&
+                              post?.marketInterest > 0
                                 ? Math.round(post?.compositeRating) + '%'
                                 : '—'}
                             </span>
@@ -906,14 +916,16 @@ export default function AddCitationModal({
                           <span
                             className={classNames(
                               getIMORatingColors(
-                                post?.totalRatingsCount > 0
+                                post?.totalRatingsCount > 0 &&
+                                  post?.marketInterest > 0
                                   ? Math.round(post?.compositeRating)
                                   : -1
                               ),
                               'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                             )}
                           >
-                            {post?.totalRatingsCount > 0
+                            {post?.totalRatingsCount > 0 &&
+                            post?.marketInterest > 0
                               ? Math.round(post?.compositeRating) + '%'
                               : '—'}
                           </span>
@@ -1013,14 +1025,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  opinion?.totalRatingsCount > 0
+                                  opinion?.totalRatingsCount > 0 &&
+                                    opinion?.marketInterest > 0
                                     ? Math.round(opinion?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
-                              {opinion?.totalRatingsCount > 0
+                              {opinion?.totalRatingsCount > 0 &&
+                              opinion?.marketInterest > 0
                                 ? Math.round(opinion?.compositeRating) + '%'
                                 : '—'}
                             </span>
@@ -1104,14 +1118,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  opinion?.totalRatingsCount > 0
+                                  opinion?.totalRatingsCount > 0 &&
+                                    opinion?.marketInterest > 0
                                     ? Math.round(opinion?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
-                              {opinion?.totalRatingsCount > 0
+                              {opinion?.totalRatingsCount > 0 &&
+                              opinion?.marketInterest > 0
                                 ? Math.round(opinion?.compositeRating) + '%'
                                 : '—'}
                             </span>
@@ -1184,14 +1200,16 @@ export default function AddCitationModal({
                           <span
                             className={classNames(
                               getIMORatingColors(
-                                opinion?.totalRatingsCount > 0
+                                opinion?.totalRatingsCount > 0 &&
+                                  opinion?.marketInterest > 0
                                   ? Math.round(opinion?.compositeRating)
                                   : -1
                               ),
                               'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                             )}
                           >
-                            {opinion?.totalRatingsCount > 0
+                            {opinion?.totalRatingsCount > 0 &&
+                            opinion?.marketInterest > 0
                               ? Math.round(opinion?.compositeRating) + '%'
                               : '—'}
                           </span>
@@ -1291,14 +1309,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  opinion?.totalRatingsCount > 0
+                                  opinion?.totalRatingsCount > 0 &&
+                                    opinion?.marketInterest > 0
                                     ? Math.round(opinion?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
-                              {opinion?.totalRatingsCount > 0
+                              {opinion?.totalRatingsCount > 0 &&
+                              opinion?.marketInterest > 0
                                 ? Math.round(opinion?.compositeRating) + '%'
                                 : '—'}
                             </span>
@@ -1382,14 +1402,16 @@ export default function AddCitationModal({
                             <span
                               className={classNames(
                                 getIMORatingColors(
-                                  opinion?.totalRatingsCount > 0
+                                  opinion?.totalRatingsCount > 0 &&
+                                    opinion?.marketInterest > 0
                                     ? Math.round(opinion?.compositeRating)
                                     : -1
                                 ),
                                 'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                               )}
                             >
-                              {opinion?.totalRatingsCount > 0
+                              {opinion?.totalRatingsCount > 0 &&
+                              opinion?.marketInterest > 0
                                 ? Math.round(opinion?.compositeRating) + '%'
                                 : '—'}
                             </span>
@@ -1462,14 +1484,16 @@ export default function AddCitationModal({
                           <span
                             className={classNames(
                               getIMORatingColors(
-                                opinion?.totalRatingsCount > 0
+                                opinion?.totalRatingsCount > 0 &&
+                                  opinion?.marketInterest > 0
                                   ? Math.round(opinion?.compositeRating)
                                   : -1
                               ),
                               'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl'
                             )}
                           >
-                            {opinion?.totalRatingsCount > 0
+                            {opinion?.totalRatingsCount > 0 &&
+                            opinion?.marketInterest > 0
                               ? Math.round(opinion?.compositeRating) + '%'
                               : '—'}
                           </span>

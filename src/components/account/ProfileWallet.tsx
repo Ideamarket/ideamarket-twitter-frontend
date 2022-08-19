@@ -386,7 +386,7 @@ export default function ProfileWallet({ userData }: Props) {
             {selectedView === TABLE_NAMES.ACCOUNT_POSTS && (
               <div className="md:hidden w-full flex gap-x-3 px-3 py-3 border-t-[6px] leading-4 text-xs text-black/[.5] font-semibold">
                 <div className="w-1/4 flex items-start">
-                  <span className="mr-1 break-all">CONTROVERSIAL</span>
+                  <span className="mr-1 break-all">HOT</span>
                   <Tooltip>
                     <div className="w-40 md:w-64">
                       The total amount of IMO staked on all users who rated a

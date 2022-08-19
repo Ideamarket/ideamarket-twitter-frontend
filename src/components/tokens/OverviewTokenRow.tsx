@@ -182,14 +182,14 @@ export default function TokenRow({
               <span
                 className={classNames(
                   getIMORatingColors(
-                    token?.totalRatingsCount > 0
+                    token?.totalRatingsCount > 0 && token?.marketInterest > 0
                       ? Math.round(token?.compositeRating)
                       : -1
                   ),
                   'w-14 h-12 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
-                {token?.totalRatingsCount > 0
+                {token?.totalRatingsCount > 0 && token?.marketInterest > 0
                   ? Math.round(token?.compositeRating) + '%'
                   : '—'}
               </span>
@@ -314,14 +314,14 @@ export default function TokenRow({
               <span
                 className={classNames(
                   getIMORatingColors(
-                    token?.totalRatingsCount > 0
+                    token?.totalRatingsCount > 0 && token?.marketInterest > 0
                       ? Math.round(token?.compositeRating)
                       : -1
                   ),
                   'w-14 h-12 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
-                {token?.totalRatingsCount > 0
+                {token?.totalRatingsCount > 0 && token?.marketInterest > 0
                   ? Math.round(token?.compositeRating) + '%'
                   : '—'}
               </span>
