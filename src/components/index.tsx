@@ -1,7 +1,6 @@
 export { default as Modal } from './modals/Modal'
 export { default as WalletStatus } from './wallet/WalletStatus'
 export { default as WalletStatusWithConnectButton } from './wallet/WalletStatusWithConnectButton'
-export { default as Table } from './tokens/OverviewTokenTable'
 export { default as OwnedTokenTableNew } from './tokens/OwnedTokenTableNew'
 export { default as MyTokenRowNew } from './tokens/MyTokenRowNew'
 export { default as MyTokenTable } from './tokens/MyTokenTable'

@@ -36,11 +36,6 @@ import { useWalletStore } from 'store/walletStore'
 import { useWeb3React } from '@web3-react/core'
 import { updatePostMetadata } from 'actions/web2/posts/updatePostMetadata'
 
-const sliderMarks = {
-  0: 'Disagree',
-  100: 'Agree',
-}
-
 export default function RateUI({
   close = () => null,
   imPost,
@@ -334,47 +329,59 @@ export default function RateUI({
             <span className="text-xl font-bold">{inputRating}</span>
           </div>
 
-          <div className="w-[90%] mx-auto">
-            <Slider
-              className="mb-7"
-              defaultValue={defaultRating}
-              onChange={(value) => {
-                setInputRating(value)
-              }}
-              onAfterChange={(value) => {
-                if (!isFullyFunctional) {
-                  onRateDragged(imPost)
-                  return
-                }
-              }}
-              marks={sliderMarks}
-              step={1}
-              min={0}
-              max={100}
-              // tipFormatter={(value) => {
-              //   return `${value}`
-              // }}
-              // handleStyle={{
-              //   backgroundColor: "rgb(8, 87, 224)",
-              //   width: "3.5rem",
-              //   height: "2rem",
-              //   borderRadius: "15px",
-              //   color: "white",
-              //   marginBottom: "12px"
-              // }}
-              handle={(handleProps: any) => {
-                return (
-                  <Handle
-                    {...handleProps}
-                    dragging={handleProps?.dragging?.toString()}
-                  >
-                    <div className="absolute -top-3 -left-6 w-[3.5rem] h-[2rem] rounded-2xl text-white bg-blue-600 flex justify-center items-center">
-                      Drag
-                    </div>
-                  </Handle>
-                )
-              }}
-            />
+          <div className="w-[100%] mx-auto">
+            <div className="w-full relative flex items-center h-16 bg-white rounded-2xl border">
+              <div className="absolute top-1 left-2 text-xs opacity-50">
+                Disagree
+              </div>
+              <Slider
+                className=""
+                defaultValue={defaultRating}
+                onChange={(value) => {
+                  setInputRating(value)
+                }}
+                onAfterChange={(value) => {
+                  if (!isFullyFunctional) {
+                    onRateDragged(imPost)
+                    return
+                  }
+                }}
+                // marks={sliderMarks}
+                step={1}
+                min={0}
+                max={100}
+                // tipFormatter={(value) => {
+                //   return `${value}`
+                // }}
+                handle={(handleProps: any) => {
+                  return (
+                    <Handle
+                      {...handleProps}
+                      dragging={handleProps?.dragging?.toString()}
+                    >
+                      <div className="absolute -top-1 -left-6 w-[3.5rem] h-[2rem] rounded-2xl text-white bg-blue-600 flex justify-center items-center">
+                        Drag
+                      </div>
+                    </Handle>
+                  )
+                }}
+                railStyle={{
+                  height: '20px',
+                  borderRadius: 0,
+                  color: 'red',
+                  backgroundColor: 'rgb(8 87 224 / 0.05)',
+                }}
+                trackStyle={{
+                  height: '20px',
+                  borderRadius: 0,
+                  background: 'transparent',
+                }}
+                style={{ padding: 0, left: '0px' }}
+              />
+              <div className="absolute top-1 right-2 text-xs opacity-50">
+                Agree
+              </div>
+            </div>
           </div>
         </div>
 

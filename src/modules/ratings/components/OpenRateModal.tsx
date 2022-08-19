@@ -14,14 +14,20 @@ type Props = {
 const OpenRateModal = ({ imPost }: Props) => {
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
-  const onRateDragged = (draggedPost: any) => {
+  const onRateDragged = (draggedPost: any, inputValue: number) => {
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, { imPost: draggedPost })
+        ModalService.open(RateModal, {
+          imPost: draggedPost,
+          defaultRating: inputValue,
+        })
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(RateModal, { imPost: draggedPost })
+      ModalService.open(RateModal, {
+        imPost: draggedPost,
+        defaultRating: inputValue,
+      })
     }
   }
 
@@ -32,7 +38,8 @@ const OpenRateModal = ({ imPost }: Props) => {
         className=""
         defaultValue={50}
         onAfterChange={(value) => {
-          onRateDragged(imPost)
+          console.log('value==', value)
+          onRateDragged(imPost, value)
         }}
         // marks={sliderMarks}
         step={1}
