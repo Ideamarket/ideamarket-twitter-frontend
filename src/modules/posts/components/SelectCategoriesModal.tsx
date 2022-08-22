@@ -1,5 +1,5 @@
 import { XIcon } from '@heroicons/react/solid'
-import getAllCategories from 'actions/web3/getAllCategories'
+import { getCategories } from 'actions/web2/getCategories'
 import classNames from 'classnames'
 import { Modal } from 'components'
 import { useState } from 'react'
@@ -22,7 +22,7 @@ export default function SelectCategoriesModal({
     useState(selectedCategories)
 
   const { data: categoriesData } = useQuery(['all-categories'], () =>
-    getAllCategories()
+    getCategories({ enabled: true })
   )
 
   const onFilterClicked = () => {
@@ -50,7 +50,9 @@ export default function SelectCategoriesModal({
 
   const displayedCats =
     categorySearchText.length > 0
-      ? categoriesData.filter((cat) => cat.includes(categorySearchText))
+      ? categoriesData.filter((cat) =>
+          cat?.name.toLowerCase().includes(categorySearchText.toLowerCase())
+        )
       : categoriesData
 
   return (
@@ -74,17 +76,17 @@ export default function SelectCategoriesModal({
                 {displayedCats.map((category) => {
                   return (
                     <div
-                      onClick={() => onLocalCategoryChanged(category)}
+                      onClick={() => onLocalCategoryChanged(category?.name)}
                       className={classNames(
-                        localSelectedCategories.includes(category)
+                        localSelectedCategories.includes(category?.name)
                           ? 'text-blue-500 bg-blue-100'
                           : 'text-black',
                         'flex items-center border rounded-2xl px-2 py-1 cursor-pointer mr-2 mt-2'
                       )}
-                      key={category}
+                      key={category?.name}
                     >
-                      <span>{category}</span>
-                      {localSelectedCategories.includes(category) && (
+                      <span>{category?.name}</span>
+                      {localSelectedCategories.includes(category?.name) && (
                         <XIcon className="w-5 h-5 ml-1" />
                       )}
                     </div>

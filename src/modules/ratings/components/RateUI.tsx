@@ -22,7 +22,6 @@ import AddCitationModal from 'modules/posts/components/AddCitationModal'
 import { IdeamarketPost } from 'modules/posts/services/PostService'
 import IMTextArea from 'modules/forms/components/IMTextArea'
 import { useContractStore } from 'store/contractStore'
-import getAllCategories from 'actions/web3/getAllCategories'
 import { XIcon } from '@heroicons/react/solid'
 import { syncPosts } from 'actions/web2/posts/syncPosts'
 import mintPost from 'actions/web3/mintPost'
@@ -35,6 +34,7 @@ import { WalletModal } from 'components'
 import { useWalletStore } from 'store/walletStore'
 import { useWeb3React } from '@web3-react/core'
 import { updatePostMetadata } from 'actions/web2/posts/updatePostMetadata'
+import { getCategories } from 'actions/web2/getCategories'
 
 export default function RateUI({
   close = () => null,
@@ -225,7 +225,7 @@ export default function RateUI({
 
   const { data: categoriesData } = useQuery(
     ['all-categories', Boolean(ideamarketPosts)],
-    () => getAllCategories()
+    () => getCategories({ enabled: true })
   )
 
   /**
@@ -452,17 +452,17 @@ export default function RateUI({
                         {categoriesData.map((category) => {
                           return (
                             <div
-                              onClick={() => onSelectCategory(category)}
+                              onClick={() => onSelectCategory(category?.name)}
                               className={classNames(
-                                selectedCategories.includes(category)
+                                selectedCategories.includes(category?.name)
                                   ? 'text-blue-500 bg-blue-100'
                                   : 'text-black',
                                 'flex items-center border rounded-2xl px-2 py-1 cursor-pointer mr-2 mt-2'
                               )}
-                              key={category}
+                              key={category?.name}
                             >
-                              <span>{category}</span>
-                              {selectedCategories.includes(category) && (
+                              <span>{category?.name}</span>
+                              {selectedCategories.includes(category?.name) && (
                                 <XIcon className="w-5 h-5 ml-1" />
                               )}
                             </div>
