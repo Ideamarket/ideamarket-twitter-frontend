@@ -112,9 +112,9 @@ export const ProfileTooltip = () => {
             </div>
 
             <span className="text-white text-xs">
-              <BsFillBellFill className="w-3 h-3 text-yellow-1" /> receive
-              notificaions, updates <br />
-              and announcements <SpearkIcon className="w-3 h-3" />
+              <BsFillBellFill className="w-3 h-3 text-yellow-1" /> get notified
+              when you <br />
+              have earnings to withdraw <SpearkIcon className="w-3 h-3" />
             </span>
           </div>
         </>

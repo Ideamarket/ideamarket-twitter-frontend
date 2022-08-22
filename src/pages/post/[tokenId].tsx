@@ -5,7 +5,7 @@ import ModalService from 'components/modals/ModalService'
 import ListingSEO from 'components/listing-page/ListingSEO'
 import { ReactElement, useContext, useEffect, useState } from 'react'
 import { formatNumberInt } from 'utils'
-import { ChatIcon, ShareIcon } from '@heroicons/react/outline'
+import { ShareIcon } from '@heroicons/react/outline'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { useWalletStore } from 'store/walletStore'
 import { GlobalContext } from 'lib/GlobalContext'
@@ -170,10 +170,16 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                 </span>
               </div>
               <div className="px-4 py-2 flex items-center">
-                <span className="w-1/2 text-xs">Comments</span>
+                <span className="w-1/2 text-xs">Ratings</span>
                 <span className="flex items-center font-bold">
-                  <ChatIcon className="w-4 mr-1 mt-0.5" />
-                  {token?.latestCommentsCount}
+                  {/* <div className="relative w-6 h-6">
+                    <Image
+                      src={'/people-icon.svg'}
+                      alt="people-icon"
+                      layout="fill"
+                    />
+                  </div> */}
+                  {token?.totalRatingsCount}
                 </span>
               </div>
               {/* <div className="px-4 py-2 flex items-center">
@@ -319,10 +325,12 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         </div>
 
         <div className="w-[50%] px-4 py-3 h-full">
-          <div className="font-semibold text-sm text-black/[.5]">Comments</div>
+          <div className="font-semibold text-sm text-black/[.5]">Ratings</div>
           <div className="flex items-center font-medium">
-            <ChatIcon className="w-4 mr-1 mt-0.5" />
-            {token?.latestCommentsCount}
+            <div className="relative w-6 h-6">
+              <Image src={'/people-icon.svg'} alt="people-icon" layout="fill" />
+            </div>
+            {token?.totalRatingsCount}
           </div>
         </div>
       </div>

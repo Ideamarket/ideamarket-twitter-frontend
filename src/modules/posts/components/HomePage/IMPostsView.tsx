@@ -356,8 +356,6 @@ const IMPostsView = ({
             <div className={classNames(AdvancedPostColWidth, '')}>
               <div className="font-semibold">Post</div>
               <div className="text-xs italic">
-                A collectible belief NFT.
-                <br />
                 Sorted by amount of $IMO staked on all users who rated.
               </div>
             </div>
