@@ -1,7 +1,5 @@
-import { ChevronRightIcon } from '@heroicons/react/outline'
 import router from 'next/router'
 import { NETWORK } from 'store/networks'
-import { AIRDROP_TYPES } from 'types/airdropTypes'
 
 export const getNavbarConfig = (user: any) => ({
   menu: [
@@ -115,44 +113,7 @@ export const getNavbarConfig = (user: any) => ({
         },
         {
           id: 4,
-          onClick: () => null,
-          name: (
-            <div className="flex justify-between items-center w-full">
-              <span>Claim</span>
-              <ChevronRightIcon className="w-4" />
-            </div>
-          ),
-          subSubMenu: [
-            {
-              name: 'Early User Airdrop Claim',
-              onClick: () => router.push(`/claim/${AIRDROP_TYPES.USER}`),
-            },
-            {
-              name: 'Community Airdrop Claim',
-              onClick: () => router.push(`/claim/${AIRDROP_TYPES.COMMUNITY}`),
-            },
-            {
-              name: 'Twitter Verification Airdrop Claim',
-              onClick: () =>
-                router.push(`/claim/${AIRDROP_TYPES.TWITTER_VERIFICATION}`),
-            },
-            {
-              name: 'First Month Locking Claim',
-              onClick: () => router.push(`/claim/${AIRDROP_TYPES.LOCKING}`),
-            },
-            {
-              name: 'Second Month Locking Claim',
-              onClick: () => router.push(`/claim/${AIRDROP_TYPES.LOCKING2}`),
-            },
-            {
-              name: 'Third Month Locking Claim',
-              onClick: () => router.push(`/claim/${AIRDROP_TYPES.LOCKING3}`),
-            },
-          ],
-        },
-        {
-          id: 5,
-          name: 'Stake',
+          name: 'Unstake from old version',
           onClick: () => router.push('/stake'),
         },
       ],

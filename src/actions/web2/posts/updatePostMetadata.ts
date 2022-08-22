@@ -1,4 +1,4 @@
-import client from 'lib/axios'
+import axios from 'axios'
 
 /**
  * After post is minted, need to update post metadata in DB
@@ -17,8 +17,33 @@ export const updatePostMetadata = async ({
     content,
     categories: categoriesString,
   }
+
+  // NFT metadata posted on uat needs to go to production to show on Stratos
+  const isMainnet = process.env.NEXT_PUBLIC_NETWORK === 'avm'
+
+  const devClient = axios.create({
+    baseURL: 'https://server-dev.ideamarket.io',
+  })
+  const qaClient = axios.create({
+    baseURL: 'https://server-qa.ideamarket.io',
+  })
+  const uatClient = axios.create({
+    baseURL: 'https://server-uat.ideamarket.io',
+  })
+  const prodClient = axios.create({
+    baseURL: 'https://server-prod.ideamarket.io',
+  })
+
   try {
-    const response = await client.patch(`/post-metadata/update`, body)
+    let response = null
+    if (isMainnet) {
+      response = await prodClient.patch(`/post-metadata/update`, body)
+      await uatClient.patch(`/post-metadata/update`, body)
+    } else {
+      response = await devClient.patch(`/post-metadata/update`, body)
+      await qaClient.patch(`/post-metadata/update`, body)
+    }
+
     return response?.data
   } catch (error) {
     console.error(`Could not update NFT post metadata for ${tokenID}`, error)
