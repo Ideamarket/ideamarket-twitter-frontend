@@ -38,7 +38,6 @@ const OpenRateModal = ({ imPost }: Props) => {
         className=""
         defaultValue={50}
         onAfterChange={(value) => {
-          console.log('value==', value)
           onRateDragged(imPost, value)
         }}
         // marks={sliderMarks}

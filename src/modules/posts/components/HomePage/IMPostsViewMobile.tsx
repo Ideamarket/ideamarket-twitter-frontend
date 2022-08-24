@@ -161,6 +161,8 @@ const IMPostsViewMobile = ({
             //   activeOverlayPostID &&
             //   activeOverlayPostID === imPost.tokenID.toString()
 
+            const postIncome = imPost.totalRatingsCount * 0.001
+
             return (
               <div
                 ref={lastElementRef}
@@ -324,7 +326,13 @@ const IMPostsViewMobile = ({
                           </div>
                         </div>
 
-                        <div className="font-bold">0.274 ETH</div>
+                        <div>
+                          <span className="font-bold">{postIncome} ETH</span>
+                          <span className="text-black/[.5] font-bold text-xs">
+                            {' '}
+                            (${imPost?.incomeInDAI?.toFixed(2)})
+                          </span>
+                        </div>
                       </div>
                     </div>
 
