@@ -160,7 +160,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
           <div className="h-9 hidden md:flex items-center">
             <button
               onClick={onWithdrawUserFeeClicked}
-              className="bg-white border-l border-t border-r-4 border-b-4 border-blue-600 rounded-3xl px-2 py-1 leading-[.5rem]"
+              className="bg-white border-l border-t border-r-4 border-b-4 hover:border border-blue-600 rounded-3xl px-2 py-1 leading-[.5rem]"
             >
               <div className="flex items-center space-x-2">
                 <div className="relative w-5 h-5">
