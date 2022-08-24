@@ -30,16 +30,15 @@ export const updatePostMetadata = async ({
   const uatClient = axios.create({
     baseURL: 'https://server-uat.ideamarket.io',
   })
-  // const prodClient = axios.create({
-  //   baseURL: 'https://server-prod.ideamarket.io',
-  // })
+  const prodClient = axios.create({
+    baseURL: 'https://server-prod.ideamarket.io',
+  })
 
   try {
     let response = null
     if (isMainnet) {
-      // TODO: add this back once we release to prod
-      // await prodClient.patch(`/post-metadata/update`, body)
-      response = await uatClient.patch(`/post-metadata/update`, body)
+      response = await prodClient.patch(`/post-metadata/update`, body)
+      await uatClient.patch(`/post-metadata/update`, body)
     } else {
       response = await devClient.patch(`/post-metadata/update`, body)
       await qaClient.patch(`/post-metadata/update`, body)

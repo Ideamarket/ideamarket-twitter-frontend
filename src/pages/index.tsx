@@ -221,10 +221,10 @@ const Home = () => {
         <div className="bg-blue-100 px-20 py-8 mb-10">
           <div className=" mx-auto max-w-7xl">
             <div className="text-sm text-blue-400 font-semibold mb-6">
-              HOW DOES IT WORK?
+              HOW IT WORKS
             </div>
 
-            <div className="md:h-auto lg:h-44 flex items-start space-x-6">
+            <div className="md:h-auto lg:h-40 flex items-start space-x-6">
               <div className="rounded-lg bg-white w-1/3 h-full p-4">
                 <div className="font-bold text-lg mb-2">Post-to-Earn</div>
                 <div className="text-black/[.5] text-sm mb-4">

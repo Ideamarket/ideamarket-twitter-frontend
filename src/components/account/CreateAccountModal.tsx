@@ -30,21 +30,22 @@ export default function CreateAccountModal({ close }: { close: () => void }) {
       <div className="p-6 bg-white w-96 md:w-[21rem]">
         <div className="flex justify-between items-center">
           <span className="text-xl text-left text-black font-gilroy-bold font-bold">
-            Click <span className="text-blue-600">SIGN</span> in Metamask to
-            edit your profile
+            To edit your profile, click{' '}
+            <span className="text-blue-600">SIGN</span> in Metamask.
           </span>
         </div>
 
         <p className="text-sm font-inter text-gray-400 font-normal my-4">
-          This will <span className="font-semibold">NOT</span> trigger a
-          blockchain transaction or cost gas fees.
+          A MetaMask popup should open shortly. This will{' '}
+          <span className="font-semibold">NOT</span> trigger a blockchain
+          transaction or cost gas fees.
         </p>
 
         <button
           onClick={close}
           className="w-full rounded-lg border bg-white text-black p-4"
         >
-          Cancel
+          Got it
         </button>
       </div>
     </Modal>

@@ -9,8 +9,6 @@ import { unsetWeb3 } from 'store/walletStore'
 import { useWeb3React } from '@web3-react/core'
 import { useContext } from 'react'
 import { GlobalContext } from 'lib/GlobalContext'
-import { BsFillBellFill } from 'react-icons/bs'
-import SpearkIcon from '../../assets/speaker.svg'
 import TwitterOutlineWhite from '../../assets/twitter-outline-white.svg'
 import A from 'components/A'
 import { clearContracts } from 'store/contractStore'
@@ -104,7 +102,7 @@ export const ProfileTooltip = () => {
         <>
           <div
             onClick={onClickSettings}
-            className="py-3 px-4 bg-brand-blue hover:bg-brand-blue/[.8] cursor-pointer"
+            className="py-3 px-4 bg-gray-400 hover:bg-gray-400/[.8] cursor-pointer"
           >
             <div className="mb-2 flex items-center text-white">
               <MailIcon className="w-5 h-5" />
@@ -112,9 +110,8 @@ export const ProfileTooltip = () => {
             </div>
 
             <span className="text-white text-xs">
-              <BsFillBellFill className="w-3 h-3 text-yellow-1" /> get notified
-              when you <br />
-              have earnings to withdraw <SpearkIcon className="w-3 h-3" />
+              Get notified when you <br />
+              have earnings to withdraw
             </span>
           </div>
         </>
