@@ -448,7 +448,7 @@ export default function StakeUserUI({
         ? buyArgs
         : [
             web3UserToken?.address,
-            selectedToken.address,
+            NETWORK.getExternalAddresses().imo, // TODO: if we ever unstake to currencies other than IMO, then change this
             ideaTokenAmountBNLocal,
             selectedTokenAmountBNLocal,
             maxSlippage,
