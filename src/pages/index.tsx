@@ -1,4 +1,4 @@
-import { A, DefaultLayout, Tooltip } from 'components'
+import { DefaultLayout, Tooltip } from 'components'
 import React, { ReactElement, useContext, useRef, useState } from 'react'
 import { IdeaToken } from 'store/ideaMarketsStore'
 import { WalletModal } from 'components'
@@ -234,15 +234,10 @@ const Home = () => {
               </div>
 
               <div className="rounded-lg bg-white w-1/3 h-full p-4">
-                <div className="font-bold text-lg mb-2">
-                  Qualify for airdrops (coming soon)
-                </div>
+                <div className="font-bold text-lg mb-2">Rate-to-Brag</div>
                 <div className="text-black/[.5] text-sm mb-4">
-                  The more posts you rate, the more airdrop-targeting tools like{' '}
-                  <A href="https://karatdao.com/" className="text-blue-600">
-                    KaratDAO
-                  </A>{' '}
-                  can qualify you for airdrops based on your beliefs
+                  On-chain ratings are a public record of personal opinion, so
+                  everyone can see who was insightful and who was misleading.
                 </div>
               </div>
 
@@ -251,10 +246,20 @@ const Home = () => {
                   Grow your Twitter audience
                 </div>
                 <div className="text-black/[.5] text-sm mb-4">
-                  Connect Twitter to attract new followers based on your
-                  Ideamarket ratings
+                  Connect Twitter and we'll recommend you to users whose
+                  on-chain ratings align with yours. Similar users will appear
+                  on your profile.
                 </div>
               </div>
+
+              {/* <div className="rounded-lg bg-white w-1/3 h-full p-4">
+                <div className="font-bold text-lg mb-2">
+                  Credibility without institutions
+                </div>
+                <div className="text-black/[.5] text-sm mb-4">
+                  As Bitcoin is money without banks, Ideamarket is credibility without institutions. Users decide what information deserves trust, without centralized third parties. Learn more in our <A href="https://docs.ideamarket.io/" className="text-blue-600">Docs</A>.
+                </div>
+              </div> */}
             </div>
           </div>
         </div>
