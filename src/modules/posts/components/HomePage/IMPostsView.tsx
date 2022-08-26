@@ -327,7 +327,9 @@ const IMPostsView = ({
                                   </div>
                                   <div>
                                     <span className="font-bold">
-                                      {postIncome} ETH
+                                      {formatNumberWithCommasAsThousandsSerperator(
+                                        postIncome.toFixed(3)
+                                      )}
                                     </span>
                                     <span className="text-black/[.5] font-bold text-xs">
                                       {' '}
@@ -562,7 +564,9 @@ const IMPostsView = ({
                                 </div>
                                 <div>
                                   <span className="font-bold">
-                                    {postIncome} ETH
+                                    {formatNumberWithCommasAsThousandsSerperator(
+                                      postIncome.toFixed(3)
+                                    )}
                                   </span>
                                   <span className="text-black/[.5] font-bold text-xs">
                                     {' '}

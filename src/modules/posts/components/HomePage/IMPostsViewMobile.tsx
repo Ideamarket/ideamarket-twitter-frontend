@@ -327,7 +327,11 @@ const IMPostsViewMobile = ({
                         </div>
 
                         <div>
-                          <span className="font-bold">{postIncome} ETH</span>
+                          <span className="font-bold">
+                            {formatNumberWithCommasAsThousandsSerperator(
+                              postIncome.toFixed(3)
+                            )}
+                          </span>
                           <span className="text-black/[.5] font-bold text-xs">
                             {' '}
                             (${imPost?.incomeInDAI?.toFixed(2)})
