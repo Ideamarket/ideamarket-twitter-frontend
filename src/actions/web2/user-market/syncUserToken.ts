@@ -5,14 +5,11 @@ import client from 'lib/axios'
  */
 export const syncUserToken = async (walletAddress: string) => {
   const body = {
-    type: 'USER_TOKEN',
-    triggerData: {
-      walletAddress,
-    },
+    walletAddress,
   }
   try {
-    const response = await client.post(`/trigger`, body)
-    return response?.data?.data?.trigger
+    const response = await client.patch(`/user-token/sync`, body)
+    return response?.data?.data
   } catch (error) {
     console.error(
       `Could not trigger user token sync for ${walletAddress}`,

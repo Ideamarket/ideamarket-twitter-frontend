@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import Select from 'react-select'
 import { IdeaMarket, IdeaToken } from 'store/ideaMarketsStore'
@@ -43,6 +43,7 @@ import { syncUserToken } from 'actions/web2/user-market/syncUserToken'
 import StakeUserUIBox from './StakeUserUIBox'
 import { A } from 'components'
 import Image from 'next/image'
+import { GlobalContext } from 'lib/GlobalContext'
 
 type StakeUserUIProps = {
   isOnChain: boolean // Is user token on chain or only in the database?
@@ -88,6 +89,7 @@ export default function StakeUserUI({
   unlockText,
   startingTradeType = TX_TYPES.STAKE_USER,
 }: StakeUserUIProps) {
+  const { setIsTxPending } = useContext(GlobalContext)
   const { account } = useWeb3React()
   const [tradeType, setTradeType] = useState(startingTradeType) // Used for smart contracts and which trade UI tab user is on
   const [isENSAddressValid, hexAddress] = useENSAddress(account)
@@ -401,6 +403,7 @@ export default function StakeUserUI({
   }
 
   async function onTradeClicked() {
+    setIsTxPending(true)
     const name = tradeType === TX_TYPES.STAKE_USER ? 'Stake' : 'Unstake'
 
     // If on chain, buy using ideaTokenExchange contract (with IMO. Uses multiaction for non-IMO buy). If not on-chain, use multiaction for doing a list and buy in one tx
@@ -465,6 +468,7 @@ export default function StakeUserUI({
             await syncUserToken(
               isOnChain ? web3UserToken?.name : web2UserToken?.walletAddress
             )
+            setIsTxPending(false)
           },
         },
         ...args
@@ -477,6 +481,7 @@ export default function StakeUserUI({
         web3UserToken?.name,
         TX_TYPES.NONE
       )
+      setIsTxPending(false)
       return
     }
 

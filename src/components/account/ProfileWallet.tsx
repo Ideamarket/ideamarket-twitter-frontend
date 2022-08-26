@@ -24,6 +24,7 @@ import { GlobalContext } from 'lib/GlobalContext'
 import {
   SortOptionsAccountOpinions,
   SortOptionsAccountPosts,
+  SortOptionsAccountRecommended,
   SortOptionsHomeUsersTable,
   TABLE_NAMES,
   TIME_FILTER,
@@ -32,6 +33,13 @@ import UserPostsTable from 'modules/posts/components/UserPostsTable'
 import { getAllPosts } from 'modules/posts/services/PostService'
 import HoldersView from 'modules/user-market/components/HoldersView'
 import HoldingsView from 'modules/user-market/components/HoldingsView'
+import UserRecommendedTable from 'modules/user-market/components/UserRecommendedTable'
+import {
+  getRecommendedUsersByWallet,
+  IdeamarketUser,
+} from 'modules/user-market/services/UserMarketService'
+import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
+import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 
 const TOKENS_PER_PAGE = 10
 
@@ -59,16 +67,19 @@ export default function ProfileWallet({ userData }: Props) {
   const web3 = useWalletStore((state) => state)
   const address = useWalletStore((state) => state.address)
 
-  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
+  const { setOnWalletConnectedCallback, isTxPending } =
+    useContext(GlobalContext)
 
   const [isVerifiedFilterActive, setIsVerifiedFilterActive] = useState(false)
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
   const [isLockedFilterActive, setIsLockedFilterActive] = useState(false)
   const [nameSearch, setNameSearch] = useState('')
 
-  const [selectedView, setSelectedView] = useState(TABLE_NAMES.ACCOUNT_OPINIONS)
+  const [selectedView, setSelectedView] = useState(
+    TABLE_NAMES.ACCOUNT_RECOMMENDED
+  )
   const [orderBy, setOrderBy] = useState(
-    SortOptionsAccountOpinions.RATING.value
+    SortOptionsAccountRecommended.MATCH_SCORE.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
 
@@ -77,6 +88,21 @@ export default function ProfileWallet({ userData }: Props) {
   )
 
   const filterTokens = isStarredFilterActive ? watchingTokens : undefined
+
+  const {
+    data: infiniteUserRecommendedData,
+    isFetching: isUserRecommendedDataLoading,
+    fetchNextPage: fetchMoreUserRecommended,
+    refetch: refetchUserRecommended,
+    hasNextPage: canFetchMoreUserRecommended,
+  } = useInfiniteQuery(
+    ['user-recommended'],
+    ({ pageParam = 0 }) =>
+      userRecommendedQueryFunction(TOKENS_PER_PAGE, pageParam),
+    infiniteQueryConfig
+  )
+
+  const userRecommendedPairs = flatten(infiniteUserRecommendedData?.pages || [])
 
   const {
     data: infiniteUserPostData,
@@ -139,6 +165,7 @@ export default function ProfileWallet({ userData }: Props) {
     refetchMyTrades()
     refetchRatings()
     refetchUserPosts()
+    refetchUserRecommended()
   }
 
   useEffect(() => {
@@ -153,7 +180,26 @@ export default function ProfileWallet({ userData }: Props) {
     isStarredFilterActive,
     isLockedFilterActive,
     nameSearch,
+    isTxPending, // If any transaction starts or stop, refresh data
   ])
+
+  async function userRecommendedQueryFunction(
+    numTokens: number,
+    skip: number = 0
+  ) {
+    if (selectedView !== TABLE_NAMES.ACCOUNT_RECOMMENDED) return []
+    if (!userData || !userData?.walletAddress) return []
+
+    const recommendedUsers = await getRecommendedUsersByWallet({
+      walletAddress: userData?.walletAddress,
+      limit: numTokens,
+      orderBy,
+      orderDirection,
+      skip,
+    })
+
+    return recommendedUsers || []
+  }
 
   async function userPostsQueryFunction(numTokens: number, skip: number = 0) {
     if (selectedView !== TABLE_NAMES.ACCOUNT_POSTS) return []
@@ -251,10 +297,43 @@ export default function ProfileWallet({ userData }: Props) {
     }
   }
 
+  const onStakeClicked = (userToken: IdeamarketUser) => {
+    if (!useWalletStore.getState().web3) {
+      setOnWalletConnectedCallback(() => () => {
+        ModalService.open(StakeUserModal, {
+          ideaToken: userToken,
+          market: USER_MARKET,
+        })
+      })
+      ModalService.open(WalletModal)
+    } else {
+      ModalService.open(StakeUserModal, {
+        ideaToken: userToken,
+        market: USER_MARKET,
+      })
+    }
+  }
+
   return (
     <div className="w-full h-full mt-8 pb-20">
       <div className="flex flex-col overflow-auto justify-between sm:flex-row mb-0 md:mb-4">
         <div className="flex order-1 md:order-none mx-4">
+          <div
+            className={classNames(
+              selectedView === TABLE_NAMES.ACCOUNT_RECOMMENDED
+                ? 'text-white'
+                : 'text-brand-gray text-opacity-60 cursor-pointer',
+              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
+            )}
+            onClick={() => {
+              setSelectedView(TABLE_NAMES.ACCOUNT_RECOMMENDED)
+              setOrderBy(SortOptionsAccountRecommended.MATCH_SCORE.value)
+              setOrderDirection('desc')
+            }}
+          >
+            Similar Users
+          </div>
+
           <div
             className={classNames(
               selectedView === TABLE_NAMES.ACCOUNT_OPINIONS
@@ -412,7 +491,37 @@ export default function ProfileWallet({ userData }: Props) {
               </div>
             )}
 
+            {/* Mobile header to explain columns for Similar Users */}
+            {selectedView === TABLE_NAMES.ACCOUNT_RECOMMENDED && (
+              <div className="md:hidden w-full flex gap-x-3 px-3 py-3 border-t-[6px] leading-4 text-xs text-black/[.5] font-semibold">
+                <div className="w-1/3 flex items-start">
+                  <span className="mr-1 break-all">% MATCH</span>
+                </div>
+
+                <div className="w-1/3 flex items-start">
+                  <span className="mr-1 break-all">STAKED</span>
+                </div>
+
+                <div className="w-1/3"></div>
+              </div>
+            )}
+
             <div className="border-t border-brand-border-gray dark:border-gray-500 shadow-home ">
+              {selectedView === TABLE_NAMES.ACCOUNT_RECOMMENDED &&
+                web3 !== undefined && (
+                  <UserRecommendedTable
+                    rawPairs={userRecommendedPairs}
+                    isPairsDataLoading={isUserRecommendedDataLoading}
+                    refetch={refetch}
+                    canFetchMore={canFetchMoreUserRecommended}
+                    orderDirection={orderDirection}
+                    orderBy={orderBy}
+                    fetchMore={fetchMoreUserRecommended}
+                    headerClicked={headerClicked}
+                    onStakeClicked={onStakeClicked}
+                  />
+                )}
+
               {selectedView === TABLE_NAMES.ACCOUNT_POSTS &&
                 web3 !== undefined && (
                   <UserPostsTable

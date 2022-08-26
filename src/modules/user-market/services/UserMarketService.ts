@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import apiGetAllUsers from 'actions/web2/user-market/apiGetAllUsers'
+import apiGetRecommendedUsersByWallet from 'actions/web2/user-market/apiGetRecommendedUsersByWallet'
 
 type Params = [
   limit: number,
@@ -36,6 +37,39 @@ export async function getAllUsers(
   )
 }
 
+/**
+ * Call API to get recommended users and then convert data to format consistent across entire frontend
+ */
+export async function getRecommendedUsersByWallet({
+  walletAddress,
+  limit,
+  orderBy,
+  orderDirection,
+  skip = 0,
+}): Promise<RecommendedUser[]> {
+  if (!walletAddress) {
+    console.error('No wallet address provided to getRecommendedUsersByWallet')
+    return []
+  }
+
+  const relations = await apiGetRecommendedUsersByWallet({
+    walletAddress,
+    skip,
+    limit,
+    orderBy,
+    orderDirection,
+  })
+
+  return await Promise.all(
+    relations.map(async (relation) => {
+      return {
+        partnerUserToken: formatApiResponseToUser(relation.partnerUserToken),
+        relation: formatApiResponseToRelation(relation.userRelation),
+      }
+    })
+  )
+}
+
 export type IdeamarketUser = {
   id: string
   walletAddress: string
@@ -66,6 +100,16 @@ export type IdeamarketUser = {
   rawMarketCap: BN
   rawDaiInToken: BN
   rawInvested: BN
+}
+
+export type Relation = {
+  // Will maybe add more relation values here in the future. matchScore uses specific algorithm and more can be added.
+  matchScore: number
+}
+
+export type RecommendedUser = {
+  partnerUserToken: IdeamarketUser
+  relation: Relation
 }
 
 /**
@@ -103,5 +147,11 @@ const formatApiResponseToUser = (apiUser: any): IdeamarketUser => {
     rawMarketCap: new BN(0),
     rawDaiInToken: new BN(0),
     rawInvested: new BN(0),
+  }
+}
+
+const formatApiResponseToRelation = (apiRelation: any): Relation => {
+  return {
+    matchScore: apiRelation?.matchScore,
   }
 }

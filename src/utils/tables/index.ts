@@ -7,6 +7,7 @@ export enum TABLE_NAMES {
   ACCOUNT_POSTS,
   ACCOUNT_HOLDERS, // The wallets/users that are staked on this account
   ACCOUNT_STAKED_ON, // The wallets/users that this account is staked on
+  ACCOUNT_RECOMMENDED, // The wallets/users that are recommended for this account based on mutual ratings
   LISTING_PAGE_OPINIONS,
   ADD_CITATION_MODAL, // Not a table, but needed to sort data in add citation modal
 }
@@ -22,6 +23,7 @@ const orderByDeposits = 'deposits'
 // const orderBy7DChange = 'weekChange'
 const orderByHolderCount = 'holders'
 const orderByPostedAt = 'postedAt'
+const orderByMatchScore = 'matchScore'
 
 export const SortOptionsHomePostsTable = {
   COMPOSITE_RATING: {
@@ -163,6 +165,35 @@ export const SortOptionsAccountHolders = {
     value: orderByHolderCount,
     displayName: 'Holders',
   },
+}
+
+// Sorting options for Recommended View on account page
+export const SortOptionsAccountRecommended = {
+  // TOTAL_RATINGS_COUNT: {
+  //   id: 1,
+  //   value: orderByTotalRatingsCount,
+  //   displayName: 'Ratings',
+  // },
+  STAKED: {
+    id: 1,
+    value: orderByDeposits,
+    displayName: 'Staked',
+  },
+  MATCH_SCORE: {
+    id: 2,
+    value: orderByMatchScore,
+    displayName: '% MATCH',
+  },
+  // WEEK_CHANGE: {
+  //   id: 3,
+  //   value: orderBy7DChange,
+  //   displayName: '7D Change',
+  // },
+  // HOLDERS: {
+  //   id: 3,
+  //   value: orderByHolderCount,
+  //   displayName: 'Holders',
+  // },
 }
 
 // Sorting options for posts table on account page

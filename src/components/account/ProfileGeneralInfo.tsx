@@ -31,7 +31,8 @@ interface Props {
 const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
   const { account, active, library } = useWeb3React()
 
-  const { jwtToken, setOnWalletConnectedCallback } = useContext(GlobalContext)
+  const { jwtToken, setOnWalletConnectedCallback, isTxPending } =
+    useContext(GlobalContext)
 
   const { loginByWallet } = useAuth()
 
@@ -44,7 +45,10 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
         limit: 10,
         orderBy: SortOptionsHomeUsersTable.STAKED.value,
         orderDirection: 'desc',
-      })
+      }),
+    {
+      enabled: !isTxPending,
+    }
   )
 
   const onLoginClicked = async () => {

@@ -2,23 +2,30 @@ import { DefaultLayout } from 'components'
 import { Toaster } from 'react-hot-toast'
 import { ProfileWallet } from 'components/account'
 import ProfileGeneralInfo from 'components/account/ProfileGeneralInfo'
-import { ReactElement, useEffect } from 'react'
+import { ReactElement, useContext, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { isAddressValid } from 'lib/utils/web3-eth'
 import { useRouter } from 'next/router'
 import { getAccount } from 'actions/web2/user-market/apiUserActions'
 import BgBanner from 'components/BgBanner'
 import { openVerifyModalAfterLogin } from 'modules/user-market/services/VerificationService'
+import { GlobalContext } from 'lib/GlobalContext'
 
 const PublicProfile = () => {
+  const { isTxPending } = useContext(GlobalContext)
   const router = useRouter()
   const { username, wasVerificationSuccess = null } = router.query // This can be DB username or onchain wallet address
 
-  const { data: userData } = useQuery<any>([{ username }], () =>
-    getAccount({
-      username: isAddressValid(username as string) ? null : username,
-      walletAddress: username,
-    })
+  const { data: userData } = useQuery<any>(
+    [{ username }],
+    () =>
+      getAccount({
+        username: isAddressValid(username as string) ? null : username,
+        walletAddress: username,
+      }),
+    {
+      enabled: !isTxPending,
+    }
   )
 
   // Create user data object for wallet that is not in DB

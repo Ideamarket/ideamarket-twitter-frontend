@@ -35,6 +35,7 @@ import { useWalletStore } from 'store/walletStore'
 import { useWeb3React } from '@web3-react/core'
 import { updatePostMetadata } from 'actions/web2/posts/updatePostMetadata'
 import { getCategories } from 'actions/web2/getCategories'
+import { syncUserRelationsForWallet } from 'actions/web2/user-market/syncUserRelationsForWallet'
 
 export default function RateUI({
   close = () => null,
@@ -168,6 +169,14 @@ export default function RateUI({
         {
           onReceipt: async (receipt: any) => {
             await syncNFTOpinions(imPost?.tokenID)
+
+            // Not using await for now in case algorithm takes lot of time to finish. Also, if this API doesn't work, using a triggered webjob may be better and more efficient at scale.
+            syncUserRelationsForWallet({
+              walletAddress: account,
+              ratedPostID: imPost?.tokenID,
+              rating: inputRating,
+            })
+
             setIsTxPending(false)
           },
         },
