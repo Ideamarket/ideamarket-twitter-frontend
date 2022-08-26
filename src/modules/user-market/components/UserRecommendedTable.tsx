@@ -158,7 +158,7 @@ export default function UserRecommendedTable({
                   />
                 ))}
 
-              {true
+              {isPairsDataLoading
                 ? Array.from(Array(TOKENS_PER_PAGE).keys()).map((token) => (
                     <UserRecommendedRowSkeleton key={token} />
                   ))
