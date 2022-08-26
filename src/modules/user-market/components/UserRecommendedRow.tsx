@@ -105,16 +105,22 @@ export default function UserRecommendedRow({
             {/* % MATCH */}
             <div className="w-[18.33%] lg:w-[15%] grow flex items-start">
               <div className="flex flex-col justify-center font-medium leading-5">
-                <span>{recommendedUser?.relation?.matchScore}%</span>
+                <span>
+                  {formatNumberWithCommasAsThousandsSerperator(
+                    Math.round(recommendedUser?.relation?.matchScore)
+                  )}
+                  %
+                </span>
               </div>
             </div>
 
             {/* STAKED */}
             <div className="w-[18.33%] lg:w-[11.25%] grow pr-2">
-              <div className="flex flex-col justify-start font-medium leading-5">
+              <div className="flex flex-col justify-start leading-5 text-blue-500 font-bold">
                 {formatNumberWithCommasAsThousandsSerperator(
                   Math.round(recommendedUser?.partnerUserToken?.deposits)
-                )}
+                )}{' '}
+                IMO
               </div>
             </div>
 
@@ -199,16 +205,20 @@ export default function UserRecommendedRow({
           {/* % MATCH */}
           <div className="flex flex-col justify-start font-medium leading-5">
             <span className="mb-1">
-              {recommendedUser?.relation?.matchScore}%
+              {formatNumberWithCommasAsThousandsSerperator(
+                Math.round(recommendedUser?.relation?.matchScore)
+              )}
+              %
             </span>
           </div>
 
           {/* STAKED */}
           <div className="flex items-center">
-            <span className="text-base text-black/[.5] font-medium">
+            <span className="text-base text-black/[.5] text-blue-500 font-bold">
               {formatNumberWithCommasAsThousandsSerperator(
                 Math.round(recommendedUser?.partnerUserToken?.deposits)
-              )}
+              )}{' '}
+              IMO
             </span>
           </div>
 
