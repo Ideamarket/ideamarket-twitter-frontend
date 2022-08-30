@@ -24,6 +24,8 @@ import { useTransactionManager } from 'utils'
 import TradeCompleteModal, {
   TX_TYPES,
 } from 'components/trade/TradeCompleteModal'
+import StakeUserModal from 'modules/user-market/components/StakeUserModal'
+import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
 
 type Props = {
   bgColor: string
@@ -70,14 +72,21 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
 
   const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
+  const onStakeClicked = () => {
+    ModalService.open(StakeUserModal, {
+      ideaToken: user,
+      market: USER_MARKET,
+    })
+  }
+
   const onNewPostClicked = () => {
     if (!useWalletStore.getState().web3) {
       setOnWalletConnectedCallback(() => () => {
-        ModalService.open(NewPostModal)
+        ModalService.open(NewPostModal, { onStakeClicked })
       })
       ModalService.open(WalletModal)
     } else {
-      ModalService.open(NewPostModal)
+      ModalService.open(NewPostModal, { onStakeClicked })
     }
   }
 

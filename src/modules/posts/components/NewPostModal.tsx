@@ -4,21 +4,14 @@ import TradeCompleteModal, {
 } from 'components/trade/TradeCompleteModal'
 import ModalService from 'components/modals/ModalService'
 import NewPostUI from './NewPostUI'
-import StakeUserModal from 'modules/user-market/components/StakeUserModal'
-import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
-import { useContext } from 'react'
-import { GlobalContext } from 'lib/GlobalContext'
 
-export default function NewPostModal({ close }: { close: () => void }) {
-  const { user } = useContext(GlobalContext)
-
-  const onStakeClicked = () => {
-    ModalService.open(StakeUserModal, {
-      ideaToken: user,
-      market: USER_MARKET,
-    })
-  }
-
+export default function NewPostModal({
+  close,
+  onStakeClicked,
+}: {
+  close: () => void
+  onStakeClicked?: () => void
+}) {
   function onTradeComplete(
     isSuccess: boolean,
     listingId: string,
