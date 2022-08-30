@@ -30,14 +30,14 @@ export const isAddressInMerkleRoot = (
   airdropType: AIRDROP_TYPES
 ) => {
   const MerkleRoot = getMerkleRoot(airdropType)
-  return MerkleRoot.claims.hasOwnProperty(address)
+  return MerkleRoot?.claims?.hasOwnProperty(address)
 }
 
 export const getClaimAmount = (address: string, airdropType: AIRDROP_TYPES) => {
   const MerkleRoot = getMerkleRoot(airdropType)
 
   if (isAddressInMerkleRoot(address, airdropType)) {
-    const amount = MerkleRoot.claims[address].amount
+    const amount = MerkleRoot?.claims[address]?.amount
     return parseFloat(
       web3BNToFloatString(
         new BN(new BigNumber(amount).toFixed()),
