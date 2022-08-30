@@ -10,14 +10,14 @@ export default function NewPostModal({ close }: { close: () => void }) {
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TX_TYPES
+    txType: TX_TYPES
   ) {
     close()
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId,
       idtValue,
-      transactionType,
+      txType,
     })
   }
 

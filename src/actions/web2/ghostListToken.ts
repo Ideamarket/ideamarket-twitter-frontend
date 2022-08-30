@@ -44,7 +44,7 @@ export const ghostListToken = async (
       isSuccess: false,
       listingId: null,
       idtValue: url,
-      transactionType: TX_TYPES.NONE,
+      txType: TX_TYPES.NONE,
     })
     return null
   }

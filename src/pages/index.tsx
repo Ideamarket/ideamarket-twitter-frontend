@@ -152,13 +152,13 @@ const Home = () => {
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TX_TYPES
+    txType: TX_TYPES
   ) {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId,
       idtValue,
-      transactionType,
+      txType,
     })
   }
 

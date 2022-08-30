@@ -83,12 +83,12 @@ const StakeEthIMOFlow = () => {
     setInputAmount(isStakeSelected ? userLPBalance : userIMOStakedBalance)
   }
 
-  const onTradeComplete = (isSuccess: boolean, transactionType: TX_TYPES) => {
+  const onTradeComplete = (isSuccess: boolean, txType: TX_TYPES) => {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId: null, // No IDT when staking EthIMO
       idtValue: null,
-      transactionType,
+      txType,
     })
   }
 

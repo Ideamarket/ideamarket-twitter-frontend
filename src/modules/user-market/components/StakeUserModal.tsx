@@ -31,14 +31,14 @@ export default function StakeUserModal({
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TX_TYPES
+    txType: TX_TYPES
   ) {
     close()
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId,
       idtValue,
-      transactionType,
+      txType,
     })
   }
 

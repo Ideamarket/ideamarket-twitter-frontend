@@ -36,6 +36,8 @@ import { useWeb3React } from '@web3-react/core'
 import { updatePostMetadata } from 'actions/web2/posts/updatePostMetadata'
 import { getCategories } from 'actions/web2/getCategories'
 import { syncUserRelationsForWallet } from 'actions/web2/user-market/syncUserRelationsForWallet'
+import StakeUserModal from 'modules/user-market/components/StakeUserModal'
+import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
 
 export default function RateUI({
   close = () => null,
@@ -51,7 +53,7 @@ export default function RateUI({
   defaultRating?: number
 }) {
   const txManager = useTransactionManager()
-  const { setIsTxPending, setOnWalletConnectedCallback } =
+  const { setIsTxPending, setOnWalletConnectedCallback, user } =
     useContext(GlobalContext)
   const { account } = useWeb3React()
 
@@ -86,18 +88,26 @@ export default function RateUI({
     setSelectedPosts(newSelectedPosts)
   }
 
+  const onStakeClicked = () => {
+    ModalService.open(StakeUserModal, {
+      ideaToken: user,
+      market: USER_MARKET,
+    })
+  }
+
   function onTradeComplete(
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TX_TYPES
+    txType: TX_TYPES
   ) {
     close()
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId,
       idtValue,
-      transactionType,
+      txType,
+      onStakeClicked, // Putting this inside TradeCompleteModal causes memory issue, so have to pass as prop
     })
   }
 

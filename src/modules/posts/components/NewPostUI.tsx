@@ -25,7 +25,7 @@ type NewPostUIProps = {
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TX_TYPES
+    txType: TX_TYPES
   ) => void
   // Method used to pass input values from this file to parent file
   onInputChanged?: (inputContent: string) => void

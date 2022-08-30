@@ -85,13 +85,13 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TX_TYPES
+    txType: TX_TYPES
   ) {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId,
       idtValue,
-      transactionType,
+      txType,
     })
   }
 
@@ -115,7 +115,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
       onTradeComplete(
         true,
         'success',
-        'success',
+        parseFloat(selectedTokenDAIValue).toFixed(2),
         TX_TYPES.WITHDRAW_CLAIMABLE_FEE
       )
     }

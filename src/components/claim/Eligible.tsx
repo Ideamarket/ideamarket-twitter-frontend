@@ -41,12 +41,12 @@ export const Eligible: React.FC<Props> = ({
   const [txFailed, setTxFailed] = useState<Boolean>(false)
   const [loading, setLoading] = useState<Boolean>(false)
 
-  const onTradeComplete = (isSuccess: boolean, transactionType: TX_TYPES) => {
+  const onTradeComplete = (isSuccess: boolean, txType: TX_TYPES) => {
     ModalService.open(TradeCompleteModal, {
       isSuccess,
       listingId: null, // No IDT when claiming
       idtValue: null,
-      transactionType,
+      txType,
     })
   }
 

@@ -54,7 +54,7 @@ type StakeUserUIProps = {
     isSuccess: boolean,
     listingId: string,
     idtValue: string,
-    transactionType: TX_TYPES
+    txType: TX_TYPES
   ) => void
   onValuesChanged: (
     ideaTokenAmount: BN,
