@@ -4,8 +4,21 @@ import TradeCompleteModal, {
 } from 'components/trade/TradeCompleteModal'
 import ModalService from 'components/modals/ModalService'
 import NewPostUI from './NewPostUI'
+import StakeUserModal from 'modules/user-market/components/StakeUserModal'
+import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
+import { useContext } from 'react'
+import { GlobalContext } from 'lib/GlobalContext'
 
 export default function NewPostModal({ close }: { close: () => void }) {
+  const { user } = useContext(GlobalContext)
+
+  const onStakeClicked = () => {
+    ModalService.open(StakeUserModal, {
+      ideaToken: user,
+      market: USER_MARKET,
+    })
+  }
+
   function onTradeComplete(
     isSuccess: boolean,
     listingId: string,
@@ -18,6 +31,7 @@ export default function NewPostModal({ close }: { close: () => void }) {
       listingId,
       idtValue,
       txType,
+      onStakeClicked, // Putting this inside TradeCompleteModal causes memory issue, so have to pass as prop
     })
   }
 

@@ -187,37 +187,112 @@ export default function TradeCompleteModal({
                 </div>
 
                 <div
-                  className="absolute bottom-0 left-0 right-0 h-44 py-5 text-white"
+                  className="absolute bottom-0 left-0 right-0 h-44 py-5 text-white flex justify-center items-center"
                   style={{
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
                     backdropFilter: 'blur(100px)',
                   }}
                 >
-                  <div className="text-sm px-4">
-                    Next, stake $IMO on yourself to increase the visibility of
-                    every post you rate. The more users who rate the same posts
-                    as you, the more you’ll be recommended as a “Similar User”
-                    on other user's profiles. No need to buy $IMO first, we'll
-                    convert it for you.
-                  </div>
+                  <div>
+                    <div className="text-sm px-4">
+                      Next, stake $IMO on yourself to increase the visibility of
+                      every post you rate. The more users who rate the same
+                      posts as you, the more you’ll be recommended as a “Similar
+                      User” on other user's profiles. No need to buy $IMO first,
+                      we'll convert it for you.
+                    </div>
 
-                  <div className="w-full flex justify-center items-center">
-                    <button
-                      onClick={onStakeClicked}
-                      className="mt-3 p-2 bg-blue-600 rounded-xl font-bold text-sm flex justify-center items-center"
-                    >
-                      <div className="relative rounded-full w-5 h-5 mr-2">
-                        <Image
-                          className="rounded-full"
-                          src={user?.profilePhoto || '/default-profile-pic.png'}
-                          alt=""
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      </div>
-                      <span>Stake on Yourself</span>
-                    </button>
+                    <div className="w-full flex justify-center items-center">
+                      <button
+                        onClick={onStakeClicked}
+                        className="mt-3 p-2 bg-blue-600 rounded-xl font-bold text-sm flex justify-center items-center"
+                      >
+                        <div className="relative rounded-full w-5 h-5 mr-2">
+                          <Image
+                            className="rounded-full"
+                            src={
+                              user?.profilePhoto || '/default-profile-pic.png'
+                            }
+                            alt=""
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                        </div>
+                        <span>Stake on Yourself</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <Wrong
+                  style={{
+                    width: '19rem',
+                    height: '16rem',
+                    position: 'absolute',
+                    top: 0,
+                  }}
+                />
+                <div
+                  className="mt-48 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
+                  style={{
+                    background: 'rgba(199, 43, 67, 0.2)',
+                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                    backdropFilter: 'blur(100px)',
+                  }}
+                >
+                  <ExclamationCircleIcon className="w-5 h-5 text-red-700 mr-2" />
+                  Transaction Failed to execute
+                </div>
+              </>
+            )}
+          </>
+        )}
+
+        {txType === TX_TYPES.TEXT_POST_LIST && (
+          <>
+            {isSuccess ? (
+              <>
+                <div className="pt-8 flex justify-center text-4xl text-white text-center font-gilroy-bold">
+                  Posted Successfully!
+                </div>
+
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-44 py-5 text-white flex justify-center items-center"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                    backdropFilter: 'blur(100px)',
+                  }}
+                >
+                  <div>
+                    <div className="text-sm px-4">
+                      To boost your post's visibility, stake $IMO on yourself
+                      and then rate your post. The more $IMO staked on you, the
+                      more you boost the visibility of every post you rate.
+                    </div>
+
+                    <div className="w-full flex justify-center items-center">
+                      <button
+                        onClick={onStakeClicked}
+                        className="mt-3 p-2 bg-blue-600 rounded-xl font-bold text-sm flex justify-center items-center"
+                      >
+                        <div className="relative rounded-full w-5 h-5 mr-2">
+                          <Image
+                            className="rounded-full"
+                            src={
+                              user?.profilePhoto || '/default-profile-pic.png'
+                            }
+                            alt=""
+                            layout="fill"
+                            objectFit="cover"
+                          />
+                        </div>
+                        <span>Stake on Yourself</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </>
@@ -248,7 +323,8 @@ export default function TradeCompleteModal({
         )}
 
         {txType !== TX_TYPES.WITHDRAW_CLAIMABLE_FEE &&
-          txType !== TX_TYPES.RATE && (
+          txType !== TX_TYPES.RATE &&
+          txType !== TX_TYPES.TEXT_POST_LIST && (
             <div className="flex flex-col justify-center items-center">
               {isSuccess ? (
                 <>

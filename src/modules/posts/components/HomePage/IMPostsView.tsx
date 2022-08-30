@@ -251,7 +251,7 @@ const IMPostsView = ({
                           </div>
 
                           <div className="flex items-center pt-6">
-                            <div className="w-1/3">
+                            {/* <div className="w-1/3">
                               <div className="flex justify-start items-center space-x-2">
                                 <div className="relative w-6 h-6">
                                   <Image
@@ -272,7 +272,7 @@ const IMPostsView = ({
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                            </div> */}
 
                             <div className="w-1/3">
                               <div className="flex justify-start items-center space-x-2">
@@ -487,7 +487,7 @@ const IMPostsView = ({
                         </div>
 
                         <div className="flex items-center pt-6">
-                          <div className="w-1/3">
+                          {/* <div className="w-1/3">
                             <div className="flex justify-start items-center space-x-2">
                               <div className="relative w-6 h-6">
                                 <Image
@@ -508,7 +508,7 @@ const IMPostsView = ({
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> */}
 
                           <div className="w-1/3">
                             <div className="flex justify-start items-center space-x-2">

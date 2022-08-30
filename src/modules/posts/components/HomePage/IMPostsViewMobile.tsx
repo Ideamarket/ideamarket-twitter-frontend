@@ -252,7 +252,7 @@ const IMPostsViewMobile = ({
                     {/* Stats */}
                     <div className="py-8">
                       {/* Ratings */}
-                      <div className="flex justify-between items-center">
+                      {/* <div className="flex justify-between items-center">
                         <div className="flex justify-start items-center space-x-2">
                           <div className="relative w-6 h-6">
                             <Image
@@ -272,7 +272,7 @@ const IMPostsViewMobile = ({
                             imPost.totalRatingsCount
                           )}
                         </div>
-                      </div>
+                      </div> */}
 
                       {/* Hot */}
                       <div className="flex justify-between items-center">

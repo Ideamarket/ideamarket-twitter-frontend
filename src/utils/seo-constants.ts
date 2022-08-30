@@ -3,7 +3,7 @@ import { isServerSide } from 'utils'
 export const DEFAULT_TITLE = 'The credibility layer of the internet'
 export const DEFAULT_TITLE_TEMPLATE = 'Ideamarket | %s'
 export const DEFAULT_DESCRIPTION =
-  'Profit by discovering the world’s best information.'
+  'A Post-to-Earn knowledge graph for building credibility without institutions.'
 export const DEFAULT_CANONICAL = 'https://ideamarket.io'
 export const SITE_NAME = 'Ideamarket'
 export const DEFAULT_OG_IMAGE = `${DEFAULT_CANONICAL}/og-image.jpg`

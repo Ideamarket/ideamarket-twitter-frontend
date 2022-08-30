@@ -133,7 +133,7 @@ export default function NewPostUI({
       return
     }
 
-    onTradeComplete(true, 'success', 'success', TX_TYPES.RATE)
+    onTradeComplete(true, 'success', 'success', TX_TYPES.TEXT_POST_LIST)
     setSelectedCategories([])
   }
 
