@@ -85,7 +85,7 @@ const getTweetUrl = (txType: TX_TYPES, value: string) => {
   } else if (txType === TX_TYPES.STAKE) {
     tweetUrl = `https://ideamarket.io/stake`
   } else if (txType === TX_TYPES.WITHDRAW_CLAIMABLE_FEE) {
-    tweetUrl = `https://ideamarket.io`
+    tweetUrl = `` // No link for now
   }
 
   return tweetUrl
@@ -182,19 +182,19 @@ export default function TradeCompleteModal({
           <>
             {isSuccess ? (
               <>
-                <div className="pt-10 flex justify-center text-4xl text-white text-center font-gilroy-bold">
+                <div className="pt-8 flex justify-center text-4xl text-white text-center font-gilroy-bold">
                   Rated Successfully!
                 </div>
 
                 <div
-                  className="absolute bottom-0 left-0 right-0 h-40 py-5 text-white text-center"
+                  className="absolute bottom-0 left-0 right-0 h-44 py-5 text-white"
                   style={{
                     background: 'rgba(255, 255, 255, 0.05)',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
                     backdropFilter: 'blur(100px)',
                   }}
                 >
-                  <div className="text-xs px-4">
+                  <div className="text-sm px-4">
                     Next, stake $IMO on yourself to increase the visibility of
                     every post you rate. The more users who rate the same posts
                     as you, the more you’ll be recommended as a “Similar User”

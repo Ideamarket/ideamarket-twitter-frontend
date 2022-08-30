@@ -186,17 +186,15 @@ const IMPostsViewMobile = ({
                     <span
                       className={classNames(
                         getIMORatingColors(
-                          imPost?.totalRatingsCount > 0 &&
-                            imPost?.marketInterest > 0
-                            ? Math.round(imPost?.compositeRating)
+                          imPost?.totalRatingsCount > 0
+                            ? Math.round(imPost?.averageRating)
                             : -1
                         ),
                         'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
                       )}
                     >
-                      {imPost?.totalRatingsCount > 0 &&
-                      imPost?.marketInterest > 0
-                        ? Math.round(imPost?.compositeRating) + '%'
+                      {imPost?.totalRatingsCount > 0
+                        ? Math.round(imPost?.averageRating) + '%'
                         : '—'}
                     </span>
 
@@ -365,17 +363,15 @@ const IMPostsViewMobile = ({
                               <span
                                 className={classNames(
                                   getIMORatingColors(
-                                    citation?.totalRatingsCount > 0 &&
-                                      citation?.marketInterest > 0
-                                      ? Math.round(citation?.compositeRating)
+                                    citation?.totalRatingsCount > 0
+                                      ? Math.round(citation?.averageRating)
                                       : -1
                                   ),
                                   'absolute top-0 right-0 w-10 h-10 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-base border-l-2 border-b-2 border-white'
                                 )}
                               >
-                                {citation?.totalRatingsCount > 0 &&
-                                citation?.marketInterest > 0
-                                  ? Math.round(citation?.compositeRating) + '%'
+                                {citation?.totalRatingsCount > 0
+                                  ? Math.round(citation?.averageRating) + '%'
                                   : '—'}
                               </span>
 

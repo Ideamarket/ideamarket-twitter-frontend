@@ -7,8 +7,6 @@ import ModalService from 'components/modals/ModalService'
 import { useWalletStore } from 'store/walletStore'
 import { NextSeo } from 'next-seo'
 import { GlobalContext } from 'pages/_app'
-import { startingOptionalColumns } from 'components/home/utils'
-import { CheckboxFilters } from 'components/tokens/utils/OverviewUtils'
 import RateModal from 'components/trade/RateModal'
 import {
   getTimeFilterDisplayNameByValue,
@@ -89,13 +87,6 @@ const Home = () => {
   )
 
   const [activeOverlayPostID, setActiveOverlayPostID] = useState(null)
-
-  if (
-    startingOptionalColumns.length ===
-    CheckboxFilters.COLUMNS.values.length - 1
-  ) {
-    startingOptionalColumns.push('All')
-  }
 
   const { setOnWalletConnectedCallback, setIsTxPending } =
     useContext(GlobalContext)

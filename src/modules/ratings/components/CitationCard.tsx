@@ -54,17 +54,15 @@ const CitationCard = ({
           <span
             className={classNames(
               getIMORatingColors(
-                citationData?.totalRatingsCount > 0 &&
-                  citationData?.marketInterest > 0
-                  ? Math.round(citationData?.compositeRating)
+                citationData?.totalRatingsCount > 0
+                  ? Math.round(citationData?.averageRating)
                   : -1
               ),
               'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl z-[100]'
             )}
           >
-            {citationData?.totalRatingsCount > 0 &&
-            citationData?.marketInterest > 0
-              ? Math.round(citationData?.compositeRating) + '%'
+            {citationData?.totalRatingsCount > 0
+              ? Math.round(citationData?.averageRating) + '%'
               : '—'}
           </span>
 
@@ -174,17 +172,15 @@ const CitationCard = ({
           <span
             className={classNames(
               getIMORatingColors(
-                citationData?.totalRatingsCount > 0 &&
-                  citationData?.marketInterest > 0
-                  ? Math.round(citationData?.compositeRating)
+                citationData?.totalRatingsCount > 0
+                  ? Math.round(citationData?.averageRating)
                   : -1
               ),
               'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl z-[100]'
             )}
           >
-            {citationData?.totalRatingsCount > 0 &&
-            citationData?.marketInterest > 0
-              ? Math.round(citationData?.compositeRating) + '%'
+            {citationData?.totalRatingsCount > 0
+              ? Math.round(citationData?.averageRating) + '%'
               : '—'}
           </span>
 

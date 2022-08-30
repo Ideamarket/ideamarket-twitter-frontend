@@ -14,7 +14,7 @@ export enum TABLE_NAMES {
 
 // To change string value being passed into orderBy to backend, you need to change "value" on SortOptions objects
 const orderByIndividualRating = 'rating'
-// const orderByAverageRating = 'averageRating'
+const orderByAverageRating = 'averageRating'
 const orderByLatestRatingsCount = 'latestRatingsCount'
 const orderByTotalRatingsCount = 'totalRatingsCount'
 const orderByCompositeRating = 'compositeRating'
@@ -54,16 +54,16 @@ export const SortOptionsHomePostsTable = {
 }
 
 export const SortOptionsAddCitationsModal = {
-  COMPOSITE_RATING: {
-    id: 1,
-    value: orderByCompositeRating,
-    displayName: 'Confidence',
-  },
-  // AVG_RATING: {
-  //   id: 2,
-  //   value: orderByAverageRating,
-  //   displayName: 'Average Rating',
+  // COMPOSITE_RATING: {
+  //   id: 1,
+  //   value: orderByCompositeRating,
+  //   displayName: 'Confidence',
   // },
+  AVG_RATING: {
+    id: 2,
+    value: orderByAverageRating,
+    displayName: 'Average Rating',
+  },
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,
@@ -198,16 +198,16 @@ export const SortOptionsAccountRecommended = {
 
 // Sorting options for posts table on account page
 export const SortOptionsAccountPosts = {
-  COMPOSITE_RATING: {
-    id: 1,
-    value: orderByCompositeRating,
-    displayName: 'Confidence',
-  },
-  // AVG_RATING: {
-  //   id: 2,
-  //   value: orderByAverageRating,
-  //   displayName: 'Average Rating',
+  // COMPOSITE_RATING: {
+  //   id: 1,
+  //   value: orderByCompositeRating,
+  //   displayName: 'Confidence',
   // },
+  AVG_RATING: {
+    id: 2,
+    value: orderByAverageRating,
+    displayName: 'Average Rating',
+  },
   MARKET_INTEREST: {
     id: 3,
     value: orderByMarketInterest,

@@ -475,14 +475,14 @@ export default function ProfileWallet({ userData }: Props) {
                 </div>
 
                 <div className="w-1/4 flex items-start">
-                  <span className="mr-1 break-all">CONFIDENCE</span>
-                  <Tooltip>
+                  <span className="mr-1">AVERAGE RATING</span>
+                  {/* <Tooltip>
                     <div className="w-full md:w-64">
                       Rating weighted by IMO staked on each user. The more IMO
                       staked on a user, the more that user’s ratings affect the
                       IMO Rating of every post they rate.
                     </div>
-                  </Tooltip>
+                  </Tooltip> */}
                 </div>
 
                 <div className="w-1/4 break-all">RATINGS</div>

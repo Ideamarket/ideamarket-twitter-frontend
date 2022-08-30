@@ -140,16 +140,15 @@ export default function UserPostsRow({
                   <span
                     className={classNames(
                       getIMORatingColors(
-                        token?.totalRatingsCount > 0 &&
-                          token?.marketInterest > 0
-                          ? Math.round(token?.compositeRating)
+                        token?.totalRatingsCount > 0
+                          ? Math.round(token?.averageRating)
                           : -1
                       ),
                       'w-14 h-12 flex justify-center items-center rounded-lg font-extrabold text-xl'
                     )}
                   >
-                    {token?.totalRatingsCount > 0 && token?.marketInterest > 0
-                      ? Math.round(token?.compositeRating) + '%'
+                    {token?.totalRatingsCount > 0
+                      ? Math.round(token?.averageRating) + '%'
                       : '—'}
                   </span>
                 </span>
@@ -274,15 +273,15 @@ export default function UserPostsRow({
               <span
                 className={classNames(
                   getIMORatingColors(
-                    token?.totalRatingsCount > 0 && token?.marketInterest > 0
-                      ? Math.round(token?.compositeRating)
+                    token?.totalRatingsCount > 0
+                      ? Math.round(token?.averageRating)
                       : -1
                   ),
                   'w-14 h-12 flex justify-center items-center rounded-lg font-extrabold text-xl'
                 )}
               >
-                {token?.totalRatingsCount > 0 && token?.marketInterest > 0
-                  ? Math.round(token?.compositeRating) + '%'
+                {token?.totalRatingsCount > 0
+                  ? Math.round(token?.averageRating) + '%'
                   : '—'}
               </span>
             </span>

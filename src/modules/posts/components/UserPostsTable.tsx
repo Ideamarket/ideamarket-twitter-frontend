@@ -26,8 +26,8 @@ const headers: Header[] = [
     sortable: true,
   },
   {
-    title: 'Confidence',
-    value: SortOptionsAccountPosts.COMPOSITE_RATING.value,
+    title: SortOptionsAccountPosts.AVG_RATING.displayName,
+    value: SortOptionsAccountPosts.AVG_RATING.value,
     sortable: true,
   },
   // {
@@ -106,12 +106,12 @@ export default function UserPostsTable({
             </Tooltip>
           </div>
         )
-      case SortOptionsAccountPosts.COMPOSITE_RATING.value:
+      case SortOptionsAccountPosts.AVG_RATING.value:
         return (
           <div className="flex items-center break-all">
             <span>
-              Confidence
-              <Tooltip
+              Average Rating
+              {/* <Tooltip
                 className="ml-1 text-black/[.5] z-[200]"
                 iconComponentClassNames="w-3"
               >
@@ -120,7 +120,7 @@ export default function UserPostsTable({
                   staked on a user, the more that user’s ratings affect the IMO
                   Rating of every post they rate.
                 </div>
-              </Tooltip>
+              </Tooltip> */}
             </span>
           </div>
         )
@@ -133,10 +133,8 @@ export default function UserPostsTable({
     switch (column.value) {
       case 'name':
         return 'w-[45%] lg:w-[55%] pl-6 pr-24'
-      case SortOptionsAccountPosts.COMPOSITE_RATING.value:
+      case SortOptionsAccountPosts.AVG_RATING.value:
         return 'w-[13.75%] lg:w-[11.25%]'
-      // case SortOptionsAccountPosts.AVG_RATING.value:
-      //   return 'w-[11%] lg:w-[9%]'
       case SortOptionsAccountPosts.MARKET_INTEREST.value:
         return 'w-[13.75%] lg:w-[11.25%]'
       case SortOptionsAccountPosts.RATINGS.value:
