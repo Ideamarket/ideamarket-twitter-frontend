@@ -225,10 +225,13 @@ const Home = () => {
               </div>
 
               <div className="rounded-lg bg-white w-1/3 h-full p-4">
-                <div className="font-bold text-lg mb-2">Rate-to-Brag</div>
+                <div className="font-bold text-lg mb-2">
+                  Prove your good judgment
+                </div>
                 <div className="text-black/[.5] text-sm mb-4">
                   On-chain ratings are a public record of personal opinion, so
-                  everyone can see who was insightful and who was misleading.
+                  everyone can see who was right and who was just following
+                  trends.
                 </div>
               </div>
 
@@ -301,7 +304,7 @@ const Home = () => {
                     'px-4 py-2 font-bold text-2xl rounded-lg flex items-center space-x-2'
                   )}
                 >
-                  <div>Users</div>
+                  <div>Leaderboard</div>
                   <div className="relative w-8 h-8">
                     <Image
                       src={'/UsersIcon.svg'}
@@ -514,7 +517,7 @@ const Home = () => {
                 'px-4 py-2 font-bold text-2xl rounded-lg'
               )}
             >
-              Users
+              Leaderboard
             </button>
           </div>
 

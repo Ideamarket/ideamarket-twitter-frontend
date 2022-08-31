@@ -274,7 +274,7 @@ export default function TradeCompleteModal({
                       more you boost the visibility of every post you rate.
                     </div>
 
-                    <div className="w-full flex justify-center items-center">
+                    {/* <div className="w-full flex justify-center items-center">
                       <button
                         onClick={onStakeClicked}
                         className="mt-3 p-2 bg-blue-600 rounded-xl font-bold text-sm flex justify-center items-center"
@@ -292,7 +292,7 @@ export default function TradeCompleteModal({
                         </div>
                         <span>Stake on Yourself</span>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </>
