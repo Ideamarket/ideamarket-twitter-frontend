@@ -767,8 +767,11 @@ export default function StakeUserUI({
                 </button>
               </div>
 
-              <div className="mt-2 text-xs text-center text-gray-500">
+              <div className="mt-2 text-xs text-center text-gray-500 font-semibold">
                 Confirm transaction in wallet to complete.
+              </div>
+              <div className="text-xs text-center">
+                {`(Gas fee estimates are high. Most tx cost < $0.50)`}
               </div>
 
               <TxPending txManager={txManager} />

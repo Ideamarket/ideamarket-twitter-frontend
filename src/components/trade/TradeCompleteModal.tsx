@@ -159,11 +159,11 @@ export default function TradeCompleteModal({
                     width: '19rem',
                     height: '16rem',
                     position: 'absolute',
-                    top: 0,
+                    top: -40,
                   }}
                 />
                 <div
-                  className="mt-48 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
+                  className="mt-36 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
                   style={{
                     background: 'rgba(199, 43, 67, 0.2)',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
@@ -172,6 +172,12 @@ export default function TradeCompleteModal({
                 >
                   <ExclamationCircleIcon className="w-5 h-5 text-red-700 mr-2" />
                   Transaction Failed to execute
+                </div>
+
+                <div className="text-sm text-white px-4 pt-2">
+                  If this happens again, try switching MetaMask's network to
+                  Ethereum Mainnet and then back to Arbitrum. Thanks for bearing
+                  with us as we settle in to Arbitrum's new Nitro upgrade.
                 </div>
               </>
             )}
@@ -232,11 +238,11 @@ export default function TradeCompleteModal({
                     width: '19rem',
                     height: '16rem',
                     position: 'absolute',
-                    top: 0,
+                    top: -40,
                   }}
                 />
                 <div
-                  className="mt-48 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
+                  className="mt-36 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
                   style={{
                     background: 'rgba(199, 43, 67, 0.2)',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
@@ -245,6 +251,12 @@ export default function TradeCompleteModal({
                 >
                   <ExclamationCircleIcon className="w-5 h-5 text-red-700 mr-2" />
                   Transaction Failed to execute
+                </div>
+
+                <div className="text-sm text-white px-4 pt-2">
+                  If this happens again, try switching MetaMask's network to
+                  Ethereum Mainnet and then back to Arbitrum. Thanks for bearing
+                  with us as we settle in to Arbitrum's new Nitro upgrade.
                 </div>
               </>
             )}
@@ -303,11 +315,11 @@ export default function TradeCompleteModal({
                     width: '19rem',
                     height: '16rem',
                     position: 'absolute',
-                    top: 0,
+                    top: -40,
                   }}
                 />
                 <div
-                  className="mt-48 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
+                  className="mt-36 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
                   style={{
                     background: 'rgba(199, 43, 67, 0.2)',
                     border: '2px solid rgba(255, 255, 255, 0.2)',
@@ -316,6 +328,12 @@ export default function TradeCompleteModal({
                 >
                   <ExclamationCircleIcon className="w-5 h-5 text-red-700 mr-2" />
                   Transaction Failed to execute
+                </div>
+
+                <div className="text-sm text-white px-4 pt-2">
+                  If this happens again, try switching MetaMask's network to
+                  Ethereum Mainnet and then back to Arbitrum. Thanks for bearing
+                  with us as we settle in to Arbitrum's new Nitro upgrade.
                 </div>
               </>
             )}
@@ -361,11 +379,11 @@ export default function TradeCompleteModal({
                       width: '19rem',
                       height: '16rem',
                       position: 'absolute',
-                      top: 0,
+                      top: -40,
                     }}
                   />
                   <div
-                    className="mt-48 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
+                    className="mt-36 px-4 py-2 text-white rounded-2xl flex justify-center items-center"
                     style={{
                       background: 'rgba(199, 43, 67, 0.2)',
                       border: '2px solid rgba(255, 255, 255, 0.2)',
@@ -374,6 +392,13 @@ export default function TradeCompleteModal({
                   >
                     <ExclamationCircleIcon className="w-5 h-5 text-red-700 mr-2" />
                     Transaction Failed to execute
+                  </div>
+
+                  <div className="text-sm text-white px-4 pt-2">
+                    If this happens again, try switching MetaMask's network to
+                    Ethereum Mainnet and then back to Arbitrum. Thanks for
+                    bearing with us as we settle in to Arbitrum's new Nitro
+                    upgrade.
                   </div>
                 </>
               )}

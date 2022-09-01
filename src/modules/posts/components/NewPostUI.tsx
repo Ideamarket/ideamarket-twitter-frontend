@@ -121,6 +121,8 @@ export default function NewPostUI({
             await syncPosts(receipt?.events?.Transfer?.returnValues?.tokenId)
 
             setIsTxPending(false)
+            setSelectedCategories([])
+            onTradeComplete(true, 'success', 'success', TX_TYPES.TEXT_POST_LIST)
           },
         },
         ...mintingArgs
@@ -132,9 +134,6 @@ export default function NewPostUI({
       setSelectedCategories([])
       return
     }
-
-    onTradeComplete(true, 'success', 'success', TX_TYPES.TEXT_POST_LIST)
-    setSelectedCategories([])
   }
 
   // Watch for changes in input and send new values to parent component
@@ -339,6 +338,9 @@ export default function NewPostUI({
 
             <div className="text-xs text-center font-semibold">
               Confirm transaction in wallet to complete.
+            </div>
+            <div className="text-xs text-center">
+              {`(Gas fee estimates are high. Most tx cost < $0.50)`}
             </div>
 
             <TxPending txManager={txManager} />

@@ -86,7 +86,7 @@
     "use-breakpoint": "2.0.2",
     "uuid": "8.3.2",
     "walletlink": "^2.2.8",
-    "web3": "^1.7.1",
+    "web3": "^1.7.5",
     "zustand": "3.6.5"
   },
   "devDependencies": {

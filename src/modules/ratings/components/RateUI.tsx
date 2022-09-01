@@ -137,6 +137,7 @@ export default function RateUI({
             ]
             const newPostInFavor = [inputRating > 50]
             setIsTxPending(false)
+            setSelectedCategories([])
             await onRateClicked(newPostCitations, newPostInFavor)
           },
         },
@@ -151,7 +152,6 @@ export default function RateUI({
     }
 
     // onTradeComplete(true, 'success', 'success', TX_TYPES.RATE)
-    setSelectedCategories([])
   }
 
   // If creating new post, need to pass citations and inFavor in since setting local state is not sync
@@ -188,6 +188,13 @@ export default function RateUI({
             })
 
             setIsTxPending(false)
+
+            onTradeComplete(
+              true,
+              imPost?.listingId,
+              imPost?.name,
+              TX_TYPES.RATE
+            )
           },
         },
         ...ratingArgs
@@ -198,8 +205,6 @@ export default function RateUI({
       onTradeComplete(false, imPost?.listingId, imPost?.name, TX_TYPES.NONE)
       return
     }
-
-    onTradeComplete(true, imPost?.listingId, imPost?.name, TX_TYPES.RATE)
   }
 
   /**
@@ -663,6 +668,9 @@ export default function RateUI({
 
             <div className="text-xs text-center font-semibold">
               Confirm transaction in wallet to complete.
+            </div>
+            <div className="text-xs text-center">
+              {`(Gas fee estimates are high. Most tx cost < $0.50)`}
             </div>
 
             <TxPending txManager={txManager} />
