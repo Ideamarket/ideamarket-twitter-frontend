@@ -15,7 +15,7 @@ export const getNavbarConfig = (user: any) => ({
         },
         {
           id: 2,
-          name: 'Whitepaper',
+          name: 'Docs',
           onClick: () => {
             window.open('https://docs.ideamarket.io/', '_blank')
           },
