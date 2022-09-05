@@ -13,7 +13,7 @@ import { TIME_FILTER } from 'utils/tables'
 import { getAllPosts } from 'modules/posts/services/PostService'
 import ListingContent from 'components/tokens/ListingContent'
 import Image from 'next/image'
-import { A, Tooltip } from 'components'
+import { A, CircleSpinner, Tooltip } from 'components'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import classNames from 'classnames'
 import { HOME_PAGE_VIEWS } from 'pages'
@@ -22,6 +22,7 @@ import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { getIMORatingColors } from 'utils/display/DisplayUtils'
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 import { NETWORK } from 'store/networks'
+import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
 const AdvancedPostColWidth = 'w-[45%]'
 const AdvancedCitationsColWidth = 'w-[35%]'
@@ -133,6 +134,15 @@ const IMPostsView = ({
 
   return (
     <div className="hidden md:block mx-auto">
+      {(!imPostPairs || imPostPairs?.length <= 0) && (
+        <div className="flex flex-col justify-center items-center">
+          <div className="flex justify-center pt-8">
+            <CircleSpinner color="#0857e0" />
+          </div>
+          <EmptyTableBody />
+        </div>
+      )}
+
       {!isAdvancedView && (
         <div className="w-full pb-40">
           <div className="flex flex-col w-[36rem] mx-auto mt-6">
