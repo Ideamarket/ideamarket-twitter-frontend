@@ -1,22 +1,10 @@
-import React, {
-  MutableRefObject,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-} from 'react'
-import { useInfiniteQuery } from 'react-query'
-
-import { flatten } from 'utils/lodash'
-import { GlobalContext } from 'lib/GlobalContext'
-import { TIME_FILTER } from 'utils/tables'
-import { getAllPosts } from 'modules/posts/services/PostService'
+import React, { MutableRefObject, useCallback, useRef } from 'react'
+import { IdeamarketPost } from 'modules/posts/services/PostService'
 import ListingContent from 'components/tokens/ListingContent'
 import Image from 'next/image'
 import { A } from 'components'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import classNames from 'classnames'
-import { HOME_PAGE_VIEWS } from 'pages'
 import OpenRateModal from 'modules/ratings/components/OpenRateModal'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { getIMORatingColors } from 'utils/display/DisplayUtils'
@@ -27,87 +15,32 @@ import {
 } from '@heroicons/react/outline'
 
 type Props = {
-  activeOverlayPostID: string
-  nameSearch: string
-  orderBy: string
-  orderDirection: string
-  selectedCategories: string[]
-  selectedView: HOME_PAGE_VIEWS
-  timeFilter: TIME_FILTER
-  isAdvancedView: boolean
-  setActiveOverlayPostID: (activeOverlayPostID: string) => void
+  isCitationsDataLoading: boolean
+  citationPairs: IdeamarketPost[]
+  canFetchMoreCitations: boolean
+  fetchMoreCitations: () => void
 }
 
-const IMPostsViewMobile = ({
-  activeOverlayPostID,
-  nameSearch,
-  orderBy,
-  orderDirection,
-  selectedCategories,
-  selectedView,
-  timeFilter,
-  isAdvancedView,
-  setActiveOverlayPostID,
+const ArgumentsViewMobile = ({
+  isCitationsDataLoading,
+  citationPairs,
+  canFetchMoreCitations,
+  fetchMoreCitations,
 }: Props) => {
-  const TOKENS_PER_PAGE = 10
-
-  const { jwtToken, isTxPending } = useContext(GlobalContext)
-
-  const {
-    data: infiniteData,
-    // isFetching: isTokenDataLoading,
-    fetchNextPage: fetchMore,
-    refetch,
-    hasNextPage: canFetchMore,
-  } = useInfiniteQuery(
-    [TOKENS_PER_PAGE, orderBy, orderDirection, selectedCategories, nameSearch],
-    ({ pageParam = 0 }) =>
-      getAllPosts(
-        [
-          TOKENS_PER_PAGE,
-          orderBy,
-          orderDirection,
-          selectedCategories,
-          null,
-          nameSearch,
-          null,
-          timeFilter,
-        ],
-        pageParam
-      ),
-    {
-      getNextPageParam: (lastGroup, allGroups) => {
-        const morePagesExist = lastGroup?.length === 10
-
-        if (!morePagesExist) {
-          return false
-        }
-
-        return allGroups.length * TOKENS_PER_PAGE
-      },
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      enabled: false,
-      keepPreviousData: true,
-    }
-  )
-
-  const imPostPairs = flatten(infiniteData?.pages || [])
-
   const observer: MutableRefObject<any> = useRef()
   const lastElementRef = useCallback(
     (node) => {
       if (observer.current) observer.current.disconnect()
 
       observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && canFetchMore) {
-          fetchMore()
+        if (entries[0].isIntersecting && canFetchMoreCitations) {
+          fetchMoreCitations()
         }
       })
 
       if (node) observer.current.observe(node)
     },
-    [canFetchMore, fetchMore]
+    [canFetchMoreCitations, fetchMoreCitations]
   )
 
   const scrollCards = (direction: string) => {
@@ -120,21 +53,8 @@ const IMPostsViewMobile = ({
     container.scrollTo({ left: xAmountToMove, top: 0, behavior: 'smooth' })
   }
 
-  useEffect(() => {
-    refetch()
-  }, [
-    orderBy,
-    orderDirection,
-    nameSearch,
-    refetch,
-    jwtToken,
-    selectedCategories,
-    timeFilter,
-    isTxPending, // If any transaction starts or stop, refresh home table data
-  ])
-
   return (
-    <>
+    <div className="md:hidden">
       <div className="mt-6 text-xs text-blue-600 text-center font-bold">
         Swipe to see more posts
       </div>
@@ -142,9 +62,9 @@ const IMPostsViewMobile = ({
         id="scrolling-cards"
         className="w-full overflow-x-auto mt-6 mb-10 flex items-start snap-x snap-mandatory"
       >
-        {imPostPairs &&
-          imPostPairs.length > 0 &&
-          imPostPairs.map((imPost, pInd) => {
+        {citationPairs &&
+          citationPairs.length > 0 &&
+          citationPairs.map((imPost, pInd) => {
             const { minterAddress } = (imPost || {}) as any
 
             const displayUsernameOrWallet = convertAccountName(
@@ -508,8 +428,8 @@ const IMPostsViewMobile = ({
           <ArrowRightIcon className="w-5 h-5" />
         </button>
       </div>
-    </>
+    </div>
   )
 }
 
-export default IMPostsViewMobile
+export default ArgumentsViewMobile

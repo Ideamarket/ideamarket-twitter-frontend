@@ -1,14 +1,10 @@
 import { apiGetCitationsByTokenID } from 'actions/web2/citations/apiGetCitationsByTokenID'
 import { apiGetCitedOnByTokenID } from 'actions/web2/citations/apiGetCitedOnByTokenID'
+import { getETHPrice } from 'modules/external-web3/services/EtherscanService'
 import {
   formatApiResponseToPost,
   IdeamarketPost,
 } from 'modules/posts/services/PostService'
-
-type CitationObject = {
-  forCitations: IdeamarketPost[]
-  againstCitations: IdeamarketPost[]
-}
 
 /**
  * Call API to get all citations and then convert data to format consistent across entire frontend
@@ -20,7 +16,7 @@ export async function getAllCitationsByTokenID({
   limit,
   orderBy,
   orderDirection,
-}): Promise<CitationObject> {
+}): Promise<IdeamarketPost[]> {
   if (!tokenID) return null
 
   const allCitations = await apiGetCitationsByTokenID({
@@ -32,22 +28,17 @@ export async function getAllCitationsByTokenID({
     orderDirection,
   })
 
-  const forCitations = await Promise.all(
-    allCitations?.forCitations?.map(async (post) => {
+  const exchangeRate = await getETHPrice()
+
+  return await Promise.all(
+    allCitations.map(async (post) => {
+      const postIncome = post.totalRatingsCount * 0.001
+      // Caclulate the DAI worth of the input tokens by finding this product
+      const product = postIncome * exchangeRate
+      post.incomeInDAI = product
       return formatApiResponseToPost(post)
     })
   )
-
-  const againstCitations = await Promise.all(
-    allCitations?.againstCitations?.map(async (post) => {
-      return formatApiResponseToPost(post)
-    })
-  )
-
-  return {
-    forCitations,
-    againstCitations,
-  }
 }
 
 /**
