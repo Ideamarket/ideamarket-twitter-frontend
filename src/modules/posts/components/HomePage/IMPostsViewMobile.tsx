@@ -1,9 +1,12 @@
 import React, {
   MutableRefObject,
   useCallback,
+  // MutableRefObject,
+  // useCallback,
   useContext,
   useEffect,
   useRef,
+  // useRef,
 } from 'react'
 import { useInfiniteQuery } from 'react-query'
 
@@ -15,6 +18,7 @@ import ListingContent from 'components/tokens/ListingContent'
 import Image from 'next/image'
 import { A } from 'components'
 import { convertAccountName } from 'lib/utils/stringUtil'
+// import { PlusIcon, XIcon } from '@heroicons/react/solid'
 import classNames from 'classnames'
 import { HOME_PAGE_VIEWS } from 'pages'
 import OpenRateModal from 'modules/ratings/components/OpenRateModal'
@@ -353,12 +357,7 @@ const IMPostsViewMobile = ({
                           return (
                             <A
                               href={`/post/${citation?.tokenID}`}
-                              className={classNames(
-                                citation?.isPostInFavorOfParent
-                                  ? 'bg-gradient-to-b from-[#0cae741a] to-[#1fbfbf1a]'
-                                  : 'bg-gradient-to-b from-[#fee8e9] to-[#fceaeb]',
-                                'relative block p-4 rounded-2xl font-bold mb-2'
-                              )}
+                              className="relative block p-4 bg-gradient-to-b from-[#0cae741a] to-[#1fbfbf1a] rounded-2xl font-bold mb-2"
                               key={cInd}
                             >
                               <span

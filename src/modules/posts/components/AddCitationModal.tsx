@@ -165,7 +165,13 @@ export default function AddCitationModal({
       orderDirection: 'desc',
     })
 
-    return latestCitations || []
+    const forCitationsPairs = latestCitations?.forCitations
+    const againstCitationsPairs = latestCitations?.againstCitations
+    const combinedCitationsPairs = forCitationsPairs.concat(
+      againstCitationsPairs
+    )
+
+    return combinedCitationsPairs || null
   }
 
   const {

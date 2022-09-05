@@ -13,7 +13,6 @@ import {
   getAllCitedOnByTokenID,
 } from '../services/CitationService'
 import ArgumentsView from './ArgumentsView'
-import ArgumentsViewMobile from './ArgumentsViewMobile'
 import CitedOnView from './CitedOnView'
 
 type Props = {
@@ -88,7 +87,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
       orderBy: orderBy,
       orderDirection,
     })
-    return latestCitations || []
+    return latestCitations || null
   }
 
   async function citedByQueryFunction(numTokens: number, skip: number = 0) {
@@ -124,7 +123,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
 
   const {
     data: infiniteCitationsData,
-    isFetching: isCitationsDataLoading,
+    // isFetching: isCitationsDataLoading,
     fetchNextPage: fetchMoreCitations,
     // refetch: refetchCitations,
     hasNextPage: canFetchMoreCitations,
@@ -134,7 +133,10 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
     infiniteQueryConfig
   )
 
-  const citationPairs = flatten(infiniteCitationsData?.pages || [])
+  const citationsObject = infiniteCitationsData?.pages[0]
+
+  const forCitationsPairs = citationsObject?.forCitations
+  const againstCitationsPairs = citationsObject?.againstCitations
 
   const {
     data: infiniteCitedByData,
@@ -178,7 +180,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
             'px-4 py-2 border rounded-lg font-bold'
           )}
         >
-          Citations
+          Arguments
         </button>
 
         <button
@@ -213,21 +215,13 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
       </div>
 
       {viewSelected === CITATION_VIEWS.CITATIONS && (
-        <>
-          <ArgumentsView
-            isCitationsDataLoading={isCitationsDataLoading}
-            citationPairs={citationPairs}
-            canFetchMoreCitations={canFetchMoreCitations}
-            fetchMoreCitations={fetchMoreCitations}
-          />
-
-          <ArgumentsViewMobile
-            isCitationsDataLoading={isCitationsDataLoading}
-            citationPairs={citationPairs}
-            canFetchMoreCitations={canFetchMoreCitations}
-            fetchMoreCitations={fetchMoreCitations}
-          />
-        </>
+        <ArgumentsView
+          isMobile={isMobile}
+          forCitationsPairs={forCitationsPairs}
+          againstCitationsPairs={againstCitationsPairs}
+          canFetchMoreCitations={canFetchMoreCitations}
+          fetchMoreCitations={fetchMoreCitations}
+        />
       )}
 
       {viewSelected === CITATION_VIEWS.OPINIONS && (

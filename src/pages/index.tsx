@@ -355,7 +355,7 @@ const Home = () => {
                         onClick={() => {
                           setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
                         }}
-                        className="relative w-28 h-9 bg-blue-100 text-blue-600 flex justify-center items-center p-2 border rounded-2xl normal-case cursor-pointer"
+                        className="relative w-28 h-9 flex justify-center items-center p-2 border rounded-2xl normal-case cursor-pointer"
                       >
                         <span className="text-xs text-blue-500 font-semibold flex items-center">
                           {getTimeFilterDisplayNameByValue(timeFilter)}
@@ -401,7 +401,9 @@ const Home = () => {
                           e.preventDefault()
                         }}
                         className={classNames(
-                          isAdvancedView ? '' : 'text-black',
+                          isAdvancedView
+                            ? 'bg-blue-100 text-blue-600'
+                            : 'text-black',
                           'flex items-center px-3 py-2 font-bold rounded-2xl border z-50'
                         )}
                       >
@@ -559,7 +561,7 @@ const Home = () => {
                       !isMobileTimeFilterDropdownOpen
                     )
                   }
-                  className="relative w-28 h-9 bg-blue-100 text-blue-600 flex justify-center items-center p-2 border rounded-2xl normal-case cursor-pointer"
+                  className="relative w-28 h-9 flex justify-center items-center p-2 border rounded-2xl normal-case cursor-pointer"
                 >
                   <span className="text-xs text-blue-500 font-semibold flex items-center">
                     {getTimeFilterDisplayNameByValue(timeFilter)}

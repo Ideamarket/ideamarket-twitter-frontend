@@ -114,7 +114,6 @@ export type IdeamarketPost = {
 
   topCitations?: any[]
   topRatings?: any[]
-  isPostInFavorOfParent?: boolean
 
   incomeInDAI: number
 }
