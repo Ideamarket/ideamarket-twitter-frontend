@@ -1,6 +1,6 @@
 import { apiGetCitationsByTokenID } from 'actions/web2/citations/apiGetCitationsByTokenID'
 import { apiGetCitedOnByTokenID } from 'actions/web2/citations/apiGetCitedOnByTokenID'
-// import { getETHPrice } from 'modules/external-web3/services/EtherscanService'
+import { getETHPrice } from 'modules/external-web3/services/EtherscanService'
 import {
   formatApiResponseToPost,
   IdeamarketPost,
@@ -28,7 +28,7 @@ export async function getAllCitationsByTokenID({
     orderDirection,
   })
 
-  const exchangeRate = 0
+  const exchangeRate = await getETHPrice()
 
   return await Promise.all(
     allCitations.map(async (post) => {
