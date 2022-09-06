@@ -129,7 +129,13 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
     // refetch: refetchCitations,
     hasNextPage: canFetchMoreCitations,
   } = useInfiniteQuery(
-    ['citations', orderBy, orderDirection, nameSearch, viewSelected],
+    [
+      `citations-of-${postID}`,
+      orderBy,
+      orderDirection,
+      nameSearch,
+      viewSelected,
+    ],
     ({ pageParam = 0 }) => citationsQueryFunction(TOKENS_PER_PAGE, pageParam),
     infiniteQueryConfig
   )
