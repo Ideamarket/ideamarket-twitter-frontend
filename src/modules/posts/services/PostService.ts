@@ -75,7 +75,7 @@ export async function getAllPosts(
     filterTokens,
     search,
     minterAddress,
-    timeFilter,
+    timeFilter: search?.length > 0 ? TIME_FILTER.ALL_TIME : timeFilter, // Filter by all time if user is using search bar
   })
 
   const exchangeRate = await getETHPrice()

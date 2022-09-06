@@ -175,8 +175,7 @@ export default function RatingsTable({
             </div>
 
             <div className="bg-white divide-y-[6px] dark:bg-gray-700">
-              {!isPairsDataLoading &&
-                rawPairs &&
+              {rawPairs &&
                 rawPairs.map((pair: any, index) => (
                   <RatingsRow
                     key={index}
