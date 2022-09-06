@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const EmptyTableBody = () => {
   return (
-    <div className="h-96 pt-16 flex flex-col items-center bg-white">
+    <div className="w-full h-96 pt-16 flex flex-col items-center bg-white">
       <div className="text-black/[.2] text-3xl font-gilroy-bold">
         There's nothing here... yet
       </div>

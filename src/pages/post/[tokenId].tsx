@@ -307,7 +307,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
         className={classNames(
           isScrolled ? 'hidden' : 'flex md:hidden',
           // shadow = 1st num is horizontal shadow length. 2nd num is vertical shadow length. 3rd num is blur amount.
-          'md:hidden absolute bottom-0 left-0 right-0 flex items-center divide-x h-[12%] bg-white z-[100] shadow-[0_-2px_10px_rgba(0,0,0,0.3)]'
+          'md:hidden absolute bottom-0 left-0 right-0 flex items-center divide-x h-[12%] bg-white z-[700] shadow-[0_-2px_10px_rgba(0,0,0,0.3)]'
         )}
       >
         <div className="w-[50%] px-4 py-3 h-full">
