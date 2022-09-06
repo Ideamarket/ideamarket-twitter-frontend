@@ -33,20 +33,20 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
-    const initializeTwitterAPI = () => {
-      // You can add this as script tag in <head>, but for some reason that way stopped working. But this works fine for now
-      const s = document.createElement('script')
-      s.setAttribute('src', 'https://platform.twitter.com/widgets.js')
-      s.setAttribute('async', 'true')
-      document.head.appendChild(s)
-    }
+    // const initializeTwitterAPI = () => {
+    //   // You can add this as script tag in <head>, but for some reason that way stopped working. But this works fine for now
+    //   const s = document.createElement('script')
+    //   s.setAttribute('src', 'https://platform.twitter.com/widgets.js')
+    //   s.setAttribute('async', 'true')
+    //   document.head.appendChild(s)
+    // }
 
-    const timeout = setTimeout(
-      () => (window as any)?.twttr?.widgets?.load(),
-      3000
-    ) // Load tweets
+    // const timeout = setTimeout(
+    //   () => (window as any)?.twttr?.widgets?.load(),
+    //   3000
+    // ) // Load tweets
 
-    initializeTwitterAPI()
+    // initializeTwitterAPI()
 
     // Track using local state if page has been scrolled from top or not
     const handleElementDisplay = () => {
@@ -58,7 +58,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     window.addEventListener('scroll', handleElementDisplay)
 
     return () => {
-      clearTimeout(timeout)
+      // clearTimeout(timeout)
       window.removeEventListener('scroll', handleElementDisplay)
     }
   }, [rawTokenId])
