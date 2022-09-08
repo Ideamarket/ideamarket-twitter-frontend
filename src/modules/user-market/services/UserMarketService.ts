@@ -105,6 +105,7 @@ export type IdeamarketUser = {
 export type Relation = {
   // Will maybe add more relation values here in the future. matchScore uses specific algorithm and more can be added.
   matchScore: number
+  mutualRatedPosts: any[]
 }
 
 export type RecommendedUser = {
@@ -153,5 +154,6 @@ const formatApiResponseToUser = (apiUser: any): IdeamarketUser => {
 const formatApiResponseToRelation = (apiRelation: any): Relation => {
   return {
     matchScore: apiRelation?.matchScore,
+    mutualRatedPosts: apiRelation?.mutualRatedPosts,
   }
 }

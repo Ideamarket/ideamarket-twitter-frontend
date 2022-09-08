@@ -24,6 +24,7 @@ const orderByDeposits = 'deposits'
 const orderByHolderCount = 'holders'
 const orderByPostedAt = 'postedAt'
 const orderByMatchScore = 'matchScore'
+const orderByMutualPostCount = 'mutualPostCount'
 
 export const SortOptionsHomePostsTable = {
   COMPOSITE_RATING: {
@@ -183,6 +184,11 @@ export const SortOptionsAccountRecommended = {
     id: 2,
     value: orderByMatchScore,
     displayName: '% MATCH',
+  },
+  MUTUAL_POST_COUNT: {
+    id: 3,
+    value: orderByMutualPostCount,
+    displayName: 'Posts in Common',
   },
   // WEEK_CHANGE: {
   //   id: 3,

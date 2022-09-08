@@ -79,7 +79,7 @@ export default function ProfileWallet({ userData }: Props) {
     TABLE_NAMES.ACCOUNT_RECOMMENDED
   )
   const [orderBy, setOrderBy] = useState(
-    SortOptionsAccountRecommended.MATCH_SCORE.value
+    SortOptionsAccountRecommended.MUTUAL_POST_COUNT.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
 
@@ -494,15 +494,19 @@ export default function ProfileWallet({ userData }: Props) {
             {/* Mobile header to explain columns for Similar Users */}
             {selectedView === TABLE_NAMES.ACCOUNT_RECOMMENDED && (
               <div className="md:hidden w-full flex gap-x-3 px-3 py-3 border-t-[6px] leading-4 text-xs text-black/[.5] font-semibold">
-                <div className="w-1/3 flex items-start">
+                <div className="w-[20%] flex items-start">
                   <span className="mr-1 break-all">% MATCH</span>
                 </div>
 
-                <div className="w-1/3 flex items-start">
+                <div className="w-[20%] flex items-start">
+                  <span className="mr-1">POSTS IN COMMON</span>
+                </div>
+
+                <div className="w-[30%] flex items-start">
                   <span className="mr-1 break-all">STAKED</span>
                 </div>
 
-                <div className="w-1/3"></div>
+                <div className="w-[30%]"></div>
               </div>
             )}
 

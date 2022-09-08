@@ -25,6 +25,11 @@ const headers: Header[] = [
     sortable: true,
   },
   {
+    title: SortOptionsAccountRecommended.MUTUAL_POST_COUNT.displayName,
+    value: SortOptionsAccountRecommended.MUTUAL_POST_COUNT.value,
+    sortable: true,
+  },
+  {
     title: SortOptionsAccountRecommended.STAKED.displayName,
     value: SortOptionsAccountRecommended.STAKED.value,
     sortable: true,
@@ -89,11 +94,13 @@ export default function UserRecommendedTable({
       case 'name':
         return 'w-[45%] lg:w-[55%] pl-6 pr-24'
       case SortOptionsAccountRecommended.STAKED.value:
-        return 'w-[18.33%] lg:w-[15%]'
+        return 'w-[13.75%] lg:w-[11.25%] pl-2'
       case SortOptionsAccountRecommended.MATCH_SCORE.value:
-        return 'w-[18.33%] lg:w-[15%]'
+        return 'w-[13.75%] lg:w-[11.25%]'
+      case SortOptionsAccountRecommended.MUTUAL_POST_COUNT.value:
+        return 'w-[13.75%] lg:w-[11.25%]'
       case 'txButtons':
-        return 'w-[18.33%] lg:w-[15%]'
+        return 'w-[13.75%] lg:w-[11.25%]'
       default:
         return ''
     }

@@ -114,6 +114,19 @@ export default function UserRecommendedRow({
               </div>
             </div>
 
+            {/* POSTS IN COMMON */}
+            <div className="w-[18.33%] lg:w-[15%] grow flex items-start">
+              <div className="flex flex-col justify-center font-medium leading-5">
+                <span>
+                  {formatNumberWithCommasAsThousandsSerperator(
+                    Math.round(
+                      recommendedUser?.relation?.mutualRatedPosts?.length
+                    )
+                  )}
+                </span>
+              </div>
+            </div>
+
             {/* STAKED */}
             <div className="w-[18.33%] lg:w-[11.25%] grow pr-2">
               <div className="flex flex-col justify-start leading-5 text-blue-500 font-bold">
@@ -201,9 +214,9 @@ export default function UserRecommendedRow({
           </div>
         </div>
 
-        <div className="flex justify-between items-center text-center px-3 py-4">
+        <div className="flex justify-between items-center text-left px-3 py-4">
           {/* % MATCH */}
-          <div className="flex flex-col justify-start font-medium leading-5">
+          <div className="w-[20%] flex flex-col justify-start font-medium leading-5">
             <span className="mb-1">
               {formatNumberWithCommasAsThousandsSerperator(
                 Math.round(recommendedUser?.relation?.matchScore)
@@ -212,8 +225,17 @@ export default function UserRecommendedRow({
             </span>
           </div>
 
+          {/* POSTS IN COMMON */}
+          <div className="w-[20%] flex flex-col justify-start font-medium leading-5">
+            <span className="mb-1">
+              {formatNumberWithCommasAsThousandsSerperator(
+                Math.round(recommendedUser?.relation?.mutualRatedPosts?.length)
+              )}
+            </span>
+          </div>
+
           {/* STAKED */}
-          <div className="flex items-center">
+          <div className="w-[30%] flex items-center">
             <span className="text-base text-black/[.5] text-blue-500 font-bold">
               {formatNumberWithCommasAsThousandsSerperator(
                 Math.round(recommendedUser?.partnerUserToken?.deposits)
@@ -228,7 +250,7 @@ export default function UserRecommendedRow({
               e.stopPropagation()
               onStakeClicked(recommendedUser?.partnerUserToken)
             }}
-            className="flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-blue-500 bg-transparent z-[500]"
+            className="w-[30%] flex justify-center items-center w-20 h-10 text-base font-bold border rounded-lg text-blue-500 bg-transparent z-[500]"
           >
             <span>Stake</span>
           </button>
