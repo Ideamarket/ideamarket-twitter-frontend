@@ -436,7 +436,7 @@ export default function StakeUserUI({
     const listAndBuyArgs = [
       web2UserToken?.walletAddress, // Name of IDT will be the wallet address
       USER_MARKET,
-      NETWORK.getExternalAddresses().imo, // Token to buy with
+      selectedToken.address, // Token to buy with
       ideaTokenAmountBNLocal, // Amount of IDT user will receive
       selectedTokenAmountBNLocal, // Amount of IMO to stake
       maxSlippage,

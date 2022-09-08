@@ -1,5 +1,5 @@
 import { useContractStore } from 'store/contractStore'
-import { bigNumberTenPow18, web3BNToFloatString, ZERO_ADDRESS } from 'utils'
+import { ZERO_ADDRESS } from 'utils'
 import { NETWORK } from 'store/networks'
 import BigNumber from 'bignumber.js'
 import BN from 'bn.js'
@@ -48,16 +48,6 @@ export default function buyToken(
       contractCall.estimateGas(contractCallOptions)
     }
   } else {
-    console.log('inputTokenAddress==', inputTokenAddress)
-    console.log('ideaTokenAddress==', ideaTokenAddress)
-    console.log('amount==', web3BNToFloatString(amount, bigNumberTenPow18, 6))
-    console.log(
-      'fallbackAmount==',
-      web3BNToFloatString(fallbackAmount, bigNumberTenPow18, 6)
-    )
-    console.log('cost==', web3BNToFloatString(cost, bigNumberTenPow18, 6))
-    console.log('lockDuration==', lockDuration)
-    console.log('recipientAddress==', recipientAddress)
     contractCall = multiAction.methods.convertAndBuy(
       inputTokenAddress,
       ideaTokenAddress,
