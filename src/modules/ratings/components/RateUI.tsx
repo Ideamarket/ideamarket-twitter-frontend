@@ -536,6 +536,15 @@ export default function RateUI({
                     {citationsInFavor &&
                       citationsInFavor?.length > 0 &&
                       citationsInFavor.map((post, postInd) => {
+                        const displayUsernameOrWalletSelected =
+                          convertAccountName(
+                            post?.minterToken?.username ||
+                              post?.minterToken?.minterAddress
+                          )
+                        const usernameOrWalletSelected =
+                          post?.minterToken?.username ||
+                          post?.minterToken?.minterAddress
+
                         return (
                           <div
                             className="flex justify-between items-center w-full mt-4"
@@ -557,9 +566,9 @@ export default function RateUI({
                                 </div>
                                 <A
                                   className="ml-2 font-bold hover:text-blue-600"
-                                  href={`/u/${usernameOrWallet}`}
+                                  href={`/u/${usernameOrWalletSelected}`}
                                 >
-                                  {displayUsernameOrWallet}
+                                  {displayUsernameOrWalletSelected}
                                 </A>
                               </div>
 
@@ -583,6 +592,15 @@ export default function RateUI({
                     {citationsNotInFavor &&
                       citationsNotInFavor?.length > 0 &&
                       citationsNotInFavor.map((post, postInd) => {
+                        const displayUsernameOrWalletSelected =
+                          convertAccountName(
+                            post?.minterToken?.username ||
+                              post?.minterToken?.minterAddress
+                          )
+                        const usernameOrWalletSelected =
+                          post?.minterToken?.username ||
+                          post?.minterToken?.minterAddress
+
                         return (
                           <div
                             className="flex justify-between items-center w-full mt-4"
@@ -604,9 +622,9 @@ export default function RateUI({
                                 </div>
                                 <A
                                   className="ml-2 font-bold hover:text-blue-600"
-                                  href={`/u/${usernameOrWallet}`}
+                                  href={`/u/${usernameOrWalletSelected}`}
                                 >
-                                  {displayUsernameOrWallet}
+                                  {displayUsernameOrWalletSelected}
                                 </A>
                               </div>
 

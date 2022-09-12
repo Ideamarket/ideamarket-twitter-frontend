@@ -16,6 +16,13 @@ export const getPostByTokenID = async ({
     tokenID,
   })
 
+  const exchangeRate = await getETHPrice()
+
+  const postIncome = post.totalRatingsCount * 0.001
+  // Caclulate the DAI worth of the input tokens by finding this product
+  const product = postIncome * exchangeRate
+  post.incomeInDAI = product
+
   return post ? formatApiResponseToPost(post) : null
 }
 
@@ -29,6 +36,13 @@ export const getPostByContent = async ({
   const post = await apiGetPostByContent({
     content,
   })
+
+  const exchangeRate = await getETHPrice()
+
+  const postIncome = post.totalRatingsCount * 0.001
+  // Caclulate the DAI worth of the input tokens by finding this product
+  const product = postIncome * exchangeRate
+  post.incomeInDAI = product
 
   return post ? formatApiResponseToPost(post) : null
 }
@@ -146,6 +160,7 @@ export const formatApiResponseToPost = (apiPost: any): IdeamarketPost => {
 
     topCitations: apiPost?.topCitations,
     topRatings: apiPost?.topRatings,
+    isPostInFavorOfParent: apiPost?.isPostInFavorOfParent,
 
     incomeInDAI: apiPost?.incomeInDAI,
   }

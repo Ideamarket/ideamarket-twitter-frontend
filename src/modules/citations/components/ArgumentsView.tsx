@@ -311,7 +311,12 @@ const ArgumentsView = ({
 
                       <A
                         href={`/post/${imPost?.tokenID}`}
-                        className="relative block px-8 pt-8 pb-10 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
+                        className={classNames(
+                          imPost?.isPostInFavorOfParent
+                            ? 'bg-gradient-to-b from-[#0cae741a]/[0.05] to-[#1fbfbf1a]/[0.05]'
+                            : 'bg-gradient-to-b from-[#fee8e9]/[0.5] to-[#fceaeb]/[0.5]',
+                          'relative block px-8 pt-8 pb-10 rounded-2xl font-bold mb-2 cursor-pointer'
+                        )}
                       >
                         <span
                           className={classNames(

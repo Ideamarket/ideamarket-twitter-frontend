@@ -170,7 +170,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
   }
 
   return (
-    <div className="max-w-[78rem] md:mt-20 mx-0 md:mx-5 xl:mx-auto pb-96">
+    <div className="max-w-[78rem] md:mt-8 mx-0 md:mx-5 xl:mx-auto pb-96">
       <div className="mb-4 flex justify-center items-center space-x-3">
         <button
           onClick={() => {
