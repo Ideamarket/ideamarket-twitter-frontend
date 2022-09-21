@@ -75,9 +75,14 @@ const ArgumentsViewMobile = ({
 
             // const isThisPostOverlaySelected =
             //   activeOverlayPostID &&
-            //   activeOverlayPostID === imPost.tokenID.toString()
+            //   activeOverlayPostID === imPost?.tokenID.toString()
 
-            const postIncome = imPost.totalRatingsCount * 0.001
+            const totalRatingsCount =
+              imPost && imPost?.totalRatingsCount > 0
+                ? imPost?.totalRatingsCount * 0.001
+                : 0
+
+            const postIncome = totalRatingsCount
 
             return (
               <div
@@ -185,7 +190,7 @@ const ArgumentsViewMobile = ({
 
                         <div className="font-bold">
                           {formatNumberWithCommasAsThousandsSerperator(
-                            imPost.totalRatingsCount
+                            imPost?.totalRatingsCount
                           )}
                         </div>
                       </div> */}
@@ -219,7 +224,7 @@ const ArgumentsViewMobile = ({
 
                         <div className="font-bold">
                           {formatNumberWithCommasAsThousandsSerperator(
-                            Math.round(imPost.marketInterest)
+                            Math.round(imPost?.marketInterest)
                           )}
                         </div>
                       </div>

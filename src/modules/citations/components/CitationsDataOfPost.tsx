@@ -46,10 +46,10 @@ enum CITATION_VIEWS {
 }
 
 const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
-  const [viewSelected, setViewSelected] = useState(CITATION_VIEWS.CITATIONS)
+  const [viewSelected, setViewSelected] = useState(CITATION_VIEWS.OPINIONS)
 
   const [orderBy, setOrderBy] = useState(
-    SortOptionsHomePostsTable.MARKET_INTEREST.value
+    SortOptionsListingPageOpinions.STAKED.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
   const [nameSearch, setNameSearch] = useState('')
@@ -174,21 +174,6 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
       <div className="mb-4 flex justify-center items-center space-x-3">
         <button
           onClick={() => {
-            headerClicked(SortOptionsHomePostsTable.MARKET_INTEREST.value)
-            setViewSelected(CITATION_VIEWS.CITATIONS)
-          }}
-          className={classNames(
-            viewSelected === CITATION_VIEWS.CITATIONS
-              ? 'text-blue-600 bg-blue-100'
-              : 'text-black/[.25] hover:bg-gray-200',
-            'px-4 py-2 border rounded-lg font-bold'
-          )}
-        >
-          Citations
-        </button>
-
-        <button
-          onClick={() => {
             headerClicked(SortOptionsListingPageOpinions.STAKED.value)
             setViewSelected(CITATION_VIEWS.OPINIONS)
           }}
@@ -205,6 +190,21 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
         <button
           onClick={() => {
             headerClicked(SortOptionsHomePostsTable.MARKET_INTEREST.value)
+            setViewSelected(CITATION_VIEWS.CITATIONS)
+          }}
+          className={classNames(
+            viewSelected === CITATION_VIEWS.CITATIONS
+              ? 'text-blue-600 bg-blue-100'
+              : 'text-black/[.25] hover:bg-gray-200',
+            'px-4 py-2 border rounded-lg font-bold'
+          )}
+        >
+          All arguments for & against
+        </button>
+
+        {/* <button
+          onClick={() => {
+            headerClicked(SortOptionsHomePostsTable.MARKET_INTEREST.value)
             setViewSelected(CITATION_VIEWS.CITED_BY)
           }}
           className={classNames(
@@ -215,7 +215,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
           )}
         >
           Cited By
-        </button>
+        </button> */}
       </div>
 
       {viewSelected === CITATION_VIEWS.CITATIONS && (

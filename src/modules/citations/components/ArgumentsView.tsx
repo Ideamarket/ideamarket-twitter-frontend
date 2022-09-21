@@ -66,9 +66,9 @@ const ArgumentsView = ({
 
                 // const isThisPostOverlaySelected =
                 //   activeOverlayPostID &&
-                //   activeOverlayPostID === imPost.tokenID.toString()
+                //   activeOverlayPostID === imPost?.tokenID.toString()
 
-                const postIncome = imPost.totalRatingsCount * 0.001
+                const postIncome = imPost?.totalRatingsCount * 0.001
 
                 return (
                   <div
@@ -90,7 +90,7 @@ const ArgumentsView = ({
                           <A
                             href={`https://stratosnft.io/asset/${
                               NETWORK.getDeployedAddresses().ideamarketPosts
-                            }/${imPost.tokenID}`}
+                            }/${imPost?.tokenID}`}
                           >
                             Buy this NFT
                             <ExternalLinkIcon className="w-3 h-3 ml-2" />
@@ -195,7 +195,7 @@ const ArgumentsView = ({
 
                                   <div className="font-bold">
                                     {formatNumberWithCommasAsThousandsSerperator(
-                                      Math.round(imPost.marketInterest)
+                                      Math.round(imPost?.marketInterest)
                                     )}
                                   </div>
                                 </div>
@@ -281,9 +281,14 @@ const ArgumentsView = ({
 
               // const isThisPostOverlaySelected =
               //   activeOverlayPostID &&
-              //   activeOverlayPostID === imPost.tokenID.toString()
+              //   activeOverlayPostID === imPost?.tokenID.toString()
 
-              const postIncome = imPost.totalRatingsCount * 0.001
+              const totalRatingsCount =
+                imPost && imPost?.totalRatingsCount > 0
+                  ? imPost?.totalRatingsCount * 0.001
+                  : 0
+
+              const postIncome = totalRatingsCount
 
               return (
                 <div
@@ -302,7 +307,7 @@ const ArgumentsView = ({
                         <A
                           href={`https://stratosnft.io/asset/${
                             NETWORK.getDeployedAddresses().ideamarketPosts
-                          }/${imPost.tokenID}`}
+                          }/${imPost?.tokenID}`}
                         >
                           Buy this NFT
                           <ExternalLinkIcon className="w-3 h-3 ml-2" />
@@ -401,7 +406,7 @@ const ArgumentsView = ({
                                 </div>
                                 <div className="font-bold">
                                   {formatNumberWithCommasAsThousandsSerperator(
-                                    imPost.totalRatingsCount
+                                    imPost?.totalRatingsCount
                                   )}
                                 </div>
                               </div>
@@ -435,7 +440,7 @@ const ArgumentsView = ({
                                 </div>
                                 <div className="font-bold">
                                   {formatNumberWithCommasAsThousandsSerperator(
-                                    Math.round(imPost.marketInterest)
+                                    Math.round(imPost?.marketInterest)
                                   )}
                                 </div>
                               </div>
