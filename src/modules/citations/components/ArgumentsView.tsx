@@ -88,7 +88,7 @@ const ArgumentsView = ({
                           )}
                         >
                           <A
-                            href={`https://stratosnft.io/asset/${
+                            href={`https://opensea.io/assets/arbitrum/${
                               NETWORK.getDeployedAddresses().ideamarketPosts
                             }/${imPost?.tokenID}`}
                           >
@@ -305,7 +305,7 @@ const ArgumentsView = ({
                         )}
                       >
                         <A
-                          href={`https://stratosnft.io/asset/${
+                          href={`https://opensea.io/assets/arbitrum/${
                             NETWORK.getDeployedAddresses().ideamarketPosts
                           }/${imPost?.tokenID}`}
                         >

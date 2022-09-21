@@ -130,7 +130,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                   )}
                 >
                   <A
-                    href={`https://stratosnft.io/asset/${
+                    href={`https://opensea.io/assets/arbitrum/${
                       NETWORK.getDeployedAddresses().ideamarketPosts
                     }/${token?.tokenID}`}
                   >
