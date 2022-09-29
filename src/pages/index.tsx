@@ -21,7 +21,7 @@ import HomeUsersTable from 'modules/user-market/components/HomeUsersTable'
 import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
 import IMPostsView from 'modules/posts/components/HomePage/IMPostsView'
-import ToggleSwitch from 'components/ToggleSwitch'
+// import ToggleSwitch from 'components/ToggleSwitch'
 import IMPostsViewMobile from 'modules/posts/components/HomePage/IMPostsViewMobile'
 import useOnClickOutside from 'utils/useOnClickOutside'
 import { ChevronDownIcon } from '@heroicons/react/outline'
@@ -63,18 +63,18 @@ const Home = () => {
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [selectedCategories, setSelectedCategories] = useState([])
   const [selectedView, setSelectedView] = useState(HOME_PAGE_VIEWS.POSTS)
-  const [isAdvancedView, setIsAdvancedView] = useState(true)
+  const [isAdvancedView /*setIsAdvancedView*/] = useState(true)
   const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ONE_DAY)
 
-  const [isTimeFilterDropdownOpen, setIsTimeFilterDropdownOpen] =
-    useState(false)
+  // const [isTimeFilterDropdownOpen, setIsTimeFilterDropdownOpen] =
+  //   useState(false)
   const [isMobileTimeFilterDropdownOpen, setIsMobileTimeFilterDropdownOpen] =
     useState(false)
-  const desktopRef = useRef()
+  // const desktopRef = useRef()
   const mobileRef = useRef()
-  useOnClickOutside(desktopRef, () => {
-    setIsTimeFilterDropdownOpen(false)
-  })
+  // useOnClickOutside(desktopRef, () => {
+  //   setIsTimeFilterDropdownOpen(false)
+  // })
   useOnClickOutside(mobileRef, () => {
     setIsMobileTimeFilterDropdownOpen(false)
   })
@@ -211,10 +211,6 @@ const Home = () => {
         {/* Carousel section */}
         <div className="bg-blue-100 px-20 py-8 mb-10">
           <div className=" mx-auto max-w-7xl">
-            <div className="text-sm text-blue-400 font-semibold mb-6">
-              HOW IT WORKS
-            </div>
-
             <div className="md:h-auto lg:h-40 flex items-start space-x-6">
               <div className="rounded-lg bg-white w-1/3 h-full p-4">
                 <div className="font-bold text-lg mb-2">Post-to-Earn</div>
@@ -318,40 +314,97 @@ const Home = () => {
               <div className="flex items-center ml-auto">
                 {/* Desktop view of 2 elements below */}
                 {selectedView === HOME_PAGE_VIEWS.POSTS && (
-                  <div className="flex items-center mx-4">
+                  <div className="flex items-center mx-2">
                     {/* Left */}
                     <div className="flex items-center space-x-3 pr-2 text-xs">
-                      <button
-                        onClick={() =>
-                          setOrderBy(
-                            SortOptionsHomePostsTable.MARKET_INTEREST.value
-                          )
-                        }
-                        className={classNames(
-                          orderBy ===
-                            SortOptionsHomePostsTable.MARKET_INTEREST.value
-                            ? 'bg-blue-100 text-blue-600'
-                            : 'text-black',
-                          'px-3 py-2 font-bold rounded-2xl border'
-                        )}
-                      >
-                        Hot
-                      </button>
-                      <button
-                        onClick={() =>
-                          setOrderBy(SortOptionsHomePostsTable.NEW.value)
-                        }
-                        className={classNames(
-                          orderBy === SortOptionsHomePostsTable.NEW.value
-                            ? 'bg-blue-100 text-blue-600'
-                            : 'text-black',
-                          'px-3 py-2 font-bold rounded-2xl border'
-                        )}
-                      >
-                        New
-                      </button>
+                      <div className="flex items-center space-x-3 pr-2 border-r">
+                        <button
+                          onClick={() =>
+                            setOrderBy(SortOptionsHomePostsTable.NEW.value)
+                          }
+                          className={classNames(
+                            orderBy === SortOptionsHomePostsTable.NEW.value
+                              ? 'bg-blue-100 text-blue-600'
+                              : 'text-black',
+                            'px-3 py-2 font-bold rounded-2xl border'
+                          )}
+                        >
+                          New
+                        </button>
+                        <button
+                          onClick={() =>
+                            setOrderBy(
+                              SortOptionsHomePostsTable.MARKET_INTEREST.value
+                            )
+                          }
+                          className={classNames(
+                            orderBy ===
+                              SortOptionsHomePostsTable.MARKET_INTEREST.value
+                              ? 'bg-blue-100 text-blue-600'
+                              : 'text-black',
+                            'px-3 py-2 font-bold rounded-2xl border'
+                          )}
+                        >
+                          Hot
+                        </button>
+                      </div>
 
-                      <div
+                      <div className="flex items-center space-x-3 pr-2 border-r">
+                        <button
+                          onClick={() =>
+                            setTimeFilter(TimeFilterOptions.ONE_DAY.value)
+                          }
+                          className={classNames(
+                            timeFilter === TimeFilterOptions.ONE_DAY.value
+                              ? 'bg-blue-100 text-blue-600'
+                              : 'text-black',
+                            'px-3 py-2 font-bold rounded-2xl border'
+                          )}
+                        >
+                          Day
+                        </button>
+                        <button
+                          onClick={() =>
+                            setTimeFilter(TimeFilterOptions.ONE_WEEK.value)
+                          }
+                          className={classNames(
+                            timeFilter === TimeFilterOptions.ONE_WEEK.value
+                              ? 'bg-blue-100 text-blue-600'
+                              : 'text-black',
+                            'px-3 py-2 font-bold rounded-2xl border'
+                          )}
+                        >
+                          Week
+                        </button>
+                        <button
+                          onClick={() =>
+                            setTimeFilter(TimeFilterOptions.ONE_MONTH.value)
+                          }
+                          className={classNames(
+                            timeFilter === TimeFilterOptions.ONE_MONTH.value
+                              ? 'bg-blue-100 text-blue-600'
+                              : 'text-black',
+                            'px-3 py-2 font-bold rounded-2xl border'
+                          )}
+                        >
+                          Month
+                        </button>
+                        <button
+                          onClick={() =>
+                            setTimeFilter(TimeFilterOptions.ALL_TIME.value)
+                          }
+                          className={classNames(
+                            timeFilter === TimeFilterOptions.ALL_TIME.value
+                              ? 'bg-blue-100 text-blue-600'
+                              : 'text-black',
+                            'px-3 py-2 font-bold rounded-2xl border'
+                          )}
+                        >
+                          All-Time
+                        </button>
+                      </div>
+
+                      {/* <div
                         onClick={() => {
                           setIsTimeFilterDropdownOpen(!isTimeFilterDropdownOpen)
                         }}
@@ -373,7 +426,7 @@ const Home = () => {
                             width="w-[10rem]"
                           />
                         )}
-                      </div>
+                      </div> */}
 
                       <div
                         onClick={() =>
@@ -394,7 +447,7 @@ const Home = () => {
                     </div>
 
                     {/* Right */}
-                    <div className="flex justify-between items-center space-x-3 pl-2 border-l text-xs">
+                    {/* <div className="flex justify-between items-center space-x-3 pl-2 border-l text-xs">
                       <button
                         onClick={(e) => {
                           setIsAdvancedView(!isAdvancedView)
@@ -414,7 +467,7 @@ const Home = () => {
                           className="ml-2"
                         />
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 )}
                 <div className="flex w-48 ml-auto">
