@@ -343,7 +343,7 @@ export default function ProfileWallet({ userData }: Props) {
             )}
             onClick={() => {
               setSelectedView(TABLE_NAMES.ACCOUNT_OPINIONS)
-              setOrderBy(SortOptionsAccountOpinions.RATING.value)
+              setOrderBy(SortOptionsAccountOpinions.MARKET_INTEREST.value)
               setOrderDirection('desc')
             }}
           >
