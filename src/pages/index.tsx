@@ -27,8 +27,7 @@ import useOnClickOutside from 'utils/useOnClickOutside'
 import { ChevronDownIcon } from '@heroicons/react/outline'
 import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import { OverviewSearchbar } from 'components/tokens/OverviewSearchbar'
-import SelectCategoriesModal from 'modules/posts/components/SelectCategoriesModal'
-import Image from 'next/image'
+// import SelectCategoriesModal from 'modules/posts/components/SelectCategoriesModal'
 import { InboxInIcon } from '@heroicons/react/solid'
 import useUserFeesClaimable from 'modules/user-market/hooks/useUserFeesClaimable'
 import useTokenToDAI from 'actions/useTokenToDAI'
@@ -62,9 +61,9 @@ const Home = () => {
   const txManager = useTransactionManager()
   const [orderDirection, setOrderDirection] = useState<'desc' | 'asc'>('desc')
   const [selectedCategories, setSelectedCategories] = useState([])
-  const [selectedView, setSelectedView] = useState(HOME_PAGE_VIEWS.POSTS)
+  const [selectedView /*setSelectedView*/] = useState(HOME_PAGE_VIEWS.POSTS)
   const [isAdvancedView /*setIsAdvancedView*/] = useState(true)
-  const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ONE_DAY)
+  const [timeFilter, setTimeFilter] = useState(TIME_FILTER.ALL_TIME)
 
   // const [isTimeFilterDropdownOpen, setIsTimeFilterDropdownOpen] =
   //   useState(false)
@@ -209,7 +208,7 @@ const Home = () => {
       {/* Desktop and tablet */}
       <div className="hidden md:block w-full">
         {/* Carousel section */}
-        <div className="bg-blue-100 px-20 py-8 mb-10">
+        {/* <div className="bg-blue-100 px-20 py-8 mb-10">
           <div className=" mx-auto max-w-7xl">
             <div className="md:h-auto lg:h-40 flex items-start space-x-6">
               <div className="rounded-lg bg-white w-1/3 h-full p-4">
@@ -241,25 +240,16 @@ const Home = () => {
                   on your profile.
                 </div>
               </div>
-
-              {/* <div className="rounded-lg bg-white w-1/3 h-full p-4">
-                <div className="font-bold text-lg mb-2">
-                  Credibility without institutions
-                </div>
-                <div className="text-black/[.5] text-sm mb-4">
-                  As Bitcoin is money without banks, Ideamarket is credibility without institutions. Users decide what information deserves trust, without centralized third parties. Learn more in our <A href="https://docs.ideamarket.io/" className="text-blue-600">Docs</A>.
-                </div>
-              </div> */}
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="px-20">
           <div className=" mx-auto max-w-7xl">
             {/* Top section with buttons */}
-            <div className="flex flex-wrap items-center pb-6">
+            <div className="flex flex-wrap items-center pb-6 mt-10">
               {/* Posts and Users buttons */}
-              <div className="flex items-center space-x-4">
+              {/* <div className="flex items-center space-x-4">
                 <button
                   onClick={() => {
                     onOrderByChanged(
@@ -309,12 +299,12 @@ const Home = () => {
                     />
                   </div>
                 </button>
-              </div>
+              </div> */}
 
-              <div className="flex items-center ml-auto">
+              <div className="flex items-center">
                 {/* Desktop view of 2 elements below */}
                 {selectedView === HOME_PAGE_VIEWS.POSTS && (
-                  <div className="flex items-center mx-2">
+                  <div className="flex items-center mr-2">
                     {/* Left */}
                     <div className="flex items-center space-x-3 pr-2 text-xs">
                       <div className="flex items-center space-x-3 pr-2 border-r">
@@ -428,7 +418,7 @@ const Home = () => {
                         )}
                       </div> */}
 
-                      <div
+                      {/* <div
                         onClick={() =>
                           ModalService.open(SelectCategoriesModal, {
                             selectedCategories,
@@ -443,7 +433,7 @@ const Home = () => {
                         <span>
                           <ChevronDownIcon className="h-4" />
                         </span>
-                      </div>
+                      </div> */}
                     </div>
 
                     {/* Right */}
@@ -537,7 +527,7 @@ const Home = () => {
         {/* Top section with buttons */}
         <div className="pb-6 border-b">
           {/* Posts and Users buttons */}
-          <div className="px-4 flex justify-center items-center space-x-4">
+          {/* <div className="px-4 flex justify-center items-center space-x-4">
             <button
               onClick={() => {
                 onOrderByChanged(
@@ -570,7 +560,7 @@ const Home = () => {
             >
               Leaderboard
             </button>
-          </div>
+          </div> */}
 
           {selectedView === HOME_PAGE_VIEWS.POSTS && (
             <div className="px-4 mt-2 flex justify-center items-center">

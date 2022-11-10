@@ -75,11 +75,9 @@ export default function ProfileWallet({ userData }: Props) {
   const [isLockedFilterActive, setIsLockedFilterActive] = useState(false)
   const [nameSearch, setNameSearch] = useState('')
 
-  const [selectedView, setSelectedView] = useState(
-    TABLE_NAMES.ACCOUNT_RECOMMENDED
-  )
+  const [selectedView, setSelectedView] = useState(TABLE_NAMES.ACCOUNT_OPINIONS)
   const [orderBy, setOrderBy] = useState(
-    SortOptionsAccountRecommended.MUTUAL_POST_COUNT.value
+    SortOptionsAccountOpinions.MARKET_INTEREST.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
 

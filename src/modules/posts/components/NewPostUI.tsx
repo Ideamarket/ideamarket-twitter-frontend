@@ -9,15 +9,15 @@ import mintPost from 'actions/web3/mintPost'
 import { useQuery } from 'react-query'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import { GlobalContext } from 'lib/GlobalContext'
-import { XIcon } from '@heroicons/react/solid'
-import { useContractStore } from 'store/contractStore'
+// import { XIcon } from '@heroicons/react/solid'
+// import { useContractStore } from 'store/contractStore'
 import { syncPosts } from 'actions/web2/posts/syncPosts'
 import { verifyTokenName } from 'actions'
 import IMTextArea from 'modules/forms/components/IMTextArea'
 import { A } from 'components'
 import { updatePostMetadata } from 'actions/web2/posts/updatePostMetadata'
 import { useWeb3React } from '@web3-react/core'
-import { getCategories } from 'actions/web2/getCategories'
+// import { getCategories } from 'actions/web2/getCategories'
 
 type NewPostUIProps = {
   isTxButtonActive?: boolean
@@ -37,7 +37,7 @@ export default function NewPostUI({
   onInputChanged = () => null,
 }: NewPostUIProps) {
   const txManager = useTransactionManager()
-  const ideamarketPosts = useContractStore.getState().ideamarketPosts
+  // const ideamarketPosts = useContractStore.getState().ideamarketPosts
 
   const { setIsTxPending } = useContext(GlobalContext)
 
@@ -58,25 +58,25 @@ export default function NewPostUI({
 
   const [selectedCategories, setSelectedCategories] = useState([])
 
-  const { data: categoriesData } = useQuery(
-    ['all-categories', Boolean(ideamarketPosts)],
-    () => getCategories({ enabled: true })
-  )
+  // const { data: categoriesData } = useQuery(
+  //   ['all-categories', Boolean(ideamarketPosts)],
+  //   () => getCategories({ enabled: true })
+  // )
 
   /**
    * This method is called when a category is clicked.
    * @param newClickedCategory -- Category just clicked
    */
-  const onSelectCategory = (newClickedCategory: string) => {
-    const isCatAlreadySelected = selectedCategories.includes(newClickedCategory)
-    let newCategories = [...selectedCategories]
-    if (isCatAlreadySelected) {
-      newCategories = newCategories.filter((cat) => cat !== newClickedCategory)
-    } else {
-      newCategories.push(newClickedCategory)
-    }
-    setSelectedCategories(newCategories)
-  }
+  // const onSelectCategory = (newClickedCategory: string) => {
+  //   const isCatAlreadySelected = selectedCategories.includes(newClickedCategory)
+  //   let newCategories = [...selectedCategories]
+  //   if (isCatAlreadySelected) {
+  //     newCategories = newCategories.filter((cat) => cat !== newClickedCategory)
+  //   } else {
+  //     newCategories.push(newClickedCategory)
+  //   }
+  //   setSelectedCategories(newCategories)
+  // }
 
   const onURLTyped = async (newTextInput: string) => {
     const typedURL = newTextInput
@@ -215,7 +215,7 @@ export default function NewPostUI({
           }
         />
 
-        {categoriesData && categoriesData?.length > 0 && (
+        {/* {categoriesData && categoriesData?.length > 0 && (
           <div className="my-4 text-sm">
             <div className="text-black/[.5] font-semibold">CATEGORY TAGS</div>
             <div className="flex flex-wrap">
@@ -240,7 +240,7 @@ export default function NewPostUI({
               })}
             </div>
           </div>
-        )}
+        )} */}
 
         {inputPostType === TX_TYPES.URL_LIST && (
           <div className="my-4">

@@ -21,8 +21,8 @@ import { PlusCircleIcon, XCircleIcon } from '@heroicons/react/outline'
 import AddCitationModal from 'modules/posts/components/AddCitationModal'
 import { IdeamarketPost } from 'modules/posts/services/PostService'
 import IMTextArea from 'modules/forms/components/IMTextArea'
-import { useContractStore } from 'store/contractStore'
-import { XIcon } from '@heroicons/react/solid'
+// import { useContractStore } from 'store/contractStore'
+// import { XIcon } from '@heroicons/react/solid'
 import { syncPosts } from 'actions/web2/posts/syncPosts'
 import mintPost from 'actions/web3/mintPost'
 import TradeCompleteModal, {
@@ -34,7 +34,7 @@ import { WalletModal } from 'components'
 import { useWalletStore } from 'store/walletStore'
 import { useWeb3React } from '@web3-react/core'
 import { updatePostMetadata } from 'actions/web2/posts/updatePostMetadata'
-import { getCategories } from 'actions/web2/getCategories'
+// import { getCategories } from 'actions/web2/getCategories'
 import { syncUserRelationsForWallet } from 'actions/web2/user-market/syncUserRelationsForWallet'
 import StakeUserModal from 'modules/user-market/components/StakeUserModal'
 import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
@@ -243,29 +243,29 @@ export default function RateUI({
       })
   )
 
-  const ideamarketPosts = useContractStore.getState().ideamarketPosts
+  // const ideamarketPosts = useContractStore.getState().ideamarketPosts
 
   const [selectedCategories, setSelectedCategories] = useState([])
 
-  const { data: categoriesData } = useQuery(
-    ['all-categories', Boolean(ideamarketPosts)],
-    () => getCategories({ enabled: true })
-  )
+  // const { data: categoriesData } = useQuery(
+  //   ['all-categories', Boolean(ideamarketPosts)],
+  //   () => getCategories({ enabled: true })
+  // )
 
   /**
    * This method is called when a category is clicked.
    * @param newClickedCategory -- Category just clicked
    */
-  const onSelectCategory = (newClickedCategory: string) => {
-    const isCatAlreadySelected = selectedCategories.includes(newClickedCategory)
-    let newCategories = [...selectedCategories]
-    if (isCatAlreadySelected) {
-      newCategories = newCategories.filter((cat) => cat !== newClickedCategory)
-    } else {
-      newCategories.push(newClickedCategory)
-    }
-    setSelectedCategories(newCategories)
-  }
+  // const onSelectCategory = (newClickedCategory: string) => {
+  //   const isCatAlreadySelected = selectedCategories.includes(newClickedCategory)
+  //   let newCategories = [...selectedCategories]
+  //   if (isCatAlreadySelected) {
+  //     newCategories = newCategories.filter((cat) => cat !== newClickedCategory)
+  //   } else {
+  //     newCategories.push(newClickedCategory)
+  //   }
+  //   setSelectedCategories(newCategories)
+  // }
 
   const getRateButtonText = () => {
     if (
@@ -465,7 +465,7 @@ export default function RateUI({
                   placeholder="Cite your reasons... (optional)"
                 />
 
-                {inputText?.length > 0 &&
+                {/* {inputText?.length > 0 &&
                   categoriesData &&
                   categoriesData?.length > 0 && (
                     <div className="my-4 text-sm">
@@ -494,7 +494,7 @@ export default function RateUI({
                         })}
                       </div>
                     </div>
-                  )}
+                  )} */}
               </>
             ) : (
               <>
