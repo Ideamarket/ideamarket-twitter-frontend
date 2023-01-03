@@ -2,44 +2,16 @@ import { flatten } from 'lodash'
 import classNames from 'classnames'
 import { useState, useEffect, useContext } from 'react'
 import { useInfiniteQuery } from 'react-query'
-import {
-  OwnedTokenTableNew,
-  WalletModal,
-  MyTradesTableNew,
-  Tooltip,
-} from '../../components'
-import { useWalletStore } from '../../store/walletStore'
-import {
-  queryOwnedTokensMaybeMarket,
-  queryMyTrades,
-  useIdeaMarketsStore,
-  IdeaToken,
-} from 'store/ideaMarketsStore'
+import { Tooltip } from '../../components'
 import ModalService from 'components/modals/ModalService'
 import WalletFilters from './WalletFilters'
 import RatingsTable from 'modules/ratings/components/RatingsTable'
-import { getUsersLatestOpinions } from 'modules/ratings/services/OpinionService'
-import RateModal from 'components/trade/RateModal'
 import { GlobalContext } from 'lib/GlobalContext'
-import {
-  SortOptionsAccountOpinions,
-  SortOptionsAccountPosts,
-  SortOptionsAccountRecommended,
-  SortOptionsHomeUsersTable,
-  TABLE_NAMES,
-  TIME_FILTER,
-} from 'utils/tables'
-import UserPostsTable from 'modules/posts/components/UserPostsTable'
-import { getAllPosts } from 'modules/posts/services/PostService'
-import HoldersView from 'modules/user-market/components/HoldersView'
-import HoldingsView from 'modules/user-market/components/HoldingsView'
-import UserRecommendedTable from 'modules/user-market/components/UserRecommendedTable'
-import {
-  getRecommendedUsersByWallet,
-  IdeamarketUser,
-} from 'modules/user-market/services/UserMarketService'
-import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
-import StakeUserModal from 'modules/user-market/components/StakeUserModal'
+import { SortOptionsAccountOpinions, TABLE_NAMES } from 'utils/tables'
+import { getAllTwitterOpinions } from 'modules/ratings/services/TwitterOpinionService'
+import InitTwitterLoginModal from './InitTwitterLoginModal'
+import NewOpinionModal from 'modules/posts/components/NewOpinionModal'
+import { IdeamarketTwitterPost } from 'modules/posts/services/TwitterPostService'
 
 const TOKENS_PER_PAGE = 10
 
@@ -64,11 +36,7 @@ type Props = {
 }
 
 export default function ProfileWallet({ userData }: Props) {
-  const web3 = useWalletStore((state) => state)
-  const address = useWalletStore((state) => state.address)
-
-  const { setOnWalletConnectedCallback, isTxPending } =
-    useContext(GlobalContext)
+  const { isTxPending, jwtToken } = useContext(GlobalContext)
 
   const [isVerifiedFilterActive, setIsVerifiedFilterActive] = useState(false)
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
@@ -77,44 +45,38 @@ export default function ProfileWallet({ userData }: Props) {
 
   const [selectedView, setSelectedView] = useState(TABLE_NAMES.ACCOUNT_OPINIONS)
   const [orderBy, setOrderBy] = useState(
-    SortOptionsAccountOpinions.MARKET_INTEREST.value
+    SortOptionsAccountOpinions.RATING.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
 
-  const watchingTokens = Object.keys(
-    useIdeaMarketsStore((store) => store.watching)
-  )
+  // const {
+  //   data: infiniteUserRecommendedData,
+  //   isFetching: isUserRecommendedDataLoading,
+  //   fetchNextPage: fetchMoreUserRecommended,
+  //   refetch: refetchUserRecommended,
+  //   hasNextPage: canFetchMoreUserRecommended,
+  // } = useInfiniteQuery(
+  //   ['user-recommended'],
+  //   ({ pageParam = 0 }) =>
+  //     userRecommendedQueryFunction(TOKENS_PER_PAGE, pageParam),
+  //   infiniteQueryConfig
+  // )
 
-  const filterTokens = isStarredFilterActive ? watchingTokens : undefined
+  // const userRecommendedPairs = flatten(infiniteUserRecommendedData?.pages || [])
 
-  const {
-    data: infiniteUserRecommendedData,
-    isFetching: isUserRecommendedDataLoading,
-    fetchNextPage: fetchMoreUserRecommended,
-    refetch: refetchUserRecommended,
-    hasNextPage: canFetchMoreUserRecommended,
-  } = useInfiniteQuery(
-    ['user-recommended'],
-    ({ pageParam = 0 }) =>
-      userRecommendedQueryFunction(TOKENS_PER_PAGE, pageParam),
-    infiniteQueryConfig
-  )
+  // const {
+  //   data: infiniteUserPostData,
+  //   isFetching: isUserPostDataLoading,
+  //   fetchNextPage: fetchMoreUserPosts,
+  //   refetch: refetchUserPosts,
+  //   hasNextPage: canFetchMoreUserPosts,
+  // } = useInfiniteQuery(
+  //   ['user-posts', selectedView, userData?.twitterUsername],
+  //   ({ pageParam = 0 }) => userPostsQueryFunction(TOKENS_PER_PAGE, pageParam),
+  //   infiniteQueryConfig
+  // )
 
-  const userRecommendedPairs = flatten(infiniteUserRecommendedData?.pages || [])
-
-  const {
-    data: infiniteUserPostData,
-    isFetching: isUserPostDataLoading,
-    fetchNextPage: fetchMoreUserPosts,
-    refetch: refetchUserPosts,
-    hasNextPage: canFetchMoreUserPosts,
-  } = useInfiniteQuery(
-    ['user-posts'],
-    ({ pageParam = 0 }) => userPostsQueryFunction(TOKENS_PER_PAGE, pageParam),
-    infiniteQueryConfig
-  )
-
-  const userPostPairs = flatten(infiniteUserPostData?.pages || [])
+  // const userPostPairs = flatten(infiniteUserPostData?.pages || [])
 
   const {
     data: infiniteRatingsData,
@@ -123,55 +85,23 @@ export default function ProfileWallet({ userData }: Props) {
     refetch: refetchRatings,
     hasNextPage: canFetchMoreRatings,
   } = useInfiniteQuery(
-    ['ratings'],
+    ['ratings', selectedView, userData?.twitterUsername],
     ({ pageParam = 0 }) => ratingsQueryFunction(TOKENS_PER_PAGE, pageParam),
     infiniteQueryConfig
   )
 
   const ratingPairs = flatten(infiniteRatingsData?.pages || [])
 
-  const {
-    data: infiniteOwnedData,
-    isFetching: isOwnedPairsDataLoading,
-    fetchNextPage: fetchMoreOwned,
-    refetch: refetchOwned,
-    hasNextPage: canFetchMoreOwned,
-  } = useInfiniteQuery(
-    ['owned-tokens', address, userData?.walletAddress],
-    ({ pageParam = 0 }) => ownedQueryFunction(TOKENS_PER_PAGE, pageParam),
-    infiniteQueryConfig
-  )
-
-  const ownedPairs = flatten(infiniteOwnedData?.pages || [])
-
-  const {
-    data: infiniteTradesData,
-    isFetching: isTradesPairsDataLoading,
-    fetchNextPage: fetchMoreTrades,
-    refetch: refetchMyTrades,
-    hasNextPage: canFetchMoreTrades,
-  } = useInfiniteQuery(
-    ['my-trades'],
-    ({ pageParam = 0 }) => tradesQueryFunction(TOKENS_PER_PAGE, pageParam),
-    infiniteQueryConfig
-  )
-
-  const myTrades = flatten(infiniteTradesData?.pages || [])
-
   function refetch() {
-    refetchOwned()
-    refetchMyTrades()
     refetchRatings()
-    refetchUserPosts()
-    refetchUserRecommended()
+    // refetchUserPosts()
+    // refetchUserRecommended()
   }
 
   useEffect(() => {
     refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    address,
-    web3,
     orderBy,
     orderDirection,
     userData,
@@ -181,94 +111,64 @@ export default function ProfileWallet({ userData }: Props) {
     isTxPending, // If any transaction starts or stop, refresh data
   ])
 
-  async function userRecommendedQueryFunction(
-    numTokens: number,
-    skip: number = 0
-  ) {
-    if (selectedView !== TABLE_NAMES.ACCOUNT_RECOMMENDED) return []
-    if (!userData || !userData?.walletAddress) return []
+  // async function userRecommendedQueryFunction(
+  //   numTokens: number,
+  //   skip: number = 0
+  // ) {
+  //   if (selectedView !== TABLE_NAMES.ACCOUNT_RECOMMENDED) return []
+  //   if (!userData || !userData?.walletAddress) return []
 
-    const recommendedUsers = await getRecommendedUsersByWallet({
-      walletAddress: userData?.walletAddress,
-      limit: numTokens,
-      orderBy,
-      orderDirection,
-      skip,
-    })
+  //   const recommendedUsers = await getRecommendedUsersByWallet({
+  //     walletAddress: userData?.walletAddress,
+  //     limit: numTokens,
+  //     orderBy,
+  //     orderDirection,
+  //     skip,
+  //   })
 
-    return recommendedUsers || []
-  }
+  //   return recommendedUsers || []
+  // }
 
-  async function userPostsQueryFunction(numTokens: number, skip: number = 0) {
-    if (selectedView !== TABLE_NAMES.ACCOUNT_POSTS) return []
-    if (!userData || !userData?.walletAddress) return []
+  // async function userPostsQueryFunction(numTokens: number, skip: number = 0) {
+  //   if (selectedView !== TABLE_NAMES.ACCOUNT_POSTS) return []
+  //   if (!userData || !userData?.walletAddress) return []
 
-    const latestUserOpinions = await getAllPosts(
-      [
-        numTokens,
-        orderBy,
-        orderDirection,
-        null,
-        filterTokens,
-        nameSearch,
-        userData?.walletAddress,
-        TIME_FILTER.ALL_TIME,
-      ],
-      skip
-    )
+  //   const latestUserOpinions = await getAllPosts(
+  //     [
+  //       numTokens,
+  //       orderBy,
+  //       orderDirection,
+  //       null,
+  //       filterTokens,
+  //       nameSearch,
+  //       userData?.walletAddress,
+  //       TIME_FILTER.ALL_TIME,
+  //     ],
+  //     skip
+  //   )
 
-    return latestUserOpinions || []
-  }
+  //   return latestUserOpinions || []
+  // }
 
   async function ratingsQueryFunction(numTokens: number, skip: number = 0) {
-    if (selectedView !== TABLE_NAMES.ACCOUNT_OPINIONS) return []
+    if (
+      selectedView !== TABLE_NAMES.ACCOUNT_OPINIONS ||
+      !userData?.twitterUsername
+    )
+      return []
 
-    const latestUserOpinions = await getUsersLatestOpinions({
-      walletAddress: userData?.walletAddress,
+    const latestUserOpinions = await getAllTwitterOpinions({
+      ratedPostID: null,
+      ratedBy: userData?.twitterUsername,
       skip,
       limit: numTokens,
-      orderBy,
+      orderBy: orderBy,
       orderDirection,
-      filterTokens,
       search: nameSearch,
+      latest: true,
     })
 
     return latestUserOpinions || []
-  }
-
-  async function ownedQueryFunction(numTokens: number, skip: number = 0) {
-    const finalAddress = userData?.walletAddress
-
-    const { holdings } = await queryOwnedTokensMaybeMarket(
-      finalAddress,
-      null,
-      numTokens,
-      skip,
-      orderBy,
-      orderDirection,
-      filterTokens,
-      nameSearch,
-      isLockedFilterActive
-    )
-
-    return holdings || []
-  }
-
-  async function tradesQueryFunction(numTokens: number, skip: number = 0) {
-    const finalAddress = userData?.walletAddress
-
-    const { trades } = await queryMyTrades(
-      finalAddress,
-      null,
-      numTokens,
-      skip,
-      orderBy,
-      orderDirection,
-      filterTokens,
-      nameSearch
-    )
-
-    return trades || []
   }
 
   function headerClicked(headerValue: string) {
@@ -284,31 +184,11 @@ export default function ProfileWallet({ userData }: Props) {
     }
   }
 
-  const onRateClicked = (token: IdeaToken, urlMetaData: any) => {
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, { imPost: token, urlMetaData })
-      })
-      ModalService.open(WalletModal)
+  const onRateClicked = (post: IdeamarketTwitterPost) => {
+    if (!jwtToken) {
+      ModalService.open(InitTwitterLoginModal)
     } else {
-      ModalService.open(RateModal, { imPost: token, urlMetaData })
-    }
-  }
-
-  const onStakeClicked = (userToken: IdeamarketUser) => {
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(StakeUserModal, {
-          ideaToken: userToken,
-          market: USER_MARKET,
-        })
-      })
-      ModalService.open(WalletModal)
-    } else {
-      ModalService.open(StakeUserModal, {
-        ideaToken: userToken,
-        market: USER_MARKET,
-      })
+      ModalService.open(NewOpinionModal, { defaultRatedPost: post })
     }
   }
 
@@ -316,7 +196,7 @@ export default function ProfileWallet({ userData }: Props) {
     <div className="w-full h-full mt-8 pb-20">
       <div className="flex flex-col overflow-auto justify-between sm:flex-row mb-0 md:mb-4">
         <div className="flex order-1 md:order-none mx-4">
-          <div
+          {/* <div
             className={classNames(
               selectedView === TABLE_NAMES.ACCOUNT_RECOMMENDED
                 ? 'text-white'
@@ -330,7 +210,7 @@ export default function ProfileWallet({ userData }: Props) {
             }}
           >
             Similar Users
-          </div>
+          </div> */}
 
           <div
             className={classNames(
@@ -348,7 +228,7 @@ export default function ProfileWallet({ userData }: Props) {
             Ratings
           </div>
 
-          <div
+          {/* <div
             className={classNames(
               selectedView === TABLE_NAMES.ACCOUNT_POSTS
                 ? 'text-white'
@@ -362,81 +242,7 @@ export default function ProfileWallet({ userData }: Props) {
             }}
           >
             Posts
-          </div>
-
-          <div
-            className={classNames(
-              selectedView === TABLE_NAMES.ACCOUNT_HOLDERS
-                ? 'text-white'
-                : 'text-brand-gray text-opacity-60 cursor-pointer',
-              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
-            )}
-            onClick={() => {
-              setSelectedView(TABLE_NAMES.ACCOUNT_HOLDERS)
-              // TODO:
-              setOrderBy(SortOptionsHomeUsersTable.STAKED.value)
-              setOrderDirection('desc')
-            }}
-          >
-            Holders
-          </div>
-
-          <div
-            className={classNames(
-              selectedView === TABLE_NAMES.ACCOUNT_STAKED_ON
-                ? 'text-white'
-                : 'text-brand-gray text-opacity-60 cursor-pointer',
-              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
-            )}
-            onClick={() => {
-              setSelectedView(TABLE_NAMES.ACCOUNT_STAKED_ON)
-              // TODO:
-              setOrderBy(SortOptionsHomeUsersTable.STAKED.value)
-              setOrderDirection('desc')
-            }}
-          >
-            Holdings
-          </div>
-
-          {address?.toLowerCase() === userData?.walletAddress?.toLowerCase() &&
-            ownedPairs &&
-            ownedPairs?.length > 0 && (
-              <div
-                className={classNames(
-                  selectedView === TABLE_NAMES.ACCOUNT_HOLDINGS
-                    ? 'text-white'
-                    : 'text-brand-gray text-opacity-60 cursor-pointer',
-                  'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
-                )}
-                onClick={() => {
-                  setSelectedView(TABLE_NAMES.ACCOUNT_HOLDINGS)
-                  setOrderBy('price')
-                  setOrderDirection('desc')
-                }}
-              >
-                Wallet
-              </div>
-            )}
-
-          {address?.toLowerCase() === userData?.walletAddress?.toLowerCase() &&
-            myTrades &&
-            myTrades?.length > 0 && (
-              <div
-                className={classNames(
-                  selectedView === TABLE_NAMES.ACCOUNT_TRADES
-                    ? 'text-white'
-                    : 'text-brand-gray text-opacity-60 cursor-pointer',
-                  'text-lg font-semibold flex flex-col justify-end mb-2.5'
-                )}
-                onClick={() => {
-                  setSelectedView(TABLE_NAMES.ACCOUNT_TRADES)
-                  setOrderBy('date')
-                  setOrderDirection('desc')
-                }}
-              >
-                Trades
-              </div>
-            )}
+          </div> */}
         </div>
       </div>
 
@@ -509,7 +315,7 @@ export default function ProfileWallet({ userData }: Props) {
             )}
 
             <div className="border-t border-brand-border-gray dark:border-gray-500 shadow-home ">
-              {selectedView === TABLE_NAMES.ACCOUNT_RECOMMENDED &&
+              {/* {selectedView === TABLE_NAMES.ACCOUNT_RECOMMENDED &&
                 web3 !== undefined && (
                   <UserRecommendedTable
                     rawPairs={userRecommendedPairs}
@@ -522,9 +328,9 @@ export default function ProfileWallet({ userData }: Props) {
                     headerClicked={headerClicked}
                     onStakeClicked={onStakeClicked}
                   />
-                )}
+                )} */}
 
-              {selectedView === TABLE_NAMES.ACCOUNT_POSTS &&
+              {/* {selectedView === TABLE_NAMES.ACCOUNT_POSTS &&
                 web3 !== undefined && (
                   <UserPostsTable
                     rawPairs={userPostPairs}
@@ -537,59 +343,24 @@ export default function ProfileWallet({ userData }: Props) {
                     headerClicked={headerClicked}
                     onRateClicked={onRateClicked}
                   />
-                )}
+                )} */}
 
-              {selectedView === TABLE_NAMES.ACCOUNT_OPINIONS &&
-                web3 !== undefined && (
-                  <RatingsTable
-                    rawPairs={ratingPairs}
-                    isPairsDataLoading={isRatingsDataLoading}
-                    refetch={refetch}
-                    canFetchMore={canFetchMoreRatings}
-                    orderDirection={orderDirection}
-                    orderBy={orderBy}
-                    fetchMore={fetchMoreRatings}
-                    headerClicked={headerClicked}
-                    onRateClicked={onRateClicked}
-                  />
-                )}
-
-              {selectedView === TABLE_NAMES.ACCOUNT_HOLDINGS && (
-                <OwnedTokenTableNew
-                  rawPairs={ownedPairs}
-                  isPairsDataLoading={isOwnedPairsDataLoading}
+              {selectedView === TABLE_NAMES.ACCOUNT_OPINIONS && userData && (
+                <RatingsTable
+                  rawPairs={ratingPairs}
+                  isPairsDataLoading={isRatingsDataLoading}
                   refetch={refetch}
-                  canFetchMore={canFetchMoreOwned}
+                  canFetchMore={canFetchMoreRatings}
                   orderDirection={orderDirection}
                   orderBy={orderBy}
-                  fetchMore={fetchMoreOwned}
+                  fetchMore={fetchMoreRatings}
                   headerClicked={headerClicked}
+                  onRateClicked={onRateClicked}
                 />
               )}
-
-              {selectedView === TABLE_NAMES.ACCOUNT_TRADES &&
-                web3 !== undefined && (
-                  <MyTradesTableNew
-                    rawPairs={myTrades}
-                    isPairsDataLoading={isTradesPairsDataLoading}
-                    canFetchMore={canFetchMoreTrades}
-                    orderDirection={orderDirection}
-                    orderBy={orderBy}
-                    fetchMore={fetchMoreTrades}
-                    headerClicked={headerClicked}
-                  />
-                )}
             </div>
           </div>
         )}
-
-      {selectedView === TABLE_NAMES.ACCOUNT_HOLDERS && web3 !== undefined && (
-        <HoldersView selectedView={selectedView} userData={userData} />
-      )}
-
-      {selectedView === TABLE_NAMES.ACCOUNT_STAKED_ON && web3 !== undefined && (
-        <HoldingsView selectedView={selectedView} userData={userData} />
-      )}
     </div>
   )
 }

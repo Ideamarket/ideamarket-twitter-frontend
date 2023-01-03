@@ -83,7 +83,7 @@ export default function VerifyModal({
     ModalService.open(WalletModal)
   }
 
-  async function initiateVerification() {
+  async function initiateTwitterLogin() {
     setIsLoading(true)
     try {
       setUUID(await requestVerification(token, ownerAddress))
@@ -324,7 +324,7 @@ export default function VerifyModal({
                       ? 'bg-brand-blue text-white border-brand-blue'
                       : 'bg-white border-brand-gray-2 text-brand-gray-2 cursor-not-allowed'
                   )}
-                  onClick={initiateVerification}
+                  onClick={initiateTwitterLogin}
                 >
                   {isLoading ? (
                     <div className="flex justify-center">

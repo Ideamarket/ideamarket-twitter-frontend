@@ -1,16 +1,14 @@
-import { useWeb3React } from '@web3-react/core'
 import {
-  getAccount,
+  getTwitterUserToken,
   loginAccount,
 } from 'actions/web2/user-market/apiUserActions'
 import { GlobalContext } from 'lib/GlobalContext'
 import { useContext } from 'react'
-import { setCookie } from 'services/CookieService'
+import { deleteCookie, setCookie } from 'services/CookieService'
 import { SignedAddress } from 'types/customTypes'
 
 const useAuth = () => {
   const { setJwtToken, setUser } = useContext(GlobalContext)
-  const { account } = useWeb3React()
 
   const loginByWallet = async (signedWalletAddress: SignedAddress) => {
     try {
@@ -42,25 +40,28 @@ const useAuth = () => {
    */
   const setJwtFromApi = (jwt: string, validUntilISODate: string) => {
     setJwtToken(jwt)
-    // List of wallet address <-> JWT pairs (named t)
-    // const oldJwtKeyValues = JSON.parse(getCookie('t'))
-    const newJwtKeyValues = { [account]: jwt }
 
     const validUntilUTCDate = new Date(validUntilISODate).toUTCString()
 
-    setCookie('t', JSON.stringify(newJwtKeyValues), validUntilUTCDate)
+    setCookie('tt', jwt, validUntilUTCDate)
   }
 
   const setUserFromJwt = async (jwt: string) => {
     if (jwt) {
-      const userToken = await getAccount({ jwt })
+      const userToken = await getTwitterUserToken({ jwt })
       if (userToken) {
         setUser(userToken)
       }
     }
   }
 
-  return { loginByWallet, setUserFromJwt }
+  const twitterLogout = (): void => {
+    deleteCookie('tt')
+    setUser(null)
+    setJwtToken(null)
+  }
+
+  return { loginByWallet, setUserFromJwt, twitterLogout, setJwtFromApi }
 }
 
 export default useAuth

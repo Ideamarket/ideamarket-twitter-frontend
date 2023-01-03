@@ -1,12 +1,12 @@
 import classNames from 'classnames'
 import { useCallback, useRef, MutableRefObject } from 'react'
-import { IdeaToken, IdeaTokenMarketPair } from 'store/ideaMarketsStore'
+import { IdeaTokenMarketPair } from 'store/ideaMarketsStore'
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 import RatingsRow from './RatingsRow'
 import RatingsRowSkeleton from './RatingsRowSkeleton'
 import { SortOptionsAccountOpinions } from 'utils/tables'
-import { Tooltip } from 'components'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
+import { IdeamarketTwitterPost } from 'modules/posts/services/TwitterPostService'
 
 type Header = {
   title: string
@@ -56,7 +56,7 @@ type RatingsTableProps = {
   orderBy: string
   fetchMore: () => any
   headerClicked: (value: string) => void
-  onRateClicked: (idt: IdeaToken, urlMetaData: any) => void
+  onRateClicked: (idt: IdeamarketTwitterPost) => void
 }
 
 export default function RatingsTable({
@@ -96,14 +96,6 @@ export default function RatingsTable({
             <span className="mr-1 uppercase">
               {SortOptionsAccountOpinions.MARKET_INTEREST.displayName}
             </span>
-            <Tooltip
-              className="text-black/[.5] z-[200]"
-              iconComponentClassNames="w-3"
-            >
-              <div className="w-64">
-                The total amount of IMO staked on all users who rated a post
-              </div>
-            </Tooltip>
           </div>
         )
       default:

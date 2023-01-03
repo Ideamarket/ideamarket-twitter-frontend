@@ -1,15 +1,16 @@
 import classNames from 'classnames'
+import { GlobalContext } from 'lib/GlobalContext'
 import { flatten } from 'lodash'
 import OpinionTable from 'modules/ratings/components/ListingPage/OpinionTable'
-import { getLatestOpinionsAboutNFTForTable } from 'modules/ratings/services/OpinionService'
-import { useState } from 'react'
+import { getAllTwitterOpinions } from 'modules/ratings/services/TwitterOpinionService'
+import { useContext, useState } from 'react'
 import { useInfiniteQuery } from 'react-query'
 import {
   SortOptionsHomePostsTable,
   SortOptionsListingPageOpinions,
 } from 'utils/tables'
 import {
-  getAllCitationsByTokenID,
+  getAllCitationsByPostID,
   getAllCitedOnByTokenID,
 } from '../services/CitationService'
 import ArgumentsView from './ArgumentsView'
@@ -46,10 +47,11 @@ enum CITATION_VIEWS {
 }
 
 const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
+  const { isTxPending } = useContext(GlobalContext)
   const [viewSelected, setViewSelected] = useState(CITATION_VIEWS.OPINIONS)
 
   const [orderBy, setOrderBy] = useState(
-    SortOptionsListingPageOpinions.STAKED.value
+    SortOptionsListingPageOpinions.RATING.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
   const [nameSearch, setNameSearch] = useState('')
@@ -61,14 +63,14 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
     )
       return
 
-    const latestOpinions = await getLatestOpinionsAboutNFTForTable({
-      tokenID: postID,
+    const latestOpinions = await getAllTwitterOpinions({
+      ratedPostID: postID,
       skip,
       limit: numTokens,
       orderBy: orderBy,
       orderDirection,
-      filterTokens: null,
       search: nameSearch,
+      latest: true,
     })
     return latestOpinions || []
   }
@@ -80,8 +82,8 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
     )
       return
 
-    const latestCitations = await getAllCitationsByTokenID({
-      tokenID: postID,
+    const latestCitations = await getAllCitationsByPostID({
+      postID,
       latest: true,
       skip,
       limit: numTokens,
@@ -115,7 +117,15 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
     // refetch: refetchOpinions,
     hasNextPage: canFetchMoreOpinions,
   } = useInfiniteQuery(
-    ['opinions', orderBy, orderDirection, nameSearch, viewSelected],
+    [
+      'opinions',
+      orderBy,
+      orderDirection,
+      nameSearch,
+      viewSelected,
+      isTxPending,
+      postID,
+    ],
     ({ pageParam = 0 }) => opinionsQueryFunction(TOKENS_PER_PAGE, pageParam),
     infiniteQueryConfig
   )
@@ -135,6 +145,8 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
       orderDirection,
       nameSearch,
       viewSelected,
+      isTxPending,
+      postID,
     ],
     ({ pageParam = 0 }) => citationsQueryFunction(TOKENS_PER_PAGE, pageParam),
     infiniteQueryConfig
@@ -149,7 +161,15 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
     // refetch: refetchCitedBy,
     hasNextPage: canFetchMoreCitedBy,
   } = useInfiniteQuery(
-    ['cited-by', orderBy, orderDirection, nameSearch, viewSelected],
+    [
+      'cited-by',
+      orderBy,
+      orderDirection,
+      nameSearch,
+      viewSelected,
+      isTxPending,
+      postID,
+    ],
     ({ pageParam = 0 }) => citedByQueryFunction(TOKENS_PER_PAGE, pageParam),
     infiniteQueryConfig
   )
@@ -174,7 +194,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
       <div className="mb-4 flex justify-center items-center space-x-3">
         <button
           onClick={() => {
-            headerClicked(SortOptionsListingPageOpinions.STAKED.value)
+            headerClicked(SortOptionsListingPageOpinions.RATING.value)
             setViewSelected(CITATION_VIEWS.OPINIONS)
           }}
           className={classNames(
@@ -189,7 +209,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
 
         <button
           onClick={() => {
-            headerClicked(SortOptionsHomePostsTable.MARKET_INTEREST.value)
+            headerClicked(SortOptionsHomePostsTable.LATEST_RATINGS_COUNT.value)
             setViewSelected(CITATION_VIEWS.CITATIONS)
           }}
           className={classNames(
@@ -225,6 +245,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
             citationPairs={citationPairs}
             canFetchMoreCitations={canFetchMoreCitations}
             fetchMoreCitations={fetchMoreCitations}
+            key={postID}
           />
 
           <ArgumentsViewMobile
@@ -232,6 +253,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
             citationPairs={citationPairs}
             canFetchMoreCitations={canFetchMoreCitations}
             fetchMoreCitations={fetchMoreCitations}
+            key={postID}
           />
         </>
       )}
@@ -248,6 +270,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
           setNameSearch={setNameSearch}
           headerClicked={headerClicked}
           fetchMoreOpinions={fetchMoreOpinions}
+          key={postID}
         />
       )}
 
@@ -256,6 +279,7 @@ const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
           citedByPairs={citedByPairs}
           canFetchMoreCitedBy={canFetchMoreCitedBy}
           fetchMoreCitedBy={fetchMoreCitedBy}
+          key={postID}
         />
       )}
     </div>

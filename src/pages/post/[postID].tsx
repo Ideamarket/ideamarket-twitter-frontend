@@ -1,46 +1,32 @@
 import { useQuery } from 'react-query'
-import {
-  A,
-  DefaultLayout,
-  Tooltip,
-  WalletModal,
-  WatchingStar,
-} from 'components'
+import { A, DefaultLayout, WatchingStar } from 'components'
 import { GetServerSideProps } from 'next'
-import ModalService from 'components/modals/ModalService'
 import ListingSEO from 'components/listing-page/ListingSEO'
 import { ReactElement, useContext, useEffect, useState } from 'react'
 import {
   formatNumberInt,
   formatNumberWithCommasAsThousandsSerperator,
 } from 'utils'
-import { ExternalLinkIcon, ShareIcon } from '@heroicons/react/outline'
+import { ShareIcon } from '@heroicons/react/outline'
 import { getURLMetaData } from 'actions/web2/getURLMetaData'
-import { useWalletStore } from 'store/walletStore'
-import { GlobalContext } from 'lib/GlobalContext'
 import ListingContent from 'components/tokens/ListingContent'
-import RateModal from 'components/trade/RateModal'
 import copy from 'copy-to-clipboard'
 import { getURL } from 'utils/seo-constants'
 import toast from 'react-hot-toast'
 import classNames from 'classnames'
-import {
-  getPostByTokenID,
-  IdeamarketPost,
-} from 'modules/posts/services/PostService'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
 import CitationsDataOfPost from 'modules/citations/components/CitationsDataOfPost'
 import OpenRateModal from 'modules/ratings/components/OpenRateModal'
-import { getIMORatingColors } from 'utils/display/DisplayUtils'
-import { NETWORK } from 'store/networks'
+import { getTwitterPostByPostID } from 'modules/posts/services/TwitterPostService'
+import { GlobalContext } from 'lib/GlobalContext'
 
-const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
-  const { data: token, refetch } = useQuery(['single-post', rawTokenId], () =>
-    getPostByTokenID({ tokenID: rawTokenId })
+const TokenDetails = ({ postID }: { postID: string }) => {
+  const { isTxPending } = useContext(GlobalContext)
+  const { data: imPost /*refetch*/ } = useQuery(
+    ['single-post', postID, isTxPending],
+    () => getTwitterPostByPostID({ postID })
   )
-
-  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
 
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -53,10 +39,10 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     //   document.head.appendChild(s)
     // }
 
-    // const timeout = setTimeout(
-    //   () => (window as any)?.twttr?.widgets?.load(),
-    //   3000
-    // ) // Load tweets
+    const timeout = setTimeout(
+      () => (window as any)?.twttr?.widgets?.load(),
+      1000
+    ) // Load tweets
 
     // initializeTwitterAPI()
 
@@ -70,50 +56,39 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
     window.addEventListener('scroll', handleElementDisplay)
 
     return () => {
-      // clearTimeout(timeout)
+      clearTimeout(timeout)
       window.removeEventListener('scroll', handleElementDisplay)
     }
-  }, [rawTokenId])
+  }, [postID])
 
-  const { minterAddress } = (token || {}) as any
+  const { minterAddress } = (imPost || {}) as any
 
   const displayUsernameOrWallet = convertAccountName(
-    token?.minterToken?.username || minterAddress
+    // imPost?.minterToken?.username || minterAddress
+    'test'
   )
-  const usernameOrWallet = token?.minterToken?.username || minterAddress
+  // const usernameOrWallet = imPost?.minterToken?.username || minterAddress
+  const usernameOrWallet = 'test'
 
-  const url = token?.url
+  const url = imPost?.content
 
   const { data: urlMetaData } = useQuery([url], () => getURLMetaData(url))
 
   const copyListingPageURL = () => {
-    const url = `${getURL()}/post/${token?.tokenID}`
+    const url = `${getURL()}/post/${imPost?.postID}`
     copy(url)
     toast.success('Copied listing page URL')
   }
 
-  const onRateClicked = (token: IdeamarketPost, urlMetaData: any) => {
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, { imPost: token, urlMetaData }, refetch)
-      })
-      ModalService.open(WalletModal)
-    } else {
-      ModalService.open(RateModal, { imPost: token, urlMetaData }, refetch)
-    }
-  }
-
-  const postIncome = token?.totalRatingsCount * 0.001
-
   return (
     <div className=" mx-auto">
-      <ListingSEO tokenName={rawTokenId} rawTokenName={rawTokenId} />
+      <ListingSEO tokenName={postID} rawTokenName={postID} />
 
       <div className="max-w-[78rem] px-5 md:px-0 mt-10 mx-0 md:mx-5 xl:mx-auto text-black/[.5]">
         <A href="/" className="hover:text-blue-600">
-          Market
+          Home
         </A>{' '}
-        / Listings
+        / Posts
       </div>
 
       {/* Start of top section of listing page */}
@@ -124,48 +99,16 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
             <div className="w-full">
               {/* The actual Post card */}
               <div className="relative">
-                <span
-                  className={classNames(
-                    'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200] cursor-pointer hover:text-blue-800'
-                  )}
-                >
-                  <A
-                    href={`https://opensea.io/assets/arbitrum/${
-                      NETWORK.getDeployedAddresses().ideamarketPosts
-                    }/${token?.tokenID}`}
-                  >
-                    Buy this NFT
-                    <ExternalLinkIcon className="w-3 h-3 ml-2" />
-                  </A>
-                </span>
-
                 <A
-                  href={`/post/${token?.tokenID}`}
-                  className={classNames(
-                    'relative block px-8 pt-8 pb-10 bg-[#0857E0]/[0.05] rounded-2xl font-bold mb-2 cursor-pointer'
-                  )}
+                  href={`/post/${imPost?.postID}`}
+                  className="relative block px-8 pt-4 pb-6 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
                 >
-                  <span
-                    className={classNames(
-                      getIMORatingColors(
-                        token?.totalRatingsCount > 0
-                          ? Math.round(token?.averageRating)
-                          : -1
-                      ),
-                      'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
-                    )}
-                  >
-                    {token?.totalRatingsCount > 0
-                      ? Math.round(token?.averageRating) + '%'
-                      : '—'}
-                  </span>
-
-                  <div className="flex items-center whitespace-nowrap text-xs">
+                  {/* <div className="flex items-center whitespace-nowrap text-xs">
                     <div className="relative rounded-full w-5 h-5">
                       <Image
                         className="rounded-full"
                         src={
-                          token?.minterToken?.profilePhoto ||
+                          imPost?.userToken?.twitterProfilePicURL ||
                           '/default-profile-pic.png'
                         }
                         alt=""
@@ -174,7 +117,6 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                       />
                     </div>
 
-                    {/* Post minter IM name/wallet and twitter name */}
                     <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
                       <A
                         className="ml-1 font-medium hover:text-blue-500"
@@ -182,7 +124,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                       >
                         {displayUsernameOrWallet}
                       </A>
-                      {token?.minterToken?.twitterUsername && (
+                      {imPost?.userToken?.twitterUsername && (
                         <A
                           className="flex items-center space-x-1 hover:text-blue-500"
                           href={`/u/${usernameOrWallet}`}
@@ -195,19 +137,20 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                             />
                           </div>
                           <span className="text-xs opacity-50">
-                            @{token?.minterToken?.twitterUsername}
+                            @{imPost?.minterToken?.twitterUsername}
                           </span>
                         </A>
                       )}
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="py-6 border-b font-bold">
                     <ListingContent
-                      imPost={token}
+                      imPost={imPost}
                       page="HomePage"
                       urlMetaData={null}
                       useMetaData={false}
+                      key={imPost?.postID}
                     />
                   </div>
 
@@ -228,7 +171,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                           </div>
                           <div className="font-bold">
                             {formatNumberWithCommasAsThousandsSerperator(
-                              imPost.totalRatingsCount
+                              imPost?.totalRatingsCount
                             )}
                           </div>
                         </div>
@@ -237,32 +180,23 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
                     <div className="w-1/3">
                       <div className="flex justify-start items-center space-x-2">
-                        <div className="relative w-6 h-6">
+                        {/* <div className="relative w-6 h-6">
                           <Image
                             src={'/eye-icon.svg'}
                             alt="eye-icon"
                             layout="fill"
                           />
-                        </div>
+                        </div> */}
 
                         <div>
                           <div className="flex items-center space-x-2">
                             <div className="text-xs text-black/[.5] font-medium">
-                              Hot
+                              # ratings
                             </div>
-                            <Tooltip
-                              className="text-black/[.5] z-[200]"
-                              iconComponentClassNames="w-3"
-                            >
-                              <div className="w-64">
-                                The total amount of IMO staked on all users who
-                                rated a post
-                              </div>
-                            </Tooltip>
                           </div>
                           <div className="font-bold">
                             {formatNumberWithCommasAsThousandsSerperator(
-                              Math.round(token?.marketInterest)
+                              Math.round(imPost?.latestRatingsCount)
                             )}
                           </div>
                         </div>
@@ -271,38 +205,38 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 
                     <div className="w-1/3">
                       <div className="flex justify-start items-center space-x-2">
-                        <div className="relative w-6 h-6">
+                        {/* <div className="relative w-6 h-6">
                           <Image
-                            src={'/income-icon.svg'}
+                            src={'/eye-icon.svg'}
                             alt="eye-icon"
                             layout="fill"
                           />
-                        </div>
+                        </div> */}
 
                         <div>
-                          <div className="text-xs text-black/[.5] font-medium">
-                            Earned
+                          <div className="flex items-center space-x-2">
+                            <div className="text-xs text-black/[.5] font-medium">
+                              Average Rating
+                            </div>
                           </div>
-                          <div>
-                            <span className="font-bold">
-                              {formatNumberWithCommasAsThousandsSerperator(
-                                postIncome.toFixed(3)
-                              )}
-                            </span>
-                            <span className="text-black/[.5] font-bold text-xs">
-                              {' '}
-                              (${token?.incomeInDAI?.toFixed(2)})
-                            </span>
+                          <div className="font-bold">
+                            {imPost?.latestRatingsCount > 0
+                              ? formatNumberWithCommasAsThousandsSerperator(
+                                  Math.round(imPost?.averageRating)
+                                )
+                              : '-'}
                           </div>
                         </div>
                       </div>
                     </div>
+
+                    <div className="w-1/3"></div>
                   </div>
                 </A>
               </div>
 
               <div className="mt-2">
-                <OpenRateModal imPost={token} />
+                <OpenRateModal imPost={imPost as any} />
               </div>
             </div>
           </div>
@@ -318,7 +252,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                     <Image
                       className="rounded-full"
                       src={
-                        token?.minterToken?.profilePhoto ||
+                        imPost?.userToken?.twitterProfilePicURL ||
                         '/default-profile-pic.png'
                       }
                       alt=""
@@ -332,7 +266,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                   >
                     {displayUsernameOrWallet}
                   </A>
-                  {token?.minterToken?.twitterUsername && (
+                  {imPost?.userToken?.twitterUsername && (
                     <A
                       className="flex items-center space-x-1 ml-1 z-50"
                       href={`/u/${usernameOrWallet}`}
@@ -345,7 +279,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
                         />
                       </div>
                       <span className="text-sm opacity-50">
-                        @{token?.minterToken?.twitterUsername}
+                        @{imPost?.userToken?.twitterUsername}
                       </span>
                     </A>
                   )}
@@ -353,7 +287,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
               )}
 
               <ListingContent
-                imPost={token}
+                imPost={imPost}
                 page="ListingPage"
                 urlMetaData={urlMetaData}
                 useMetaData={false}
@@ -365,7 +299,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
             <button
               onClick={(e) => {
                 e.stopPropagation()
-                onRateClicked(token, urlMetaData)
+                // onRateClicked(imPost, urlMetaData)
               }}
               className="flex justify-center items-center w-full h-10 text-base font-medium text-white rounded-lg bg-black/[.8] dark:bg-gray-600 dark:text-gray-300 tracking-tightest-2"
             >
@@ -385,14 +319,14 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
               </button>
 
               <div className="flex justify-center items-center w-10 h-10 border-2 rounded-lg">
-                {token && <WatchingStar token={token} />}
+                {imPost && <WatchingStar token={imPost} />}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <CitationsDataOfPost postID={rawTokenId} />
+      <CitationsDataOfPost postID={postID} key={postID} />
 
       {/* Block at bottom of mobile screen before scroll */}
       <div
@@ -408,10 +342,10 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
           </div>
           <div className="flex items-center">
             <span className="text-blue-600 font-semibold text-xl mr-1">
-              {formatNumberInt(token?.averageRating)}
+              {formatNumberInt(imPost?.averageRating)}
             </span>
             <span className="text-sm text-black/[.5]">
-              ({token?.latestRatingsCount})
+              ({imPost?.latestRatingsCount})
             </span>
           </div>
         </div>
@@ -422,7 +356,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
             <div className="relative w-6 h-6">
               <Image src={'/people-icon.svg'} alt="people-icon" layout="fill" />
             </div>
-            {token?.totalRatingsCount}
+            {imPost?.totalRatingsCount}
           </div>
         </div>
       </div>
@@ -433,7 +367,7 @@ const TokenDetails = ({ rawTokenId }: { rawTokenId: string }) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
-      rawTokenId: context.query.tokenId,
+      postID: context.query.postID,
     },
   }
 }

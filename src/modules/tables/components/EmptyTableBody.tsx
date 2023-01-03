@@ -13,7 +13,7 @@ const EmptyTableBody = () => {
         href="https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0xB41bd4C99dA73510d9e081C5FADBE7A27Ac1F814"
         className="mt-4 text-black underline hover:text-blue-500 cursor-pointer font-medium"
       >
-        <span className="underline">Buy IMO on SushiSwap</span>
+        <span className="underline">Buy $IMO on SushiSwap</span>
         <ExternalLinkIcon className="w-5 inline ml-1 mb-1" />
       </A>
 

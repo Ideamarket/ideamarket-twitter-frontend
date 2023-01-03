@@ -98,8 +98,8 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
 
   const copyProfileURL = () => {
     const url = `${getURL()}/u/${
-      userData && userData?.username
-        ? userData?.username
+      userData && userData?.twitterUsername
+        ? userData?.twitterUsername
         : userData?.walletAddress
     }`
     copy(url)
@@ -126,7 +126,9 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
           <div className="w-3/4 bg-black border border-[#1d1d1d] flex items-center p-4 rounded-lg">
             <div className="relative w-20 h-20 rounded-full bg-gray-400 overflow-hidden">
               <Image
-                src={userData?.profilePhoto || '/default-profile-pic.png'}
+                src={
+                  userData?.twitterProfilePicURL || '/default-profile-pic.png'
+                }
                 alt="Profile photo"
                 layout="fill"
                 objectFit="cover"
@@ -179,7 +181,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
               )}
 
               {/* Wallet */}
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <WalletIcon className="stroke-current text-white w-5 h-full mr-3" />
                 <div className="flex items-center rounded-xl border border-[#1d1d1d] px-3 py-1">
                   <A
@@ -194,14 +196,14 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                     <ExternalLinkIcon className="w-4 text-[#7f7f7f]" />
                   </A>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 
           {/* Right container */}
           <div className="w-56">
             {/* Upper box: staked, stake, holders */}
-            <div className="bg-black border border-[#1d1d1d] flex flex-col rounded-lg">
+            {/* <div className="bg-black border border-[#1d1d1d] flex flex-col rounded-lg">
               <div className="flex items-start p-4">
                 <span className="text-sm opacity-70 mr-6">STAKED</span>
                 <span>
@@ -227,7 +229,7 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                   ) || 0}
                 </span>
               </div>
-            </div>
+            </div> */}
 
             {/* Share and settings button */}
             <div className="h-12 ml-auto mt-2 flex items-start">
@@ -261,7 +263,9 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
           <div className="w-3/4 bg-black border border-[#1d1d1d] flex items-start p-4 rounded-lg">
             <div className="relative w-20 h-20 rounded-full bg-gray-400 overflow-hidden">
               <Image
-                src={userData?.profilePhoto || '/default-profile-pic.png'}
+                src={
+                  userData?.twitterProfilePicURL || '/default-profile-pic.png'
+                }
                 alt="Profile photo"
                 layout="fill"
                 objectFit="cover"
@@ -394,7 +398,9 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
           <div className="w-full bg-black border border-[#1d1d1d] flex flex-col items-start p-4 rounded-lg">
             <div className="relative w-20 h-20 mx-auto rounded-full bg-gray-400 overflow-hidden">
               <Image
-                src={userData?.profilePhoto || '/default-profile-pic.png'}
+                src={
+                  userData?.twitterProfilePicURL || '/default-profile-pic.png'
+                }
                 alt="Profile photo"
                 layout="fill"
                 objectFit="cover"

@@ -1,24 +1,21 @@
 import { Transition } from '@headlessui/react'
-import A from 'components/A'
 import { getNavbarConfig } from './constants'
 import NavItem from './NavItem'
-// import NavThemeButton from './NavThemeButton'
 
 type Props = {
   isMobileNavOpen: boolean
   user: any
-  account: string
 }
 
-const MobileNavItems = ({ isMobileNavOpen, user, account }: Props) => {
+const MobileNavItems = ({ isMobileNavOpen, user }: Props) => {
   let navbarConfig = getNavbarConfig(user)
 
-  const userNameOrWallet =
-    user && user.username
-      ? user.username
-      : user?.walletAddress
-      ? user?.walletAddress
-      : account
+  // const userNameOrWallet =
+  //   user && user.username
+  //     ? user.username
+  //     : user?.walletAddress
+  //     ? user?.walletAddress
+  //     : account
 
   return (
     <div className="absolute left-0 right-0 z-[900]">
@@ -37,7 +34,7 @@ const MobileNavItems = ({ isMobileNavOpen, user, account }: Props) => {
             <NavItem menuItem={menuItem} key={i} />
           ))}
 
-          {account && (
+          {/* {account && (
             <div className="relative bg-white">
               <A
                 className="px-3 py-2 text-sm font-bold cursor-pointer hover:text-gray-500 active:text-gray-800"
@@ -46,7 +43,7 @@ const MobileNavItems = ({ isMobileNavOpen, user, account }: Props) => {
                 <span>My Profile</span>
               </A>
             </div>
-          )}
+          )} */}
 
           {/* <div className="flex px-1 mt-5">
             <NavThemeButton />

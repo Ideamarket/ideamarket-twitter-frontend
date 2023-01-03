@@ -7,10 +7,12 @@ type Response = {
 /**
  *
  */
-export const initiateVerification = async (jwt: string): Promise<Response> => {
+export const initiateTwitterLoginAPI = async (
+  jwt: string
+): Promise<Response> => {
   try {
     const response = await client.post(
-      `/twitter-verification/initiateVerification`,
+      `/twitter-user-token/initiateTwitterLogin`,
       {},
       {
         headers: {

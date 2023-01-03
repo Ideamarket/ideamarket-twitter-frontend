@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState } from 'react'
 import Image from 'next/image'
 
-import WalletGreenIcon from '../../assets/wallet-green.svg'
 import { useWeb3React } from '@web3-react/core'
 import { GlobalContext } from 'lib/GlobalContext'
 import ModalService from 'components/modals/ModalService'
@@ -11,6 +10,7 @@ import WalletIcon from '../../assets/wallet.svg'
 import { ProfileTooltip } from 'components/nav-menu/ProfileTooltip'
 import useOnClickOutside from 'utils/useOnClickOutside'
 import ConnectWalletTooltip from 'components/nav-menu/ConnectWalletTooltip'
+import { twitterLogin } from 'modules/user-market/services/TwitterUserService'
 
 export default function WalletStatusWithConnectButton() {
   const { active, account } = useWeb3React()
@@ -27,22 +27,21 @@ export default function WalletStatusWithConnectButton() {
     ModalService.open(WalletModal)
   }
 
-  const [connectWalletVisibility, setConnectWalletVisibility] =
-    useState<Boolean>(false)
+  const [connectWalletVisibility] = useState<Boolean>(false)
   const [timerId, setTimerId] = useState(null)
 
-  const onMouseLeaveConnectWallet = () => {
-    setTimerId(
-      setTimeout(() => {
-        setConnectWalletVisibility(false)
-      }, 200)
-    )
-  }
+  // const onMouseLeaveConnectWallet = () => {
+  //   setTimerId(
+  //     setTimeout(() => {
+  //       setConnectWalletVisibility(false)
+  //     }, 200)
+  //   )
+  // }
 
-  const onMouseEnterConnectWallet = () => {
-    timerId && clearTimeout(timerId)
-    setConnectWalletVisibility(true)
-  }
+  // const onMouseEnterConnectWallet = () => {
+  //   timerId && clearTimeout(timerId)
+  //   setConnectWalletVisibility(true)
+  // }
 
   const [profileTooltipVisibility, setProfileTooltipVisibility] =
     useState<Boolean>(false)
@@ -57,25 +56,25 @@ export default function WalletStatusWithConnectButton() {
 
   const onMouseEnterProfileTooltip = () => {
     timerId && clearTimeout(timerId)
-    active && setProfileTooltipVisibility(true)
+    user?.twitterUsername && setProfileTooltipVisibility(true)
   }
 
   return (
     <>
       {/* Desktop */}
       <div className="hidden h-full md:flex flex-row items-center px-2 cursor-pointer justify-self-end">
-        {!active && (
+        {!user?.twitterUsername && (
           <>
             {connectWalletVisibility && (
               <div className="fixed h-screen z-[300] inset-0 bg-gray-500 bg-opacity-75"></div>
             )}
             <div
-              // onClick={openWalletModal}
-              onMouseEnter={onMouseEnterConnectWallet}
-              onMouseLeave={onMouseLeaveConnectWallet}
-              className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-brand-blue rounded-xl"
+              onClick={() => twitterLogin(null)}
+              // onMouseEnter={onMouseEnterConnectWallet}
+              // onMouseLeave={onMouseLeaveConnectWallet}
+              className="relative h-full z-[500] flex justify-center items-center px-4 py-2 ml-2 text-xs font-bold text-white rounded-xl bg-[#1DA1F2] rounded-xl"
             >
-              Connect Wallet
+              Connect Twitter
               {connectWalletVisibility && (
                 <div className="absolute top-0 mt-12 right-0 mb-1 text-sm text-black overflow-hidden cursor-default">
                   <ConnectWalletTooltip />
@@ -85,7 +84,7 @@ export default function WalletStatusWithConnectButton() {
           </>
         )}
 
-        {active && (
+        {user && user?.twitterUsername && (
           <div
             onMouseEnter={onMouseEnterProfileTooltip}
             onMouseLeave={onMouseLeaveProfileTooltip}
@@ -100,9 +99,16 @@ export default function WalletStatusWithConnectButton() {
               onClick={openWalletModal}
               className="flex items-center border rounded-3xl px-3 py-2"
             >
-              <WalletGreenIcon className="w-6 h-6" />
+              <div className="relative w-6 h-6">
+                <Image
+                  src={'/twitter-solid-blue.svg'}
+                  alt="twitter-solid-blue-icon"
+                  layout="fill"
+                />
+              </div>
+
               <div className="ml-3 text-gray-400 align-middle whitespace-nowrap hidden md:flex">
-                {account.slice(0, 6)}...{account.slice(-4)}
+                {user?.twitterUsername}
               </div>
             </div>
 
@@ -110,9 +116,7 @@ export default function WalletStatusWithConnectButton() {
               href={
                 active
                   ? `/u/${
-                      user && user.username
-                        ? user.username
-                        : user?.walletAddress
+                      user && user.twitterUsername ? user.twitterUsername : ''
                     }`
                   : '#'
               }
@@ -123,7 +127,9 @@ export default function WalletStatusWithConnectButton() {
               >
                 <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
                   <Image
-                    src={user?.profilePhoto || '/default-profile-pic.png'}
+                    src={
+                      user?.twitterProfilePicURL || '/default-profile-pic.png'
+                    }
                     alt="Profile photo"
                     layout="fill"
                     objectFit="cover"
@@ -162,7 +168,7 @@ export default function WalletStatusWithConnectButton() {
               className="ml-3 w-8 h-8 relative rounded-full bg-gray-400"
             >
               <Image
-                src={user?.profilePhoto || '/default-profile-pic.png'}
+                src={user?.twitterProfilePicURL || '/default-profile-pic.png'}
                 alt="Profile photo"
                 layout="fill"
                 objectFit="cover"

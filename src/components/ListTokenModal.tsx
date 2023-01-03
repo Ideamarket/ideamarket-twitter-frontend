@@ -34,7 +34,7 @@ export default function ListTokenModal({ close }: { close: () => void }) {
 
   const [tokenName, setTokenName] = useState('')
   const [isValidTokenName, setIsValidTokenName] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage] = useState('')
 
   const [isWantBuyChecked, setIsWantBuyChecked] = useState(false)
   const [buyPayWithAddress, setBuyPayWithAddress] = useState(undefined)
@@ -100,13 +100,9 @@ export default function ListTokenModal({ close }: { close: () => void }) {
       selectedMarket.name
     ).convertUserInputToTokenName(userInput)
 
-    const { isValid, isAlreadyOnChain, finalTokenValue } =
-      await verifyTokenName(nameBeforeAPI)
+    const { isValid, finalTokenValue } = await verifyTokenName(nameBeforeAPI)
 
     setTokenName(finalTokenValue)
-
-    if (isAlreadyOnChain) setErrorMessage('This token is already listed')
-    else setErrorMessage('')
 
     setIsValidTokenName(isValid)
   }

@@ -1,31 +1,25 @@
-import { WalletModal } from 'components'
+import InitTwitterLoginModal from 'components/account/InitTwitterLoginModal'
 import ModalService from 'components/modals/ModalService'
-import RateModal from 'components/trade/RateModal'
 import { GlobalContext } from 'lib/GlobalContext'
+import NewOpinionModal from 'modules/posts/components/NewOpinionModal'
 import { IdeamarketPost } from 'modules/posts/services/PostService'
+import { IdeamarketTwitterPost } from 'modules/posts/services/TwitterPostService'
 import Slider, { Handle } from 'rc-slider'
 import { useContext } from 'react'
-import { useWalletStore } from 'store/walletStore'
 
 type Props = {
-  imPost: IdeamarketPost
+  imPost: IdeamarketPost | IdeamarketTwitterPost
 }
 
 const OpenRateModal = ({ imPost }: Props) => {
-  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
+  const { jwtToken } = useContext(GlobalContext)
 
   const onRateDragged = (draggedPost: any, inputValue: number) => {
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, {
-          imPost: draggedPost,
-          defaultRating: inputValue,
-        })
-      })
-      ModalService.open(WalletModal)
+    if (!jwtToken) {
+      ModalService.open(InitTwitterLoginModal)
     } else {
-      ModalService.open(RateModal, {
-        imPost: draggedPost,
+      ModalService.open(NewOpinionModal, {
+        defaultRatedPost: draggedPost,
         defaultRating: inputValue,
       })
     }

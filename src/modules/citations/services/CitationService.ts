@@ -1,26 +1,26 @@
-import { apiGetCitationsByTokenID } from 'actions/web2/citations/apiGetCitationsByTokenID'
+import { apiGetCitationsByPostID } from 'actions/web2/citations/apiGetCitationsByPostID'
 import { apiGetCitedOnByTokenID } from 'actions/web2/citations/apiGetCitedOnByTokenID'
-import { getETHPrice } from 'modules/external-web3/services/EtherscanService'
 import {
   formatApiResponseToPost,
   IdeamarketPost,
 } from 'modules/posts/services/PostService'
+import { formatApiResponseToTwitterPost } from 'modules/posts/services/TwitterPostService'
 
 /**
  * Call API to get all citations and then convert data to format consistent across entire frontend
  */
-export async function getAllCitationsByTokenID({
-  tokenID,
+export async function getAllCitationsByPostID({
+  postID,
   latest,
   skip,
   limit,
   orderBy,
   orderDirection,
 }): Promise<IdeamarketPost[]> {
-  if (!tokenID) return null
+  if (!postID) return null
 
-  const allCitations = await apiGetCitationsByTokenID({
-    tokenID,
+  const allCitations = await apiGetCitationsByPostID({
+    postID,
     latest,
     skip,
     limit,
@@ -28,15 +28,9 @@ export async function getAllCitationsByTokenID({
     orderDirection,
   })
 
-  const exchangeRate = await getETHPrice()
-
   return await Promise.all(
     allCitations.map(async (post) => {
-      const postIncome = post.totalRatingsCount * 0.001
-      // Caclulate the DAI worth of the input tokens by finding this product
-      const product = postIncome * exchangeRate
-      post.incomeInDAI = product
-      return formatApiResponseToPost(post)
+      return formatApiResponseToTwitterPost(post)
     })
   )
 }

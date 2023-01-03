@@ -2,46 +2,29 @@ import { DefaultLayout } from 'components'
 import { Toaster } from 'react-hot-toast'
 import { ProfileWallet } from 'components/account'
 import ProfileGeneralInfo from 'components/account/ProfileGeneralInfo'
-import { ReactElement, useContext, useEffect } from 'react'
+import { ReactElement, useContext } from 'react'
 import { useQuery } from 'react-query'
-import { isAddressValid } from 'lib/utils/web3-eth'
 import { useRouter } from 'next/router'
-import { getAccount } from 'actions/web2/user-market/apiUserActions'
+import { getTwitterUserToken } from 'actions/web2/user-market/apiUserActions'
 import BgBanner from 'components/BgBanner'
-import { openVerifyModalAfterLogin } from 'modules/user-market/services/VerificationService'
 import { GlobalContext } from 'lib/GlobalContext'
+import { IdeamarketTwitterUser } from 'modules/user-market/services/TwitterUserService'
 
 const PublicProfile = () => {
   const { isTxPending } = useContext(GlobalContext)
   const router = useRouter()
-  const { username, wasVerificationSuccess = null } = router.query // This can be DB username or onchain wallet address
+  const { username } = router.query // This can be DB username or onchain wallet address
 
-  const { data: userData } = useQuery<any>(
+  const { data: userData } = useQuery<IdeamarketTwitterUser>(
     [{ username }],
     () =>
-      getAccount({
-        username: isAddressValid(username as string) ? null : username,
-        walletAddress: username,
+      getTwitterUserToken({
+        twitterUsername: username,
       }),
     {
       enabled: !isTxPending,
     }
   )
-
-  // Create user data object for wallet that is not in DB
-  const nonDBUserData = {
-    walletAddress: isAddressValid(username as string) ? username : null,
-  }
-
-  const finalUserData = userData ? userData : nonDBUserData
-
-  // This logic is for verification
-  useEffect(() => {
-    // wasVerificationSuccess mainly used to know if just came from verifying
-    if (finalUserData && wasVerificationSuccess) {
-      openVerifyModalAfterLogin(Boolean(finalUserData?.twitterUsername))
-    }
-  }, [finalUserData, finalUserData?.twitterUsername, wasVerificationSuccess])
 
   return (
     <div className="font-inter">
@@ -51,8 +34,8 @@ const PublicProfile = () => {
       <div className="relative z-10 h-full pt-8 pb-5 text-white md:pt-16">
         <div className="mx-auto md:px-4 md:max-w-304">
           <Toaster />
-          <ProfileGeneralInfo userData={finalUserData} />
-          <ProfileWallet userData={finalUserData} />
+          <ProfileGeneralInfo userData={userData} />
+          <ProfileWallet userData={userData} />
         </div>
       </div>
     </div>

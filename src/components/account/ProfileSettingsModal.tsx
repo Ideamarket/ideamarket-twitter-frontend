@@ -6,7 +6,7 @@ import { MdOutlineAddPhotoAlternate } from 'react-icons/md'
 import { GlobalContext } from 'lib/GlobalContext'
 import { useEffect } from 'react'
 import { CircleSpinner } from 'components'
-import { UserProfile } from 'types/customTypes'
+import { TwitterUserProfile } from 'types/customTypes'
 import ModalService from 'components/modals/ModalService'
 import EmailVerificationCode from './EmailVerificationCode'
 import classNames from 'classnames'
@@ -38,13 +38,13 @@ const reducer = (state, action: any) => {
       return state
   }
 }
-const initialState: UserProfile = {
+const initialState: TwitterUserProfile = {
   name: '',
   username: '',
   bio: '',
   email: '',
   walletAddress: '',
-  profilePhoto: undefined,
+  twitterProfilePicURL: '',
 }
 
 export default function ProfileSettingsModal({ close }: { close: () => void }) {

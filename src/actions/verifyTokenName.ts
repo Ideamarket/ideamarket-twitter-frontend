@@ -1,24 +1,21 @@
-import { getPostByContent } from 'modules/posts/services/PostService'
+import { getTwitterPostByURL } from 'modules/posts/services/TwitterPostService'
 
 export default async function verifyTokenName(url: string) {
   if (!url || url === '')
     return {
       isValid: false,
-      isAlreadyGhostListed: false,
-      isAlreadyOnChain: false,
+      isAlreadyPosted: false,
       finalTokenValue: '',
     }
 
-  const existingListing = await getPostByContent({ content: url })
+  const existingPost = await getTwitterPostByURL({ content: url })
 
-  const isAlreadyOnChain = Boolean(existingListing)
-
-  // Is valid if 1) canonical is not null 2) not already on chain
-  const isValid = url && !isAlreadyOnChain
+  const isAlreadyPosted = Boolean(existingPost)
 
   return {
-    isValid,
-    isAlreadyOnChain,
-    finalTokenValue: url, // TODO
+    isValid: true,
+    isAlreadyPosted,
+    existingPost,
+    finalTokenValue: url,
   }
 }

@@ -1,4 +1,4 @@
-import { completeVerification } from 'actions/web2/twitter/completeVerification'
+import { completeTwitterLogin } from 'actions/web2/twitter-auth/completeTwitterLogin'
 import { CircleSpinner, DefaultLayout } from 'components'
 import { GetServerSideProps } from 'next'
 import { ReactElement, useContext, useEffect } from 'react'
@@ -22,12 +22,8 @@ const TwitterVerifyRedirect = ({
   const { jwtToken, user } = useContext(GlobalContext)
 
   useEffect(() => {
-    const completeVerificationAndRedirect = async () => {
-      const response = await completeVerification(
-        oauth_token,
-        oauth_verifier,
-        jwtToken
-      )
+    const completeTwitterLoginAndRedirect = async () => {
+      const response = await completeTwitterLogin(oauth_token, oauth_verifier)
 
       const wasVerificationSuccess = Boolean(response?.verificationCompleted)
 
@@ -48,7 +44,7 @@ const TwitterVerifyRedirect = ({
       (user?.username || user?.walletAddress) &&
       ((oauth_token && oauth_verifier) || denied)
     ) {
-      completeVerificationAndRedirect()
+      completeTwitterLoginAndRedirect()
     }
   }, [
     jwtToken,

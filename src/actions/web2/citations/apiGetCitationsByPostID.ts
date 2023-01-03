@@ -1,21 +1,21 @@
 import client from 'lib/axios'
 
 /**
- * Get citations that are for and against this tokenID.=
+ * Get citations that are for and against this postID.=
  */
-export const apiGetCitationsByTokenID = async ({
-  tokenID,
+export const apiGetCitationsByPostID = async ({
+  postID,
   latest,
   skip,
   limit,
   orderBy,
   orderDirection,
 }) => {
-  if (!tokenID) return []
+  if (!postID) return []
 
   try {
     const params = {
-      tokenID,
+      postID,
       latest,
       skip,
       limit,
@@ -23,13 +23,13 @@ export const apiGetCitationsByTokenID = async ({
       orderDirection,
     }
 
-    const response = await client.get(`/post/citations`, {
+    const response = await client.get(`/twitter-post/citations`, {
       params,
     })
 
     return response?.data?.data?.citations
   } catch (error) {
-    console.error(`Could not get citations for this tokenID: ${tokenID}`, error)
+    console.error(`Could not get citations for this postID: ${postID}`, error)
     return null
   }
 }

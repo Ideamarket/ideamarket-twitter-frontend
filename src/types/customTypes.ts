@@ -9,15 +9,18 @@ export type SignedAddress = {
   signature: string
 }
 
-export type UserProfile = {
+export type TwitterUserProfile = {
+  id?: string
+  twitterUserId?: string
+  twitterUsername?: string
+
   name?: string
   username?: string
   bio?: string
-  profilePhoto?: string
+  twitterProfilePicURL?: string
   email?: string
   walletAddress?: string
   visibilityOptions?: VisibilityOptions
-  twitterUsername?: string
 }
 
-export type UserPublicProfile = Partial<{ profilePhoto: string }>
+export type UserPublicProfile = Partial<{ twitterProfilePicURL: string }>

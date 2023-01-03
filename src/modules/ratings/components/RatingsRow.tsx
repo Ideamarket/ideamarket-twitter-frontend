@@ -1,8 +1,5 @@
 import { A } from 'components'
-import { IdeaToken } from 'store/ideaMarketsStore'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
-import { useQuery } from 'react-query'
-import { getURLMetaData } from 'actions/web2/getURLMetaData'
 import ListingContent from 'components/tokens/ListingContent'
 import {
   getListingTypeFromIDTURL,
@@ -15,11 +12,12 @@ import { SortOptionsAccountOpinions } from 'utils/tables'
 import classNames from 'classnames'
 import { useState } from 'react'
 import CitationCard from './CitationCard'
+import { IdeamarketTwitterPost } from 'modules/posts/services/TwitterPostService'
 
 type Props = {
   opinion: any
   refetch: () => void
-  onRateClicked: (idt: IdeaToken, urlMetaData: any) => void
+  onRateClicked: (idt: IdeamarketTwitterPost) => void
   lastElementRef?: (node) => void
 }
 
@@ -29,10 +27,6 @@ export default function RatingsRow({
   onRateClicked,
   lastElementRef,
 }: Props) {
-  const { data: urlMetaData } = useQuery([opinion?.url], () =>
-    getURLMetaData(opinion?.url)
-  )
-
   // selected citation object
   const [selectedCitationForRow, setSelectedCitationForRow] = useState(
     opinion?.citations[0] && opinion?.citations?.length > 0
@@ -54,7 +48,7 @@ export default function RatingsRow({
   const onRowCitationChanged = (isLeft: boolean) => {
     const oldCitationIndex = opinion?.citations.findIndex(
       (citation) =>
-        citation.citation.tokenID === selectedCitationForRow.citation.tokenID
+        citation.citation.postID === selectedCitationForRow.citation.postID
     )
 
     let newCitationIndex = null
@@ -84,7 +78,7 @@ export default function RatingsRow({
       {/* Desktop row */}
       <div className="hidden relative md:block py-6">
         {/* Makes so entire row can be clicked to go to Post page */}
-        <Link href={`/post/${opinion?.tokenID}`}>
+        <Link href={`/post/${opinion?.ratedPostID}`}>
           <a
             className="absolute top-0 left-0 w-full h-full z-40"
             // title="open in new tab"
@@ -99,7 +93,7 @@ export default function RatingsRow({
           {/* Icon and Name */}
           <div className="w-[40%] relative pl-6 pr-10">
             <div className="relative flex items-start w-3/4 mx-auto md:w-full text-gray-900 dark:text-gray-200">
-              <div className="mr-4 flex flex-col items-center space-y-2">
+              {/* <div className="mr-4 flex flex-col items-center space-y-2">
                 <div className="relative rounded-full w-6 h-6">
                   <Image
                     className="rounded-full"
@@ -113,11 +107,10 @@ export default function RatingsRow({
                   />
                 </div>
 
-                {/* <WatchingStar token={token} /> */}
-              </div>
+              </div> */}
 
               <div className="pr-6 w-full">
-                <div className="flex items-center space-x-1 text-black pb-2 flex-wrap">
+                {/* <div className="flex items-center space-x-1 text-black pb-2 flex-wrap">
                   <A
                     className="font-bold hover:text-blue-600 z-50"
                     href={`/u/${usernameOrWallet}`}
@@ -141,18 +134,13 @@ export default function RatingsRow({
                       </span>
                     </A>
                   )}
-                </div>
+                </div> */}
 
                 <ListingContent
                   imPost={opinion}
                   page="HomePage"
-                  urlMetaData={urlMetaData}
-                  useMetaData={
-                    getListingTypeFromIDTURL(opinion?.url) !==
-                      LISTING_TYPE.TWEET &&
-                    getListingTypeFromIDTURL(opinion?.url) !==
-                      LISTING_TYPE.TEXT_POST
-                  }
+                  urlMetaData={null}
+                  useMetaData={false}
                 />
               </div>
             </div>
@@ -204,7 +192,7 @@ export default function RatingsRow({
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
-                      onRateClicked(opinion, urlMetaData)
+                      onRateClicked(opinion)
                     }}
                     className="flex justify-center items-center w-full mr-10 h-10 text-base font-bold rounded-lg border-brand-blue text-white bg-brand-blue hover:bg-blue-800 z-50"
                   >
@@ -299,7 +287,7 @@ export default function RatingsRow({
           <ListingContent
             imPost={opinion}
             page="MobileAccountPage"
-            urlMetaData={urlMetaData}
+            urlMetaData={null}
             useMetaData={
               getListingTypeFromIDTURL(opinion?.url) !== LISTING_TYPE.TWEET
             }
@@ -391,7 +379,7 @@ export default function RatingsRow({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              onRateClicked(opinion, urlMetaData)
+              onRateClicked(opinion)
             }}
             className="flex justify-center items-center w-20 h-10 text-base font-bold rounded-lg border-brand-blue text-white bg-brand-blue hover:bg-blue-800"
           >

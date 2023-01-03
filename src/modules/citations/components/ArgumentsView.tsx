@@ -1,20 +1,17 @@
-import { ExternalLinkIcon } from '@heroicons/react/outline'
 import classNames from 'classnames'
-import { A, CircleSpinner, Tooltip } from 'components'
+import { A, CircleSpinner } from 'components'
 import ListingContent from 'components/tokens/ListingContent'
 import { convertAccountName } from 'lib/utils/stringUtil'
-import { IdeamarketPost } from 'modules/posts/services/PostService'
+import { IdeamarketTwitterPost } from 'modules/posts/services/TwitterPostService'
 import OpenRateModal from 'modules/ratings/components/OpenRateModal'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 import Image from 'next/image'
 import { MutableRefObject, useCallback, useRef } from 'react'
-import { NETWORK } from 'store/networks'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
-import { getIMORatingColors } from 'utils/display/DisplayUtils'
 
 type Props = {
   isCitationsDataLoading: boolean
-  citationPairs: IdeamarketPost[]
+  citationPairs: IdeamarketTwitterPost[]
   canFetchMoreCitations: boolean
   fetchMoreCitations: () => void
 }
@@ -66,7 +63,7 @@ const ArgumentsView = ({
 
                 // const isThisPostOverlaySelected =
                 //   activeOverlayPostID &&
-                //   activeOverlayPostID === imPost?.tokenID.toString()
+                //   activeOverlayPostID === imPost?.postID.toString()
 
                 const postIncome = imPost?.totalRatingsCount * 0.001
 
@@ -90,14 +87,14 @@ const ArgumentsView = ({
                           <A
                             href={`https://opensea.io/assets/arbitrum/${
                               NETWORK.getDeployedAddresses().ideamarketPosts
-                            }/${imPost?.tokenID}`}
+                            }/${imPost?.postID}`}
                           >
                             Buy this NFT
                             <ExternalLinkIcon className="w-3 h-3 ml-2" />
                           </A>
                         </span>
                         <A
-                          href={`/post/${imPost?.tokenID}`}
+                          href={`/post/${imPost?.postID}`}
                           className="w-full relative block px-8 pt-8 pb-10 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
                         >
                           <span
@@ -120,7 +117,7 @@ const ArgumentsView = ({
                               <Image
                                 className="rounded-full"
                                 src={
-                                  imPost?.minterToken?.profilePhoto ||
+                                  imPost?.minterToken?.twitterProfilePicURL ||
                                   '/default-profile-pic.png'
                                 }
                                 alt=""
@@ -248,9 +245,7 @@ const ArgumentsView = ({
           <div className="py-3 mt-5 mb-8 flex space-x-10 text-sm text-black/[.5] border-y-2 border-black/[0.05]">
             <div className={classNames(AdvancedPostColWidth, '')}>
               <div className="font-semibold">Post</div>
-              <div className="text-xs italic">
-                Sorted by amount of $IMO staked on all users who rated.
-              </div>
+              <div className="text-xs italic">Sorted by number of ratings.</div>
             </div>
 
             <div className={classNames(AdvancedCitationsColWidth, '')}>
@@ -271,24 +266,13 @@ const ArgumentsView = ({
           {citationPairs &&
             citationPairs.length > 0 &&
             citationPairs.map((imPost, pInd) => {
-              const { minterAddress } = (imPost || {}) as any
+              // const { minterAddress } = (imPost || {}) as any
 
-              const displayUsernameOrWallet = convertAccountName(
-                imPost?.minterToken?.username || minterAddress
-              )
-              const usernameOrWallet =
-                imPost?.minterToken?.username || minterAddress
-
-              // const isThisPostOverlaySelected =
-              //   activeOverlayPostID &&
-              //   activeOverlayPostID === imPost?.tokenID.toString()
-
-              const totalRatingsCount =
-                imPost && imPost?.totalRatingsCount > 0
-                  ? imPost?.totalRatingsCount * 0.001
-                  : 0
-
-              const postIncome = totalRatingsCount
+              // const displayUsernameOrWallet = convertAccountName(
+              //   imPost?.minterToken?.username || minterAddress
+              // )
+              // const usernameOrWallet =
+              //   imPost?.minterToken?.username || minterAddress
 
               return (
                 <div
@@ -299,23 +283,8 @@ const ArgumentsView = ({
                   <div className={classNames(AdvancedPostColWidth, '')}>
                     {/* The actual Post card */}
                     <div className="relative">
-                      <span
-                        className={classNames(
-                          'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200] cursor-pointer hover:text-blue-800'
-                        )}
-                      >
-                        <A
-                          href={`https://opensea.io/assets/arbitrum/${
-                            NETWORK.getDeployedAddresses().ideamarketPosts
-                          }/${imPost?.tokenID}`}
-                        >
-                          Buy this NFT
-                          <ExternalLinkIcon className="w-3 h-3 ml-2" />
-                        </A>
-                      </span>
-
                       <A
-                        href={`/post/${imPost?.tokenID}`}
+                        href={`/post/${imPost?.postID}`}
                         className={classNames(
                           imPost?.isPostInFavorOfParent
                             ? 'bg-gradient-to-b from-[#0cae741a]/[0.05] to-[#1fbfbf1a]/[0.05]'
@@ -323,63 +292,6 @@ const ArgumentsView = ({
                           'relative block px-8 pt-8 pb-10 rounded-2xl font-bold mb-2 cursor-pointer'
                         )}
                       >
-                        <span
-                          className={classNames(
-                            getIMORatingColors(
-                              imPost?.totalRatingsCount > 0
-                                ? Math.round(imPost?.averageRating)
-                                : -1
-                            ),
-                            'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
-                          )}
-                        >
-                          {imPost?.totalRatingsCount > 0
-                            ? Math.round(imPost?.averageRating) + '%'
-                            : '—'}
-                        </span>
-
-                        <div className="flex items-center whitespace-nowrap text-xs">
-                          <div className="relative rounded-full w-5 h-5">
-                            <Image
-                              className="rounded-full"
-                              src={
-                                imPost?.minterToken?.profilePhoto ||
-                                '/default-profile-pic.png'
-                              }
-                              alt=""
-                              layout="fill"
-                              objectFit="cover"
-                            />
-                          </div>
-
-                          {/* Post minter IM name/wallet and twitter name */}
-                          <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                            <A
-                              className="ml-1 font-medium hover:text-blue-500"
-                              href={`/u/${usernameOrWallet}`}
-                            >
-                              {displayUsernameOrWallet}
-                            </A>
-                            {imPost?.minterToken?.twitterUsername && (
-                              <A
-                                className="flex items-center space-x-1 hover:text-blue-500"
-                                href={`/u/${usernameOrWallet}`}
-                              >
-                                <div className="relative w-4 h-4">
-                                  <Image
-                                    src={'/twitter-solid-blue.svg'}
-                                    alt="twitter-solid-blue-icon"
-                                    layout="fill"
-                                  />
-                                </div>
-                                <span className="text-xs opacity-50">
-                                  @{imPost?.minterToken?.twitterUsername}
-                                </span>
-                              </A>
-                            )}
-                          </div>
-                        </div>
-
                         <div className="py-6 border-b font-bold">
                           <ListingContent
                             imPost={imPost}
@@ -390,57 +302,25 @@ const ArgumentsView = ({
                         </div>
 
                         <div className="flex items-center pt-6">
-                          {/* <div className="w-1/3">
-                            <div className="flex justify-start items-center space-x-2">
-                              <div className="relative w-6 h-6">
-                                <Image
-                                  src={'/people-icon.svg'}
-                                  alt="people-icon"
-                                  layout="fill"
-                                />
-                              </div>
-
-                              <div>
-                                <div className="text-xs text-black/[.5] font-medium">
-                                  Ratings
-                                </div>
-                                <div className="font-bold">
-                                  {formatNumberWithCommasAsThousandsSerperator(
-                                    imPost?.totalRatingsCount
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                          </div> */}
-
                           <div className="w-1/3">
                             <div className="flex justify-start items-center space-x-2">
-                              <div className="relative w-6 h-6">
+                              {/* <div className="relative w-6 h-6">
                                 <Image
                                   src={'/eye-icon.svg'}
                                   alt="eye-icon"
                                   layout="fill"
                                 />
-                              </div>
+                              </div> */}
 
                               <div>
                                 <div className="flex items-center space-x-2">
                                   <div className="text-xs text-black/[.5] font-medium">
-                                    Hot
+                                    # ratings
                                   </div>
-                                  <Tooltip
-                                    className="text-black/[.5] z-[200]"
-                                    iconComponentClassNames="w-3"
-                                  >
-                                    <div className="w-64">
-                                      The total amount of IMO staked on all
-                                      users who rated a post
-                                    </div>
-                                  </Tooltip>
                                 </div>
                                 <div className="font-bold">
                                   {formatNumberWithCommasAsThousandsSerperator(
-                                    Math.round(imPost?.marketInterest)
+                                    Math.round(imPost?.latestRatingsCount)
                                   )}
                                 </div>
                               </div>
@@ -449,31 +329,38 @@ const ArgumentsView = ({
 
                           <div className="w-1/3">
                             <div className="flex justify-start items-center space-x-2">
-                              <div className="relative w-6 h-6">
+                              {/* <div className="relative w-6 h-6">
                                 <Image
-                                  src={'/income-icon.svg'}
+                                  src={'/eye-icon.svg'}
                                   alt="eye-icon"
                                   layout="fill"
                                 />
-                              </div>
+                              </div> */}
 
                               <div>
-                                <div className="text-xs text-black/[.5] font-medium">
-                                  Earned
+                                <div className="flex items-center space-x-2">
+                                  <div className="text-xs text-black/[.5] font-medium">
+                                    Average Rating
+                                  </div>
                                 </div>
-                                <div>
-                                  <span className="font-bold">
-                                    {formatNumberWithCommasAsThousandsSerperator(
-                                      postIncome.toFixed(3)
-                                    )}
-                                  </span>
-                                  <span className="text-black/[.5] font-bold text-xs">
-                                    {' '}
-                                    (${imPost?.incomeInDAI?.toFixed(2)})
-                                  </span>
+                                <div className="font-bold">
+                                  {imPost?.latestRatingsCount > 0
+                                    ? formatNumberWithCommasAsThousandsSerperator(
+                                        Math.round(imPost?.averageRating)
+                                      )
+                                    : '-'}
                                 </div>
                               </div>
                             </div>
+                          </div>
+
+                          <div className="w-1/3">
+                            <A
+                              href={`/post/${imPost?.postID}`}
+                              className="text-blue-500 text-sm hover:underline"
+                            >
+                              View more details...
+                            </A>
                           </div>
                         </div>
                       </A>
@@ -489,18 +376,18 @@ const ArgumentsView = ({
                   >
                     {imPost?.topCitations?.length > 0 &&
                       imPost?.topCitations.map((citation, cInd) => {
-                        const { minterAddress } = (citation || {}) as any
+                        // const { minterAddress } = (citation || {}) as any
 
-                        const displayUsernameOrWalletCitation =
-                          convertAccountName(
-                            citation?.minterToken?.username || minterAddress
-                          )
-                        const usernameOrWalletCitation =
-                          citation?.minterToken?.username || minterAddress
+                        // const displayUsernameOrWalletCitation =
+                        //   convertAccountName(
+                        //     citation?.minterToken?.username || minterAddress
+                        //   )
+                        // const usernameOrWalletCitation =
+                        //   citation?.minterToken?.username || minterAddress
 
                         return (
                           <A
-                            href={`/post/${citation?.tokenID}`}
+                            href={`/post/${citation?.postID}`}
                             className={classNames(
                               citation?.isPostInFavorOfParent
                                 ? 'bg-gradient-to-b from-[#0cae741a] to-[#1fbfbf1a]'
@@ -509,64 +396,6 @@ const ArgumentsView = ({
                             )}
                             key={cInd}
                           >
-                            <span
-                              className={classNames(
-                                getIMORatingColors(
-                                  citation?.totalRatingsCount > 0
-                                    ? Math.round(citation?.averageRating)
-                                    : -1
-                                ),
-                                'absolute top-0 right-0 w-10 h-10 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-base border-l-2 border-b-2 border-white'
-                              )}
-                            >
-                              {citation?.totalRatingsCount > 0
-                                ? Math.round(citation?.averageRating) + '%'
-                                : '—'}
-                            </span>
-
-                            {/* Citation username/wallet/pic */}
-                            <div className="flex items-center whitespace-nowrap text-xs mb-2">
-                              <div className="relative rounded-full w-5 h-5">
-                                <Image
-                                  className="rounded-full"
-                                  src={
-                                    citation?.minterToken?.profilePhoto ||
-                                    '/default-profile-pic.png'
-                                  }
-                                  alt=""
-                                  layout="fill"
-                                  objectFit="cover"
-                                />
-                              </div>
-
-                              {/* Post minter IM name/wallet and twitter name */}
-                              <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                                <A
-                                  className="ml-1 font-medium hover:text-blue-500"
-                                  href={`/u/${usernameOrWalletCitation}`}
-                                >
-                                  {displayUsernameOrWalletCitation}
-                                </A>
-                                {citation?.minterToken?.twitterUsername && (
-                                  <A
-                                    className="flex items-center space-x-1 hover:text-blue-500"
-                                    href={`/u/${usernameOrWalletCitation}`}
-                                  >
-                                    <div className="relative w-4 h-4">
-                                      <Image
-                                        src={'/twitter-solid-blue.svg'}
-                                        alt="twitter-solid-blue-icon"
-                                        layout="fill"
-                                      />
-                                    </div>
-                                    <span className="text-xs opacity-50">
-                                      @{citation?.minterToken?.twitterUsername}
-                                    </span>
-                                  </A>
-                                )}
-                              </div>
-                            </div>
-
                             <ListingContent
                               imPost={citation}
                               page="HomePage"
@@ -582,10 +411,10 @@ const ArgumentsView = ({
                     {imPost?.topRatings?.length > 0 &&
                       imPost?.topRatings.map((rating, rInd) => {
                         const displayUsernameOrWallet = convertAccountName(
-                          rating?.userToken?.username || rating?.ratedBy
+                          rating?.userToken?.twitterUsername || rating?.ratedBy
                         )
                         const usernameOrWallet =
-                          rating?.userToken?.username || rating?.ratedBy
+                          rating?.userToken?.twitterUsername || rating?.ratedBy
 
                         return (
                           <div
@@ -596,7 +425,7 @@ const ArgumentsView = ({
                               <Image
                                 className="rounded-full"
                                 src={
-                                  rating?.userToken?.profilePhoto ||
+                                  rating?.userToken?.twitterProfilePicURL ||
                                   '/default-profile-pic.png'
                                 }
                                 alt=""
@@ -605,7 +434,6 @@ const ArgumentsView = ({
                               />
                             </div>
 
-                            {/* Post minter IM name/wallet and twitter name */}
                             <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
                               <A
                                 className="ml-1 font-medium hover:text-blue-500"

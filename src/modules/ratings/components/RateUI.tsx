@@ -16,7 +16,7 @@ import {
   getListingTypeFromIDTURL,
   LISTING_TYPE,
 } from 'components/tokens/utils/ListingUtils'
-import { getAccount } from 'actions/web2/user-market/apiUserActions'
+import { getTwitterUserToken } from 'actions/web2/user-market/apiUserActions'
 import { PlusCircleIcon, XCircleIcon } from '@heroicons/react/outline'
 import AddCitationModal from 'modules/posts/components/AddCitationModal'
 import { IdeamarketPost } from 'modules/posts/services/PostService'
@@ -237,9 +237,8 @@ export default function RateUI({
   const { data: userDataForMinter } = useQuery<any>(
     [`minterAddress-${minterAddress}`],
     () =>
-      getAccount({
-        username: null,
-        walletAddress: minterAddress,
+      getTwitterUserToken({
+        twitterUsername: null,
       })
   )
 

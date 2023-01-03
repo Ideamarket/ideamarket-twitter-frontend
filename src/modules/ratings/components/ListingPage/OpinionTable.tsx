@@ -89,7 +89,7 @@ type Props = {
   fetchMoreOpinions: () => void
 }
 
-const stakedColWidth = 'w-[15%]'
+// const stakedColWidth = 'w-[15%]'
 const userColWidth = 'w-[20%]'
 const ratingColWidth = 'w-[15%]'
 const citationColWidth = 'w-[50%]'
@@ -199,7 +199,7 @@ const OpinionTable = ({
           {/* Table header */}
           <div className="rounded-xl flex items-center w-full h-16 text-black/[.5] font-semibold text-xs">
             {/* STAKED column */}
-            <div
+            {/* <div
               onClick={() =>
                 headerClicked(SortOptionsListingPageOpinions.STAKED.value)
               }
@@ -223,7 +223,7 @@ const OpinionTable = ({
                   )}
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* User and comment column */}
             <div className={classNames(userColWidth, `pl-6 pr-6`)}>USER</div>
@@ -284,10 +284,10 @@ const OpinionTable = ({
                 <div
                   ref={desktopLastElementRef}
                   className="bg-white h-min min-h-[5rem] py-4 mb-4 flex items-start w-full text-black rounded-2xl"
-                  key={oIndex}
+                  key={opinion?.opinionID}
                 >
                   {/* STAKED column */}
-                  <div
+                  {/* <div
                     className={classNames(
                       stakedColWidth,
                       `text-blue-500 font-semibold pl-6`
@@ -297,7 +297,7 @@ const OpinionTable = ({
                       Math.round(opinion?.userToken?.deposits)
                     )}{' '}
                     IMO
-                  </div>
+                  </div> */}
 
                   {/* User and comment column */}
                   <div
@@ -312,7 +312,7 @@ const OpinionTable = ({
                           <Image
                             className="rounded-full"
                             src={
-                              opinion?.userToken?.profilePhoto ||
+                              opinion?.userToken?.twitterProfilePicURL ||
                               '/default-profile-pic.png'
                             }
                             alt=""
@@ -332,23 +332,6 @@ const OpinionTable = ({
                           >
                             {displayUsernameOrWallet}
                           </A>
-                          {opinion?.userToken?.twitterUsername && (
-                            <A
-                              className="flex items-center space-x-1 text-black z-50"
-                              href={`/u/${usernameOrWallet}`}
-                            >
-                              <div className="relative w-4 h-4">
-                                <Image
-                                  src={'/twitter-solid-blue.svg'}
-                                  alt="twitter-solid-blue-icon"
-                                  layout="fill"
-                                />
-                              </div>
-                              <span className="text-sm opacity-50">
-                                @{opinion?.userToken?.twitterUsername}
-                              </span>
-                            </A>
-                          )}
                         </div>
 
                         {/* {opinion?.comment && (
@@ -481,7 +464,7 @@ const OpinionTable = ({
                       <Image
                         className="rounded-full"
                         src={
-                          opinion?.userToken?.profilePhoto ||
+                          opinion?.userToken?.twitterProfilePicURL ||
                           '/default-profile-pic.png'
                         }
                         alt=""
@@ -495,23 +478,6 @@ const OpinionTable = ({
                     >
                       {displayUsernameOrWallet}
                     </A>
-                    {opinion?.userToken?.twitterUsername && (
-                      <A
-                        className="flex items-center space-x-1 text-black ml-1 z-50"
-                        href={`/u/${usernameOrWallet}`}
-                      >
-                        <div className="relative w-4 h-4">
-                          <Image
-                            src={'/twitter-solid-blue.svg'}
-                            alt="twitter-solid-blue-icon"
-                            layout="fill"
-                          />
-                        </div>
-                        <span className="text-sm opacity-50">
-                          @{opinion?.userToken?.twitterUsername}
-                        </span>
-                      </A>
-                    )}
                   </div>
 
                   <span className="text-blue-500 font-medium">

@@ -7,52 +7,25 @@ import { MenuIcon, XIcon } from '@heroicons/react/solid'
 import { WalletStatusWithConnectButton } from 'components'
 import MobileNavItems from './MobileNavItems'
 import NavItem from './NavItem'
-import { useWeb3React } from '@web3-react/core'
 import { GlobalContext } from 'lib/GlobalContext'
 import { PencilIcon as OutlinePencilIcon } from '@heroicons/react/outline'
 import { PencilIcon as SolidPencilIcon } from '@heroicons/react/solid'
 import ModalService from 'components/modals/ModalService'
-import NewPostModal from 'modules/posts/components/NewPostModal'
-import WalletModal from 'components/wallet/WalletModal'
-import { useWalletStore } from 'store/walletStore'
+import NewOpinionModal from 'modules/posts/components/NewOpinionModal'
 import A from 'components/A'
 import classNames from 'classnames'
-import useUserFeesClaimable from 'modules/user-market/hooks/useUserFeesClaimable'
-import useTokenToDAI from 'actions/useTokenToDAI'
-import withdrawClaimableFees from 'actions/web3/user-market/withdrawClaimableFees'
-import { useTransactionManager } from 'utils'
-import TradeCompleteModal, {
-  TX_TYPES,
-} from 'components/trade/TradeCompleteModal'
-// import StakeUserModal from 'modules/user-market/components/StakeUserModal'
-// import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
+import InitTwitterLoginModal from 'components/account/InitTwitterLoginModal'
 
 type Props = {
   bgColor: string
   textColor?: string
 }
 
-const ETH_TOKEN = {
-  name: 'Ethereum',
-  address: '0x0000000000000000000000000000000000000000',
-  symbol: 'ETH',
-  decimals: 18,
-}
-
 const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
-  const { setIsTxPending, user } = useContext(GlobalContext)
-  const { account } = useWeb3React()
-  const txManager = useTransactionManager()
+  const { user, jwtToken } = useContext(GlobalContext)
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
 
   const navbarConfig = getNavbarConfig(user)
-
-  const [, ethClaimable] = useUserFeesClaimable()
-  const [, , selectedTokenDAIValue] = useTokenToDAI(
-    ETH_TOKEN as any,
-    ethClaimable,
-    18
-  )
 
   useEffect(() => {
     NProgress.configure({ trickleSpeed: 100 })
@@ -70,65 +43,27 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
     }
   }, [])
 
-  const { setOnWalletConnectedCallback } = useContext(GlobalContext)
+  const onNewPostClicked = () => {
+    if (!jwtToken) {
+      ModalService.open(InitTwitterLoginModal)
+    } else {
+      ModalService.open(NewOpinionModal /*, { onStakeClicked }*/)
+    }
+  }
 
-  // const onStakeClicked = () => {
-  //   ModalService.open(StakeUserModal, {
-  //     ideaToken: user,
-  //     market: USER_MARKET,
+  // function onTradeComplete(
+  //   isSuccess: boolean,
+  //   listingId: string,
+  //   idtValue: string,
+  //   txType: TX_TYPES
+  // ) {
+  //   ModalService.open(TradeCompleteModal, {
+  //     isSuccess,
+  //     listingId,
+  //     idtValue,
+  //     txType,
   //   })
   // }
-
-  const onNewPostClicked = () => {
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(NewPostModal /*, { onStakeClicked }*/)
-      })
-      ModalService.open(WalletModal)
-    } else {
-      ModalService.open(NewPostModal /*, { onStakeClicked }*/)
-    }
-  }
-
-  function onTradeComplete(
-    isSuccess: boolean,
-    listingId: string,
-    idtValue: string,
-    txType: TX_TYPES
-  ) {
-    ModalService.open(TradeCompleteModal, {
-      isSuccess,
-      listingId,
-      idtValue,
-      txType,
-    })
-  }
-
-  const onWithdrawUserFeeClicked = async () => {
-    if (ethClaimable && ethClaimable > 0) {
-      setIsTxPending(true)
-
-      try {
-        await txManager.executeTx(
-          'Withdraw claimable fees',
-          withdrawClaimableFees
-        )
-      } catch (ex) {
-        console.log(ex)
-        onTradeComplete(false, 'error', 'error', TX_TYPES.NONE)
-        setIsTxPending(false)
-        return
-      }
-
-      setIsTxPending(false)
-      onTradeComplete(
-        true,
-        'success',
-        parseFloat(selectedTokenDAIValue).toFixed(2),
-        TX_TYPES.WITHDRAW_CLAIMABLE_FEE
-      )
-    }
-  }
 
   return (
     <div
@@ -168,39 +103,10 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
 
           <div className="h-9 hidden md:flex items-center">
             <button
-              onClick={onWithdrawUserFeeClicked}
-              className="bg-white border-l border-t border-r-4 border-b-4 hover:border border-blue-600 rounded-3xl px-2 py-1 leading-[.5rem]"
-            >
-              <div className="flex items-center space-x-2">
-                <div className="relative w-5 h-5">
-                  <Image
-                    src={'/withdraw-icon.svg'}
-                    alt="withdraw-icon"
-                    layout="fill"
-                  />
-                </div>
-                <div>
-                  <div className="mt-1 text-[0.6rem] text-black/[.5]">
-                    Available to Withdraw
-                  </div>
-                  <div>
-                    <span className="text-black font-bold text-xs">
-                      {ethClaimable} ETH
-                    </span>
-                    <span className="text-black/[.5] font-bold text-xs">
-                      {' '}
-                      (${parseFloat(selectedTokenDAIValue).toFixed(2)})
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </button>
-
-            <button
               onClick={onNewPostClicked}
               className="flex items-center space-x-2 h-full bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-xs font-bold px-3 py-1 ml-3 rounded-xl"
             >
-              <span>New Post</span>
+              <span>Rate Tweet</span>
               <OutlinePencilIcon className="w-3" />
             </button>
 
@@ -253,11 +159,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
         </div>
       </div>
 
-      <MobileNavItems
-        isMobileNavOpen={isMobileNavOpen}
-        user={user}
-        account={account}
-      />
+      <MobileNavItems isMobileNavOpen={isMobileNavOpen} user={user} />
     </div>
   )
 }

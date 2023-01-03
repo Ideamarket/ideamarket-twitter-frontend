@@ -57,29 +57,27 @@ export const checkAccountEmailVerificationCode = ({ token, code, email }) =>
   )
 
 /**
- * Get account for a walletAddress, username, or jwt
+ * Get account for a twitterUsername, or jwt
  */
-export const getAccount = async ({
-  walletAddress = null,
-  username = null,
+export const getTwitterUserToken = async ({
+  twitterUsername = null,
   jwt = null,
 }) => {
-  if (!username && !walletAddress && !jwt) return null
+  if (!twitterUsername && !jwt) return null
 
   try {
-    const response = await client.get(`/user-token/single`, {
+    const response = await client.get(`/twitter-user-token/single`, {
       params: {
-        username,
-        walletAddress,
+        twitterUsername,
       },
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     })
 
-    return response?.data?.data?.userToken
+    return response?.data?.data?.twitterUserToken
   } catch (error) {
-    console.error(`getAccount failed`)
+    console.error(`getTwitterUserToken failed`)
     return null
   }
 }

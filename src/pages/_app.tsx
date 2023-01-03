@@ -64,7 +64,17 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     }
   }, [active])
 
-  // initUseMarketStore()
+  useEffect(() => {
+    const initializeTwitterAPI = () => {
+      // You can add this as script tag in <head>, but for some reason that way stopped working. But this works fine for now
+      const s = document.createElement('script')
+      s.setAttribute('src', 'https://platform.twitter.com/widgets.js')
+      s.setAttribute('async', 'true')
+      document.head.appendChild(s)
+    }
+
+    initializeTwitterAPI()
+  }, [])
 
   return (
     <>

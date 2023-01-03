@@ -23,6 +23,8 @@ const moduleExports = withPWA({
       'etherscan.io',
       'cryptologos.cc',
       'ideamarket.azureedge.net',
+      'pbs.twimg.com',
+      'abs.twimg.com'
     ],
   },
   async redirects() {

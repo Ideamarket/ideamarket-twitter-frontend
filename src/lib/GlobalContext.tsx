@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { NETWORK, INetworkSpecifics } from 'store/networks'
-import { UserProfile } from 'types/customTypes'
+import { TwitterUserProfile } from 'types/customTypes'
 
 interface GlobalContextState {
   onWalletConnectedCallback: () => void
@@ -11,7 +11,7 @@ interface GlobalContextState {
   setRequiredNetwork: (val: INetworkSpecifics) => void
   jwtToken: null | string
   setJwtToken: (val: string) => void
-  user: UserProfile
+  user: TwitterUserProfile
   setUser: (val: any) => void
   imoAdvVisibility: boolean
   setImoAdvVisibility: (val) => void
@@ -29,7 +29,7 @@ export const initialState: GlobalContextState = {
   jwtToken: null,
   setJwtToken: (val: string) => {},
   user: {},
-  setUser: (val: UserProfile) => {},
+  setUser: (val: TwitterUserProfile) => {},
   imoAdvVisibility: true,
   setImoAdvVisibility: (val) => {},
   isTxPending: false,

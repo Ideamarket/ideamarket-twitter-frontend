@@ -11,7 +11,7 @@ import DropdownButtons from 'components/dropdowns/DropdownButtons'
 import { GlobalContext } from 'lib/GlobalContext'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import { flatten } from 'lodash'
-import { getAllCitationsByTokenID } from 'modules/citations/services/CitationService'
+import { getAllCitationsByPostID } from 'modules/citations/services/CitationService'
 import { getUsersLatestOpinions } from 'modules/ratings/services/OpinionService'
 import Image from 'next/image'
 import {
@@ -156,8 +156,8 @@ export default function AddCitationModal({
   }, [orderBy, postSearchText, refetchSearchedPosts, isTxPending])
 
   async function citationsQueryFunction(numTokens: number, skip: number = 0) {
-    const latestCitations = await getAllCitationsByTokenID({
-      tokenID: rootPost?.tokenID,
+    const latestCitations = await getAllCitationsByPostID({
+      postID: rootPost?.tokenID,
       latest: false,
       skip,
       limit: numTokens,

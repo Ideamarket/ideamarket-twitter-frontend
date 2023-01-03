@@ -65,11 +65,33 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#317EFB" />
         </Head>
         <body>
-          <Script
+          {/* <Script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.twttr = (function(d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0],
+                    t = window.twttr || {};
+                  if (d.getElementById(id)) return t;
+                  js = d.createElement(s);
+                  js.id = id;
+                  js.src = "https://platform.twitter.com/widgets.js";
+                  fjs.parentNode.insertBefore(js, fjs);
+
+                  t._e = [];
+                  t.ready = function(f) {
+                    t._e.push(f);
+                  };
+
+                  return t;
+                }(document, "script", "twitter-wjs"));
+              `,
+            }}
+          /> */}
+          {/* <Script
             async
             src="https://platform.twitter.com/widgets.js"
             charSet="utf-8"
-          />
+          /> */}
           <Script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${MyDocument.GA_TRACKING_ID}`}
