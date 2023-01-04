@@ -163,7 +163,7 @@ const IMPostsViewMobile = ({
                 <div className="relative">
                   <span
                     className={classNames(
-                      'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200]'
+                      'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600'
                     )}
                   >
                     View details...

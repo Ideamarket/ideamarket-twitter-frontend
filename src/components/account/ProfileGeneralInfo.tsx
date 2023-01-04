@@ -13,12 +13,6 @@ import { getSignedInWalletAddress } from 'lib/utils/web3-eth'
 import useAuth from './useAuth'
 import CreateAccountModal from './CreateAccountModal'
 import { GlobalContext } from 'lib/GlobalContext'
-import StakeUserModal from 'modules/user-market/components/StakeUserModal'
-import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
-import WalletIcon from '../../assets/wallet.svg'
-import WalletModal from 'components/wallet/WalletModal'
-import { useWalletStore } from 'store/walletStore'
-import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import { useQuery } from 'react-query'
 import { getUserHolders } from 'actions/web2/user-market/apiUserActions'
 import HoldersSummary from './HoldersSummary'
@@ -31,8 +25,7 @@ interface Props {
 const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
   const { account, active, library } = useWeb3React()
 
-  const { jwtToken, setOnWalletConnectedCallback, isTxPending } =
-    useContext(GlobalContext)
+  const { jwtToken, isTxPending } = useContext(GlobalContext)
 
   const { loginByWallet } = useAuth()
 
@@ -77,23 +70,6 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
     }
 
     ModalService.open(ProfileSettingsModal)
-  }
-
-  const onStakeClicked = () => {
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(StakeUserModal, {
-          ideaToken: userData,
-          market: USER_MARKET,
-        })
-      })
-      ModalService.open(WalletModal)
-    } else {
-      ModalService.open(StakeUserModal, {
-        ideaToken: userData,
-        market: USER_MARKET,
-      })
-    }
   }
 
   const copyProfileURL = () => {
@@ -313,59 +289,12 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                     </div>
                   </div>
                 )}
-
-                {/* Wallet */}
-                <div className="flex items-center">
-                  <WalletIcon className="stroke-current text-white w-5 h-full mr-3" />
-                  <div className="flex items-center rounded-xl border border-[#1d1d1d] px-3 py-1">
-                    <A
-                      href={`https://context.app/${userData?.walletAddress}`}
-                      className="flex items-center space-x-2 text-sm hover:text-blue-600"
-                    >
-                      <span>{`${userData?.walletAddress?.slice(
-                        0,
-                        10
-                      )}...${userData?.walletAddress?.slice(-8)}`}</span>
-
-                      <ExternalLinkIcon className="w-4 text-[#7f7f7f]" />
-                    </A>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
 
           {/* Right container */}
           <div className="w-56 ml-10">
-            {/* Upper box: staked, stake, holders */}
-            <div className="bg-black border border-[#1d1d1d] flex flex-col rounded-lg">
-              <div className="flex items-start p-4">
-                <span className="text-sm opacity-70 mr-6">STAKED</span>
-                <span>
-                  {formatNumberWithCommasAsThousandsSerperator(
-                    Math.round(userData?.deposits)
-                  ) || 0}{' '}
-                  IMO
-                </span>
-              </div>
-
-              <div
-                onClick={onStakeClicked}
-                className="p-3 bg-blue-700 hover:bg-blue-800 text-center text-white font-bold cursor-pointer"
-              >
-                Stake
-              </div>
-
-              <div className="flex items-start p-4">
-                <span className="text-sm opacity-70 mr-6">HOLDERS</span>
-                <span>
-                  {formatNumberWithCommasAsThousandsSerperator(
-                    userData?.holders
-                  ) || 0}
-                </span>
-              </div>
-            </div>
-
             {/* Share and settings button */}
             <div className="w-56 h-12 ml-auto mt-2 flex items-start">
               <div
@@ -448,24 +377,6 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
                     </div>
                   </div>
                 )}
-
-                {/* Wallet */}
-                <div className="flex items-center">
-                  <WalletIcon className="stroke-current text-white w-5 h-full mr-3" />
-                  <div className="flex items-center rounded-xl border border-[#1d1d1d] px-3 py-1">
-                    <A
-                      href={`https://context.app/${userData?.walletAddress}`}
-                      className="flex items-center space-x-2 text-sm hover:text-blue-600"
-                    >
-                      <span>{`${userData?.walletAddress?.slice(
-                        0,
-                        10
-                      )}...${userData?.walletAddress?.slice(-8)}`}</span>
-
-                      <ExternalLinkIcon className="w-4 text-[#7f7f7f]" />
-                    </A>
-                  </div>
-                </div>
               </div>
 
               <HoldersSummary holders={userHolders} userData={userData} />
@@ -474,35 +385,6 @@ const ProfileGeneralInfo: React.FC<Props> = ({ userData }) => {
 
           {/* Staked/Stake/Holders container */}
           <div className="w-full mt-6">
-            {/* Upper box: staked, stake, holders */}
-            <div className="bg-black border border-[#1d1d1d] flex flex-col rounded-lg">
-              <div className="flex items-start p-4">
-                <span className="text-sm opacity-70 mr-6">STAKED</span>
-                <span>
-                  {formatNumberWithCommasAsThousandsSerperator(
-                    Math.round(userData?.deposits)
-                  ) || 0}{' '}
-                  IMO
-                </span>
-              </div>
-
-              <div
-                onClick={onStakeClicked}
-                className="p-3 bg-blue-700 hover:bg-blue-800 text-center text-white font-bold cursor-pointer"
-              >
-                Stake
-              </div>
-
-              <div className="flex items-start p-4">
-                <span className="text-sm opacity-70 mr-6">HOLDERS</span>
-                <span>
-                  {formatNumberWithCommasAsThousandsSerperator(
-                    userData?.holders
-                  ) || 0}
-                </span>
-              </div>
-            </div>
-
             {/* Share and settings button */}
             <div className="w-full h-12 mt-2 flex items-start">
               <div

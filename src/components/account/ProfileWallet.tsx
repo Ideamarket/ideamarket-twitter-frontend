@@ -13,7 +13,7 @@ import InitTwitterLoginModal from './InitTwitterLoginModal'
 import NewOpinionModal from 'modules/posts/components/NewOpinionModal'
 import { IdeamarketTwitterPost } from 'modules/posts/services/TwitterPostService'
 
-const TOKENS_PER_PAGE = 10
+const TOKENS_PER_PAGE = 3
 
 const infiniteQueryConfig = {
   getNextPageParam: (lastGroup, allGroups) => {

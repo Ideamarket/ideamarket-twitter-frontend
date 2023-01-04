@@ -1,19 +1,16 @@
 import React, { useContext, useRef, useState } from 'react'
 import Image from 'next/image'
 
-import { useWeb3React } from '@web3-react/core'
 import { GlobalContext } from 'lib/GlobalContext'
 import ModalService from 'components/modals/ModalService'
 import WalletModal from './WalletModal'
 import A from 'components/A'
-import WalletIcon from '../../assets/wallet.svg'
 import { ProfileTooltip } from 'components/nav-menu/ProfileTooltip'
 import useOnClickOutside from 'utils/useOnClickOutside'
 import ConnectWalletTooltip from 'components/nav-menu/ConnectWalletTooltip'
 import { twitterLogin } from 'modules/user-market/services/TwitterUserService'
 
 export default function WalletStatusWithConnectButton() {
-  const { active, account } = useWeb3React()
   const { user } = useContext(GlobalContext)
 
   const [showProfileTooltip, setShowProfileTooltip] = useState(false)
@@ -114,7 +111,7 @@ export default function WalletStatusWithConnectButton() {
 
             <A
               href={
-                active
+                user && user.twitterUsername
                   ? `/u/${
                       user && user.twitterUsername ? user.twitterUsername : ''
                     }`
@@ -122,7 +119,9 @@ export default function WalletStatusWithConnectButton() {
               }
             >
               <button
-                onClick={active ? null : openWalletModal}
+                onClick={
+                  user && user.twitterUsername ? null : () => twitterLogin(null)
+                }
                 className="flex items-center space-x-2 h-9 bg-white/[.1] hover:text-blue-500 text-sm font-semibold py-1 ml-2 rounded-lg"
               >
                 <div className="ml-3 w-8 h-8 relative rounded-full bg-gray-400">
@@ -144,24 +143,23 @@ export default function WalletStatusWithConnectButton() {
 
       {/* Mobile */}
       <div className="flex md:hidden">
-        {!active && (
+        {!user?.twitterUsername && (
           <button
-            onClick={openWalletModal}
+            onClick={() => twitterLogin(null)}
             className="w-9 h-9 bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 rounded-xl"
           >
-            <WalletIcon className="stroke-current text-white w-6 h-full mx-auto" />
+            <div className="relative w-6 h-6 mx-auto">
+              <Image
+                src={'/twitter-solid-gray.svg'}
+                alt="twitter-solid-gray-icon"
+                layout="fill"
+              />
+            </div>
           </button>
         )}
 
-        {active && (
+        {user && user?.twitterUsername && (
           <>
-            <div onClick={openWalletModal} className="flex items-center">
-              {/* <WalletGreenIcon className="w-6 h-6" /> */}
-              <div className="ml-3 text-gray-400 align-middle whitespace-nowrap hidden md:flex">
-                {account.slice(0, 6)}...{account.slice(-4)}
-              </div>
-            </div>
-
             <div
               ref={ref}
               onClick={() => setShowProfileTooltip(!showProfileTooltip)}

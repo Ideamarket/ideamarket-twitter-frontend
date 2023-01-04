@@ -22,7 +22,7 @@ type Props = {
   isMobile?: boolean
 }
 
-const TOKENS_PER_PAGE = 10
+const TOKENS_PER_PAGE = 3
 
 const infiniteQueryConfig = {
   getNextPageParam: (lastGroup, allGroups) => {

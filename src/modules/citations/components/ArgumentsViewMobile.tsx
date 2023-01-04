@@ -62,7 +62,7 @@ const ArgumentsViewMobile = ({
               <div
                 ref={lastElementRef}
                 className="snap-start snap-always shrink-0 grow-0 basis-[95%] w-full pl-2 mb-10"
-                key={imPost.postID}
+                key={imPost?.postID}
               >
                 {/* The actual Post card */}
                 <div className="relative">

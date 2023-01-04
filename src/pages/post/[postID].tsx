@@ -241,6 +241,7 @@ const TokenDetails = ({ postID }: { postID: string }) => {
                 page="ListingPage"
                 urlMetaData={urlMetaData}
                 useMetaData={false}
+                key={imPost?.postID}
               />
             </div>
           </div>
