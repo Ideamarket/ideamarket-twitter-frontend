@@ -18,7 +18,6 @@ import {
 import { SortAscendingIcon, SortDescendingIcon } from '@heroicons/react/solid'
 import Image from 'next/image'
 import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
-import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
 import classNames from 'classnames'
 import CitationCard from '../CitationCard'
 
@@ -456,7 +455,7 @@ const OpinionTable = ({
               <div
                 ref={mobileLastElementRef}
                 className="relative bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
-                key={oIndex}
+                key={opinion.opinionID}
               >
                 <div className="mb-2 flex items-start space-x-3">
                   <div className="flex items-center pb-2 flex-wrap">
@@ -480,12 +479,12 @@ const OpinionTable = ({
                     </A>
                   </div>
 
-                  <span className="text-blue-500 font-medium">
+                  {/* <span className="text-blue-500 font-medium">
                     {formatNumberWithCommasAsThousandsSerperator(
                       Math.round(opinion?.userToken?.deposits)
                     )}{' '}
                     IMO
-                  </span>
+                  </span> */}
                 </div>
 
                 <div className="relative h-4 mb-4 w-full bg-black/[.1]">

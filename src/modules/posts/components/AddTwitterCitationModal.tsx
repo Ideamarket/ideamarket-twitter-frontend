@@ -75,7 +75,6 @@ export default function AddTwitterCitationModal({
     // setSelectedCategories([]) // Set selected categories to none if any input typed
 
     const canonical = await getValidURL(typedURL)
-    console.log('canonical==', canonical)
 
     // If null, then reset inFavorArray
     if (!Boolean(canonical)) {
@@ -97,7 +96,7 @@ export default function AddTwitterCitationModal({
 
   return (
     <Modal close={close}>
-      <div className="w-full md:w-136 mx-auto bg-white dark:bg-gray-700 rounded-xl">
+      <div className="w-full md:w-[40rem] mx-auto bg-white dark:bg-gray-700 rounded-xl">
         <div className="px-6 py-4">
           <div className="pb-6">
             <button
@@ -117,7 +116,7 @@ export default function AddTwitterCitationModal({
           {/* Against - Selected - For HEADER */}
           <div className="mb-4 flex justify-between items-center font-bold">
             <span className="text-[#e63b3b] text-sm">
-              <ArrowCircleLeftIcon className="w-5 cursor-pointer mr-1" />
+              <ArrowCircleLeftIcon className="w-7 cursor-pointer mr-1" />
               <span>AGAINST</span>
               {/* <span className="ml-1">
                 ({localInFavorArray.filter((ele) => !ele).length})
@@ -135,7 +134,7 @@ export default function AddTwitterCitationModal({
                 ({localInFavorArray.filter((ele) => ele).length})
               </span> */}
               <span>FOR</span>
-              <ArrowCircleRightIcon className="w-5 cursor-pointer ml-1" />
+              <ArrowCircleRightIcon className="w-7 cursor-pointer ml-1" />
             </span>
           </div>
 
@@ -147,61 +146,64 @@ export default function AddTwitterCitationModal({
             defaultRows={1}
           />
 
-          <div className="my-4">
-            <div className="ml-1 mb-3 text-sm font-semibold">TWEET PREVIEW</div>
+          {!isValidURL && (
+            <div className="text-red-400 text-sm">
+              {finalURL === '' ? 'Enter a tweet URL to cite' : 'INVALID URL'}
+            </div>
+          )}
 
-            <div className="flex items-center w-full mb-2">
-              {(localInFavorArray?.length === 0 ||
-                (localInFavorArray?.length > 0 && localInFavorArray[0])) && (
-                <div className="w-[15%]">
-                  <ArrowCircleLeftIcon
-                    onClick={() =>
-                      onLocalCitationChanged(IN_FAVOR_STATE.AGAINST)
-                    }
-                    className="w-5 cursor-pointer"
-                  />
+          {isValidURL && (
+            <div className="my-4">
+              <div className="ml-1 mb-3 text-sm font-semibold">
+                TWEET PREVIEW
+              </div>
+
+              <div className="flex items-center w-full mb-2">
+                {(localInFavorArray?.length === 0 ||
+                  (localInFavorArray?.length > 0 && localInFavorArray[0])) && (
+                  <div className="w-[15%]">
+                    <ArrowCircleLeftIcon
+                      onClick={() =>
+                        onLocalCitationChanged(IN_FAVOR_STATE.AGAINST)
+                      }
+                      className="w-7 cursor-pointer"
+                    />
+                  </div>
+                )}
+
+                <div
+                  className={classNames(
+                    localInFavorArray?.length > 0 ? 'w-[85%]' : 'w-[70%]',
+                    localInFavorArray?.length > 0
+                      ? !localInFavorArray[0]
+                        ? 'bg-[#ec4a4a]/[.25]'
+                        : 'bg-[#0cae74]/[.25]'
+                      : 'bg-black/[.1] ',
+                    'rounded-lg p-4'
+                  )}
+                >
+                  {isValidURL && (
+                    <ListingContent
+                      imPost={{ content: finalURL }}
+                      page="AddTwitterCitationModal"
+                      urlMetaData={null}
+                      key={finalURL}
+                    />
+                  )}
                 </div>
-              )}
 
-              <div
-                className={classNames(
-                  localInFavorArray?.length > 0 ? 'w-[85%]' : 'w-[70%]',
-                  localInFavorArray?.length > 0
-                    ? !localInFavorArray[0]
-                      ? 'bg-[#ec4a4a]/[.25]'
-                      : 'bg-[#0cae74]/[.25]'
-                    : 'bg-black/[.1] ',
-                  'rounded-lg p-4'
-                )}
-              >
-                {isValidURL && (
-                  <ListingContent
-                    imPost={{ content: finalURL }}
-                    page="AddTwitterCitationModal"
-                    urlMetaData={null}
-                    key={finalURL}
-                  />
-                )}
-                {!isValidURL && (
-                  <div className="text-red-400">
-                    {finalURL === ''
-                      ? 'Enter a tweet URL to cite'
-                      : 'INVALID URL'}
+                {(localInFavorArray?.length === 0 ||
+                  (localInFavorArray?.length > 0 && !localInFavorArray[0])) && (
+                  <div className="w-[15%] flex justify-end">
+                    <ArrowCircleRightIcon
+                      onClick={() => onLocalCitationChanged(IN_FAVOR_STATE.FOR)}
+                      className="w-7 cursor-pointer"
+                    />
                   </div>
                 )}
               </div>
-
-              {(localInFavorArray?.length === 0 ||
-                (localInFavorArray?.length > 0 && !localInFavorArray[0])) && (
-                <div className="w-[15%] flex justify-end">
-                  <ArrowCircleRightIcon
-                    onClick={() => onLocalCitationChanged(IN_FAVOR_STATE.FOR)}
-                    className="w-5 cursor-pointer"
-                  />
-                </div>
-              )}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </Modal>

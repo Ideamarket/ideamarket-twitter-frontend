@@ -50,21 +50,6 @@ export default function ProfileWallet({ userData }: Props) {
   const [orderDirection, setOrderDirection] = useState('desc')
 
   // const {
-  //   data: infiniteUserRecommendedData,
-  //   isFetching: isUserRecommendedDataLoading,
-  //   fetchNextPage: fetchMoreUserRecommended,
-  //   refetch: refetchUserRecommended,
-  //   hasNextPage: canFetchMoreUserRecommended,
-  // } = useInfiniteQuery(
-  //   ['user-recommended'],
-  //   ({ pageParam = 0 }) =>
-  //     userRecommendedQueryFunction(TOKENS_PER_PAGE, pageParam),
-  //   infiniteQueryConfig
-  // )
-
-  // const userRecommendedPairs = flatten(infiniteUserRecommendedData?.pages || [])
-
-  // const {
   //   data: infiniteUserPostData,
   //   isFetching: isUserPostDataLoading,
   //   fetchNextPage: fetchMoreUserPosts,
@@ -110,45 +95,6 @@ export default function ProfileWallet({ userData }: Props) {
     nameSearch,
     isTxPending, // If any transaction starts or stop, refresh data
   ])
-
-  // async function userRecommendedQueryFunction(
-  //   numTokens: number,
-  //   skip: number = 0
-  // ) {
-  //   if (selectedView !== TABLE_NAMES.ACCOUNT_RECOMMENDED) return []
-  //   if (!userData || !userData?.walletAddress) return []
-
-  //   const recommendedUsers = await getRecommendedUsersByWallet({
-  //     walletAddress: userData?.walletAddress,
-  //     limit: numTokens,
-  //     orderBy,
-  //     orderDirection,
-  //     skip,
-  //   })
-
-  //   return recommendedUsers || []
-  // }
-
-  // async function userPostsQueryFunction(numTokens: number, skip: number = 0) {
-  //   if (selectedView !== TABLE_NAMES.ACCOUNT_POSTS) return []
-  //   if (!userData || !userData?.walletAddress) return []
-
-  //   const latestUserOpinions = await getAllPosts(
-  //     [
-  //       numTokens,
-  //       orderBy,
-  //       orderDirection,
-  //       null,
-  //       filterTokens,
-  //       nameSearch,
-  //       userData?.walletAddress,
-  //       TIME_FILTER.ALL_TIME,
-  //     ],
-  //     skip
-  //   )
-
-  //   return latestUserOpinions || []
-  // }
 
   async function ratingsQueryFunction(numTokens: number, skip: number = 0) {
     if (
@@ -196,22 +142,6 @@ export default function ProfileWallet({ userData }: Props) {
     <div className="w-full h-full mt-8 pb-20">
       <div className="flex flex-col overflow-auto justify-between sm:flex-row mb-0 md:mb-4">
         <div className="flex order-1 md:order-none mx-4">
-          {/* <div
-            className={classNames(
-              selectedView === TABLE_NAMES.ACCOUNT_RECOMMENDED
-                ? 'text-white'
-                : 'text-brand-gray text-opacity-60 cursor-pointer',
-              'text-lg font-semibold flex flex-col justify-end mb-2.5 pr-6'
-            )}
-            onClick={() => {
-              setSelectedView(TABLE_NAMES.ACCOUNT_RECOMMENDED)
-              setOrderBy(SortOptionsAccountRecommended.MATCH_SCORE.value)
-              setOrderDirection('desc')
-            }}
-          >
-            Similar Users
-          </div> */}
-
           <div
             className={classNames(
               selectedView === TABLE_NAMES.ACCOUNT_OPINIONS
@@ -221,7 +151,7 @@ export default function ProfileWallet({ userData }: Props) {
             )}
             onClick={() => {
               setSelectedView(TABLE_NAMES.ACCOUNT_OPINIONS)
-              setOrderBy(SortOptionsAccountOpinions.MARKET_INTEREST.value)
+              setOrderBy(SortOptionsAccountOpinions.RATING.value)
               setOrderDirection('desc')
             }}
           >

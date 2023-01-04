@@ -10,21 +10,21 @@ import { useInfiniteQuery } from 'react-query'
 import { flatten } from 'utils/lodash'
 import { GlobalContext } from 'lib/GlobalContext'
 import { TIME_FILTER } from 'utils/tables'
-import { getAllPosts } from 'modules/posts/services/PostService'
 import ListingContent from 'components/tokens/ListingContent'
 import Image from 'next/image'
-import { A } from 'components'
+import { A, CircleSpinner } from 'components'
 import { convertAccountName } from 'lib/utils/stringUtil'
 import classNames from 'classnames'
 import { HOME_PAGE_VIEWS } from 'pages'
 import OpenRateModal from 'modules/ratings/components/OpenRateModal'
-import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
-import { getIMORatingColors } from 'utils/display/DisplayUtils'
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
   ExternalLinkIcon,
 } from '@heroicons/react/outline'
+import { getAllTwitterPosts } from 'modules/posts/services/TwitterPostService'
+import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
+import EmptyTableBody from 'modules/tables/components/EmptyTableBody'
 
 type Props = {
   activeOverlayPostID: string
@@ -55,14 +55,21 @@ const IMPostsViewMobile = ({
 
   const {
     data: infiniteData,
-    // isFetching: isTokenDataLoading,
+    isFetching: isTokenDataLoading,
     fetchNextPage: fetchMore,
     refetch,
     hasNextPage: canFetchMore,
   } = useInfiniteQuery(
-    [TOKENS_PER_PAGE, orderBy, orderDirection, selectedCategories, nameSearch],
+    [
+      TOKENS_PER_PAGE,
+      orderBy,
+      orderDirection,
+      selectedCategories,
+      nameSearch,
+      timeFilter,
+    ],
     ({ pageParam = 0 }) =>
-      getAllPosts(
+      getAllTwitterPosts(
         [
           TOKENS_PER_PAGE,
           orderBy,
@@ -70,14 +77,13 @@ const IMPostsViewMobile = ({
           selectedCategories,
           null,
           nameSearch,
-          null,
           timeFilter,
         ],
         pageParam
       ),
     {
       getNextPageParam: (lastGroup, allGroups) => {
-        const morePagesExist = lastGroup?.length === 10
+        const morePagesExist = lastGroup?.length === TOKENS_PER_PAGE
 
         if (!morePagesExist) {
           return false
@@ -133,6 +139,8 @@ const IMPostsViewMobile = ({
     isTxPending, // If any transaction starts or stop, refresh home table data
   ])
 
+  const isNoPosts = !imPostPairs || imPostPairs?.length <= 0
+
   return (
     <>
       <div className="mt-6 text-xs text-blue-600 text-center font-bold">
@@ -145,25 +153,11 @@ const IMPostsViewMobile = ({
         {imPostPairs &&
           imPostPairs.length > 0 &&
           imPostPairs.map((imPost, pInd) => {
-            const { minterAddress } = (imPost || {}) as any
-
-            const displayUsernameOrWallet = convertAccountName(
-              imPost?.minterToken?.username || minterAddress
-            )
-            const usernameOrWallet =
-              imPost?.minterToken?.username || minterAddress
-
-            // const isThisPostOverlaySelected =
-            //   activeOverlayPostID &&
-            //   activeOverlayPostID === imPost.tokenID.toString()
-
-            const postIncome = imPost.totalRatingsCount * 0.001
-
             return (
               <div
                 ref={lastElementRef}
                 className="snap-start snap-always shrink-0 grow-0 basis-[95%] w-full pl-2 mb-10"
-                key={pInd}
+                key={imPost?.postID}
               >
                 {/* The actual Post card */}
                 <div className="relative">
@@ -172,70 +166,14 @@ const IMPostsViewMobile = ({
                       'absolute bottom-0 right-0 w-28 h-6 flex justify-center items-center rounded-br-2xl rounded-tl-2xl font-extrabold text-xs bg-blue-100 text-blue-600 z-[200]'
                     )}
                   >
-                    Buy this NFT
+                    View details...
                     <ExternalLinkIcon className="w-3 h-3 ml-2" />
                   </span>
+
                   <A
-                    href={`/post/${imPost?.tokenID}`}
+                    href={`/post/${imPost?.postID}`}
                     className="w-full relative block p-4 bg-[#0857E0]/[0.05] rounded-2xl"
                   >
-                    <span
-                      className={classNames(
-                        getIMORatingColors(
-                          imPost?.totalRatingsCount > 0
-                            ? Math.round(imPost?.averageRating)
-                            : -1
-                        ),
-                        'absolute top-0 right-0 w-14 h-14 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-lg border-l-2 border-b-2 border-white'
-                      )}
-                    >
-                      {imPost?.totalRatingsCount > 0
-                        ? Math.round(imPost?.averageRating) + '%'
-                        : '—'}
-                    </span>
-
-                    <div className="flex items-center whitespace-nowrap text-xs">
-                      <div className="relative rounded-full w-5 h-5">
-                        <Image
-                          className="rounded-full"
-                          src={
-                            imPost?.minterToken?.profilePhoto ||
-                            '/default-profile-pic.png'
-                          }
-                          alt=""
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      </div>
-
-                      {/* Post minter IM name/wallet and twitter name */}
-                      <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                        <A
-                          className="ml-1 font-medium hover:text-blue-500"
-                          href={`/u/${usernameOrWallet}`}
-                        >
-                          {displayUsernameOrWallet}
-                        </A>
-                        {imPost?.minterToken?.twitterUsername && (
-                          <A
-                            className="flex items-center space-x-1 hover:text-blue-500"
-                            href={`/u/${usernameOrWallet}`}
-                          >
-                            <div className="relative w-4 h-4">
-                              <Image
-                                src={'/twitter-solid-blue.svg'}
-                                alt="twitter-solid-blue-icon"
-                                layout="fill"
-                              />
-                            </div>
-                            <span className="text-xs opacity-50">
-                              @{imPost?.minterToken?.twitterUsername}
-                            </span>
-                          </A>
-                        )}
-                      </div>
-                    </div>
-
                     <div className="py-6 border-b font-bold text-xl">
                       <ListingContent
                         imPost={imPost}
@@ -270,20 +208,20 @@ const IMPostsViewMobile = ({
                         </div>
                       </div> */}
 
-                      {/* Hot */}
+                      {/* # Ratings */}
                       <div className="flex justify-between items-center">
                         <div className="flex justify-start items-center space-x-2">
-                          <div className="relative w-6 h-6">
+                          {/* <div className="relative w-6 h-6">
                             <Image
                               src={'/eye-icon.svg'}
                               alt="eye-icon"
                               layout="fill"
                             />
-                          </div>
+                          </div> */}
 
                           <div className="flex items-center space-x-2">
                             <div className="text-xs text-black/[.5] font-semibold">
-                              Hot
+                              # Ratings
                             </div>
                             {/* Removing tooltip on mobile because card clicks to Post page */}
                             {/* <Tooltip
@@ -299,36 +237,34 @@ const IMPostsViewMobile = ({
 
                         <div className="font-bold">
                           {formatNumberWithCommasAsThousandsSerperator(
-                            Math.round(imPost.marketInterest)
+                            Math.round(imPost.latestRatingsCount)
                           )}
                         </div>
                       </div>
 
-                      {/* Earned */}
+                      {/* Average Rating */}
                       <div className="flex justify-between items-center">
                         <div className="flex justify-start items-center space-x-2">
-                          <div className="relative w-6 h-6">
+                          {/* <div className="relative w-6 h-6">
                             <Image
                               src={'/income-icon.svg'}
                               alt="eye-icon"
                               layout="fill"
                             />
-                          </div>
+                          </div> */}
 
                           <div className="text-xs text-black/[.5] font-semibold">
-                            Earned
+                            Average Rating
                           </div>
                         </div>
 
                         <div>
                           <span className="font-bold">
-                            {formatNumberWithCommasAsThousandsSerperator(
-                              postIncome.toFixed(3)
-                            )}
-                          </span>
-                          <span className="text-black/[.5] font-bold text-xs">
-                            {' '}
-                            (${imPost?.incomeInDAI?.toFixed(2)})
+                            {imPost.latestRatingsCount > 0
+                              ? formatNumberWithCommasAsThousandsSerperator(
+                                  Math.round(imPost.averageRating)
+                                )
+                              : '-'}
                           </span>
                         </div>
                       </div>
@@ -341,85 +277,17 @@ const IMPostsViewMobile = ({
                         </div>
 
                         {imPost?.topCitations.map((citation, cInd) => {
-                          const { minterAddress } = (citation || {}) as any
-
-                          const displayUsernameOrWalletCitation =
-                            convertAccountName(
-                              citation?.minterToken?.username || minterAddress
-                            )
-                          const usernameOrWalletCitation =
-                            citation?.minterToken?.username || minterAddress
-
                           return (
                             <A
-                              href={`/post/${citation?.tokenID}`}
+                              href={`/post/${citation?.postID}`}
                               className={classNames(
                                 citation?.isPostInFavorOfParent
                                   ? 'bg-gradient-to-b from-[#0cae741a] to-[#1fbfbf1a]'
                                   : 'bg-gradient-to-b from-[#fee8e9] to-[#fceaeb]',
                                 'relative block p-4 rounded-2xl font-bold mb-2'
                               )}
-                              key={cInd}
+                              key={citation?.postID}
                             >
-                              <span
-                                className={classNames(
-                                  getIMORatingColors(
-                                    citation?.totalRatingsCount > 0
-                                      ? Math.round(citation?.averageRating)
-                                      : -1
-                                  ),
-                                  'absolute top-0 right-0 w-10 h-10 flex justify-center items-center rounded-tr-2xl rounded-bl-2xl font-extrabold text-base border-l-2 border-b-2 border-white'
-                                )}
-                              >
-                                {citation?.totalRatingsCount > 0
-                                  ? Math.round(citation?.averageRating) + '%'
-                                  : '—'}
-                              </span>
-
-                              {/* Citation username/wallet/pic */}
-                              <div className="flex items-center whitespace-nowrap text-xs mb-2">
-                                <div className="relative rounded-full w-5 h-5">
-                                  <Image
-                                    className="rounded-full"
-                                    src={
-                                      citation?.minterToken?.profilePhoto ||
-                                      '/default-profile-pic.png'
-                                    }
-                                    alt=""
-                                    layout="fill"
-                                    objectFit="cover"
-                                  />
-                                </div>
-
-                                {/* Post minter IM name/wallet and twitter name */}
-                                <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                                  <A
-                                    className="ml-1 font-medium hover:text-blue-500"
-                                    href={`/u/${usernameOrWalletCitation}`}
-                                  >
-                                    {displayUsernameOrWalletCitation}
-                                  </A>
-                                  {citation?.minterToken?.twitterUsername && (
-                                    <A
-                                      className="flex items-center space-x-1 hover:text-blue-500"
-                                      href={`/u/${usernameOrWalletCitation}`}
-                                    >
-                                      <div className="relative w-4 h-4">
-                                        <Image
-                                          src={'/twitter-solid-blue.svg'}
-                                          alt="twitter-solid-blue-icon"
-                                          layout="fill"
-                                        />
-                                      </div>
-                                      <span className="text-xs opacity-50">
-                                        @
-                                        {citation?.minterToken?.twitterUsername}
-                                      </span>
-                                    </A>
-                                  )}
-                                </div>
-                              </div>
-
                               <ListingContent
                                 imPost={citation}
                                 page="HomePage"
@@ -439,11 +307,14 @@ const IMPostsViewMobile = ({
                         </div>
 
                         {imPost?.topRatings.map((rating, rInd) => {
-                          const displayUsernameOrWallet = convertAccountName(
-                            rating?.userToken?.username || rating?.ratedBy
-                          )
-                          const usernameOrWallet =
-                            rating?.userToken?.username || rating?.ratedBy
+                          const displayTwitterUsernameOrWallet =
+                            convertAccountName(
+                              rating?.userToken?.twitterUsername ||
+                                rating?.ratedBy
+                            )
+                          const twitterUsernameOrWallet =
+                            rating?.userToken?.twitterUsername ||
+                            rating?.ratedBy
 
                           return (
                             <div
@@ -454,7 +325,7 @@ const IMPostsViewMobile = ({
                                 <Image
                                   className="rounded-full"
                                   src={
-                                    rating?.userToken?.profilePhoto ||
+                                    rating?.userToken?.twitterProfilePicURL ||
                                     '/default-profile-pic.png'
                                   }
                                   alt=""
@@ -467,9 +338,9 @@ const IMPostsViewMobile = ({
                               <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
                                 <A
                                   className="ml-1 font-medium hover:text-blue-500"
-                                  href={`/u/${usernameOrWallet}`}
+                                  href={`/u/${twitterUsernameOrWallet}`}
                                 >
-                                  {displayUsernameOrWallet}
+                                  {displayTwitterUsernameOrWallet}
                                 </A>
                               </div>
 
@@ -491,6 +362,17 @@ const IMPostsViewMobile = ({
             )
           })}
       </div>
+
+      {isNoPosts && (
+        <div className="flex flex-col justify-center items-center pb-40">
+          {isTokenDataLoading && (
+            <div className="flex justify-center pt-8">
+              <CircleSpinner color="#0857e0" />
+            </div>
+          )}
+          <EmptyTableBody />
+        </div>
+      )}
 
       {/* Bottom 2 buttons for cycling cards as user */}
       <div className="fixed bottom-0 w-full h-20 px-4 flex justify-between items-center z-[600] active:bg-black/[.05]">

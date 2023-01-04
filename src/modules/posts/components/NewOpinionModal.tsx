@@ -23,7 +23,7 @@ export default function NewOpinionModal({
 
   return (
     <Modal close={close}>
-      <div className="w-full md:w-136 mx-auto bg-white dark:bg-gray-700 rounded-xl">
+      <div className="w-full md:w-[40rem] mx-auto bg-white dark:bg-gray-700 rounded-xl">
         <NewOpinionUI
           onPostOrRateComplete={onPostOrRateComplete}
           defaultRatedPost={defaultRatedPost}

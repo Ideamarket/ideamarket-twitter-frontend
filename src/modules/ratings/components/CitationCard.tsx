@@ -1,10 +1,7 @@
 import classNames from 'classnames'
 import { A } from 'components'
 import ListingContent from 'components/tokens/ListingContent'
-import { convertAccountName } from 'lib/utils/stringUtil'
-import Image from 'next/image'
 import { formatNumberWithCommasAsThousandsSerperator } from 'utils'
-import { getIMORatingColors, urlify } from 'utils/display/DisplayUtils'
 import { IdeamarketTwitterOpinion } from '../services/TwitterOpinionService'
 
 type Props = {
@@ -25,19 +22,6 @@ const CitationCard = ({
 
   const citationData = isCitationOnOpinion ? citation?.citation : citation
 
-  // const cutOffContent = citationData?.content?.length > 280
-  const citationText = true
-    ? citationData?.content
-    : citationData?.content.slice(0, 280) + '...'
-
-  const displayUsernameOrWalletCitation = convertAccountName(
-    citationData?.minterToken?.username ||
-      citationData?.minterToken?.walletAddress
-  )
-  const usernameOrWalletCitation =
-    citationData?.minterToken?.username ||
-    citationData?.minterToken?.walletAddress
-
   return (
     <>
       {/* Desktop */}
@@ -45,7 +29,7 @@ const CitationCard = ({
         className={classNames(
           bgCardColor,
           shadow,
-          'hidden md:block relative px-3 py-2 rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal'
+          'hidden md:block relative px-8 pt-4 pb-6 border-2 border-[#0857E0]/[0.05] hover:border-blue-600 rounded-lg w-full text-gray-900 dark:text-gray-200 font-normal'
         )}
       >
         <A
@@ -53,21 +37,6 @@ const CitationCard = ({
           target="_blank"
           rel="noopener noreferrer"
         >
-          {/* <span
-            className={classNames(
-              getIMORatingColors(
-                citationData?.totalRatingsCount > 0
-                  ? Math.round(citationData?.averageRating)
-                  : -1
-              ),
-              'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl z-[100]'
-            )}
-          >
-            {citationData?.totalRatingsCount > 0
-              ? Math.round(citationData?.averageRating) + '%'
-              : '—'}
-          </span> */}
-
           {isCitationOnOpinion && (
             <div className="flex items-center text-sm text-black/[.5] mb-4">
               <span className="mr-2">
@@ -93,7 +62,7 @@ const CitationCard = ({
 
           <div className="flex items-start">
             {/* The citation content */}
-            <div className="pr-6 w-full">
+            <div className="w-full">
               <div className="py-6 border-b font-bold">
                 <ListingContent
                   imPost={citationData}
@@ -183,26 +152,12 @@ const CitationCard = ({
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span
-            className={classNames(
-              getIMORatingColors(
-                citationData?.totalRatingsCount > 0
-                  ? Math.round(citationData?.averageRating)
-                  : -1
-              ),
-              'absolute top-0 right-0 w-14 h-12 flex justify-center items-center rounded-tr-lg rounded-bl-lg font-extrabold text-xl z-[100]'
-            )}
-          >
-            {citationData?.totalRatingsCount > 0
-              ? Math.round(citationData?.averageRating) + '%'
-              : '—'}
-          </span>
-
           {isCitationOnOpinion && (
             <div className="flex items-center text-sm text-black/[.5] mb-4">
               <span className="mr-2">
                 {citation?.inFavor ? 'FOR' : 'AGAINST'}
               </span>
+
               <div className="flex items-center">
                 {opinion?.citations?.length > 1 &&
                   opinion?.citations?.map((c) => {
@@ -221,66 +176,78 @@ const CitationCard = ({
           )}
 
           <div className="flex items-start">
-            {/* The citation minter profile image */}
-            <div className="mr-4 flex flex-col items-center space-y-2">
-              <div className="relative rounded-full w-6 h-6">
-                <Image
-                  className="rounded-full"
-                  src={
-                    citationData?.minterToken?.twitterProfilePicURL ||
-                    '/default-profile-pic.png'
-                  }
-                  alt=""
-                  layout="fill"
-                  objectFit="cover"
+            {/* The citation content */}
+            <div className="w-full">
+              <div className="py-6 border-b font-bold">
+                <ListingContent
+                  imPost={citationData}
+                  page="HomePage"
+                  urlMetaData={null}
+                  useMetaData={false}
                 />
               </div>
 
-              {/* <WatchingStar token={token} /> */}
-            </div>
-
-            {/* The citation minter username and content */}
-            <div className="pr-6 w-full">
-              <div className="flex items-center space-x-1 pb-2 flex-wrap">
-                <A className="font-bold text-sm">
-                  {displayUsernameOrWalletCitation}
-                </A>
-                {citationData?.minterToken?.twitterUsername && (
-                  <A
-                    className="flex items-center space-x-1 text-black z-50"
-                    href={`/u/${usernameOrWalletCitation}`}
-                  >
-                    <div className="relative w-4 h-4">
+              <div className="flex items-center pt-6">
+                <div className="w-1/3">
+                  <div className="flex justify-start items-center space-x-2">
+                    {/* <div className="relative w-6 h-6">
                       <Image
-                        src={'/twitter-solid-blue.svg'}
-                        alt="twitter-solid-blue-icon"
+                        src={'/eye-icon.svg'}
+                        alt="eye-icon"
                         layout="fill"
                       />
+                    </div> */}
+
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <div className="text-xs text-black/[.5] font-medium">
+                          # ratings
+                        </div>
+                      </div>
+                      <div className="font-bold">
+                        {formatNumberWithCommasAsThousandsSerperator(
+                          Math.round(citationData?.latestRatingsCount)
+                        )}
+                      </div>
                     </div>
-                    <span className="text-sm opacity-50">
-                      @{citationData?.minterToken?.twitterUsername}
-                    </span>
-                  </A>
-                )}
-              </div>
+                  </div>
+                </div>
 
-              <div className="relative">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: urlify(citationText),
-                  }}
-                  className="w-full py-2 rounded-lg whitespace-pre-wrap break-words"
-                  style={{ wordBreak: 'break-word' }} // Fixes overflow issue on browsers that dont support break-words above
-                />
+                <div className="w-1/3">
+                  <div className="flex justify-start items-center space-x-2">
+                    {/* <div className="relative w-6 h-6">
+                      <Image
+                        src={'/eye-icon.svg'}
+                        alt="eye-icon"
+                        layout="fill"
+                      />
+                    </div> */}
 
-                {/* {cutOffContent && (
+                    <div>
+                      <div className="flex items-center space-x-2">
+                        <div className="text-xs text-black/[.5] font-medium">
+                          Average Rating
+                        </div>
+                      </div>
+                      <div className="font-bold">
+                        {citationData.latestRatingsCount > 0
+                          ? formatNumberWithCommasAsThousandsSerperator(
+                              Math.round(citationData?.averageRating)
+                            )
+                          : '-'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="w-1/3">
                   <A
                     href={`/post/${citationData?.postID}`}
-                    className="absolute bottom-0 right-0 text-blue-500 z-[60]"
+                    className="text-blue-500 text-sm hover:underline"
                   >
-                    (More...)
+                    View more details...
                   </A>
-                )} */}
+                </div>
               </div>
             </div>
           </div>

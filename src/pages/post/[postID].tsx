@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query'
-import { A, DefaultLayout, WatchingStar } from 'components'
+import { A, DefaultLayout } from 'components'
 import { GetServerSideProps } from 'next'
 import ListingSEO from 'components/listing-page/ListingSEO'
 import { ReactElement, useContext, useEffect, useState } from 'react'
@@ -18,11 +18,17 @@ import { convertAccountName } from 'lib/utils/stringUtil'
 import Image from 'next/image'
 import CitationsDataOfPost from 'modules/citations/components/CitationsDataOfPost'
 import OpenRateModal from 'modules/ratings/components/OpenRateModal'
-import { getTwitterPostByPostID } from 'modules/posts/services/TwitterPostService'
+import {
+  getTwitterPostByPostID,
+  IdeamarketTwitterPost,
+} from 'modules/posts/services/TwitterPostService'
 import { GlobalContext } from 'lib/GlobalContext'
+import ModalService from 'components/modals/ModalService'
+import InitTwitterLoginModal from 'components/account/InitTwitterLoginModal'
+import NewOpinionModal from 'modules/posts/components/NewOpinionModal'
 
 const TokenDetails = ({ postID }: { postID: string }) => {
-  const { isTxPending } = useContext(GlobalContext)
+  const { isTxPending, jwtToken } = useContext(GlobalContext)
   const { data: imPost /*refetch*/ } = useQuery(
     ['single-post', postID, isTxPending],
     () => getTwitterPostByPostID({ postID })
@@ -80,6 +86,14 @@ const TokenDetails = ({ postID }: { postID: string }) => {
     toast.success('Copied listing page URL')
   }
 
+  const onRateClicked = (post: IdeamarketTwitterPost) => {
+    if (!jwtToken) {
+      ModalService.open(InitTwitterLoginModal)
+    } else {
+      ModalService.open(NewOpinionModal, { defaultRatedPost: post })
+    }
+  }
+
   return (
     <div className=" mx-auto">
       <ListingSEO tokenName={postID} rawTokenName={postID} />
@@ -101,49 +115,8 @@ const TokenDetails = ({ postID }: { postID: string }) => {
               <div className="relative">
                 <A
                   href={`/post/${imPost?.postID}`}
-                  className="relative block px-8 pt-4 pb-6 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
+                  className="relative block px-8 pt-4 pb-6 bg-[#0857E0]/[0.05] border-2 border-[#0857E0]/[0.05] hover:border-blue-600  rounded-2xl cursor-pointer"
                 >
-                  {/* <div className="flex items-center whitespace-nowrap text-xs">
-                    <div className="relative rounded-full w-5 h-5">
-                      <Image
-                        className="rounded-full"
-                        src={
-                          imPost?.userToken?.twitterProfilePicURL ||
-                          '/default-profile-pic.png'
-                        }
-                        alt=""
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    </div>
-
-                    <div className="flex items-center space-x-1 flex-wrap z-50 text-black">
-                      <A
-                        className="ml-1 font-medium hover:text-blue-500"
-                        href={`/u/${usernameOrWallet}`}
-                      >
-                        {displayUsernameOrWallet}
-                      </A>
-                      {imPost?.userToken?.twitterUsername && (
-                        <A
-                          className="flex items-center space-x-1 hover:text-blue-500"
-                          href={`/u/${usernameOrWallet}`}
-                        >
-                          <div className="relative w-4 h-4">
-                            <Image
-                              src={'/twitter-solid-blue.svg'}
-                              alt="twitter-solid-blue-icon"
-                              layout="fill"
-                            />
-                          </div>
-                          <span className="text-xs opacity-50">
-                            @{imPost?.minterToken?.twitterUsername}
-                          </span>
-                        </A>
-                      )}
-                    </div>
-                  </div> */}
-
                   <div className="py-6 border-b font-bold">
                     <ListingContent
                       imPost={imPost}
@@ -155,29 +128,6 @@ const TokenDetails = ({ postID }: { postID: string }) => {
                   </div>
 
                   <div className="flex items-center pt-6">
-                    {/* <div className="w-1/3">
-                      <div className="flex justify-start items-center space-x-2">
-                        <div className="relative w-6 h-6">
-                          <Image
-                            src={'/people-icon.svg'}
-                            alt="people-icon"
-                            layout="fill"
-                          />
-                        </div>
-
-                        <div>
-                          <div className="text-xs text-black/[.5] font-medium">
-                            Ratings
-                          </div>
-                          <div className="font-bold">
-                            {formatNumberWithCommasAsThousandsSerperator(
-                              imPost?.totalRatingsCount
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div> */}
-
                     <div className="w-1/3">
                       <div className="flex justify-start items-center space-x-2">
                         {/* <div className="relative w-6 h-6">
@@ -299,7 +249,7 @@ const TokenDetails = ({ postID }: { postID: string }) => {
             <button
               onClick={(e) => {
                 e.stopPropagation()
-                // onRateClicked(imPost, urlMetaData)
+                onRateClicked(imPost)
               }}
               className="flex justify-center items-center w-full h-10 text-base font-medium text-white rounded-lg bg-black/[.8] dark:bg-gray-600 dark:text-gray-300 tracking-tightest-2"
             >
@@ -312,15 +262,11 @@ const TokenDetails = ({ postID }: { postID: string }) => {
                   e.stopPropagation()
                   copyListingPageURL()
                 }}
-                className="flex justify-center items-center w-[85%] h-10 border-2 text-black text-base font-medium text-white rounded-lg hover:bg-blue-500 hover:text-white dark:text-gray-300 tracking-tightest-2"
+                className="flex justify-center items-center w-full h-10 border-2 text-black text-base font-medium text-white rounded-lg hover:bg-blue-500 hover:text-white dark:text-gray-300 tracking-tightest-2"
               >
                 <ShareIcon className="w-4 mr-2" />
                 <span className="mb-0.5">Share</span>
               </button>
-
-              <div className="flex justify-center items-center w-10 h-10 border-2 rounded-lg">
-                {imPost && <WatchingStar token={imPost} />}
-              </div>
             </div>
           </div>
         </div>
@@ -344,9 +290,9 @@ const TokenDetails = ({ postID }: { postID: string }) => {
             <span className="text-blue-600 font-semibold text-xl mr-1">
               {formatNumberInt(imPost?.averageRating)}
             </span>
-            <span className="text-sm text-black/[.5]">
+            {/* <span className="text-sm text-black/[.5]">
               ({imPost?.latestRatingsCount})
-            </span>
+            </span> */}
           </div>
         </div>
 
@@ -356,7 +302,7 @@ const TokenDetails = ({ postID }: { postID: string }) => {
             <div className="relative w-6 h-6">
               <Image src={'/people-icon.svg'} alt="people-icon" layout="fill" />
             </div>
-            {imPost?.totalRatingsCount}
+            {imPost?.latestRatingsCount}
           </div>
         </div>
       </div>

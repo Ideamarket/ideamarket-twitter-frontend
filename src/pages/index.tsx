@@ -446,60 +446,11 @@ const Home = ({ oauth_token, oauth_verifier, denied }: Props) => {
       {/* Mobile */}
       <div className="md:hidden w-full">
         {/* Top section with buttons */}
-        <div className="pb-6 border-b">
-          {/* Posts and Users buttons */}
-          {/* <div className="px-4 flex justify-center items-center space-x-4">
-            <button
-              onClick={() => {
-                onOrderByChanged(
-                  SortOptionsHomePostsTable.MARKET_INTEREST.value,
-                  'desc'
-                )
-                setSelectedView(HOME_PAGE_VIEWS.POSTS)
-              }}
-              className={classNames(
-                selectedView === HOME_PAGE_VIEWS.POSTS
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-black/[.05] text-black/[.25]',
-                'px-4 py-2 font-bold text-2xl rounded-lg'
-              )}
-            >
-              Posts
-            </button>
-
-            <button
-              onClick={() => {
-                onOrderByChanged(SortOptionsHomeUsersTable.STAKED.value, 'desc')
-                setSelectedView(HOME_PAGE_VIEWS.USERS)
-              }}
-              className={classNames(
-                selectedView === HOME_PAGE_VIEWS.USERS
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-black/[.05] text-black/[.25]',
-                'px-4 py-2 font-bold text-2xl rounded-lg'
-              )}
-            >
-              Leaderboard
-            </button>
-          </div> */}
-
+        <div className="py-6 border-b">
           {selectedView === HOME_PAGE_VIEWS.POSTS && (
             <div className="px-4 mt-2 flex justify-center items-center">
               {/* Left */}
               <div className="flex items-center space-x-3 pr-2 text-xs">
-                <button
-                  onClick={() =>
-                    setOrderBy(SortOptionsHomePostsTable.MARKET_INTEREST.value)
-                  }
-                  className={classNames(
-                    orderBy === SortOptionsHomePostsTable.MARKET_INTEREST.value
-                      ? 'bg-blue-100 text-blue-600'
-                      : 'text-black',
-                    'p-2 font-bold rounded-2xl border'
-                  )}
-                >
-                  Hot
-                </button>
                 <button
                   onClick={() =>
                     setOrderBy(SortOptionsHomePostsTable.NEW.value)
@@ -512,6 +463,23 @@ const Home = ({ oauth_token, oauth_verifier, denied }: Props) => {
                   )}
                 >
                   New
+                </button>
+
+                <button
+                  onClick={() =>
+                    setOrderBy(
+                      SortOptionsHomePostsTable.LATEST_RATINGS_COUNT.value
+                    )
+                  }
+                  className={classNames(
+                    orderBy ===
+                      SortOptionsHomePostsTable.LATEST_RATINGS_COUNT.value
+                      ? 'bg-blue-100 text-blue-600'
+                      : 'text-black',
+                    'p-2 font-bold rounded-2xl border'
+                  )}
+                >
+                  # Ratings
                 </button>
               </div>
 
@@ -579,6 +547,7 @@ const Home = ({ oauth_token, oauth_verifier, denied }: Props) => {
               timeFilter={timeFilter}
               isAdvancedView={isAdvancedView}
               setActiveOverlayPostID={setActiveOverlayPostID}
+              key={`${orderBy}-${timeFilter}-${nameSearch}`}
             />
           </>
         )}

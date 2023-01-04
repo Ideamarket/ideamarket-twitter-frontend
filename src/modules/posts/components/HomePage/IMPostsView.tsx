@@ -174,7 +174,7 @@ const IMPostsView = ({
                     <div className="relative">
                       <A
                         href={`/post/${imPost?.postID}`}
-                        className="relative block px-8 pt-4 pb-6 bg-[#0857E0]/[0.05]  rounded-2xl cursor-pointer"
+                        className="relative block px-8 pt-4 pb-6 bg-[#0857E0]/[0.05] border-2 border-[#0857E0]/[0.05] hover:border-blue-600 rounded-2xl cursor-pointer"
                       >
                         <div className="py-6 border-b font-bold">
                           <ListingContent
