@@ -48,10 +48,11 @@ enum CITATION_VIEWS {
 
 const CitationsDataOfPost = ({ postID, isMobile = false }: Props) => {
   const { isTxPending } = useContext(GlobalContext)
-  const [viewSelected, setViewSelected] = useState(CITATION_VIEWS.OPINIONS)
+  const [viewSelected, setViewSelected] = useState(CITATION_VIEWS.CITATIONS)
 
   const [orderBy, setOrderBy] = useState(
-    SortOptionsListingPageOpinions.RATING.value
+    // SortOptionsListingPageOpinions.RATING.value
+    SortOptionsHomePostsTable.LATEST_RATINGS_COUNT.value
   )
   const [orderDirection, setOrderDirection] = useState('desc')
   const [nameSearch, setNameSearch] = useState('')

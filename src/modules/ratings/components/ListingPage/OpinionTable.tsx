@@ -455,7 +455,7 @@ const OpinionTable = ({
               <div
                 ref={mobileLastElementRef}
                 className="relative bg-white px-3 py-4 flex flex-col justify-center w-full text-black"
-                key={opinion.opinionID}
+                key={opinion?.opinionID}
               >
                 <div className="mb-2 flex items-start space-x-3">
                   <div className="flex items-center pb-2 flex-wrap">

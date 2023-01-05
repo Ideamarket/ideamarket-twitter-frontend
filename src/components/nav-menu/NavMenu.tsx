@@ -106,7 +106,7 @@ const NavMenu = ({ bgColor, textColor = 'text-white' }: Props) => {
               onClick={onNewPostClicked}
               className="flex items-center space-x-2 h-full bg-gradient-to-br from-brand-blue-1 to-brand-blue-2 text-white text-xs font-bold px-3 py-1 ml-3 rounded-xl"
             >
-              <span>Rate Tweet</span>
+              <span>Post Tweet</span>
               <OutlinePencilIcon className="w-3" />
             </button>
 

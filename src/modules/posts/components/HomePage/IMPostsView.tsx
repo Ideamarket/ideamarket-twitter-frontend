@@ -140,9 +140,6 @@ const IMPostsView = ({
           <div className="py-3 mt-5 mb-8 flex space-x-10 text-sm text-black/[.5] border-y-2 border-black/[0.05]">
             <div className={classNames(AdvancedPostColWidth, '')}>
               <div className="font-semibold">Post</div>
-              <div className="text-xs italic">
-                Sorted by amount of $IMO staked on all users who rated.
-              </div>
             </div>
 
             <div className={classNames(AdvancedCitationsColWidth, '')}>
