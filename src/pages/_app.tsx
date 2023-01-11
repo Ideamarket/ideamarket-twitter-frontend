@@ -19,8 +19,9 @@ import {
   SITE_NAME,
   TWITTER_HANDLE,
 } from 'utils/seo-constants'
+import { Web3ReactProvider } from '@web3-react/core'
+import Web3 from 'web3'
 import ModalRoot from 'components/modals/ModalRoot'
-import { WrongNetworkOverlay } from 'components'
 import { NextPage } from 'next'
 
 import { QueryClient, QueryClientProvider } from 'react-query'
@@ -29,6 +30,10 @@ import MixPanelProvider from 'utils/mixPanel'
 import { GlobalContextComponent } from 'lib/GlobalContext'
 import { ClientWrapper } from 'lib/ClientWrapper'
 export { GlobalContext } from 'lib/GlobalContext'
+
+function getLibrary(provider: any): Web3 {
+  return new Web3(provider)
+}
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactElement<any, any>
@@ -90,13 +95,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <GlobalContextComponent>
           <ThemeProvider attribute="class" defaultTheme="light">
-            <ClientWrapper>
-              <MixPanelProvider>
-                {getLayout(<Component {...pageProps} />)}
-              </MixPanelProvider>
-            </ClientWrapper>
-            <WrongNetworkOverlay />
-            <ModalRoot />
+            <Web3ReactProvider getLibrary={getLibrary}>
+              <ClientWrapper>
+                <MixPanelProvider>
+                  {getLayout(<Component {...pageProps} />)}
+                </MixPanelProvider>
+              </ClientWrapper>
+              <ModalRoot />
+            </Web3ReactProvider>
           </ThemeProvider>
         </GlobalContextComponent>
       </QueryClientProvider>

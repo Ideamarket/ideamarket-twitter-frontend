@@ -6,14 +6,9 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { IdeaToken } from 'store/ideaMarketsStore'
-import { WalletModal } from 'components'
-import ModalService from 'components/modals/ModalService'
 
-import { useWalletStore } from 'store/walletStore'
 import { NextSeo } from 'next-seo'
 import { GlobalContext } from 'pages/_app'
-import RateModal from 'components/trade/RateModal'
 import {
   getTimeFilterDisplayNameByValue,
   HomeUsersTableColumns,
@@ -24,8 +19,6 @@ import {
 } from 'utils/tables'
 import classNames from 'classnames'
 import HomeUsersTable from 'modules/user-market/components/HomeUsersTable'
-import StakeUserModal from 'modules/user-market/components/StakeUserModal'
-import { USER_MARKET } from 'modules/user-market/utils/UserMarketUtils'
 import IMPostsView from 'modules/posts/components/HomePage/IMPostsView'
 import IMPostsViewMobile from 'modules/posts/components/HomePage/IMPostsViewMobile'
 import useOnClickOutside from 'utils/useOnClickOutside'
@@ -52,8 +45,7 @@ type Props = {
  */
 const Home = ({ oauth_token, oauth_verifier, denied }: Props) => {
   // After trade or list success, the token data needs to be refetched. This toggle does that.
-  const [tradeOrListSuccessToggle, setTradeOrListSuccessToggle] =
-    useState(false)
+  const [tradeOrListSuccessToggle] = useState(false)
   const [isStarredFilterActive, setIsStarredFilterActive] = useState(false)
   const [nameSearch, setNameSearch] = useState('')
   const [orderBy, setOrderBy] = useState(
@@ -80,7 +72,7 @@ const Home = ({ oauth_token, oauth_verifier, denied }: Props) => {
 
   const [activeOverlayPostID, setActiveOverlayPostID] = useState(null)
 
-  const { setOnWalletConnectedCallback, setUser } = useContext(GlobalContext)
+  const { setUser } = useContext(GlobalContext)
 
   const { setJwtFromApi } = useAuth()
 
@@ -113,40 +105,6 @@ const Home = ({ oauth_token, oauth_verifier, denied }: Props) => {
     setOrderDirection(direction as any)
   }
 
-  const onRateClicked = (token: IdeaToken, urlMetaData: any) => {
-    const onClose = () => setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
-
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(RateModal, { imPost: token, urlMetaData }, onClose)
-      })
-      ModalService.open(WalletModal)
-    } else {
-      ModalService.open(RateModal, { imPost: token, urlMetaData }, onClose)
-    }
-  }
-
-  const onStakeClicked = (token: IdeaToken) => {
-    const onClose = () => setTradeOrListSuccessToggle(!tradeOrListSuccessToggle)
-
-    if (!useWalletStore.getState().web3) {
-      setOnWalletConnectedCallback(() => () => {
-        ModalService.open(
-          StakeUserModal,
-          { ideaToken: token, market: USER_MARKET },
-          onClose
-        )
-      })
-      ModalService.open(WalletModal)
-    } else {
-      ModalService.open(
-        StakeUserModal,
-        { ideaToken: token, market: USER_MARKET },
-        onClose
-      )
-    }
-  }
-
   // function onTradeComplete(
   //   isSuccess: boolean,
   //   listingId: string,
@@ -173,8 +131,8 @@ const Home = ({ oauth_token, oauth_verifier, denied }: Props) => {
     timeFilter,
     getColumn: (column) => null,
     onOrderByChanged,
-    onRateClicked,
-    onStakeClicked,
+    onRateClicked: null,
+    onStakeClicked: null,
     tradeOrListSuccessToggle,
     setSelectedCategories,
     setIsStarredFilterActive,
